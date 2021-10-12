@@ -7,6 +7,5 @@
     "type": "base",
     "qdmToQicoreMappinngsUrl": "http://internal-mat-dev-ecs-lb-1195232407.us-east-1.elb.amazonaws.com:9090"
   }
-
 }
 

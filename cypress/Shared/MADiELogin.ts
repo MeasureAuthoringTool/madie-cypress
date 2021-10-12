@@ -8,8 +8,8 @@ export class MADiELogin {
     //public static readonly termsConditionsCheckbox = '.custom-checkbox'
     public static readonly signInButton = '#okta-signin-submit'
 
-    private static harpUser = 'praveena.vasireddy@semanticbits.com'
-    private static password = 'Friday@123'
+    private static harpUser = Cypress.env('MADIE_DEV_USERNAME')
+    private static password = Cypress.env('MADIE_DEV_PASSWORD')
 
     public static Login(): void {
 
