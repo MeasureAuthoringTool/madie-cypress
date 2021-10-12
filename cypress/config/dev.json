@@ -1,5 +1,5 @@
 {
-  "baseUrl": "https://dev-emeasuretool.hcqis.org",
+  "baseUrl": "https://dev-madie.hcqis.org",
   "screenshotsFolder": "mochawesome-report/assets",
   "numTestsKeptInMemory": 5,
   "env": {
