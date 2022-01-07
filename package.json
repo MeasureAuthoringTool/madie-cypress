@@ -17,7 +17,7 @@
 		"dev:all:tests:report": "npm run delete:reports; npm run delete:mochawesome; npm run dev:all:tests; npm run combine:reports; npm run generateOne:report"
 	},
 	"devDependencies": {
-		"@cypress/browserify-preprocessor": "^2.2.4",
+		"@cypress/browserify-preprocessor": "^3.0.2",
 		"@types/node": "^12.20.27",
 		"axe-core": "^4.3.3",
 		"cypress": "^8.5.0",
