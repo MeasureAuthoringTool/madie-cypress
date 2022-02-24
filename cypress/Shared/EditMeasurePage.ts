@@ -16,17 +16,17 @@ export class EditMeasurePage {
     public static readonly editMeasureFieldLevelError = '[data-testid="edit-measure-name-error-text"]'
     public static readonly editMeasureSaveButton = '[data-testid="save-edit-measure-name"] > path'
     public static readonly editMeasureCancelButton = '.fa-times-circle'
-    public static readonly measureStewardLeftNavTab = '.sc-kfPuZi'
+    public static readonly measureStewardLeftNavTab = '[class="sc-jJoQJp sc-gWXbKe cqtDRF fdLXpi"]'
 
     //Measure CQL Page
-    //cql editor box on page
+    //cql editor box on pagez
     public static readonly cqlEditorTextBox = '.ace_content'
     //save button on page
     public static readonly cqlEditorSaveButton = '[data-testid="save-cql-btn"]'
 
     //Measure Groups Page
     //Scoring drop-down box
-    public static readonly measureScoringDBox = '[data-testid=select-measure-scoring-groups]'
+    public static readonly measureScoringDBox = '[data-testid="scoring-unit-select"]'
 
     //Measure Steward Page
     public static readonly measureStewardTextBox = '[data-testid="measureStewardInput"]'

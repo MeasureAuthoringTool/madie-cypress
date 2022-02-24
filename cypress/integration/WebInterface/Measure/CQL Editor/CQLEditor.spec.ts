@@ -4,6 +4,7 @@ import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 import {EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import {LandingPage} from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now() + 1
 let CqlLibraryName = 'TestLibrary' + Date.now() + 1
@@ -70,7 +71,7 @@ describe('Validate Measure Group', () => {
 
 
         //Navigate away from the page
-        cy.get(EditMeasurePage.mainMadiePageButton).click()
+        cy.get(LandingPage.madieLogo).click()
 
         //Navigate back to the CQL Editor page
         MeasuresPage.clickEditforCreatedMeasure()

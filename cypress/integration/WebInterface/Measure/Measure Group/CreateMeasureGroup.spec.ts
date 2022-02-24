@@ -9,7 +9,6 @@ let CqlLibraryName = 'TestLibrary' + Date.now()
 let measureScoring = MeasureGroupPage.measureScoringUnit
 
 
-
 describe('Validate Measure Group', () => {
 
     before('Create Measure', () => {
@@ -41,8 +40,6 @@ describe('Validate Measure Group', () => {
 
         //get current value what is in the scoring box
         cy.get(EditMeasurePage.measureScoringDBox).find(':selected').should('to.have.value', measureScoring)
-
-
     })
 
     it('Verify values in the scoring drop down box', () => {
@@ -54,16 +51,10 @@ describe('Validate Measure Group', () => {
         MeasureGroupPage.clickMeasureGroupTab()
 
         //validate values in the scoring drop down box
-        cy.get('#select-measure-scoring-groups').find('option').then(options => {
+        cy.get(EditMeasurePage.measureScoringDBox).find('option').then(options => {
             const actual = [...options].map(o => o.value)
             expect(actual).to.deep.eq(['Cohort', 'Continuous Variable', 'Proportion', 'Ratio'])
           })
-
-
     })
-/*     
-    it('Create Measure Group', () => {
 
-    }) 
-*/
 })
