@@ -32,7 +32,6 @@ export class EditMeasurePage {
     public static readonly measureScoringDBox = '[data-testid=scoring-unit-select]'
     public static readonly saveMeasureGroupDetails = '[data-testid=group-form-submit-btn'
 
-
     //Measure Meta Data
     //Measure Steward Page
     public static readonly measureStewardTextBox = '[data-testid="measureStewardInput"]'
