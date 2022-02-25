@@ -15,7 +15,8 @@ export class OktaLogin {
         cy.visit('/', { onBeforeLoad: (win) => { win.sessionStorage.clear() } })
 
         //Login with passed harp user and password
-        cy.get(this.usernameInput, { timeout: 400000 }).should('be.visible')
+        cy.wait(5000)
+        cy.get(this.usernameInput, { timeout: 600000 }).should('be.visible')
         cy.get(this.usernameInput).type(Environment.credentials().harpUser)
         cy.get(this.passwordInput).type(Environment.credentials().password)
         cy.get(this.signInButton).click()
@@ -25,8 +26,8 @@ export class OktaLogin {
     public static Logout(): void {
         cy.get(Header.signOutButton).should('be.visible')
         cy.get(Header.signOutButton).click({force:true})
-        cy.wait(2000)
-        cy.get(this.usernameInput).should('be.visible')
+        cy.wait(5000)
+        cy.get(this.usernameInput, { timeout: 600000 }).should('be.visible')
         cy.log('Logout Successful')
 
     }
