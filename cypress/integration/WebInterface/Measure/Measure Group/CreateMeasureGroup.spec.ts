@@ -314,8 +314,9 @@ describe('Validate Measure Group', () => {
         cy.get('#scoring-unit-select').contains('Ratio')
         cy.get('#ipp-expression-select').contains('Initial Population')
 
-    }) 
+    })
+})
 /*     
     it('Create Measure Group', () => {
 
-})
+})*/
