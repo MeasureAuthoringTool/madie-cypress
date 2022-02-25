@@ -45,6 +45,7 @@ let cqlDefinedFactorialOfFiveContinued = '({ 1, 2, 3, 4, 5 }) Num{enter}'
 let cqlDefinedFactorialOffiveAdditional = 'aggregate Result: Coalesce(Result, 1) * Num{enter}'
 
 
+
 describe('Validate Measure Group', () => {
 
     before('Create Measure', () => {
@@ -93,6 +94,75 @@ describe('Validate Measure Group', () => {
             const actual = [...options].map(o => o.value)
             expect(actual).to.deep.eq(['Cohort', 'Continuous Variable', 'Proportion', 'Ratio'])
         })
+    })
+    it('Initial Population being populated from CQL', () => {
+
+        //click on Edit button to edit measure
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //click on the CQL Editor tab
+        CQLEditorPage.clickCQLEditorTab()
+
+        //Enter value in CQL Editor tab
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlLibraryV)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlFHIRV)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlIncludeFHIRHelpers)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlIncludeSuppDataEleFHIR4)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlValueSet)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlValueSetContinued)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlParameter)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlContext)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefineEthnic)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefineEthnicContinued)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefinePayer)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefineRace)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefineSex)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefineIniPop)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefineIniPopContinued)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefineNum)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefineLSRF)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefineLSRFContinued)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefineDenom)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlInitialPop)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefineMedReqInternals)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefineMedReqInternalsContinued)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlRollOutInternals)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlMedReqInternalsHeader)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlMedReqInternalsContinuedAgain, { parseSpecialCharSequences: false })
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlEnter)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlMedReqInternalsAdditional,{ parseSpecialCharSequences: false })
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlMedReqInternalsAdditionalOneMoreTime, { parseSpecialCharSequences: false })
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlEnter)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlMedReqInternalsAdditionalContinued)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqllMedReqInternalsAdditionalContinuedAgain, { parseSpecialCharSequences: false })
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlEnter)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefineFactorialOfFive)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefinedFactorialOfFiveContinued, { parseSpecialCharSequences: false })
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cqlDefinedFactorialOffiveAdditional)
+
+
+
+        //save CQL
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        //Validate saved message on page
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
+
+        //navigate to the measure group tab
+        MeasureGroupPage.clickMeasureGroupTab()
+
+        //validate population definitions are those that were added via CQL
+        cy.get('#ipp-expression-select').find('option:nth-child(1)').should('contain.text', 'SDE Ethnicity')
+        cy.get('#ipp-expression-select').find('option:nth-child(2)').should('contain.text', 'SDE Payer')
+        cy.get('#ipp-expression-select').find('option:nth-child(3)').should('contain.text', 'SDE Race')
+        cy.get('#ipp-expression-select').find('option:nth-child(4)').should('contain.text', 'SDE Sex')
+        cy.get('#ipp-expression-select').find('option:nth-child(5)').should('contain.text', 'Initial Population')
+        cy.get('#ipp-expression-select').find('option:nth-child(6)').should('contain.text', 'Numerator')
+        cy.get('#ipp-expression-select').find('option:nth-child(7)').should('contain.text', 'FactorialOfFive')
+        cy.get('#ipp-expression-select').find('option:nth-child(8)').should('contain.text', 'RolledOutIntervals')
+        cy.get('#ipp-expression-select').find('option:nth-child(9)').should('contain.text', 'MedicationRequestIntervals')
+        cy.get('#ipp-expression-select').find('option:nth-child(10)').should('contain.text', 'Denominator')
+
     })
     it('Initial Population being populated from CQL', () => {
 
@@ -244,8 +314,9 @@ describe('Validate Measure Group', () => {
         cy.get('#scoring-unit-select').contains('Ratio')
         cy.get('#ipp-expression-select').contains('Initial Population')
 
-    }) 
+    })
+})
 /*     
     it('Create Measure Group', () => {
 
-})
+})*/
