@@ -71,7 +71,7 @@ export class TestCasesPage {
         cy.get(TestCasesPage.existingTestCaseSeriesDropdown).click()
 
         //Save edited / updated to test case
-        cy.get(this.cuTestCaseButton).click()
+        cy.get(this.cuTestCaseButton).click({force:true})
         cy.get(this.successMsg).should('contain.text', 'Test case updated successfully!')
 
         //Verify edited / updated test case Title and Series exists on Test Cases Page

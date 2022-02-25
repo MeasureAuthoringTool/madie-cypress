@@ -4,7 +4,6 @@ import {MeasuresPage} from "../../../Shared/MeasuresPage"
 import {TestCasesPage} from "../../../Shared/TestCasesPage"
 import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
 
-
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let measureScoring = 'Ratio'
@@ -18,21 +17,23 @@ let testCaseJson = '{ \n' + 'Encounter: "Office Visit union" \n' + 'Id: "Identif
 
 describe('Create Test Case', () => {
 
-    before('Create Measure', () => {
-
+    // before('Create Measure', () => {
+    //
+    //     OktaLogin.Login()
+    //
+    //
+    //
+    //     OktaLogin.Logout()
+    //
+    // })
+    beforeEach('Login', () => {
         OktaLogin.Login()
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasure(measureName, CqlLibraryName, measureScoring)
 
-        OktaLogin.Logout()
-
     })
-    beforeEach('Login', () => {
-        OktaLogin.Login()
-
-    })
-    afterEach('Login', () => {
+    afterEach('Logout', () => {
         OktaLogin.Logout()
 
     })
@@ -45,6 +46,18 @@ describe('Create Test Case', () => {
         //Navigate to Test Cases Page and create Test Case
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
     })
+})
+
+describe('Edit Test Case', () => {
+
+        before('Login', () => {
+            OktaLogin.Login()
+
+        })
+        after('Logout', () => {
+            OktaLogin.Logout()
+
+        })
 
     it('Edit and update test case', () => {
 
