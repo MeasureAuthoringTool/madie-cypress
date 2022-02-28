@@ -7,7 +7,7 @@ export class MeasureGroupPage {
     public static readonly initialPopulation1 = ""
 
     //saved message
-    public static readonly successfulSaveMeasureGroupMsg = '#main > div > div > div > form > div:nth-child(1) > div.sc-jObWnj.knmXkm > div > div.MuiAlert-message.css-1w0ym84'
+    public static readonly successfulSaveMeasureGroupMsg = 'div[data-testid=success-alert] .MuiAlert-message'
 
     public static clickMeasureGroupTab(): void {
         let measureGroupTabValue = EditMeasurePage.measureGroupsTab

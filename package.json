@@ -54,5 +54,10 @@
 	},
 	"publishConfig": {
 		"registry": "https://npm.pkg.github.com/"
+	},
+	"dependencies": {
+		"@types/lodash": "^4.14.179",
+		"browser-sync": "^2.27.7",
+		"lodash": "^4.17.21"
 	}
 }
