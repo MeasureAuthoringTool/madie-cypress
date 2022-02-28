@@ -69,47 +69,46 @@ describe('Validate Measure Group', () => {
 
 
         // read file
-    cy.fixture('cqlData.txt').then((str) => {
-        // split file by line endings
-        const fileArr = str.split(/\r?\n/);
-        // log file in form of array
-        cy.log(fileArr);
-        // remove new line endings
-        const cqlArr = fileArr.map((line: any) => {
-          const goodLine = line.split('\\n');
-          return goodLine[0];
-        });
-        // log new array
-        cy.log(cqlArr);
-        CQLEditorPage.cqlValues.cqlLibraryV = cqlArr[0]
-        CQLEditorPage.cqlValues.cqlFHIRV = cqlArr[1]
-        CQLEditorPage.cqlValues.cqlIncludeFHIRHelpers = cqlArr[2]
-        CQLEditorPage.cqlValues.cqlIncludeSuppDataEleFHIR4 = cqlArr[3]
-        CQLEditorPage.cqlValues.cqlValueSet = cqlArr[4]
-        CQLEditorPage.cqlValues.cqlValueSetContinued = cqlArr[5]
-        CQLEditorPage.cqlValues.cqlContext = cqlArr[6]
-        CQLEditorPage.cqlValues.cqlDefineIniPop = cqlArr[7]
-        //Enter value in CQL Editor tab
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlLibraryV.toString())
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlFHIRV.toString())
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlIncludeFHIRHelpers.toString())
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlIncludeSuppDataEleFHIR4.toString())
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlValueSet.toString())
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlValueSetContinued.toString())
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlParameter.toString())
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlContext.toString())
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlDefineIniPop.toString())
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-
-    })
+        cy.fixture('cqlData.txt').then((str) => {
+            // split file by line endings
+            const fileArr = str.split(/\r?\n/);
+            // log file in form of array
+            cy.log(fileArr);
+            // remove new line endings
+            const cqlArr = fileArr.map((line: any) => {
+                const goodLine = line.split('\\n');
+                return goodLine[0];
+            });
+            // log new array
+            cy.log(cqlArr);
+            CQLEditorPage.cqlValues.cqlLibraryV = cqlArr[0]
+            CQLEditorPage.cqlValues.cqlFHIRV = cqlArr[1]
+            CQLEditorPage.cqlValues.cqlIncludeFHIRHelpers = cqlArr[2]
+            CQLEditorPage.cqlValues.cqlIncludeSuppDataEleFHIR4 = cqlArr[3]
+            CQLEditorPage.cqlValues.cqlValueSet = cqlArr[4]
+            CQLEditorPage.cqlValues.cqlValueSetContinued = cqlArr[5]
+            CQLEditorPage.cqlValues.cqlContext = cqlArr[6]
+            CQLEditorPage.cqlValues.cqlDefineIniPop = cqlArr[7]
+            //Enter value in CQL Editor tab
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlLibraryV.toString())
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlFHIRV.toString())
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlIncludeFHIRHelpers.toString())
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlIncludeSuppDataEleFHIR4.toString())
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlValueSet.toString())
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlValueSetContinued.toString())
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlParameter.toString())
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlContext.toString())
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlDefineIniPop.toString())
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        })
         //save CQL
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //Validate saved message on page
@@ -171,22 +170,16 @@ describe('Validate Measure Group', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
     
         })
-
         //save CQL
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
         //Validate saved message on page
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
-
         //Click on the measure group tab
         MeasureGroupPage.clickMeasureGroupTab()
-
         //select a population definition
         cy.get('#ipp-expression-select').select('Initial Population') //select the 'Initial Population' option
-
         //save population definiitong with scoring unit
         cy.get(EditMeasurePage.saveMeasureGroupDetails).click()
-
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
@@ -195,12 +188,10 @@ describe('Validate Measure Group', () => {
 
         //navigate away from measure group page
         cy.get(EditMeasurePage.mainMadiePageButton).click()
-
         //navigate back to the measure group page
         MeasuresPage.clickEditforCreatedMeasure()
         //Click on the measure group tab
         MeasureGroupPage.clickMeasureGroupTab()
-
         //verify that the population and the scoring unit that was saved, together, appears
         cy.get('#scoring-unit-select').contains('Ratio')
         cy.get('#ipp-expression-select').contains('Initial Population')
