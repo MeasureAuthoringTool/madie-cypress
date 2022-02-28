@@ -1,9 +1,9 @@
-'library FHIRCommunicationTest version \'1.0.005\''
-'using FHIR version \'4.0.1\''
-'include FHIRHelpers version \'4.0.001\' called FHIRHelpers'
-'include SupplementalDataElementsFHIR4 version \'2.0.000\' called SDE'
-'valueset "Level of Severity of Retinopathy Findings":'
-'\'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1283\''
-'parameter "Measurement Period" Interval<DateTime>'
-'context Patient'
-'define "Initial Population":'
+library FHIRCommunicationTest version '1.0.005'
+using FHIR version '4.0.1'
+include FHIRHelpers version '4.0.001' called FHIRHelpers
+include SupplementalDataElementsFHIR4 version '2.0.000' called SDE
+valueset "Level of Severity of Retinopathy Findings":
+'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1283\'
+parameter "Measurement Period" Interval<DateTime>
+context Patient
+define "Initial Population":

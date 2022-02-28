@@ -87,8 +87,9 @@ describe('Validate Measure Group', () => {
             CQLEditorPage.cqlValues.cqlIncludeSuppDataEleFHIR4 = cqlArr[3]
             CQLEditorPage.cqlValues.cqlValueSet = cqlArr[4]
             CQLEditorPage.cqlValues.cqlValueSetContinued = cqlArr[5]
-            CQLEditorPage.cqlValues.cqlContext = cqlArr[6]
-            CQLEditorPage.cqlValues.cqlDefineIniPop = cqlArr[7]
+            CQLEditorPage.cqlValues.cqlParameter = cqlArr[6]
+            CQLEditorPage.cqlValues.cqlContext = cqlArr[7]
+            CQLEditorPage.cqlValues.cqlDefineIniPop = cqlArr[8]
             //Enter value in CQL Editor tab
             cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlLibraryV.toString())
             cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
@@ -120,10 +121,10 @@ describe('Validate Measure Group', () => {
 
     })
 
-    it.only('Scoring unit and population association saves and persists', () => {
+    it('Scoring unit and population association saves and persists', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasure('NewTestMeasure'+ Date.now(), 'NewLibTestName'+ Date.now(), measureScoring)
+        CreateMeasurePage.CreateQICoreMeasure('NewTestMeasures'+ Date.now() + 1, 'NewLibTestNames'+ Date.now() + 1, measureScoring)
         //click on Edit button to edit measure
         MeasuresPage.clickEditforCreatedMeasure()
         //click on the CQL Editor tab
@@ -147,8 +148,9 @@ describe('Validate Measure Group', () => {
             CQLEditorPage.cqlValues.cqlIncludeSuppDataEleFHIR4 = cqlArr[3]
             CQLEditorPage.cqlValues.cqlValueSet = cqlArr[4]
             CQLEditorPage.cqlValues.cqlValueSetContinued = cqlArr[5]
-            CQLEditorPage.cqlValues.cqlContext = cqlArr[6]
-            CQLEditorPage.cqlValues.cqlDefineIniPop = cqlArr[7]
+            CQLEditorPage.cqlValues.cqlParameter = cqlArr[6]
+            CQLEditorPage.cqlValues.cqlContext = cqlArr[7]
+            CQLEditorPage.cqlValues.cqlDefineIniPop = cqlArr[8]
             //Enter value in CQL Editor tab
             cy.get(EditMeasurePage.cqlEditorTextBox).type(CQLEditorPage.cqlValues.cqlLibraryV.toString())
             cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')

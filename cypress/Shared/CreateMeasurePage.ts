@@ -22,13 +22,14 @@ export class CreateMeasurePage {
 
     public static clickCreateMeasureButton() : void {
 
+        let alias = 'measure' + (Date.now()+1).toString()
         //setup for grabbing the measure create call
-        cy.intercept('POST', '/api/measure').as('measure')
+        cy.intercept('POST', '/api/measure').as(alias)
 
         cy.get(this.createMeasureButton).click()
 
         //saving measureID to file to use later
-        cy.wait('@measure').then(({response}) => {
+        cy.wait('@' + alias).then(({response}) => {
             expect(response.statusCode).to.eq(201)
             cy.writeFile('cypress/downloads/measureId', response.body.id)
         })
