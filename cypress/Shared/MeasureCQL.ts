@@ -1,7 +1,8 @@
 
 export class MeasureCQL {
 
-    public static readonly SBTESTCMS347_CQL = 'library SBTESTCMS347 version \'0.0.016\'\n' +
+    public static readonly SBTESTCMS347_CQL = 
+        'library SBTESTCMS347 version \'0.0.016\'\n' +
         '\n' +
         'using FHIR version \'4.0.1\'\n' +
         '\n' +
