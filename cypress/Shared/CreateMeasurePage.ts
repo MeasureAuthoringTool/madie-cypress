@@ -35,7 +35,9 @@ export class CreateMeasurePage {
         })
     }
 
-    public static CreateQICoreMeasure(measureName: string,CqlLibraryName: string,measureScoring: string) : void {
+    public static CreateQICoreMeasure(measureName: string,CqlLibraryName: string,measureScoring: string[] | string) : void {
+
+        Array.isArray(measureScoring) ? (measureScoring.toString()).valueOf() : (measureScoring.toString()).valueOf()
 
         cy.log('Create ' +measureScoring+ ' Measure')
         cy.get(LandingPage.newMeasureButton).click()
@@ -66,8 +68,12 @@ export class CreateMeasurePage {
         cy.log( measureScoring+ ' Measure created successfully')
     }
 
-    public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureScoring: string): void {
+    public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureScoring: string[] | string): void {
+        Array.isArray(measureScoring) ? (measureScoring.toString()).valueOf() : (measureScoring.toString()).valueOf()
+        cy.log('The value of measureScoring is ' + measureScoring)
         cy.setAccessTokenCookie()
+
+
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {

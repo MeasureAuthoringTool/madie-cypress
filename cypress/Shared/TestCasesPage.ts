@@ -19,17 +19,26 @@ export class TestCasesPage {
     public static readonly testCaseJsonValidationDisplayList = '[data-testid="json-validation-errors-list"] > span'
     public static readonly testCaseJsonValidationErrorList = '.CreateTestCase__ValidationErrorCard-sc-z6rmnc-7'
     public static readonly testCasePopulationList = '[data-testid="create-test-case-populations"]'
+    public static readonly testCasePopulationValuesTable = '[data-testid="test-case-population-list-tbl"]'
+    public static readonly testCaseIPPCheckBox = '[data-testid="test-population-initialPopulation-expected"]'
+    public static readonly testCaseNUMERCheckBox = '[data-testid="test-population-numerator-expected"]'
+    public static readonly testCaseNUMEXCheckBox = '[data-testid="test-population-numeratorExclusion-expected"]'
+    public static readonly testCaseDENOMCheckBox = '[data-testid="test-population-denominator-expected"]'
+    public static readonly testCaseDENEXCheckBox = '[data-testid="test-population-denominatorExclusion-expected"]'
+    public static readonly testCaseDENEXCEPCheckBox = '[data-testid="test-population-denominatorException-expected"]'
+    public static readonly testCaseMSRPOPLCheckBox = '[data-testid="test-population-measurePopulation-expected"]'
+    public static readonly testCaseMSRPOPLEXCheckBox = '[data-testid="test-population-measurePopulationExclusion-expected"]'
 
     public static clickCreateTestCaseButton() : void {
-
+        let alias = 'testcase' + (Date.now()+1).toString()
         //setup for grabbing the measure create call
         cy.readFile('cypress/fixtures/measureId').should('exist').then((id)=> {
-            cy.intercept('POST', '/api/measures/'+ id + '/test-cases').as('testcase')
+            cy.intercept('POST', '/api/measures/'+ id + '/test-cases').as(alias)
 
             cy.get(this.createTestCaseButton).click()
 
             //saving testCaseId to file to use later
-            cy.wait('@testcase').then(({response}) => {
+            cy.wait('@' + alias).then(({response}) => {
                 expect(response.statusCode).to.eq(201)
                 cy.writeFile('cypress/fixtures/testCaseId', response.body.id)
             })

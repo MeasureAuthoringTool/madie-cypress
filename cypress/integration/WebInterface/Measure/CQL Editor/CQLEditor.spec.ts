@@ -12,7 +12,7 @@ let CqlLibraryName = 'TestLibrary' + Date.now() + 1
 let measureScoring = MeasureGroupPage.measureScoringUnit
 
 
-describe('Validate Measure Group', () => {
+describe('Validate CQL Editior Errors', () => {
 
     before('Create Measure', () => {
 
