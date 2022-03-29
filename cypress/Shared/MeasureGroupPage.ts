@@ -1,3 +1,7 @@
+import {MeasuresPage} from "./MeasuresPage"
+import {EditMeasurePage} from "./EditMeasurePage"
+import {CQLEditorPage} from "./CQLEditorPage"
+
 export class MeasureGroupPage {
 
     //Scoring drop-down box
@@ -19,5 +23,34 @@ export class MeasureGroupPage {
 
     //saved message
     public static readonly successfulSaveMeasureGroupMsg = '.MuiAlert-message.css-1w0ym84'
+
+    public static createMeasureGroupforRatioMeasure () : void {
+
+        //Click on Edit Measure
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.readFile('cypress/fixtures/EXM124v7QICore4Entry.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+        })
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //Create Measure Group
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.get(this.initialPopulationSelect).select('SDE Ethnicity')
+        cy.get(this.denominatorSelect).select('SDE Payer')
+        cy.get(this.denominatorExclusionSelect).select('SDE Race')
+        cy.get(this.numeratorSelect).select('Initial Population')
+        cy.get(this.numeratorExclusionSelect).select('SDE Ethnicity')
+        cy.get(this.saveMeasureGroupDetails).click()
+        //validation successful save message
+        cy.get(this.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(this.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+    }
 
 }

@@ -20,6 +20,17 @@ export class TestCasesPage {
     public static readonly testCaseJsonValidationErrorList = '.CreateTestCase__ValidationErrorCard-sc-z6rmnc-7'
     public static readonly testCasePopulationList = '[data-testid="create-test-case-populations"]'
 
+    //Test Case Population Values
+    public static readonly testCasePopulationHeaderForNoMeasureGroup = '.GroupPopulations___StyledSpan2-sc-1752rtp-2'
+    public static readonly testCasePopulationValuesHeader = '.GroupPopulations___StyledSpan-sc-1752rtp-1'
+    public static readonly testCasePopulationValuesTable = '[data-testid="test-case-population-list-tbl"]'
+    public static readonly testCasePopulationValues = '.TestCasePopulationList___StyledTr-sc-iww9ze-3'
+    public static readonly initialPopulationRow = '[data-testid="test-row-population-id-initialPopulation"]'
+    public static readonly numeratorRow = '[data-testid="test-row-population-id-numerator"]'
+    public static readonly numeratorExclusionRow = '[data-testid="test-row-population-id-numeratorExclusion"]'
+    public static readonly denominatorRow = '[data-testid="test-row-population-id-denominator"]'
+    public static readonly denominatorExclusionRow = '[data-testid="test-row-population-id-denominatorExclusion"]'
+
     public static clickCreateTestCaseButton() : void {
 
         //setup for grabbing the measure create call
@@ -110,4 +121,5 @@ export class TestCasesPage {
             cy.get('[data-testid=edit-test-case-'+ fileContents +']').click()
         })
     }
+
 }
