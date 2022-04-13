@@ -79,7 +79,6 @@ export class TestCasesPage {
 
         cy.get(this.testCasePopulationList).should('be.visible')
 
-
         cy.get(this.testCaseTitle).should('be.visible')
         cy.get(this.testCaseTitle).should('be.enabled')
         cy.get(this.testCaseTitle).type(testCaseTitle, { force: true })
@@ -102,7 +101,6 @@ export class TestCasesPage {
     public static updateTestCase (updatedTestCaseTitle:string, updatedTestCaseDescription:string, updatedTestCaseSeries:string)  :void{
         cy.get(this.testCasePopulationList).should('be.visible')
 
-        cy.wait(2000)
         //Edit / Update test case title
         cy.get(this.testCaseTitle).should('be.visible')
         cy.get(this.testCaseTitle).should('be.enabled')
