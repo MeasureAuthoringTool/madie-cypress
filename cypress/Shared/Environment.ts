@@ -20,6 +20,23 @@ export class Environment {
         }
     }
 
+    public static altUserCredentials = () : { harpUser: string, password: string } => {
+        switch(Cypress.env('environment')) {
+            case 'dev': {
+                return {
+                    harpUser: Cypress.env('DEV_ALT_USERNAME'),
+                    password: Cypress.env('DEV_ALT_PASSWORD')
+                }
+            }
+            case 'test': {
+                return {
+                    harpUser: Cypress.env('TEST_ALT_USERNAME'),
+                    password: Cypress.env('TEST_ALT_PASSWORD')
+                }
+            }
+        }
+    }
+
     public static authentication = () : { authnUrl: string, authUri: string, redirectUri: string, clientId: string } => {
         switch (Cypress.env('environment')) {
             case 'dev':

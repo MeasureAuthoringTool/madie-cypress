@@ -27,10 +27,11 @@ export class CQLLibraryPage {
         cy.get(this.cqlLibraryNameTextbox).type(CQLLibraryName)
         cy.get(this.cqlLibraryModelDropdown).click()
         cy.get(this.cqlLibraryModelQICore).click()
-        cy.get(this.saveCQLLibraryBtn).click()
+        this.clickCreateLibraryButton()
+        cy.get(Header.cqlLibraryTab).click()
         cy.get(this.cqlLibraryNameList).contains(CQLLibraryName)
         cy.get(this.cqlLibraryModelList).contains('QI-Core')
-        this.clickCreateLibraryButton()
+
         cy.log('CQL Library Created Successfully')
     }
 

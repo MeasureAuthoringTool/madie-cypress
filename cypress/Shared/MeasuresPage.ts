@@ -4,6 +4,7 @@
 export class MeasuresPage {
 
     public static readonly measureListTitles = '.MeasureList___StyledTd-sc-1kfngu9-13'
+    public static readonly allMeasuresTab = '[data-testid=all-measures-tab]'
 
 
     public static clickEditforCreatedMeasure(): void {

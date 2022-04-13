@@ -28,6 +28,11 @@ export class EditMeasurePage {
     //save button on page
     public static readonly cqlEditorSaveButton = '[data-testid="save-cql-btn"]'
 
+    //Delete Measure
+    public static readonly deleteMeasureButton = '[data-testid=delete-measure-button]'
+    public static readonly deleteMeasureConfirmationMsg = '.message'
+    public static readonly deleteMeasureConfirmationButton = '[data-testid=delete-measure-button-2]'
+    public static readonly successfulMeasureDeleteMsg = '[data-testid=edit-measure-information-success-text]'
 
     //Measure Meta Data
     //Measure Steward Page

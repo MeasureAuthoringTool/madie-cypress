@@ -81,8 +81,8 @@ export class CreateMeasurePage {
                 },
                 method: 'POST',
                 body: {
-                    'measureName': measureName + Date.now(),
-                    'cqlLibraryName': CqlLibraryName + Date.now(),
+                    'measureName': measureName,
+                    'cqlLibraryName': CqlLibraryName,
                     'model': 'QI-Core',
                     'measureScoring': measureScoring
                 }
