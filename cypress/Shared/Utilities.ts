@@ -90,7 +90,6 @@ export class Utilities {
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
                     .should('not.have.value', 'MSRPOPLEX')
                 cy.get(Header.mainMadiePageButton).click()
-                cy.wait(7000)
                 break
             }
             case 'Proportion': {
@@ -111,7 +110,6 @@ export class Utilities {
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
                     .should('not.have.value', 'MSRPOPLEX')
                 cy.get(Header.mainMadiePageButton).click()
-                cy.wait(7000)
                 break
             }
             case 'Continuous Variable': {
@@ -134,7 +132,6 @@ export class Utilities {
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
                     .should('not.have.value', 'DENEXCEP')
                 cy.get(Header.mainMadiePageButton).click()
-                cy.wait(7000)
                 break
             }
             case 'Cohort': {
@@ -155,7 +152,6 @@ export class Utilities {
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
                     .should('not.have.value', 'MSRPOPLEX')
                 cy.get(Header.mainMadiePageButton).click()
-                cy.wait(7000)
                 break
 
             }

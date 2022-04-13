@@ -88,6 +88,7 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.log((measureScoringArray[i].valueOf()).toString())
             //select scoring unit on measure
             cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[i].valueOf()).toString())
+            cy.wait(1000)
             //based on the scoring unit value, select a value for all population fields
             Utilities.validationMeasureGroupSaveAll((measureScoringArray[i].valueOf()).toString())                
             //save measure group
@@ -104,6 +105,7 @@ describe('Test Case Expected Measure Group population values based on initial me
                     }
                })
         }
+        cy.wait(1000)
         //navigate back to main measure page
         cy.get(Header.mainMadiePageButton).click()
 
@@ -128,10 +130,13 @@ describe('Test Case Expected Measure Group population values based on initial me
                 cy.log((measureScoringArray[0].valueOf()).toString())
                 //select scoring unit on measure
                 cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[0].valueOf()).toString())
+                cy.wait(1000)
                 //based on the scoring unit value, select a value for all population fields
-                Utilities.validationMeasureGroupSaveAll((measureScoringArray[0].valueOf()).toString())                
+                Utilities.validationMeasureGroupSaveAll((measureScoringArray[0].valueOf()).toString())
+                cy.wait(1000)          
                 //save measure group
                 cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+                cy.wait(1000)
                 //validation message after attempting to save
                 cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
                 cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
@@ -166,8 +171,10 @@ describe('Test Case Expected Measure Group population values based on initial me
                 //navigate back to the test case tab
                 cy.get(EditMeasurePage.testCasesTab).click()
                 TestCasesPage.clickEditforCreatedTestCase()
+                cy.wait(1000)
                 //confirm that check boxes that were checked are no longer checked
                 cy.get(TestCasesPage.testCaseIPPCheckBox).should('not.be.checked')
+                cy.wait(1000)
                 //navigate back to the main measures page
                 cy.get(Header.mainMadiePageButton).click()
 
