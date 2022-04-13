@@ -9,12 +9,13 @@ import {Header} from "../../../../Shared/Header"
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let measureScoring = MeasureGroupPage.measureScoringUnit
+let userToken = 'default'
 
 describe('Validate Measure Group', () => {
 
     beforeEach('Create measure and Login', () => {
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring, userToken)
         OktaLogin.Login()
     })
 

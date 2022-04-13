@@ -5,12 +5,13 @@ import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let measureScoring = 'Ratio'
+let userToken = 'default'
 
 describe('Edit Measure Name Validations', () => {
     before('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring, userToken)
 
     })
 

@@ -130,4 +130,35 @@ export class TestCasesPage {
             cy.get('[data-testid=edit-test-case-'+ fileContents +']').click()
         })
     }
+    public static CreateTestCaseAPI(title: string, series: string, description: string): void {
+        cy.setAccessTokenCookie()
+
+        //Add Test Case to the Measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/test-cases',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: {
+                        'name': "DENOMFail",
+                        'series': series,
+                        'title': title,
+                        'description': description,
+                        'json': "{ \n  Encounter: \"Office Visit union\" \n  Id: \"Identifier\" \n  value: \"Visit out of hours (procedure)\" \n}"
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.series).to.eql(series)
+                    expect(response.body.title).to.eql(title)
+                    expect(response.body.description).to.eql(description)
+                    expect(response.body.json).to.be.exist
+                    cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                })
+            })
+        })
+    }
 }

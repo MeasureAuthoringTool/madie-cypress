@@ -8,13 +8,14 @@ import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let measureScoring = 'Ratio'
+let userToken = 'default'
 
 describe('Reset Measure Populations', () => {
 
     before('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring, userToken)
 
     })
     beforeEach('Login', () => {

@@ -8,13 +8,14 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let measureScoring = MeasureGroupPage.measureScoringUnit
+let userToken = 'default'
 
 describe('Measure Group', () => {
 
     before('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring, userToken)
 
     })
     beforeEach('Login', () => {

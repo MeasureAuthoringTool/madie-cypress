@@ -1,3 +1,4 @@
+import { Environment } from "./Environment";
 import {LandingPage} from "./LandingPage"
 import {MeasuresPage} from "./MeasuresPage";
 
@@ -69,8 +70,19 @@ export class CreateMeasurePage {
         cy.log( measureScoring+ ' Measure created successfully')
     }
 
-    public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureScoring: string): void {
-        cy.setAccessTokenCookie()
+    public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureScoring: string, userToken: string): string {
+        let user = ''
+        //cy.setAccessTokenCookie()
+        switch (userToken){
+            case 'default':
+                cy.setAccessTokenCookie()
+                user = Environment.credentials().harpUser
+                break
+            case 'alt':
+                cy.setAccessTokenCookieALT()
+                user = Environment.credentials().harpUserALT
+                break
+        }
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -84,7 +96,8 @@ export class CreateMeasurePage {
                     'measureName': measureName + Date.now(),
                     'cqlLibraryName': CqlLibraryName + Date.now(),
                     'model': 'QI-Core',
-                    'measureScoring': measureScoring
+                    'measureScoring': measureScoring,
+                    'createdBy': user
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
@@ -92,5 +105,6 @@ export class CreateMeasurePage {
                 cy.writeFile('cypress/fixtures/measureId', response.body.id)
             })
         })
+        return user
     }
 }

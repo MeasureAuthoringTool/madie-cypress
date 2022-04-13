@@ -3,18 +3,22 @@ export class Environment {
      * We set our environment variables here in this class
      */
 
-    public static credentials = () : { harpUser: string, password: string } => {
+    public static credentials = () : { harpUser: string, password: string, harpUserALT: string, passwordALT: string } => {
         switch(Cypress.env('environment')) {
             case 'dev': {
                 return {
                     harpUser: Cypress.env('DEV_USERNAME'),
-                    password: Cypress.env('DEV_PASSWORD')
+                    password: Cypress.env('DEV_PASSWORD'),
+                    harpUserALT: Cypress.env('DEV_ALT_USERNAME'),
+                    passwordALT: Cypress.env('DEV_ALT_PASSWORD')
                 }
             }
             case 'test': {
                 return {
                     harpUser: Cypress.env('TEST_USERNAME'),
-                    password: Cypress.env('TEST_PASSWORD')
+                    password: Cypress.env('TEST_PASSWORD'),
+                    harpUserALT: Cypress.env('TEST_ALT_USERNAME'),
+                    passwordALT: Cypress.env('TEST_ALT_PASSWORD')
                 }
             }
         }

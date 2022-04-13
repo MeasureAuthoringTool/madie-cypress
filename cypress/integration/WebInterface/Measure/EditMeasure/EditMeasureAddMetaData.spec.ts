@@ -9,13 +9,14 @@ import {Utilities} from "../../../../Shared/Utilities";
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let measureScoring = MeasureGroupPage.measureScoringUnit
+let userToken = 'default'
 
 describe('Edit Measure: Add Meta Data', () => {
 
     before('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring, userToken)
 
     })
     beforeEach('Login', () => {

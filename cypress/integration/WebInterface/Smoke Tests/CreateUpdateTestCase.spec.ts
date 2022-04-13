@@ -15,13 +15,14 @@ let updatedTestCaseTitle = 'Title for Auto Test' + " some update"
 let updatedTestCaseDescription = testCaseDescription + ' '+ 'UpdatedTestCaseDescription'
 let updatedTestCaseSeries = 'CMSTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
+let userToken = 'default'
 
 describe('Create Test Case', () => {
 
     before('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring, userToken)
 
     })
     beforeEach('Login', () => {

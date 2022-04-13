@@ -19,9 +19,9 @@ let twoFiftyTwoCharacters = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxy
 describe('Test Case Validations', () => {
 
     before('Create Measure', () => {
-
+        let userToken = 'default'
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring, userToken)
 
     })
     beforeEach('Login', () => {
@@ -118,9 +118,10 @@ describe('Test Case Validations', () => {
 describe('Test Case Json Validations', () => {
     
     before('Create Measure', () => {
+        let userToken = 'default'
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring, userToken)
 
     })
 

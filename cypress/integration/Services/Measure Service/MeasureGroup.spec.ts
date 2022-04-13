@@ -17,9 +17,10 @@ describe('Measure Service: Test Case Endpoints', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newMeasureName = measureName + randValue
         let newCqlLibraryName = CqlLibraryName + randValue
+        let userToken = 'default'
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureScoring)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureScoring, userToken)
 
     })
     it('Create Proportion measure group', () => {
