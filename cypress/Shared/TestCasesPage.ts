@@ -58,7 +58,7 @@ export class TestCasesPage {
 
     public static grabValidateTestCaseTitleAndSeries(testCaseTitle: string, testCaseSeries: string) : void{
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-
+            cy.get('[data-testid=test-case-row-'+ fileContents +']').should('be.visible')
             cy.get('[data-testid=test-case-row-'+ fileContents +']').invoke('text').then(
                 (text) => {
                     expect(text).to.include(testCaseTitle)
@@ -71,6 +71,7 @@ export class TestCasesPage {
     public static createTestCase (testCaseTitle:string, testCaseDescription:string, testCaseSeries:string, testCaseJson:string)  :void{
 
         //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(this.newTestCaseButton).should('be.visible')
         cy.get(this.newTestCaseButton).should('be.enabled')
@@ -78,7 +79,6 @@ export class TestCasesPage {
 
         cy.get(this.testCasePopulationList).should('be.visible')
 
-        cy.wait(2000)
 
         cy.get(this.testCaseTitle).should('be.visible')
         cy.get(this.testCaseTitle).should('be.enabled')
@@ -127,6 +127,7 @@ export class TestCasesPage {
     }
     public static clickEditforCreatedTestCase(): void {
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
+            cy.get('[data-testid=edit-test-case-'+ fileContents +']').should('be.visible')
             cy.get('[data-testid=edit-test-case-'+ fileContents +']').click()
         })
     }

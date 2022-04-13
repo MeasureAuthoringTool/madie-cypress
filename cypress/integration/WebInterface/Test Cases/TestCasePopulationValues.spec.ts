@@ -82,15 +82,14 @@ describe('Test Case Expected Measure Group population values based on initial me
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
-            
+
         for (let i = 0; i<=1; i++){
             //log, in cypress, the measure score value
             cy.log((measureScoringArray[i].valueOf()).toString())
             //select scoring unit on measure
             cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[i].valueOf()).toString())
-            cy.wait(1000)
             //based on the scoring unit value, select a value for all population fields
-            Utilities.validationMeasureGroupSaveAll((measureScoringArray[i].valueOf()).toString())                
+            Utilities.validationMeasureGroupSaveAll((measureScoringArray[i].valueOf()).toString())
             //save measure group
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
             //validation message after attempting to save
@@ -105,10 +104,6 @@ describe('Test Case Expected Measure Group population values based on initial me
                     }
                })
         }
-        cy.wait(1000)
-        //navigate back to main measure page
-        cy.get(Header.mainMadiePageButton).click()
-
 
     })
 
@@ -130,21 +125,22 @@ describe('Test Case Expected Measure Group population values based on initial me
                 cy.log((measureScoringArray[0].valueOf()).toString())
                 //select scoring unit on measure
                 cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[0].valueOf()).toString())
-                cy.wait(1000)
                 //based on the scoring unit value, select a value for all population fields
                 Utilities.validationMeasureGroupSaveAll((measureScoringArray[0].valueOf()).toString())
-                cy.wait(1000)          
                 //save measure group
+                cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
                 cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-                cy.wait(1000)
+
                 //validation message after attempting to save
+                cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
                 cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
                 cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
                 //create test case
-                cy.wait(1000)
                 TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
-                cy.get(EditMeasurePage.testCasesTab).click()
+
                 TestCasesPage.clickEditforCreatedTestCase()
+
+                cy.get(TestCasesPage.testCaseIPPCheckBox).should('be.visible')
                 cy.get(TestCasesPage.testCaseIPPCheckBox).check().should('be.checked')
                 cy.get(TestCasesPage.testCaseNUMERCheckBox).check().should('be.checked')
                 cy.get(TestCasesPage.testCaseNUMEXCheckBox).check().should('be.checked')
@@ -165,18 +161,20 @@ describe('Test Case Expected Measure Group population values based on initial me
                 cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
                 //validation message after attempting to save
                 cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-                cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'This change will reset the population scoring value in test cases. Are you sure you wanted to continue with this? UpdateCancel')
+                cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'This change ' +
+                    'will reset the population scoring value in test cases. Are you sure you wanted to continue with this? UpdateCancel')
+        cy.pause()
+
                 cy.get(MeasureGroupPage.confirmScoreUnitValueUpdateBtn).click()
-                cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+                cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population ' +
+                    'details for this group updated successfully.')
                 //navigate back to the test case tab
                 cy.get(EditMeasurePage.testCasesTab).click()
                 TestCasesPage.clickEditforCreatedTestCase()
-                cy.wait(1000)
+
                 //confirm that check boxes that were checked are no longer checked
+                cy.get(TestCasesPage.testCaseIPPCheckBox).should('be.visible')
                 cy.get(TestCasesPage.testCaseIPPCheckBox).should('not.be.checked')
-                cy.wait(1000)
-                //navigate back to the main measures page
-                cy.get(Header.mainMadiePageButton).click()
 
     })
 })
