@@ -26,7 +26,7 @@ describe('Test Case Expected Measure Group population values based on initial me
         let userToken = 'default'
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureScoringArray[3], userToken)
+        //CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureScoringArray[3], userToken)
         OktaLogin.Login()
 
     })
