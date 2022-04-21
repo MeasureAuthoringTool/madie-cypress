@@ -5,6 +5,7 @@ import {Environment} from "../../../Shared/Environment"
 import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
 import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
 import {TestCasesPage} from "../../../Shared/TestCasesPage"
+import {TestCaseJson} from "../../../Shared/TestCaseJson"
 
 let measureName = ''
 let newMeasureName = ''
@@ -720,9 +721,10 @@ describe('Measure Service: Update Delete Flag', () => {
             let title = 'someTitleValue'
             let series = 'SomeSeriesValue'
             let description = 'SomeDescription'
+            let testCaseJson = TestCaseJson.TestCaseJson_Valid
 
 
-            TestCasesPage.CreateTestCaseAPI(title, series, description)
+            TestCasesPage.CreateTestCaseAPI(title, description, series, testCaseJson)
                     
             cy.getCookie('accessToken').then((accessToken) => {
                 cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {

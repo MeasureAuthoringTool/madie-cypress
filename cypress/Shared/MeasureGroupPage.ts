@@ -1,6 +1,7 @@
 import {MeasuresPage} from "./MeasuresPage"
 import {EditMeasurePage} from "./EditMeasurePage"
 import {CQLEditorPage} from "./CQLEditorPage"
+import {Header} from "./Header"
 
 export class MeasureGroupPage {
 
@@ -60,6 +61,8 @@ export class MeasureGroupPage {
     }
 
     public static createMeasureGroupforRatioMeasure () : void {
+
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()

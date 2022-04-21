@@ -4,9 +4,10 @@ import {MeasureGroupPage} from "./MeasureGroupPage"
 
 export class Utilities {
 
-    public static deleteMeasure(measureName: string, cqlLibraryName: string, measureScoring: string, deleteSecondMeasure?:boolean, altUser?:boolean): void {
+    public static deleteMeasure(measureName: string, cqlLibraryName: string, measureScoring: string | string[], deleteSecondMeasure?:boolean, altUser?:boolean): void {
 
         let path = 'cypress/fixtures/measureId'
+        let measureCheck = null
 
         if (altUser)
         {
@@ -21,23 +22,44 @@ export class Utilities {
         {
             path = 'cypress/fixtures/measureId2'
         }
-
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(path).should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/'+id,
-                    method: 'PUT',
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + id,
                     headers: {
-                        Authorization: 'Bearer ' + accessToken.value
+                        authorization: 'Bearer ' + accessToken.value
                     },
-                    body: {"id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName,
-                        "measureScoring": measureScoring, "model": 'QI-Core', "active": false}
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body).to.eql("Measure updated successfully.")
+                    method: 'GET',
+
+                    }).then((response) => {
+                        //expect(response.status).to.eql(404)
+                        measureCheck = response.status
                 })
+
             })
         })
+        if (measureCheck === 200){
+            cy.getCookie('accessToken').then((accessToken) => {
+                cy.readFile(path).should('exist').then((id) => {
+                    cy.request({
+                        url: '/api/measures/'+id,
+                        method: 'PUT',
+                        headers: {
+                            Authorization: 'Bearer ' + accessToken.value
+                        },
+                        body: {"id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName,
+                            "measureScoring": measureScoring, "model": 'QI-Core', "active": false}
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body).to.eql("Measure updated successfully.")
+                    })
+                })
+            })
+        } else {
+            return
+        }
+
     }
 
     public static textValues = {
@@ -86,12 +108,14 @@ export class Utilities {
             // log new array
             cy.log(cqlArr);
             this.waitForElementVisible(pageResource, 3000)
+            cy.get(pageResource).invoke('show')
             for (let i in cqlArr){
                 this.textValues.dataLines = cqlArr[i]
                 cy.log(this.textValues.dataLines)
                 cy.get(pageResource)
                     .should('contains.text', this.textValues.dataLines)
                 this.textValues.dataLines = null
+                //#ace-editor-wrapper > div.ace_scroller > div > div.ace_layer.ace_text-layer
 
             }
         })

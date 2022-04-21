@@ -23,6 +23,7 @@ export class TestCasesPage {
 
     //Test Case Population Values
     public static readonly testCaseIPPCheckBox = '[data-testid="test-population-initialPopulation-expected"]'
+    //<input type="checkbox" id="initialPopulation-expected-cb" data-testid="test-population-initialPopulation-expected" class="TestCasePopulation__StyledInput-sc-xck5bx-2 imTgWn">
     public static readonly testCaseNUMERCheckBox = '[data-testid="test-population-numerator-expected"]'
     public static readonly testCaseNUMEXCheckBox = '[data-testid="test-population-numeratorExclusion-expected"]'
     public static readonly testCaseDENOMCheckBox = '[data-testid="test-population-denominator-expected"]'
@@ -137,7 +138,7 @@ export class TestCasesPage {
             cy.get('[data-testid=edit-test-case-'+ fileContents +']').click()
         })
     }
-    public static CreateTestCaseAPI(title: string, series: string, description: string): void {
+    public static CreateTestCaseAPI(testCaseTitle:string, testCaseDescription:string, testCaseSeries:string, testCaseJson:string): void {
         cy.setAccessTokenCookie()
 
         //Add Test Case to the Measure
@@ -151,18 +152,19 @@ export class TestCasesPage {
                     method: 'POST',
                     body: {
                         'name': "DENOMFail",
-                        'series': series,
-                        'title': title,
-                        'description': description,
-                        'json': "{ \n  Encounter: \"Office Visit union\" \n  Id: \"Identifier\" \n  value: \"Visit out of hours (procedure)\" \n}"
+                        'series': testCaseSeries,
+                        'title': testCaseTitle,
+                        'description': testCaseDescription,
+                        'json': testCaseJson//"{ \n  Encounter: \"Office Visit union\" \n  Id: \"Identifier\" \n  value: \"Visit out of hours (procedure)\" \n}"
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)
                     expect(response.body.id).to.be.exist
-                    expect(response.body.series).to.eql(series)
-                    expect(response.body.title).to.eql(title)
-                    expect(response.body.description).to.eql(description)
+                    expect(response.body.series).to.eql(testCaseSeries)
+                    expect(response.body.title).to.eql(testCaseTitle)
+                    expect(response.body.description).to.eql(testCaseDescription)
                     expect(response.body.json).to.be.exist
+                    expect(response.body.json).to.eql(testCaseJson)
                     cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
                 })
             })
