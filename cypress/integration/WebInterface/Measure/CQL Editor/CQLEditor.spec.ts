@@ -77,7 +77,7 @@ describe('CQL Editor', () => {
 
     })
 
-    it.only('Verify errors appear on CQL Editor page and in the CQL Editor object, on save and on tab / page load, when included library is not found', () => {
+    it('Verify errors appear on CQL Editor page and in the CQL Editor object, on save and on tab / page load, when included library is not found', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
