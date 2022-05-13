@@ -44,7 +44,7 @@
 		"@cypress/browserify-preprocessor": "^2.2.4",
 		"@types/node": "^12.20.27",
 		"axe-core": "^4.3.3",
-		"cypress": "^8.1.0",
+		"cypress": "^9.6.1",
 		"cypress-axe": "^0.13.0",
 		"cypress-commands": "^1.1.0",
 		"cypress-visual-regression": "^1.5.2",
@@ -57,5 +57,10 @@
 	},
 	"publishConfig": {
 		"registry": "https://npm.pkg.github.com/"
+	},
+	"dependencies": {
+		"node": "^17.7.2",
+		"uuid": "^7.0.3"
 	}
 }
+
