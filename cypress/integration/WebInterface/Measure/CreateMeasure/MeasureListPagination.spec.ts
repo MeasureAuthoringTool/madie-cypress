@@ -52,15 +52,17 @@ describe('Measure List Pagination', () => {
 
     after('Cleanup Measures and Logout', () => {
 
-        cy.getCookie('accessToken').then((accessToken) => {
+        cy.setAccessTokenCookie()
 
-            let idsList = ''
+        let idsList = ''
 
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
 
-                idsList = fileContents.split(',')
+            idsList = fileContents.split(',')
 
-                for(let j=0; j < idsList.length-1; j++) {
+            for(let j=0; j < idsList.length-1; j++) {
+
+                cy.getCookie('accessToken').then((accessToken) => {
 
                     let id = idsList[j]
 
@@ -74,7 +76,7 @@ describe('Measure List Pagination', () => {
                         },
                         body: {
                             "id": id, "measureName": measureName[j], "cqlLibraryName": CqlLibraryName[j] + 1,
-                             "model": 'QI-Core', "active": false, "measurementPeriodStart": mpStartDate,
+                            "model": 'QI-Core', "active": false, "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate
                         }
 
@@ -82,9 +84,8 @@ describe('Measure List Pagination', () => {
                         expect(response.status).to.eql(200)
                         expect(response.body).to.eql("Measure updated successfully.")
                     })
-                }
-
-            })
+                })
+            }
 
         })
 
