@@ -162,8 +162,7 @@ describe('Measure: CQL Editor', () => {
         cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLEditorPage.errorInCQLEditorWindow).should('not.exist')
 
     })
-    //skipping --- this will be fixed with bug MAT-4521
-    it.skip('Graceful error msg if model is missing in CQL', () => {
+    it('Graceful error msg if model is missing in CQL', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()

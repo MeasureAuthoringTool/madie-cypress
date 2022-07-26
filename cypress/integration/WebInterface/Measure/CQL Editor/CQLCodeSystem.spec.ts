@@ -239,7 +239,6 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLEditorPage.errorInCQLEditorWindow).should('not.exist')
 
     })
-    //negative test -- waiting on MAT-4458
     it('Verify proper error(s) appear in CQL Editor, when user provides a FHIR version and there is no vsac version', () => {
 
         //Click on Edit Measure

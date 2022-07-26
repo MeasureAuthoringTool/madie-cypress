@@ -74,7 +74,6 @@ describe('Execute Test Case', () => {
 
 
     })
-    //this test should be re-ran without the Deonminator Exclusion field containing a value, after MAT-4497 is fixed
     it('Verify Test execution status when the Expected and Actual values do not match', () => {
 
         //Add Measure Group

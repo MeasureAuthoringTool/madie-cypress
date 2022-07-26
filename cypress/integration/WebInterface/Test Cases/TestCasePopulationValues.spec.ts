@@ -17,7 +17,6 @@ let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 let testCaseSeries = 'SBTestSeries'
 let newMeasureName = ''
 let newCqlLibraryName = ''
-////skipping 1.) these tests need to be re-worked to account for no default measure score on group tab / page; 2.) MAT-4467
 describe('Test Case Expected Measure Group population values based on initial measure scoring', () => {
 
     beforeEach('Create measure and login', () => {
