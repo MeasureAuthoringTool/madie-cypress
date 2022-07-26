@@ -5,6 +5,15 @@ import { Environment } from "./Environment"
 
 export class MeasureGroupPage {
 
+    //tabs on Measure Group page
+    public static readonly populationTab = '[data-testid="populations-tab"]'
+    public static readonly stratificationTab = '[data-testid="stratifications-tab"]'
+    public static readonly reportingTab = '[data-testid="reporting-tab"]'
+
+    //Reporting tab fields
+    public static readonly rateAggregation = '[data-testid="rateAggregationText"]'
+    public static readonly improvementNotationSelect = '[data-testid="improvement-notation-select"]'
+    
     //Scoring drop-down box
     public static readonly measureScoringSelect = '[data-testid="scoring-unit-select"]'
     public static readonly saveMeasureGroupDetails = '[data-testid="group-form-submit-btn"]'
