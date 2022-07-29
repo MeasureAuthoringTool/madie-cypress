@@ -69,7 +69,7 @@
 		"registry": "https://npm.pkg.github.com/"
 	},
 	"dependencies": {
-		"node": "^17.7.2",
+		"node": "^17.9.1",
 		"uuid": "^7.0.3"
 	}
 }
