@@ -430,7 +430,7 @@ export class Utilities {
             case "all": {
                 //log, in cypress, the measure score value
                 cy.log((mgPVTestType.valueOf()).toString())
-                this.validationMeasureGroupSaveAll((measureScoreValue.valueOf()).toString())                
+                this.validationMeasureGroupSaveAll((measureScoreValue.valueOf()).toString())
                 //save measure group
                 cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
                 this.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
@@ -441,20 +441,12 @@ export class Utilities {
                 cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
                 cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
                 this.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
-                cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg)
-                    .then(($message) => {
-                        if (($message.text() == 'This change will reset the population scoring value in test cases. cases. Are you sure you wanted to continue with this? UpdateCancel'/*'This change will reset the population scoring value in test cases. Are you sure you wanted to continue with this? UpdateCancel'*/)) {
-                            cy.get(MeasureGroupPage.confirmScoreUnitValueUpdateBtn).click()
-                            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
-                        }
-                        else if ( ($message.text() != 'This change will reset the population scoring value in test cases. cases. Are you sure you wanted to continue with this? UpdateCancel')) {
-                            expect($message.text()).to.be.oneOf(['Population details for this group saved successfully.', 'Population details for this group updated successfully.'])
-                        }
-                   })
+                cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+
                 break
             }
             case 'wOReq': {
-                this.validationMeasureGroupSaveWithoutRequired((measureScoreValue.valueOf()).toString())                
+                this.validationMeasureGroupSaveWithoutRequired((measureScoreValue.valueOf()).toString())
                 //save measure group button is not enabled
                 cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
                 break
@@ -473,19 +465,10 @@ export class Utilities {
                     cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus().click()
                     //validation message after attempting to save
                     cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-                    cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg)
-                        .then(($message) => {
-                            if (($message.text() == 'This change will reset the population scoring value in test cases. cases. Are you sure you wanted to continue with this? UpdateCancel'/*'This change will reset the population scoring value in test cases. Are you sure you wanted to continue with this? UpdateCancel'*/)) {
-                                cy.get(MeasureGroupPage.confirmScoreUnitValueUpdateBtn).click()
-                                cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
-                            }
-                            else if ( ($message.text() != 'This change will reset the population scoring value in test cases. cases. Are you sure you wanted to continue with this? UpdateCancel')) {
-                                expect($message.text()).to.be.oneOf(['Population details for this group saved successfully.', 'Population details for this group updated successfully.'])
-                            }
-                        })
-                    } 
+                    cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+                    }
                     break
             }
-        }        
+        }
     }
 }

@@ -13,7 +13,7 @@ export class MeasureGroupPage {
     //related to delete functionality for groups
     public static readonly deleteGroupbtn = '[data-testid="group-form-delete-btn"]'
     public static readonly deleteMeasureGroupModal = '[data-testid="delete-measure-group-dialog"]'
-    public static readonly yesDeleteModalbtn = '[data-testid="delete-measure-group-modal-delete-btn"]'
+    public static readonly yesDeleteModalbtn = '[data-testid="delete-measure-group-modal-agree-btn"]'
     public static readonly keepGroupModalbtn = '[data-testid="delete-measure-group-modal-cancel-btn"]'
     //Reporting tab fields
     public static readonly rateAggregation = '[data-testid="rateAggregationText"]'
@@ -40,6 +40,10 @@ export class MeasureGroupPage {
 
     //add measure group
     public static readonly addMeasureGroupButton = '[data-testid="add-measure-group-button"]'
+
+    //update measure group
+    public static readonly updateMeasureGroupConfirmationMsg = '.jss7'
+    public static readonly updateMeasureGroupConfirmationBtn = '[data-testid="update-measure-group-scoring-modal-agree-btn"]'
 
     //additional measure groups (assuming thay exist)
     public static readonly measureGroupOne = '[data-testid="leftPanelMeasureInformation-MeasureGroup1"]'

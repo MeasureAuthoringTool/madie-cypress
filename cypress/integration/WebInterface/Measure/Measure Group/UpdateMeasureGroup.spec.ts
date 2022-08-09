@@ -11,8 +11,8 @@ let measureScoringArray = ['Ratio', 'Cohort', 'Continuous Variable', 'Proportion
 let mgPVTestType = ['all', 'wOReq', 'wOOpt']
 let newMeasureName = ''
 let newCqlLibraryName = ''
-//skipping due to MAT-4591
-describe.skip('Validate Measure Group', () => {
+
+describe('Validate Measure Group', () => {
 
     beforeEach('Create measure and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -54,16 +54,27 @@ describe.skip('Validate Measure Group', () => {
 
         //Measure group description
         cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
-            
-        for (let j in mgPVTestType){
-            for (let i in measureScoringArray){
-                //log, in cypress, the measure score value
-                cy.log((measureScoringArray[i].valueOf()).toString())
-                //select scoring unit on measure
-                cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[i].valueOf()).toString())
-                Utilities.validateMeasureGroup((measureScoringArray[i].valueOf()).toString(), mgPVTestType[j])
-            }
-        }
+
+        //log, in cypress, the measure score value
+        cy.log((measureScoringArray[1].valueOf()).toString())
+        //select scoring unit on measure
+        cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[1].valueOf()).toString())
+        Utilities.validateMeasureGroup((measureScoringArray[1].valueOf()).toString(), mgPVTestType[0])
+
+        //Update Measure Group
+        cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[2].valueOf()).toString())
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.initialPopulationSelect).select('SDE Payer')
+        cy.get(MeasureGroupPage.measurePopulationSelect).select('SDE Sex')
+        cy.get(MeasureGroupPage.measurePopulationExclusionSelect).select('Absence of Cervix')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationMsg).should('contain.text', 'Are you sure you want to Save Changes?')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
     })
 
@@ -85,15 +96,20 @@ describe.skip('Validate Measure Group', () => {
         //Measure group description
         cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
                     
-        for (let j in mgPVTestType){
-            for (let i in measureScoringArray){
-                //log, in cypress, the measure score value
-                cy.log((measureScoringArray[i].valueOf()).toString())
-                //select scoring unit on measure
-                cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[i].valueOf()).toString())
-                Utilities.validateMeasureGroup((measureScoringArray[i].valueOf()).toString(), mgPVTestType[j])
-            }
-        }
+        //log, in cypress, the measure score value
+        cy.log((measureScoringArray[1].valueOf()).toString())
+        //select scoring unit on measure
+        cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[1].valueOf()).toString())
+        Utilities.validateMeasureGroup((measureScoringArray[1].valueOf()).toString(), mgPVTestType[0])
+
+        //Update Measure Group without all required populations
+        cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[2].valueOf()).toString())
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.initialPopulationSelect).select('SDE Payer')
+        cy.get(MeasureGroupPage.measurePopulationExclusionSelect).select('Absence of Cervix')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
 
     })
 
@@ -114,16 +130,25 @@ describe.skip('Validate Measure Group', () => {
 
         //Measure group description
         cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
-                    
-        for (let j in mgPVTestType){
-            for (let i in measureScoringArray){
-                //log, in cypress, the measure score value
-                cy.log((measureScoringArray[i].valueOf()).toString())
-                //select scoring unit on measure
-                cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[i].valueOf()).toString())
-                Utilities.validateMeasureGroup((measureScoringArray[i].valueOf()).toString(), mgPVTestType[j])
-            }
-        }
 
+        //log, in cypress, the measure score value
+        cy.log((measureScoringArray[1].valueOf()).toString())
+        //select scoring unit on measure
+        cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[1].valueOf()).toString())
+        Utilities.validateMeasureGroup((measureScoringArray[1].valueOf()).toString(), mgPVTestType[0])
+
+        //Update Measure Group without optional populations
+        cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[2].valueOf()).toString())
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.initialPopulationSelect).select('SDE Payer')
+        cy.get(MeasureGroupPage.measurePopulationSelect).select('SDE Sex')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationMsg).should('contain.text', 'Are you sure you want to Save Changes?')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
     })
 })

@@ -6,7 +6,6 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {Utilities} from "../../../../Shared/Utilities"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import { createPublicKey } from "crypto"
 let measureOne = 'TestMeasure' + Date.now()
 let CqlLibraryName1 = 'TestLibrary' + Date.now()
 let title1 = 'TCOneForDeleteTests'
@@ -77,9 +76,9 @@ describe('Validate Measure Group deletion functionality', () => {
 
         //modal has messaging asking the user to confirm the deletion
         cy.get('.MuiTypography-root.MuiTypography-body1.jss6.css-9l3uo3').should('exist')
-        cy.get('.MuiTypography-root.MuiTypography-body1.jss6.css-9l3uo3').should('contain.text', 'Measure Group 1 will be deleted. Are you sure you want to delete this measure group ?')
-        cy.get('.MuiTypography-root.MuiTypography-body1.jss7.css-9l3uo3').should('exist')
-        cy.get('.MuiTypography-root.MuiTypography-body1.jss7.css-9l3uo3').should('contain.text', 'This action cannot be undone.')
+        cy.get('.MuiTypography-root.MuiTypography-body1.jss6.css-9l3uo3').should('contain.text', 'Measure Group 1 will be deleted. Are you sure you want to delete this measure group?')
+        cy.get('.jss8').should('exist')
+        cy.get('.jss8').should('contain.text', 'This action cannot be undone.')
 
     })
 
