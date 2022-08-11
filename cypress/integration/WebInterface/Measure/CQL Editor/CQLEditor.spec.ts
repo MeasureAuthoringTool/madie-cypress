@@ -162,8 +162,7 @@ describe('Measure: CQL Editor', () => {
 
     })
 
-    //skipping until MAT-4521 is fixed
-    it.skip('Graceful error msg if model is missing in CQL', () => {
+    it('Graceful error msg if model is missing in CQL', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -291,8 +290,7 @@ describe('Measure: CQL Editor: valueSet', () => {
 
     })
 
-    //skipping until MAT-4608 is fixed
-    it.skip('Value Set Invalid, 400 undefined', () => {
+    it('Value Set Invalid, 400 undefined', () => {
 
         //Click on Edit Button
         MeasuresPage.clickEditforCreatedMeasure()
@@ -320,6 +318,6 @@ describe('Measure: CQL Editor: valueSet', () => {
         ('show').click({force:true, multiple: true})
 
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text',
-            'ELM: 1:23 | Request failed with status code 400 for oid = undefined location = 18:1-18:23')
+            'VSAC: 0:22 | Request failed with status code 400 for oid = undefined location = 18:0-18:22')
     })
 })
