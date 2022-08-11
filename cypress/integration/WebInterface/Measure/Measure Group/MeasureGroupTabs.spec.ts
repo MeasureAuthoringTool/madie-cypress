@@ -5,12 +5,9 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 import {Utilities} from "../../../../Shared/Utilities"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import { symlink } from "fs"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
-let measureScoringArray = ['Ratio', 'Cohort', 'Continuous Variable', 'Proportion']
-let mgPVTestType = ['all', 'wOReq', 'wOOpt']
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.SBTEST_CQL

@@ -10,8 +10,6 @@ export class MeasureGroupPage {
     public static readonly stratificationTab = '[data-testid="stratifications-tab"]'
     public static readonly reportingTab = '[data-testid="reporting-tab"]'
 
-<<<<<<< Updated upstream
-=======
     //stratification fields
     public static readonly stratOne = '[name="stratifications[0].cqlDefinition"]'
     public static readonly stratTwo = '[name="stratifications[1].cqlDefinition"]'
@@ -30,7 +28,7 @@ export class MeasureGroupPage {
 
     public static readonly saveStratButton = '[data-testid="add-strat-button"]'
         
->>>>>>> Stashed changes
+
     //related to delete functionality for groups
     public static readonly deleteGroupbtn = '[data-testid="group-form-delete-btn"]'
     public static readonly deleteMeasureGroupModal = '[data-testid="delete-measure-group-dialog"]'
