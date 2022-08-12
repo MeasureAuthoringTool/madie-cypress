@@ -284,8 +284,65 @@ describe('Validate Measure Group -- scoring and populations', () => {
                 expect($message.val().toString()).to.equal('MeasureGroup Description value')
             })
     })
+
+    it('Add second initial population for Ratio Measure', () => {
+
+        //click on Edit button to edit measure
+        MeasuresPage.clickEditforCreatedMeasure()
+        //navigate to CQL Editor page / tab
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        //read and write CQL from flat file
+        cy.readFile('cypress/fixtures/EXM124v7QICore4Entry.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+        })
+
+        //save CQL on measure
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        //Click on the measure group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.log((measureScoringArray[0].valueOf()).toString())
+        //select scoring unit as Ratio on measure
+        cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[0].valueOf()).toString())
+        Utilities.validateMeasureGroup((measureScoringArray[0].valueOf()).toString(), mgPVTestType[0])
+
+        //fill in a description value
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+
+        //Add Second Initial Population
+        cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
+        cy.get(MeasureGroupPage.secondInitialPopulationSelect).select('Initial Population')
+
+        //save population definition with scoring unit
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+        //validate data is saved in mongo database --> future addition to automated test script
+
+        //navigate away from measure group page
+        cy.get(Header.mainMadiePageButton).click()
+        //navigate back to the measure group page
+        MeasuresPage.clickEditforCreatedMeasure()
+        //Click on the measure group tab
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        //verify that the population and the scoring unit that was saved, together, appears
+        cy.get(MeasureGroupPage.measureScoringSelect).contains('Ratio')
+        cy.get(MeasureGroupPage.initialPopulationSelect).contains('SDE Payer')
+        cy.get(MeasureGroupPage.secondInitialPopulationSelect).contains('Initial Population')
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox)
+            .then(($message) => {
+                expect($message.val().toString()).to.equal('MeasureGroup Description value')
+            })
+    })
 })
-describe.only('Validate Population Basis', () => {
+
+describe('Validate Population Basis', () => {
 
     before('Create measure', () => {
         //Create New Measure

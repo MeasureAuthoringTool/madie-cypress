@@ -49,7 +49,9 @@ export class MeasureGroupPage {
     public static readonly saveMeasureGroupDetails = '[data-testid="group-form-submit-btn"]'
 
     //Populations
-    public static readonly initialPopulationSelect = '[id="population-select-initial-population"]'
+    public static readonly initialPopulationSelect = '[name="populations[0].definition"]'
+    public static readonly addSecondInitialPopulationLink = '[data-testid="add_populations[0].definition"]'
+    public static readonly secondInitialPopulationSelect = '[name="populations[1].definition"]'
     public static readonly denominatorSelect = '[id="population-select-denominator"]'
     public static readonly denominatorExclusionSelect = '[id="population-select-denominator-exclusion"]'
     public static readonly denominatorExceptionSelect = '[id="population-select-denominator-exception"]'

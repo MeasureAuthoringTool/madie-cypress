@@ -1,6 +1,4 @@
 import {Utilities} from "../../../Shared/Utilities"
-
-export {}
 import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
 import {MeasureCQL} from "../../../Shared/MeasureCQL"
 
@@ -36,9 +34,10 @@ describe('Measure Service: Test Case Endpoints', () => {
 
     })
     it('Create Proportion measure group', () => {
-        let PopIniPop = 'IPP'
-        let PopNum = 'Numerator'
-        let PopDenom = 'Denominator'
+
+        let PopIniPop = 'Initial Population'
+        let PopNum = 'Absence of Cervix'
+        let PopDenom = 'Pap Test with Results'
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
@@ -67,25 +66,27 @@ describe('Measure Service: Test Case Endpoints', () => {
                         ],
                         "measureGroupTypes": [
                             "Outcome"
-                        ]
+                        ],
+                        "populationBasis": "Boolean"
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)
                     expect(response.body.id).to.be.exist
                     expect(response.body.scoring).to.eql(measureScoring)
-                    expect(response.body.populations[0].definition).to.eql('IPP')
-                    expect(response.body.populations[1].definition).to.eql('Numerator')
-                    expect(response.body.populations[2].definition).to.eql('Denominator')
+                    expect(response.body.populations[0].definition).to.eql('Initial Population')
+                    expect(response.body.populations[1].definition).to.eql('Absence of Cervix')
+                    expect(response.body.populations[2].definition).to.eql('Pap Test with Results')
                 })
             })
         })
     })
 
     it('Update measure group to Ratio', () => {
-        let PopIniPop = 'IPP'
-        let PopNum = 'Numerator'
-        let PopNumExc = 'Numerator Exclusion'
-        let PopDenom = 'Denominator'
+
+        let PopIniPop = 'Initial Population'
+        let PopNum = 'Absence of Cervix'
+        let PopDenom = 'Pap Test with Results'
+        let PopNumExc = 'Surgical Absence of Cervix'
         let measureTstScoring = 'Ratio'
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -119,16 +120,17 @@ describe('Measure Service: Test Case Endpoints', () => {
                         ],
                         "measureGroupTypes": [
                             "Outcome"
-                        ]
+                        ],
+                        "populationBasis": "Boolean"
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
                     expect(response.body.id).to.be.exist
                     expect(response.body.scoring).to.eql('Ratio')
-                    expect(response.body.populations[0].definition).to.eql('IPP')
-                    expect(response.body.populations[1].definition).to.eql('Numerator')
-                    expect(response.body.populations[2].definition).to.eql('Numerator Exclusion')
-                    expect(response.body.populations[3].definition).to.eql('Denominator')
+                    expect(response.body.populations[0].definition).to.eql('Initial Population')
+                    expect(response.body.populations[1].definition).to.eql('Absence of Cervix')
+                    expect(response.body.populations[2].definition).to.eql('Surgical Absence of Cervix')
+                    expect(response.body.populations[3].definition).to.eql('Pap Test with Results')
                 })
             })
         })
@@ -136,9 +138,9 @@ describe('Measure Service: Test Case Endpoints', () => {
 
     it('Add UCUM Scoring unit to the Measure Group', () =>  {
 
-        let PopIniPop = 'IPP'
-        let PopNum = 'Numerator'
-        let PopDenom = 'Denominator'
+        let PopIniPop = 'Initial Population'
+        let PopNum = 'Absence of Cervix'
+        let PopDenom = 'Pap Test with Results'
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
@@ -170,15 +172,16 @@ describe('Measure Service: Test Case Endpoints', () => {
                         ],
                         "scoringUnit": {
                             "label": "ml milliLiters",
-                        }
+                        },
+                        "populationBasis": "Boolean"
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)
                     expect(response.body.id).to.be.exist
                     expect(response.body.scoring).to.eql(measureScoring)
-                    expect(response.body.populations[0].definition).to.eql('IPP')
-                    expect(response.body.populations[1].definition).to.eql('Numerator')
-                    expect(response.body.populations[2].definition).to.eql('Denominator')
+                    expect(response.body.populations[0].definition).to.eql('Initial Population')
+                    expect(response.body.populations[1].definition).to.eql('Absence of Cervix')
+                    expect(response.body.populations[2].definition).to.eql('Pap Test with Results')
                     expect(response.body.scoringUnit.label).to.eql('ml milliLiters')
                 })
             })
@@ -188,9 +191,9 @@ describe('Measure Service: Test Case Endpoints', () => {
 
     it('Update UCUM Scoring unit for the Measure Group', () =>  {
 
-        let PopIniPop = 'IPP'
-        let PopNum = 'Numerator'
-        let PopDenom = 'Denominator'
+        let PopIniPop = 'Initial Population'
+        let PopNum = 'Absence of Cervix'
+        let PopDenom = 'Pap Test with Results'
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
@@ -222,23 +225,84 @@ describe('Measure Service: Test Case Endpoints', () => {
                         ],
                         "scoringUnit": {
                             "label": "455 455",
-                        }
+                        },
+                        "populationBasis": "Boolean"
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)
                     expect(response.body.id).to.be.exist
                     expect(response.body.scoring).to.eql(measureScoring)
-                    expect(response.body.populations[0].definition).to.eql('IPP')
-                    expect(response.body.populations[1].definition).to.eql('Numerator')
-                    expect(response.body.populations[2].definition).to.eql('Denominator')
+                    expect(response.body.populations[0].definition).to.eql('Initial Population')
+                    expect(response.body.populations[1].definition).to.eql('Absence of Cervix')
+                    expect(response.body.populations[2].definition).to.eql('Pap Test with Results')
                     expect(response.body.scoringUnit.label).to.eql('455 455')
                 })
             })
         })
 
     })
+
+    it('Add Second Initial Population for Ratio Measure', () => {
+
+        let PopIniPop = 'Initial Population'
+        let SecondPopInPop = 'SDE Race'
+        let PopNum = 'Absence of Cervix'
+        let PopDenom = 'Pap Test with Results'
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups/',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": fileContents,
+                        "scoring": "Ratio",
+                        "populations": [
+                            {
+                                "name": "initialPopulation",
+                                "definition": PopIniPop
+                            },
+                            {
+                                "name": "initialPopulation",
+                                "definition": SecondPopInPop
+                            },
+                            {
+                                "name": "numerator",
+                                "definition": PopNum
+                            },
+                            {
+                                "name": "denominator",
+                                "definition": PopDenom
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ],
+                        "scoringUnit": {
+                            "label": "ml milliLiters",
+                        },
+                        "populationBasis": "Boolean"
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.scoring).to.eql('Ratio')
+                    expect(response.body.populations[0].definition).to.eql('Initial Population')
+                    expect(response.body.populations[1].definition).to.eql('SDE Race')
+                    expect(response.body.populations[2].definition).to.eql('Absence of Cervix')
+                    expect(response.body.populations[3].definition).to.eql('Pap Test with Results')
+                    expect(response.body.scoringUnit.label).to.eql('ml milliLiters')
+                })
+            })
+        })
+    })
 })
-describe.only('Verify Population Basis is required when creating group on backend', () => {
+
+//Skipping until MAT-4630 is fixed
+describe.skip('Verify Population Basis is required when creating group on backend', () => {
     beforeEach('Set Access Token',() => {
 
         cy.setAccessTokenCookie()
@@ -261,7 +325,7 @@ describe.only('Verify Population Basis is required when creating group on backen
 
 
     it('Verify that 400 level response is returned when Population Basis is not included, when trying to create a group', () => {
-        let user = ''
+
         let measurePath = ''
         let measureGroupPath = ''
         let measureScoring = 'Proportion'
