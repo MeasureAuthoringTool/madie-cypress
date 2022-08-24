@@ -57,11 +57,12 @@ export class MeasureGroupPage {
     public static readonly measureGroupTypeListBox = '[id="mui-component-select-measureGroupTypes"]'
 
     //Scoring drop-down box
-    public static readonly measureScoringSelect = '[data-testid="scoring-unit-select"]'
+    public static readonly measureScoringSelect = '#scoring-select'
+    public static readonly measureScoringRatio = '[data-testid="group-scoring-option-RATIO"]'
     public static readonly saveMeasureGroupDetails = '[data-testid="group-form-submit-btn"]'
 
     //Populations
-    public static readonly initialPopulationSelect = '[name="populations[0].definition"]'
+    public static readonly initialPopulationSelect = '[id="population-select-initial-population"]'
     public static readonly denominatorSelect = '[id="population-select-denominator"]'
     public static readonly denominatorExclusionSelect = '[id="population-select-denominator-exclusion"]'
     public static readonly denominatorExceptionSelect = '[id="population-select-denominator-exception"]'
@@ -69,11 +70,29 @@ export class MeasureGroupPage {
     public static readonly numeratorExclusionSelect = '[id="population-select-numerator-exclusion"]'
     public static readonly measurePopulationSelect = '[id="population-select-measure-population"]'
     public static readonly measurePopulationExclusionSelect = '[id="population-select-measure-population-exclusion"]'
+    public static readonly measurePopulationOption = '[data-testid="select-option-measure-group-population"]'
 
     //UCUM scoring unit
     public static readonly ucumScoringUnitSelect = '.css-ackcql'
     public static readonly ucumScoringUnitDropdownList = '#react-select-2-input'
     public static readonly ucumScoringUnitfullName = '#react-select-2-option-1-0'
+
+    //Measure Observations
+    public static readonly addDenominatorObservationLink = '[data-testid="add-measure-observation-denominator"]'
+    public static readonly denominatorObservation = '[id="measure-observation-denominator"]'
+    public static readonly denominatorAggregateFunction = '[id="measure-observation-aggregate-denominator"]'
+    public static readonly removeDenominatorObservation = '[data-testid="measure-observation-denominator-remove"]'
+    public static readonly measureObservationSelect = '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-1km1ehz"]'
+    public static readonly aggregateFunctionCount = '[data-value="Count"]'
+    public static readonly aggregateFunctionMaximum = '[data-value="Maximum"]'
+    public static readonly addNumeratorObservationLink = '[data-testid="add-measure-observation-numerator"]'
+    public static readonly numeratorObservation = '[id="measure-observation-numerator"]'
+    public static readonly numeratorAggregateFunction= '[id="measure-observation-aggregate-numerator"]'
+    public static readonly removeNumeratorObservation = '[data-testid="measure-observation-numerator-remove"]'
+
+    //Continuous Variable Measure Observation
+    public static readonly cvMeasureObservation = '[id="measure-observation-cv-obs"]'
+    public static readonly cvAggregateFunction = '[id="measure-observation-aggregate-cv-obs"]'
 
     //add measure group
     public static readonly addMeasureGroupButton = '[data-testid="add-measure-group-button"]'
@@ -177,19 +196,26 @@ export class MeasureGroupPage {
         })
         cy.get(MeasureGroupPage.measureGroupTypeDropdownBtn).click({force:true})
 
-        cy.get(MeasureGroupPage.measureScoringSelect).select('Ratio')
-        cy.get(MeasureGroupPage.initialPopulationSelect).select('ipp')
-        cy.get(MeasureGroupPage.denominatorSelect).select('denom')
-        cy.get(MeasureGroupPage.denominatorExclusionSelect).select('ipp') //related to bug 4497
-        cy.get(MeasureGroupPage.numeratorSelect).select('num')
-        cy.get(MeasureGroupPage.numeratorExclusionSelect).select('num')
+        cy.get(MeasureGroupPage.measureScoringSelect).click()
+        cy.get(MeasureGroupPage.measureScoringRatio).click()
+
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(1).click() //select ipp
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(0).click() //select denom
+        cy.get(MeasureGroupPage.denominatorExclusionSelect).click()
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(2).click() //select num
+        cy.get(MeasureGroupPage.numeratorSelect).click()
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(3).click() //select numeratorExclusion
+        cy.get(MeasureGroupPage.numeratorExclusionSelect).click()
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(1).click() //select ipp
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
     }
 
     public static CreateProportionMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, PopNumP?:string, PopDenomP?: string): string {
