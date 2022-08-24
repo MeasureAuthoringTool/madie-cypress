@@ -59,6 +59,7 @@ export class MeasureGroupPage {
     //Scoring drop-down box
     public static readonly measureScoringSelect = '#scoring-select'
     public static readonly measureScoringRatio = '[data-testid="group-scoring-option-RATIO"]'
+    public static readonly measureScoringCV = '[data-testid="group-scoring-option-CONTINUOUS_VARIABLE"]'
     public static readonly saveMeasureGroupDetails = '[data-testid="group-form-submit-btn"]'
 
     //Populations

@@ -11,13 +11,29 @@ context Patient
 define "ipp":
   exists ["Encounter"] E where E.period.start during "Measurement Period"
 
-define "denom":
-  "ipp"
+{home}define "denom":
+{home}  "ipp"
 
-define "num":
-  exists ["Encounter"] E where E.status ~ 'finished'
+{home}define "num":
+{home}  exists ["Encounter"] E where E.status ~ 'finished'
 
-define "numeratorExclusion":
-    "num"
+{home}define "numeratorExclusion":
+{home}    "num"
 
+{home}define function ToCode(coding FHIR.Coding):
+{home} if coding is null then
+{home}   null
+{home}      else
+{home}        System.Code {
+{home}           code: coding.code.value,
+{home}           system: coding.system.value,
+{home}           version: coding.version.value,
+{home}           display: coding.display.value
+{home}           }
 
+{home}define function fun(notPascalCase Integer ):
+{home}  true
+
+{home}define function "isFinishedEncounter"(Enc Encounter):
+{home}  true
+{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}
