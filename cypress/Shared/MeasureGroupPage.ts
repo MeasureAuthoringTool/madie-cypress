@@ -365,7 +365,7 @@ export class MeasureGroupPage {
                             {
                                 "_id" : "",
                                 "name" : "denominatorExclusion",
-                                "definition" : ""
+                                "definition" : PopDenomP
                             },
                             {
                                 "_id" : "",
@@ -375,7 +375,7 @@ export class MeasureGroupPage {
                             {
                                 "_id" : "",
                                 "name" : "numeratorExclusion",
-                                "definition" : ""
+                                "definition" : PopNumP
                             }
                         ],
                         "measureGroupTypes": [

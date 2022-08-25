@@ -5,6 +5,9 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 import {Utilities} from "../../../../Shared/Utilities"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
+import {TestCasesPage} from "../../../../Shared/TestCasesPage"
+import {TestCaseJson} from "../../../../Shared/TestCaseJson"
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -13,6 +16,10 @@ let mgPVTestType = ['all', 'wOReq', 'wOOpt']
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.ICFTest_CQL
+let testCaseTitle = 'test case title'
+let testCaseDescription = 'DENOMFail' + Date.now()
+let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
+let testCaseSeries = 'SBTestSeries'
 
 describe('Validate Measure Group', () => {
 
@@ -97,7 +104,7 @@ describe('Validate Measure Group', () => {
 
         //Measure group description
         cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
-                    
+
         //log, in cypress, the measure score value
         cy.log((measureScoringArray[1].valueOf()).toString())
         //select scoring unit on measure
@@ -210,7 +217,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.rdioSecondNum).should('be.visible')
 
         cy.get(MeasureGroupPage.rdioSecondNum).should('be.checked')
-        
+
     })
     it('Validate that when the association for IP1 changes, IP2 associations also change', () => {
         //Click on Edit Measure
@@ -243,7 +250,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.rdioSecondDenom).should('be.checked')
 
 
-        
+
     })
     it('Validate association for IP2 is read only', () => {
 
@@ -271,10 +278,10 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.rdioSecondDenom).should('be.disabled')
         cy.get(MeasureGroupPage.rdioSecondNum).should('be.disabled')
 
-        
+
     })
     it('Validate that save can occur once a value has been indicated for IP2', () => {
-        
+
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
 
@@ -294,7 +301,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('be.visible')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
-        
+
         //save button is disabled
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
 
@@ -332,7 +339,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('be.visible')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
-        
+
         //save button is disabled
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
 
@@ -367,7 +374,62 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
     })
 
+    it('Validate test case execution for measure group with second initial population', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //navigate to CQL Editor page / tab
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, {delay:50})
+        })
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //Click on the measure group tab
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //fill in a description value
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+
+        //Add Second Initial Population
+        cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
+        cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('be.visible')
+        cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
+
+        cy.get(MeasureGroupPage.secondInitialPopulationSelect).click()
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(0).click() //select denom
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+
+        //save
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        //confirmed updated / saved msg
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+        //Add Test Case
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson, true)
+
+        //Navigate to Test Cases Page and execute Test Case
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.executeTestCaseButton).focus()
+        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'pass')
+
+    })
 })
+
 describe('Delete second Initial Population -- Ratio score only', () => {
 
     beforeEach('Create measure and login', () => {
@@ -419,8 +481,8 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(MeasureGroupPage.deleteSecondInitialPopulation).should('be.visible')
 
         //deleting / removing the second initial population before saving
-        cy.get(MeasureGroupPage.deleteSecondInitialPopulation).click()  
-        
+        cy.get(MeasureGroupPage.deleteSecondInitialPopulation).click()
+
         //associations are removed
         cy.get(MeasureGroupPage.lblFirstIpAssociation).should('not.exist')
         cy.get(MeasureGroupPage.rdioFirstDenom).should('not.exist')
