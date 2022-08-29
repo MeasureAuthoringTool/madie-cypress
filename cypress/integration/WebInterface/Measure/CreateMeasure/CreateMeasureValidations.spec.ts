@@ -2,7 +2,7 @@ import {OktaLogin} from "../../../../Shared/OktaLogin"
 import {LandingPage} from "../../../../Shared/LandingPage"
 import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 
-describe('Measure Name Validations', () => {
+describe('Create Measure Validations', () => {
 
     beforeEach('Login',() => {
         OktaLogin.Login()
@@ -14,7 +14,6 @@ describe('Measure Name Validations', () => {
 
     //Measure Name Validations
     it('Verify error messages when the measure name entered is invalid or empty', () => {
-
 
         //Click on New Measure Button
         cy.get(LandingPage.newMeasureButton).click()
@@ -59,6 +58,7 @@ describe('Measure Name Validations', () => {
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
         cy.get(CreateMeasurePage.measureModelQICore).click()
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).type('eCQMTitle')
         cy.get(CreateMeasurePage.measurementPeriodStartDate).type('12/01/2020')
         cy.get(CreateMeasurePage.measurementPeriodEndDate).type('01/01/2021')
 
@@ -136,6 +136,37 @@ describe('Measure Name Validations', () => {
 
         cy.get(CreateMeasurePage.cancelButton).click()
 
+    })
+
+    //eCQM Abbreviated title validations
+    it('Verify error message when the eCQM title entered is invalid or empty', () => {
+
+        let measureName = 'TestMeasure' + Date.now()
+        let CqlLibraryName = 'TestLibrary' + Date.now()
+
+        //Click on New Measure Button
+        cy.get(LandingPage.newMeasureButton).click()
+        cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
+        cy.get(CreateMeasurePage.measureModelDropdown).click()
+        cy.get(CreateMeasurePage.measureModelQICore).click()
+        cy.get(CreateMeasurePage.measurementPeriodStartDate).type('12/01/2020')
+        cy.get(CreateMeasurePage.measurementPeriodEndDate).type('01/01/2021')
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(CqlLibraryName)
+
+        //eCQM abbreviated title empty
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).focus().blur()
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleFieldLevelError).should('contain.text', 'eCQM Abbreviated Title is required.')
+
+        //Verify if create measure button is disabled
+        cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
+
+        //eCQM abbreviated title more than 32 characters
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).type('This test is for measure name validation.This test is')
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleFieldLevelError).should('contain.text', 'eCQM Abbreviated Title cannot be more than 32 characters.')
+
+        //Verify if create measure button is disabled
+        cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
+        cy.get(CreateMeasurePage.cancelButton).click()
     })
 })
 

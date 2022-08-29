@@ -1,6 +1,3 @@
-
-
-export {}
 import {Utilities} from "../../../Shared/Utilities"
 import {MeasureCQL} from "../../../Shared/MeasureCQL"
 import {Environment} from "../../../Shared/Environment"
@@ -22,6 +19,7 @@ const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
 let measureCQL = MeasureCQL.SBTEST_CQL
+let eCQMTitle = 'eCQMTitle'
 
 describe('Measure Service: Create Measure', () => {
 
@@ -46,7 +44,7 @@ describe('Measure Service: Create Measure', () => {
                 headers: {
                     Authorization: 'Bearer ' + accessToken.value
                 },
-                body: {"measureName": measureName, "cqlLibraryName": CQLLibraryName, "model": model, "measurementPeriodStart": mpStartDate,
+                body: {"measureName": measureName, "cqlLibraryName": CQLLibraryName, "model": model, "ecqmTitle": eCQMTitle, "measurementPeriodStart": mpStartDate,
                        "measurementPeriodEnd": mpEndDate}
             }).then((response) => {
                 expect(response.status).to.eql(201)
@@ -424,6 +422,7 @@ describe('Measure Service: CQL Library name validations', () => {
                 body: {
                     "measureName": measureName,
                     "cqlLibraryName": CQLLibraryName,
+                    "ecqmTitle": eCQMTitle,
                     "model": model
                 }
             }).then((response) => {
@@ -491,7 +490,7 @@ describe('Measure Service: Update Delete Flag', () => {
                         headers: {
                             Authorization: 'Bearer ' + accessToken.value
                         },
-                        body: {"id": id, "measureName": newMeasureName, "cqlLibraryName": newCQLLibraryName, "model": model, "measurementPeriodStart": mpStartDate,
+                        body: {"id": id, "measureName": newMeasureName, "cqlLibraryName": newCQLLibraryName, "model": model, "ecqmTitle": eCQMTitle, "measurementPeriodStart": mpStartDate,
                                "measurementPeriodEnd": mpEndDate, "active": false, "createdBy": defaultUser}
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -537,7 +536,7 @@ describe('Measure Service: Update Delete Flag', () => {
                         headers: {
                             Authorization: 'Bearer ' + accessToken.value
                         },
-                        body: {"id": id, "measureName": newMeasureName, "cqlLibraryName": newCQLLibraryName, "model": model, "measureScoring": measureScoringU, "active": false, "createdBy": user}
+                        body: {"id": id, "measureName": newMeasureName, "cqlLibraryName": newCQLLibraryName, "model": model, "ecqmTitle": "eCQMTitle", "measureScoring": measureScoringU, "active": false, "createdBy": user}
                         }).then((response) => {
                             expect(response.status).to.eql(403)
                     })
@@ -576,7 +575,7 @@ describe('Measure Service: Update Delete Flag', () => {
                         headers: {
                             authorization: 'Bearer ' + accessToken.value
                         },
-                        body: {"id": id+1, "measureName": newMeasureName, "cqlLibraryName": newCQLLibraryName, "model": model, "active": false, "createdBy": defaultUser}
+                        body: {"id": id+1, "measureName": newMeasureName, "cqlLibraryName": newCQLLibraryName, "model": model, "ecqmTitle": eCQMTitle, "active": false, "createdBy": defaultUser}
                         }).then((response) => {
                             expect(response.status).to.eql(400)
                     })
@@ -601,7 +600,7 @@ describe('Measure Service: Update Delete Flag', () => {
                         headers: {
                             authorization: 'Bearer ' + accessToken.value
                         },
-                        body: {"id": id, "measureName": newMeasureName, "cqlLibraryName": newCQLLibraryName, "model": model, "measurementPeriodStart": mpStartDate,
+                        body: {"id": id, "measureName": newMeasureName, "cqlLibraryName": newCQLLibraryName, "model": model, "ecqmTitle": eCQMTitle, "measurementPeriodStart": mpStartDate,
                                "measurementPeriodEnd": mpEndDate, "active": false, "createdBy": defaultUser}
                         }).then((response) => {
                             expect(response.status).to.eql(200)
@@ -665,7 +664,7 @@ describe('Measurement Period Validations', () => {
                 headers: {
                     Authorization: 'Bearer ' + accessToken.value
                 },
-                body: {"measureName": measureName, "cqlLibraryName": CQLLibraryName, "model": model, "measurementPeriodStart": mpEndDate,
+                body: {"measureName": measureName, "cqlLibraryName": CQLLibraryName, "model": model, "ecqmTitle": eCQMTitle, "measurementPeriodStart": mpEndDate,
                        "measurementPeriodEnd": mpStartDate}
             }).then((response) => {
                 expect(response.status).to.eql(400)
@@ -687,7 +686,7 @@ describe('Measurement Period Validations', () => {
                 headers: {
                     Authorization: 'Bearer ' + accessToken.value
                 },
-                body: {"measureName": measureName, "cqlLibraryName": CQLLibraryName, "model": model, "measurementPeriodStart": "",
+                body: {"measureName": measureName, "cqlLibraryName": CQLLibraryName, "model": model, "ecqmTitle": eCQMTitle, "measurementPeriodStart": "",
                        "measurementPeriodEnd": ""}
             }).then((response) => {
                 expect(response.status).to.eql(400)
@@ -709,7 +708,7 @@ describe('Measurement Period Validations', () => {
                 headers: {
                     Authorization: 'Bearer ' + accessToken.value
                 },
-                body: {"measureName": measureName, "cqlLibraryName": CQLLibraryName, "model": model, "measurementPeriodStart": "1823-01-01T05:00:00.000+0000",
+                body: {"measureName": measureName, "cqlLibraryName": CQLLibraryName, "model": model, "ecqmTitle": eCQMTitle, "measurementPeriodStart": "1823-01-01T05:00:00.000+0000",
                        "measurementPeriodEnd": "3023-01-01T05:00:00.000+0000"}
             }).then((response) => {
                 expect(response.status).to.eql(400)
@@ -743,6 +742,74 @@ describe('Measurement Period Validations', () => {
     })
 
 })
+
+describe('Measure Service: eCQM abbreviated title validations', () => {
+
+    beforeEach('Set Access Token', () => {
+
+        cy.setAccessTokenCookie()
+
+    })
+
+    it('Validation error: ecqm abbreviated title empty', () => {
+
+        measureName = 'TestMeasure' + Date.now()
+        CQLLibraryName = 'TestCql' + Date.now()
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                failOnStatusCode: false,
+                url: '/api/measure',
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken.value
+                },
+                body: {
+                        "measureName": measureName,
+                        "cqlLibraryName": CQLLibraryName,
+                        "model": model,
+                        "ecqmTitle": "",
+                        "measurementPeriodStart": mpStartDate,
+                        "measurementPeriodEnd": mpEndDate
+                      }
+            }).then((response) => {
+                expect(response.status).to.eql(400)
+                expect(response.body.validationErrors.ecqmTitle).to.eql("eCQM Abbreviated Title is required.")
+            })
+        })
+
+    })
+
+    it('Validation error: ecqm abbreviated title more than 32 characters', () => {
+
+        measureName = 'TestMeasure' + Date.now()
+        CQLLibraryName = 'TestCql' + Date.now()
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                failOnStatusCode: false,
+                url: '/api/measure',
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken.value
+                },
+                body: {
+                        "measureName": measureName,
+                        "cqlLibraryName": CQLLibraryName,
+                        "model": model,
+                        "ecqmTitle": 'This test is for measure name validation.This test is',
+                        "measurementPeriodStart": mpStartDate,
+                        "measurementPeriodEnd": mpEndDate
+                      }
+            }).then((response) => {
+                expect(response.status).to.eql(400)
+                expect(response.body.validationErrors.ecqmTitle).to.eql("eCQM Abbreviated Title cannot be more than 32 characters.")
+            })
+        })
+
+    })
+})
+
 
 
 

@@ -338,6 +338,55 @@ describe('Validate Measure Group -- scoring and populations', () => {
                 expect($message.val().toString()).to.equal('MeasureGroup Description value')
             })
     })
+
+    it('Verify warning modal when Measure Group has unsaved changes', () => {
+
+        cy.log('Create Ratio Measure')
+        MeasureGroupPage.createMeasureGroupforRatioMeasure()
+
+        //Change scoring type & population
+        cy.get(MeasureGroupPage.measureScoringSelect).click()
+        cy.get(MeasureGroupPage.measureScoringCV).click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(1).click() //select ipp
+
+        //Warning Modal not displayed when user navigated to Populations/Stratification/Reporting tabs without saving changes
+        cy.log('Navigating to Stratification tab')
+        cy.get(MeasureGroupPage.stratificationTab).click()
+        cy.get(MeasureGroupPage.stratOne).should('exist')
+
+        //Navigate back to populations tab
+        cy.log('Navigating back to populations tab')
+        cy.get(MeasureGroupPage.populationTab).click()
+        cy.get(MeasureGroupPage.stratOne).should('not.exist')
+
+        //Warning Modal displayed when user navigated to another Measure Group without saving changes
+        cy.log('Navigate to another Measure Group')
+        cy.get(MeasureGroupPage.addMeasureGroupButton).click()
+        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
+        cy.get(MeasureGroupPage.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(MeasureGroupPage.cancelDiscardChangesBtn).click()
+
+        //Warning Modal displayed when user navigated to a different tab without saving changes
+        cy.log('Navigating to CQL Editor tab')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
+        cy.get(MeasureGroupPage.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(MeasureGroupPage.cancelDiscardChangesBtn).click()
+
+        //Warning Modal displayed when user clicks Discard Changes for that measure group
+        cy.log('Click on Discard Changes button')
+        cy.get(MeasureGroupPage.discardChangesBtn).click()
+        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
+        cy.get(MeasureGroupPage.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(MeasureGroupPage.continueDiscardChangesBtn).click()
+
+        //Navigate to Groups tab and verify the Measure scoring and population reset to previous values
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.measureScoringSelect).contains('Ratio')
+        cy.get(MeasureGroupPage.initialPopulationSelect).contains('ipp')
+
+    })
 })
 
 describe('Validate Population Basis', () => {

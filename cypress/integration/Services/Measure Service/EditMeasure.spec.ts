@@ -1,6 +1,5 @@
 import {Utilities} from "../../../Shared/Utilities"
 
-export {}
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -29,6 +28,7 @@ describe('Measure Service: Edit Measure', () => {
                     'cqlLibraryName': cqlLibraryName,
                     'model': 'QI-Core',
                     'measureScoring': 'Cohort',
+                    "ecqmTitle": "eCQMTitle",
                     "measurementPeriodStart": mpStartDate,
                     "measurementPeriodEnd": mpEndDate
                 }
@@ -69,6 +69,7 @@ describe('Measure Service: Edit Measure', () => {
                         'measureName': 'UpdatedTestMeasure' + Date.now(),
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
                         "measurementPeriodEnd": mpEndDate,
                         'measureScoring': 'Ratio'
@@ -99,6 +100,7 @@ describe('Measure Service: Edit Measure', () => {
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
                         'measureScoring': 'Ratio',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
                         "measurementPeriodEnd": mpEndDate
                     }
@@ -127,6 +129,7 @@ describe('Measure Service: Edit Measure', () => {
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
                         'measureScoring': 'Ratio',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
                         "measurementPeriodEnd": mpEndDate
                     }
@@ -155,6 +158,7 @@ describe('Measure Service: Edit Measure', () => {
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
                         'measureScoring': 'Ratio',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
                         "measurementPeriodEnd": mpEndDate
                     }
@@ -187,6 +191,7 @@ describe('Measure Service: Edit Measure', () => {
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
                         'measureScoring': 'Ratio',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
                         "measurementPeriodEnd": mpEndDate
                     }
@@ -215,6 +220,7 @@ describe('Measure Service: Edit Measure', () => {
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
                         'measureScoring': 'Ratio',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
                         "measurementPeriodEnd": mpEndDate
                     }
@@ -242,6 +248,7 @@ describe('Measure Service: Edit Measure', () => {
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
                         'measureScoring': 'Ratio',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
                         "measurementPeriodEnd": mpEndDate,
                         'measureMetaData': {"measureSteward": "SemanticBits"}
@@ -270,6 +277,7 @@ describe('Measure Service: Edit Measure', () => {
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
                         'measureScoring': 'Ratio',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
                         "measurementPeriodEnd": mpEndDate,
                         'measureMetaData': {"description": "SemanticBits"}
@@ -298,6 +306,7 @@ describe('Measure Service: Edit Measure', () => {
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
                         'measureScoring': 'Ratio',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
                         "measurementPeriodEnd": mpEndDate,
                         'measureMetaData': {"copyright": "copyright"}
@@ -326,6 +335,7 @@ describe('Measure Service: Edit Measure', () => {
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
                         'measureScoring': 'Ratio',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
                         "measurementPeriodEnd": mpEndDate,
                         'measureMetaData': {"disclaimer": "disclaimer"}
@@ -354,6 +364,7 @@ describe('Measure Service: Edit Measure', () => {
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
                         'measureScoring': 'Ratio',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
                         "measurementPeriodEnd": mpEndDate,
                         'measureMetaData': {"rationale": "rationale"}
@@ -382,6 +393,7 @@ describe('Measure Service: Edit Measure', () => {
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
                         'measureScoring': 'Ratio',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
                         "measurementPeriodEnd": mpEndDate,
                         'measureMetaData': {"author": "author"}
@@ -410,6 +422,7 @@ describe('Measure Service: Edit Measure', () => {
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
                         'measureScoring': 'Ratio',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
                         "measurementPeriodEnd": mpEndDate,
                         'measureMetaData': {"guidance": "guidance"}
@@ -441,6 +454,7 @@ describe('Measurement Period Validations', () => {
                     'cqlLibraryName': newCQLLibraryName,
                     'model': 'QI-Core',
                     'measureScoring': 'Cohort',
+                    "ecqmTitle": "eCQMTitle",
                     "measurementPeriodStart": mpStartDate,
                     "measurementPeriodEnd": mpEndDate
                 }
@@ -483,6 +497,7 @@ describe('Measurement Period Validations', () => {
                         'measureName': 'UpdatedTestMeasure' + Date.now(),
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpEndDate,
                         "measurementPeriodEnd": mpStartDate,
                         'measureScoring': 'Ratio'
@@ -511,6 +526,7 @@ describe('Measurement Period Validations', () => {
                         'measureName': 'UpdatedTestMeasure' + Date.now(),
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": "",
                         "measurementPeriodEnd": "",
                         'measureScoring': 'Ratio'
@@ -539,6 +555,7 @@ describe('Measurement Period Validations', () => {
                         'measureName': 'UpdatedTestMeasure' + Date.now(),
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": "1823-01-01T05:00:00.000+0000",
                         "measurementPeriodEnd": "3023-01-01T05:00:00.000+0000",
                         'measureScoring': 'Ratio'
@@ -568,6 +585,7 @@ describe('Measurement Period Validations', () => {
                         'measureName': 'UpdatedTestMeasure' + Date.now(),
                         'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                         'model': 'QI-Core',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": "01/01/2021",
                         "measurementPeriodEnd": "01/01/2023",
                         'measureScoring': 'Ratio'

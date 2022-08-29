@@ -35,7 +35,7 @@ export class Utilities {
                         Authorization: 'Bearer ' + accessToken.value
                     },
                     body: {"id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": ecqmTitle,
-                        "model": 'QI-Core', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate,"active": false}
+                        "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate,"active": false}
                 }).then((response) => {
                     expect(response.status).to.eql(200)
                     expect(response.body).to.eql("Measure updated successfully.")

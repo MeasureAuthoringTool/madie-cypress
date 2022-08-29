@@ -10,7 +10,7 @@ let newMeasureName = ''
 let newCqlLibraryName = ''
 
 
-describe('Edit Measure Name Validations', () => {
+describe('Edit Measure Validations', () => {
     before('Create Measure', () => {
 
         //Create New Measure
@@ -57,6 +57,24 @@ describe('Edit Measure Name Validations', () => {
             'is for measure name validation.This test is')
         cy.get(EditMeasurePage.measureNameFieldLevelError).should('contain.text', 'A Measure name cannot be more than 500 characters.')
 
+    })
+
+    it('Verify error message when the eCQM abbreviated title entered is invalid or empty', () => {
+
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //eCQM abbreviated title empty
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).clear().focus().blur()
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleFieldLevelError).should('contain.text', 'eCQM Abbreviated Title is required')
+
+        //Verify if create measure button is disabled
+        cy.get(EditMeasurePage.measurementInformationSaveButton).should('be.disabled')
+
+        //eCQM abbreviated title more than 32 characters
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).clear().type('This test is for measure name validation.This test is')
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleFieldLevelError).should('contain.text', 'eCQM Abbreviated Title cannot be more than 32 characters')
+
+        cy.get(EditMeasurePage.measurementInformationSaveButton).should('be.disabled')
     })
 })
 

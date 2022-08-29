@@ -106,16 +106,22 @@ export class MeasureGroupPage {
     public static readonly updateMeasureGroupConfirmationUndoWarning = '[class="MuiTypography-root MuiTypography-body1 jss8 css-9l3uo3"]'
     public static readonly updateMeasureGroupConfirmationBtn = '[data-testid="update-measure-group-scoring-modal-agree-btn"]'
 
-    //additional measure groups (assuming thay exist)
+    //additional measure groups (assuming they exist)
     public static readonly measureGroupOne = '[data-testid="leftPanelMeasureInformation-MeasureGroup1"]'
     public static readonly measureGroupTwo = '[data-testid="leftPanelMeasureInformation-MeasureGroup2"]'
     public static readonly measureGroupThree = '[data-testid="leftPanelMeasureInformation-MeasureGroup3"]'
     public static readonly measureGroupFour = '[data-testid="leftPanelMeasureInformation-MeasureGroup4"]'
     public static readonly measureGroupFive = '[data-testid="leftPanelMeasureInformation-MeasureGroup5"]'
 
+    //Discard Changes
+    public static readonly discardChangesBtn = '[data-testid="group-form-discard-btn"]'
+    public static readonly discardChangesConfirmationModal = '[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]'
+    public static readonly discardChangesConfirmationText = '[class="dialog-warning-body"]'
+    public static readonly cancelDiscardChangesBtn = '[data-testid="discard-dialog-cancel-button"]'
+    public static readonly continueDiscardChangesBtn = '[data-testid="discard-dialog-continue-button"]'
+
     //population basis
     public static readonly popBasis = '[data-testid="population-basis-combo-box"]'
-
 
     //Measure group description
     public static readonly measureGroupDescriptionBox = '[name="groupDescription"]'
@@ -224,9 +230,9 @@ export class MeasureGroupPage {
         let measurePath = ''
         let measureGroupPath = ''
         let measureScoring = 'Proportion'
-        if ((PopIniPopP == undefined) || (PopIniPopP === null)){PopIniPopP = 'SDE Payer'}
-        if ((PopNumP == undefined) || (PopNumP === null)){PopNumP = 'SDE Race'}
-        if ((PopDenomP == undefined) || (PopDenomP === null)){PopDenomP = 'SDE Race'}
+        if ((PopIniPopP == undefined) || (PopIniPopP === null)){PopIniPopP = 'ipp'}
+        if ((PopNumP == undefined) || (PopNumP === null)){PopNumP = 'num'}
+        if ((PopDenomP == undefined) || (PopDenomP === null)){PopDenomP = 'denom'}
         if (altUser)
         {
             cy.setAccessTokenCookieALT()

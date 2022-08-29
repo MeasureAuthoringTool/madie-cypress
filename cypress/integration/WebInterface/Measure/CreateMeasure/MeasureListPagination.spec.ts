@@ -32,7 +32,8 @@ describe('Measure List Pagination', () => {
                     body: {
                         'measureName': measureName[i],
                         'cqlLibraryName': CqlLibraryName[i],
-                        'model': 'QI-Core',
+                        'model': 'QI-Core v4.1.1',
+                        "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
                         "measurementPeriodEnd": mpEndDate
                     }
@@ -76,7 +77,7 @@ describe('Measure List Pagination', () => {
                         },
                         body: {
                             "id": id, "measureName": measureName[j], "cqlLibraryName": CqlLibraryName[j] + 1,
-                            "model": 'QI-Core', "active": false, "measurementPeriodStart": mpStartDate,
+                            "model": 'QI-Core v4.1.1', "ecqmTitle": "eCQMTitle", "active": false, "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate
                         }
 
