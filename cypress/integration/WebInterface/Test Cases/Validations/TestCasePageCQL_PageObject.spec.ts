@@ -76,6 +76,7 @@ describe('Test Case Page CQL page object', () => {
         cy.get(TestCasesPage.tcCQLArea).should('contain.text', measureCQL)
 
     })
+
     it('Updates applied and saved from the Measure CQL page / tab are updated and reflective in the Test Case Page', () =>{
         //Click on Edit Button
         MeasuresPage.clickEditforCreatedMeasure()
@@ -101,8 +102,8 @@ describe('Test Case Page CQL page object', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         //type in an additional value to the already existing value in the editor
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}using FHIR version \'4.0.1\'')
-
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('using FHIR version \'4.0.1\'')
 
         //saving new CQL value
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
@@ -118,7 +119,8 @@ describe('Test Case Page CQL page object', () => {
         TestCasesPage.clickEditforCreatedTestCase()
  
         //confirm that CQL field, on the Test Case page, reflects the additional text
-        cy.get(TestCasesPage.tcCQLArea).should('contain.text', measureCQL+'using FHIR version \'4.0.1\'')
+        cy.log(measureCQL)
+        cy.get(TestCasesPage.tcCQLArea).should('contain.text', 'using FHIR version \'4.0.1\'')
 
     })
     it('A message is displayed if there are issues with the CQL', () =>{
@@ -188,6 +190,7 @@ describe('Test Case Page CQL page object', () => {
         cy.get(TestCasesPage.tctMeasureCQLSubTab).should('exist')
         cy.get(TestCasesPage.tctMeasureCQLSubTab).should('be.visible')
     })
+
     it('Verify the Test Case Expected / Actual tab', () =>{
         //Click on Edit Button
         MeasuresPage.clickEditforCreatedMeasure()

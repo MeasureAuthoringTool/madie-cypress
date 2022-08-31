@@ -6,16 +6,18 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {Utilities} from "../../../../Shared/Utilities"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {TestCaseJson} from "../../../../Shared/TestCaseJson"
+import {MeasureCQL} from "../../../../Shared/MeasureCQL"
+
 let measureOne = 'TestMeasure' + Date.now()
 let CqlLibraryName1 = 'TestLibrary' + Date.now()
 let title1 = 'TCOneForDeleteTests'
 let series = 'ICFTestSeries'
 let description = 'Some Test Description'
+let measureCQL = MeasureCQL.SBTEST_CQL
 let validJsonValue = TestCaseJson.API_TestCaseJson_Valid
 let measureTwo = measureOne + "Second"
 var newCqlLibraryName = null
 var randValue = null
-
 
 describe('Validate Measure Group deletion functionality', () => {
 
@@ -25,12 +27,12 @@ describe('Validate Measure Group deletion functionality', () => {
         newCqlLibraryName = CqlLibraryName1 + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(measureOne, newCqlLibraryName)
+        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(measureOne, newCqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI()
         TestCasesPage.CreateTestCaseAPI(title1, series, description, validJsonValue)
 
         //create new measure via temp user
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(measureTwo, newCqlLibraryName+"second", null, true, true )
+        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(measureTwo, newCqlLibraryName+"second", measureCQL, true, true )
         MeasureGroupPage.CreateProportionMeasureGroupAPI(true, true)
         TestCasesPage.CreateTestCaseAPI(title1+"second", series, description, validJsonValue, true, true)
         OktaLogin.Login()
