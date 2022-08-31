@@ -79,9 +79,6 @@ describe('Test Case Validations', () => {
         cy.get(TestCasesPage.newTestCaseButton).click()
 
         cy.get(TestCasesPage.detailsTab).click()
-
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-
         cy.wait(2000)
 
         cy.get(TestCasesPage.testCaseTitle).should('be.visible')
@@ -106,9 +103,6 @@ describe('Test Case Validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.detailsTab).click()
-
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-
         cy.wait(2000)
 
         cy.get(TestCasesPage.testCaseTitle).should('exist')
