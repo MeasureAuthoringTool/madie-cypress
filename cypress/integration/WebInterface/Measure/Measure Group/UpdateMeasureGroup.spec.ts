@@ -490,17 +490,18 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.popBasis).type('Boolean')
         cy.get(MeasureGroupPage.popBasisOption).click()
 
+        //Update populations
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'num')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'num')
+
         //Add Second Initial Population
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('be.visible')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
         Utilities.dropdownSelect(MeasureGroupPage.secondInitialPopulationSelect, 'denom')
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationOneSelect, 'ipp')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'denom')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'num')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'denom')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'num')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')

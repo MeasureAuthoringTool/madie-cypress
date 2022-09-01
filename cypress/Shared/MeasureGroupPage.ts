@@ -80,7 +80,6 @@ export class MeasureGroupPage {
     public static readonly measurePopulationOption = '[data-testid="select-option-measure-group-population"]'
     public static readonly measureObsAggregSelect = '[data-testid="measure-observation-aggregate-cv-obs-input"]'
     public static readonly populationMismatchErrorMsg = '[data-testid="helper-text"]'
-    public static readonly initialPopulationOneSelect = '[id="population-select-initial-population-1"]'
 
     //UCUM scoring unit
     public static readonly ucumScoringUnitSelect = '.css-ackcql'
