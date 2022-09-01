@@ -76,6 +76,7 @@ export class TestCasesPage {
             cy.intercept('POST', '/api/measures/' + id + '/test-cases').as('testcase')
 
             cy.get(this.createTestCaseButton).click()
+            cy.get(TestCasesPage.detailsTab).click()
 
             //saving testCaseId to file to use later
             cy.wait('@testcase').then(({response}) => {

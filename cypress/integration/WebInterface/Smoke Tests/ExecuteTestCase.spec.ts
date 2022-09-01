@@ -45,19 +45,23 @@ describe('Execute Test Case', () => {
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
 
-
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
         cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.newTestCaseButton).click()
 
+        //click on Expected/Actual tab tab
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+
+        cy.get(TestCasesPage.testCasePopulationList).should('contain.text', 'No populations for current scoring. Please make sure at least one measure group has been created.')
+
         //click on details tab
         cy.get(TestCasesPage.detailsTab).should('exist')
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
-
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
         cy.get(TestCasesPage.testCaseTitle).should('exist')
         cy.get(TestCasesPage.testCaseTitle).should('be.visible')
@@ -74,11 +78,11 @@ describe('Execute Test Case', () => {
 
         TestCasesPage.clickCreateTestCaseButton(true)
 
+        cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
         cy.get(TestCasesPage.executeTestCaseButton).should('not.be.enabled')
-
-
     })
+
     it('Verify Test execution status when the Expected and Actual values do not match', () => {
 
         //Add Measure Group
@@ -94,8 +98,6 @@ describe('Execute Test Case', () => {
         cy.get(TestCasesPage.detailsTab).should('exist')
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
-
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
         cy.get(TestCasesPage.testCaseTitle).should('exist')
         cy.get(TestCasesPage.testCaseTitle).should('be.visible')
@@ -115,10 +117,10 @@ describe('Execute Test Case', () => {
         //Click on Edit for Test Case
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //click on details tab
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
-        cy.get(TestCasesPage.detailsTab).click()
+        //click on Expected/Actual tab
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         //Select the Expected Value
         cy.get(TestCasesPage.testCaseIPPCheckBox).should('exist')
@@ -129,18 +131,19 @@ describe('Execute Test Case', () => {
 
         //Save updated test case
         cy.get(TestCasesPage.cuTestCaseButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully!')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.executeTestCaseButton).focus()
+        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
-
-        cy.get(TestCasesPage.testCaseStatus).should('exist')
-        cy.get(TestCasesPage.testCaseStatus).should('be.visible')
+        cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'fail')
     })
+
     it('Verify Test execution status when the Expected and Actual values match', () => {
 
         //Add Measure Group
@@ -157,8 +160,6 @@ describe('Execute Test Case', () => {
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()        
 
-        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-
         cy.get(TestCasesPage.testCaseTitle).should('exist')
         cy.get(TestCasesPage.testCaseTitle).should('be.visible')
         cy.get(TestCasesPage.testCaseTitle).should('be.enabled')
@@ -171,6 +172,11 @@ describe('Execute Test Case', () => {
 
         //Add json to the test case
         cy.get(TestCasesPage.aceEditor).type(testCaseJson)
+
+        //click on Expected/Actual tab
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         cy.get(TestCasesPage.testCaseIPPCheckBox).should('exist')
         cy.get(TestCasesPage.testCaseIPPCheckBox).should('be.enabled')
@@ -195,7 +201,7 @@ describe('Execute Test Case', () => {
         TestCasesPage.clickCreateTestCaseButton(true)
 
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')        
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
         cy.get(TestCasesPage.executeTestCaseButton).focus()
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
