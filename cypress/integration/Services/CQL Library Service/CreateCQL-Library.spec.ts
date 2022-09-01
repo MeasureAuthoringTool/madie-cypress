@@ -3,7 +3,7 @@ import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
 
 let CQLLibraryName = ''
 let harpUser = Environment.credentials().harpUser
-let model = 'QI-core v4.1.1'
+let model = 'QI-Core v4.1.1'
 
 describe('CQL Library Service: Create CQL Library', () => {
 

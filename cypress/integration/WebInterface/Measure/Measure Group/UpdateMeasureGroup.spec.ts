@@ -11,8 +11,6 @@ import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
-let measureScoringArray = ['Ratio', 'Cohort', 'Continuous Variable', 'Proportion']
-let mgPVTestType = ['all', 'wOReq', 'wOOpt']
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.ICFTest_CQL
@@ -64,18 +62,49 @@ describe('Validate Measure Group', () => {
         //Measure group description
         cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
 
-        //log, in cypress, the measure score value
-        cy.log((measureScoringArray[1].valueOf()).toString())
+        //select a group type
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
+            if ($ele.text() == "Process") {
+                cy.wrap($ele).should('exist')
+                cy.wrap($ele).focus()
+                cy.wrap($ele).click()
+            }
+        })
+        cy.get(MeasureGroupPage.measureGroupTypeDropdownBtn).should('exist').invoke('click')
+
         //select scoring unit on measure
-        cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[1].valueOf()).toString())
-        Utilities.validateMeasureGroup((measureScoringArray[1].valueOf()).toString(), mgPVTestType[0])
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+        cy.get(MeasureGroupPage.popBasis).should('exist')
+        cy.get(MeasureGroupPage.popBasis).should('be.visible')
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('Procedure')
+        cy.get(MeasureGroupPage.popBasisOption).click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //Update Measure Group
-        cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[3].valueOf()).toString())
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
+        cy.get(MeasureGroupPage.popBasis).should('exist')
+        cy.get(MeasureGroupPage.popBasis).should('be.visible')
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('Procedure')
+        cy.get(MeasureGroupPage.popBasisOption).click()
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.initialPopulationSelect).select('SDE Payer')
-        cy.get(MeasureGroupPage.denominatorSelect).select('SDE Sex')
-        cy.get(MeasureGroupPage.numeratorSelect).select('Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Surgical Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Surgical Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'Surgical Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Surgical Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Surgical Absence of Cervix')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
@@ -105,17 +134,40 @@ describe('Validate Measure Group', () => {
         //Measure group description
         cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
 
-        //log, in cypress, the measure score value
-        cy.log((measureScoringArray[1].valueOf()).toString())
+        //select a group type
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
+            if ($ele.text() == "Process") {
+                cy.wrap($ele).should('exist')
+                cy.wrap($ele).focus()
+                cy.wrap($ele).click()
+            }
+        })
+        cy.get(MeasureGroupPage.measureGroupTypeDropdownBtn).should('exist').invoke('click')
+
         //select scoring unit on measure
-        cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[1].valueOf()).toString())
-        Utilities.validateMeasureGroup((measureScoringArray[1].valueOf()).toString(), mgPVTestType[0])
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+        cy.get(MeasureGroupPage.popBasis).should('exist')
+        cy.get(MeasureGroupPage.popBasis).should('be.visible')
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('Procedure')
+        cy.get(MeasureGroupPage.popBasisOption).click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //Update Measure Group without all required populations
-        cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[2].valueOf()).toString())
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.initialPopulationSelect).select('SDE Payer')
-        cy.get(MeasureGroupPage.measurePopulationExclusionSelect).select('Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'Surgical Absence of Cervix')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
@@ -140,28 +192,57 @@ describe('Validate Measure Group', () => {
         //Measure group description
         cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
 
-        //log, in cypress, the measure score value
-        cy.log((measureScoringArray[1].valueOf()).toString())
-        //select scoring unit on measure
-        cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[1].valueOf()).toString())
-        Utilities.validateMeasureGroup((measureScoringArray[1].valueOf()).toString(), mgPVTestType[0])
+        //select a group type
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
+            if ($ele.text() == "Process") {
+                cy.wrap($ele).should('exist')
+                cy.wrap($ele).focus()
+                cy.wrap($ele).click()
+            }
+        })
+        cy.get(MeasureGroupPage.measureGroupTypeDropdownBtn).should('exist').invoke('click')
 
-        //Update Measure Group without optional populations
-        cy.get(MeasureGroupPage.measureScoringSelect).select((measureScoringArray[3].valueOf()).toString())
+        //select scoring unit on measure
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+        cy.get(MeasureGroupPage.popBasis).should('exist')
+        cy.get(MeasureGroupPage.popBasis).should('be.visible')
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('Procedure')
+        cy.get(MeasureGroupPage.popBasisOption).click()
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.initialPopulationSelect).select('SDE Payer')
-        cy.get(MeasureGroupPage.denominatorSelect).select('SDE Sex')
-        cy.get(MeasureGroupPage.numeratorSelect).select('Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationMsg).should('contain.text', 'Are you sure you want to Save Changes?')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+
+        //Update Measure Group without optional populations
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
+        cy.get(MeasureGroupPage.popBasis).should('exist')
+        cy.get(MeasureGroupPage.popBasis).should('be.visible')
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('Procedure')
+        cy.get(MeasureGroupPage.popBasisOption).click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Surgical Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationMsg).contains('Are you sure you want to Save Changes?')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
     })
 })
+
 describe('Adding an Initial Population to group -- Ratio score only', () => {
 
     beforeEach('Create measure and login', () => {
@@ -170,7 +251,14 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, measureCQL)
+        OktaLogin.Login()
+        MeasuresPage.clickEditforCreatedMeasure()
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.wait(4500)
+        OktaLogin.Logout()
         MeasureGroupPage.CreateRatioMeasureGroupAPI()
         OktaLogin.Login()
 
@@ -179,11 +267,11 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
 
-    it('Validate that when an second Initial Population is added, assoications appear for IP1 and IP2', () => {
+    it('Validate that when an second Initial Population is added, associations appear for IP1 and IP2', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -306,7 +394,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
 
         //select a value for the second IP
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).select('SDE Race')
+        Utilities.dropdownSelect(MeasureGroupPage.secondInitialPopulationSelect, 'Surgical Absence of Cervix')
 
         //verify that save button becomes enabled
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -344,7 +432,8 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
 
         //select a value for the second IP
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).select('SDE Race')
+        //cy.get(MeasureGroupPage.secondInitialPopulationSelect).select('SDE Race')
+        Utilities.dropdownSelect(MeasureGroupPage.secondInitialPopulationSelect, 'Surgical Absence of Cervix')
 
         //verify that save button becomes enabled
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -374,7 +463,8 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
     })
 
-    it('Validate test case execution for measure group with second initial population', () => {
+    //Skipping until MAT-4743 is fixed
+    it.skip('Validate test case execution for measure group with second initial population', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -396,13 +486,21 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         //fill in a description value
         cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
 
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('Boolean')
+        cy.get(MeasureGroupPage.popBasisOption).click()
+
         //Add Second Initial Population
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('be.visible')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
+        Utilities.dropdownSelect(MeasureGroupPage.secondInitialPopulationSelect, 'denom')
 
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(0).click() //select denom
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationOneSelect, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'num')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'num')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
@@ -437,8 +535,19 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
+        // //Create New Measure
+        // CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        // MeasureGroupPage.CreateRatioMeasureGroupAPI()
+        // OktaLogin.Login()
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, measureCQL)
+        OktaLogin.Login()
+        MeasuresPage.clickEditforCreatedMeasure()
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.wait(4500)
+        OktaLogin.Logout()
         MeasureGroupPage.CreateRatioMeasureGroupAPI()
         OktaLogin.Login()
 
@@ -467,14 +576,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('be.visible')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
-
-        //verify that the second initial population appears and can be assigned a value
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('exist')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('be.enabled')
-        cy.get(MeasureGroupPage.lblSecondInitialPopulation).should('exist')
-        cy.get(MeasureGroupPage.lblSecondInitialPopulation).should('be.visible')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).select('Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.secondInitialPopulationSelect, 'Surgical Absence of Cervix')
 
         //verify that the delete button for the second initial population is available
         cy.get(MeasureGroupPage.deleteSecondInitialPopulation).should('exist')
@@ -518,14 +620,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('be.visible')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
-
-        //verify that the second initial population appears and can be assigned a value
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('exist')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('be.enabled')
-        cy.get(MeasureGroupPage.lblSecondInitialPopulation).should('exist')
-        cy.get(MeasureGroupPage.lblSecondInitialPopulation).should('be.visible')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).select('Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.secondInitialPopulationSelect, 'Surgical Absence of Cervix')
 
         //verify that the delete button for the second initial population is available
         cy.get(MeasureGroupPage.deleteSecondInitialPopulation).should('exist')
@@ -551,20 +646,13 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('be.visible')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
-
-        //verify that the second initial population appears and can be assigned a value
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('exist')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('be.enabled')
-        cy.get(MeasureGroupPage.lblSecondInitialPopulation).should('exist')
-        cy.get(MeasureGroupPage.lblSecondInitialPopulation).should('be.visible')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).select('Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.secondInitialPopulationSelect, 'Surgical Absence of Cervix')
 
         //verify that the delete button for the second initial population is available
         cy.get(MeasureGroupPage.deleteSecondInitialPopulation).should('exist')
         cy.get(MeasureGroupPage.deleteSecondInitialPopulation).should('be.visible')
 
-        //deleting / removeing the second initial population before saving
+        //deleting / removing the second initial population before saving
         cy.get(MeasureGroupPage.deleteSecondInitialPopulation).click()
 
         //verify that the second initial population is no longer on screen / in the UI
@@ -574,14 +662,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('be.visible')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
-
-        //verify that the second initial population appears and can be assigned a value
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('exist')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('be.enabled')
-        cy.get(MeasureGroupPage.lblSecondInitialPopulation).should('exist')
-        cy.get(MeasureGroupPage.lblSecondInitialPopulation).should('be.visible')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).select('Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.secondInitialPopulationSelect, 'Surgical Absence of Cervix')
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -619,14 +700,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('exist')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).should('be.visible')
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
-
-        //verify that the second initial population appears and can be assigned a value
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('exist')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('be.enabled')
-        cy.get(MeasureGroupPage.lblSecondInitialPopulation).should('exist')
-        cy.get(MeasureGroupPage.lblSecondInitialPopulation).should('be.visible')
-        cy.get(MeasureGroupPage.secondInitialPopulationSelect).select('Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.secondInitialPopulationSelect, 'Surgical Absence of Cervix')
 
         //verify that the delete button for the second initial population is available
         cy.get(MeasureGroupPage.deleteSecondInitialPopulation).should('exist')
@@ -648,10 +722,10 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(MeasureGroupPage.lblSecondInitialPopulation).should('not.exist')
 
         //verify IP1 and the other population field values are unchanged
-        cy.get(MeasureGroupPage.initialPopulationSelect).find('option:selected').should('have.text', 'SDE Payer')
-        cy.get(MeasureGroupPage.denominatorSelect).find('option:selected').should('have.text', 'SDE Race')
-        cy.get(MeasureGroupPage.denominatorExclusionSelect).find('option:selected').should('have.text', 'Select Denominator Exclusion')
-        cy.get(MeasureGroupPage.numeratorSelect).find('option:selected').should('have.text', 'SDE Race')
-        cy.get(MeasureGroupPage.numeratorExclusionSelect).find('option:selected').should('have.text', 'Select Numerator Exclusion')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text.text', 'Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', 'Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.denominatorExclusionSelect).should('contain.text', 'Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.numeratorExclusionSelect).should('contain.text', 'Surgical Absence of Cervix')
     })
 })

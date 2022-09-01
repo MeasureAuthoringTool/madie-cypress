@@ -2,7 +2,7 @@ import {OktaLogin} from "../../../Shared/OktaLogin"
 import {Header} from "../../../Shared/Header"
 import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
 import {CQLLibrariesPage} from "../../../Shared/CQLLibrariesPage"
-import {Utilities} from "../../../Shared/Utilities";
+import {Utilities} from "../../../Shared/Utilities"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 
@@ -68,7 +68,7 @@ describe('CQL Library Validations', () => {
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(CQLLibraryName+randValue)
-        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).dblclick()
+        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).focus().blur()
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).click({force:true})
         cy.get(CQLLibraryPage.cqlLibraryModelErrorMsg).should('contain.text', 'A CQL library model is required.')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
@@ -106,7 +106,7 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('be.visible')
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).invoke('text').then((text) => {
-            expect(text.length).to.equal(1760)
+            expect(text.length).greaterThan(1760)
         })
 
     })
@@ -142,10 +142,10 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).should('contain.value', UpdatedCQLLibraryName)
 
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()        
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).invoke('text').then((text) => {
             expect(text.length).to.equal(1768)
         })
-        
+
     })
 })

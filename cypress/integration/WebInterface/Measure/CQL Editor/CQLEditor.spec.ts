@@ -166,7 +166,7 @@ describe('Measure: CQL Editor', () => {
 
     })
 
-    it('Graceful error msg if model is missing in CQL', () => {
+    it.only('Graceful error msg if model is missing in CQL', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -281,7 +281,7 @@ describe('Measure: CQL Editor: valueSet', () => {
 
         cy.get(CQLEditorPage.umlsMessage).should('not.exist')
 
-         //Validate error(s) in CQL Editor window
+        //Validate error(s) in CQL Editor window
         cy.scrollTo('top')
         cy.get(EditMeasurePage.cqlEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
@@ -289,11 +289,11 @@ describe('Measure: CQL Editor: valueSet', () => {
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLEditorPage.errorInCQLEditorWindow).should('exist')
 
         cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLEditorPage.errorInCQLEditorWindow).eq(5).invoke
-            ('show').click({force:true, multiple: true})
+        ('show').click({force:true, multiple: true})
 
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text',
             "VSAC: 0:102 | Request failed with status code 404 for oid = 2.16.840.1.113883.3.464.1003.110.12.1059999 " +
-                  "location = 36:0-36:102")
+            "location = 36:0-36:102")
 
     })
 

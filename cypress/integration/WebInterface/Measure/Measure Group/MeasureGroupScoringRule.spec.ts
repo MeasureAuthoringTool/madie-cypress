@@ -5,10 +5,8 @@ import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {Utilities} from "../../../../Shared/Utilities"
 
-
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
-
 
 describe('Measure Group', () => {
 
@@ -51,7 +49,7 @@ describe('Measure Group', () => {
             })
 
         //cohort
-        cy.get(MeasureGroupPage.measureScoringSelect).select('Cohort')
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
 
         //verify the correct populations are displayed and not displayed
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
@@ -64,7 +62,7 @@ describe('Measure Group', () => {
         cy.get(MeasureGroupPage.measurePopulationExclusionSelect).should('not.exist')
 
         //Continuous Variable
-        cy.get(MeasureGroupPage.measureScoringSelect).select('Continuous Variable')
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
 
         //verify the correct populations are displayed and not displayed
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
@@ -77,7 +75,7 @@ describe('Measure Group', () => {
         cy.get(MeasureGroupPage.measurePopulationExclusionSelect).should('be.visible')
 
         //Proportion
-        cy.get(MeasureGroupPage.measureScoringSelect).select('Proportion')
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
 
         //verify the correct populations are displayed and not displayed
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
@@ -90,7 +88,7 @@ describe('Measure Group', () => {
         cy.get(MeasureGroupPage.measurePopulationExclusionSelect).should('not.exist')
 
         //Ratio
-        cy.get(MeasureGroupPage.measureScoringSelect).select('Ratio')
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
 
         //verify the correct populations are displayed and not displayed
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')

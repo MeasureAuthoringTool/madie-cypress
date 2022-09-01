@@ -2,6 +2,7 @@ import {MeasuresPage} from "./MeasuresPage"
 import {EditMeasurePage} from "./EditMeasurePage"
 import {CQLEditorPage} from "./CQLEditorPage"
 import {Environment} from "./Environment"
+import {Utilities} from "./Utilities"
 
 export class MeasureGroupPage {
 
@@ -79,7 +80,8 @@ export class MeasureGroupPage {
     public static readonly measurePopulationOption = '[data-testid="select-option-measure-group-population"]'
     public static readonly measureObsAggregSelect = '[data-testid="measure-observation-aggregate-cv-obs-input"]'
     public static readonly populationMismatchErrorMsg = '[data-testid="helper-text"]'
-    
+    public static readonly initialPopulationOneSelect = '[id="population-select-initial-population-1"]'
+
     //UCUM scoring unit
     public static readonly ucumScoringUnitSelect = '.css-ackcql'
     public static readonly ucumScoringUnitDropdownList = '#react-select-2-input'
@@ -143,6 +145,7 @@ export class MeasureGroupPage {
     //update button
     public static readonly confirmScoreUnitValueUpdateBtn = '[data-testid="group-form-update-btn"]'
 
+
     public static createMeasureGroupforProportionMeasure () : void {
 
         //Click on Edit Measure
@@ -170,12 +173,13 @@ export class MeasureGroupPage {
             }
         })
         cy.get(MeasureGroupPage.measureGroupTypeDropdownBtn).click({force:true})
-
-        cy.get(this.measureScoringSelect).select('Proportion')
-        cy.get(this.initialPopulationSelect).select('ipp')
-        cy.get(this.denominatorSelect).select('denom')
-        cy.get(this.numeratorSelect).select('num')
-        cy.get(this.numeratorExclusionSelect).select('num')
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'num')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'num')
         cy.get(this.saveMeasureGroupDetails).click()
 
         //validation successful save message
@@ -210,23 +214,14 @@ export class MeasureGroupPage {
             }
         })
         cy.get(MeasureGroupPage.measureGroupTypeDropdownBtn).click({force:true})
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
 
-        cy.get(MeasureGroupPage.measureScoringSelect).click()
-        cy.get(MeasureGroupPage.measureScoringRatio).click()
-
-        cy.get(MeasureGroupPage.initialPopulationSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(1).click() //select ipp
-        cy.get(MeasureGroupPage.denominatorSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(0).click() //select denom
-        cy.get(MeasureGroupPage.denominatorExclusionSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(2).click() //select num
-        cy.get(MeasureGroupPage.numeratorSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(3).click() //select numeratorExclusion
-        cy.get(MeasureGroupPage.numeratorExclusionSelect).click()
-        cy.get(MeasureGroupPage.measurePopulationOption).eq(1).click() //select ipp
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'num')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'num')
+        cy.get(this.saveMeasureGroupDetails).click()
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -327,9 +322,9 @@ export class MeasureGroupPage {
         let measurePath = ''
         let measureGroupPath = ''
         let measureScoring = 'Ratio'
-        if ((PopIniPopP == undefined) || (PopIniPopP === null)){PopIniPopP = 'SDE Payer'}
-        if ((PopNumP == undefined) || (PopNumP === null)){PopNumP = 'SDE Race'}
-        if ((PopDenomP == undefined) || (PopDenomP === null)){PopDenomP = 'SDE Race'}
+        if ((PopIniPopP == undefined) || (PopIniPopP === null)){PopIniPopP = 'Surgical Absence of Cervix'}
+        if ((PopNumP == undefined) || (PopNumP === null)){PopNumP = 'Surgical Absence of Cervix'}
+        if ((PopDenomP == undefined) || (PopDenomP === null)){PopDenomP = 'Surgical Absence of Cervix'}
         if (altUser)
         {
             cy.setAccessTokenCookieALT()
@@ -364,7 +359,7 @@ export class MeasureGroupPage {
                     body: {
                         "id": fileContents,
                         "scoring": measureScoring,
-                        "populationBasis": "Boolean",
+                        "populationBasis": "Procedure",
                         "populations": [
                             {
                                 "_id" : "",

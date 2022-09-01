@@ -10,7 +10,6 @@ import assert = require("assert")
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
-let measureGroupType = 'Process'
 let measureScoringArray = ['Ratio', 'Cohort', 'Continuous Variable', 'Proportion']
 let mgPVTestType = ['all', 'wOReq', 'wOOpt']
 let newMeasureName = ''
