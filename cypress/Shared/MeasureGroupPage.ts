@@ -268,7 +268,7 @@ export class MeasureGroupPage {
                     body: {
                         "id": fileContents,
                         "scoring": measureScoring,
-                        "populationBasis": "Procedure",
+                        "populationBasis": "Boolean",
                         "populations": [
                             {
                                 "_id" : "",

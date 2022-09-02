@@ -266,7 +266,7 @@ export class MeasureCQL {
         
         
         
-        'include FHIRHelpers version \'4.0.001\' called FHIRHelpers\n' +
+        'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
         
         
         

@@ -108,8 +108,6 @@ describe('Fluent Function Capability', () => {
         cy.get(TestCasesPage.testCaseIPPCheckBox).click()
         cy.get(TestCasesPage.testCaseIPPCheckBox).check().should('be.checked')
 
-cy.pause()
-
         TestCasesPage.clickCreateTestCaseButton(true)
 
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
