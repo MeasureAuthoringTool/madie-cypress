@@ -2,7 +2,7 @@ library EXM124v7QICore4 version '7.0.000'
 
 using FHIR version '4.0.1'
 
-include FHIRHelpers version '4.0.001'
+include FHIRHelpers version '4.1.000'
 
 include HospiceQICore4 version '2.0.000' called Hospice
 include AdultOutpatientEncountersQICore4 version '2.0.000' called AdultOutpatientEncounters

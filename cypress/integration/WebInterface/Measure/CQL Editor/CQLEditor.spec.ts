@@ -166,7 +166,7 @@ describe('Measure: CQL Editor', () => {
 
     })
 
-    it.only('Graceful error msg if model is missing in CQL', () => {
+    it('Graceful error msg if model is missing in CQL', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()

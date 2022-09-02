@@ -92,7 +92,7 @@ describe('Validate CQL on CQL Library page', () => {
 
         //Update text in the CQL Library Editor that will cause error
         cy.readFile('cypress/fixtures/EXM124v7QICore4Entry_FHIR_404.txt').should('exist').then((fileContents) => {
-            cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type(fileContents)
+            cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type(fileContents, {delay:50})
         })
 
         //save the value in the CQL Editor
