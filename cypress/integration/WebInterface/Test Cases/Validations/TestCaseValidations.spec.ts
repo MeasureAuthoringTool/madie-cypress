@@ -275,7 +275,7 @@ describe('Test Case Validations', () => {
             'than 250 characters.')
     })
 })
-describe.only('Attempting to create a test case without a title', () => {
+describe('Attempting to create a test case without a title', () => {
 
     beforeEach('Create measure and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
