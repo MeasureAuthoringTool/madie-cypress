@@ -316,7 +316,7 @@ export class MeasureGroupPage {
         return user
     }
 
-    public static CreateRatioMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, PopNumP?:string, PopDenomP?: string): string {
+    public static CreateRatioMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, PopNumP?:string, PopDenomP?: string, popBasis?: string): string {
         let user = ''
         let measurePath = ''
         let measureGroupPath = ''
@@ -358,7 +358,7 @@ export class MeasureGroupPage {
                     body: {
                         "id": fileContents,
                         "scoring": measureScoring,
-                        "populationBasis": "Procedure",
+                        "populationBasis": popBasis,
                         "populations": [
                             {
                                 "_id" : "",

@@ -13,7 +13,7 @@ let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let measureCQL = MeasureCQL.ICFTest_CQL
+let ratioMeasureCQL = MeasureCQL.ICFCleanTest_CQL
 let testCaseTitle = 'test case title'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
@@ -251,7 +251,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -259,7 +259,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.wait(4500)
         OktaLogin.Logout()
-        MeasureGroupPage.CreateRatioMeasureGroupAPI()
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
         OktaLogin.Login()
 
     })
@@ -460,8 +460,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
     })
 
-    //Skipping until MAT-4743 is fixed
-    it.skip('Validate test case execution for measure group with second initial population', () => {
+    it('Validate test case execution for measure group with second initial population', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -509,8 +508,55 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         //confirmed updated / saved msg
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
-        //Add Test Case
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson, true)
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click()
+
+        //click on details tab
+        cy.get(TestCasesPage.detailsTab).should('exist')
+        cy.get(TestCasesPage.detailsTab).should('be.visible')
+        cy.get(TestCasesPage.detailsTab).click()
+
+        cy.get(TestCasesPage.testCaseTitle).should('exist')
+        cy.get(TestCasesPage.testCaseTitle).should('be.visible')
+        cy.get(TestCasesPage.testCaseTitle).should('be.enabled')
+        cy.get(TestCasesPage.testCaseTitle).focus().clear()
+        cy.get(TestCasesPage.testCaseTitle).invoke('val', '')
+        cy.get(TestCasesPage.testCaseTitle).type('{selectall}{backspace}{selectall}{backspace}')
+        cy.get(TestCasesPage.testCaseTitle).type(testCaseTitle, { force: true })
+        cy.get(TestCasesPage.testCaseDescriptionTextBox).type(testCaseDescription)
+        cy.get(TestCasesPage.testCaseSeriesTextBox).type(testCaseSeries).type('{enter}')
+
+        //Add json to the test case
+        cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
+
+        //click on Expected/Actual tab
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+
+        cy.get(TestCasesPage.testCaseIPPCheckBox).should('exist')
+        cy.get(TestCasesPage.testCaseIPPCheckBox).should('be.enabled')
+        cy.get(TestCasesPage.testCaseIPPCheckBox).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPCheckBox).click({ multiple: true })
+        cy.get(TestCasesPage.testCaseIPPCheckBox).check().should('be.checked')
+        cy.get(TestCasesPage.testCaseNUMERCheckBox).should('not.be.checked')
+        cy.get(TestCasesPage.testCaseNUMEXCheckBox).should('not.be.checked')
+
+        cy.get(TestCasesPage.testCaseDENOMCheckBox).should('exist')
+        cy.get(TestCasesPage.testCaseDENOMCheckBox).should('be.enabled')
+        cy.get(TestCasesPage.testCaseDENOMCheckBox).should('be.visible')
+        cy.get(TestCasesPage.testCaseDENOMCheckBox).click()
+        cy.get(TestCasesPage.testCaseDENOMCheckBox).check().should('be.checked')
+
+        cy.get(TestCasesPage.testCaseDENEXCheckBox).should('exist')
+        cy.get(TestCasesPage.testCaseDENEXCheckBox).should('be.enabled')
+        cy.get(TestCasesPage.testCaseDENEXCheckBox).should('be.visible')
+        cy.get(TestCasesPage.testCaseDENEXCheckBox).click()
+        cy.get(TestCasesPage.testCaseDENEXCheckBox).check().should('be.checked')
+
+        TestCasesPage.clickCreateTestCaseButton(true)
 
         //Navigate to Test Cases Page and execute Test Case
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -534,7 +580,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -542,7 +588,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.wait(4500)
         OktaLogin.Logout()
-        MeasureGroupPage.CreateRatioMeasureGroupAPI()
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
         OktaLogin.Login()
 
     })
