@@ -133,17 +133,8 @@ describe('Validate Measure Group deletion functionality', () => {
         cy.get(MeasureGroupPage.denominatorSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', 'Surgical Absence of Cervix')
 
-        cy.get(MeasureGroupPage.denominatorExclusionSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.denominatorExclusionSelect).should('contain.text', 'Surgical Absence of Cervix')
-
-        cy.get(MeasureGroupPage.denominatorExceptionSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.denominatorExceptionSelect).should('contain.text', 'Surgical Absence of Cervix')
-
         cy.get(MeasureGroupPage.numeratorSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'Surgical Absence of Cervix')
-
-        cy.get(MeasureGroupPage.numeratorExclusionSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.numeratorExclusionSelect).should('contain.text', 'Surgical Absence of Cervix')
 
     })
 
