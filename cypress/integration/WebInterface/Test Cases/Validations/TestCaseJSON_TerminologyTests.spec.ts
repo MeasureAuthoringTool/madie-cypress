@@ -536,7 +536,7 @@ describe('Test Case JSON / terminology tests: positive tests -- Test Case JSON u
     })
 
     //skipping test due to bug MAT-4705
-    it.only('Test Case JSON proper use of value set(s) -- FHIR based QICore', () =>{
+    it.skip('Test Case JSON proper use of value set(s) -- FHIR based QICore', () =>{
         //Click on Edit Button
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
