@@ -125,6 +125,5 @@ describe('Measure List Pagination', () => {
         cy.get(MeasuresPage.paginationLimitEquals25).click( {force:true} )
         //Verify pagination limit after change
         cy.get(MeasuresPage.paginationLimitSelect).should('contain', '25')
-
     })
 })
