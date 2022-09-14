@@ -7,7 +7,6 @@ import {Utilities} from "../../../Shared/Utilities"
 import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
 import {TestCaseJson} from "../../../Shared/TestCaseJson"
 import {MeasureCQL} from "../../../Shared/MeasureCQL"
-import { createPublicKey } from "crypto"
 
 let measureName = 'TestMeasure' + (Date.now())
 let CqlLibraryName = 'TestLibrary' + (Date.now())
@@ -21,6 +20,7 @@ let testCaseSeries = 'SBTestSeries'
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
+
 describe('Test Case Expected Measure Group population values based on initial measure scoring', () => {
 
     beforeEach('Create measure and login', () => {
@@ -30,7 +30,6 @@ describe('Test Case Expected Measure Group population values based on initial me
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-        //MeasureGroupPage.CreateProportionMeasureGroupAPI()
         OktaLogin.Login()
 
     })
@@ -589,7 +588,6 @@ describe('TC Pop value options are limited to those that are defined from Measur
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.wait(4500)
         OktaLogin.Logout()
-        //MeasureGroupPage.CreateProportionMeasureGroupAPI(false, 'Procedure')
         OktaLogin.Login()
 
     })
