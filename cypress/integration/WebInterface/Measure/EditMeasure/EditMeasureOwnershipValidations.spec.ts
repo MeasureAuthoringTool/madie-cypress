@@ -7,7 +7,6 @@ import {Utilities} from "../../../../Shared/Utilities"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {LandingPage} from "../../../../Shared/LandingPage"
 
-//let measureCQL = MeasureCQL.SBTEST_CQL
 let measureCQL = "library SimpleFhirMeasureLib version '0.0.004'\nusing FHIR version '4.0.1'\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\nparameter 'Measurement Period' Interval<DateTime>\ncontext Patient\ndefine 'ipp':\n  exists ['Encounter'] E where E.period.start during 'Measurement Period'\ndefine 'denom':\n  'ipp'\ndefine 'num':\n  exists ['Encounter'] E where E.status ~ 'finished'"
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestLibrary' + Date.now()
@@ -65,31 +64,31 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         cy.get(EditMeasurePage.leftPanelMeasureSteward).should('be.visible')
         cy.get(EditMeasurePage.leftPanelMeasureSteward).click()
-        cy.get(EditMeasurePage.measureStewardTextBox).should('not.exist')
-        
+        cy.get(EditMeasurePage.measureStewardTextBox).should('have.attr', 'readonly', 'readonly')
+
         cy.get(EditMeasurePage.leftPanelDescription).should('be.visible')
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionTextBox).should('not.exist')
-        
+        cy.get(EditMeasurePage.measureDescriptionTextBox).should('have.attr', 'readonly', 'readonly')
+
         cy.get(EditMeasurePage.leftPanelCopyright).should('be.visible')
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureCopyrightTextBox).should('not.exist')        
-        
+        cy.get(EditMeasurePage.measureCopyrightTextBox).should('have.attr', 'readonly', 'readonly')
+
         cy.get(EditMeasurePage.leftPanelDisclaimer).should('be.visible')
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureDisclaimerTextBox).should('not.exist')
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).should('have.attr', 'readonly', 'readonly')
 
         cy.get(EditMeasurePage.leftPanelRationale).should('be.visible')
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureRationaleTextBox).should('not.exist')
+        cy.get(EditMeasurePage.measureRationaleTextBox).should('have.attr', 'readonly', 'readonly')
 
         cy.get(EditMeasurePage.leftPanelAuthor).should('be.visible')
         cy.get(EditMeasurePage.leftPanelAuthor).click()
-        cy.get(EditMeasurePage.measureAuthorTextBox).should('not.exist')
+        cy.get(EditMeasurePage.measureAuthorTextBox).should('have.attr', 'readonly', 'readonly')
 
         cy.get(EditMeasurePage.leftPanelGuidance).should('be.visible')
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGuidanceTextBox).should('not.exist')
+        cy.get(EditMeasurePage.measureGuidanceTextBox).should('have.attr', 'readonly', 'readonly')
 
     })
 
@@ -104,7 +103,7 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         //edit the measure that was not created by current measure
         MeasuresPage.clickEditforCreatedMeasure(true)
-        
+
         //confirm that the CQL Editor tab is available and click on it
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -145,6 +144,6 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(TestCasesPage.testCaseTitle).should('not.exist')
         cy.get(TestCasesPage.testCaseDescriptionTextBox).should('not.exist')
         cy.get(TestCasesPage.testCaseSeriesTextBox).should('not.exist')
-        
+
     })
 })
