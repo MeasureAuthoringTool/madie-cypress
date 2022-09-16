@@ -278,6 +278,33 @@ describe('Measure: CQL Editor', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).contains(newCqlLibraryName+'TEST')
 
     })
+
+    it('Verify error appears on CQL Editor when concept construct is used', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //Click on the CQL Editor tab
+        CQLEditorPage.clickCQLEditorTab()
+
+        cy.readFile('cypress/fixtures/cqlSaveCQL.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+
+            //save the value in the CQL Editor
+            cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+            //Validate message on page
+            cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
+                'Library Name and/or Version can not be updated in the CQL Editor. MADiE has overwritten the updated Library Name and/or Version.')
+
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}').type('concept Type B Hepatitis')
+
+            //save the value in the CQL Editor
+            cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+            cy.get(EditMeasurePage.cqlEditorTextBox).should('contain', '/*CONCEPT DECLARATION REMOVED: CQL concept construct shall NOT be used.*/')
+
+        })
+    })
 })
 
 describe('Measure: CQL Editor: valueSet', () => {
