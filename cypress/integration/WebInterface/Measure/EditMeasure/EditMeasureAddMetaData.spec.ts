@@ -2,7 +2,7 @@ import {OktaLogin} from "../../../../Shared/OktaLogin"
 import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
+
 import {Header} from "../../../../Shared/Header"
 import {Utilities} from "../../../../Shared/Utilities"
 
@@ -145,5 +145,35 @@ describe('Edit Measure: Add Meta Data', () => {
             expect(val).to.eql(guidance)
         })
         cy.log('Measure Guidance added successfully')
+    })
+})
+
+describe('Verify Measure Id and Version Id', () => {
+
+    before('Login', () => {
+
+        OktaLogin.Login()
+
+        })
+
+        after('Log out and Clean up', () => {
+
+            OktaLogin.Logout()
+            Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+        })
+    it('Verify that the Measure Id and Version Id are auto generated for new Measures', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasure(measureName,CqlLibraryName)
+
+        //Click on Edit Measure
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        cy.get(EditMeasurePage.measureId).should('exist')
+        cy.get(EditMeasurePage.measureId).should('have.attr', 'readonly', 'readonly')
+
+        cy.get(EditMeasurePage.versionId).should('exist')
+        cy.get(EditMeasurePage.versionId).should('have.attr', 'readonly', 'readonly')
     })
 })
