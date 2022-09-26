@@ -72,6 +72,7 @@ export class TestCasesPage {
     public static readonly denominatorRow = '[data-testid="test-row-population-id-denominator"]'
     public static readonly denominatorExclusionRow = '[data-testid="test-row-population-id-denominatorExclusion"]'
     public static readonly denominatorExceptionRow = '[data-testid="test-row-population-id-denominatorException"]'
+    public static readonly measureObservationRow = '[data-testid="test-population-measureObservation-expected"]'
 
     public static clickCreateTestCaseButton(withBundleId?:boolean) : void {
 
