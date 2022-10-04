@@ -74,6 +74,10 @@ export class TestCasesPage {
     public static readonly denominatorExceptionRow = '[data-testid="test-row-population-id-denominatorException"]'
     public static readonly measureObservationRow = '[data-testid="test-population-measureObservation-expected"]'
 
+    //Stratifications
+    public static readonly denominatorStratificationOneExpectedValue = '[data-testid="test-population-Strata-1 Denominator-expected"]'
+    public static readonly numeratorStratificationTwoExpectedValue = '[data-testid="test-population-Strata-2 Numerator-expected"]'
+
     //Test Case Expected/Actual Values
     public static readonly nonBooleanExpectedValueError = '[class="qpp-error-message"]'
 
