@@ -18,12 +18,11 @@ describe('CQL Library Validations', () => {
         OktaLogin.Logout()
 
     })
-    it('CQL Library header (breadcrumbs, name, version/draft, model, last update)', () => {
+    it('CQL Library header (breadcrumbs, name, version/draft, model)', () => {
 
-        const dayjs = require('dayjs')
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newCQLLibraryName = CQLLibraryName+randValue
-        let lastUpdated = dayjs().format('M/DD/YYYY')
+
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
@@ -55,8 +54,6 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.headerDetails).should('include.text', 'v0.0.000')
         cy.get(CQLLibraryPage.headerDetails).should('include.text', 'Draft')
         cy.get(CQLLibraryPage.headerDetails).should('include.text', 'QI-Core v4.1.1')
-        cy.get(CQLLibraryPage.headerDetails).should('include.text', lastUpdated)
-
 
     })
     it('CQL Library cancel / discard changes button', () => {

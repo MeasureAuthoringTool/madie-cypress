@@ -46,7 +46,8 @@ describe('Non Boolean Population Basis Expected values', () => {
 
     })
 
-    it('Verify Expected values for non boolean population basis', () => {
+    //Skipping until MAT-4909 is fixed
+    it.skip('Verify Expected values for non boolean population basis', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -108,7 +109,8 @@ describe('Non Boolean Population Basis Expected values', () => {
 
     })
 
-    it('Verify Expected values for multiple measure groups with Boolean and Non boolean Population Basis', () => {
+    //Skipping until MAT-4909 is fixed
+    it.skip('Verify Expected values for multiple measure groups with Boolean and Non boolean Population Basis', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -276,7 +278,8 @@ describe('Non Boolean Population Basis Expected values', () => {
                 
     })
 
-    it('Validate and save Non Boolean Expected values', () => {
+    //Skipping until MAT-4909 is fixed
+    it.skip('Validate and save Non Boolean Expected values', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -374,7 +377,8 @@ describe('Boolean Population Basis Expected Values', () => {
 
     })
 
-    it('Verify Boolean Expected values are saved to the database upon clicking save button for multiple Measure groups', () => {
+    //Skipping until MAT-4909 is fixed
+    it.skip('Verify Boolean Expected values are saved to the database upon clicking save button for multiple Measure groups', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -473,15 +477,14 @@ describe('Boolean Population Basis Expected Values', () => {
         //Assert Expected values for Population Basis Encounter (Proportion Measure Group)
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
-        cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Group 1 - (Proportion)')
+        cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Group 1 - Proportion | Boolean')
         cy.get(TestCasesPage.testCaseIPPCheckBox).eq(0).should('be.checked')
         cy.get(TestCasesPage.testCaseDENOMCheckBox).should('be.checked')
         cy.get(TestCasesPage.testCaseNUMERCheckBox).should('be.checked')
 
         //Assert Expected values for Population Basis Boolean (Cohort Measure Group)
         
-
-        cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Group 2 - (Cohort)')
+        cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Group 2 - Cohort | Boolean')
         cy.get(TestCasesPage.testCaseIPPCheckBox).eq(1).should('be.checked')
     })
     it('Verify Expected / Actual page dirty check with Boolean Population Basis and with multiple groups', () => {

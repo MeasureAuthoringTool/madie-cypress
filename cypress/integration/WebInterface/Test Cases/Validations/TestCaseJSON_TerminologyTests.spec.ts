@@ -14,13 +14,11 @@ let CqlLibraryName = 'TestLibrary' + Date.now()
 
 let testCaseTitle = 'test case title'
 let testCaseDescription = 'DENOMFail' + Date.now()
+let testCaseSeries = 'SBTestSeries'
 let validTerminologyFHIR_and_QICORETestCaseJson = TestCaseJson.validTestCaseJsonFHIR_and_QICORE
 let invalidTerminologyFHIR_and_QICOREEntireEntryBlockTestCaseJson = TestCaseJson.invalidTestCaseJsonFHIR_and_QICORE
 let invalidTerminologyFHIR_and_QICOREStatusTestCaseJson = TestCaseJson.invalidTestCaseJsonFHIR_and_QICORE_Status
 let invalidTerminologyFHIR_and_QICOREMDatesTestCaseJson = TestCaseJson.invalidTestCaseJsonFHIR_and_QICORE_MDates
-
-let valid_test = TestCaseJson.TestCaseJson_Valid
-let testCaseSeries = 'SBTestSeries'
 
 describe('Test Case JSON / terminology tests: Negative tests -- Test Case JSON does not use value set(s)', () => {
     beforeEach('Create measure and login', () => {
@@ -79,13 +77,13 @@ describe('Test Case JSON / terminology tests: Negative tests -- Test Case JSON d
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.runTestButton).should('be.visible')
-        cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click()
-
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
         cy.get(TestCasesPage.tcHighlightingTab).click()
+
+        cy.get(TestCasesPage.runTestButton).should('be.visible')
+        cy.get(TestCasesPage.runTestButton).should('be.enabled')
+        cy.get(TestCasesPage.runTestButton).click()
 
         //cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Measure Group 1 - (Proportion)')
 
@@ -134,19 +132,18 @@ describe('Test Case JSON / terminology tests: Negative tests -- Test Case JSON d
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
+         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
+         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
+         cy.get(TestCasesPage.tcHighlightingTab).click()
+
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click()
 
-        cy.get(TestCasesPage.tcHighlightingTab).should('exist')
-        cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
-        cy.get(TestCasesPage.tcHighlightingTab).click()
-
-        //cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Measure Group 1 - (Proportion)')
+         //cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Measure Group 1 - (Proportion)')
         cy.readFile('cypress/fixtures/groupId').should('exist').then((groupid) => {
             cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Population Group: ' + groupid /* + '\ndefine "ipp":\n\n exists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period"\n\ndefine function ToDateTime(value dateTime): value.value\n' */)
         })
-        //Population Group: 6324dbcc3e9dc9628c4eeea0\ndefine "ipp":\n\n exists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period"\n\ndefine function ToDateTime(value dateTime): value.value\n
 
     })
     it('Test Case JSON improper use of / invalid value set(s) -- Test Case JSON using wrong dates -- FHIR', () =>{
@@ -187,13 +184,13 @@ describe('Test Case JSON / terminology tests: Negative tests -- Test Case JSON d
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.runTestButton).should('be.visible')
-        cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click()
-
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
         cy.get(TestCasesPage.tcHighlightingTab).click()
+
+        cy.get(TestCasesPage.runTestButton).should('be.visible')
+        cy.get(TestCasesPage.runTestButton).should('be.enabled')
+        cy.get(TestCasesPage.runTestButton).click()
 
         //cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Measure Group 1 - (Proportion)')
         cy.readFile('cypress/fixtures/groupId').should('exist').then((groupid) => {
@@ -241,13 +238,13 @@ describe('Test Case JSON / terminology tests: Negative tests -- Test Case JSON d
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.runTestButton).should('be.visible')
-        cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click()
-
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
         cy.get(TestCasesPage.tcHighlightingTab).click()
+
+        cy.get(TestCasesPage.runTestButton).should('be.visible')
+        cy.get(TestCasesPage.runTestButton).should('be.enabled')
+        cy.get(TestCasesPage.runTestButton).click()
 
         //cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Measure Group 1 - (Proportion)')
 
@@ -296,22 +293,19 @@ describe('Test Case JSON / terminology tests: Negative tests -- Test Case JSON d
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.runTestButton).should('be.visible')
-        cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click()
-
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
         cy.get(TestCasesPage.tcHighlightingTab).click()
+
+        cy.get(TestCasesPage.runTestButton).should('be.visible')
+        cy.get(TestCasesPage.runTestButton).should('be.enabled')
+        cy.get(TestCasesPage.runTestButton).click()
 
         //cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Measure Group 1 - (Proportion)')
 
         cy.readFile('cypress/fixtures/groupId').should('exist').then((groupid) => {
             cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Population Group: ' + groupid /* + '\ndefine "num":\n    exists ["Encounter": "Office Visit"] E where E.status ~ \'finished\'\n' */)
         })
-
-        //cy.get(TestCasesPage.testCalculationResults).should('contain.text', '\ndefine "num":\n    exists ["Encounter": "Office Visit"] E where E.status ~ \'finished\'\n')
-
     })
 })
 
@@ -333,7 +327,9 @@ describe('Test Case JSON / terminology tests: positive tests -- Test Case JSON u
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
-    it('Test Case JSON proper use of value set(s) -- FHIR', () =>{
+
+    //Skipping until MAT-4909 is fixed
+    it.skip('Test Case JSON proper use of value set(s) -- FHIR', () =>{
         //Click on Edit Button
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
@@ -387,13 +383,13 @@ describe('Test Case JSON / terminology tests: positive tests -- Test Case JSON u
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.runTestButton).should('be.visible')
-        cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click()
-
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
         cy.get(TestCasesPage.tcHighlightingTab).click()
+
+        cy.get(TestCasesPage.runTestButton).should('be.visible')
+        cy.get(TestCasesPage.runTestButton).should('be.enabled')
+        cy.get(TestCasesPage.runTestButton).click()
 
         //cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Measure Group 1 - (Proportion)')
 
@@ -403,7 +399,9 @@ describe('Test Case JSON / terminology tests: positive tests -- Test Case JSON u
 
         //cy.get(TestCasesPage.testCalculationResults).should('contain.text', '\ndefine "ipp":\n\n  exists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period"\n')
     })
-    it('Test Case JSON proper use of value set(s) -- FHIR based QICore', () =>{
+
+    //Skipping until MAT-4909 is fixed
+    it.skip('Test Case JSON proper use of value set(s) -- FHIR based QICore', () =>{
         //Click on Edit Button
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
@@ -457,13 +455,13 @@ describe('Test Case JSON / terminology tests: positive tests -- Test Case JSON u
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.runTestButton).should('be.visible')
-        cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).click()
-
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
         cy.get(TestCasesPage.tcHighlightingTab).click()
+
+        cy.get(TestCasesPage.runTestButton).should('be.visible')
+        cy.get(TestCasesPage.runTestButton).should('be.enabled')
+        cy.get(TestCasesPage.runTestButton).click()
 
         //cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Measure Group 1 - (Proportion)')
 

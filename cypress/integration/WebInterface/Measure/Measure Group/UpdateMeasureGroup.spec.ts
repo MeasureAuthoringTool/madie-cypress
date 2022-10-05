@@ -460,7 +460,8 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
     })
 
-    it('Validate test case execution for measure group with second initial population', () => {
+    //Skipping until MAT-4909 is fixed
+    it.skip('Validate test case execution for measure group with second initial population', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
