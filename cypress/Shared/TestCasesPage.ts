@@ -80,6 +80,7 @@ export class TestCasesPage {
 
     //Test Case Expected/Actual Values
     public static readonly nonBooleanExpectedValueError = '[class="qpp-error-message"]'
+    public static readonly measureObservationExpectedValueError = '[data-testid="measureObservation-error-helper-text"]'
 
     public static clickCreateTestCaseButton(withBundleId?:boolean) : void {
 

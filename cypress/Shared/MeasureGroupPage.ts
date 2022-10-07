@@ -226,6 +226,48 @@ export class MeasureGroupPage {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
     }
 
+    public static createMeasureGroupforContinuousVariableMeasure () : void {
+
+        //Click on Edit Measure
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+        })
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //Create Measure Group
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
+            if ($ele.text() == "Process") {
+                cy.wrap($ele).click()
+            }
+        })
+        cy.get(MeasureGroupPage.measureGroupTypeDropdownBtn).click({force:true})
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'denom')
+        cy.get(MeasureGroupPage.cvMeasureObservation).click()
+        cy.get(MeasureGroupPage.measureObservationSelect).eq(1).click() //select isFinishedEncounter
+        cy.get(MeasureGroupPage.cvAggregateFunction).click()
+        cy.get(MeasureGroupPage.aggregateFunctionCount).click()
+        cy.get(this.saveMeasureGroupDetails).click()
+
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+    }
+
     public static CreateProportionMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, PopNumP?:string, PopDenomP?: string, popBasis?: string): string {
         let user = ''
         let measurePath = ''
