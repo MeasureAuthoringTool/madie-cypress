@@ -8,7 +8,6 @@ import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
 import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 
-
 let measureName = 'MeasureName ' + Date.now()
 let CqlLibraryName = 'CQLLibraryName' + Date.now()
 let newMeasureName = ''
@@ -551,6 +550,200 @@ describe('Measure bundle end point returns stratifications', () => {
                     expect(response.body.entry[0].resource.group[0].stratifier[2].id).to.not.be.empty
                     expect(response.body.entry[0].resource.group[0].stratifier[2].extension[0].valueCodeableConcept.coding[0].code).to.eql('Numerator')
                     expect(response.body.entry[0].resource.group[0].stratifier[2].criteria.expression).to.eql('Surgical Absence of Cervix')
+                })
+            })
+        })
+    })
+})
+
+describe('Verify the criteria reference for measure observations', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    newMeasureName = measureName + randValue
+    newCqlLibraryName = CqlLibraryName + randValue
+
+    beforeEach('Create Measure', () => {
+
+        cy.setAccessTokenCookie()
+
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        OktaLogin.Login()
+    })
+
+    afterEach('Clean up', () => {
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('Measure bundle end point returns criteria reference for CV measure observations and is equal to measure population id', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //navigate to CQL Editor page / tab
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, {delay: 50})
+        })
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //Click on the measure group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
+            if ($ele.text() == "Process") {
+                cy.wrap($ele).click()
+            }
+        })
+        cy.get(MeasureGroupPage.measureGroupTypeDropdownBtn).click({force: true})
+
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'ToCode')
+        Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
+
+        //Click on Stratification tab
+        cy.get(MeasureGroupPage.stratificationTab).should('exist')
+        cy.get(MeasureGroupPage.stratificationTab).click()
+
+        //Add Stratification 1
+        Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'Initial Population')
+        cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
+
+        //Add Stratification 2
+        Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'num')
+        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'Measure Population')
+        cy.get(MeasureGroupPage.stratDescTwo).type('StratificationTwo')
+
+        //Add Stratification 3
+        cy.get(MeasureGroupPage.addStratButton).click()
+        Utilities.dropdownSelect(MeasureGroupPage.stratThree, 'numeratorExclusion')
+        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'Measure Population Exclusion')
+        cy.get(MeasureGroupPage.stratDescThree).type('StratificationThree')
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+
+        //log out of UI
+        OktaLogin.Logout()
+
+        //log into backend
+        cy.setAccessTokenCookie()
+
+        //send GET Bundle request and verify response includes elm xml value
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/bundles',
+                    method: 'GET',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.resourceType).to.eql('Bundle')
+                    expect(response.body.entry[0].resource.group[0].population[1].id).to.eql(response.body.entry[0].resource.group[0].population[3].extension[1].valueString)
+
+                })
+            })
+        })
+    })
+
+    it('Measure bundle end point returns criteria reference for Ratio measure observations and is equal to measure population id', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+        })
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //Create Measure Group
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
+            if ($ele.text() == "Process") {
+                cy.wrap($ele).click()
+            }
+        })
+        cy.get(MeasureGroupPage.measureGroupTypeDropdownBtn).click({force:true})
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'num')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'num')
+
+        //Add Denominator Observation
+        cy.log('Adding Measure Observations')
+        cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
+        cy.get(MeasureGroupPage.denominatorObservation).click()
+        cy.get(MeasureGroupPage.measureObservationSelect).eq(1).click() //select fun
+        cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
+        cy.get(MeasureGroupPage.aggregateFunctionCount).click()
+
+        //Add Numerator Observation
+        cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
+        cy.get(MeasureGroupPage.numeratorObservation).click()
+        cy.get(MeasureGroupPage.measureObservationSelect).eq(2).click() //select isFinishedEncounter
+        cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
+        cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
+
+        //save Measure Group
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+
+        //log out of UI
+        OktaLogin.Logout()
+
+        //log into backend
+        cy.setAccessTokenCookie()
+
+        //send GET Bundle request and verify response includes elm xml value
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/bundles',
+                    method: 'GET',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.resourceType).to.eql('Bundle')
+                    //Compare denominator population id with denominator criteria reference
+                    expect(response.body.entry[0].resource.group[0].population[1].id).to.eql(response.body.entry[0].resource.group[0].population[5].extension[1].valueString)
+                    expect(response.body.entry[0].resource.group[0].population[1].code.coding[0].code).to.eql('denominator')
+                    //Compare numerator population id with numerator criteria reference
+                    expect(response.body.entry[0].resource.group[0].population[3].id).to.eql(response.body.entry[0].resource.group[0].population[6].extension[1].valueString)
+                    expect(response.body.entry[0].resource.group[0].population[3].code.coding[0].code).to.eql('numerator')
                 })
             })
         })

@@ -129,7 +129,7 @@ export class MeasureGroupPage {
 
     //population basis
     public static readonly popBasis = '[data-testid="population-basis-combo-box"]'
-    public static readonly popBasisOption = '#mui-3-option-0'
+    public static readonly popBasisOption = '#population-basis-option-0'
 
     //Measure group description
     public static readonly measureGroupDescriptionBox = '[name="groupDescription"]'
