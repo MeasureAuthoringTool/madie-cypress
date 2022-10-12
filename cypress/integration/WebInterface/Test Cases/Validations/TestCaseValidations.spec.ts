@@ -7,7 +7,6 @@ import {Utilities} from "../../../../Shared/Utilities"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let newMeasureName = ''
@@ -490,7 +489,7 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(MeasureGroupPage.continueDiscardChangesBtn).click()
     })
 })
-describe('Attempting to create a test case without a title', () => {
+describe('Validate dirty check modal after saving test case', () => {
 
     beforeEach('Create measure and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))

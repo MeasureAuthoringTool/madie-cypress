@@ -46,8 +46,7 @@ describe('Non Boolean Population Basis Expected values', () => {
 
     })
 
-    //Skipping until MAT-4909 is fixed
-    it.skip('Verify Expected values for non boolean population basis', () => {
+    it('Verify Expected values for non boolean population basis', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -109,8 +108,7 @@ describe('Non Boolean Population Basis Expected values', () => {
 
     })
 
-    //Skipping until MAT-4909 is fixed
-    it.skip('Verify Expected values for multiple measure groups with Boolean and Non boolean Population Basis', () => {
+    it('Verify Expected values for multiple measure groups with Boolean and Non boolean Population Basis', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -278,8 +276,7 @@ describe('Non Boolean Population Basis Expected values', () => {
                 
     })
 
-    //Skipping until MAT-4909 is fixed
-    it.skip('Validate and save Non Boolean Expected values', () => {
+    it('Validate and save Non Boolean Expected values', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -317,21 +314,21 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(TestCasesPage.testCaseIPPCheckBox).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPCheckBox).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPCheckBox).type('abc')
-        cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Only numeric values can be entered in the expected values')
+        cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
 
         cy.get(TestCasesPage.testCaseDENOMCheckBox).should('exist')
         cy.get(TestCasesPage.testCaseDENOMCheckBox).should('be.enabled')
         cy.get(TestCasesPage.testCaseDENOMCheckBox).should('be.visible')
         cy.get(TestCasesPage.testCaseDENOMCheckBox).type('$%@')
-        cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Only numeric values can be entered in the expected values')
+        cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
 
         cy.get(TestCasesPage.testCaseNUMERCheckBox).should('exist')
         cy.get(TestCasesPage.testCaseNUMERCheckBox).should('be.enabled')
         cy.get(TestCasesPage.testCaseNUMERCheckBox).should('be.visible')
         cy.get(TestCasesPage.testCaseNUMERCheckBox).type('13@a')
-        cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Only numeric values can be entered in the expected values')
+        cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
 
         cy.get(TestCasesPage.testCaseIPPCheckBox).clear().type('1')
@@ -377,8 +374,7 @@ describe('Boolean Population Basis Expected Values', () => {
 
     })
 
-    //Skipping until MAT-4909 is fixed
-    it.skip('Verify Boolean Expected values are saved to the database upon clicking save button for multiple Measure groups', () => {
+    it('Verify Boolean Expected values are saved to the database upon clicking save button for multiple Measure groups', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()

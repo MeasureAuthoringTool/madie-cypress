@@ -328,8 +328,7 @@ describe('Test Case JSON / terminology tests: positive tests -- Test Case JSON u
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
-    //Skipping until MAT-4909 is fixed
-    it.skip('Test Case JSON proper use of value set(s) -- FHIR', () =>{
+    it('Test Case JSON proper use of value set(s) -- FHIR', () =>{
         //Click on Edit Button
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
@@ -400,8 +399,7 @@ describe('Test Case JSON / terminology tests: positive tests -- Test Case JSON u
         //cy.get(TestCasesPage.testCalculationResults).should('contain.text', '\ndefine "ipp":\n\n  exists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period"\n')
     })
 
-    //Skipping until MAT-4909 is fixed
-    it.skip('Test Case JSON proper use of value set(s) -- FHIR based QICore', () =>{
+    it('Test Case JSON proper use of value set(s) -- FHIR based QICore', () =>{
         //Click on Edit Button
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
