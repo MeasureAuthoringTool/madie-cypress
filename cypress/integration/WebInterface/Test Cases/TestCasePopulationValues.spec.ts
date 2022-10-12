@@ -346,7 +346,7 @@ describe('Test Case Population dependencies', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.wait(4500)
         OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'Boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial PopulationOne', 'Initial PopulationOne', 'Initial PopulationOne', 'Boolean')
         OktaLogin.Login()
     })
 
@@ -360,16 +360,15 @@ describe('Test Case Population dependencies', () => {
 
     })
 
-    //Skipping until MAT-4909 is fixed
-    it.skip('Verify Test Case population dependencies for Proportion Measures', () => {
+    it('Verify Test Case population dependencies for Proportion Measures', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Initial PopulationOne')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'Initial PopulationOne')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Initial PopulationOne')
         //save measure group
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()

@@ -3,6 +3,7 @@ import {EditMeasurePage} from "./EditMeasurePage"
 import {CQLEditorPage} from "./CQLEditorPage"
 import {Environment} from "./Environment"
 import {Utilities} from "./Utilities"
+import { v4 as uuidv4 } from 'uuid'
 
 export class MeasureGroupPage {
 
@@ -314,32 +315,32 @@ export class MeasureGroupPage {
                         "populationBasis": popBasis,
                         "populations": [
                             {
-                                "_id" : "",
+                                "id" : uuidv4(),
                                 "name" : "initialPopulation",
                                 "definition" : PopIniPopP
                             },
                             {
-                                "_id" : "",
+                                "id" : uuidv4(),
                                 "name" : "denominator",
                                 "definition" : PopDenomP
                             },
                             {
-                                "_id" : "",
+                                "id" : uuidv4(),
                                 "name" : "denominatorExclusion",
                                 "definition" :""
                             },
                             {
-                                "_id" : "",
+                                "id" : uuidv4(),
                                 "name" : "denominatorException",
                                 "definition" : ""
                             },
                             {
-                                "_id" : "",
+                                "id" : uuidv4(),
                                 "name" : "numerator",
                                 "definition" : PopNumP
                             },
                             {
-                                "_id" : "",
+                                "id" : uuidv4(),
                                 "name" : "numeratorExclusion",
                                 "definition" :""
                             }
@@ -404,27 +405,27 @@ export class MeasureGroupPage {
                         "populationBasis": popBasis,
                         "populations": [
                             {
-                                "_id" : "",
+                                "id" : uuidv4(),
                                 "name" : "initialPopulation",
                                 "definition" : PopIniPopP
                             },
                             {
-                                "_id" : "",
+                                "id" : uuidv4(),
                                 "name" : "denominator",
                                 "definition" : PopDenomP
                             },
                             {
-                                "_id" : "",
+                                "id" : uuidv4(),
                                 "name" : "denominatorExclusion",
                                 "definition" : PopDenomP
                             },
                             {
-                                "_id" : "",
+                                "id" : uuidv4(),
                                 "name" : "numerator",
                                 "definition" : PopNumP
                             },
                             {
-                                "_id" : "",
+                                "id" : uuidv4(),
                                 "name" : "numeratorExclusion",
                                 "definition" : PopNumP
                             }

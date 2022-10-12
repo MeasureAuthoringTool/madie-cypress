@@ -483,17 +483,17 @@ describe('Measure Observation - Expected Values',  () => {
         cy.get(TestCasesPage.measureObservationRow).should('exist')
 
         //Check Measure Population Exclusion and verify Observation row goes away
-        cy.get(TestCasesPage.testCaseMSRPOPLEXCheckBox).should('exist')
-        cy.get(TestCasesPage.testCaseMSRPOPLEXCheckBox).should('be.enabled')
-        cy.get(TestCasesPage.testCaseMSRPOPLEXCheckBox).should('be.visible')
-        cy.get(TestCasesPage.testCaseMSRPOPLEXCheckBox).check().should('be.checked')
+        cy.get(TestCasesPage.testCaseMSRPOPLEXExpected).should('exist')
+        cy.get(TestCasesPage.testCaseMSRPOPLEXExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseMSRPOPLEXExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseMSRPOPLEXExpected).check().should('be.checked')
         cy.get(TestCasesPage.measureObservationRow).should('not.exist')
 
         //Uncheck Measure Population Exclusion and verify Observation row re appears
-        cy.get(TestCasesPage.testCaseMSRPOPLEXCheckBox).should('exist')
-        cy.get(TestCasesPage.testCaseMSRPOPLEXCheckBox).should('be.enabled')
-        cy.get(TestCasesPage.testCaseMSRPOPLEXCheckBox).should('be.visible')
-        cy.get(TestCasesPage.testCaseMSRPOPLEXCheckBox).uncheck().should('not.be.checked')
+        cy.get(TestCasesPage.testCaseMSRPOPLEXExpected).should('exist')
+        cy.get(TestCasesPage.testCaseMSRPOPLEXExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseMSRPOPLEXExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseMSRPOPLEXExpected).uncheck().should('not.be.checked')
         cy.get(TestCasesPage.measureObservationRow).should('exist')
     })
 

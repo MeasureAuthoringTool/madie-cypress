@@ -322,6 +322,9 @@ export class MeasureCQL {
     'where ValidEncounter.period during \"Measurement Period\"\n' +
     'and ValidEncounter.isFinishedEncounter()\n' +
 
+        'define \"Initial PopulationOne\":\n' +
+               'true\n' +
+
 
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
 '(Enc E where E.status = \'finished\') is not null\n'
