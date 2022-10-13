@@ -17,7 +17,8 @@ describe('Create CQL Library', () => {
     it('Navigate to CQL Library Page and create New Library', () => {
 
         let CQLLibraryName = 'TestLibrary' + Date.now()
+        let CQLLibraryPublisher = 'SemanticBits'
 
-        CQLLibraryPage.createCQLLibrary(CQLLibraryName)
+        CQLLibraryPage.createCQLLibrary(CQLLibraryName, CQLLibraryPublisher)
     })
 })

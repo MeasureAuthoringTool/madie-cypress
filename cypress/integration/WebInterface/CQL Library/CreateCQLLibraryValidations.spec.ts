@@ -274,7 +274,9 @@ describe('CQL Library Validations', () => {
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let UpdatedCQLLibraryName = CQLLibraryName +randValue+ "updated"
-        CQLLibraryPage.createCQLLibrary(UpdatedCQLLibraryName)
+        let CQLLibraryPublisher = 'SemanticBits'
+
+        CQLLibraryPage.createCQLLibrary(UpdatedCQLLibraryName, CQLLibraryPublisher)
         //navigate to the CQL Libaray page
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()

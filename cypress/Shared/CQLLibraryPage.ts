@@ -37,12 +37,20 @@ export class CQLLibraryPage {
     public static readonly errorInCQLEditorWindow = 'div.ace_gutter-cell.ace_error'
 
 
-    public static createCQLLibrary (CQLLibraryName: string) : void {
+    public static createCQLLibrary (CQLLibraryName: string, CQLLibraryPublisher: string) : void {
 
         cy.get(Header.cqlLibraryTab).click()
         cy.wait(1000)
         cy.get(this.createCQLLibraryBtn).click()
         cy.get(this.newCQLLibName).type(CQLLibraryName)
+        cy.get(this.cqlLibraryDesc).type('description')
+        cy.get(CQLLibraryPage.cqlLibraryPublisher).should('exist')
+        cy.get(CQLLibraryPage.cqlLibraryPublisher).should('be.visible')
+        cy.get(CQLLibraryPage.cqlLibraryPublisher).type(CQLLibraryPublisher)
+        cy.get(CQLLibraryPage.cqlLibraryPublisherDrpDwn).should('exist')
+        cy.get(CQLLibraryPage.cqlLibraryPublisherDrpDwn).should('be.visible')
+        cy.get(CQLLibraryPage.cqlLibraryPublisherDrpDwn).click()
+
         Utilities.dropdownSelect(CQLLibraryPage.cqlLibraryModelDropdown, CQLLibraryPage.cqlLibraryModelQICore)
         this.clickCreateLibraryButton()
         cy.get(Header.cqlLibraryTab).click()
@@ -84,7 +92,7 @@ export class CQLLibraryPage {
         })
     }
 
-    public static createCQLLibraryAPI(CqlLibraryName: string, twoLibraries?: boolean, altUser?: boolean): string {
+    public static createCQLLibraryAPI(CqlLibraryName: string, CQLLibraryPublisher: string, twoLibraries?: boolean, altUser?: boolean): string {
         let user = ''
 
         if (altUser)
@@ -110,6 +118,8 @@ export class CQLLibraryPage {
                     'cqlLibraryName': CqlLibraryName,
                     'model': 'QI-Core v4.1.1',
                     'createdBy': user,
+                    "description": "description",
+                    "publisher": CQLLibraryPublisher,
                     'cql': ""
                 }
             }).then((response) => {
@@ -130,7 +140,7 @@ export class CQLLibraryPage {
         return user
     }
 
-    public static createAPICQLLibraryWithValidCQL(CqlLibraryName: string, twoLibraries?: boolean, altUser?: boolean): string {
+    public static createAPICQLLibraryWithValidCQL(CqlLibraryName: string, CQLLibraryPublisher: string, twoLibraries?: boolean, altUser?: boolean): string {
         let user = ''
 
         if (altUser)
@@ -160,6 +170,8 @@ export class CQLLibraryPage {
                         "using QICore version '4.1.0'\n" +
                         "\n" +
                         "valueset \"ONC Administrative Sex\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1'",
+                    "description": "description",
+                    "publisher": CQLLibraryPublisher,
                     'createdBy': user
                 }
             }).then((response) => {
@@ -181,7 +193,7 @@ export class CQLLibraryPage {
     }
 
 
-    public static createAPICQLLibraryWithInvalidCQL(CqlLibraryName: string): void {
+    public static createAPICQLLibraryWithInvalidCQL(CqlLibraryName: string, CQLLibraryPublisher: string): void {
 
         cy.setAccessTokenCookie()
 
@@ -197,6 +209,8 @@ export class CQLLibraryPage {
                     'cqlLibraryName': CqlLibraryName,
                     'model': 'QI-Core v4.1.1',
                     'cql': "library TESTMEASURE0000000003 version '0.0.000'\nusing FHIR version '4.0.1'\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\nparameter \"Measurement Period\" Interval<DateTimeTest>\ncontext Patient\ndefine \"SDE Ethnicity\":\nSDE.\"SDE Ethnicity\"\ndefine \"SDE Payer\":\nSDE.\"SDE Payer\"\ndefine \"SDE Race\":\nSDE.\"SDE Race\"\ndefine \"SDE Sex\":\nSDE.\"SDE Sex\"",
+                    "description": "description",
+                    "publisher": CQLLibraryPublisher,
                     'cqlErrors': true
                 }
             }).then((response) => {

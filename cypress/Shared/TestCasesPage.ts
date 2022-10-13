@@ -35,7 +35,7 @@ export class TestCasesPage {
     public static readonly testCaseTitleInlineError = '[data-testid="title-helper-text"]'
     public static readonly testCaseJsonValidationErrorBtn = '[data-testid="show-json-validation-errors-button"]'
     public static readonly testCaseJsonValidationDisplayList = '[data-testid="json-validation-errors-list"] > span'
-    public static readonly testCaseJsonValidationErrorList = '.CreateTestCase__ValidationErrorCard-sc-z6rmnc-5'
+    public static readonly testCaseJsonValidationErrorList = '.CreateTestCase__ValidationAlertCard-sc-z6rmnc-7'
     public static readonly testCasePopulationList = '[data-testid="create-test-case-populations"]'
     public static readonly testCaseExecutionError = '[data-testid="display-tests-error"]'
     public static readonly runTestButton = '[data-testid="run-test-case-button"]'

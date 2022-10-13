@@ -5,12 +5,13 @@ import {CQLLibrariesPage} from "../../../Shared/CQLLibrariesPage"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let updatedCQLLibraryName= 'UpdatedTestLibrary' + Date.now()
+let CQLLibraryPublisher = 'SemanticBits'
 
 describe('Edit Measure', () => {
     before('Create Measure', () => {
 
         //Create CQL Library
-        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName)
+        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
     })
 
     beforeEach('Login', () => {

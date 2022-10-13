@@ -5,6 +5,7 @@ import {Header} from "../../../../Shared/Header"
 import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
 
 let CqlLibraryOther = ''
+let CQLLibraryPublisher = 'SemanticBits'
 
 describe('Version CQL Library with errors', () => {
 
@@ -12,7 +13,7 @@ describe('Version CQL Library with errors', () => {
 
         //Create CQL Library
         CqlLibraryOther = 'CQLLibraryWithErrors' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithInvalidCQL(CqlLibraryOther)
+        CQLLibraryPage.createAPICQLLibraryWithInvalidCQL(CqlLibraryOther, CQLLibraryPublisher)
 
         OktaLogin.Login()
 

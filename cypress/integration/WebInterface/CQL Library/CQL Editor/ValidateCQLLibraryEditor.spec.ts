@@ -6,14 +6,16 @@ import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage"
 
 let apiCQLLibraryName = ''
+let CQLLibraryPublisher = 'SemanticBits'
 
 describe('Validate CQL on CQL Library page', () => {
 
     beforeEach('Create CQL library', () => {
 
         apiCQLLibraryName = 'TestLibrary' + Date.now()
+
         //Create CQL Library
-        CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName)
+        CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName, CQLLibraryPublisher)
         OktaLogin.Login()
 
     })
@@ -24,7 +26,7 @@ describe('Validate CQL on CQL Library page', () => {
 
     })
 
-    it('Add valid CQL on CQL Library Editor and verify no errors appear', () => {
+    it.only('Add valid CQL on CQL Library Editor and verify no errors appear', () => {
         //Navigate to CQL Library Page
         cy.get(Header.cqlLibraryTab).click()
         //Click Edit CQL Library
@@ -216,7 +218,7 @@ describe('CQL Library: CQL Editor: valueSet', () => {
 
         apiCQLLibraryName = 'TestLibrary' + Date.now()
         //Create CQL Library
-        CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName)
+        CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName, CQLLibraryPublisher)
 
         OktaLogin.Login()
 

@@ -6,6 +6,7 @@ let CqlLibraryTwo = ''
 let updatedCqlLibraryName = 'UpdatedTestLibrary' + Date.now()
 let harpUser = Environment.credentials().harpUser
 let model = 'QI-Core v4.1.1'
+let CQLLibraryPublisher = 'SemanticBits'
 
 describe('Version and Draft CQL Library', () => {
 
@@ -18,11 +19,11 @@ describe('Version and Draft CQL Library', () => {
 
         //Create CQL Library with Regular User
         CqlLibraryOne = 'TestLibrary1' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne)
+        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
 
         //Create Measure with Alternate User
         CqlLibraryTwo = 'TestLibrary2' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryTwo, true, true)
+        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryTwo, CQLLibraryPublisher, true, true)
     })
 
     it('Add Version to the CQL Library', () => {
@@ -152,7 +153,7 @@ describe('Draft and Version Validations', () => {
         cy.setAccessTokenCookie()
 
         CqlLibraryOne = 'TestLibraryOne' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne)
+        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
     })
 
     it('Verify the CQL Library updates are restricted after Version is created', () => {
@@ -204,12 +205,14 @@ describe('Draft and Version Validations', () => {
 
 describe('Version CQL Library without CQL', () => {
 
+    let CQLLibraryPublisher = 'SemanticBits'
+
     before('Set Access Token and create CQL Library', () => {
 
         cy.setAccessTokenCookie()
 
         CqlLibraryOne = 'CQLLibraryWithoutCQL' + Date.now()
-        CQLLibraryPage.createCQLLibraryAPI(CqlLibraryOne)
+        CQLLibraryPage.createCQLLibraryAPI(CqlLibraryOne, CQLLibraryPublisher)
 
     })
 
@@ -245,7 +248,7 @@ describe('Version CQL Library with invalid CQL', () => {
         cy.setAccessTokenCookie()
 
         CqlLibraryOne = 'CQLLibraryWithInvalidCQL' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithInvalidCQL(CqlLibraryOne)
+        CQLLibraryPage.createAPICQLLibraryWithInvalidCQL(CqlLibraryOne, CQLLibraryPublisher)
 
     })
 

@@ -3,13 +3,14 @@ import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage"
 import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
 
 let CqlLibraryOne = ''
+let CQLLibraryPublisher = 'SemanticBits'
 
 describe('Add Version to CQL Library', () => {
 
     beforeEach('Create CQL Library and Login', () => {
         //Create CQL Library with Regular User
         CqlLibraryOne = 'TestLibrary1' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne)
+        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
 
         OktaLogin.Login()
 

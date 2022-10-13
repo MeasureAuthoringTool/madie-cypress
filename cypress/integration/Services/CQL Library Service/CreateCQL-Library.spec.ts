@@ -78,10 +78,11 @@ describe('CQL Library Service: Create CQL Library', () => {
 describe('CQL Library Name validations', () => {
 
     let apiCQLLibraryName = 'TestLibrary' + Date.now()
+    let CQLLibraryPublisher = 'SemanticBits'
 
     before('Create CQL Library', () => {
 
-        CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName)
+        CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName, CQLLibraryPublisher)
     })
 
     beforeEach('Set Access Token', () => {

@@ -3,6 +3,7 @@ import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
 let CQLLibraryName = ''
 let updatedCQLLibraryName = ''
 let model = 'QI-Core v4.1.1'
+let CQLLibraryPublisher = 'SemanticBits'
 
 describe('Edit CQL Library', () => {
 
@@ -12,7 +13,7 @@ describe('Edit CQL Library', () => {
 
         cy.setAccessTokenCookie()
 
-        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName)
+        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
 
     })
 
