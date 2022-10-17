@@ -32,7 +32,7 @@ describe('Measure Observations', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
         OktaLogin.Logout()
 
     })
@@ -45,14 +45,18 @@ describe('Measure Observations', () => {
         cy.log('Adding Measure Observations')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(0).click() //select ToCode
+        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
+        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(0).wait(1000).click() //select ToCode
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
         cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(2).click() //select isFinishedEncounter
+        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
+        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(2).wait(1000).click() //select isFinishedEncounter
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
@@ -118,7 +122,9 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.measurePopulationOption).eq(0).click() //select denom
 
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(1).click() //select isFinishedEncounter
+        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
+        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(0).wait(1000).click() //select ToCode
         cy.get(MeasureGroupPage.cvAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
@@ -139,7 +145,7 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.measureScoringSelect).contains('Continuous Variable')
         cy.get(MeasureGroupPage.initialPopulationSelect).contains('ipp')
         cy.get(MeasureGroupPage.measurePopulationSelect).contains('denom')
-        cy.get(MeasureGroupPage.cvMeasureObservation).contains('isFinishedEncounter')
+        cy.get(MeasureGroupPage.cvMeasureObservation).contains('ToCode')
         cy.get(MeasureGroupPage.cvAggregateFunction).contains('Count')
     })
 
@@ -150,14 +156,18 @@ describe('Measure Observations', () => {
         //Add Denominator Observation
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(0).click() //select ToCode
+        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
+        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(0).wait(1000).click() //select ToCode
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
         cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(2).click() //select isFinishedEncounter
+        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
+        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(2).wait(1000).click() //select isFinishedEncounter
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
@@ -227,14 +237,18 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.log('Adding Measure Observations')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(0).click() //select ToCode
+        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
+        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(0).wait(1000).click() //select ToCode
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
         cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(2).click() //select isFinishedEncounter
+        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
+        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(2).wait(1000).click() //select isFinishedEncounter
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
@@ -333,7 +347,9 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.measurePopulationOption).eq(0).click() //select denom
 
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(1).click() //select isFinishedEncounter
+        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
+        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(0).wait(1000).click() //select ToCode
         cy.get(MeasureGroupPage.cvAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
@@ -354,7 +370,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.measureScoringSelect).contains('Continuous Variable')
         cy.get(MeasureGroupPage.initialPopulationSelect).contains('ipp')
         cy.get(MeasureGroupPage.measurePopulationSelect).contains('denom')
-        cy.get(MeasureGroupPage.cvMeasureObservation).contains('isFinishedEncounter')
+        cy.get(MeasureGroupPage.cvMeasureObservation).contains('ToCode')
         cy.get(MeasureGroupPage.cvAggregateFunction).contains('Count')
 
         //second / non-owner user
@@ -456,7 +472,9 @@ describe('Measure Observation - Expected Values',  () => {
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'num')
 
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(1).click() //select isFinishedEncounter
+        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
+        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(1).wait(1000).click() //select isFinishedEncounter
         cy.get(MeasureGroupPage.cvAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
@@ -505,14 +523,18 @@ describe('Measure Observation - Expected Values',  () => {
         cy.log('Adding Measure Observations')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(0).click() //select ToCode
+        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
+        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(0).wait(1000).click() //select ToCode
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
         cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(2).click() //select isFinishedEncounter
+        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
+        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(2).wait(1000).click() //select isFinishedEncounter
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
