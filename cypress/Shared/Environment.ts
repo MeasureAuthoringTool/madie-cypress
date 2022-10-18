@@ -12,7 +12,7 @@ export class Environment {
                     harpUserALT: Cypress.env('DEV_ALT_USERNAME'),
                     passwordALT: Cypress.env('DEV_ALT_PASSWORD'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
-                    measureSharing_API_Key: Cypress.env('MEASURESHARING_API_KEY')
+                    measureSharing_API_Key: Cypress.env('DEV_MEASURESHARING_API_KEY')
                 }
             }
             case 'test': {
@@ -22,7 +22,7 @@ export class Environment {
                     harpUserALT: Cypress.env('TEST_ALT_USERNAME'),
                     passwordALT: Cypress.env('TEST_ALT_PASSWORD'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
-                    measureSharing_API_Key: Cypress.env('MEASURESHARING_API_KEY')
+                    measureSharing_API_Key: Cypress.env('TEST_MEASURESHARING_API_KEY')
                 }
             }
             case 'impl': {
@@ -32,7 +32,7 @@ export class Environment {
                     harpUserALT: Cypress.env('IMPL_ALT_USERNAME'),
                     passwordALT: Cypress.env('IMPL_ALT_PASSWORD'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
-                    measureSharing_API_Key: Cypress.env('MEASURESHARING_API_KEY')
+                    measureSharing_API_Key: Cypress.env('IMPL_MEASURESHARING_API_KEY')
                 }
             }
         }
