@@ -2,7 +2,7 @@ import {EditMeasurePage} from "./EditMeasurePage"
 export class CQLEditorPage {
 
     //success save message without errors
-    public static readonly successfulCQLSaveNoErrors = '[data-testid=save-cql-success]'
+    public static readonly successfulCQLSaveNoErrors = '[data-testid="generic-success-text-header"]'
 
     //Error marker inside of the CQL Editor window
     public static readonly errorInCQLEditorWindow = 'div.ace_gutter-cell.ace_error'
