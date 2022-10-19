@@ -55,12 +55,11 @@ export class TestCasesPage {
     public static readonly testCaseListCoveragePercTab = '[data-testid="coverage-tab"]'
 
     //Test Case Population Values
-    public static readonly testCaseIPPCheckBox = '[data-testid="test-population-initialPopulation-expected"]'
-    public static readonly testCaseNUMERCheckBox = '[data-testid="test-population-numerator-expected"]'
-    public static readonly testCaseNUMEXCheckBox = '[data-testid="test-population-numeratorExclusion-expected"]'
-    public static readonly testCaseDENOMCheckBox = '[data-testid="test-population-denominator-expected"]'
-    public static readonly testCaseDENEXCheckBox = '[data-testid="test-population-denominatorExclusion-expected"]'
-    public static readonly testCaseDENEXCEPCheckBox = '[data-testid="test-population-denominatorException-expected"]'
+    public static readonly testCaseIPPExpected = '[data-testid="test-population-initialPopulation-expected"]'
+    public static readonly testCaseNUMERExpected = '[data-testid="test-population-numerator-expected"]'
+    public static readonly testCaseNUMEXExpected = '[data-testid="test-population-numeratorExclusion-expected"]'
+    public static readonly testCaseDENOMExpected = '[data-testid="test-population-denominator-expected"]'
+    public static readonly testCaseDENEXExpected = '[data-testid="test-population-denominatorExclusion-expected"]'
     public static readonly testCaseMSRPOPLExpected = '[data-testid="test-population-measurePopulation-expected"]'
     public static readonly testCaseMSRPOPLEXExpected = '[data-testid="test-population-measurePopulationExclusion-expected"]'
     public static readonly testCasePopulationHeaderForNoMeasureGroup = '.MuiAlert-message.css-1w0ym84'

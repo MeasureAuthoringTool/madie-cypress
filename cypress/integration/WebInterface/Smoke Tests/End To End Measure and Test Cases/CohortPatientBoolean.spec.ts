@@ -98,11 +98,11 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPCheckBox).should('exist')
-        cy.get(TestCasesPage.testCaseIPPCheckBox).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPCheckBox).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPCheckBox).click()
-        cy.get(TestCasesPage.testCaseIPPCheckBox).check().should('be.checked')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).click()
+        cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
 
         TestCasesPage.clickCreateTestCaseButton(true)
 

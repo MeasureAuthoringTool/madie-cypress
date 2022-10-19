@@ -106,10 +106,10 @@ describe.skip('Measure Creation and Testing: Cohort Episode Encounter', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
 
-        cy.get(TestCasesPage.testCaseIPPCheckBox).should('exist')
-        cy.get(TestCasesPage.testCaseIPPCheckBox).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPCheckBox).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPCheckBox).type('1')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
 
         TestCasesPage.clickCreateTestCaseButton(true)
 

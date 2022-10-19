@@ -194,12 +194,12 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.numeratorAggregateFunction).contains('Maximum')
 
         //Remove Denominator Observation and assert
-        cy.get(MeasureGroupPage.removeDenominatorObservation).click()
+        cy.get(MeasureGroupPage.removeDenominatorObservation).click().wait(1000)
         cy.get(MeasureGroupPage.denominatorObservation).should('not.exist')
         cy.get(MeasureGroupPage.denominatorAggregateFunction).should('not.exist')
 
         //Remove Numerator Observation and assert
-        cy.get(MeasureGroupPage.removeNumeratorObservation).click()
+        cy.get(MeasureGroupPage.removeNumeratorObservation).click().wait(1000)
         cy.get(MeasureGroupPage.numeratorObservation).should('not.exist')
         cy.get(MeasureGroupPage.numeratorAggregateFunction).should('not.exist')
 
@@ -563,41 +563,41 @@ describe('Measure Observation - Expected Values',  () => {
         cy.get(TestCasesPage.measureObservationRow).eq(1).should('exist')
 
         //Check Denominator Exclusion and verify Denominator Observation row goes away
-        cy.get(TestCasesPage.testCaseDENEXCheckBox).should('exist')
-        cy.get(TestCasesPage.testCaseDENEXCheckBox).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENEXCheckBox).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENEXCheckBox).check().should('be.checked')
+        cy.get(TestCasesPage.testCaseDENEXExpected).should('exist')
+        cy.get(TestCasesPage.testCaseDENEXExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseDENEXExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseDENEXExpected).check().should('be.checked')
         cy.get(TestCasesPage.measureObservationRow).eq(1).should('not.exist')
 
         //Uncheck Denominator Exclusion and verify Denominator Observation row re appears
-        cy.get(TestCasesPage.testCaseDENEXCheckBox).should('exist')
-        cy.get(TestCasesPage.testCaseDENEXCheckBox).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENEXCheckBox).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENEXCheckBox).uncheck().should('not.be.checked')
+        cy.get(TestCasesPage.testCaseDENEXExpected).should('exist')
+        cy.get(TestCasesPage.testCaseDENEXExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseDENEXExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseDENEXExpected).uncheck().should('not.be.checked')
         cy.get(TestCasesPage.measureObservationRow).eq(1).should('exist')
 
         //Check Numerator Exclusion and verify Numerator Observation row goes away
-        cy.get(TestCasesPage.testCaseNUMEXCheckBox).should('exist')
-        cy.get(TestCasesPage.testCaseNUMEXCheckBox).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMEXCheckBox).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMEXCheckBox).check().should('be.checked')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).should('exist')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).check().should('be.checked')
         cy.get(TestCasesPage.measureObservationRow).eq(1).should('not.exist')
 
         //Uncheck Numerator Exclusion and verify Numerator Observation row re appears
-        cy.get(TestCasesPage.testCaseNUMEXCheckBox).should('exist')
-        cy.get(TestCasesPage.testCaseNUMEXCheckBox).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMEXCheckBox).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMEXCheckBox).uncheck().should('not.be.checked')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).should('exist')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).uncheck().should('not.be.checked')
         cy.get(TestCasesPage.measureObservationRow).eq(1).should('exist')
 
         //Check Numerator & Denominator Exclusion and verify Numerator & Denominator Observation rows goes away
-        cy.get(TestCasesPage.testCaseNUMEXCheckBox).check().should('be.checked')
-        cy.get(TestCasesPage.testCaseDENEXCheckBox).check().should('be.checked')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).check().should('be.checked')
+        cy.get(TestCasesPage.testCaseDENEXExpected).check().should('be.checked')
         cy.get(TestCasesPage.measureObservationRow).should('not.exist')
 
         //Uncheck Numerator & Denominator Exclusion and verify Numerator & Denominator Observation rows re appear
-        cy.get(TestCasesPage.testCaseNUMEXCheckBox).uncheck().should('not.be.checked')
-        cy.get(TestCasesPage.testCaseDENEXCheckBox).uncheck().should('not.be.checked')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).uncheck().should('not.be.checked')
+        cy.get(TestCasesPage.testCaseDENEXExpected).uncheck().should('not.be.checked')
         cy.get(TestCasesPage.measureObservationRow).eq(0).should('exist')
         cy.get(TestCasesPage.measureObservationRow).eq(1).should('exist')
     })
