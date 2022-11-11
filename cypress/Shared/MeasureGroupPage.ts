@@ -147,7 +147,7 @@ export class MeasureGroupPage {
     public static readonly measureScoringUnit = "Ratio"
 
     //saved message
-    public static readonly successfulSaveMeasureGroupMsg = '.MuiAlert-message.css-1w0ym84'
+    public static readonly successfulSaveMeasureGroupMsg = '[data-testid="population-criteria-success"]'
 
     //update button
     public static readonly confirmScoreUnitValueUpdateBtn = '[data-testid="group-form-update-btn"]'
