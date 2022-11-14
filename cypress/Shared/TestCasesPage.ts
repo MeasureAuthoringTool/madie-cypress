@@ -84,6 +84,7 @@ export class TestCasesPage {
     public static readonly denominatorStratificationOneExpectedValue = '[data-testid="test-population-Strata-1 Denominator-expected"]'
     public static readonly numeratorStratificationTwoExpectedValue = '[data-testid="test-population-Strata-2 Numerator-expected"]'
     public static readonly initialPopulationStratificationExpectedValue = '[data-testid="test-population-Strata-1 Initial Population-expected"]'
+    public static readonly measurePopulationStratificationExpectedValue = '[data-testid="test-population-Strata-2 Measure Population-expected"]'
 
     //Test Case Expected/Actual Values
     public static readonly nonBooleanExpectedValueError = '[class="qpp-error-message"]'
