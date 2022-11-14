@@ -8,14 +8,14 @@ import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 
-let measureName = 'CohortPatientWithStrat' + Date.now()
-let CqlLibraryName = 'CohortPatientWithStrat' + Date.now()
+let measureName = 'CohortEpisodeWithStrat' + Date.now()
+let CqlLibraryName = 'CohortEpisodeWithStrat' + Date.now()
 let testCaseTitle = 'PASS'
 let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
-let testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
+let testCaseJson = TestCaseJson.TestCaseJson_CohortEpisodeWithStrat_PASS
 
-let measureCQL = 'library CohortPatientWithStrartification version \'0.0.000\'\n' +
+let measureCQL = 'library CohortEpisodeWithStrat1668108456699 version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.2.000\' called FHIRHelpers\n' +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
@@ -23,15 +23,16 @@ let measureCQL = 'library CohortPatientWithStrartification version \'0.0.000\'\n
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
     'valueset "Preventive Care Services-Initial Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\'\n' +
     'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
-    'valueset "End Stage Renal Disease": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.353\' \n' +
+    'valueset "End Stage Renal Disease": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.353\'\n' +
     '\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
     'default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
     '\n' +
     'context Patient\n' +
     '\n' +
+    '\n' +
     'define "Initial Population":\n' +
-    '   true\n' +
+    ' "Qualifying Encounters"\n' +
     ' \n' +
     'define "Qualifying Encounters":\n' +
     '(\n' +
@@ -44,13 +45,16 @@ let measureCQL = 'library CohortPatientWithStrartification version \'0.0.000\'\n
     'where ValidEncounter.period during "Measurement Period"\n' +
     'and ValidEncounter.isFinishedEncounter()\n' +
     '\n' +
+    '\n' +
+    '\n' +
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
     '(Enc E where E.status = \'finished\') is not null\n' +
     '\n' +
-    'define "Stratification 1":\n' +
-    'true'
+    'define "Stratificaction 1":\n' +
+    ' "Qualifying Encounters" Enc\n' +
+    ' where Enc.type in "Annual Wellness Visit"'
 
-describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () => {
+describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () => {
 
     before('Create Measure, Test Case and Login', () => {
 
@@ -73,7 +77,7 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
 
     })
 
-    it('End to End Cohort Patient w/ Stratification, Pass Result', () => {
+    it('End to End Cohort Episode w/ Stratification, Pass Result', () => {
 
         //Click on Edit Button
         MeasuresPage.clickEditforCreatedMeasure()
@@ -88,12 +92,18 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
 
         Utilities.setMeasureGroupType()
 
+        cy.get(MeasureGroupPage.popBasis).should('exist')
+        cy.get(MeasureGroupPage.popBasis).should('be.visible')
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('Encounter')
+        cy.get(MeasureGroupPage.popBasisOption).click()
+
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Cohort')
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
 
         cy.get(MeasureGroupPage.stratificationTab).click()
 
-        Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Stratification 1')
+        Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Stratificaction 1')
         cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
@@ -114,12 +124,12 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
+        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
 
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('exist')
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('be.enabled')
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('be.visible')
-        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).check().should('be.checked')
+        cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).type('1')
 
         cy.get(TestCasesPage.detailsTab).should('exist')
         cy.get(TestCasesPage.detailsTab).should('be.visible')
