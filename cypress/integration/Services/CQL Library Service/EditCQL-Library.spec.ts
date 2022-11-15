@@ -1,9 +1,12 @@
 import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
+import {Environment} from "../../../Shared/Environment"
 
 let CQLLibraryName = ''
 let updatedCQLLibraryName = ''
 let model = 'QI-Core v4.1.1'
 let CQLLibraryPublisher = 'SemanticBits'
+let CqlLibraryTwo = ''
+let harpUser = Environment.credentials().harpUser
 
 describe('Edit CQL Library', () => {
 
@@ -13,7 +16,12 @@ describe('Edit CQL Library', () => {
 
         cy.setAccessTokenCookie()
 
+        //Create CQL Library with Regular User
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
+
+        //Create CQL Library with Alternate User
+        CqlLibraryTwo = 'TestLibrary2' + Date.now()
+        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryTwo, CQLLibraryPublisher, true, true)
 
     })
 
@@ -200,4 +208,30 @@ describe('Edit CQL Library', () => {
         })
     })
 
+    it('Verify non Library owner unable to Edit CQL Library', () => {
+
+        updatedCQLLibraryName = 'UpdatedCQLLibrary' + Date.now()
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/cqlLibraryId2').should('exist').then((cqlLibraryId2) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/cql-libraries/' + cqlLibraryId2,
+                    method: 'PUT',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": cqlLibraryId2,
+                        "cqlLibraryName": updatedCQLLibraryName,
+                        "model": model
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(403)
+                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot modify resource CQL Library with id: ' + cqlLibraryId2)
+
+                })
+            })
+        })
+    })
 })
