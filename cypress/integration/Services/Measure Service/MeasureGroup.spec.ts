@@ -1,6 +1,7 @@
 import {Utilities} from "../../../Shared/Utilities"
 import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
 import {MeasureCQL} from "../../../Shared/MeasureCQL"
+import { v4 as uuidv4 } from 'uuid'
 
 let measureName = 'MeasureName ' + Date.now()
 let CqlLibraryName = 'CQLLibraryName' + Date.now()
@@ -52,14 +53,17 @@ describe('Measure Service: Measure Group Endpoints', () => {
                         "scoring": measureScoring,
                         "populations": [
                             {
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPop
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": PopNum
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": PopDenom
                             }
@@ -102,18 +106,22 @@ describe('Measure Service: Measure Group Endpoints', () => {
                         "scoring": measureTstScoring,
                         "populations": [
                             {
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPop
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": PopNum
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": PopNumExc
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": PopDenom
                             }
@@ -155,14 +163,17 @@ describe('Measure Service: Measure Group Endpoints', () => {
                         "scoring": measureScoring,
                         "populations": [
                             {
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPop
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": PopNum
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": PopDenom
                             }
@@ -208,14 +219,17 @@ describe('Measure Service: Measure Group Endpoints', () => {
                         "scoring": measureScoring,
                         "populations": [
                             {
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPop
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": PopNum
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": PopDenom
                             }
@@ -262,18 +276,22 @@ describe('Measure Service: Measure Group Endpoints', () => {
                         "scoring": "Ratio",
                         "populations": [
                             {
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPop
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": SecondPopInPop
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": PopNum
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": PopDenom
                             }
@@ -321,18 +339,22 @@ describe('Measure Service: Measure Group Endpoints', () => {
                         "scoring": "Ratio",
                         "populations": [
                             {
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPop
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": SecondPopInPop
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": PopNum
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": PopDenom
                             }
@@ -372,14 +394,17 @@ describe('Measure Service: Measure Group Endpoints', () => {
                         "scoring": "Ratio",
                         "populations": [
                             {
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPop
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": PopNum
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": PopDenom
                             }
@@ -446,32 +471,32 @@ describe('Measure Populations', () => {
                         "scoring": measureScoring,
                         "populations": [
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": 'ipp'
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": 'denom'
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "denominatorExclusion",
                                 "definition": ""
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "denominatorException",
                                 "definition": ""
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": 'num'
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": ""
                             }
@@ -511,32 +536,32 @@ describe('Measure Populations', () => {
                         "populationBasis": "Boolean",
                         "populations": [
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": 'ipp'
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": 'denom'
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "denominatorExclusion",
                                 "definition": ""
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "denominatorException",
                                 "definition": ""
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": 'num'
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": ""
                             }
@@ -576,32 +601,32 @@ describe('Measure Populations', () => {
                         "populationBasis": "Encounter",
                         "populations": [
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": 'ipp'
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": 'denom'
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "denominatorExclusion",
                                 "definition": ""
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "denominatorException",
                                 "definition": ""
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": 'num'
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": ""
                             }
@@ -665,7 +690,7 @@ describe('Measure Observations', () => {
                         "populationBasis": "Boolean",
                         "populations": [
                             {
-                                "_id" : "",
+                                "id": uuidv4(),
                                 "name" : "initialPopulation",
                                 "definition" : PopIniPop
                             },
@@ -675,7 +700,7 @@ describe('Measure Observations', () => {
                                 "definition" : PopDenom
                             },
                             {
-                                "_id" : "",
+                                "id": uuidv4(),
                                 "name" : "denominatorExclusion",
                                 "definition" : ""
                             },
@@ -685,7 +710,7 @@ describe('Measure Observations', () => {
                                 "definition" : PopNum
                             },
                             {
-                                "_id" : "",
+                                "id": uuidv4(),
                                 "name" : "numeratorExclusion",
                                 "definition" : ""
                             }
@@ -743,11 +768,12 @@ describe('Measure Observations', () => {
                         "populationBasis": "Boolean",
                         "populations": [
                             {
-                                "_id" : "",
+                                "id": uuidv4(),
                                 "name" : "initialPopulation",
                                 "definition" : PopIniPop
                             },
                             {
+                                "id": uuidv4(),
                                 "name" : "measurePopulation",
                                 "definition" : PopDenom
                             }
@@ -820,32 +846,32 @@ describe('Measure Stratifications', () => {
                         "populationBasis": "Boolean",
                         "populations": [
                             {
-                                "id": "",
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": 'ipp'
                             },
                             {
-                                "id": "",
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": 'denom'
                             },
                             {
-                                "id": "",
+                                "id": uuidv4(),
                                 "name": "denominatorExclusion",
                                 "definition": ""
                             },
                             {
-                                "id": "",
+                                "id": uuidv4(),
                                 "name": "denominatorException",
                                 "definition": ""
                             },
                             {
-                                "id": "",
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": 'num'
                             },
                             {
-                                "id": "",
+                                "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": ""
                             }
@@ -901,32 +927,32 @@ describe('Measure Stratifications', () => {
                         "populationBasis": "Boolean",
                         "populations": [
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": 'ipp'
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": 'denom'
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "denominatorExclusion",
                                 "definition": ""
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "denominatorException",
                                 "definition": ""
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": 'num'
                             },
                             {
-                                "_id": "",
+                                "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": ""
                             }
@@ -953,6 +979,90 @@ describe('Measure Stratifications', () => {
                     console.log(response)
                     expect(response.status).to.eql(400)
                     expect(response.body.message).to.eql('Return type for the CQL definition selected for the Stratification(s) does not match with population basis.')
+                })
+            })
+        })
+    })
+
+    it('Verify error message when the populations are missing IDs', () => {
+
+        let measurePath = ''
+        let measureScoring = 'Proportion'
+        measurePath = 'cypress/fixtures/measureId'
+
+        //Add Measure Group to the Measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(measurePath).should('exist').then((fileContents) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + fileContents + '/groups/',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": fileContents,
+                        "scoring": measureScoring,
+                        "populationBasis": "Boolean",
+                        "populations": [
+                            {
+                                "id": "",
+                                "name": "initialPopulation",
+                                "definition": 'ipp'
+                            },
+                            {
+                                "id": "",
+                                "name": "denominator",
+                                "definition": 'denom'
+                            },
+                            {
+                                "id": "",
+                                "name": "denominatorExclusion",
+                                "definition": ""
+                            },
+                            {
+                                "id": "",
+                                "name": "denominatorException",
+                                "definition": ""
+                            },
+                            {
+                                "id": "",
+                                "name": "numerator",
+                                "definition": 'num'
+                            },
+                            {
+                                "id": "",
+                                "name": "numeratorExclusion",
+                                "definition": ""
+                            }
+                        ],
+                        "stratifications": [
+                            {
+                                "id": "",
+                                "description": "",
+                                "cqlDefinition": "Surgical Absence of Cervix",
+                                "association": "denominator"
+                            },
+                            {
+                                "id": "",
+                                "description": "",
+                                "cqlDefinition": "Surgical Absence of Cervix",
+                                "association": "initialPopulation"
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ]
+                    }
+                }).then((response) => {
+                    console.log(response)
+                    expect(response.status).to.eql(400)
+                    expect(response.body.validationErrors).to.have.property("populations[0].id").to.eql("Population ID is required.")
+                    expect(response.body.validationErrors).to.have.property("populations[3].id").to.eql("Population ID is required.")
+                    expect(response.body.validationErrors).to.have.property("populations[4].id").to.eql("Population ID is required.")
+                    expect(response.body.validationErrors).to.have.property("populations[5].id").to.eql("Population ID is required.")
+                    expect(response.body.validationErrors).to.have.property("populations[2].id").to.eql("Population ID is required.")
+                    expect(response.body.validationErrors).to.have.property("populations[1].id").to.eql("Population ID is required.")
                 })
             })
         })
