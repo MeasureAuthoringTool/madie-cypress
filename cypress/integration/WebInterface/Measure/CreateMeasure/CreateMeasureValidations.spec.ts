@@ -5,8 +5,6 @@ import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {Utilities} from "../../../../Shared/Utilities"
-
 
 let newMeasureName = ''
 let newCqlLibraryName = ''
@@ -186,6 +184,7 @@ describe('Create Measure Validations', () => {
 
         //discard previous entry
         cy.get(EditMeasurePage.measureStewardDevelopersDiscardCancel).click()
+        cy.get(EditMeasurePage.discardChangesContinueBtn).click()
 
         //verify that empty fields
         cy.get(EditMeasurePage.measureStewardObjHoldingValue).should('be.empty')
@@ -252,6 +251,7 @@ describe('Create Measure Validations', () => {
 
         //discard previous entry
         cy.get(EditMeasurePage.measureStewardDevelopersDiscardCancel).click()
+        cy.get(EditMeasurePage.discardChangesContinueBtn).click()
 
         //verify that empty fields
         cy.get(EditMeasurePage.measureStewardObjHoldingValue).should('be.empty')
@@ -487,7 +487,7 @@ describe('Create Measure Validations', () => {
         //Verify error message when the CQL Library Name field is empty
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).click()
         cy.get(CreateMeasurePage.measureNameTextbox).click()
-        cy.get(CreateMeasurePage.cqlLibraryNameFieldLevelError).should('contain.text', 'Measure Lbrary name is required.')
+        cy.get(CreateMeasurePage.cqlLibraryNameFieldLevelError).should('contain.text', 'Measure Library name is required.')
         //Verify if create measure button is disabled
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
@@ -614,8 +614,8 @@ describe('Measurement Period Validations', () => {
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(CqlLibraryName)
         cy.get(CreateMeasurePage.measurementPeriodEndDate).type('01/01/1999')
         cy.get(CreateMeasurePage.measurementPeriodStartDate).type('12/01/2022')
-        cy.get(CreateMeasurePage.measurementPeriodEndDateError).should('contain.text', 'Measurement period ' +
-            'end date should be greater than or equal to measurement period start date.')
+        cy.get(CreateMeasurePage.measurementPeriodEndDateError).should('contain.text', 'Measurement period end date ' +
+            'should be greater than measurement period start date.')
         cy.get(CreateMeasurePage.cancelButton).click()
 
     })
@@ -665,6 +665,21 @@ describe('Measurement Period Validations', () => {
         cy.get(CreateMeasurePage.measurementPeriodEndDateError).should('contain.text', 'Invalid date format. (mm/dd/yyyy)')
         cy.get(CreateMeasurePage.cancelButton).click()
 
+    })
+
+    it('Verify error message when the Measurement Period start and end dates are same', () => {
+
+        cy.get(LandingPage.newMeasureButton).click()
+        cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
+        cy.get(CreateMeasurePage.measureModelDropdown).click()
+        cy.get(CreateMeasurePage.measureModelQICore).click()
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(CqlLibraryName)
+        cy.get(CreateMeasurePage.measurementPeriodStartDate).type('01/01/2020')
+        cy.get(CreateMeasurePage.measurementPeriodEndDate).click()
+        cy.get(CreateMeasurePage.measurementPeriodEndDate).type('01/01/2020')
+        cy.get(CreateMeasurePage.measurementPeriodStartDate).click()
+        cy.get(CreateMeasurePage.measurementPeriodEndDateError).should('contain.text', 'Measurement period end date should be greater than measurement period start date.')
+        cy.get(CreateMeasurePage.cancelButton).click()
     })
 
 })
