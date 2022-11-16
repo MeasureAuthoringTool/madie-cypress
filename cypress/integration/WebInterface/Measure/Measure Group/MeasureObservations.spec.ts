@@ -198,12 +198,12 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.numeratorAggregateFunction).contains('Maximum')
 
         //Remove Denominator Observation and assert
-        cy.get(MeasureGroupPage.removeDenominatorObservation).click().wait(1000)
+        cy.get(MeasureGroupPage.removeDenominatorObservation).click()
         cy.get(MeasureGroupPage.denominatorObservation).should('not.exist')
         cy.get(MeasureGroupPage.denominatorAggregateFunction).should('not.exist')
 
         //Remove Numerator Observation and assert
-        cy.get(MeasureGroupPage.removeNumeratorObservation).click().wait(1000)
+        cy.get(MeasureGroupPage.removeNumeratorObservation).click()
         cy.get(MeasureGroupPage.numeratorObservation).should('not.exist')
         cy.get(MeasureGroupPage.numeratorAggregateFunction).should('not.exist')
 

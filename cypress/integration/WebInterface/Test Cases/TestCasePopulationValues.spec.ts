@@ -303,7 +303,7 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(3500)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -346,7 +346,6 @@ describe('Test Case Expected Measure Group population values based on initial me
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.wait(2000)
 
         //Navigate to Test Cases page and verify Populations
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -442,9 +441,9 @@ describe('Test Case Population dependencies', () => {
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseDENOMExpected).check()
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
@@ -455,9 +454,9 @@ describe('Test Case Population dependencies', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseIPPExpected).uncheck()
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.checked')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
@@ -468,9 +467,9 @@ describe('Test Case Population dependencies', () => {
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseDENOMExpected).check()
-        cy.wait(500)
+ 
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
@@ -481,9 +480,9 @@ describe('Test Case Population dependencies', () => {
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseDENOMExpected).uncheck()
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.be.checked')
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
@@ -494,9 +493,9 @@ describe('Test Case Population dependencies', () => {
         cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseNUMERExpected).check()
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
@@ -511,9 +510,9 @@ describe('Test Case Population dependencies', () => {
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.wait(500)
+       
         cy.get(TestCasesPage.testCaseDENOMExpected).uncheck()
-        cy.wait(500)
+        
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.be.checked')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
@@ -524,18 +523,18 @@ describe('Test Case Population dependencies', () => {
         cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        cy.wait(500)
+        
         cy.get(TestCasesPage.testCaseNUMERExpected).check()
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         cy.log('Uncheck Numerator and verify if Denom is not unchecked')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseNUMERExpected).uncheck()
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseNUMERExpected).should('not.be.checked')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
@@ -546,18 +545,18 @@ describe('Test Case Population dependencies', () => {
         cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseNUMERExpected).check()
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         cy.log('Uncheck IPP and verify if DENOM and Numerator are unchecked')
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseIPPExpected).uncheck()
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.checked')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
@@ -572,9 +571,9 @@ describe('Test Case Population dependencies', () => {
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('exist')
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.enabled')
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseNUMEXExpected).check()
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.checked')
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
@@ -660,7 +659,7 @@ describe('TC Pop value options are limited to those that are defined from Measur
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.wait(2000)
+   
         //create test case
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -777,7 +776,7 @@ describe('Test Case Expected Measure Group population values based on initial me
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.wait(1000)
+
 
         //confirm change to Population Criteria
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')

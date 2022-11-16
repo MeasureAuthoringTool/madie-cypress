@@ -62,7 +62,6 @@ describe('Draft and Version Validations', () => {
         updatedCqlLibraryName = 'UpdatedCQLLibraryOne' + Date.now()
 
         CQLLibrariesPage.clickVersionforCreatedLibrary()
-        cy.wait(1000)
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).eq(0).click()
         cy.get(CQLLibrariesPage.createVersionContinueButton).click()
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New version of CQL Library is Successfully created')
@@ -78,7 +77,6 @@ describe('Draft and Version Validations', () => {
         let versionNumber = '1.0.000'
 
         CQLLibrariesPage.clickVersionforCreatedLibrary()
-        cy.wait(1000)
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).eq(0).click()
         cy.get(CQLLibrariesPage.createVersionContinueButton).click()
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New version of CQL Library is Successfully created')
@@ -107,7 +105,7 @@ describe('Draft and Version Validations', () => {
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
 
         cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL saved successfully')
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL Library saved successfully')
 
         CQLLibrariesPage.clickVersionforCreatedLibrary()
         cy.get('.MuiDialogContent-root > :nth-child(2) > :nth-child(4)').should('contain.text', 'Versioning cannot be done as there is no associated Cql with this library')

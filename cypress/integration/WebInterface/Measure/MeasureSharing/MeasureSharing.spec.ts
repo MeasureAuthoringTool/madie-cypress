@@ -104,7 +104,7 @@ describe('Measure Sharing', () => {
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click().wait(3000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Click on the measure group tab

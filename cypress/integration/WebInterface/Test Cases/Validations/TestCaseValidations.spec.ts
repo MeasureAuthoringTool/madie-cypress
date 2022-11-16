@@ -108,7 +108,6 @@ describe('Test Case Validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.detailsTab).click()
-        cy.wait(2000)
 
         cy.get(TestCasesPage.testCaseTitle).should('exist')
         cy.get(TestCasesPage.testCaseTitle).should('be.visible')
@@ -190,13 +189,13 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(TestCasesPage.testCaseTitle).should('be.visible')
         cy.get(TestCasesPage.testCaseTitle).should('be.enabled')
         cy.get(TestCasesPage.testCaseTitle).focus()
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseTitle).clear()
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseTitle).invoke('val', '')
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseTitle).type('{selectall}{backspace}{selectall}{backspace}')
-        cy.wait(500)
+
 
         //Update Test Case Description
         cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
@@ -229,13 +228,10 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(TestCasesPage.testCaseTitle).should('be.visible')
         cy.get(TestCasesPage.testCaseTitle).should('be.enabled')
         cy.get(TestCasesPage.testCaseTitle).focus()
-        cy.wait(500)
         cy.get(TestCasesPage.testCaseTitle).clear()
-        cy.wait(500)
         cy.get(TestCasesPage.testCaseTitle).invoke('val', '')
-        cy.wait(500)
         cy.get(TestCasesPage.testCaseTitle).type('{selectall}{backspace}{selectall}{backspace}')
-        cy.wait(500)
+
         cy.get(TestCasesPage.testCaseTitle).type('newTestCaseTitle')
 
         //attempt to navigate away from the test case page

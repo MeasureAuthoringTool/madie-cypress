@@ -29,14 +29,14 @@ export class CQLLibrariesPage {
         //Navigate to CQL Library Page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
         cy.readFile(filePath).should('exist').then((fileContents) => {
 
             cy.intercept('GET', '/api/cql-libraries/' + fileContents).as('cqlLibrary')
 
             cy.get('[data-testid=cqlLibrary-button-'+ fileContents +']').should('exist')
             cy.get('[data-testid=cqlLibrary-button-'+ fileContents +']').should('be.visible')
-            cy.get('[data-testid=cqlLibrary-button-'+ fileContents +']').click()
+            cy.get('[data-testid=cqlLibrary-button-'+ fileContents +']').wait(1000).click()
 
             cy.wait('@cqlLibrary').then(({response}) => {
                 expect(response.statusCode).to.eq(200)

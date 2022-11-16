@@ -64,12 +64,12 @@ describe('Run Test Case button validations', () => {
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click().wait(2000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click()
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).wait(2000).click()
+        cy.get(EditMeasurePage.measureGroupsTab).click()
 
         Utilities.setMeasureGroupType()
 
@@ -95,7 +95,6 @@ describe('Run Test Case button validations', () => {
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.wait(2000)
 
         //click on details tab
         cy.get(TestCasesPage.detailsTab).should('exist')
@@ -120,7 +119,7 @@ describe('Run Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(1000).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(1000).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
@@ -152,7 +151,7 @@ describe('Run Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(1000).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(1000).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Create Measure Group
@@ -212,9 +211,6 @@ describe('Run Test Case button validations', () => {
         cy.log('Test Case created successfully')
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.wait(2000)
-
-        cy.reload()
 
         //Add json to the test case
         cy.get(TestCasesPage.aceEditor).type(invalidTestCaseJson)
@@ -231,7 +227,6 @@ describe('Run Test Case button validations', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.wait(2000)
 
         //click on details tab
         cy.get(TestCasesPage.detailsTab).should('exist')
@@ -259,7 +254,7 @@ describe('Run Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(1000).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(1000).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Create Measure Group
@@ -322,7 +317,6 @@ describe('Run Test Case button validations', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.wait(2000)
 
         cy.get(TestCasesPage.runTestButton).should('be.disabled')
 
@@ -343,7 +337,7 @@ describe('Run Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(1000).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(1000).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Create Measure Group
@@ -396,9 +390,6 @@ describe('Run Test Case button validations', () => {
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.wait(2000)
-
-        cy.reload()
 
         //Add json to the test case
         cy.get(TestCasesPage.aceEditor).type(invalidTestCaseJson)
@@ -507,7 +498,7 @@ describe('Execute Test Case Button Validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(1000).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(1000).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Navigate to Test Cases page and add Test Case details
@@ -539,9 +530,6 @@ describe('Execute Test Case Button Validations', () => {
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.wait(2000)
-
-        cy.reload()
 
         //Add json to the test case
         cy.get(TestCasesPage.aceEditor).type(invalidTestCaseJson)
@@ -557,7 +545,6 @@ describe('Execute Test Case Button Validations', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.wait(2000)
 
         //click on details tab
         cy.get(TestCasesPage.detailsTab).should('exist')
@@ -618,7 +605,6 @@ describe('Execute Test Case Button Validations', () => {
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.wait(2000)
 
         //click on details tab
         cy.get(TestCasesPage.detailsTab).should('exist')
@@ -722,10 +708,6 @@ describe('Run and Execute Test case', () => {
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.reload()
-        cy.wait(3700)
-
-        cy.reload()
 
         //Add json to the test case
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 20000)
@@ -748,7 +730,7 @@ describe('Run and Execute Test case', () => {
         //Verify Highlighting tab before clicking on Run Test button
         cy.get(TestCasesPage.tcHighlightingTab).click()
         cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
-        cy.wait(1000)
+
         //Click on Run Test button and verify the text on Highlighting tab
         cy.get(TestCasesPage.runTestButton).click()
         cy.get(TestCasesPage.testCalculationResults).should('include.text', 'Population Criteria 1\ndefine fluent function "isFinishedEncounter"(Enc Encounter):\n(Enc E where E.status = \'finished\') is not null')
@@ -757,7 +739,7 @@ describe('Run and Execute Test case', () => {
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('exist')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).wait(3000).click().wait(1000)
+        cy.get(EditMeasurePage.testCasesTab).wait(3000).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
@@ -860,10 +842,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.reload()
-        cy.wait(2000)
-
-        cy.reload()
 
         //Add json to the test case
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
@@ -879,7 +857,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.wait(2000)
+
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -982,8 +960,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.reload()
-
         //Add json to the test case
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
 
@@ -998,7 +974,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.reload()
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -1045,16 +1020,15 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.grabValidateTestCaseTitleAndSeries('Failing Test Case', 'ICFTCSeries')
         
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.reload() 
 
         //Add json to the test case
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
         
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click().wait(1000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click()
         
-        cy.get(TestCasesPage.detailsTab).click().wait(1000)
+        cy.get(TestCasesPage.detailsTab).click()
         
         cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully!')
 
@@ -1145,16 +1119,15 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.grabValidateTestCaseTitleAndSeries('Failing Test Case', 'ICFTCSeries')
         
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.reload()
 
         //Add json to the test case
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
         
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click().wait(1000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click()
         
-        cy.get(TestCasesPage.detailsTab).click().wait(1000)
+        cy.get(TestCasesPage.detailsTab).click()
         
         cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully!')
 

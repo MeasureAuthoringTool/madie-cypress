@@ -56,7 +56,7 @@ describe('Validate Measure Group', () => {
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click()
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -123,7 +123,7 @@ describe('Validate Measure Group', () => {
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click()
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -176,7 +176,7 @@ describe('Validate Measure Group', () => {
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click()
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -441,7 +441,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Click on the measure group tab
@@ -507,8 +507,6 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.log('Test Case created successfully')
 
         TestCasesPage.clickEditforCreatedTestCase()
-
-        cy.reload()
 
         //Add json to the test case
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)

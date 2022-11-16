@@ -63,7 +63,6 @@ describe('Validate CQL on CQL Library page', () => {
         CQLLibrariesPage.clickEditforCreatedLibrary()
         //Clear the text in CQL Library Editor
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-        cy.wait(1000)
 
         //Update text in the CQL Library Editor that will cause error
         Utilities.typeFileContents('cypress/fixtures/cqlCQLEditor.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
@@ -120,7 +119,6 @@ describe('Validate CQL on CQL Library page', () => {
         CQLLibrariesPage.clickEditforCreatedLibrary()
         //Clear the text in CQL Library Editor
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-        cy.wait(1000)
 
         //Update text in the CQL Library Editor that will cause error
         Utilities.typeFileContents('cypress/fixtures/EXM124v7QICore4Entry_FHIR_404.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
@@ -176,9 +174,7 @@ describe('Validate CQL on CQL Library page', () => {
         //Clear the text in CQL Library Editor
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
-        cy.wait(1000)
-
-        //Update text in the CQL Library Editor that will cause error
+         //Update text in the CQL Library Editor that will cause error
         Utilities.typeFileContents('cypress/fixtures/EXM124v7QICore4Entry_FHIR.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         //enter description detail

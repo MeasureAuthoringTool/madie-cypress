@@ -30,7 +30,7 @@ describe('CQL Library Validations', () => {
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+ 
         //click button to create a new CQL Library
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
@@ -79,8 +79,8 @@ describe('CQL Library Validations', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
         //click button to create a new CQL Library
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
@@ -126,8 +126,8 @@ describe('CQL Library Validations', () => {
     it('CQL Library Name Validations', () => {
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
@@ -189,8 +189,8 @@ describe('CQL Library Validations', () => {
         //Verify error message for empty CQL Library Model
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
@@ -199,8 +199,8 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.newCQLLibName).should('be.visible')
         cy.get(CQLLibraryPage.newCQLLibName).should('be.enabled')
         cy.get(CQLLibraryPage.newCQLLibName).type(CQLLibraryName+randValue)
-        cy.get(CQLLibraryPage.cqlLibraryModalField).wait(2000).click().wait(2000)
-        cy.get(CQLLibraryPage.cqlLibraryCreateForm).click().wait(1000)
+        cy.get(CQLLibraryPage.cqlLibraryModalField).wait(2000).click()
+        cy.get(CQLLibraryPage.cqlLibraryCreateForm).click()
         cy.get(CQLLibraryPage.cqlLibraryCreateFormSideClickArea).click().wait(2000).click().wait(2000).click()
         cy.get(CQLLibraryPage.cqlLibraryModelErrorMsg).should('contain.text', 'A CQL library model is required.')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
@@ -213,14 +213,14 @@ describe('CQL Library Validations', () => {
         //navigate to the CQL Libaray page and create new CQL Library
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(LibraryName)
-        cy.get(CQLLibraryPage.cqlLibraryModalField).wait(1000).click().wait(1000)
+        cy.get(CQLLibraryPage.cqlLibraryModalField).wait(1000).click()
         cy.get(CQLLibraryPage.cqlLibraryModelQICore).click()
 
         //move to and then away from the description detail field
@@ -240,8 +240,8 @@ describe('CQL Library Validations', () => {
         //navigate to the CQL Libaray page and create new CQL Library
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+ 
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
@@ -272,8 +272,8 @@ describe('CQL Library Validations', () => {
         //navigate to the CQL Libaray page and create new CQL Library
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
@@ -330,8 +330,8 @@ describe('CQL Library Validations', () => {
         CQLLibraryPage.createCQLLibrary(UpdatedCQLLibraryName, CQLLibraryPublisher)
         //navigate to the CQL Libaray page
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
         cy.get(CQLLibraryPage.currentCQLLibName).clear().type(UpdatedCQLLibraryName)
@@ -355,7 +355,7 @@ describe('CQL Library Validations', () => {
 
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         cy.get(CQLLibraryPage.currentCQLLibName).should('contain.value', UpdatedCQLLibraryName)

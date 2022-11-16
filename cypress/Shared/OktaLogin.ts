@@ -22,7 +22,7 @@ export class OktaLogin {
         cy.get(this.usernameInput, { timeout: 100000 }).should('be.visible')
         cy.get(this.passwordInput, { timeout: 100000 }).should('be.enabled')
         cy.get(this.passwordInput, { timeout: 100000 }).should('be.visible')
-        cy.wait(1000)
+
         cy.get(this.usernameInput).type(Environment.credentials().harpUserALT)
         cy.get(this.passwordInput).type(Environment.credentials().passwordALT)
         cy.get(this.signInButton, { timeout: 100000 }).should('be.enabled')

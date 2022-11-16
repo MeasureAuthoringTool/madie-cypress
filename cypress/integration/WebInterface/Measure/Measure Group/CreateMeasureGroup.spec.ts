@@ -51,15 +51,14 @@ describe('Validate Measure Group -- scoring and populations', () => {
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click()
 
         //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).wait(2000).click().wait(1000)
+        cy.get(EditMeasurePage.measureGroupsTab).wait(2000).click()
 
         //Message appears at the top of the Population Criteria tab / page
-        cy.get(MeasureGroupPage.CQLHasErrorMsg).should('exist')
+        cy.get(MeasureGroupPage.CQLHasErrorMsg).wait(2000).should('exist')
         cy.get(MeasureGroupPage.CQLHasErrorMsg).should('be.visible')
         cy.get(MeasureGroupPage.CQLHasErrorMsg).should('contain.text', 'Please complete the CQL Editor process before continuing')
     })
@@ -77,12 +76,12 @@ describe('Validate Measure Group -- scoring and populations', () => {
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click()
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).wait(2000).click().wait(1000)
+        cy.get(EditMeasurePage.measureGroupsTab).wait(2000).click()
 
         //fill in a description value
         cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
@@ -156,11 +155,11 @@ describe('Validate Measure Group -- scoring and populations', () => {
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click().wait(2000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click()
 
         //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist').wait(1000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible').wait(2000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).wait(4000).click()
 
         //Select Group Type
@@ -306,12 +305,12 @@ describe('Validate Population Basis', () => {
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click()
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).wait(2000).click().wait(1000)
+        cy.get(EditMeasurePage.measureGroupsTab).wait(2000).click()
 
         //fill in a description value
         cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')

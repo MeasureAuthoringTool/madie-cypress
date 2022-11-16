@@ -179,15 +179,14 @@ export class TestCasesPage {
 
         this.clickEditforCreatedTestCase()
 
-        cy.reload()
 
         //Add json to the test case
         cy.get(this.aceEditor).type(testCaseJson)
 
-        cy.get(this.detailsTab).click().wait(1000)
+        cy.get(this.detailsTab).click()
 
         //Save edited / updated to test case
-        cy.get(this.editTestCaseSaveButton).click().wait(1000)
+        cy.get(this.editTestCaseSaveButton).click()
         cy.get(this.confirmationMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'An error occurred with the Test Case JSON while updating the test case'])
         })
@@ -213,13 +212,13 @@ export class TestCasesPage {
         cy.get(this.testCaseTitle).should('be.visible')
         cy.get(this.testCaseTitle).should('be.enabled')
         cy.get(this.testCaseTitle).focus()
-        cy.wait(500)
+
         cy.get(this.testCaseTitle).clear()
-        cy.wait(500)
+
         cy.get(this.testCaseTitle).invoke('val', '')
-        cy.wait(500)
+
         cy.get(this.testCaseTitle).type('{selectall}{backspace}{selectall}{backspace}')
-        cy.wait(500)
+
         //cy.get(this.testCaseTitle).clear()
         cy.get(this.testCaseTitle).type(updatedTestCaseTitle)
         //Update Test Case Description

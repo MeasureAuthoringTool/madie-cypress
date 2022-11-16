@@ -26,8 +26,8 @@ describe('Edit Measure', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
         //click button to create a new CQL Library
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
@@ -55,7 +55,6 @@ describe('Edit Measure', () => {
         CQLLibraryPage.clickCreateLibraryButton()
         //navigate to CQL Library list page
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
 
         //Click on Edit button, Verify error message when the CQL Library Name field is empty
         CQLLibrariesPage.clickEditforCreatedLibrary()
@@ -100,8 +99,8 @@ describe('Edit Measure', () => {
         //navigate to the CQL Libaray page and navigate to the edit CQL Library page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
@@ -129,8 +128,8 @@ describe('Edit Measure', () => {
         //navigate to the CQL Libaray page and navigate to the edit CQL Library page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
@@ -161,13 +160,13 @@ describe('Edit Measure', () => {
 
         cy.get(CQLLibraryPage.genericSuccessMessage).should('exist')
         cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL saved successfully')
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL Library saved successfully')
 
         //navigate back to the CQL Libaray page and navigate to the edit CQL Library page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
         
@@ -199,8 +198,8 @@ describe('Edit Measure', () => {
         //navigate to the CQL Libaray page and navigate to the edit CQL Library page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
 

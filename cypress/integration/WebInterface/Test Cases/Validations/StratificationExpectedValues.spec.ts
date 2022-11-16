@@ -173,7 +173,7 @@ describe('Stratification Expected values for Boolean Population Basis', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('exist')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(1000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Assert saved stratification values
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -242,13 +242,13 @@ describe('Stratification Expected values for Boolean Population Basis', () => {
         //check the numerator stratification check boxes
         cy.get(TestCasesPage.numeratorStratificationTwoExpectedValue).should('exist')
         cy.get(TestCasesPage.numeratorStratificationTwoExpectedValue).should('be.visible')
-        cy.get(TestCasesPage.numeratorStratificationTwoExpectedValue).wait(1000).check().wait(1000)
+        cy.get(TestCasesPage.numeratorStratificationTwoExpectedValue).wait(1000).check()
 
         //save test case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('exist')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(1000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Navigate to Test Cases list page and click into / edit test case
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -318,13 +318,13 @@ describe('Stratification Expected values for Boolean Population Basis', () => {
         //check the denominator stratification check boxes
         cy.get(TestCasesPage.denominatorStratificationOneExpectedValue).should('exist')
         cy.get(TestCasesPage.denominatorStratificationOneExpectedValue).should('be.visible')
-        cy.get(TestCasesPage.denominatorStratificationOneExpectedValue).wait(1000).check().wait(1000)
+        cy.get(TestCasesPage.denominatorStratificationOneExpectedValue).wait(1000).check()
 
         //save test case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('exist')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(1000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Navigate to Test Cases list page and click into / edit test case
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -492,13 +492,13 @@ describe('Stratification Expected values for Non Boolean Population Basis', () =
 
         //Save Stratification Expected Values
         cy.get(TestCasesPage.denominatorStratificationOneExpectedValue).wait(1000).type('1')
-        cy.get(TestCasesPage.numeratorStratificationTwoExpectedValue).wait(1000).type('1').wait(1000)
+        cy.get(TestCasesPage.numeratorStratificationTwoExpectedValue).wait(1000).type('1')
         
         //save test case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('exist')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(1000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Assert saved stratification values
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -566,13 +566,13 @@ describe('Stratification Expected values for Non Boolean Population Basis', () =
 
         //Save Stratification Expected Values
         cy.get(TestCasesPage.denominatorStratificationOneExpectedValue).wait(1000).type('1')
-        cy.get(TestCasesPage.numeratorStratificationTwoExpectedValue).wait(1000).type('2').wait(1000)
+        cy.get(TestCasesPage.numeratorStratificationTwoExpectedValue).wait(1000).type('2')
         
         //save test case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('exist')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(1000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Assert saved stratification values
         cy.get(EditMeasurePage.testCasesTab).click()

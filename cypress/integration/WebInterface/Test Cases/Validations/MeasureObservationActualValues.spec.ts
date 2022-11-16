@@ -123,11 +123,11 @@ describe('Non Boolean Measure Observation Actual values', () => {
 
         //Click on RunTest Button
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('1')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(1000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).wait(1000).click({force:true}).wait(1000)
+        cy.get(TestCasesPage.runTestButton).wait(1000).click({force:true})
         cy.get(TestCasesPage.cvMeasureObservationActualValue).should('have.value', '30')
 
     })
@@ -196,11 +196,11 @@ describe('Non Boolean Measure Observation Actual values', () => {
         //Click on RunTest Button
         cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
         cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(1000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).wait(1000).click({force:true}).wait(1000)
+        cy.get(TestCasesPage.runTestButton).wait(1000).click({force:true})
         cy.get(TestCasesPage.denominatorMeasureObservationActualValue).should('have.value', '30')
         cy.get(TestCasesPage.numeratorMeasureObservationActualValue).should('have.value', '30')
 
@@ -270,11 +270,11 @@ describe('Boolean Measure Observation Actual values', () => {
 
         //Click on RunTest Button
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).check().should('be.checked')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(1000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).wait(2000).click({force:true}).wait(2000)
+        cy.get(TestCasesPage.runTestButton).wait(2000).click({force:true})
         cy.get(TestCasesPage.cvMeasureObservationActualValue).should('have.value', '1')
 
     })

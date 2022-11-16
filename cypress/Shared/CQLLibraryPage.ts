@@ -51,8 +51,10 @@ export class CQLLibraryPage {
 
     public static createCQLLibrary (CQLLibraryName: string, CQLLibraryPublisher: string) : void {
 
-        cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
         cy.get(this.createCQLLibraryBtn).click()
         cy.get(this.newCQLLibName).type(CQLLibraryName)
         Utilities.dropdownSelect(CQLLibraryPage.cqlLibraryModelDropdown, CQLLibraryPage.cqlLibraryModelQICore)
@@ -62,8 +64,9 @@ export class CQLLibraryPage {
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type(CQLLibraryPublisher).type('{downArrow}{enter}')
 
         this.clickCreateLibraryButton()
-        cy.get(Header.cqlLibraryTab).click()
-        cy.wait(1000)
+         cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
         this.validateCQlLibraryName(CQLLibraryName)
         this.validateCQlLibraryModel('QI-Core')
         cy.log('CQL Library Created Successfully')
@@ -93,7 +96,7 @@ export class CQLLibraryPage {
         //setup for grabbing the measure create call
         cy.intercept('POST', '/api/cql-libraries').as(alias)
 
-        cy.get(this.saveCQLLibraryBtn).click()
+        cy.get(this.saveCQLLibraryBtn).wait(1000).click()
         //saving measureID to file to use later
         cy.wait('@' + alias).then(({response}) => {
             expect(response.statusCode).to.eq(201)
