@@ -803,7 +803,7 @@ describe('Measurement Period Validations', () => {
                         "measurementPeriodEnd": mpStartDate}
             }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.message).to.eql("Measurement period end date should be greater than or equal to measurement period start date.")
+                expect(response.body.message).to.eql("Measurement period end date should be greater than measurement period start date.")
             })
         })
     })
@@ -880,11 +880,41 @@ describe('Measurement Period Validations', () => {
                         "cqlLibraryName": CQLLibraryName,
                         "model": model,
                         "versionId": uuidv4(),
+                        "ecqmTitle": eCQMTitle,
                         "measurementPeriodStart": "01/01/2021",
                         "measurementPeriodEnd": "01/01/2023"}
             }).then((response) => {
                 expect(response.status).to.eql(400)
                 expect(response.body.error).to.eql("Bad Request")
+            })
+        })
+
+    })
+
+    it('Verify error message when the Measurement Period start and end dates are same', () => {
+
+        measureName = 'TestMeasure5' + Date.now()
+        CQLLibraryName = 'TestCql5' + Date.now()
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                failOnStatusCode: false,
+                url: '/api/measure',
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken.value
+                },
+                body: { "measureName": measureName,
+                    "cqlLibraryName": CQLLibraryName,
+                    "model": model,
+                    "versionId": uuidv4(),
+                    "ecqmTitle": eCQMTitle,
+                    "measurementPeriodStart": "2023-01-01T05:00:00.000+0000",
+                    "measurementPeriodEnd": "2023-01-01T05:00:00.000+0000"}
+            }).then((response) => {
+                expect(response.status).to.eql(400)
+                expect(response.body.error).to.eql("Bad Request")
+                expect(response.body.message).to.eql("Measurement period end date should be greater than measurement period start date.")
             })
         })
 

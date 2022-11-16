@@ -3,7 +3,7 @@ export class EditMeasurePage {
     //dirty modal
     public static readonly dirtCheckModal = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-mbdu2s"]'
     public static readonly keepWorkingCancel = '[data-testid="discard-dialog-cancel-button"]'
-    public static readonly discardChangesContinue = '[data-testid="discard-dialog-continue-button"]'
+    public static readonly discardChangesContinueBtn = '[data-testid="discard-dialog-continue-button"]'
     
 
     //Edit Measure tab menu
@@ -32,6 +32,7 @@ export class EditMeasurePage {
     public static readonly leftPanelStewardDevelopers = '[data-testid="leftPanelMeasureSteward"]'
     public static readonly leftPanelGuidance = '[data-testid="leftPanelMeasureGuidance"]'
     public static readonly leftPanelMClinicalGuidanceRecommendation = '[data-testid="leftPanelMeasureClinicalGuidance"]'
+    public static readonly leftPanelModelAndMeasurementPeriod = '[data-testid="leftPanelModelAndMeasurementPeriod"]'
 
     //Measure CQL Page
     //cql editor box on page
