@@ -129,13 +129,6 @@ export class MeasureGroupPage {
     public static readonly measureGroupFour = '[data-testid="leftPanelMeasureInformation-MeasureGroup4"]'
     public static readonly measureGroupFive = '[data-testid="leftPanelMeasureInformation-MeasureGroup5"]'
 
-    //Discard Changes
-    public static readonly discardChangesBtn = '[data-testid="group-form-discard-btn"]'
-    public static readonly discardChangesConfirmationModal = '[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]'
-    public static readonly discardChangesConfirmationText = '[class="dialog-warning-body"]'
-    public static readonly cancelDiscardChangesBtn = '[data-testid="discard-dialog-cancel-button"]'
-    public static readonly continueDiscardChangesBtn = '[data-testid="discard-dialog-continue-button"]'
-
     //population basis
     public static readonly popBasis = '[data-testid="populationBasis"]'
     public static readonly popBasisOption = '#populationBasis-option-0'

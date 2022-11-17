@@ -5,6 +5,7 @@ import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
+import {Global} from "../../../../Shared/Global";
 
 let newMeasureName = ''
 let newCqlLibraryName = ''
@@ -178,13 +179,13 @@ describe('Create Measure Validations', () => {
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.disabled')
 
         //discard button becomes available
-        cy.get(EditMeasurePage.measureStewardDevelopersDiscardCancel).should('exist')
-        cy.get(EditMeasurePage.measureStewardDevelopersDiscardCancel).should('be.visible')
-        cy.get(EditMeasurePage.measureStewardDevelopersDiscardCancel).should('be.enabled')
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('exist')
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('be.visible')
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('be.enabled')
 
         //discard previous entry
-        cy.get(EditMeasurePage.measureStewardDevelopersDiscardCancel).click()
-        cy.get(EditMeasurePage.discardChangesContinueBtn).click()
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
+        cy.get(Global.discardChangesContinue).click()
 
         //verify that empty fields
         cy.get(EditMeasurePage.measureStewardObjHoldingValue).should('be.empty')
@@ -198,9 +199,9 @@ describe('Create Measure Validations', () => {
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.disabled')
 
         //discard button becomes available
-        cy.get(EditMeasurePage.measureStewardDevelopersDiscardCancel).should('exist')
-        cy.get(EditMeasurePage.measureStewardDevelopersDiscardCancel).should('be.visible')
-        cy.get(EditMeasurePage.measureStewardDevelopersDiscardCancel).should('be.enabled')
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('exist')
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('be.visible')
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('be.enabled')
     })
 
     it('Validate dirty check on Steward & Developers section of Measure Details page', () => {
@@ -244,14 +245,14 @@ describe('Create Measure Validations', () => {
         cy.get(EditMeasurePage.dirtCheckModal).should('be.visible')
 
         //select continue working on page
-        cy.get(EditMeasurePage.keepWorkingCancel).should('exist')
-        cy.get(EditMeasurePage.keepWorkingCancel).should('be.visible')
-        cy.get(EditMeasurePage.keepWorkingCancel).should('be.enabled')
-        cy.get(EditMeasurePage.keepWorkingCancel).click()
+        cy.get(Global.keepWorkingCancel).should('exist')
+        cy.get(Global.keepWorkingCancel).should('be.visible')
+        cy.get(Global.keepWorkingCancel).should('be.enabled')
+        cy.get(Global.keepWorkingCancel).click()
 
         //discard previous entry
-        cy.get(EditMeasurePage.measureStewardDevelopersDiscardCancel).click()
-        cy.get(EditMeasurePage.discardChangesContinueBtn).click()
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
+        cy.get(Global.discardChangesContinue).click()
 
         //verify that empty fields
         cy.get(EditMeasurePage.measureStewardObjHoldingValue).should('be.empty')
@@ -367,7 +368,7 @@ describe('Create Measure Validations', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('be.visible')
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).type('Some test value')
-        cy.get(EditMeasurePage.measureClinicalRecommendationDiscardButton).click()
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.text', 'Clinical Recommendation Statement')
 
         //type some value in the text box and save it
@@ -378,12 +379,12 @@ describe('Create Measure Validations', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('exist')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('be.visible')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.measureClinicalRecommendationDiscardButton).should('exist')
-        cy.get(EditMeasurePage.measureClinicalRecommendationDiscardButton).should('be.visible')
-        cy.get(EditMeasurePage.measureClinicalRecommendationDiscardButton).should('be.enabled')
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('exist')
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('be.visible')
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('be.enabled')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('be.disabled')
-        cy.get(EditMeasurePage.measureClinicalRecommendationDiscardButton).should('be.disabled')
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('be.disabled')
 
         //verify save success message
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('exist')
@@ -430,7 +431,7 @@ describe('Create Measure Validations', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('be.visible')
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).type('Some new test value')
-        cy.get(EditMeasurePage.measureClinicalRecommendationDiscardButton).click()
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.text', 'Some test value')
     })
 

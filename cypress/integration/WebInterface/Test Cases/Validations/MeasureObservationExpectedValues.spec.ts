@@ -7,6 +7,7 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import {Global} from "../../../../Shared/Global";
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -178,12 +179,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //verify that the discard modal appears
-        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('exist')
-        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('be.visible')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('exist')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('be.visible')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('be.enabled')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).click()
+        Global.clickOnDiscardChanges()
 
     })
 })
