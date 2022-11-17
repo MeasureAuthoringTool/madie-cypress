@@ -146,7 +146,7 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'pass')
+        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
     })
 })
