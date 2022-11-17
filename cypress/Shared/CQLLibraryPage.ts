@@ -1,6 +1,7 @@
 import {Header} from "./Header"
 import {Environment} from "./Environment"
 import {Utilities} from "./Utilities";
+import {umlsLoginForm} from "./umlsLoginForm";
 
 export class CQLLibraryPage {
 
@@ -27,7 +28,7 @@ export class CQLLibraryPage {
     public static readonly currentCQLLibSavebtn = '[data-testid="cql-library-save-button"]'
     public static readonly headerDetails = '[class="details"]'
     public static readonly cqlLibraryDesc = '[id="cql-library-description"]'
-    public static readonly cqlLibraryCreatePublisher = '[data-testid="cql-library-publisher"]'
+    public static readonly cqlLibraryCreatePublisher = '[data-testid="publisher"]'
     public static readonly cqlLibraryModalField = '[id="model-select"]'
     public static readonly cqlLibraryCreateForm = '[id="menu-model"]'
     public static readonly cqlLibraryCreateFormSideClickArea = '[class="MuiBox-root css-0"]'
@@ -53,9 +54,18 @@ export class CQLLibraryPage {
 
 
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
 
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
+
+        cy.get(Header.cqlLibraryTab).click()
+
+        cy.wait('@libraries', { timeout: 60000})
+
+        cy.get(this.createCQLLibraryBtn).should('be.visible')
+        cy.get(this.createCQLLibraryBtn).should('be.enabled')
         cy.get(this.createCQLLibraryBtn).click()
+
+        cy.get(this.newCQLLibName).should('be.visible')
         cy.get(this.newCQLLibName).type(CQLLibraryName)
         Utilities.dropdownSelect(CQLLibraryPage.cqlLibraryModelDropdown, CQLLibraryPage.cqlLibraryModelQICore)
         cy.get(this.cqlLibraryDesc).type('description')
