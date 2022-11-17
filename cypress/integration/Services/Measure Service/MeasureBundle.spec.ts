@@ -107,26 +107,32 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                         "populationBasis": 'Boolean',
                         "populations": [
                             {
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPop
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": PopDenom
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominatorExclusion",
                                 "definition": PopDenex
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominatorException",
                                 "definition": PopDenexcep
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": PopNum
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": PopNumex
                             }
@@ -232,14 +238,17 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
                         "populationBasis": 'Boolean',
                         "populations": [
                             {
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": 'ipp'
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "measurePopulation",
                                 "definition": 'num'
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "measurePopulationExclusion",
                                 "definition": 'numeratorExclusion'
                             },
@@ -347,6 +356,8 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
                     "measurementPeriodEnd": '2023-01-01T05:00:00.000+00:00', 'versionId': uuidv4()}
             }).then((response) => {
                 expect(response.status).to.eql(201)
+                cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
             })
         })
     })
@@ -401,26 +412,32 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
                         "populationBasis": 'Boolean',
                         "populations": [
                             {
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPop
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": PopDenom
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominatorExclusion",
                                 "definition": PopDenex
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominatorException",
                                 "definition": PopDenexcep
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": PopNum
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": PopNumex
                             }

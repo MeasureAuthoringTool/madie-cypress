@@ -45,26 +45,32 @@ describe('Test Case population values based on Measure Group population definiti
                         "populationBasis": 'Boolean',
                         "populations": [
                             {
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPop
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": PopDenom
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominatorExclusion",
                                 "definition": PopDenex
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominatorException",
                                 "definition": PopDenexcep
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": PopNum
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": PopNumex
                             }
@@ -209,22 +215,27 @@ describe('Test Case population values based on Measure Group population definiti
                             "populationBasis": 'Boolean',
                             "populations": [
                                 {
+                                    "id": uuidv4(),
                                     "name": "initialPopulation",
                                     "definition": PopIniPop
                                 },
                                 {
+                                    "id": uuidv4(),
                                     "name": "denominator",
                                     "definition": PopDenom
                                 },
                                 {
+                                    "id": uuidv4(),
                                     "name": "denominatorExclusion",
                                     "definition": PopDenex
                                 },
                                 {
+                                    "id": uuidv4(),
                                     "name": "denominatorException",
                                     "definition": PopDenexcep
                                 },
                                 {
+                                    "id": uuidv4(),
                                     "name": "numerator",
                                     "definition": PopNum
                                 }
@@ -281,26 +292,32 @@ describe('Test Case population values based on Measure Group population definiti
                         "populationBasis": 'Boolean',
                         "populations": [
                             {
+                                "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPop
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": PopDenom
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominatorExclusion",
                                 "definition": PopDenex
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "denominatorException",
                                 "definition": PopDenexcep
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": PopNum
                             },
                             {
+                                "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": PopNumex
                             }
