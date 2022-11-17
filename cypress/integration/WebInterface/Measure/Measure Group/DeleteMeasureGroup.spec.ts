@@ -7,6 +7,7 @@ import {Utilities} from "../../../../Shared/Utilities"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {TestCaseJson} from "../../../../Shared/TestCaseJson"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
+import {Global} from "../../../../Shared/Global";
 
 let measureOne = 'TestMeasure' + Date.now()
 let CqlLibraryName1 = 'TestLibrary' + Date.now()
@@ -193,8 +194,7 @@ describe('Validate Measure Group deletion functionality', () => {
         cy.get(MeasureGroupPage.measureGroupOne).should('exist').focus().should('be.visible')
         cy.get(MeasureGroupPage.measureGroupOne).click()
 
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('exist').focus().should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).click()
+        Global.clickOnDiscardChanges()
 
         //click on the second group that was just created
         cy.get(MeasureGroupPage.measureGroupTwo).should('exist').should('be.visible')

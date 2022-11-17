@@ -36,7 +36,7 @@ describe('Validate CQL Editor tab sticky footer', () => {
 
     })
 
-    it('Validate Save and Discard buttons -- text, functionality, and availability', () => {
+    it.only('Validate Save and Discard buttons -- text, functionality, and availability', () => {
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
 
@@ -60,8 +60,7 @@ describe('Validate CQL Editor tab sticky footer', () => {
         cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorDiscardButton).click()
 
-        cy.get(Global.dirtCheckModal).should('be.visible')
-        cy.get(Global.discardChangesContinue).click()
+        Global.discardChanges()
 
         //confirm that CQL Editor object is empty
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', '')

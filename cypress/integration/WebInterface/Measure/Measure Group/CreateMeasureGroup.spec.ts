@@ -6,6 +6,7 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {Utilities} from "../../../../Shared/Utilities"
 import {Header} from "../../../../Shared/Header"
 import assert = require("assert")
+import {Global} from "../../../../Shared/Global";
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -215,6 +216,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.log('Create Ratio Measure')
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
 
+        cy.wait(1000)
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -237,23 +239,21 @@ describe('Validate Measure Group -- scoring and populations', () => {
         //Warning Modal displayed when user navigated to another Measure Group without saving changes
         cy.log('Navigate to another Measure Group')
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
-        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
-        cy.get(MeasureGroupPage.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
-        cy.get(MeasureGroupPage.cancelDiscardChangesBtn).click()
+        cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
+        cy.get(Global.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(Global.keepWorkingCancel).click()
 
         //Warning Modal displayed when user navigated to a different tab without saving changes
         cy.log('Navigating to CQL Editor tab')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
-        cy.get(MeasureGroupPage.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
-        cy.get(MeasureGroupPage.cancelDiscardChangesBtn).click()
+        cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
+        cy.get(Global.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(Global.keepWorkingCancel).click()
 
         //Warning Modal displayed when user clicks Discard Changes for that measure group
         cy.log('Click on Discard Changes button')
-        cy.get(MeasureGroupPage.discardChangesBtn).click()
-        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
-        cy.get(MeasureGroupPage.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).click()
+        cy.get(Global.discardChangesBtn).click()
+        Global.clickOnDiscardChanges()
 
         //Navigate to Groups tab and verify the Measure scoring and population reset to previous values
         cy.get(EditMeasurePage.measureGroupsTab).click()

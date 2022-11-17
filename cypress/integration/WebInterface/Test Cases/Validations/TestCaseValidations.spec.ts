@@ -7,6 +7,7 @@ import {Utilities} from "../../../../Shared/Utilities"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {TestCaseJson} from "../../../../Shared/TestCaseJson"
+import {Global} from "../../../../Shared/Global";
 
 let measureName = 'TestMeasure' + Date.now()
 let newMeasureName = ''
@@ -240,13 +241,7 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
         
         //verify that the discard modal appears
-        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('exist')
-        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('be.visible')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('exist')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('be.visible')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('be.enabled')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).click()
-
+        Global.clickOnDiscardChanges()
 
     })
     it('Validate dirty check on the test case description, in the test case details tab', () => {
@@ -274,12 +269,7 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
         
         //verify that the discard modal appears
-        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('exist')
-        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('be.visible')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('exist')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('be.visible')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('be.enabled')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).click()        
+        Global.clickOnDiscardChanges()
     })
     it('Validate dirty check on the test case series, in the test case details tab', () => {
         //Click on Edit Measure
@@ -306,11 +296,6 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
                 
         //verify that the discard modal appears
-        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('exist')
-        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('be.visible')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('exist')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('be.visible')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('be.enabled')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).click()
+        Global.clickOnDiscardChanges()
     })
 })
