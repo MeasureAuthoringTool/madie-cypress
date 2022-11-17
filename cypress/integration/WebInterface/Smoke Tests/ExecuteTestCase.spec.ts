@@ -86,9 +86,6 @@ describe('Execute Test Case', () => {
         //Add Measure Group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
 
-        //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
-
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         TestCasesPage.clickEditforCreatedTestCase()
@@ -119,16 +116,13 @@ describe('Execute Test Case', () => {
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'fail')
+        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Fail')
     })
 
     it('Verify Test execution status when the Expected and Actual values match', () => {
 
         //Add Measure Group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
-
-        //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
@@ -171,7 +165,7 @@ describe('Execute Test Case', () => {
         cy.get(TestCasesPage.executeTestCaseButton).focus()
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'pass')
+        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
     })
 
