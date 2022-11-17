@@ -1,7 +1,6 @@
 import {Header} from "./Header"
 import {Environment} from "./Environment"
-import {Utilities} from "./Utilities";
-import {umlsLoginForm} from "./umlsLoginForm";
+import {Utilities} from "./Utilities"
 
 export class CQLLibraryPage {
 
@@ -38,7 +37,7 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryEditPublisherDrpDwn = '#mui-4-option-0'
     public static readonly cqlLibDescHelperText = '[data-testid="description-helper-text"]'
     public static readonly cqlLibPubHelperText = '[data-testid="publisher-helper-text"]'
-    public static readonly cqlLibraryExperimentalChkBox = '[id="epxerimental"]'
+    public static readonly cqlLibraryExperimentalChkBox = '[id="experimental"]'
     public static readonly editLibraryOwnershipError = '[id="content"]'
 
     //CQL Editor

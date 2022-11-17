@@ -29,10 +29,13 @@ describe('CQL Library Validations', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
+
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
+
         cy.get(Header.cqlLibraryTab).click()
- 
-        //click button to create a new CQL Library
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
+
+        cy.wait('@libraries', { timeout: 60000})
+
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
@@ -79,10 +82,12 @@ describe('CQL Library Validations', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
 
-        //click button to create a new CQL Library
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
+        cy.get(Header.cqlLibraryTab).click()
+
+        cy.wait('@libraries', { timeout: 60000})
+
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
@@ -126,9 +131,12 @@ describe('CQL Library Validations', () => {
     it('CQL Library Name Validations', () => {
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
 
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
+        cy.get(Header.cqlLibraryTab).click()
+
+        cy.wait('@libraries', { timeout: 60000})
+
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
@@ -154,7 +162,7 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
 
-        //Verify error message when the CQL Library Name has only numbers
+        //Verify error message when the CQL Library Name has numbers
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear().type('35657')
         cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
@@ -189,9 +197,12 @@ describe('CQL Library Validations', () => {
         //Verify error message for empty CQL Library Model
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
 
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
+        cy.get(Header.cqlLibraryTab).click()
+
+        cy.wait('@libraries', { timeout: 60000})
+
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
@@ -213,9 +224,12 @@ describe('CQL Library Validations', () => {
         //navigate to the CQL Libaray page and create new CQL Library
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
 
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
+        cy.get(Header.cqlLibraryTab).click()
+
+        cy.wait('@libraries', { timeout: 60000})
+
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
@@ -237,12 +251,15 @@ describe('CQL Library Validations', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let LibraryName = CQLLibraryName+randValue
 
-        //navigate to the CQL Libaray page and create new CQL Library
+        //navigate to the CQL Library page and create new CQL Library
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
- 
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
+
+        cy.get(Header.cqlLibraryTab).click()
+
+        cy.wait('@libraries', { timeout: 60000})
+
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
@@ -256,12 +273,9 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryDesc).type('Some random data')
 
         //move to and then away from the publisher field
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).wait(1000).click()
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.visible')
+        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).dblclick()
         cy.get(CQLLibraryPage.cqlLibraryDesc).click()
         cy.get(CQLLibraryPage.cqlLibPubHelperText).should('contain.text', 'Publisher is required.')
-        cy.get(CQLLibraryPage.cqlLibPubHelperText).should('have.color', '#D32F2F')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
     })
 
@@ -269,12 +283,15 @@ describe('CQL Library Validations', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let LibraryName = CQLLibraryName+randValue
 
-        //navigate to the CQL Libaray page and create new CQL Library
+        //navigate to the CQL Library page and create new CQL Library
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
 
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
+        cy.get(Header.cqlLibraryTab).click()
+
+        cy.wait('@libraries', { timeout: 60000})
+
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
@@ -317,53 +334,6 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).invoke('text').then((text) => {
             expect(text.length).greaterThan(1710)
-        })
-
-    })
-
-    it('Update new CQL Library Creation with CQL', () =>{
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let UpdatedCQLLibraryName = CQLLibraryName +randValue+ "updated"
-        let CQLLibraryPublisher = 'SemanticBits'
-
-        CQLLibraryPage.createCQLLibrary(UpdatedCQLLibraryName, CQLLibraryPublisher)
-        //navigate to the CQL Libaray page
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
-
-        //Click Edit CQL Library
-        CQLLibrariesPage.clickEditforCreatedLibrary()
-        cy.get(CQLLibraryPage.currentCQLLibName).clear().type(UpdatedCQLLibraryName)
-        Utilities.typeFileContents('cypress/fixtures/AdultOutpatientEncountersQICore4Entry.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
-
-        //enter description detail
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).type('Some random data')
-
-        //enter / select a publisher value
-        cy.get(CQLLibraryPage.cqlLibraryEditPublisher).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryEditPublisher).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryEditPublisher).type('SemanticBits')
-        cy.get(CQLLibraryPage.cqlLibraryEditPublisher).type('{downArrow}').type('{enter}')
-
-        cy.get(CQLLibraryPage.cqlLibraryStickySave).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully! Library Name ' +
-            'and/or Version can not be updated in the CQL Editor. MADiE has overwritten the updated Library Name and/or Version.')
-
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        CQLLibrariesPage.clickEditforCreatedLibrary()
-
-        cy.get(CQLLibraryPage.currentCQLLibName).should('contain.value', UpdatedCQLLibraryName)
-
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).invoke('text').then((text) => {
-            expect(text.length).greaterThan(1715)
         })
 
     })

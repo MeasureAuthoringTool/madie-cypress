@@ -6,54 +6,27 @@ import {Header} from "../../../Shared/Header"
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let CQLLibraryPublisher = 'SemanticBits'
 
-describe('Edit Measure', () => {
-    before('Create Measure', () => {
 
-        //Create CQL Library
+describe('Edit CQL Library validations', () => {
+
+    before('Create CQL Library', () => {
+
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
+
     })
 
     beforeEach('Login', () => {
+
         OktaLogin.Login()
     })
 
     afterEach('Logout', () => {
+
         OktaLogin.Logout()
     })
 
-    it('CQL Library edit page level validations on the CQL Library name, error messaging and accessibilty of the save button', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        //navigate to the main CQL Library list page
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
+    it('CQL Library edit page level validations on the CQL Library name, error messaging and accessibility of the save button', () => {
 
-        //click button to create a new CQL Library
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('exist')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
-        //Enter a name for the new CQL Library
-        cy.get(CQLLibraryPage.newCQLLibName).click()
-        cy.get(CQLLibraryPage.newCQLLibName).focused().type(CQLLibraryName+randValue)
-        //select a model value
-        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).wait(1000).click()
-        cy.get(CQLLibraryPage.cqlLibraryModelQICore).click()
-
-        //enter description detail
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).type('Some random data')
-
-        //enter / select a publisher value
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('SemanticBits')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('{downArrow}').type('{enter}')
-
-        //save the new CQL Library
-        CQLLibraryPage.clickCreateLibraryButton()
-        //navigate to CQL Library list page
         cy.get(Header.cqlLibraryTab).click()
 
         //Click on Edit button, Verify error message when the CQL Library Name field is empty
@@ -88,53 +61,35 @@ describe('Edit Measure', () => {
         cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name cannot be more than 255 characters.')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.disabled')
     })
-    it('CQL Edit page validation on description field', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let LibraryName = CQLLibraryName+randValue
+    it('CQL Library Edit page validation on description and publisher field', () => {
 
-        CQLLibraryPage.createCQLLibraryAPI(LibraryName, 'Able Health')
-        OktaLogin.Login()
-
-        //navigate to the CQL Libaray page and navigate to the edit CQL Library page
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
+        cy.get(Header.cqlLibraryTab).click()
 
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
-
-        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(LibraryName + 'updated')
-
-        //move to and then away from the description detail field
+        //Assert validation on description field
         cy.get(CQLLibraryPage.cqlLibraryDesc).clear()
         cy.get(CQLLibraryPage.cqlLibraryDesc).focus().blur()
         cy.get(CQLLibraryPage.cqlLibDescHelperText).should('contain.text', 'Description is required.')
-        cy.get(CQLLibraryPage.cqlLibDescHelperText).should('have.color', '#FF342D')
+
+        //Assert validation on Publisher field
+        cy.get(CQLLibraryPage.cqlLibraryEditPublisher).click()
+        cy.get(CQLLibraryPage.cqlLibraryEditPublisherCloseIcon).click()
+        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).dblclick()
+        cy.get(CQLLibraryPage.cqlLibraryDesc).click()
+        cy.get(CQLLibraryPage.cqlLibPubHelperText).should('contain.text', 'Publisher is required.')
         cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.disabled')
 
     })
 
-    it('CQL Edit page validation that the "Experimental" check box can be checked or unchecked -- not required', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let LibraryName = CQLLibraryName+randValue
+    it('CQL Library Edit page validation that the "Experimental" check box can be checked or unchecked -- not required', () => {
 
-        //create CQL Library via API
-        CQLLibraryPage.createCQLLibraryAPI(LibraryName, 'Able Health')
-
-        OktaLogin.Login()
-
-        //navigate to the CQL Libaray page and navigate to the edit CQL Library page
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).wait(1000).click()
 
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
-
-        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(LibraryName + 'updated')
-
 
         //enter description detail
         cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
@@ -162,7 +117,7 @@ describe('Edit Measure', () => {
         cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
         cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL Library saved successfully')
 
-        //navigate back to the CQL Libaray page and navigate to the edit CQL Library page
+        //navigate back to the CQL Library page and navigate to the edit CQL Library page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).wait(1000).click()
@@ -184,50 +139,4 @@ describe('Edit Measure', () => {
         cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.enabled')
         
     })
-
-    it('CQL Edit page validation on Publisher field', () => {
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let LibraryName = CQLLibraryName+randValue
-
-        //create CQL Library via API
-        CQLLibraryPage.createCQLLibraryAPI(LibraryName, 'Able Health')
-
-        OktaLogin.Login()
-
-        //navigate to the CQL Libaray page and navigate to the edit CQL Library page
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
-
-        //Click Edit CQL Library
-        CQLLibrariesPage.clickEditforCreatedLibrary()
-
-        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(LibraryName + 'updated')
-
-
-        //enter description detail
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).type('Some random data')
-
-        //experimental check box
-        cy.get(CQLLibraryPage.cqlLibraryExperimentalChkBox).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryExperimentalChkBox).focus().wait(1000).check()
-
-
-        //enter description detail
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).type('Some random data')
-
-        //move to and, then, away from the Publisher field
-        cy.get(CQLLibraryPage.cqlLibraryEditPublisher).click()
-        cy.get(CQLLibraryPage.cqlLibraryEditPublisherCloseIcon).click()
-        cy.get(CQLLibraryPage.cqlLibPubHelperText).should('contain.text', 'Publisher is required.')
-        cy.get(CQLLibraryPage.cqlLibPubHelperText).should('have.color', '#FF342D')
-        cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.disabled')
-
-    })
-
 })
