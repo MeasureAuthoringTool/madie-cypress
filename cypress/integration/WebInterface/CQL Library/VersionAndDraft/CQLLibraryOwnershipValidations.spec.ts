@@ -1,52 +1,11 @@
 import {OktaLogin} from "../../../../Shared/OktaLogin"
 import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage"
 import {Header} from "../../../../Shared/Header"
-import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
 
 let CqlLibraryOne = ''
-let CqlLibraryTwo = ''
 let CQLLibraryPublisher = 'SemanticBits'
 
 describe('Verify non Library owner unable to create Version', () => {
-
-    before('Create CQL Library using ALT user', () => {
-        //Create Measure with Alternate User
-        CqlLibraryTwo = 'TestLibrary2' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryTwo, CQLLibraryPublisher,  true, true)
-    })
-
-    beforeEach('Create CQL Library and Login', () => {
-        //Create CQL Library with Regular User
-        CqlLibraryOne = 'TestLibrary1' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
-
-        OktaLogin.Login()
-
-    })
-
-    afterEach('Logout', () => {
-
-        OktaLogin.Logout()
-
-    })
-
-    //Skipping until MAT-5012 is fixed
-    it.skip('Verify non Library owner unable to create Version', () => {
-
-        //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).click()
-
-        //Navigate to All Libraries tab
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
-        CQLLibrariesPage.clickVersionforCreatedLibrary(true)
-        cy.get(CQLLibrariesPage.versionLibraryRadioButton).eq(0).click()
-        cy.get(CQLLibrariesPage.createVersionContinueButton).click()
-        cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'User is unauthorized to create a version')
-    })
-
-})
-
-describe('Edit CQL Library ownership validations', () => {
 
     beforeEach('Create CQL Library with regular user and Login as Alt user', () => {
 
@@ -60,6 +19,26 @@ describe('Edit CQL Library ownership validations', () => {
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
+
+    })
+
+    it('Verify Version button is not visible for non Library owner', () => {
+
+        //Navigate to CQL Library Page
+        cy.get(Header.cqlLibraryTab).click()
+
+        //Navigate to All Libraries tab
+        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+
+        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+
+            cy.intercept('GET', '/api/cql-libraries/' + fileContents).as('cqlLibrary')
+
+            cy.get('[data-testid="view/edit-cqlLibrary-button-'+ fileContents + '"]').click()
+            //Verify version button is not visible
+            cy.get('[data-testid="create-new-version-'+ fileContents +'-button"]').should('not.exist')
+
+        })
     })
 
     it('Verify Non owner of the library unable to edit details', () => {
@@ -71,10 +50,22 @@ describe('Edit CQL Library ownership validations', () => {
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
 
         //Edit CQL Library
-        CQLLibrariesPage.clickEditforCreatedLibrary()
+        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+
+            cy.intercept('GET', '/api/cql-libraries/' + fileContents).as('cqlLibrary')
+
+            cy.get('[data-testid=cqlLibrary-button-'+ fileContents +']').should('exist')
+            cy.get('[data-testid=cqlLibrary-button-'+ fileContents +']').should('be.visible')
+            cy.get('[data-testid=cqlLibrary-button-'+ fileContents +']').wait(1000).click()
+
+            cy.wait('@cqlLibrary').then(({response}) => {
+                expect(response.statusCode).to.eq(200)
+            })
+        })
+
         cy.get(CQLLibraryPage.editLibraryOwnershipError).should('contain.text', 'You are not the owner of the CQL Library. Only owner can edit it.')
-        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).should('have.attr', 'readonly', 'readonly')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('have.attr', 'readonly', 'readonly')
+        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).should('have.attr', 'disabled', 'disabled')
+        cy.get(CQLLibraryPage.cqlLibraryDesc).should('have.attr', 'disabled', 'disabled')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.disabled')
 
     })
