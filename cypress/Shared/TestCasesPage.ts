@@ -31,7 +31,7 @@ export class TestCasesPage {
     public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
     public static readonly testCaseTitle = '[data-testid="test-case-title"]'
     public static readonly executeTestCaseButton = '[data-testid="execute-test-cases-button"]'
-    public static readonly testCaseStatus = 'tbody > tr > :nth-child(4)'
+    public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
     public static readonly secondTestCaseStatus = '[class="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorError MuiChip-filledError css-c3eeld"]'
     public static readonly testCaseTitleInlineError = '[data-testid="title-helper-text"]'
     public static readonly testCaseJsonValidationErrorBtn = '[data-testid="show-json-validation-errors-button"]'
@@ -241,9 +241,10 @@ export class TestCasesPage {
     }
     public static clickEditforCreatedTestCase(): void {
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=edit-test-case-'+ fileContents +']').should('be.visible')
-            cy.get('[data-testid=edit-test-case-'+ fileContents +']').should('be.enabled')
-            cy.get('[data-testid=edit-test-case-'+ fileContents +']').click()
+            cy.get('.chevron-container > [data-testid="ExpandMoreIcon"]').click()
+            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('be.visible')
+            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('be.enabled')
+            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').click()
         })
 
     }
