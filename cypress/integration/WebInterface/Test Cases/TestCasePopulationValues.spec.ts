@@ -9,7 +9,6 @@ import {TestCaseJson} from "../../../Shared/TestCaseJson"
 import {MeasureCQL} from "../../../Shared/MeasureCQL"
 import {Header} from "../../../Shared/Header"
 import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
-import {Global} from "../../../Shared/Global"
 
 let measureName = 'TestMeasure' + (Date.now())
 let CqlLibraryName = 'TestLibrary' + (Date.now())
@@ -689,8 +688,6 @@ describe('TC Pop value options are limited to those that are defined from Measur
         //go back and update measure group to contain values for all of the population fields
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        cy.get(Global.discardChangesContinue).click()
 
         Utilities.validateMeasureGroup(measureScoringArray[4].valueOf().toString(),'all')
         cy.get(EditMeasurePage.testCasesTab).click()

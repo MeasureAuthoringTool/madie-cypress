@@ -8,6 +8,7 @@ import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 import {Utilities} from "../../../../Shared/Utilities"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
+import {Global} from "../../../../Shared/Global";
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -647,12 +648,7 @@ describe('Stratification Expected values for Non Boolean Population Basis', () =
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //verify that the discard modal appears
-        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('exist')
-        cy.get(MeasureGroupPage.discardChangesConfirmationModal).should('be.visible')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('exist')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('be.visible')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).should('be.enabled')
-        cy.get(MeasureGroupPage.continueDiscardChangesBtn).click()
+        Global.clickOnDiscardChanges()
 
     })
 })

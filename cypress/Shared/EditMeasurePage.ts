@@ -2,9 +2,6 @@ export class EditMeasurePage {
 
     //dirty modal
     public static readonly dirtCheckModal = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-mbdu2s"]'
-    public static readonly keepWorkingCancel = '[data-testid="discard-dialog-cancel-button"]'
-    public static readonly discardChangesContinueBtn = '[data-testid="discard-dialog-continue-button"]'
-    
 
     //Edit Measure tab menu
     public static readonly measureDetailsTab = '[data-testid=measure-details-tab]'
@@ -41,6 +38,7 @@ export class EditMeasurePage {
     public static readonly cqlEditorSaveButton = '[data-testid="save-cql-btn"]'
     //discard changes
     public static readonly cqlEditorDiscardButton = '[data-testid="reset-cql-btn"]'
+    public static readonly measureDetailsDiscardChangesBtn = '[data-testid="cancel-button"]'
 
     //Delete Measure
     public static readonly deleteMeasureButton = '[data-testid=delete-measure-button]'
@@ -58,7 +56,6 @@ export class EditMeasurePage {
     public static readonly measureDevelopersObjHoldingValue = '#developers'
     //<span class="MuiChip-label MuiChip-labelMedium css-9iedg7">ACO Health Solutions</span>
     public static readonly measureStewardDevelopersSaveButton = '[data-testid="steward-and-developers-save"]'
-    public static readonly measureStewardDevelopersDiscardCancel = '[data-testid="cancel-button"]'
     public static readonly measureStewardDevelopersSuccessMessage = '[data-testid="steward-and-developers-success"]'
     public static readonly measureStewardAlertMsg = '[data-testid="steward-helper-text"]'
     public static readonly measureDevelopersAlertMsg = '[data-testid="developers-helper-text"]'
@@ -91,6 +88,5 @@ export class EditMeasurePage {
     //Clinical Guidance / Recommendation Page
     public static readonly measureClinicalRecommendationTextBox = '[data-testid="measureClinical Recommendation StatementInput"]'
     public static readonly measureClinicalRecommendationSaveButton = '[data-testid="measureClinical Recommendation StatementSave"]'
-    public static readonly measureClinicalRecommendationDiscardButton = '[data-testid="cancel-button"]'
     public static readonly measureClinicalRecommendationSuccessMessage = '[data-testid="measureClinical Recommendation StatementSuccess"]'
 }
