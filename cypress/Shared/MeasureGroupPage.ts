@@ -137,8 +137,8 @@ export class MeasureGroupPage {
     public static readonly continueDiscardChangesBtn = '[data-testid="discard-dialog-continue-button"]'
 
     //population basis
-    public static readonly popBasis = '[data-testid="population-basis-combo-box"]'
-    public static readonly popBasisOption = '#population-basis-option-0'
+    public static readonly popBasis = '[data-testid="populationBasis"]'
+    public static readonly popBasisOption = '#populationBasis-option-0'
 
     //Measure group description
     public static readonly measureGroupDescriptionBox = '[name="groupDescription"]'
