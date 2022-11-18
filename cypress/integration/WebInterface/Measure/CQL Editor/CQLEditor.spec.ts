@@ -101,7 +101,9 @@ describe('Measure: CQL Editor', () => {
         CQLEditorPage.clickCQLEditorTab()
 
         //type text in the CQL Editor that will cause error
-        Utilities.readWriteFileData('cqlCQLEditor.txt', EditMeasurePage.cqlEditorTextBox)
+        cy.readFile('cypress/fixtures/cqlCQLEditor.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+        })
 
         //save the value in the CQL Editor
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -116,11 +118,8 @@ describe('Measure: CQL Editor', () => {
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 1:3 | Could not resolve identifier SDE in the current library.")
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 5:13 | Member SDE Sex not found for type null.")
 
-        //Navigate away from the page
-        cy.get(Header.measures).click()
-
-        //Navigate back to the CQL Editor page
-        MeasuresPage.clickEditforCreatedMeasure()
+        //Navigate away from CQL Editor tab
+        cy.get(EditMeasurePage.measureDetailsTab).click()
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -165,11 +164,11 @@ describe('Measure: CQL Editor', () => {
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text',
             '"status":404,"error":"Not Found","path":"/api/fhir/libraries/cql"}"')
 
-        //Navigate away from the page
-        cy.get(Header.measures).click()
+        //Navigate away from CQL Editor tab
+        cy.get(EditMeasurePage.measureDetailsTab).click()
 
-        //Navigate back to the CQL Editor page
-        MeasuresPage.clickEditforCreatedMeasure()
+        //Click on the CQL Editor tab
+        CQLEditorPage.clickCQLEditorTab()
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -182,42 +181,6 @@ describe('Measure: CQL Editor', () => {
 
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text',
             '"status":404,"error":"Not Found","path":"/api/fhir/libraries/cql"}"')
-
-    })
-
-    it('Verify no errors appear on CQL Editor page and in the CQL Editor object, on save and on tab / page load, ' +
-        'when included library is found', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
-
-        //Click on the CQL Editor tab
-        CQLEditorPage.clickCQLEditorTab()
-
-        cy.readFile('cypress/fixtures/EXM124v7QICore4Entry_FHIR.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
-
-        //save the value in the CQL Editor
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        //Validate message on page
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-
-        //Validate the lack of error(s) in CQL Editor
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLEditorPage.errorInCQLEditorWindow).should('not.exist')
-
-        //Navigate away from the page
-        cy.get(Header.measures).click()
-
-        //Navigate back to the CQL Editor page
-        MeasuresPage.clickEditforCreatedMeasure()
-
-        //Click on the CQL Editor tab
-        CQLEditorPage.clickCQLEditorTab()
-
-        //Validate error(s) in CQL Editor persists after saving
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLEditorPage.errorInCQLEditorWindow).should('not.exist')
 
     })
 
@@ -254,6 +217,7 @@ describe('Measure: CQL Editor', () => {
             'ELM: 1:37 | Internal translator error.')
 
     })
+
     it('Verify Library name and version are replaced with the actual Library Name and Version for the Measure', () => {
 
         //Click on Edit Measure
@@ -279,10 +243,7 @@ describe('Measure: CQL Editor', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).contains('version \'0.0.000\'')
 
         //Navigate away from the page
-        cy.get(Header.measures).click()
-
-        //Navigate back to the CQL Editor page
-        MeasuresPage.clickEditforCreatedMeasure()
+        cy.get(EditMeasurePage.measureDetailsTab).click()
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -314,15 +275,13 @@ describe('Measure: CQL Editor', () => {
         cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLEditorPage.errorInCQLEditorWindow).should('not.exist')
 
         //Navigate away from the page
-        cy.get(Header.measures).click()
-
-        //Navigate back to the CQL Editor page
-        MeasuresPage.clickEditforCreatedMeasure()
+        cy.get(EditMeasurePage.measureDetailsTab).click()
 
         cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear()
         cy.get(EditMeasurePage.cqlLibraryNameTextBox).type(newCqlLibraryName+'TEST')
 
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
