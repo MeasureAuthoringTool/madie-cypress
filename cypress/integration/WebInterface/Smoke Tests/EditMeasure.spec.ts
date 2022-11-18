@@ -59,6 +59,7 @@ describe('Edit Measure', () => {
         //select a value for Developers
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('exist').should('be.visible').click().type("ACO Health Solutions")
         cy.get(EditMeasurePage.measureDevelopersDrpDwnOption).click()
+        cy.get('.content').click()
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('exist')
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
         //save button should become available, now, because a value is, now, in both fields

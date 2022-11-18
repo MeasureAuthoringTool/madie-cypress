@@ -45,7 +45,8 @@ describe('Save CQL on CQL Editor Page', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Navigate to Measures page and verify the saved CQL
-        cy.get(Header.mainMadiePageButton).click()
+        cy.get(Header.measures).click()
+
         //Click on Edit Button
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()
