@@ -41,6 +41,10 @@ describe('Measure Observations', () => {
 
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
 
+        //navigate away from measure group page
+        cy.get(Header.mainMadiePageButton).click()
+        //navigate back to the measure group page
+        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -76,6 +80,7 @@ describe('Measure Observations', () => {
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
         //navigate back to the measure group page
+        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -102,6 +107,7 @@ describe('Measure Observations', () => {
         })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.wait(8700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Create Measure Group
@@ -121,8 +127,7 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-
-        Utilities.dropdownSelect(MeasureGroupPage.measureObservationSelect, 'ToCode')
+        cy.get(MeasureGroupPage.MOToCodeValue).wait(1000).click()
 
         cy.get(MeasureGroupPage.cvAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
@@ -137,6 +142,7 @@ describe('Measure Observations', () => {
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
         //navigate back to the measure group page
+        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -151,7 +157,10 @@ describe('Measure Observations', () => {
     it('Remove Measure Observations from Ratio Measure', () => {
 
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
-
+        //navigate away from measure group page
+        cy.get(Header.mainMadiePageButton).click()
+        //navigate back to the measure group page
+        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -186,6 +195,7 @@ describe('Measure Observations', () => {
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
         //navigate back to the measure group page
+        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -222,6 +232,7 @@ describe('Measure Observations', () => {
         })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.wait(8700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Navigate to Measure Group tab
@@ -267,7 +278,10 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
     it('Non-owner of measure cannot change measure observation', () => {
 
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
-
+        //navigate away from measure group page
+        cy.get(Header.mainMadiePageButton).click()
+        //navigate back to the measure group page
+        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -303,6 +317,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
         //navigate back to the measure group page
+        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -320,7 +335,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
-
+        cy.wait(9700)
         cy.get(MeasuresPage.allMeasuresTab).should('exist')
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
@@ -362,6 +377,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.wait(8700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Create Measure Group
@@ -380,7 +396,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        Utilities.dropdownSelect(MeasureGroupPage.measureObservationSelect, 'ToCode')
+        cy.get(MeasureGroupPage.MOToCodeValue).wait(1000).click()
         cy.get(MeasureGroupPage.cvAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
@@ -394,6 +410,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
         //navigate back to the measure group page
+        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -410,7 +427,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
-
+        cy.wait(9700)
         cy.get(MeasuresPage.allMeasuresTab).should('exist')
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
@@ -481,6 +498,7 @@ describe('Measure Observation - Expected Values',  () => {
         })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.wait(8700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Create Measure Group
@@ -563,7 +581,10 @@ describe('Measure Observation - Expected Values',  () => {
     it('Verify Expected values for Boolean Type Ratio Measure Observations', () => {
 
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
-
+        //navigate away from measure group page
+        cy.get(Header.mainMadiePageButton).click()
+        //navigate back to the measure group page
+        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.measureGroupsTab).click()
 

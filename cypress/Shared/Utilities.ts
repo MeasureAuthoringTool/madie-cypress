@@ -448,6 +448,7 @@ export class Utilities {
             .parent()
             .click()
             .get('ul > li[data-value="' + valueDataElement + '"]')
+            //<li class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-1km1ehz" tabindex="-1" role="option" aria-selected="false" data-value="ToCode">ToCode<span class="MuiTouchRipple-root css-w0pj6f"></span></li>
             .click()
         }
     }
