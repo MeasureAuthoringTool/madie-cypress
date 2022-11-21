@@ -4,7 +4,7 @@ import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {Utilities} from "../../../../Shared/Utilities"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName1 = 'TestLibrary' + Date.now()
@@ -46,10 +46,19 @@ describe('Validate Measure Group additions', () => {
         //read and write CQL from flat file
         Utilities.typeFileContents('cypress/fixtures/EXM124v7QICore4Entry.txt', EditMeasurePage.cqlEditorTextBox)
         //save CQL on measure
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(4500)
+
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
 
         //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -131,6 +140,8 @@ describe('Validate Measure Group additions', () => {
         MeasuresPage.clickEditforCreatedMeasure()
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        //clear current CQL Editor contents
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
         //read and write CQL from flat file
         Utilities.typeFileContents('cypress/fixtures/CQLForFluentFunction.txt', EditMeasurePage.cqlEditorTextBox)
 
@@ -160,10 +171,11 @@ describe('Validate Measure Group additions', () => {
         cy.get(MeasureGroupPage.measureGroupFive).should('be.visible')
 
         Utilities.setMeasureGroupType()
+        Utilities.waitForElementVisible(MeasureGroupPage.measureScoringSelect, 20700)
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
 
-
+        Utilities.waitForElementVisible(MeasureGroupPage.initialPopulationSelect, 20700)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect,'Initial Population')
 
 
@@ -177,15 +189,16 @@ describe('Validate Measure Group additions', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
-        cy.get(MeasureGroupPage.measureGroupOne).should('exist')
-        cy.get(MeasureGroupPage.measureGroupOne).should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupOne).click()
+        cy.get(MeasureGroupPage.measureGroupThree).should('exist')
+        cy.get(MeasureGroupPage.measureGroupThree).should('be.visible')
+        cy.get(MeasureGroupPage.measureGroupThree).click()
 
         cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text','Cohort')
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text','Initial Population')
 
-        cy.get(MeasureGroupPage.measureGroupTwo).should('not.exist')
-        cy.get(MeasureGroupPage.measureGroupThree).should('not.exist')
+        cy.get(MeasureGroupPage.measureGroupOne).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTwo).should('exist')
+        cy.get(MeasureGroupPage.measureGroupThree).should('exist')
         cy.get(MeasureGroupPage.measureGroupFour).should('not.exist')
         cy.get(MeasureGroupPage.measureGroupFive).should('not.exist')
 

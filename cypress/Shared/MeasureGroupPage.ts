@@ -9,8 +9,8 @@ import { v4 as uuidv4 } from 'uuid'
 export class MeasureGroupPage {
 
     //CQL has errors message
-    public static readonly CQLHasErrorMsg = '[data-testid="cql-has-errors-message"]'
-
+    public static readonly CQLHasErrorMsg = '[data-testid="error-alerts"]'
+    
     //tabs on Measure Group page
     public static readonly populationTab = '[data-testid="populations-tab"]'
     public static readonly stratificationTab = '[data-testid="stratifications-tab"]'
@@ -108,6 +108,8 @@ export class MeasureGroupPage {
     public static readonly removeNumeratorObservation = '[data-testid="measure-observation-numerator-remove"]'
 
     //Continuous Variable Measure Observation
+    public static readonly MOToCodeValue = '[data-value="ToCode"]'
+    
     public static readonly cvMeasureObservation = '[id="measure-observation-cv-obs"]'
     public static readonly cvAggregateFunction = '[id="measure-observation-aggregate-cv-obs"]'
 

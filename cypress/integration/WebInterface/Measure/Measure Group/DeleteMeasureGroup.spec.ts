@@ -7,7 +7,8 @@ import {Utilities} from "../../../../Shared/Utilities"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {TestCaseJson} from "../../../../Shared/TestCaseJson"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {Global} from "../../../../Shared/Global";
+import {Global} from "../../../../Shared/Global"
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 
 let measureOne = 'TestMeasure' + Date.now()
 let CqlLibraryName1 = 'TestLibrary' + Date.now()
@@ -33,7 +34,9 @@ describe('Validate Measure Group deletion functionality', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(4500)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null,null,null,null,
             null,'Procedure')
@@ -264,9 +267,13 @@ describe('Validate Measure Group deletion functionality', () => {
         //confirm test case is still present on measure
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
             cy.get('[data-testid=test-case-row-'+ fileContents +']', { timeout: 80000 }).should('exist')
-            cy.get('[data-testid=edit-test-case-'+ fileContents +']', { timeout: 80000 }).should('be.visible')
-            cy.get('[data-testid=edit-test-case-'+ fileContents +']', { timeout: 80000 }).click()
+            cy.get('[data-testid=select-action-'+ fileContents +']', { timeout: 80000 }).should('be.visible')
+            cy.get('[data-testid=select-action-'+ fileContents +']', { timeout: 80000 }).click()
+            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']', { timeout: 80000 }).should('be.visible')
+            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']', { timeout: 80000 }).click()
         })
+        //<button data-testid="view-edit-test-case-6376a9e6397dda4088e73cd9">edit</button>
+        //<button class="action-button" css="[object Object]" data-testid="select-action-6376a9e6397dda4088e73cd9"><div class="action">Select</div><div class="chevron-container"><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ExpandMoreIcon"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"></path></svg></div></button>
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((mId) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((tId)=> {
                 cy.intercept('GET', 'https://dev-madie.hcqis.org/measures/' + mId + '/edit/test-cases/'+ tId, [])
@@ -287,7 +294,9 @@ describe('Ownership test when deleting groups', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(4500)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(true, true, null,
             null, null, 'Procedure')
