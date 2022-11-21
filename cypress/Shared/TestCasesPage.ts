@@ -55,6 +55,8 @@ export class TestCasesPage {
     public static readonly testCaseListPassingPercTab = '[data-testid="passing-tab"]'
     public static readonly testCaseListCoveragePercTab = '[data-testid="coverage-tab"]'
     public static readonly testCaseListCoverageHighlighting = '[data-testid="code-coverage-highlighting"]'
+    public static readonly selectTestCaseDropdownBtn = '.chevron-container > [data-testid="ExpandMoreIcon"]'
+    public static readonly testCaseListTable = '[data-testid="test-case-tbl"]'
 
     //Test Case Population Values
     public static readonly testCaseIPPExpected = '[data-testid="test-population-initialPopulation-expected"]'
@@ -108,6 +110,11 @@ export class TestCasesPage {
     public static readonly discardChangesConfirmationText = '[id="discard-changes-dialog-body"]'
     public static readonly discardChangesCancelBtn = '[data-testid="discard-dialog-cancel-button"]'
     public static readonly continueDiscardChangesBtn = '[data-testid="discard-dialog-continue-button"]'
+
+    //Delete Test Case
+    public static readonly deleteTestCaseBtn = '[data-testid="delete-test-case-btn"]'
+    public static readonly deleteTestCaseConfirmationText = '[class="dialog-warning-body"]'
+    public static readonly deleteTestCaseContinueBtn = '[data-testid="delete-dialog-continue-button"]'
 
 
     public static clickCreateTestCaseButton() : void {
