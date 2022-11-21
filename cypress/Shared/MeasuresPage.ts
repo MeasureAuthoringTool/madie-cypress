@@ -6,7 +6,6 @@ export class MeasuresPage {
     public static readonly measureListTitles = '[data-testid=table-body] > :nth-child(1)'
     public static readonly allMeasuresTab = '[data-testid=all-measures-tab]'
     public static readonly searchInputBox = '[data-testid="searchMeasure-input"]'
-    public static readonly viewMeasureButton = '.action'
 
     //Pagination
     public static readonly paginationNextButton = '[data-testid="NavigateNextIcon"]'
@@ -24,9 +23,9 @@ export class MeasuresPage {
         }
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=edit-measure-'+ fileContents +']', 3000)
+            Utilities.waitForElementVisible('[data-testid=edit-measure-'+ fileContents +']', 6000)
             cy.get('[data-testid=edit-measure-'+ fileContents +']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=edit-measure-'+ fileContents +']', 3000)
+            Utilities.waitForElementEnabled('[data-testid=edit-measure-'+ fileContents +']', 6000)
             cy.get('[data-testid=edit-measure-'+ fileContents +']').should('be.enabled')
             cy.get('[data-testid=edit-measure-'+ fileContents +']').click()
         })

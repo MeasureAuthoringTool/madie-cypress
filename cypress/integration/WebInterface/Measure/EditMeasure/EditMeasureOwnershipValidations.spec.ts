@@ -58,6 +58,7 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         //edit the measure that was not created by current measure
         MeasuresPage.clickEditforCreatedMeasure(true)
+        cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
 
         cy.get(CreateMeasurePage.measurementPeriodStartDate).should('be.disabled')
         cy.get(CreateMeasurePage.measurementPeriodEndDate).should('be.disabled')
@@ -129,19 +130,21 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.readFile('cypress/fixtures/testcaseId2').should('exist').then((fileContents) => {
-            //confirm that edit button for test case is not available
-            cy.get('[data-testid=edit-test-case-'+ fileContents +']').should('not.exist')
+
+            cy.get('[data-testid=select-action-'+ fileContents +']').click()
 
             //confirm that view button for test case is available and click on the view button
-            cy.get('[data-testid=view-test-case-'+ fileContents +']').should('be.visible')
-            cy.get('[data-testid=view-test-case-'+ fileContents +']').should('be.enabled')
-            cy.get('[data-testid=view-test-case-'+ fileContents +']').click()
+            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('have.text', 'view')
+            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('be.visible')
+            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('be.enabled')
+            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').click()
         })
 
         //confirm that the text boxes, for the test case fields are not visible
-        cy.get(TestCasesPage.testCaseTitle).should('not.exist')
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).should('not.exist')
-        cy.get(TestCasesPage.testCaseSeriesTextBox).should('not.exist')
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.testCaseTitle).should('have.attr', 'disabled', 'disabled')
+        cy.get(TestCasesPage.testCaseDescriptionTextBox).should('have.attr', 'disabled', 'disabled')
+        cy.get('[id="test-case-series"]').should('have.attr', 'disabled', 'disabled')
 
     })
 })

@@ -2,7 +2,6 @@ import {OktaLogin} from "../../../../Shared/OktaLogin"
 import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-
 import {Header} from "../../../../Shared/Header"
 import {Utilities} from "../../../../Shared/Utilities"
 
@@ -88,7 +87,7 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.enabled')
         
         //save Steward & Developers
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).click()
+        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).click({force:true})
         cy.get(EditMeasurePage.measureStewardDevelopersSuccessMessage).should('be.visible')
 
         //Guidance

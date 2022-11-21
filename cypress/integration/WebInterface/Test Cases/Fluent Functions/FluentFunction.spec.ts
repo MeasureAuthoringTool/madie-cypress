@@ -1,7 +1,6 @@
 import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 import {OktaLogin} from "../../../../Shared/OktaLogin"
 import {Utilities} from "../../../../Shared/Utilities"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
 import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
@@ -107,7 +106,7 @@ describe('Fluent Function Capability', () => {
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'pass')
+        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
     })
 })
