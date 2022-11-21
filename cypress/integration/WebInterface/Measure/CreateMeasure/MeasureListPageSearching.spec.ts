@@ -2,6 +2,7 @@ import {OktaLogin} from "../../../../Shared/OktaLogin"
 import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
+import {LandingPage} from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -36,10 +37,10 @@ describe('Measure List Page Searching', () => {
 
         //Search for the Measure using eCQMTitle
         cy.log('Search Measure with eCQM Title')
-        cy.get('[data-testid="my-measures-tab"]').wait(1000).click()
+        cy.get(LandingPage.myMeasuresTab).wait(1000).click()
         cy.get(MeasuresPage.searchInputBox).clear().type('eCQMTitle01').wait(1000).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', measureName)
-        cy.get(MeasuresPage.viewMeasureButton).wait(1000).click()
+        MeasuresPage.clickEditforCreatedMeasure()
         cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).should('have.value','eCQMTitle01')
 
         //Delete the Measure & search for deleted Measure under My Measures tab

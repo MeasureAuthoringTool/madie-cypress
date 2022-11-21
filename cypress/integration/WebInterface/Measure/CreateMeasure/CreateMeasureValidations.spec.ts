@@ -3,40 +3,32 @@ import {LandingPage} from "../../../../Shared/LandingPage"
 import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {Global} from "../../../../Shared/Global";
+import {Global} from "../../../../Shared/Global"
+import {Utilities} from "../../../../Shared/Utilities"
 
+let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let ratioMeasureCQL = MeasureCQL.ICFCleanTest_CQL
 
+describe('Validations on Measure Details page', () => {
 
-describe('Create Measure Validations', () => {
+    beforeEach('Create New Measure and Login', () => {
 
-    beforeEach('Login',() => {
+        newMeasureName = 'TestMeasure' + Date.now() + randValue
+        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+        //Create New Measure
+        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
         OktaLogin.Login()
     })
 
     afterEach('Logout', () => {
         OktaLogin.Logout()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Verify Steward & Developers section of Measure Details page', () => {
-        newMeasureName = 'TestMeasure' + Date.now()
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now()
-
-        //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
-        OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(5500)
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
-        OktaLogin.Login()
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -44,7 +36,7 @@ describe('Create Measure Validations', () => {
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('be.visible')
-        cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('include.text','Steward & Developers')
+        cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('include.text', 'Steward & Developers')
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
 
         //confirm Steward field
@@ -57,36 +49,22 @@ describe('Create Measure Validations', () => {
     })
 
     it('Verify fields on the Steward & Developers section of Measure Details page are required and the messaging around the requirement', () => {
-        newMeasureName = 'TestMeasure' + Date.now()
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now()
-
-        //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
-        OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(5500)
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
-        OktaLogin.Login()
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
-        
+
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('be.visible')
-        cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()        
+        cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
 
         //give the Steward field focus and then remove focus from it without selecting a value for it
         cy.get(EditMeasurePage.measureStewardDrpDwn).should('exist')
         cy.get(EditMeasurePage.measureStewardDrpDwn).should('be.visible')
         cy.get(EditMeasurePage.measureStewardDrpDwn).click()
-        
+
         //remove focus from Steward drop down field
-        cy.get(EditMeasurePage.leftPanelStewardDevelopers).click() 
+        cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
 
         //confirm alert / error message that should appear below the Steward field
         cy.get(EditMeasurePage.measureStewardAlertMsg).should('exist')
@@ -97,10 +75,10 @@ describe('Create Measure Validations', () => {
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('exist')
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('be.visible')
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).click()
-        
+
         //remove focus from Developers drop down field
-        cy.get(EditMeasurePage.leftPanelStewardDevelopers).click() 
-        
+        cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
+
         //confirm alert / error message that should appear below the Developers field
         cy.get(EditMeasurePage.measureDevelopersAlertMsg).should('exist')
         cy.get(EditMeasurePage.measureDevelopersAlertMsg).should('be.visible')
@@ -108,20 +86,6 @@ describe('Create Measure Validations', () => {
     })
 
     it('Validate Save buttons accessibility (Save when both fields have value)', () => {
-        newMeasureName = 'TestMeasure' + Date.now()
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now()
-
-        //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
-        OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(5500)
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
-        OktaLogin.Login()
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -148,20 +112,6 @@ describe('Create Measure Validations', () => {
     })
 
     it('Validate Discard button accessibility and text / label on button', () => {
-        newMeasureName = 'TestMeasure' + Date.now()
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now()
-
-        //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
-        OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(5500)
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
-        OktaLogin.Login()
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -205,20 +155,6 @@ describe('Create Measure Validations', () => {
     })
 
     it('Validate dirty check on Steward & Developers section of Measure Details page', () => {
-        newMeasureName = 'TestMeasure' + Date.now()
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now()
-
-        //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
-        OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(5500)
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
-        OktaLogin.Login()
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -269,28 +205,14 @@ describe('Create Measure Validations', () => {
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        
+
         //confirm dirty check window
         cy.get(EditMeasurePage.dirtCheckModal).should('exist')
         cy.get(EditMeasurePage.dirtCheckModal).should('be.visible')
-       
+
     })
 
     it('Validate success message once both fields have value and are saved', () => {
-        newMeasureName = 'TestMeasure' + Date.now()
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now()
-
-        //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
-        OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(5500)
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
-        OktaLogin.Login()
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -316,9 +238,9 @@ describe('Create Measure Validations', () => {
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
         //save button should become available, now, because a value is, now, in both fields
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.enabled')
-        
+
         //save Steward & Developers
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).click()
+        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).click({force: true}).wait(1000)
 
         //validate success message
         cy.get(EditMeasurePage.measureStewardDevelopersSuccessMessage).should('exist')
@@ -345,15 +267,7 @@ describe('Create Measure Validations', () => {
         cy.get('.MuiChip-label').should('include.text', 'ACO Health Solutions')
     })
 
-    //Skipping until MAT-4984 is fixed
-    //Clinical Recommendation validations
-    it.skip('Validating the Clinical Recommendation page and the fields, buttons, and messaging for that page', () => {
-        newMeasureName = 'TestMeasure' + Date.now()
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now()
-
-        //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
-        OktaLogin.Login()
+    it('Validating the Clinical Recommendation page and the fields, buttons, and messaging for that page', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -369,7 +283,8 @@ describe('Create Measure Validations', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).type('Some test value')
         cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.text', 'Clinical Recommendation Statement')
+        Global.clickOnDiscardChanges()
+        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('be.empty')
 
         //type some value in the text box and save it
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('exist')
@@ -432,7 +347,26 @@ describe('Create Measure Validations', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).type('Some new test value')
         cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
+        Global.clickOnDiscardChanges()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.text', 'Some test value')
+    })
+
+})
+
+describe('Create Measure validations', () => {
+
+    beforeEach('Create New Measure and Login', () => {
+
+        newMeasureName = 'TestMeasure' + Date.now() + randValue
+        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+        //Create New Measure
+        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
+        OktaLogin.Login()
+    })
+
+    afterEach('Logout and cleanup', () => {
+        OktaLogin.Logout()
+
     })
 
     //Measure Name Validations
