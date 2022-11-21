@@ -24,9 +24,9 @@ export class MeasuresPage {
         }
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=edit-measure-'+ fileContents +']', 3000)
+            Utilities.waitForElementVisible('[data-testid=edit-measure-'+ fileContents +']', 6000)
             cy.get('[data-testid=edit-measure-'+ fileContents +']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=edit-measure-'+ fileContents +']', 3000)
+            Utilities.waitForElementEnabled('[data-testid=edit-measure-'+ fileContents +']', 6000)
             cy.get('[data-testid=edit-measure-'+ fileContents +']').should('be.enabled')
             cy.get('[data-testid=edit-measure-'+ fileContents +']').click()
         })
