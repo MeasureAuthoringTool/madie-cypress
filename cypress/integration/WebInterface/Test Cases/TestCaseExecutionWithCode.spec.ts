@@ -5,7 +5,6 @@ import {Utilities} from "../../../Shared/Utilities"
 import {MeasuresPage} from "../../../Shared/MeasuresPage"
 import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
 import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
-import {Header} from "../../../Shared/Header"
 import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
 
 let measureName = 'TestMeasure' + Date.now()
@@ -46,12 +45,6 @@ describe('Test Case Execution with codes', () => {
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        //Navigate to Measures Page
-        cy.get(Header.measures).click()
-
-        //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -97,7 +90,7 @@ describe('Test Case Execution with codes', () => {
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'pass')
+        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
     })
 })
