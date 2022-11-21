@@ -443,7 +443,12 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
 
         //save
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).wait(9700).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 20700)
+        Utilities.waitForElementEnabled(MeasureGroupPage.saveMeasureGroupDetails, 20700)
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //confirmed updated / saved msg
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
@@ -538,7 +543,10 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
-        cy.get(TestCasesPage.aceEditor).wait(2000).type(validTestCaseJson)
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 20700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
