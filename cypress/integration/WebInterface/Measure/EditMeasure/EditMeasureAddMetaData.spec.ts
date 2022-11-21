@@ -4,6 +4,7 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {Header} from "../../../../Shared/Header"
 import {Utilities} from "../../../../Shared/Utilities"
+import {LandingPage} from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -103,6 +104,10 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
