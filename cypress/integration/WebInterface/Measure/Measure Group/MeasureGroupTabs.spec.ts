@@ -497,7 +497,15 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
-
+        cy.get('body').then((body) => {
+            if((body.find(MeasureGroupPage.stratAssociationOne).length !=0 )){
+                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 20700)
+                cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
+                cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
+            } else {
+                cy.get(MeasureGroupPage.stratificationTab).click()
+            }
+        })
         //Association -- default value -- score type is Proportion
         cy.get(MeasureGroupPage.stratAssociationOne).should('contain.text', 'Initial Population')
     })
@@ -557,6 +565,15 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')        
         cy.get(MeasureGroupPage.stratificationTab).click()
+        cy.get('body').then((body) => {
+            if((body.find(MeasureGroupPage.stratAssociationOne).length !=0 )){
+                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 20700)
+                cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
+                cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
+            } else {
+                cy.get(MeasureGroupPage.stratificationTab).click()
+            }
+        })
         cy.get(MeasureGroupPage.stratOne).should('contain.text', 'denom')
         cy.get(MeasureGroupPage.stratTwo).should('contain.text', 'denom')
         cy.get(MeasureGroupPage.stratThree).should('contain.text', 'ipp')
@@ -626,6 +643,15 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')        
         cy.get(MeasureGroupPage.stratificationTab).click()
+        cy.get('body').then((body) => {
+            if((body.find(MeasureGroupPage.stratAssociationOne).length !=0 )){
+                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 20700)
+                cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
+                cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
+            } else {
+                cy.get(MeasureGroupPage.stratificationTab).click()
+            }
+        })
         cy.get(MeasureGroupPage.removeStratButton).click({force:true, multiple: true})
 
         //Click on Stratification tab
@@ -633,6 +659,15 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')        
         cy.get(MeasureGroupPage.stratificationTab).click()
+        cy.get('body').then((body) => {
+            if((body.find(MeasureGroupPage.stratAssociationOne).length !=0 )){
+                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 20700)
+                cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
+                cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
+            } else {
+                cy.get(MeasureGroupPage.stratificationTab).click()
+            }
+        })
 
         //Verify Stratifications before save
         cy.get(MeasureGroupPage.stratThree).should('contain.text', 'ipp')
@@ -648,6 +683,15 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')        
         cy.get(MeasureGroupPage.stratificationTab).click()
+        cy.get('body').then((body) => {
+            if((body.find(MeasureGroupPage.stratAssociationOne).length !=0 )){
+                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 20700)
+                cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
+                cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
+            } else {
+                cy.get(MeasureGroupPage.stratificationTab).click()
+            }
+        })
         cy.get(MeasureGroupPage.stratOne).should('contain.text', 'denom')
         cy.get(MeasureGroupPage.stratTwo).should('contain.text', 'denom')
 

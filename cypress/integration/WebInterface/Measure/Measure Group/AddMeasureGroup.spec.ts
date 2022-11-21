@@ -140,6 +140,8 @@ describe('Validate Measure Group additions', () => {
         MeasuresPage.clickEditforCreatedMeasure()
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        //clear current CQL Editor contents
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
         //read and write CQL from flat file
         Utilities.typeFileContents('cypress/fixtures/CQLForFluentFunction.txt', EditMeasurePage.cqlEditorTextBox)
 
@@ -169,10 +171,11 @@ describe('Validate Measure Group additions', () => {
         cy.get(MeasureGroupPage.measureGroupFive).should('be.visible')
 
         Utilities.setMeasureGroupType()
+        Utilities.waitForElementVisible(MeasureGroupPage.measureScoringSelect, 20700)
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
 
-
+        Utilities.waitForElementVisible(MeasureGroupPage.initialPopulationSelect, 20700)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect,'Initial Population')
 
 
@@ -186,15 +189,16 @@ describe('Validate Measure Group additions', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
-        cy.get(MeasureGroupPage.measureGroupOne).should('exist')
-        cy.get(MeasureGroupPage.measureGroupOne).should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupOne).click()
+        cy.get(MeasureGroupPage.measureGroupThree).should('exist')
+        cy.get(MeasureGroupPage.measureGroupThree).should('be.visible')
+        cy.get(MeasureGroupPage.measureGroupThree).click()
 
         cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text','Cohort')
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text','Initial Population')
 
-        cy.get(MeasureGroupPage.measureGroupTwo).should('not.exist')
-        cy.get(MeasureGroupPage.measureGroupThree).should('not.exist')
+        cy.get(MeasureGroupPage.measureGroupOne).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTwo).should('exist')
+        cy.get(MeasureGroupPage.measureGroupThree).should('exist')
         cy.get(MeasureGroupPage.measureGroupFour).should('not.exist')
         cy.get(MeasureGroupPage.measureGroupFive).should('not.exist')
 

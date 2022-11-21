@@ -263,7 +263,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 22700)
         cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false,
@@ -431,6 +431,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         //change association only
         //change value of first IP association
         cy.get(MeasureGroupPage.rdioFirstNum).check()
+        cy.get(MeasureGroupPage.rdioFirstNum).invoke('click')
         cy.get(MeasureGroupPage.rdioFirstNum).should('be.checked')
         cy.get(MeasureGroupPage.rdioFirstDenom).should('not.be.checked')
 

@@ -247,7 +247,9 @@ describe('Validate Measure Group -- scoring and populations', () => {
 
         cy.log('Create Ratio Measure')
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
-
+        
+        //navigate away from measure group page
+        cy.get(Header.mainMadiePageButton).click()
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
         cy.get(LandingPage.myMeasuresTab).should('exist')
