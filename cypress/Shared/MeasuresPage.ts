@@ -6,7 +6,6 @@ export class MeasuresPage {
     public static readonly measureListTitles = '[data-testid=table-body] > :nth-child(1)'
     public static readonly allMeasuresTab = '[data-testid=all-measures-tab]'
     public static readonly searchInputBox = '[data-testid="searchMeasure-input"]'
-    public static readonly viewMeasureButton = '.action'
 
     //Pagination
     public static readonly paginationNextButton = '[data-testid="NavigateNextIcon"]'
