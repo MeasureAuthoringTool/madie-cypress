@@ -7,7 +7,7 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {Global} from "../../../../Shared/Global";
+import {Global} from "../../../../Shared/Global"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -86,13 +86,6 @@ describe('Measure Observation Expected values', () => {
 
         //Create Ratio measure group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
-        MeasuresPage.clickEditforCreatedMeasure()
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        //Select null values for Denominator & Numerator Exclusion
-        cy.get(MeasureGroupPage.denominatorExclusionSelect).click()
-        cy.get('.MuiList-root > [data-value=""]').click()
-        cy.get(MeasureGroupPage.numeratorExclusionSelect).click()
-        cy.get('.MuiList-root > [data-value=""]').click()
 
         //Add Denominator Observation
         cy.log('Adding Measure Observations')
