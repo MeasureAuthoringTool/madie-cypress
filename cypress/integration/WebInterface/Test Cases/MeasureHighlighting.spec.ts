@@ -5,7 +5,6 @@ import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
 import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
 import {TestCasesPage} from "../../../Shared/TestCasesPage"
 import {Utilities} from "../../../Shared/Utilities"
-import {MeasuresPage} from "../../../Shared/MeasuresPage";
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -44,9 +43,6 @@ describe('Measure Highlighting', () => {
 
         //Add Measure Group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
-
-        //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
