@@ -59,8 +59,8 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
-        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
 
         //Click on the measure group tab
@@ -93,8 +93,8 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
-        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
 
         //Click on the measure group tab
@@ -182,8 +182,8 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
-        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
 
         //Click on the measure group tab
@@ -347,8 +347,8 @@ describe('Validate Population Basis', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
-        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
 
         //Click on the measure group tab

@@ -121,8 +121,8 @@ describe('Measure Observations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
-        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
 
         //Click on the measure group tab
@@ -267,8 +267,8 @@ describe('Measure Observations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
-        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
 
         //Click on the measure group tab
@@ -431,8 +431,8 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
-        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
 
         //Click on the measure group tab
@@ -570,8 +570,8 @@ describe('Measure Observation - Expected Values',  () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
-        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
 
         //Click on the measure group tab

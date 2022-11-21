@@ -61,8 +61,8 @@ describe('Validate Measure Group', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
-        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
 
         //Click on the measure group tab
@@ -135,8 +135,8 @@ describe('Validate Measure Group', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
-        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
 
         //Click on the measure group tab
@@ -195,8 +195,8 @@ describe('Validate Measure Group', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
-        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
 
         //Click on the measure group tab
@@ -263,8 +263,8 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 22700)
-        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 22700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false,
             'Surgical Absence of Cervix', 'Surgical Absence of Cervix',
@@ -475,8 +475,8 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
-        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
 
         //Click on the measure group tab
@@ -615,8 +615,8 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
-        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
         OktaLogin.Login()
