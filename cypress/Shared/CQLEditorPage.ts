@@ -4,6 +4,9 @@ export class CQLEditorPage {
     //success save message without errors
     public static readonly successfulCQLSaveNoErrors = '[data-testid="generic-success-text-header"]'
 
+    //general alert message on CQL save results
+    public static readonly cqlSaveResultsAlertMsg = '[class="madie-alert success"]'
+
     //Error/warning marker inside of the CQL Editor window
     public static readonly errorInCQLEditorWindow = 'div.ace_gutter-cell.ace_error'
     public static readonly warningInCQLEditorWindow = '.ace_warning'

@@ -109,7 +109,7 @@ export class MeasureGroupPage {
 
     //Continuous Variable Measure Observation
     public static readonly MOToCodeValue = '[data-value="ToCode"]'
-    //<li class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-1km1ehz" tabindex="-1" role="option" aria-selected="false" data-value="ToCode">ToCode<span class="MuiTouchRipple-root css-w0pj6f"></span></li>
+    
     public static readonly cvMeasureObservation = '[id="measure-observation-cv-obs"]'
     public static readonly cvAggregateFunction = '[id="measure-observation-aggregate-cv-obs"]'
 

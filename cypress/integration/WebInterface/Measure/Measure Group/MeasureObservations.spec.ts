@@ -7,6 +7,7 @@ import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
+import {LandingPage} from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -43,8 +44,11 @@ describe('Measure Observations', () => {
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -79,8 +83,11 @@ describe('Measure Observations', () => {
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
         //navigate back to the measure group page
-        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -106,11 +113,21 @@ describe('Measure Observations', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
 
+        //save CQL on measure
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        //Create Measure Group
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+
+
+        //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         Utilities.setMeasureGroupType()
@@ -141,8 +158,11 @@ describe('Measure Observations', () => {
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
         //navigate back to the measure group page
-        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -159,8 +179,11 @@ describe('Measure Observations', () => {
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
         //navigate back to the measure group page
-        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -194,8 +217,11 @@ describe('Measure Observations', () => {
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
         //navigate back to the measure group page
-        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -230,12 +256,21 @@ describe('Measure Observations', () => {
         cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
-
+        //save CQL on measure
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        //Navigate to Measure Group tab
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+
+
+        //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.setMeasureGroupType()
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
@@ -280,8 +315,11 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
         //navigate back to the measure group page
-        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -316,8 +354,11 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
         //navigate back to the measure group page
-        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -335,7 +376,10 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
-        cy.wait(9700)
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
         cy.get(MeasuresPage.allMeasuresTab).should('exist')
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
@@ -376,11 +420,21 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
 
+        //save CQL on measure
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        //Create Measure Group
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+
+
+        //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.setMeasureGroupType()
 
@@ -409,8 +463,11 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
         //navigate back to the measure group page
-        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -427,7 +484,10 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
-        cy.wait(9700)
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
         cy.get(MeasuresPage.allMeasuresTab).should('exist')
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
@@ -496,12 +556,21 @@ describe('Measure Observation - Expected Values',  () => {
         cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
-
+        //save CQL on measure
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        //Create Measure Group
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+
+
+        //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         Utilities.setMeasureGroupType()
@@ -583,8 +652,11 @@ describe('Measure Observation - Expected Values',  () => {
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
         //navigate back to the measure group page
-        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.measureGroupsTab).click()
 

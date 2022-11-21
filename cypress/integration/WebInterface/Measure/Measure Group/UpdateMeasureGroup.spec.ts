@@ -54,13 +54,19 @@ describe('Validate Measure Group', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
+
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+
 
         //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -122,13 +128,19 @@ describe('Validate Measure Group', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
+
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+
 
         //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -176,13 +188,19 @@ describe('Validate Measure Group', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
+
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+
 
         //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -244,7 +262,9 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false,
             'Surgical Absence of Cervix', 'Surgical Absence of Cervix',
@@ -442,14 +462,19 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, {delay:50})
         })
         //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+
 
         //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -580,7 +605,9 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
         OktaLogin.Login()

@@ -4,7 +4,7 @@ import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {Utilities} from "../../../../Shared/Utilities"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName1 = 'TestLibrary' + Date.now()
@@ -46,10 +46,19 @@ describe('Validate Measure Group additions', () => {
         //read and write CQL from flat file
         Utilities.typeFileContents('cypress/fixtures/EXM124v7QICore4Entry.txt', EditMeasurePage.cqlEditorTextBox)
         //save CQL on measure
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
+
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+
 
         //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 

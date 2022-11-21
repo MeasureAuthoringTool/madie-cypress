@@ -7,7 +7,8 @@ import {Utilities} from "../../../../Shared/Utilities"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {TestCaseJson} from "../../../../Shared/TestCaseJson"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {Global} from "../../../../Shared/Global";
+import {Global} from "../../../../Shared/Global"
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 
 let measureOne = 'TestMeasure' + Date.now()
 let CqlLibraryName1 = 'TestLibrary' + Date.now()
@@ -33,7 +34,9 @@ describe('Validate Measure Group deletion functionality', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(13500)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null,null,null,null,
             null,'Procedure')
@@ -291,7 +294,9 @@ describe('Ownership test when deleting groups', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(true, true, null,
             null, null, 'Procedure')

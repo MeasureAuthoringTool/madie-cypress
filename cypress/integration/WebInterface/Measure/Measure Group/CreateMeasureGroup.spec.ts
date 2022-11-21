@@ -6,7 +6,9 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {Utilities} from "../../../../Shared/Utilities"
 import {Header} from "../../../../Shared/Header"
 import assert = require("assert")
-import {Global} from "../../../../Shared/Global";
+import {Global} from "../../../../Shared/Global"
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import {LandingPage} from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -50,17 +52,25 @@ describe('Validate Measure Group -- scoring and populations', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type('{backspace}')
         }
         //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
+
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+
 
         //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Message appears at the top of the Population Criteria tab / page
-        cy.get(MeasureGroupPage.CQLHasErrorMsg).wait(8000).should('exist')
+        Utilities.waitForElementVisible(MeasureGroupPage.CQLHasErrorMsg, 20700)
+        cy.get(MeasureGroupPage.CQLHasErrorMsg).should('exist')
         cy.get(MeasureGroupPage.CQLHasErrorMsg).should('be.visible')
         cy.get(MeasureGroupPage.CQLHasErrorMsg).should('contain.text', 'Please complete the CQL Editor process before continuing')
     })
@@ -76,13 +86,19 @@ describe('Validate Measure Group -- scoring and populations', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
+
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+
 
         //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -125,8 +141,11 @@ describe('Validate Measure Group -- scoring and populations', () => {
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -155,15 +174,20 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.readFile('cypress/fixtures/GenericCQLBoolean.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
-
         //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
+
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+
 
         //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -204,8 +228,11 @@ describe('Validate Measure Group -- scoring and populations', () => {
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        cy.wait(9700)
         MeasuresPage.clickEditforCreatedMeasure()
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -221,7 +248,10 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.log('Create Ratio Measure')
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
 
-        cy.wait(9700)
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -308,13 +338,19 @@ describe('Validate Population Basis', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(8700)
+
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.cqlSaveResultsAlertMsg, 20700)
+        cy.get(CQLEditorPage.cqlSaveResultsAlertMsg).should('be.visible')
+
 
         //Click on the measure group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
