@@ -453,7 +453,10 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.MOToCodeValue).wait(1000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.MOToCodeValue, 20700)
+        cy.get(MeasureGroupPage.MOToCodeValue).should('exist')
+        cy.get(MeasureGroupPage.MOToCodeValue).should('be.visible')
+        cy.get(MeasureGroupPage.MOToCodeValue).click()
         cy.get(MeasureGroupPage.cvAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
