@@ -124,7 +124,61 @@ describe('Measure Sharing', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //Create New Test case
-        TestCasesPage.createTestCase(testCaseTitle,testCaseDescription,testCaseSeries,testCaseJson)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+
+    })
+})
+
+describe('Delete Test Case with Shared user', () => {
+
+    beforeEach('Create Measure and Set Access Token', () => {
+
+        cy.setAccessTokenCookie()
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+    })
+
+    afterEach('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        OktaLogin.Logout()
+    })
+
+    it('Verify Test Case can be deleted by the shared user', () => {
+
+        //Share Measure with ALT User
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        'api-key': measureSharingAPIKey
+                    },
+                    method: 'PUT'
+
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                })
+            })
+        })
+
+        //Login as Alt User
+        OktaLogin.AltLogin()
+
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        cy.get(TestCasesPage.selectTestCaseDropdownBtn).click()
+        cy.get(TestCasesPage.deleteTestCaseBtn).click()
+
+        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCaseTitle + '?')
+        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+
+        cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCaseTitle)
 
     })
 })
