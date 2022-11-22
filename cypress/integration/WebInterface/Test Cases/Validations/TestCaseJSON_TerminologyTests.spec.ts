@@ -32,7 +32,9 @@ describe('Warning modal on Test Case JSON Editor', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(4500)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'Boolean')
         OktaLogin.Login()
@@ -78,6 +80,10 @@ describe('Warning modal on Test Case JSON Editor', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
+        //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 27700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.get(TestCasesPage.aceEditor).type('Warning Modal Test')
 
         //Warning Modal displayed when user navigated to Measure Group tab without saving changes
@@ -113,7 +119,9 @@ describe('JSON Rescource ID tests', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(17000)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
         OktaLogin.Login()
@@ -203,6 +211,9 @@ describe('JSON Rescource ID tests', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.get(TestCasesPage.aceEditor).type(missingResourceIDTCJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -293,6 +304,9 @@ describe('JSON Rescource ID tests', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.get(TestCasesPage.aceEditor).type(dupResourceIDTCJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -326,7 +340,9 @@ describe('JSON Rescource ID tests - Proportion Score Type', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(17000)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
         OktaLogin.Login()
@@ -405,6 +421,9 @@ describe('JSON Rescource ID tests - Proportion Score Type', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -435,7 +454,9 @@ describe('JSON Rescource ID tests -- CV', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(17000)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         //MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
         OktaLogin.Login()
@@ -495,6 +516,10 @@ describe('JSON Rescource ID tests -- CV', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 27700)
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
     
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
