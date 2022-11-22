@@ -32,7 +32,6 @@ export class TestCasesPage {
     public static readonly testCaseTitle = '[data-testid="test-case-title"]'
     public static readonly executeTestCaseButton = '[data-testid="execute-test-cases-button"]'
     public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
-    public static readonly secondTestCaseStatus = '[class="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorError MuiChip-filledError css-c3eeld"]'
     public static readonly testCaseTitleInlineError = '[data-testid="title-helper-text"]'
     public static readonly testCaseJsonValidationErrorBtn = '[data-testid="show-json-validation-errors-button"]'
     public static readonly testCaseJsonValidationDisplayList = '[data-testid="json-validation-errors-list"]'
