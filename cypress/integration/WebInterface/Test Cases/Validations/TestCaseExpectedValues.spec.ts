@@ -14,7 +14,7 @@ let randValue = (Math.floor((Math.random() * 1000) + 1))
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
-let testCaseJson = TestCaseJson.TestCaseJson_Valid_w_All_Encounter
+let testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 let newMeasureName = measureName + randValue
 let newCqlLibraryName = CqlLibraryName + randValue
 
@@ -23,6 +23,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
     beforeEach('Create measure, measure group, test case and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
     })
 
@@ -41,9 +42,6 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
         //Create Ratio Measure group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
-        //Create Test Case
-        MeasuresPage.clickEditforCreatedMeasure()
-        TestCasesPage.createTestCase(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
         //Add Expected values for Test Case
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -91,9 +89,6 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
         //Create Ratio Measure group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
-        //Create Test Case
-        MeasuresPage.clickEditforCreatedMeasure()
-        TestCasesPage.createTestCase(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
         //Add Expected values for Test Case
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -149,15 +144,14 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.testCaseNUMERExpected).should('not.contain.value')
     })
 
-    it('Verify if Measure group is deleted, that group no longer appears in the edit test case page', () => {
+    //Skipping until MAT-5065 is fixed
+    it.skip('Verify if Measure group is deleted, that group no longer appears in the edit test case page', () => {
 
         //Create Ratio Measure group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
-        //Create Test Case
-        MeasuresPage.clickEditforCreatedMeasure()
-        TestCasesPage.createTestCase(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
         //Navigate to Edit Test Case page and assert Measure group
+        cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected / Actual tab
@@ -177,7 +171,8 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(MeasureGroupPage.deleteGroupbtn).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.deleteGroupbtn).click()
         cy.get(MeasureGroupPage.yesDeleteModalbtn).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.yesDeleteModalbtn).click()
+        cy.get(MeasureGroupPage.yesDeleteModalbtn).click().wait(1000)
+        cy.get('[data-testid="save-measure-group-validation-message"]').should('contain.text', 'You must set all required Populations.')
 
         //Navigate to Edit Test Case page and assert Measure group after deletion
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -189,7 +184,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('not.exist')
-        cy.get('[class="GroupPopulations___StyledSpan-sc-1752rtp-0 glAlCW"]').should('contain.text', 'No data for current scoring. Please make sure at least one measure group has been created.')
+        cy.get('[class="GroupPopulations___StyledSpan-sc-1752rtp-0 jriTet"]').should('contain.text', 'No data for current scoring. Please make sure at least one measure group has been created.')
     })
 
     it('Verify if group populations are added/deleted, test case expected values will be updated', () => {
@@ -219,9 +214,6 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully')
-
-        //Create Test Case
-        TestCasesPage.createTestCase(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
         //Add Expected values for Test Case
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -269,9 +261,6 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
         //Create Ratio Measure group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
-        //Create Test Case
-        MeasuresPage.clickEditforCreatedMeasure()
-        TestCasesPage.createTestCase(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
         //Add Measure observation to the Measure group and remove Denominator Exclusion value
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -342,8 +331,6 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
         //Create CV Measure Group
         MeasureGroupPage.createMeasureGroupforContinuousVariableMeasure()
-        //Create Test Case
-        TestCasesPage.createTestCase(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
         //Verify Stratification Expected values before adding stratification
         cy.get(EditMeasurePage.testCasesTab).click()
