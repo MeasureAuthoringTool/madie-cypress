@@ -19,7 +19,6 @@ describe('Read only for measure, measure group, and test cases that user does no
 
     before('Create Measure, Measure Group, and Test Case with alt user', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL, true, true)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(true, true, 'ipp', 'num', 'denom')
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCSeries, TCDescription, '', true, true)
@@ -45,7 +44,7 @@ describe('Read only for measure, measure group, and test cases that user does no
     it('Measure fields on detail page are not editable', () =>{
 
         //page loads
-        cy.location('pathname', {timeout: 60000}).should('include', '/measures');
+        cy.location('pathname', {timeout: 60000}).should('include', '/measures')
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 3000)
         Utilities.waitForElementEnabled(LandingPage.myMeasuresTab, 3000)
 
@@ -56,7 +55,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
 
-        //edit the measure that was not created by current measure
+        //edit the measure that was not created by logged in user
         MeasuresPage.clickEditforCreatedMeasure(true)
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
 
@@ -122,7 +121,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
 
-        //edit the measure that was not created by current measure
+        //edit the measure that was not created by logged in owner
         MeasuresPage.clickEditforCreatedMeasure(true)
 
         //confirm that the test case tab is available and click on it
@@ -145,6 +144,59 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(TestCasesPage.testCaseTitle).should('have.attr', 'disabled', 'disabled')
         cy.get(TestCasesPage.testCaseDescriptionTextBox).should('have.attr', 'disabled', 'disabled')
         cy.get('[id="test-case-series"]').should('have.attr', 'disabled', 'disabled')
+
+    })
+
+    it('Fields on Measure Group page are not editable', () => {
+
+        //page loads
+        cy.location('pathname', {timeout: 60000}).should('include', '/measures')
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 3000)
+        Utilities.waitForElementEnabled(LandingPage.myMeasuresTab, 3000)
+
+        //navigate to the all measures tab
+        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 3000)
+        cy.get(LandingPage.allMeasuresTab).should('be.visible')
+        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 3000)
+        cy.get(LandingPage.allMeasuresTab).should('be.enabled')
+        cy.get(LandingPage.allMeasuresTab).click()
+
+        //edit the measure group that was not created by logged in owner
+        MeasuresPage.clickEditforCreatedMeasure(true)
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Verify that the Add Population Criteria button is not shown
+        cy.get(MeasureGroupPage.addMeasureGroupButton).should('not.exist')
+
+        //Group Type, Population Basis fields are read only
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('not.be.enabled')
+        cy.get(MeasureGroupPage.popBasis).should('not.be.enabled')
+        cy.get(MeasureGroupPage.measureScoringSelect).should('not.be.enabled')
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).should('not.be.enabled')
+
+        //Population fields are read only
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'ipp').should('not.be.enabled')
+        cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', 'denom').should('not.be.enabled')
+        cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'num').should('not.be.enabled')
+        cy.get(MeasureGroupPage.denominatorExceptionSelect).should('not.be.enabled')
+        cy.get(MeasureGroupPage.denominatorExclusionSelect).should('not.be.enabled')
+        cy.get(MeasureGroupPage.numeratorExclusionSelect).should('not.be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('not.exist')
+        cy.get(MeasureGroupPage.deleteGroupbtn).should('not.exist')
+
+        //Stratification fields are read only
+        cy.get(MeasureGroupPage.stratificationTab).click()
+        cy.get(MeasureGroupPage.stratOne).should('not.be.enabled')
+        cy.get(MeasureGroupPage.stratAssociationOne).should('not.be.enabled')
+        cy.get(MeasureGroupPage.stratDescOne).should('not.be.enabled')
+        cy.get(MeasureGroupPage.stratTwo).should('not.be.enabled')
+        cy.get(MeasureGroupPage.stratAssociationTwo).should('not.be.enabled')
+        cy.get(MeasureGroupPage.stratDescTwo).should('not.be.enabled')
+
+        //Reporting fields are read only
+        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get(MeasureGroupPage.rateAggregation).should('not.be.enabled')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('not.be.enabled')
 
     })
 })
