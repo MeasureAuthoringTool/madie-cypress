@@ -66,7 +66,7 @@ describe('Edit Measure', () => {
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.enabled')
         
         //save Steward & Developers
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).click()
+        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).click({force:true})
 
         //validate success message
         cy.get(EditMeasurePage.measureStewardDevelopersSuccessMessage).should('exist')
