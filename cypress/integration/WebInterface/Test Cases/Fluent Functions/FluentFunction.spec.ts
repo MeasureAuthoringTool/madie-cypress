@@ -95,7 +95,6 @@ describe('Fluent Function Capability', () => {
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully!')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
