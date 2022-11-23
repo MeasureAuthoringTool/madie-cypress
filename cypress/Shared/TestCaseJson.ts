@@ -100,7 +100,7 @@ export class TestCaseJson {
     ' "text": "Lizzy Health","family": "Health","given": [ "Lizzy" ]} ],"gender": "female","birthDate": "2000-10-11"}} ]}'
 
 
-    public static readonly TestCaseJson_CohortPatientBoolean_PASS ='{{}"resourceType": "Bundle", "id": "ip-pass-Inpatient' +
+    public static readonly TestCaseJson_CohortPatientBoolean_PASS ='{"resourceType": "Bundle", "id": "ip-pass-Inpatient' +
         'Encounter", "meta": { "versionId": "3", "lastUpdated": "2022-09-14T12:38:39.889+00:00" }, "type": "collection", ' +
         '"entry": [ { "fullUrl": "http://MyHealthcare.com/Patient/609bde3598086b0a16d79fc6", "resource": { "id": "609bde3' +
         '598086b0a16d79fc6", "resourceType": "Patient", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDe' +
@@ -133,7 +133,7 @@ export class TestCaseJson {
         '"system": "http://holycrosshospital.com/location", "value": "4989ju789fn93bvy562loe87c" } ], "status": "active", "' +
         'name": "North Wing, second floor" } } ] }'
 
-    public static readonly TestCaseJson_CohortEpisodeWithStrat_PASS ='{{}"resourceType": "Bundle", "id": "ip-pass-Encounter", ' +
+    public static readonly TestCaseJson_CohortEpisodeWithStrat_PASS ='{"resourceType": "Bundle", "id": "ip-pass-Encounter", ' +
         '"meta": { "versionId": "3", "lastUpdated": "2022-09-14T12:38:39.889+00:00" }, "type": "collection", "entry": [ { ' +
         '"fullUrl": "http://MyHealthcare.com/Patient/609bde3598086b0a16d79fc6", "resource": { "id": "609bde3598086b0a16d79' +
         'fc6", "resourceType": "Patient", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-' +
@@ -148,7 +148,7 @@ export class TestCaseJson {
         ': "http://snomed.info/sct", "code": "103391001", "display": "Urgency" } ] }, "period": { "start": "2022-07-15T08:00' +
         ':00+00:00", "end": "2022-07-15T09:00:00+00:00" } } } ] }'
 
-    public static readonly CohortEpisodeEncounter_PASS ='{{}"resourceType": "Bundle", "id": "ip-pass-InpatientEncounter", ' +
+    public static readonly CohortEpisodeEncounter_PASS ='{"resourceType": "Bundle", "id": "ip-pass-InpatientEncounter", ' +
         '"meta": { "versionId": "3", "lastUpdated": "2022-09-14T12:38:39.889+00:00" }, "type": "collection", "entry": [ ' +
         '{ "fullUrl": "http://MyHealthcare.com/Patient/609bde3598086b0a16d79fc6", "resource": { "id": "609bde3598086b0a1' +
         '6d79fc6", "resourceType": "Patient", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/' +
@@ -181,7 +181,7 @@ export class TestCaseJson {
         'cation" ] }, "identifier": [ { "use": "official", "system": "http://holycrosshospital.com/location", "value": "' +
         '4989ju789fn93bvy562loe87c" } ], "status": "active", "name": "North Wing, second floor" } } ] }'
 
-    public static readonly RatioPatientSingleIPNoMO_IPP_PASS ='{{}"resourceType": "Bundle", "id": "Denom-Pass-RatioPatie' +
+    public static readonly RatioPatientSingleIPNoMO_IPP_PASS ='{"resourceType": "Bundle", "id": "Denom-Pass-RatioPatie' +
         'ntSingleIPNoMO", "meta": { "versionId": "1", "lastUpdated": "2022-09-14T15:14:42.152+00:00" }, "type": "collec' +
         'tion", "entry": [ { "fullUrl": "609bde3598086b0a16d79fc6", "resource": { "resourceType": "Patient", "id": "609' +
         'bde3598086b0a16d79fc6", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patie' +
@@ -214,7 +214,7 @@ export class TestCaseJson {
         '": "183452005" } ] } ], "subject": { "reference": "Patient/609bde3598086b0a16d79fc6" }, "period": { "start": "201' +
         '2-01-16T08:00:00+00:00", "end": "2012-02-15T09:00:00+00:00" } } }] }'
 
-    public static readonly RatioPatientSingleIPNoMO_DRC_PASS ='{{}"resourceType": "Bundle", "id": "Numex-Pass-RatioPatien' +
+    public static readonly RatioPatientSingleIPNoMO_DRC_PASS ='{"resourceType": "Bundle", "id": "Numex-Pass-RatioPatien' +
         'tMultiIPWithMO", "meta": { "versionId": "1", "lastUpdated": "2022-09-14T15:14:42.152+00:00" }, "type": "collec' +
         'tion", "entry": [ { "fullUrl": "609bde3598086b0a16d79fc6", "resource": { "resourceType": "Patient", "id": "609b' +
         'de3598086b0a16d79fc6", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient' +
@@ -248,7 +248,7 @@ export class TestCaseJson {
         'isplay": "Unscheduled (qualifier value)" } ] }, "subject": { "reference": "Patient/609bde3598086b0a16d79fc6" },' +
         ' "period": { "start": "2022-01-16T08:00:00+00:00", "end": "2022-02-15T09:00:00+00:00" } } }] }'
 
-    public static readonly RatioEpisodeSingleIPNoMO_IPP_PASS ='{{}"resourceType": "Bundle", "id": "Denom-Pass-RatioEpisode' +
+    public static readonly RatioEpisodeSingleIPNoMO_IPP_PASS ='{"resourceType": "Bundle", "id": "Denom-Pass-RatioEpisode' +
         'MultiIPWithMO", "meta": { "versionId": "1", "lastUpdated": "2022-09-14T15:14:42.152+00:00" }, "type": "collectio' +
         'n", "entry": [ { "fullUrl": "609bde3598086b0a16d79fc6", "resource": { "resourceType": "Patient", "id": "609bde35' +
         '98086b0a16d79fc6", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient" ] }' +
@@ -280,7 +280,7 @@ export class TestCaseJson {
         'nomed.info/sct", "code": "183452005" } ] } ], "subject": { "reference": "Patient/609bde3598086b0a16d79fc6" }, "period"' +
         ': { "start": "2012-01-16T08:00:00+00:00", "end": "2012-02-15T09:00:00+00:00" } } }] }'
 
-    public static readonly RatioEpisodeSingleIPNoMO_MultipleEpisodes_PASS ='{{}"resourceType": "Bundle", "id": "2Enc-1Num' +
+    public static readonly RatioEpisodeSingleIPNoMO_MultipleEpisodes_PASS ='{"resourceType": "Bundle", "id": "2Enc-1Num' +
         'ex-RatioEpisodeMultiIPWithMO", "meta": { "versionId": "1", "lastUpdated": "2022-09-14T15:14:42.152+00:00" }, "t' +
         'ype": "collection", "entry": [ { "fullUrl": "609bde3598086b0a16d79fc6", "resource": { "resourceType": "Patient"' +
         ', "id": "609bde3598086b0a16d79fc6", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qi' +
@@ -320,7 +320,7 @@ export class TestCaseJson {
         ' "reference": "Patient/609bde3598086b0a16d79fc6" }, "period": { "start": "2022-01-16T08:00:00+00:00", "end": "2022' +
         '-02-15T09:00:00+00:00" } } }] }'
 
-    public static readonly CVPatientWithMO_PASS = '{{}"resourceType": "Bundle","id": "IP-Pass-CVPatient","meta": {"versionId": "1",' +
+    public static readonly CVPatientWithMO_PASS = '{"resourceType": "Bundle","id": "IP-Pass-CVPatient","meta": {"versionId": "1",' +
         '"lastUpdated": "2022-09-14T15:14:42.152+00:00"},"type": "collection","entry": [  {"fullUrl": "609bde3598086b0a16d79fc6",' +
         '"resource": {"resourceType": "Patient","id": "609bde3598086b0a16d79fc6","meta": ' +
         '{"profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient" ]  }, "text": {"status": "generated",' +
@@ -348,7 +348,7 @@ export class TestCaseJson {
         '"display" : "inpatient encounter"},"type": [ {"coding": [ {"system": "http://snomed.info/sct","code": "183452005"} ]} ],"subject": ' +
         '{"reference": "Patient/609bde3598086b0a16d79fc6"},"period": {"start": "2012-01-16T08:00:00+00:00","end": "2012-02-15T09:00:00+00:00"} }}]}'
 
-    public static readonly CVEpisodeWithMO_PASS = '{{}"resourceType": "Bundle","id": "MsrPop-Pass-CVEpisode","meta": {"versionId": "1",' +
+    public static readonly CVEpisodeWithMO_PASS = '{"resourceType": "Bundle","id": "MsrPop-Pass-CVEpisode","meta": {"versionId": "1",' +
         '"lastUpdated": "2022-09-14T15:14:42.152+00:00" },"type": "collection","entry": [ {"fullUrl": "609bde3598086b0a16d79fc6","resource": ' +
         '{"resourceType": "Patient","id": "609bde3598086b0a16d79fc6","meta": {"profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/' +
         'qicore-patient" ]},"text": {"status": "generated","div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\"><div class=\\"hapiHeaderText\\">' +
@@ -376,7 +376,7 @@ export class TestCaseJson {
         '"Unscheduled (qualifier value)"} ]},"subject": {"reference":"Patient/609bde3598086b0a16d79fc6"},"period": {"start":"2022-01-16T08:00:00+00:00",' +
         '"end": "2022-02-15T09:00:00+00:00"} }}]}'
 
-    public static readonly CVEpisodeWithStratification_PASS = '{{}"resourceType":"Bundle","id": "ip-pass-Encounter","meta": {"versionId": "3",' +
+    public static readonly CVEpisodeWithStratification_PASS = '{"resourceType":"Bundle","id": "ip-pass-Encounter","meta": {"versionId": "3",' +
         '"lastUpdated": "2022-09-14T12:38:39.889+00:00"},"type": "collection","entry": [{"fullUrl": "http://MyHealthcare.com/Patient/609bde3598086b0a16d79fc6",' +
         '"resource": {"id": "609bde3598086b0a16d79fc6","resourceType": "Patient","meta": {"profile": ["http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"' +
         ']},"identifier": [{"type": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v2-0203","code": "MR"}]},"system": "http://myGoodHealthcare.com/MRN",' +
@@ -388,7 +388,7 @@ export class TestCaseJson {
         '[{"system": "http://snomed.info/sct","code": "103391001","display": "Urgency"}]},"period": {"start": "2022-07-15T08:00:00+00:00","end":' +
         ' "2022-07-15T09:00:00+00:00"}}}]}'
 
-    public static readonly CVPatientWithStratification_PASS = '{{}"resourceType": "Bundle","id": "IP-Pass-CVPatient","meta": {"versionId": "1",' +
+    public static readonly CVPatientWithStratification_PASS = '{"resourceType": "Bundle","id": "IP-Pass-CVPatient","meta": {"versionId": "1",' +
         '"lastUpdated": "2022-09-14T15:14:42.152+00:00" },"type": "collection","entry": [ {"fullUrl": "609bde3598086b0a16d79fc6","resource": ' +
         '{"resourceType": "Patient","id": "609bde3598086b0a16d79fc6","meta": {"profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/' +
         'qicore-patient" ]},"text": {"status": "generated","div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\"><div class=\\"hapiHeaderText\\">' +
@@ -415,7 +415,7 @@ export class TestCaseJson {
         ' } ]} ],"subject": {"reference": "Patient/609bde3598086b0a16d79fc6"},"period": {"start": "2012-01-16T08:00:00+00:00","end": ' +
         '"2012-02-15T09:00:00+00:00" }}}]}'
 
-    public static readonly ProportionEpisode_PASS = '{{}"resourceType": "Bundle","id": "IPP-Pass-ProportionEpisode","meta": {"versionId":' +
+    public static readonly ProportionEpisode_PASS = '{"resourceType": "Bundle","id": "IPP-Pass-ProportionEpisode","meta": {"versionId":' +
         ' "1","lastUpdated": "2022-09-14T15:14:42.152+00:00"},"type": "collection","entry": [ {"fullUrl": "609bde3598086b0a16d79fc6",' +
         '"resource": {"resourceType": "Patient","id": "609bde3598086b0a16d79fc6","meta": {"profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient" ]' +
         '},"text": {"status": "generated","div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\"><div class=\\"hapiHeaderText\\">LocationPeriodStartTimeMissing ' +

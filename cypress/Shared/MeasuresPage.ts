@@ -1,4 +1,4 @@
-import {Utilities} from "../Shared/Utilities"
+import {Utilities} from "./Utilities"
 
 
 export class MeasuresPage {
