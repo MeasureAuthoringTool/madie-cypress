@@ -183,8 +183,8 @@ describe('Measure: CQL Editor', () => {
             '"status":404,"error":"Not Found","path":"/api/fhir/libraries/cql"}"')
 
     })
-
-    it('Graceful error msg if model is missing in CQL', () => {
+    // skipping due to bug 5077
+    it.skip('Graceful error msg if model is missing in CQL', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -198,6 +198,9 @@ describe('Measure: CQL Editor', () => {
 
         //save the value in the CQL Editor
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Validate message on page
         CQLEditorPage.validateSuccessfulCQLUpdate()
@@ -214,7 +217,7 @@ describe('Measure: CQL Editor', () => {
         ('show').click({force:true, multiple: true})
 
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text',
-            'ELM: 1:37 | Internal translator error.')
+            'ELM: 1:37 | Model Type and version are required')
 
     })
 
@@ -232,6 +235,9 @@ describe('Measure: CQL Editor', () => {
 
         //save the value in the CQL Editor
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')        
 
         //Validate message on page
         CQLEditorPage.validateSuccessfulCQLUpdate()
