@@ -464,6 +464,6 @@ export class Utilities {
                 cy.wrap($ele).click()
             }
         })
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').wait(500).type('{enter}')
     }
 }
