@@ -7,7 +7,7 @@ import {Utilities} from "../../../../Shared/Utilities"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {Global} from "../../../../Shared/Global";
+import {Global} from "../../../../Shared/Global"
 
 let measureName = 'TestMeasure' + Date.now()
 let newMeasureName = ''
