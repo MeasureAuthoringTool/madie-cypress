@@ -144,8 +144,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.testCaseNUMERExpected).should('not.contain.value')
     })
 
-    //Skipping until MAT-5065 is fixed
-    it.skip('Verify if Measure group is deleted, that group no longer appears in the edit test case page', () => {
+    it('Verify if Measure group is deleted, that group no longer appears in the edit test case page', () => {
 
         //Create Ratio Measure group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
