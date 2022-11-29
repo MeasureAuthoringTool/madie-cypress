@@ -212,7 +212,7 @@ describe('Run / Execute Test Case button validations', () => {
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'An error occurred with the Test Case JSON while updating the test case')
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
 
         cy.log('JSON added to test case successfully')
 
