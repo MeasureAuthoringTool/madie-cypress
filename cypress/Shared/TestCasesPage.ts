@@ -3,7 +3,7 @@ import { Environment } from "./Environment"
 import {Utilities} from "./Utilities"
 
 export class TestCasesPage {
-
+    
     //tabs on the test case page
     public static readonly cqlHasErrorsMsg = '[data-testid="test-case-cql-has-errors-message"]'
     public static readonly detailsTab = '[data-testid="details-tab"]'

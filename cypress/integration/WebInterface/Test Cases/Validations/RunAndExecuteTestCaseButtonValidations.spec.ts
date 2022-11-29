@@ -15,6 +15,9 @@ let testCaseTitle = 'test case title'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 let invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
+let warningTestCaseJson = TestCaseJson.TestCaseJson_with_warnings
+let errorTestCaseJSON_no_ResourceID = TestCaseJson.TestCaseJson_missingResourceIDs
+let err_and_warningTestCaseJson = TestCaseJson.TestCaseJson_with_warning_and_error
 let testCaseSeries = 'SBTestSeries'
 let measureCQL = MeasureCQL.CQL_Multiple_Populations
 let mesureCQLPFTests = MeasureCQL.CQL_Populations
@@ -206,6 +209,9 @@ describe('Run / Execute Test Case button validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')        
         cy.get(TestCasesPage.aceEditor).type(invalidTestCaseJson)
 
         cy.get(TestCasesPage.detailsTab).click()
@@ -227,6 +233,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.detailsTab).click()
 
         cy.get(TestCasesPage.runTestButton).should('be.disabled')
+        
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -408,6 +415,10 @@ describe('Run / Execute Test Case button validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
+        //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')        
         cy.get(TestCasesPage.aceEditor).type(invalidTestCaseJson)
 
         //Run Test case before save
@@ -665,6 +676,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
+        //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')        
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -782,6 +797,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
+        //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')        
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -843,6 +862,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
+        //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')        
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
         
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -942,6 +965,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
+        //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')        
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -974,5 +1001,433 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '0%')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
+    })
+})
+
+describe.only('Verify that "Run Test" works with warnings but does not with errors', () => {
+
+    beforeEach('Create measure, login and update CQL, create group, and login', () => {
+
+        CqlLibraryName = 'TestLibrary5' + Date.now()
+
+        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(measureName, CqlLibraryName, mesureCQLPFTests)
+        OktaLogin.Login()
+        MeasuresPage.clickEditforCreatedMeasure()
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
+        OktaLogin.Login()
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.Logout()
+
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let newCqlLibraryName = CqlLibraryName + randValue
+
+        Utilities.deleteMeasure(measureName, newCqlLibraryName)
+    })
+
+    it('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //Add second Measure Group with return type as Boolean
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        Utilities.setMeasureGroupType()
+
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+        cy.get(MeasureGroupPage.popBasis).should('exist')
+        cy.get(MeasureGroupPage.popBasis).should('be.visible')
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('boolean')
+        cy.get(MeasureGroupPage.popBasisOption).click()
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
+        
+
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click()
+
+        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
+
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+
+        TestCasesPage.clickCreateTestCaseButton()
+
+        //Verify created test case Title and Series exists on Test Cases Page
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
+
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditor).type(warningTestCaseJson)
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
+        cy.get(TestCasesPage.detailsTab).click()
+
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //click on actual / expected sub-tab
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+
+        //check the check box for the expected IP
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).invoke('click').check().should('be.checked')
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
+        //Verify Highlighting tab before clicking on Run Test button
+        cy.get(TestCasesPage.tcHighlightingTab).click()
+        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
+
+        //Click on Execute Test Case button on Edit Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.executeTestCaseButton).focus()
+        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+
+        //refresh test case list page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //open edit page for test case
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //navigate to the details tab for the test case
+        cy.get(TestCasesPage.detailsTab).click()
+
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).should('be.visible')
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
+
+        //confirm warning message
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No issues detected during validation for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'')
+
+        //attempt to click on 'Run Test Case' to run the test case via the edit page
+        cy.get(TestCasesPage.runTestButton).should('exist')
+        cy.get(TestCasesPage.runTestButton).should('be.visible')
+        cy.get(TestCasesPage.runTestButton).should('be.enabled')
+        cy.get(TestCasesPage.runTestButton).click()
+
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No issues detected during validation for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'')
+
+    })
+
+    it('Cannot "Run Test Case" or "Execute Test Case" when a test case has only an error', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //Add second Measure Group with return type as Boolean
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        Utilities.setMeasureGroupType()
+
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+        cy.get(MeasureGroupPage.popBasis).should('exist')
+        cy.get(MeasureGroupPage.popBasis).should('be.visible')
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('boolean')
+        cy.get(MeasureGroupPage.popBasisOption).click()
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
+        
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+        //create a test case that will fail:
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click()
+
+        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
+
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type('Test Case with errors')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type('TCwE')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('ICFTCwESeries').type('{enter}')
+
+        TestCasesPage.clickCreateTestCaseButton()
+
+        //Verify created test case Title and Series exists on Test Cases Page
+        TestCasesPage.grabValidateTestCaseTitleAndSeries('Test Case with errors', 'ICFTCwESeries')
+
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditor).type(errorTestCaseJSON_no_ResourceID)
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click()
+
+        cy.get(TestCasesPage.detailsTab).click()
+
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //click on actual / expected sub-tab
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+
+        //check the check box for the expected IP
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).invoke('click').check().should('be.checked')
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()        
+
+        //Click on Execute Test Case button on Edit Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 20700)
+        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.executeTestCaseButton).focus()
+        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'No valid test cases to execute!')
+
+        //refresh test case list page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //open edit page for test case
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //navigate to the details tab for the test case
+        cy.get(TestCasesPage.detailsTab).click()
+
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).should('be.visible')
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
+
+        //confirm error message
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'All resources in bundle must have unique ID regardless of type. Multiple resources detected with ID [null]')
+
+        //the 'Run Test Case' button, to run the test case, is unavailable
+        cy.get(TestCasesPage.runTestButton).should('exist')
+        cy.get(TestCasesPage.runTestButton).should('not.be.enabled')
+
+    })
+
+    it('Cannot "Run Test Case" or "Execute Test Case" when a test case has an error and warning', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //Add second Measure Group with return type as Boolean
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        Utilities.setMeasureGroupType()
+
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+        cy.get(MeasureGroupPage.popBasis).should('exist')
+        cy.get(MeasureGroupPage.popBasis).should('be.visible')
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('boolean')
+        cy.get(MeasureGroupPage.popBasisOption).click()
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
+        
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+        //create a test case that will fail:
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click()
+
+        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
+
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type('Test Case with errors')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type('TCwE')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('ICFTCwESeries').type('{enter}')
+
+        TestCasesPage.clickCreateTestCaseButton()
+
+        //Verify created test case Title and Series exists on Test Cases Page
+        TestCasesPage.grabValidateTestCaseTitleAndSeries('Test Case with errors', 'ICFTCwESeries')
+
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditor).type(err_and_warningTestCaseJson)
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click()
+
+        cy.get(TestCasesPage.detailsTab).click()
+
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //click on actual / expected sub-tab
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+
+        //check the check box for the expected IP
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).invoke('click').check().should('be.checked')
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()        
+
+        //Click on Execute Test Case button on Edit Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 20700)
+        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.executeTestCaseButton).focus()
+        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'No valid test cases to execute!')
+
+        //refresh test case list page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //open edit page for test case
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //navigate to the details tab for the test case
+        cy.get(TestCasesPage.detailsTab).click()
+
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).should('be.visible')
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
+
+        //confirm error message
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'All resources in bundle must have unique ID regardless of type. Multiple resources detected with ID [null]')
+
+        //the 'Run Test Case' button, to run the test case, is unavailable
+        cy.get(TestCasesPage.runTestButton).should('exist')
+        cy.get(TestCasesPage.runTestButton).should('not.be.enabled')
+
     })
 })
