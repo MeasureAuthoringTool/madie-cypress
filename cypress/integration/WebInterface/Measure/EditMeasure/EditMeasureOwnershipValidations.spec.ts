@@ -112,6 +112,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(EditMeasurePage.cqlEditorTextBox.valueOf().toString()).eq(null)
 
     })
+
     it('Test Cases are read / view only', () =>{
 
         //navigate to the all measures tab
@@ -128,7 +129,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.readFile('cypress/fixtures/testcaseId2').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((fileContents) => {
 
             cy.get('[data-testid=select-action-'+ fileContents +']').click()
 
