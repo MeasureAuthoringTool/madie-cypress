@@ -43,6 +43,7 @@ describe('Edit Measure: Add Meta Data', () => {
         let rationale = 'rationale'
         let guidance = 'guidance'
         let clinicalRecommendation = 'Clinical Recommendation'
+        let riskAdjustment = 'Risk Adjustment'
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -86,7 +87,7 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
         //save button should become available, now, because a value is, now, in both fields
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.enabled')
-        
+
         //save Steward & Developers
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).click({force:true})
         cy.get(EditMeasurePage.measureStewardDevelopersSuccessMessage).should('be.visible')
@@ -102,6 +103,12 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).clear().type(clinicalRecommendation)
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
+
+        //Risk Adjustment
+        cy.get(EditMeasurePage.leftPanelRiskAdjustment).click()
+        cy.get(EditMeasurePage.measureRiskAdjustmentTextBox).clear().type(riskAdjustment)
+        cy.get(EditMeasurePage.measureRiskAdjustmentSaveButton).click()
+        cy.get(EditMeasurePage.measureRiskAdjustmentSuccessMessage).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
         //wait until page / tabs loads
@@ -159,7 +166,14 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).invoke('val').then(val =>{
             expect(val).to.eql(clinicalRecommendation)
         })
-        cy.log('Measure Guidance added successfully')
+        cy.log('Measure Clinical Recommendation added successfully')
+
+        //Risk Adjustment
+        cy.get(EditMeasurePage.leftPanelRiskAdjustment).click()
+        cy.get(EditMeasurePage.measureRiskAdjustmentTextBox).invoke('val').then(val =>{
+            expect(val).to.eql(riskAdjustment)
+        })
+        cy.log('Measure Risk Adjustment added successfully')
     })
 })
 
@@ -169,14 +183,14 @@ describe('Verify Measure Id and Version Id', () => {
 
         OktaLogin.Login()
 
-        })
+    })
 
-        after('Log out and Clean up', () => {
+    after('Log out and Clean up', () => {
 
-            OktaLogin.Logout()
-            Utilities.deleteMeasure(measureName, CqlLibraryName)
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
 
-        })
+    })
     it('Verify that the Measure Id and Version Id are auto generated for new Measures', () => {
 
         //Create New Measure

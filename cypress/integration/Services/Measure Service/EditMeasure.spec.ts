@@ -455,6 +455,38 @@ describe('Measure Service: Edit Measure', () => {
             })
         })
     })
+
+    it('Add Meta Data Risk Adjustment to the measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': id,
+                            'measureName': 'UpdatedTestMeasure' + Date.now(),
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.0.001' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
+                            'model': model,
+                            'measureScoring': 'Ratio',
+                            'versionId':vId,
+                            "ecqmTitle": "eCQMTitle",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
+                            'measureMetaData': {"riskAdjustment": "Risk Adjustment"}
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                    })
+                })
+            })
+        })
+    })
 })
 
 describe('Measurement Period Validations', () => {
@@ -616,61 +648,61 @@ describe('Validate CMS ID', () => {
 
     before('Set Access Token and create Measure',() => {
 
-            cy.setAccessTokenCookie()
+        cy.setAccessTokenCookie()
 
-            //Create Measure with CMS ID
-            cy.getCookie('accessToken').then((accessToken) => {
+        //Create Measure with CMS ID
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(versionIdPath).should('exist').then((vId) => {
+                cy.request({
+                    url: '/api/measure',
+                    method: 'POST',
+                    headers: {
+                        Authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "measureName": measureName,
+                        "cqlLibraryName": cqlLibraryName,
+                        "model": model,
+                        "versionId": vId,
+                        "cmsId": "99999",
+                        "ecqmTitle": "eCQMTitle",
+                        "measurementPeriodStart": mpStartDate,
+                        "measurementPeriodEnd": mpEndDate
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                    cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                })
+            })
+        })
+    })
+
+    after('Clean up',() => {
+
+        cy.setAccessTokenCookie()
+
+        //Delete Measure with CMS ID
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
-                        url: '/api/measure',
-                        method: 'POST',
+                        url: '/api/measures/'+id,
+                        method: 'PUT',
                         headers: {
                             Authorization: 'Bearer ' + accessToken.value
                         },
-                        body: {
-                            "measureName": measureName,
-                            "cqlLibraryName": cqlLibraryName,
-                            "model": model,
-                            "versionId": vId,
-                            "cmsId": "99999",
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate
-                        }
+                        body: {"id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": "ecqmTitle", "cmsId": "99999",
+                            "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate,"active": false, 'versionId':vId}
                     }).then((response) => {
-                        expect(response.status).to.eql(201)
-                        cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                        cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                        expect(response.status).to.eql(200)
+                        expect(response.body).to.eql("Measure updated successfully.")
                     })
                 })
             })
         })
 
-        after('Clean up',() => {
-
-            cy.setAccessTokenCookie()
-
-            //Delete Measure with CMS ID
-            cy.getCookie('accessToken').then((accessToken) => {
-                cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                    cy.readFile(versionIdPath).should('exist').then((vId) => {
-                        cy.request({
-                            url: '/api/measures/'+id,
-                            method: 'PUT',
-                            headers: {
-                                Authorization: 'Bearer ' + accessToken.value
-                            },
-                            body: {"id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": "ecqmTitle", "cmsId": "99999",
-                                "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate,"active": false, 'versionId':vId}
-                        }).then((response) => {
-                            expect(response.status).to.eql(200)
-                            expect(response.body).to.eql("Measure updated successfully.")
-                        })
-                    })
-                })
-            })
-
-        })
+    })
 
     it('Validate error message while editing CMS ID', () => {
 
@@ -705,4 +737,3 @@ describe('Validate CMS ID', () => {
         })
     })
 })
-
