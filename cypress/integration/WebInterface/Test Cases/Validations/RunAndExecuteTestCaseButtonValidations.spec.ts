@@ -1004,7 +1004,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
     })
 })
 
-describe.only('Verify that "Run Test" works with warnings but does not with errors', () => {
+describe('Verify that "Run Test" works with warnings but does not with errors', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
