@@ -194,11 +194,11 @@ export class TestCasesPage {
         //Save edited / updated to test case
         cy.get(this.editTestCaseSaveButton).click()
         cy.get(this.confirmationMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'An error occurred with the Test Case JSON while updating the test case'])
+            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON'])
         })
 
         cy.get(this.confirmationMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'An error occurred with the Test Case JSON while updating the test case'])
+            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON'])
         })
 
         cy.log('JSON added to test case successfully')

@@ -224,7 +224,7 @@ describe('JSON Rescource ID tests', () => {
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.confirmationMsg).should('exist')
         cy.get(TestCasesPage.confirmationMsg).should('be.visible')
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'An error occurred with the Test Case JSON while updating the test case')
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with errors in JSON')
 
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
@@ -317,7 +317,7 @@ describe('JSON Rescource ID tests', () => {
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.confirmationMsg).should('exist')
         cy.get(TestCasesPage.confirmationMsg).should('be.visible')
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'An error occurred with the Test Case JSON while updating the test case')
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with errors in JSON')
 
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
