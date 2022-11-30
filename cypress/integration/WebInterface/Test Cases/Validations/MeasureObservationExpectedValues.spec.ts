@@ -75,7 +75,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'An error occurred with the Test Case JSON while updating the test case')
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with errors in JSON')
 
         //Assert saved observation values
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
