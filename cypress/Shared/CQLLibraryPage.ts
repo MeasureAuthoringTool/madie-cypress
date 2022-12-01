@@ -2,6 +2,7 @@ import { Header } from "./Header"
 import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 
+
 export class CQLLibraryPage {
 
     public static readonly createCQLLibraryBtn = '[data-testid="create-new-cql-library-button"]'
