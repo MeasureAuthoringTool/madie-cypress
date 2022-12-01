@@ -1,16 +1,17 @@
-import {MeasuresPage} from "./MeasuresPage"
-import {Header} from "./Header"
-import {EditMeasurePage} from "./EditMeasurePage"
-import {CQLEditorPage} from "./CQLEditorPage"
-import {Environment} from "./Environment"
-import {Utilities} from "./Utilities"
+import { MeasuresPage } from "./MeasuresPage"
+import { Header } from "./Header"
+import { EditMeasurePage } from "./EditMeasurePage"
+import { CQLEditorPage } from "./CQLEditorPage"
+import { Environment } from "./Environment"
+import { Utilities } from "./Utilities"
 import { v4 as uuidv4 } from 'uuid'
 
 export class MeasureGroupPage {
+    //<div required="" data-testid="scoring-select" class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1wunfk1"><div role="button" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="scoring-select-label scoring-select" aria-describedby="scoring-select-helper-text" id="scoring-select" aria-required="true" class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-182didf" tabindex="0">Proportion</div><input name="scoring" aria-hidden="true" tabindex="-1" class="MuiSelect-nativeInput css-1k3x8v3" required="" data-testid="scoring-select-input" value="Proportion"><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-1636szt" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ExpandMoreIcon"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"></path></svg><fieldset aria-hidden="true" class="MuiOutlinedInput-notchedOutline css-igs3ac"><legend class="css-hdw1oc"><span class="notranslate">​</span></legend></fieldset></div>
 
     //CQL has errors message
     public static readonly CQLHasErrorMsg = '[data-testid="error-alerts"]'
-    
+
     //tabs on Measure Group page
     public static readonly populationTab = '[data-testid="populations-tab"]'
     public static readonly stratificationTab = '[data-testid="stratifications-tab"]'
@@ -27,10 +28,10 @@ export class MeasureGroupPage {
     public static readonly stratAssociationThree = '[id="association-select-3"]'
     public static readonly stratAssociationFour = '[id="association-select-4"]'
 
-    public static readonly stratDescOne ='[name="stratifications[0].description"]'
-    public static readonly stratDescTwo ='[name="stratifications[1].description"]'
-    public static readonly stratDescThree ='[name="stratifications[2].description"]'
-    public static readonly stratDescFour ='[name="stratifications[3].description"]'
+    public static readonly stratDescOne = '[name="stratifications[0].description"]'
+    public static readonly stratDescTwo = '[name="stratifications[1].description"]'
+    public static readonly stratDescThree = '[name="stratifications[2].description"]'
+    public static readonly stratDescFour = '[name="stratifications[3].description"]'
 
     public static readonly addStratButton = '[data-testid="add-strat-button"]'
     public static readonly removeStratButton = '[data-testid="remove-strat-button"]'
@@ -104,12 +105,12 @@ export class MeasureGroupPage {
     public static readonly aggregateFunctionDropdownList = '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-1km1ehz"]'
     public static readonly addNumeratorObservationLink = '[data-testid="add-measure-observation-numerator"]'
     public static readonly numeratorObservation = '[id="measure-observation-numerator"]'
-    public static readonly numeratorAggregateFunction= '[id="measure-observation-aggregate-numerator"]'
+    public static readonly numeratorAggregateFunction = '[id="measure-observation-aggregate-numerator"]'
     public static readonly removeNumeratorObservation = '[data-testid="measure-observation-numerator-remove"]'
 
     //Continuous Variable Measure Observation
     public static readonly MOToCodeValue = '[data-value="ToCode"]'
-    
+
     public static readonly cvMeasureObservation = '[id="measure-observation-cv-obs"]'
     public static readonly cvAggregateFunction = '[id="measure-observation-aggregate-cv-obs"]'
 
@@ -148,7 +149,7 @@ export class MeasureGroupPage {
     public static readonly confirmScoreUnitValueUpdateBtn = '[data-testid="group-form-update-btn"]'
 
 
-    public static createMeasureGroupforProportionMeasure () : void {
+    public static createMeasureGroupforProportionMeasure(): void {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -191,7 +192,7 @@ export class MeasureGroupPage {
         cy.get(this.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
     }
 
-    public static createMeasureGroupforRatioMeasure () : void {
+    public static createMeasureGroupforRatioMeasure(): void {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -225,7 +226,7 @@ export class MeasureGroupPage {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
     }
 
-    public static createMeasureGroupforContinuousVariableMeasure () : void {
+    public static createMeasureGroupforContinuousVariableMeasure(): void {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -269,32 +270,28 @@ export class MeasureGroupPage {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
     }
 
-    public static CreateProportionMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, PopNumP?:string, PopDenomP?: string, popBasis?: string): string {
+    public static CreateProportionMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, PopNumP?: string, PopDenomP?: string, popBasis?: string): string {
         let user = ''
         let measurePath = ''
         let measureGroupPath = ''
         let measureScoring = 'Proportion'
-        if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')){popBasis = 'boolean'}
-        if ((PopIniPopP == undefined) || (PopIniPopP === null)){PopIniPopP = 'Surgical Absence of Cervix'}
-        if ((PopNumP == undefined) || (PopNumP === null)){PopNumP = 'Surgical Absence of Cervix'}
-        if ((PopDenomP == undefined) || (PopDenomP === null)){PopDenomP = 'Surgical Absence of Cervix'}
-        if (altUser)
-        {
+        if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
+        if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Surgical Absence of Cervix' }
+        if ((PopNumP == undefined) || (PopNumP === null)) { PopNumP = 'Surgical Absence of Cervix' }
+        if ((PopDenomP == undefined) || (PopDenomP === null)) { PopDenomP = 'Surgical Absence of Cervix' }
+        if (altUser) {
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
         }
-        else
-        {
+        else {
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
         }
-        if (twoMeasureGroups === true)
-        {
+        if (twoMeasureGroups === true) {
             measurePath = 'cypress/fixtures/measureId2'
             measureGroupPath = 'cypress/fixtures/groupId2'
         }
-        else
-        {
+        else {
             measurePath = 'cypress/fixtures/measureId'
             measureGroupPath = 'cypress/fixtures/groupId'
         }
@@ -314,43 +311,43 @@ export class MeasureGroupPage {
                         "populationBasis": popBasis,
                         "populations": [
                             {
-                                "id" : uuidv4(),
-                                "name" : "initialPopulation",
-                                "definition" : PopIniPopP
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPopP
                             },
                             {
-                                "id" : uuidv4(),
-                                "name" : "denominator",
-                                "definition" : PopDenomP
+                                "id": uuidv4(),
+                                "name": "denominator",
+                                "definition": PopDenomP
                             },
                             {
-                                "id" : uuidv4(),
-                                "name" : "denominatorExclusion",
-                                "definition" :""
+                                "id": uuidv4(),
+                                "name": "denominatorExclusion",
+                                "definition": ""
                             },
                             {
-                                "id" : uuidv4(),
-                                "name" : "denominatorException",
-                                "definition" : ""
+                                "id": uuidv4(),
+                                "name": "denominatorException",
+                                "definition": ""
                             },
                             {
-                                "id" : uuidv4(),
-                                "name" : "numerator",
-                                "definition" : PopNumP
+                                "id": uuidv4(),
+                                "name": "numerator",
+                                "definition": PopNumP
                             },
                             {
-                                "id" : uuidv4(),
-                                "name" : "numeratorExclusion",
-                                "definition" :""
+                                "id": uuidv4(),
+                                "name": "numeratorExclusion",
+                                "definition": ""
                             }
                         ],
                         "scoringUnit": {
                             "label": "ml milliLiters",
                             "value": {
-                              "code": "ml",
-                              "name": "milliLiters",
-                              "guidance": "",
-                              "system": "https://clinicaltables.nlm.nih.gov/"
+                                "code": "ml",
+                                "name": "milliLiters",
+                                "guidance": "",
+                                "system": "https://clinicaltables.nlm.nih.gov/"
                             }
                         },
                         "measureGroupTypes": [
@@ -367,33 +364,29 @@ export class MeasureGroupPage {
         return user
     }
 
-    public static CreateRatioMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, PopNumP?:string, PopDenomP?: string, popBasis?: string): string {
+    public static CreateRatioMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, PopNumP?: string, PopDenomP?: string, popBasis?: string): string {
         let user = ''
         let measurePath = ''
         let measureGroupPath = ''
         let measureScoring = 'Ratio'
-        if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')){popBasis = 'boolean'}
-        if ((PopIniPopP == undefined) || (PopIniPopP === null)){PopIniPopP = 'Surgical Absence of Cervix'}
-        if ((PopNumP == undefined) || (PopNumP === null)){PopNumP = 'Surgical Absence of Cervix'}
-        if ((PopDenomP == undefined) || (PopDenomP === null)){PopDenomP = 'Surgical Absence of Cervix'}
-        if (altUser)
-        {
+        if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
+        if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Surgical Absence of Cervix' }
+        if ((PopNumP == undefined) || (PopNumP === null)) { PopNumP = 'Surgical Absence of Cervix' }
+        if ((PopDenomP == undefined) || (PopDenomP === null)) { PopDenomP = 'Surgical Absence of Cervix' }
+        if (altUser) {
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
         }
-        else
-        {
+        else {
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
         }
-        if (twoMeasureGroups === true)
-        {
+        if (twoMeasureGroups === true) {
             measurePath = 'cypress/fixtures/measureId2'
             measureGroupPath = 'cypress/fixtures/groupId2'
             //cy.writeFile('cypress/fixtures/measureId2', response.body.id)
         }
-        else
-        {
+        else {
             measurePath = 'cypress/fixtures/measureId'
             measureGroupPath = 'cypress/fixtures/groupId'
         }
@@ -413,29 +406,29 @@ export class MeasureGroupPage {
                         "populationBasis": popBasis,
                         "populations": [
                             {
-                                "id" : uuidv4(),
-                                "name" : "initialPopulation",
-                                "definition" : PopIniPopP
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPopP
                             },
                             {
-                                "id" : uuidv4(),
-                                "name" : "denominator",
-                                "definition" : PopDenomP
+                                "id": uuidv4(),
+                                "name": "denominator",
+                                "definition": PopDenomP
                             },
                             {
-                                "id" : uuidv4(),
-                                "name" : "denominatorExclusion",
-                                "definition" : PopDenomP
+                                "id": uuidv4(),
+                                "name": "denominatorExclusion",
+                                "definition": PopDenomP
                             },
                             {
-                                "id" : uuidv4(),
-                                "name" : "numerator",
-                                "definition" : PopNumP
+                                "id": uuidv4(),
+                                "name": "numerator",
+                                "definition": PopNumP
                             },
                             {
-                                "id" : uuidv4(),
-                                "name" : "numeratorExclusion",
-                                "definition" : PopNumP
+                                "id": uuidv4(),
+                                "name": "numeratorExclusion",
+                                "definition": PopNumP
                             }
                         ],
                         "measureGroupTypes": [
