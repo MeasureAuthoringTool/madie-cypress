@@ -3,7 +3,7 @@ library FluentFuntion version '1.0.000'
 using QICore version '4.1.1'
 
 include FHIRHelpers version '4.1.000' called FHIRHelpers
-include GlobalCommonFunctionsQICore4 version '7.0.000' called Global
+include CQMCommon version '1.0.000' called Global
 
 {home}define "Initial Population":
   exists Global."Inpatient Encounter"
