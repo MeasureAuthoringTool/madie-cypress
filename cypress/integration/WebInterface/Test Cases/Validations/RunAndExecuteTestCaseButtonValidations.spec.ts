@@ -433,7 +433,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.detailsTab).should('be.enabled')
         cy.get(TestCasesPage.detailsTab).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'An error occurred with the Test Case JSON while updating the test case')
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with errors in JSON')
 
         //Add valid json to the test case and run
         cy.get('#ace-editor-wrapper > .ace_scroller > .ace_content').type('{selectall}{backspace}{selectall}{backspace}')
@@ -1575,7 +1575,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
     })
 
-    it.only('Can "Run Test Cases" on test case list page after a group has its population basis or scoring value changed' +
+    it('Can "Run Test Cases" on test case list page after a group has its population basis or scoring value changed' +
         ' (displays pass / fail) and results are the same for individual run on edit page', () => {
 
             //Click on Edit Measure
