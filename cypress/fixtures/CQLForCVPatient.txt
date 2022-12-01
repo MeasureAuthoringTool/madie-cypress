@@ -2,8 +2,8 @@ library CVPatient version '0.0.000'
 
 using QICore version '4.1.1'
 
-include FHIRHelpers version '4.2.000' called FHIRHelpers
-include GlobalCommonFunctionsQICore4 version '7.1.000' called Global
+include FHIRHelpers version '4.1.000' called FHIRHelpers
+include CQMCommon version '1.0.000' called Global
 
 codesystem "SNOMED": 'http://snomed.info/sct'
 

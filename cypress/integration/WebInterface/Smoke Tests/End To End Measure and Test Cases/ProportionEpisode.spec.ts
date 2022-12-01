@@ -18,8 +18,8 @@ let measureCQL = 'library ProportionEpisodeMeasure version \'0.0.000\'\n' +
     '\n' +
     'using QICore version \'4.1.1\'\n' +
     '\n' +
-    'include FHIRHelpers version \'4.2.000\' called FHIRHelpers\n' +
-    'include GlobalCommonFunctionsQICore4 version \'7.1.000\' called Global\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    'include CQMCommon version \'1.0.000\' called Global\n' +
     '\n' +
     'codesystem "SNOMED": \'http://snomed.info/sct\'\n' +
     '\n' +
