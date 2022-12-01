@@ -7,6 +7,7 @@ import {Utilities} from "../../../Shared/Utilities"
 import {MeasureCQL} from "../../../Shared/MeasureCQL"
 import {TestCasesPage} from "../../../Shared/TestCasesPage"
 import {TestCaseJson} from "../../../Shared/TestCaseJson"
+import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -35,7 +36,7 @@ describe('Code Coverage Highlighting', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(13500)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'Boolean')
         OktaLogin.Login()
