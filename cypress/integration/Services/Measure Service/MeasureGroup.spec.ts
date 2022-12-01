@@ -1,6 +1,6 @@
-import {Utilities} from "../../../Shared/Utilities"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
+import { Utilities } from "../../../Shared/Utilities"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
 
 let measureName = 'MeasureName ' + Date.now()
@@ -12,12 +12,12 @@ let popMeasureCQL = MeasureCQL.SBTEST_CQL
 
 describe('Measure Service: Measure Group Endpoints', () => {
 
-    beforeEach('Set Access Token',() => {
+    beforeEach('Set Access Token', () => {
 
         cy.setAccessTokenCookie()
     })
 
-    after('Clean up',() => {
+    after('Clean up', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
@@ -144,7 +144,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
         })
     })
 
-    it('Add UCUM Scoring unit to the Measure Group', () =>  {
+    it('Add UCUM Scoring unit to the Measure Group', () => {
 
         let PopIniPop = 'ipp'
         let PopNum = 'num'
@@ -200,7 +200,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
 
     })
 
-    it('Update UCUM Scoring unit for the Measure Group', () =>  {
+    it('Update UCUM Scoring unit for the Measure Group', () => {
 
         let PopIniPop = 'ipp'
         let PopNum = 'num'
@@ -647,12 +647,12 @@ describe('Measure Populations', () => {
 
 describe('Measure Observations', () => {
 
-    beforeEach('Set Access Token',() => {
+    beforeEach('Set Access Token', () => {
 
         cy.setAccessTokenCookie()
     })
 
-    after('Clean up',() => {
+    after('Clean up', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
@@ -664,7 +664,7 @@ describe('Measure Observations', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
         //let measureCQL = "library SimpleFhirMeasure version '0.0.001'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.0.001' called FHIRHelpers\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"ipp\":\n  exists [\"Encounter\"] E where E.period.start during \"Measurement Period\"\n  \ndefine \"denom\":\n  \"ipp\"\n  \ndefine \"num\":\n  exists [\"Encounter\"] E where E.status ~ 'finished'\n  \ndefine \"numeratorExclusion\":\n    \"num\"\n    \ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n           version: coding.version.value,\n           display: coding.display.value\n           }\n           \ndefine function fun(notPascalCase Integer ):\n  true\n  \ndefine function \"isFinishedEncounter\"(Enc Encounter):\n  true\n  \n"
-        let measureCQL = "library SimpleFhirMeasure version '0.0.001'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.0.001' called FHIRHelpers\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"ipp\":\n  exists [\"Encounter\"] E where E.period.start during \"Measurement Period\"\n\ndefine \"denom\":\n \"ipp\"\n\ndefine \"num\":\n  exists [\"Encounter\"] E where E.status ~ 'finished'\n\ndefine \"numeratorExclusion\":\n    \"num\"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n          version: coding.version.value,\n           display: coding.display.value\n           }\n\ndefine function fun(notPascalCase Integer ):\n  true\n\ndefine function \"isFinishedEncounter\"(Enc Encounter):\n  true\n\n\n\n"
+        let measureCQL = "library SimpleFhirMeasure version '0.0.001'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"ipp\":\n  exists [\"Encounter\"] E where E.period.start during \"Measurement Period\"\n\ndefine \"denom\":\n \"ipp\"\n\ndefine \"num\":\n  exists [\"Encounter\"] E where E.status ~ 'finished'\n\ndefine \"numeratorExclusion\":\n    \"num\"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n          version: coding.version.value,\n           display: coding.display.value\n           }\n\ndefine function fun(notPascalCase Integer ):\n  true\n\ndefine function \"isFinishedEncounter\"(Enc Encounter):\n  true\n\n\n\n"
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
 
@@ -691,28 +691,28 @@ describe('Measure Observations', () => {
                         "populations": [
                             {
                                 "id": uuidv4(),
-                                "name" : "initialPopulation",
-                                "definition" : PopIniPop
+                                "name": "initialPopulation",
+                                "definition": PopIniPop
                             },
                             {
                                 "id": "89f42def-f989-4e9d-8e5f-c2c0cafc04d7",
-                                "name" : "denominator",
-                                "definition" : PopDenom
+                                "name": "denominator",
+                                "definition": PopDenom
                             },
                             {
                                 "id": uuidv4(),
-                                "name" : "denominatorExclusion",
-                                "definition" : ""
+                                "name": "denominatorExclusion",
+                                "definition": ""
                             },
                             {
                                 "id": "fa60458b-b2fa-4ba2-9bc4-d6db3468f895",
-                                "name" : "numerator",
-                                "definition" : PopNum
+                                "name": "numerator",
+                                "definition": PopNum
                             },
                             {
                                 "id": uuidv4(),
-                                "name" : "numeratorExclusion",
-                                "definition" : ""
+                                "name": "numeratorExclusion",
+                                "definition": ""
                             }
                         ],
                         "measureObservations": [
@@ -769,13 +769,13 @@ describe('Measure Observations', () => {
                         "populations": [
                             {
                                 "id": uuidv4(),
-                                "name" : "initialPopulation",
-                                "definition" : PopIniPop
+                                "name": "initialPopulation",
+                                "definition": PopIniPop
                             },
                             {
                                 "id": uuidv4(),
-                                "name" : "measurePopulation",
-                                "definition" : PopDenom
+                                "name": "measurePopulation",
+                                "definition": PopDenom
                             }
                         ],
                         "measureObservations": [

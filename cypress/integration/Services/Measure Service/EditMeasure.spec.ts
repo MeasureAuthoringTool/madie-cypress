@@ -1,6 +1,6 @@
-import {Utilities} from "../../../Shared/Utilities"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
+import { Utilities } from "../../../Shared/Utilities"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -17,20 +17,20 @@ let mpEndDate = now().format('YYYY-MM-DD')
 
 describe('Measure Service: Edit Measure', () => {
 
-    before('Create Measure',() => {
+    before('Create Measure', () => {
 
         cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
     })
 
-    beforeEach('Set Access Token',() => {
+    beforeEach('Set Access Token', () => {
 
         cy.setAccessTokenCookie()
 
     })
 
-    after('Clean up',() => {
+    after('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, cqlLibraryName)
 
@@ -74,7 +74,7 @@ describe('Measure Service: Edit Measure', () => {
                 //Verify error message when the measure name is empty
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' +id,
+                    url: '/api/measures/' + id,
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
@@ -117,7 +117,7 @@ describe('Measure Service: Edit Measure', () => {
                             'model': model,
                             'measureScoring': 'Ratio',
                             "ecqmTitle": "eCQMTitle",
-                            'versionId':vId,
+                            'versionId': vId,
                             'cql': measureCQL,
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate
@@ -188,7 +188,7 @@ describe('Measure Service: Edit Measure', () => {
                             'measureScoring': 'Ratio',
                             "ecqmTitle": "eCQMTitle",
                             'cql': measureCQL,
-                            'versionId':vId,
+                            'versionId': vId,
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate
                         }
@@ -215,7 +215,7 @@ describe('Measure Service: Edit Measure', () => {
                         body: {
                             'id': id,
                             'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.0.001' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
                             'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                             'model': model,
                             'measureScoring': 'Ratio',
@@ -246,15 +246,15 @@ describe('Measure Service: Edit Measure', () => {
                         body: {
                             'id': id,
                             'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.0.001' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
                             'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                             'model': model,
                             'measureScoring': 'Ratio',
-                            'versionId':vId,
+                            'versionId': vId,
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"measureSteward": "SemanticBits"}
+                            'measureMetaData': { "measureSteward": "SemanticBits" }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -278,7 +278,7 @@ describe('Measure Service: Edit Measure', () => {
                         body: {
                             'id': id,
                             'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.0.001' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
                             'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                             'model': model,
                             'measureScoring': 'Ratio',
@@ -286,7 +286,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"description": "SemanticBits"}
+                            'measureMetaData': { "description": "SemanticBits" }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -310,15 +310,15 @@ describe('Measure Service: Edit Measure', () => {
                         body: {
                             'id': id,
                             'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.0.001' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
                             'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                             'model': model,
                             'measureScoring': 'Ratio',
-                            'versionId':vId,
+                            'versionId': vId,
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"copyright": "copyright"}
+                            'measureMetaData': { "copyright": "copyright" }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -342,7 +342,7 @@ describe('Measure Service: Edit Measure', () => {
                         body: {
                             'id': id,
                             'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.0.001' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
                             'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                             'model': model,
                             'measureScoring': 'Ratio',
@@ -350,7 +350,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"disclaimer": "disclaimer"}
+                            'measureMetaData': { "disclaimer": "disclaimer" }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -374,7 +374,7 @@ describe('Measure Service: Edit Measure', () => {
                         body: {
                             'id': id,
                             'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.0.001' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
                             'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                             'model': model,
                             'measureScoring': 'Ratio',
@@ -382,7 +382,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"rationale": "rationale"}
+                            'measureMetaData': { "rationale": "rationale" }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -406,7 +406,7 @@ describe('Measure Service: Edit Measure', () => {
                         body: {
                             'id': id,
                             'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.0.001' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
                             'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                             'model': model,
                             'measureScoring': 'Ratio',
@@ -414,7 +414,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"author": "author"}
+                            'measureMetaData': { "author": "author" }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -438,15 +438,15 @@ describe('Measure Service: Edit Measure', () => {
                         body: {
                             'id': id,
                             'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.0.001' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
                             'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                             'model': model,
                             'measureScoring': 'Ratio',
-                            'versionId':vId,
+                            'versionId': vId,
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"guidance": "guidance"}
+                            'measureMetaData': { "guidance": "guidance" }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -470,15 +470,15 @@ describe('Measure Service: Edit Measure', () => {
                         body: {
                             'id': id,
                             'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.0.001' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
                             'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                             'model': model,
                             'measureScoring': 'Ratio',
-                            'versionId':vId,
+                            'versionId': vId,
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"riskAdjustment": "Risk Adjustment"}
+                            'measureMetaData': { "riskAdjustment": "Risk Adjustment" }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -504,7 +504,7 @@ describe('Measurement Period Validations', () => {
 
     })
 
-    after('Clean up',() => {
+    after('Clean up', () => {
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newCqlLibraryName = cqlLibraryName + randValue
@@ -619,7 +619,7 @@ describe('Measurement Period Validations', () => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' +id,
+                    url: '/api/measures/' + id,
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
@@ -646,7 +646,7 @@ describe('Measurement Period Validations', () => {
 
 describe('Validate CMS ID', () => {
 
-    before('Set Access Token and create Measure',() => {
+    before('Set Access Token and create Measure', () => {
 
         cy.setAccessTokenCookie()
 
@@ -678,7 +678,7 @@ describe('Validate CMS ID', () => {
         })
     })
 
-    after('Clean up',() => {
+    after('Clean up', () => {
 
         cy.setAccessTokenCookie()
 
@@ -687,13 +687,15 @@ describe('Validate CMS ID', () => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
-                        url: '/api/measures/'+id,
+                        url: '/api/measures/' + id,
                         method: 'PUT',
                         headers: {
                             Authorization: 'Bearer ' + accessToken.value
                         },
-                        body: {"id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": "ecqmTitle", "cmsId": "99999",
-                            "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate,"active": false, 'versionId':vId}
+                        body: {
+                            "id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": "ecqmTitle", "cmsId": "99999",
+                            "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate, "active": false, 'versionId': vId
+                        }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
                         expect(response.body).to.eql("Measure updated successfully.")

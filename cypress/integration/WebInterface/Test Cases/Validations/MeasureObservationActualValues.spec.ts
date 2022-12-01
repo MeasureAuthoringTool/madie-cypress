@@ -1,12 +1,12 @@
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -127,7 +127,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).wait(1000).click({force:true})
+        cy.get(TestCasesPage.runTestButton).wait(1000).click({ force: true })
         cy.get(TestCasesPage.cvMeasureObservationActualValue).should('have.value', '30')
 
     })
@@ -200,7 +200,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).wait(1000).click({force:true})
+        cy.get(TestCasesPage.runTestButton).wait(1000).click({ force: true })
         cy.get(TestCasesPage.denominatorMeasureObservationActualValue).should('have.value', '30')
         cy.get(TestCasesPage.numeratorMeasureObservationActualValue).should('have.value', '30')
 
@@ -274,7 +274,7 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).wait(2000).click({force:true})
+        cy.get(TestCasesPage.runTestButton).wait(2000).click({ force: true })
         cy.get(TestCasesPage.cvMeasureObservationActualValue).should('have.value', '1')
 
     })

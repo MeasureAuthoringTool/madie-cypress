@@ -14,7 +14,7 @@ in the measure development community.
 using QICore version '4.1.0'
 
 include FHIRHelpers version '4.1.000'
-include GlobalCommonFunctionsQICore4 version '7.0.000' called Global
+include CQMCommon version '1.0.000' called Global
 
 valueset "ONC Administrative Sex": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1'
 valueset "Race": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836'

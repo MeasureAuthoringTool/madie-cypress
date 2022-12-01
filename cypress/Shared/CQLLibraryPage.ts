@@ -1,6 +1,6 @@
-import {Header} from "./Header"
-import {Environment} from "./Environment"
-import {Utilities} from "./Utilities"
+import { Header } from "./Header"
+import { Environment } from "./Environment"
+import { Utilities } from "./Utilities"
 
 export class CQLLibraryPage {
 
@@ -49,7 +49,7 @@ export class CQLLibraryPage {
     public static readonly errorInCQLEditorWindow = 'div.ace_gutter-cell.ace_error'
 
 
-    public static createCQLLibrary (CQLLibraryName: string, CQLLibraryPublisher: string) : void {
+    public static createCQLLibrary(CQLLibraryName: string, CQLLibraryPublisher: string): void {
 
 
         cy.get(Header.cqlLibraryTab).should('be.visible')
@@ -58,7 +58,7 @@ export class CQLLibraryPage {
 
         cy.get(Header.cqlLibraryTab).click()
 
-        cy.wait('@libraries', { timeout: 60000})
+        cy.wait('@libraries', { timeout: 60000 })
 
         cy.get(this.createCQLLibraryBtn).should('be.visible')
         cy.get(this.createCQLLibraryBtn).should('be.enabled')
@@ -73,7 +73,7 @@ export class CQLLibraryPage {
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type(CQLLibraryPublisher).type('{downArrow}{enter}')
 
         this.clickCreateLibraryButton()
-         cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).wait(1000).click()
 
         this.validateCQlLibraryName(CQLLibraryName)
@@ -84,7 +84,7 @@ export class CQLLibraryPage {
     public static validateCQlLibraryName(expectedValue: string): void {
         cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
 
-            let element = cy.get('[data-testid=cqlLibrary-button-'+ fileContents +']').parent()
+            let element = cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').parent()
             element.parent().should('contain', expectedValue)
 
         })
@@ -93,21 +93,21 @@ export class CQLLibraryPage {
     public static validateCQlLibraryModel(expectedValue: string): void {
         cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
 
-            let element = cy.get('[data-testid=cqlLibrary-button-'+ fileContents + '-model' + ']').parent()
+            let element = cy.get('[data-testid=cqlLibrary-button-' + fileContents + '-model' + ']').parent()
             element.parent().should('contain', expectedValue)
 
         })
     }
 
-    public static clickCreateLibraryButton() : void {
+    public static clickCreateLibraryButton(): void {
 
-        let alias = 'library' + (Date.now().valueOf()+1).toString()
+        let alias = 'library' + (Date.now().valueOf() + 1).toString()
         //setup for grabbing the measure create call
         cy.intercept('POST', '/api/cql-libraries').as(alias)
 
         cy.get(this.saveCQLLibraryBtn).wait(1000).click()
         //saving measureID to file to use later
-        cy.wait('@' + alias).then(({response}) => {
+        cy.wait('@' + alias).then(({ response }) => {
             expect(response.statusCode).to.eq(201)
             cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
         })
@@ -116,13 +116,11 @@ export class CQLLibraryPage {
     public static createCQLLibraryAPI(CqlLibraryName: string, CQLLibraryPublisher: string, twoLibraries?: boolean, altUser?: boolean): string {
         let user = ''
 
-        if (altUser)
-        {
+        if (altUser) {
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
         }
-        else
-        {
+        else {
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
         }
@@ -147,12 +145,10 @@ export class CQLLibraryPage {
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
-                if (twoLibraries === true)
-                {
+                if (twoLibraries === true) {
                     cy.writeFile('cypress/fixtures/cqlLibraryId2', response.body.id)
                 }
-                else
-                {
+                else {
                     cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
                 }
 
@@ -164,13 +160,11 @@ export class CQLLibraryPage {
     public static createAPICQLLibraryWithValidCQL(CqlLibraryName: string, CQLLibraryPublisher: string, twoLibraries?: boolean, altUser?: boolean): string {
         let user = ''
 
-        if (altUser)
-        {
+        if (altUser) {
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
         }
-        else
-        {
+        else {
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
         }
@@ -199,12 +193,10 @@ export class CQLLibraryPage {
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
-                if (twoLibraries === true)
-                {
+                if (twoLibraries === true) {
                     cy.writeFile('cypress/fixtures/cqlLibraryId2', response.body.id)
                 }
-                else
-                {
+                else {
                     cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
                 }
 

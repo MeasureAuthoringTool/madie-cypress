@@ -17,7 +17,7 @@ include FHIRHelpers version '4.1.000'
 
 include HospiceQICore4 version '2.0.000' called Hospice
 include AdultOutpatientEncountersQICore4 version '2.0.000' called AdultOutpatientEncounters
-include MATGlobalCommonFunctionsQICore4 version '5.0.000' called Global
+include CQMCommon version '1.0.000' called Global
 include SupplementalDataElementsQICore4 version '2.0.000' called SDE
 
 codesystem "SNOMEDCT:2017-09": 'http://snomed.info/sct/731000124108' version 'http://snomed.info/sct/731000124108/version/201709'
