@@ -7,8 +7,8 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 import {Utilities} from "../../../../Shared/Utilities"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
-import {Global} from "../../../../Shared/Global";
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import {Global} from "../../../../Shared/Global"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -52,65 +52,6 @@ describe('Stratification Expected values for Boolean Population Basis', () => {
         let newCqlLibraryName = CqlLibraryName + randValue
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
-    })
-
-    it('Verify Stratification Expected values for Boolean Population Basis', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
-
-        //Click on Measure Group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.populationTab).click()
-
-        //Click on Stratification tab
-        cy.get(MeasureGroupPage.stratificationTab).should('exist')
-        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-        cy.get(MeasureGroupPage.stratificationTab).click()
-
-        //create stratification fields if they do not already exist on page
-        cy.get('body').then((body) => {
-            if((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
-                cy.get(MeasureGroupPage.addStratButton).should('exist')
-                cy.get(MeasureGroupPage.addStratButton).should('be.visible')
-                cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
-                cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
-            }
-        })
-
-        //Add Stratification 1
-        Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'denominator')
-        cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
-
-        //Add Stratification 2
-        Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'numerator')
-        cy.get(MeasureGroupPage.stratDescTwo).type('StratificationTwo')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).click()
-        //create test case
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-        cy.get(EditMeasurePage.testCasesTab).click()
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        //click on Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-
-        //Verify Stratification Expected check boxes are displayed
-        cy.get(TestCasesPage.testCasePopulationValuesTable).should('be.visible')
-        cy.get(TestCasesPage.denominatorStratificationOneExpectedValue).should('be.visible')
-        cy.get(TestCasesPage.numeratorStratificationTwoExpectedValue).should('be.visible')
-
 
     })
 
@@ -362,7 +303,7 @@ describe('Stratification Expected values for Non Boolean Population Basis', () =
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(15500)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Qualifying Encounters', 'Qualifying Encounters', 'Encounter')
         OktaLogin.Login()

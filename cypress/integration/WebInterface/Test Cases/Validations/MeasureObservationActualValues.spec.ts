@@ -1,12 +1,12 @@
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -19,7 +19,7 @@ let newMeasureName = measureName + randValue
 let newCqlLibraryName = CqlLibraryName + randValue
 let measureCQL = 'library Library4969 version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
-    'include FHIRHelpers version \'4.2.000\' called FHIRHelpers\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
@@ -127,7 +127,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).wait(1000).click({force:true})
+        cy.get(TestCasesPage.runTestButton).wait(1000).click({ force: true })
         cy.get(TestCasesPage.cvMeasureObservationActualValue).should('have.value', '30')
 
     })
@@ -200,7 +200,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).wait(1000).click({force:true})
+        cy.get(TestCasesPage.runTestButton).wait(1000).click({ force: true })
         cy.get(TestCasesPage.denominatorMeasureObservationActualValue).should('have.value', '30')
         cy.get(TestCasesPage.numeratorMeasureObservationActualValue).should('have.value', '30')
 
@@ -274,7 +274,7 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).wait(2000).click({force:true})
+        cy.get(TestCasesPage.runTestButton).wait(2000).click({ force: true })
         cy.get(TestCasesPage.cvMeasureObservationActualValue).should('have.value', '1')
 
     })
