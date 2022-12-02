@@ -79,7 +79,7 @@ export class CQLLibraryPage {
 
         this.validateCQlLibraryName(CQLLibraryName)
         this.validateCQlLibraryModel('QI-Core')
-        cy.log('CQL Library Created Successfully')
+        cy.log('CQL Library Created Successfully2')
     }
 
     public static validateCQlLibraryName(expectedValue: string): void {
