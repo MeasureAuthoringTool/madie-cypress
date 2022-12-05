@@ -17,7 +17,7 @@ describe('Create New Measure', () => {
 
     after('Clean up', () => {
 
-        //Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
 
