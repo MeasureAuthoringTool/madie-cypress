@@ -77,7 +77,7 @@ export function setAccessTokenCookie() {
         },
         failOnStatusCode: false
     }).then((response) => {
-
+console.log(response)
         expect(response.status).to.eql(200)
         const sessionToken = response.body.sessionToken
 
@@ -101,8 +101,10 @@ export function setAccessTokenCookie() {
             headers: {
                 'Accept-Encoding': 'gzip, deflate, br',
                 'Accept': '*/*'
-            }
+            },
+            failOnStatusCode: false
         }).then((response) => {
+            console.log(response)
             expect(response.status).to.eql(200)
 
             const resp = response.body
@@ -129,9 +131,10 @@ export function setAccessTokenCookie() {
                     redirect_uri: redirectUri,
                     code: authCode,
                     code_verifier: codeVerifier
-                }
+                },
+                failOnStatusCode: false
             }).then((response) => {
-
+console.log(response)
                 expect(response.status).to.eql(200)
                 const access_token = response.body.access_token
                 //setting the cookie value to be grabbed for api authentication
