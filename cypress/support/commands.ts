@@ -77,7 +77,7 @@ export function setAccessTokenCookie() {
         },
         failOnStatusCode: false
     }).then((response) => {
-console.log(response)
+cy.log(response.body)
         expect(response.status).to.eql(200)
         const sessionToken = response.body.sessionToken
 
@@ -104,7 +104,7 @@ console.log(response)
             },
             failOnStatusCode: false
         }).then((response) => {
-            console.log(response)
+            cy.log(response.body)
             expect(response.status).to.eql(200)
 
             const resp = response.body
@@ -134,7 +134,7 @@ console.log(response)
                 },
                 failOnStatusCode: false
             }).then((response) => {
-console.log(response)
+                cy.log(response.body)
                 expect(response.status).to.eql(200)
                 const access_token = response.body.access_token
                 //setting the cookie value to be grabbed for api authentication
