@@ -68,8 +68,8 @@ describe('CQL Library Service: Create CQL Library', () => {
                 },
                 failOnStatusCode: false
             }).then((response) => {
-                cy.log(response.body.toString())
-                expect(response.body.toString()).to.eql('test')
+                expect(response.headers.toString()).to.eql('test')
+                //expect(response.body.toString()).to.eql('test')
 
                 const resp = response.body
 
@@ -99,7 +99,7 @@ describe('CQL Library Service: Create CQL Library', () => {
                     },
                     failOnStatusCode: false
                 }).then((response) => {
-                    cy.log(response.body)
+
                     expect(response.status).to.eql(200)
                     const access_token = response.body.access_token
                     //setting the cookie value to be grabbed for api authentication
