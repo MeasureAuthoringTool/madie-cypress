@@ -41,7 +41,7 @@ describe('CQL Library Service: Create CQL Library', () => {
             },
             failOnStatusCode: false
         }).then((response) => {
-            console.log(response)
+
             expect(response.status).to.eql(200)
             const sessionToken = response.body.sessionToken
 
@@ -68,11 +68,11 @@ describe('CQL Library Service: Create CQL Library', () => {
                 },
                 failOnStatusCode: false
             }).then((response) => {
-                console.log(url)
-                console.log(response)
-                expect(response.status).to.eql(200)
+                cy.log(response.body.toString())
+                expect(response.body.toString()).to.eql('test')
 
                 const resp = response.body
+
                 const codeIdx = resp.indexOf("data.code")
                 const codeEndIdx = resp.indexOf(";", codeIdx)
                 const codeLine = resp.substring(codeIdx, codeEndIdx)
