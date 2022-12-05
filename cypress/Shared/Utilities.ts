@@ -33,6 +33,7 @@ export class Utilities {
             cy.readFile(path).should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.request({
+                        failOnStatusCode: false,
                     url: '/api/measures/'+id,
                     method: 'PUT',
                     headers: {
@@ -41,6 +42,8 @@ export class Utilities {
                     body: {"id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": ecqmTitle,
                         "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate,"active": false, 'versionId':vId}
                     }).then((response) => {
+                        console.log(response)
+
                     expect(response.status).to.eql(200)
                     expect(response.body).to.eql("Measure updated successfully.")
                     })
