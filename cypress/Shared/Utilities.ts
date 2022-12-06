@@ -294,9 +294,9 @@ export class Utilities {
                     .should('not.exist')
                 Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Surgical Absence of Cervix')
                 cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-                cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', '-')
-                cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', '-')
-                cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', '-')
+                cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Select Initial Population')
+                cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', 'Select Denominator')
+                cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'Select Numerator')
                 break
             }
             case 'Proportion': {
@@ -305,9 +305,9 @@ export class Utilities {
                 Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'Surgical Absence of Cervix')
                 Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Surgical Absence of Cervix')
                 cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-                cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', '-')
-                cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', '-')
-                cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', '-')
+                cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Select Initial Population')
+                cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', 'Select Denominator')
+                cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'Select Numerator')
                 break
             }
             case 'Continuous Variable': {
@@ -324,8 +324,8 @@ export class Utilities {
                 cy.get(MeasureGroupPage.numeratorExclusionSelect)
                     .should('not.exist')
                 cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-                cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', '-')
-                cy.get(MeasureGroupPage.measurePopulationSelect).should('contain.text', '-')
+                cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Select Initial Population')
+                cy.get(MeasureGroupPage.measurePopulationSelect).should('contain.text', 'Select Measure Population')
                 break
             }
             case 'Cohort': {
@@ -341,7 +341,7 @@ export class Utilities {
                 cy.get(MeasureGroupPage.numeratorExclusionSelect)
                     .should('not.exist')
                 cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-                cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', '-')
+                cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Select Initial Population')
                 break
 
             }

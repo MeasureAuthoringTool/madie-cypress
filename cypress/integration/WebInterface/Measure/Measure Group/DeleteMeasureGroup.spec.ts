@@ -101,7 +101,7 @@ describe('Validate Measure Group deletion functionality', () => {
         //confirm Scoring value is blank
         cy.get(MeasureGroupPage.measureScoringSelect).should('exist')
         cy.get(MeasureGroupPage.measureScoringSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', '-')
+        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Select Scoring')
     })
 
     it('Confirmation modal has a Keep button and clicking on it will result in the group persisting', () => {
@@ -258,7 +258,7 @@ describe('Validate Measure Group deletion functionality', () => {
         //confirm Scoring value is blank
         cy.get(MeasureGroupPage.measureScoringSelect).should('exist')
         cy.get(MeasureGroupPage.measureScoringSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', '-')
+        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Select Scoring')
 
         //navigate to the test case list tab / page
         cy.get(EditMeasurePage.testCasesTab).should('exist').should('be.visible')
