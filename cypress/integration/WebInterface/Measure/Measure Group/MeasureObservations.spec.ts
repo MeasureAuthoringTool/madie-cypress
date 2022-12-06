@@ -266,7 +266,7 @@ describe('Measure Observations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        //wait for alert / succesful save message to appear
+        //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -279,7 +279,7 @@ describe('Measure Observations', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
 
         //Verify default value
-        cy.get(MeasureGroupPage.cvAggregateFunction).should('contain', '-')
+        cy.get(MeasureGroupPage.cvAggregateFunction).should('contain.text', 'Select Aggregate Function')
 
         //Verify Aggregate function dropdown values
         cy.get(MeasureGroupPage.cvAggregateFunction).click()

@@ -95,12 +95,12 @@ describe('Measure Populations', () => {
 
 
         //verify the populations after reset
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', '-')
-        cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', '-')
-        cy.get(MeasureGroupPage.denominatorExclusionSelect).should('contain.text', '-')
-        cy.get(MeasureGroupPage.denominatorExceptionSelect).should('contain.text', '-')
-        cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', '-')
-        cy.get(MeasureGroupPage.numeratorExclusionSelect).should('contain.text', '-')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Select Initial Population')
+        cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', 'Select Denominator')
+        cy.get(MeasureGroupPage.denominatorExclusionSelect).should('contain.text', 'Select Denominator Exclusion')
+        cy.get(MeasureGroupPage.denominatorExceptionSelect).should('contain.text', 'Select Denominator Exception')
+        cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'Select Numerator')
+        cy.get(MeasureGroupPage.numeratorExclusionSelect).should('contain.text', 'Select Numerator Exclusion')
 
         cy.log('Measure Populations reset successfully')
 
