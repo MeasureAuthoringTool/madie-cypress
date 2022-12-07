@@ -354,7 +354,7 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).should('be.empty')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', '-')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Select Improvement Notation')
 
         cy.get(MeasureGroupPage.measureGroupOne).click()
         //Click on Populations tab
@@ -430,9 +430,9 @@ describe('Validating Stratification tabs', () => {
 
         //confirm values in stratification 1 related fields -- score type is Proportion
         //stratification 1 -- default value
-        cy.get(MeasureGroupPage.stratOne).should('contain.text', '-')
+        cy.get(MeasureGroupPage.stratOne).should('contain.text', 'Select Definition')
         cy.get(MeasureGroupPage.stratOne).each(($ele) => {
-            expect($ele.text()).to.be.oneOf(['-', 'denom', 'ipp', 'num'])
+            expect($ele.text()).to.be.oneOf(['Select Definition', 'denom', 'ipp', 'num'])
         })
         //Association -- default value -- score type is Proportion
         cy.get(MeasureGroupPage.stratAssociationOne).should('contain.text', 'Initial Population')
@@ -839,7 +839,7 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).should('be.empty')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', '-')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Select Improvement Notation')
 
     })
 
