@@ -9,6 +9,7 @@ export class Utilities {
 
         let path = 'cypress/fixtures/measureId'
         let versionIdPath = 'cypress/fixtures/versionId'
+        let measureSetId = 'cypress/fixtures/measureSetId'
         const now = require('dayjs')
         let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
         let mpEndDate = now().format('YYYY-MM-DD')
@@ -32,6 +33,7 @@ export class Utilities {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(path).should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.readFile(measureSetId).should('exist').then((measureSetId) => {
                     cy.request({
                         failOnStatusCode: false,
                     url: '/api/measures/'+id,
@@ -40,7 +42,7 @@ export class Utilities {
                         Authorization: 'Bearer ' + accessToken.value
                     },
                     body: {"id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": ecqmTitle,
-                        "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate,"active": false, 'versionId':vId}
+                        "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate,"active": false, 'versionId':vId, 'measureSetId':measureSetId}
                     }).then((response) => {
                         console.log(response)
 
@@ -48,6 +50,7 @@ export class Utilities {
                     expect(response.body).to.eql("Measure updated successfully.")
                     })
                 })
+            })
             })
         })
     }
