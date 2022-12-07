@@ -5,14 +5,6 @@ let CQLLibraryName = ''
 let harpUser = Environment.credentials().harpUser
 let model = 'QI-Core v4.1.1'
 
-const authnUrl = Environment.authentication().authnUrl
-const authUri = Environment.authentication().authUri
-const redirectUri = Environment.authentication().redirectUri
-const clientId = Environment.authentication().clientId
-const authCodeUrl = authUri + '/v1/authorize'
-const tokenUrl = authUri + '/v1/token'
-const codeVerifier = Cypress.env('MADIE_CODEVERIFIER')
-
 describe('CQL Library Service: Create CQL Library', () => {
 
     beforeEach('Set Access Token', () => {

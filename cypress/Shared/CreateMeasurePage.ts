@@ -70,7 +70,7 @@ export class CreateMeasurePage {
     }
 
     public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
-        twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
+                                         twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
 
         let user = ''
         const now = require('dayjs')
@@ -113,7 +113,8 @@ export class CreateMeasurePage {
                     'elmJson': elmJson,
                     'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
                     'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
-                    'versionId': uuidv4()
+                    'versionId': uuidv4(),
+                    'measureSetId': uuidv4()
 
                 }
             }).then((response) => {
@@ -123,10 +124,12 @@ export class CreateMeasurePage {
                 if (twoMeasures === true) {
                     cy.writeFile('cypress/fixtures/measureId2', response.body.id)
                     cy.writeFile('cypress/fixtures/versionId2', response.body.versionId)
+                    cy.writeFile('cypress/fixtures/measureSetId2', response.body.measureSetId)
                 }
                 else {
                     cy.writeFile('cypress/fixtures/measureId', response.body.id)
                     cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
                 }
 
             })
@@ -169,7 +172,8 @@ export class CreateMeasurePage {
                     "ecqmTitle": "ecqmTitle",
                     'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
                     'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
-                    'versionId': uuidv4()
+                    'versionId': uuidv4(),
+                    'measureSetId': uuidv4()
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
@@ -177,10 +181,12 @@ export class CreateMeasurePage {
                 if (twoMeasures === true) {
                     cy.writeFile('cypress/fixtures/measureId2', response.body.id)
                     cy.writeFile('cypress/fixtures/versionId2', response.body.versionId)
+                    cy.writeFile('cypress/fixtures/measureSetId2', response.body.measureSetId)
                 }
                 else {
                     cy.writeFile('cypress/fixtures/measureId', response.body.id)
                     cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
                 }
 
             })
