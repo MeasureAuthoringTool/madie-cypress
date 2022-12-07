@@ -353,7 +353,7 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
                     Authorization: 'Bearer ' + accessToken.value
                 },
                 body: {"measureName": newMeasureName, "cqlLibraryName": newCqlLibraryName, 'cql': measureCQL, "model": 'QI-Core v4.1.1', "ecqmTitle": 'eCQMTitle', "measurementPeriodStart": '2020-01-01T05:00:00.000+00:00',
-                    "measurementPeriodEnd": '2023-01-01T05:00:00.000+00:00', 'versionId': uuidv4()}
+                    "measurementPeriodEnd": '2023-01-01T05:00:00.000+00:00', 'versionId': uuidv4(), 'measureSetId': uuidv4()}
             }).then((response) => {
                 expect(response.status).to.eql(201)
                 cy.writeFile('cypress/fixtures/measureId', response.body.id)
