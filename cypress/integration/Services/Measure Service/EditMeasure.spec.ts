@@ -1,6 +1,7 @@
 import { Utilities } from "../../../Shared/Utilities"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import { v4 as uuidv4 } from 'uuid'
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -54,6 +55,7 @@ describe('Measure Service: Edit Measure', () => {
                             "model": model,
                             "measureScoring": "Ratio",
                             "versionId": vId,
+                            "measureSetId": uuidv4(),
                             "ecqmTitle": "ecqmTitle",
                             "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
                             "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z"
@@ -118,6 +120,7 @@ describe('Measure Service: Edit Measure', () => {
                             'measureScoring': 'Ratio',
                             "ecqmTitle": "eCQMTitle",
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             'cql': measureCQL,
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate
@@ -152,6 +155,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             'cql': measureCQL,
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate
                         }
@@ -189,6 +193,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             'cql': measureCQL,
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate
                         }
@@ -220,6 +225,7 @@ describe('Measure Service: Edit Measure', () => {
                             'model': model,
                             'measureScoring': 'Ratio',
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             'ecqmTitle': "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate
@@ -251,6 +257,7 @@ describe('Measure Service: Edit Measure', () => {
                             'model': model,
                             'measureScoring': 'Ratio',
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
@@ -283,6 +290,7 @@ describe('Measure Service: Edit Measure', () => {
                             'model': model,
                             'measureScoring': 'Ratio',
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
@@ -315,6 +323,7 @@ describe('Measure Service: Edit Measure', () => {
                             'model': model,
                             'measureScoring': 'Ratio',
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
@@ -347,6 +356,7 @@ describe('Measure Service: Edit Measure', () => {
                             'model': model,
                             'measureScoring': 'Ratio',
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
@@ -379,6 +389,7 @@ describe('Measure Service: Edit Measure', () => {
                             'model': model,
                             'measureScoring': 'Ratio',
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
@@ -411,6 +422,7 @@ describe('Measure Service: Edit Measure', () => {
                             'model': model,
                             'measureScoring': 'Ratio',
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
@@ -443,6 +455,7 @@ describe('Measure Service: Edit Measure', () => {
                             'model': model,
                             'measureScoring': 'Ratio',
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
@@ -475,6 +488,7 @@ describe('Measure Service: Edit Measure', () => {
                             'model': model,
                             'measureScoring': 'Ratio',
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
@@ -531,6 +545,7 @@ describe('Measurement Period Validations', () => {
                             'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                             'model': model,
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             "ecqmTitle": "eCQMTitle",
                             'cql': measureCQL,
                             "measurementPeriodStart": mpEndDate,
@@ -564,6 +579,7 @@ describe('Measurement Period Validations', () => {
                             'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                             'model': model,
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             "ecqmTitle": "eCQMTitle",
                             'cql': measureCQL,
                             "measurementPeriodStart": "",
@@ -597,6 +613,7 @@ describe('Measurement Period Validations', () => {
                             'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
                             'model': model,
                             'versionId': vId,
+                            'measureSetId': uuidv4(),
                             "ecqmTitle": "eCQMTitle",
                             'cql': measureCQL,
                             "measurementPeriodStart": "1823-01-01T05:00:00.000+0000",
@@ -664,6 +681,7 @@ describe('Validate CMS ID', () => {
                         "cqlLibraryName": cqlLibraryName,
                         "model": model,
                         "versionId": vId,
+                        "measureSetId": uuidv4(),
                         "cmsId": "99999",
                         "ecqmTitle": "eCQMTitle",
                         "measurementPeriodStart": mpStartDate,
@@ -694,7 +712,7 @@ describe('Validate CMS ID', () => {
                         },
                         body: {
                             "id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": "ecqmTitle", "cmsId": "99999",
-                            "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate, "active": false, 'versionId': vId
+                            "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate, "active": false, 'versionId': vId, 'measureSetId': uuidv4()
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -725,6 +743,7 @@ describe('Validate CMS ID', () => {
                             "model": model,
                             "measureScoring": "Ratio",
                             "versionId": vId,
+                            "measureSetId": uuidv4(),
                             "cmsId": "55555",
                             "ecqmTitle": "ecqmTitle",
                             "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
