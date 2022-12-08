@@ -1,12 +1,12 @@
-import {Utilities} from "../../../../Shared/Utilities"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../Shared/Header"
-import {EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../Shared/Header"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 
 let measureName = 'MeasureName ' + Date.now()
 let CqlLibraryName = 'CQLLibraryName' + Date.now()
@@ -20,7 +20,7 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
 
-    before('Create Measure and login',() => {
+    before('Create Measure and login', () => {
 
         cy.setAccessTokenCookie()
 
@@ -31,7 +31,9 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(15500)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         //create Measure Group
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
@@ -39,7 +41,7 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
         OktaLogin.Login()
     })
 
-    after('Clean up',() => {
+    after('Clean up', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
@@ -65,7 +67,10 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(4500)
+
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //log out of UI
         OktaLogin.Logout()
@@ -99,7 +104,7 @@ describe('Bundle returns elmXML', () => {
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
 
-    before('Create Measure',() => {
+    before('Create Measure', () => {
 
         cy.setAccessTokenCookie()
 
@@ -110,7 +115,9 @@ describe('Bundle returns elmXML', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(15500)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         //create Measure Group
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
@@ -118,7 +125,7 @@ describe('Bundle returns elmXML', () => {
         OktaLogin.Login()
     })
 
-    after('Clean up',() => {
+    after('Clean up', () => {
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
@@ -141,8 +148,9 @@ describe('Bundle returns elmXML', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        //wait for change to validate
-        cy.wait(15500)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //log out of UI
         OktaLogin.Logout()
@@ -188,7 +196,9 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(15500)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         //create Measure Group
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
@@ -226,9 +236,9 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
                 cy.wrap($ele).click()
             }
         })
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('ml')
-        //Select ml milliLiters from the dropdown
-        cy.get(MeasureGroupPage.ucumScoringUnitfullName).click()
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
+        //Select mL milliliters from the dropdown
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
         cy.get(MeasureGroupPage.popBasis).click()
@@ -266,8 +276,8 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
                     expect(response.body.entry[0].resource.group[0].extension[0].valueCodeableConcept.coding[0].code).to.eql('proportion')
                     expect(response.body.entry[0].resource.group[1].extension[0].valueCodeableConcept.coding[0].code).to.eql('cohort')
                     expect(response.body.entry[0].resource.group[1].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
-                    expect(response.body.entry[0].resource.group[1].extension[2].valueCodeableConcept.coding[0].code).to.eql('ml')
-                    expect(response.body.entry[0].resource.group[1].extension[2].valueCodeableConcept.coding[0].display).to.eql('ml milliLiters')
+                    expect(response.body.entry[0].resource.group[1].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL')
+                    expect(response.body.entry[0].resource.group[1].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL milliliter')
                 })
             })
         })
@@ -292,7 +302,9 @@ describe('Measure bundle end point returns stratifications', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(15500)
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
 
         OktaLogin.Login()
@@ -330,9 +342,9 @@ describe('Measure bundle end point returns stratifications', () => {
                 cy.wrap($ele).click()
             }
         })
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('ml')
-        //Select ml milliLiters from the dropdown
-        cy.get(MeasureGroupPage.ucumScoringUnitfullName).click()
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
+        //Select mL milliliters from the dropdown
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
 
@@ -384,8 +396,8 @@ describe('Measure bundle end point returns stratifications', () => {
                     expect(response.body.entry[0].resource.group[0].stratifier[1].extension[0].valueCodeableConcept.coding[0].code).to.eql('initial-population')
                     expect(response.body.entry[0].resource.group[0].stratifier[1].criteria.expression).to.eql('Surgical Absence of Cervix')
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('ml')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('ml milliLiters')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL milliliter')
                 })
             })
         })
@@ -401,7 +413,7 @@ describe('Measure bundle end point returns stratifications', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
         cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, {delay:50})
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, { delay: 50 })
         })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -423,9 +435,9 @@ describe('Measure bundle end point returns stratifications', () => {
                 cy.wrap($ele).click()
             }
         })
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('ml')
-        //Select ml milliLiters from the dropdown
-        cy.get(MeasureGroupPage.ucumScoringUnitfullName).click()
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
+        //Select mL milliliters from the dropdown
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'denom')
         Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'ToCode')
@@ -487,8 +499,8 @@ describe('Measure bundle end point returns stratifications', () => {
                     expect(response.body.entry[0].resource.group[0].stratifier[2].extension[0].valueCodeableConcept.coding[0].code).to.eql('measure-population-exclusion')
                     expect(response.body.entry[0].resource.group[0].stratifier[2].criteria.expression).to.eql('numeratorExclusion')
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('ml')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('ml milliLiters')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL milliliter')
                 })
             })
         })
@@ -520,9 +532,9 @@ describe('Measure bundle end point returns stratifications', () => {
                 cy.wrap($ele).click()
             }
         })
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('ml')
-        //Select ml milliLiters from the dropdown
-        cy.get(MeasureGroupPage.ucumScoringUnitfullName).click()
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
+        //Select mL milliliters from the dropdown
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Surgical Absence of Cervix')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Surgical Absence of Cervix')
@@ -586,8 +598,8 @@ describe('Measure bundle end point returns stratifications', () => {
                     expect(response.body.entry[0].resource.group[0].stratifier[2].extension[0].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-appliesTo')
                     expect(response.body.entry[0].resource.group[0].stratifier[2].extension[0].valueCodeableConcept.coding[0].code).to.eql('numerator')
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('ml')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('ml milliLiters')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL milliliter')
                     expect(response.body.entry[0].resource.group[0].stratifier[2].criteria.expression).to.eql('Surgical Absence of Cervix')
                 })
             })
@@ -624,7 +636,7 @@ describe('Verify the criteria reference for measure observations', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, {delay: 50})
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, { delay: 50 })
         })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -646,9 +658,9 @@ describe('Verify the criteria reference for measure observations', () => {
                 cy.wrap($ele).click()
             }
         })
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('ml')
-        //Select ml milliLiters from the dropdown
-        cy.get(MeasureGroupPage.ucumScoringUnitfullName).click()
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
+        //Select mL milliliters from the dropdown
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'denom')
         Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'ToCode')
@@ -699,8 +711,8 @@ describe('Verify the criteria reference for measure observations', () => {
                     expect(response.body.resourceType).to.eql('Bundle')
                     expect(response.body.entry[0].resource.group[0].population[1].id).to.eql(response.body.entry[0].resource.group[0].population[3].extension[1].valueString)
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('ml')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('ml milliLiters')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL milliliter')
 
                 })
             })
@@ -735,9 +747,9 @@ describe('Verify the criteria reference for measure observations', () => {
                 cy.wrap($ele).click()
             }
         })
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('ml')
-        //Select ml milliLiters from the dropdown
-        cy.get(MeasureGroupPage.ucumScoringUnitfullName).click()
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
+        //Select mL milliliters from the dropdown
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'denom')
@@ -793,8 +805,8 @@ describe('Verify the criteria reference for measure observations', () => {
                     expect(response.body.entry[0].resource.group[0].population[3].id).to.eql(response.body.entry[0].resource.group[0].population[6].extension[1].valueString)
                     expect(response.body.entry[0].resource.group[0].population[3].code.coding[0].code).to.eql('numerator')
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('ml')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('ml milliLiters')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL milliliter')
                 })
             })
         })
