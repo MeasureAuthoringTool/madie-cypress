@@ -1,14 +1,14 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {Header} from "../../../../Shared/Header"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { Header } from "../../../../Shared/Header"
 import assert = require("assert")
-import {Global} from "../../../../Shared/Global"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {LandingPage} from "../../../../Shared/LandingPage"
+import { Global } from "../../../../Shared/Global"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { LandingPage } from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -18,23 +18,32 @@ let newCqlLibraryName = ''
 
 describe('Validate Measure Group -- scoring and populations', () => {
 
-    beforeEach('Create New Measure and Login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    newMeasureName = measureName + randValue
+    newCqlLibraryName = CqlLibraryName + randValue
+
+    beforeEach('Create Measure and login', () => {
+
+        cy.setAccessTokenCookie()
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
+        MeasuresPage.clickEditforCreatedMeasure()
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
 
+        OktaLogin.Login()
     })
 
-    afterEach(' Clean up and Logout', () => {
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+    afterEach('Clean up and Logout', () => {
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
         OktaLogin.Logout()
 
     })
@@ -48,7 +57,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.readFile('cypress/fixtures/GenericCQLBoolean.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
-        for(let i = 0; i<=5; i++){
+        for (let i = 0; i <= 5; i++) {
             cy.get(EditMeasurePage.cqlEditorTextBox).type('{backspace}')
         }
         //save CQL on measure
@@ -86,19 +95,19 @@ describe('Validate Measure Group -- scoring and populations', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
-        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 20700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 20700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
 
         //Click on the measure group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -116,7 +125,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         //select scoring unit on measure
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
 
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect,'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
 
         //Add UCUM scoring unit
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
@@ -127,9 +136,9 @@ describe('Validate Measure Group -- scoring and populations', () => {
                 cy.wrap($ele).click()
             }
         })
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('ml')
-        //Select ml milliLiters from the dropdown
-        cy.get(MeasureGroupPage.ucumScoringUnitfullName).click()
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
+        //Select mL milliliters from the dropdown
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -154,14 +163,14 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.popBasis).then(($text) => {
             assert($text.text(), 'Boolean')
         })
-        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text','Cohort')
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text','Initial Population')
+        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Cohort')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Initial Population')
         cy.get(MeasureGroupPage.measureGroupDescriptionBox)
             .then(($message) => {
                 expect($message.val().toString()).to.equal('MeasureGroup Description value')
             })
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).should('contain.text','ml milliLiters')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('contain.text','Process')
+        cy.get(MeasureGroupPage.ucumScoringUnitCurrentValue).should('contain.value', 'mL milliliter')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('contain.text', 'Process')
     })
 
     it('Add second initial population for Ratio Measure', () => {
@@ -197,7 +206,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         //select scoring unit as Ratio on measure
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
 
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect,'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusion')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
@@ -237,7 +246,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //verify that the population and the scoring unit that was saved, together, appears
-        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text','Ratio')
+        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Ratio')
         cy.get(MeasureGroupPage.firstInitialPopulationSelect).should('contain.text', 'Initial Population')
         cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('contain.text', 'Initial Population2')
 
@@ -247,7 +256,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
 
         cy.log('Create Ratio Measure')
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
-        
+
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
         //wait until page / tabs loads
@@ -294,42 +303,43 @@ describe('Validate Measure Group -- scoring and populations', () => {
 
         //Navigate to Groups tab and verify the Measure scoring and population reset to previous values
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text','Ratio')
+        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Ratio')
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'ipp')
 
     })
 })
 
 describe('Validate Population Basis', () => {
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    newMeasureName = measureName + randValue
+    newCqlLibraryName = CqlLibraryName + randValue
 
-    before('Create measure', () => {
-        //Create New Measure
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
+    beforeEach('Create Measure and login', () => {
+
+        cy.setAccessTokenCookie()
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-
-    })
-
-    beforeEach('Login', () => {
+        OktaLogin.Login()
+        MeasuresPage.clickEditforCreatedMeasure()
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
 
         OktaLogin.Login()
-
     })
 
-    afterEach('Login', () => {
-
+    afterEach('Clean up and Logout', () => {
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
         OktaLogin.Logout()
 
     })
 
-    after('Clean up', () => {
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
-    })
     it('Verify default Value and if no value is selected for Population Basis, the save button is unavailable', () => {
         //click on Edit button to edit measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -372,7 +382,7 @@ describe('Validate Population Basis', () => {
         //select scoring unit on measure
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
 
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect,'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
 
         //Add UCUM scoring unit
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
@@ -383,9 +393,9 @@ describe('Validate Population Basis', () => {
                 cy.wrap($ele).click()
             }
         })
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('ml')
-        //Select ml milliLiters from the dropdown
-        cy.get(MeasureGroupPage.ucumScoringUnitfullName).click()
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
+        //Select mL milliliters from the dropdown
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
