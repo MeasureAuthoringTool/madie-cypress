@@ -1,5 +1,6 @@
 import {OktaLogin} from "../../../../Shared/OktaLogin"
 import {MeasuresPage} from "../../../../Shared/MeasuresPage"
+import { v4 as uuidv4 } from 'uuid'
 
 let measureName  = []
 let CqlLibraryName  = []
@@ -8,6 +9,7 @@ const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
 let versionIdPath = 'cypress/fixtures/versionId'
+let measureSetIdPath = 'cypress/fixtures/measureSetId'
 
 describe('Measure List Pagination', () => {
 
@@ -37,6 +39,7 @@ describe('Measure List Pagination', () => {
                             'model': 'QI-Core v4.1.1',
                             "ecqmTitle": "eCQMTitle",
                             "versionId": vId,
+                            "measureSetId": uuidv4(),
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate
                         }
@@ -46,6 +49,8 @@ describe('Measure List Pagination', () => {
                         measureIds [i] = response.body.id
                         fileContents = fileContents + measureIds[i] + ','
                         cy.writeFile('cypress/fixtures/measureId', fileContents)
+                        cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                        cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
 
                     })
                 })
@@ -63,41 +68,44 @@ describe('Measure List Pagination', () => {
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             cy.readFile(versionIdPath).should('exist').then((vId) => {
+                cy.readFile(measureSetIdPath).should('exist').then((measureSetId) => {
 
-                idsList = fileContents.split(',')
+                    idsList = fileContents.split(',')
 
-                for (let j = 0; j < idsList.length - 1; j++) {
+                    for (let j = 0; j < idsList.length - 1; j++) {
 
-                    cy.getCookie('accessToken').then((accessToken) => {
+                        cy.getCookie('accessToken').then((accessToken) => {
 
-                        let id = idsList[j]
+                            let id = idsList[j]
 
-                        cy.log('ID is : ' + id)
+                            cy.log('ID is : ' + id)
 
-                        cy.request({
-                            url: '/api/measures/' + id,
-                            method: 'PUT',
-                            headers: {
-                                Authorization: 'Bearer ' + accessToken.value
-                            },
-                            body: {
-                                "id": id,
-                                "measureName": measureName[j],
-                                "cqlLibraryName": CqlLibraryName[j] + 1,
-                                "model": 'QI-Core v4.1.1',
-                                "versionId": vId,
-                                "ecqmTitle": "eCQMTitle",
-                                "active": false,
-                                "measurementPeriodStart": mpStartDate,
-                                "measurementPeriodEnd": mpEndDate
-                            }
+                            cy.request({
+                                url: '/api/measures/' + id,
+                                method: 'PUT',
+                                headers: {
+                                    Authorization: 'Bearer ' + accessToken.value
+                                },
+                                body: {
+                                    "id": id,
+                                    "measureName": measureName[j],
+                                    "cqlLibraryName": CqlLibraryName[j] + 1,
+                                    "model": 'QI-Core v4.1.1',
+                                    "versionId": vId,
+                                    "measureSetId": measureSetId,
+                                    "ecqmTitle": "eCQMTitle",
+                                    "active": false,
+                                    "measurementPeriodStart": mpStartDate,
+                                    "measurementPeriodEnd": mpEndDate
+                                }
 
-                        }).then((response) => {
-                            expect(response.status).to.eql(200)
-                            expect(response.body).to.eql("Measure updated successfully.")
+                            }).then((response) => {
+                                expect(response.status).to.eql(200)
+                                expect(response.body).to.eql("Measure updated successfully.")
+                            })
                         })
-                    })
-                }
+                    }
+                })
             })
         })
 
