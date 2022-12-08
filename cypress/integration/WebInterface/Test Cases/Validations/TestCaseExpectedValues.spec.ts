@@ -129,6 +129,9 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Population Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure group.Are you sure you want to Save Changes?This action cannot be undone.')
+        cy.get(MeasureGroupPage.updatePopulationBasisConfirmationBtn).click()
+
         //validation message after attempting to save
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
