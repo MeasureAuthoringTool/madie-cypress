@@ -31,7 +31,7 @@ export class Utilities {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(path).should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.readFile(versionIdPath).should('exist').then((measureSetId) => {
+                    cy.readFile(measureSetIdPath).should('exist').then((measureSetId) => {
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/measures/' + id,
