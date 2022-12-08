@@ -93,6 +93,7 @@ export class MeasureGroupPage {
 
     public static readonly ucumScoringUnitfullName = '[aria-activedescendant="scoring-unit-dropdown-option-0"]'
     public static readonly ucumScoringUnitDropdownList = '[data-testid="measure-scoring-unit-text-input"]'
+    public static readonly ucumScoringUnitCurrentValue = '[id="scoring-unit-dropdown"]'
 
     //Measure Observations
     public static readonly addDenominatorObservationLink = '[data-testid="add-measure-observation-denominator"]'
