@@ -148,7 +148,8 @@ describe('Read only for measure, measure group, and test cases that user does no
 
     })
 
-    it('Fields on Measure Group page are not editable', () => {
+    //Skipping until MAT-5128 is fixed
+    it.skip('Fields on Measure Group page are not editable', () => {
 
         //page loads
         cy.location('pathname', {timeout: 60000}).should('include', '/measures')
