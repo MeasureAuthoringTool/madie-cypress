@@ -103,7 +103,7 @@ describe('Warning modal on Test Case JSON Editor', () => {
 
     })
 })
-describe('JSON Rescource ID tests', () => {
+describe('JSON Resource ID tests', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
@@ -438,28 +438,15 @@ describe('JSON Rescource ID tests - Proportion Score Type', () => {
     })
 
 })
-describe('JSON Rescource ID tests -- CV', () => {
+describe('JSON Resource ID tests -- CV', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(measureName, CqlLibraryName, mesureCQLPFTests)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        //MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
-        OktaLogin.Login()
+
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -475,11 +462,21 @@ describe('JSON Rescource ID tests -- CV', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
     
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-    
+
         cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, {delay:50})
         })
@@ -494,17 +491,7 @@ describe('JSON Rescource ID tests -- CV', () => {
         Utilities.setMeasureGroupType()
     
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
-        cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('ml')
-        //Select ml milliLiters from the dropdown
-        cy.get(MeasureGroupPage.ucumScoringUnitfullName).click()
+
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'denom')
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'num')
