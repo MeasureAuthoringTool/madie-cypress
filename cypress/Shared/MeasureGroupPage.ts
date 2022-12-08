@@ -7,8 +7,6 @@ import { v4 as uuidv4 } from 'uuid'
 
 export class MeasureGroupPage {
 
-    //<div required="" data-testid="scoring-select" class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall  css-1wunfk1"><div role="button" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="scoring-select-label scoring-select" aria-describedby="scoring-select-helper-text" id="scoring-select" aria-required="true" class="MuiSelect-select MuiSelect-outlined MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputSizeSmall css-182didf" tabindex="0">Proportion</div><input name="scoring" aria-hidden="true" tabindex="-1" class="MuiSelect-nativeInput css-1k3x8v3" required="" data-testid="scoring-select-input" value="Proportion"><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-1636szt" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ExpandMoreIcon"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"></path></svg><fieldset aria-hidden="true" class="MuiOutlinedInput-notchedOutline css-igs3ac"><legend class="css-hdw1oc"><span class="notranslate">​</span></legend></fieldset></div>
-
     //CQL has errors message
     public static readonly CQLHasErrorMsg = '[data-testid="error-alerts"]'
 
@@ -90,9 +88,11 @@ export class MeasureGroupPage {
     public static readonly populationMismatchErrorMsg = '[data-testid="helper-text"]'
 
     //UCUM scoring unit
-    public static readonly ucumScoringUnitSelect = '[class=" css-1m9es75"]'
-    public static readonly ucumScoringUnitDropdownList = '[id=react-select-2-input]'
-    public static readonly ucumScoringUnitfullName = '#react-select-2-option-0-0'
+    public static readonly ucumScoringUnitSelect = '[data-testid="measure-scoring-unit-text-input"]'
+
+
+    public static readonly ucumScoringUnitfullName = '[aria-activedescendant="scoring-unit-dropdown-option-0"]'
+    public static readonly ucumScoringUnitDropdownList = '[data-testid="measure-scoring-unit-text-input"]'
 
     //Measure Observations
     public static readonly addDenominatorObservationLink = '[data-testid="add-measure-observation-denominator"]'

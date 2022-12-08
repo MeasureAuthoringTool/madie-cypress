@@ -70,7 +70,7 @@ export class CreateMeasurePage {
     }
 
     public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
-                                         twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
+        twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
 
         let user = ''
         const now = require('dayjs')
@@ -163,6 +163,7 @@ export class CreateMeasurePage {
                 },
                 method: 'POST',
                 body: {
+                    'measureSetId': uuidv4(),
                     'measureName': measureName,
                     'cqlLibraryName': CqlLibraryName,
                     'model': 'QI-Core v4.1.1',
@@ -173,7 +174,6 @@ export class CreateMeasurePage {
                     'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
                     'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
                     'versionId': uuidv4(),
-                    'measureSetId': uuidv4()
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)

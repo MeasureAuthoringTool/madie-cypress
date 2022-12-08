@@ -1,4 +1,4 @@
-import {Utilities} from "./Utilities"
+import { Utilities } from "./Utilities"
 
 
 export class MeasuresPage {
@@ -17,24 +17,23 @@ export class MeasuresPage {
     public static clickEditforCreatedMeasure(secondMeasure?: boolean): void {
         let filePath = 'cypress/fixtures/measureId'
 
-        if (secondMeasure === true)
-        {
+        if (secondMeasure === true) {
             filePath = 'cypress/fixtures/measureId2'
         }
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=edit-measure-'+ fileContents +']', 6000)
-            cy.get('[data-testid=edit-measure-'+ fileContents +']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=edit-measure-'+ fileContents +']', 6000)
-            cy.get('[data-testid=edit-measure-'+ fileContents +']').should('be.enabled')
-            cy.get('[data-testid=edit-measure-'+ fileContents +']').click()
+            Utilities.waitForElementVisible('[data-testid=edit-measure-' + fileContents + ']', 30000)
+            cy.get('[data-testid=edit-measure-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=edit-measure-' + fileContents + ']', 30000)
+            cy.get('[data-testid=edit-measure-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=edit-measure-' + fileContents + ']').click()
         })
     }
 
     public static validateMeasureName(expectedValue: string): void {
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
 
-            let element = cy.get('[data-testid=edit-measure-'+ fileContents +']').parent()
+            let element = cy.get('[data-testid=edit-measure-' + fileContents + ']').parent()
             element.parent().should('contain', expectedValue)
 
         })

@@ -1,56 +1,56 @@
-import {TestCasesPage} from "./TestCasesPage"
-import {Header} from "./Header"
-import {MeasureGroupPage} from "./MeasureGroupPage"
-import {CQLLibraryPage} from "./CQLLibraryPage";
+import { TestCasesPage } from "./TestCasesPage"
+import { Header } from "./Header"
+import { MeasureGroupPage } from "./MeasureGroupPage"
+import { CQLLibraryPage } from "./CQLLibraryPage";
 
 export class Utilities {
 
-    public static deleteMeasure(measureName: string, cqlLibraryName: string, deleteSecondMeasure?:boolean, altUser?:boolean): void {
+    public static deleteMeasure(measureName: string, cqlLibraryName: string, deleteSecondMeasure?: boolean, altUser?: boolean): void {
 
         let path = 'cypress/fixtures/measureId'
         let versionIdPath = 'cypress/fixtures/versionId'
-        let measureSetId = 'cypress/fixtures/measureSetId'
+        let measureSetIdPath = 'cypress/fixtures/measureSetId'
         const now = require('dayjs')
         let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
         let mpEndDate = now().format('YYYY-MM-DD')
         let ecqmTitle = 'eCQMTitle'
 
-        if (altUser)
-        {
+        if (altUser) {
             cy.setAccessTokenCookieALT()
         }
-        else
-        {
+        else {
             cy.setAccessTokenCookie()
         }
 
-        if (deleteSecondMeasure)
-        {
+        if (deleteSecondMeasure) {
             path = 'cypress/fixtures/measureId2'
             versionIdPath = 'cypress/fixtures/versionId2'
+            measureSetIdPath = 'cypress/fixtures/measureSetId2'
         }
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(path).should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.readFile(measureSetId).should('exist').then((measureSetId) => {
-                    cy.request({
-                        failOnStatusCode: false,
-                    url: '/api/measures/'+id,
-                    method: 'PUT',
-                    headers: {
-                        Authorization: 'Bearer ' + accessToken.value
-                    },
-                    body: {"id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": ecqmTitle,
-                        "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate,"active": false, 'versionId':vId, 'measureSetId':measureSetId}
-                    }).then((response) => {
-                        console.log(response)
+                    cy.readFile(versionIdPath).should('exist').then((measureSetId) => {
+                        cy.request({
+                            failOnStatusCode: false,
+                            url: '/api/measures/' + id,
+                            method: 'PUT',
+                            headers: {
+                                Authorization: 'Bearer ' + accessToken.value
+                            },
+                            body: {
+                                "id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": ecqmTitle,
+                                "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate, "active": false, 'versionId': vId, 'measureSetId': measureSetId
+                            }
+                        }).then((response) => {
+                            console.log(response)
 
-                    expect(response.status).to.eql(200)
-                    expect(response.body).to.eql("Measure updated successfully.")
+                            expect(response.status).to.eql(200)
+                            expect(response.body).to.eql("Measure updated successfully.")
+                        })
                     })
                 })
-            })
             })
         })
     }
@@ -68,7 +68,7 @@ export class Utilities {
         })
     }
 
-    public static readWriteFileData(file: string, pageResource: any): void{
+    public static readWriteFileData(file: string, pageResource: any): void {
         cy.fixture(file).then((str) => {
             // split file by line endings
             const fileArr = str.split(/\r?\n/);
@@ -81,11 +81,11 @@ export class Utilities {
             });
             // log new array
             cy.log(cqlArr);
-            for (let i in cqlArr){
-                if (cqlArr[i] == '' || cqlArr[i] == null || cqlArr[i] == undefined){
+            for (let i in cqlArr) {
+                if (cqlArr[i] == '' || cqlArr[i] == null || cqlArr[i] == undefined) {
                     cy.get(pageResource).type('{enter}')
                 }
-                else { 
+                else {
                     this.textValues.dataLines = cqlArr[i]
                     cy.get(pageResource)
                         .type(this.textValues.dataLines)
@@ -97,7 +97,7 @@ export class Utilities {
         })
     }
 
-    public static validateCQL(file: string, pageResource: any): void{
+    public static validateCQL(file: string, pageResource: any): void {
         cy.fixture(file).then((str) => {
             // split file by line endings
             const fileArr = str.split(/\r?\n/);
@@ -112,7 +112,7 @@ export class Utilities {
             cy.log(cqlArr);
             this.waitForElementVisible(pageResource, 3000)
             cy.get(pageResource).invoke('show')
-            for (let i in cqlArr){
+            for (let i in cqlArr) {
                 this.textValues.dataLines = cqlArr[i]
                 cy.log(this.textValues.dataLines)
                 cy.get(pageResource)
@@ -131,20 +131,20 @@ export class Utilities {
         cy.get(element, { timeout: timeout }).should('be.visible')
     }
 
-    public static validateTCPopValueCheckBoxes (measureScoreValue: string | string[]): void {
-        switch ((measureScoreValue.valueOf()).toString()){
+    public static validateTCPopValueCheckBoxes(measureScoreValue: string | string[]): void {
+        switch ((measureScoreValue.valueOf()).toString()) {
             case "Ratio": {
                 //validate what available check boxes should and shouldn't be present / visible
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','IPP')
+                    .contains('td', 'IPP')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','NUMER')
+                    .contains('td', 'NUMER')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','NUMEX')
+                    .contains('td', 'NUMEX')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','DENOM')
+                    .contains('td', 'DENOM')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','DENEX')
+                    .contains('td', 'DENEX')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
                     .should('not.have.value', 'DENEXCEP')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
@@ -156,17 +156,17 @@ export class Utilities {
             }
             case 'Proportion': {
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','IPP')
+                    .contains('td', 'IPP')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','NUMER')
+                    .contains('td', 'NUMER')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','NUMEX')
+                    .contains('td', 'NUMEX')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','DENOM')
+                    .contains('td', 'DENOM')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','DENEX')
+                    .contains('td', 'DENEX')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','DENEXCEP')
+                    .contains('td', 'DENEXCEP')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
                     .should('not.have.value', 'MSRPOPL')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
@@ -176,21 +176,21 @@ export class Utilities {
             }
             case 'Continuous Variable': {
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','IPP')
+                    .contains('td', 'IPP')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','MSRPOPL')
+                    .contains('td', 'MSRPOPL')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','MSRPOPLEX')
+                    .contains('td', 'MSRPOPLEX')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .should('not.have.value','NUMER')
+                    .should('not.have.value', 'NUMER')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .should('not.have.value','NUMEX')
+                    .should('not.have.value', 'NUMEX')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .should('not.have.value','DENOM')
+                    .should('not.have.value', 'DENOM')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .should('not.have.value','DENEX')
+                    .should('not.have.value', 'DENEX')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .should('not.have.value','DENEXCEP')
+                    .should('not.have.value', 'DENEXCEP')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
                     .should('not.have.value', 'DENEXCEP')
                 cy.get(Header.mainMadiePageButton).click()
@@ -198,15 +198,15 @@ export class Utilities {
             }
             case 'Cohort': {
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .contains('td','IPP')
+                    .contains('td', 'IPP')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .should('not.have.value','NUMER')
+                    .should('not.have.value', 'NUMER')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .should('not.have.value','NUMEX')
+                    .should('not.have.value', 'NUMEX')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .should('not.have.value','DENOM')
+                    .should('not.have.value', 'DENOM')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
-                    .should('not.have.value','DENEX')
+                    .should('not.have.value', 'DENEX')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
                     .should('not.have.value', 'DENEXCEP')
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
@@ -220,8 +220,8 @@ export class Utilities {
         }
     }
 
-    public static validationMeasureGroupSaveAll (measureScoreValue: string | string[]): void {
-        switch ((measureScoreValue.valueOf()).toString()){
+    public static validationMeasureGroupSaveAll(measureScoreValue: string | string[]): void {
+        switch ((measureScoreValue.valueOf()).toString()) {
             case "Ratio": {
                 //verify the correct populations are displayed and not displayed
                 cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
@@ -278,11 +278,11 @@ export class Utilities {
                 break
 
             }
-            
+
         }
     }
 
-    public static validationMeasureGroupSaveWithoutRequired (measureScoreValue: string | string[]): void {
+    public static validationMeasureGroupSaveWithoutRequired(measureScoreValue: string | string[]): void {
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
@@ -291,8 +291,8 @@ export class Utilities {
                 cy.wrap($ele).click()
             }
         })
-        cy.get(MeasureGroupPage.measureGroupTypeDropdownBtn).click({force:true})
-        switch ((measureScoreValue.valueOf()).toString()){
+        cy.get(MeasureGroupPage.measureGroupTypeDropdownBtn).click({ force: true })
+        switch ((measureScoreValue.valueOf()).toString()) {
             case "Ratio": {
                 //verify the correct populations are displayed and not displayed
                 Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Surgical Absence of Cervix')
@@ -351,11 +351,11 @@ export class Utilities {
                 break
 
             }
-            
+
         }
     }
 
-    public static validationMeasureGroupSaveWithoutOptional (measureScoreValue: string | string[]): void {
+    public static validationMeasureGroupSaveWithoutOptional(measureScoreValue: string | string[]): void {
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
@@ -364,8 +364,8 @@ export class Utilities {
                 cy.wrap($ele).click()
             }
         })
-        cy.get(MeasureGroupPage.measureGroupTypeDropdownBtn).click({force:true})
-        switch ((measureScoreValue.valueOf()).toString()){
+        cy.get(MeasureGroupPage.measureGroupTypeDropdownBtn).click({ force: true })
+        switch ((measureScoreValue.valueOf()).toString()) {
             case "Ratio": {
                 //verify the correct populations are displayed and not displayed
                 Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
@@ -380,7 +380,7 @@ export class Utilities {
             case 'Proportion': {
                 //verify the correct populations are displayed and not displayed
                 Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
-                Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Surgical Absence of Cervix')              
+                Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Surgical Absence of Cervix')
                 Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Surgical Absence of Cervix')
                 Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Surgical Absence of Cervix')
                 Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'Surgical Absence of Cervix')
@@ -390,7 +390,7 @@ export class Utilities {
             case 'Continuous Variable': {
                 //verify the correct populations are displayed and not displayed
                 Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
-                Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'Surgical Absence of Cervix')                    
+                Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'Surgical Absence of Cervix')
                 cy.get(MeasureGroupPage.denominatorSelect)
                     .should('not.exist')
                 cy.get(MeasureGroupPage.denominatorExclusionSelect)
@@ -407,15 +407,15 @@ export class Utilities {
                 break
 
             }
-            
+
         }
     }
 
-    public static validateMeasureGroup (measureScoreValue: any | any[], mgPVTestType: string | string[]): void {
+    public static validateMeasureGroup(measureScoreValue: any | any[], mgPVTestType: string | string[]): void {
         //log, in cypress, the test type value
         cy.log((mgPVTestType.valueOf()).toString())
 
-        switch ((mgPVTestType.valueOf()).toString()){
+        switch ((mgPVTestType.valueOf()).toString()) {
             case "all": {
 
                 //log, in cypress, the measure score value
@@ -437,28 +437,28 @@ export class Utilities {
         }
     }
 
-    public static dropdownSelect (dropdownDataElement: string, valueDataElement: string): void {
+    public static dropdownSelect(dropdownDataElement: string, valueDataElement: string): void {
         cy.get(dropdownDataElement).should('exist').should('be.visible')
-        
-        if(valueDataElement == MeasureGroupPage.measureScoringCohort ||
+
+        if (valueDataElement == MeasureGroupPage.measureScoringCohort ||
             valueDataElement == MeasureGroupPage.measureScoringProportion ||
-            valueDataElement == MeasureGroupPage.measureScoringRatio||
+            valueDataElement == MeasureGroupPage.measureScoringRatio ||
             valueDataElement == MeasureGroupPage.measureScoringCV ||
             valueDataElement == CQLLibraryPage.cqlLibraryModelQICore
-        ){
+        ) {
             cy.get(dropdownDataElement).click()
             cy.get(valueDataElement).click()
         }
-        else{
+        else {
             cy.get(dropdownDataElement)
-            .parent()
-            .click()
-            .get('ul > li[data-value="' + valueDataElement + '"]')
-            .click()
+                .parent()
+                .click()
+                .get('ul > li[data-value="' + valueDataElement + '"]')
+                .click()
         }
     }
 
-    public static setMeasureGroupType (): void {
+    public static setMeasureGroupType(): void {
 
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
