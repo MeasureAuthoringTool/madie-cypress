@@ -1,10 +1,10 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -42,6 +42,8 @@ describe('Validating Population tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -49,7 +51,7 @@ describe('Validating Population tabs', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
+        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -57,10 +59,10 @@ describe('Validating Population tabs', () => {
         //validation message after attempting to save
         cy.get(MeasureGroupPage.popUpConfirmationModal).should('exist')
         cy.get(MeasureGroupPage.popUpConfirmationModal).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.popUpConfirmationModal, 3000)
+        Utilities.waitForElementVisible(MeasureGroupPage.popUpConfirmationModal, 30000)
         cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('exist')
         cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.scoreUpdateMGConfirmMsg, 3000)
+        Utilities.waitForElementVisible(MeasureGroupPage.scoreUpdateMGConfirmMsg, 30000)
         cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Scoring is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.')
         cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Are you sure you want to Save Changes?')
         cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'This action cannot be undone.')
@@ -77,6 +79,8 @@ describe('Validating Population tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -104,12 +108,18 @@ describe('Validating Population tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
+
         //Click on Reporting tab
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
         cy.get(MeasureGroupPage.reportingTab).click()
-        cy.get(MeasureGroupPage.reportingTab).click()
+
 
         //assert the two fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
@@ -118,7 +128,7 @@ describe('Validating Population tabs', () => {
 
         //save measure group
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
+        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -126,42 +136,53 @@ describe('Validating Population tabs', () => {
         //validation message after attempting to save
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 30000)
 
         //assert save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         //navigate to the populations tab
+        cy.get(MeasureGroupPage.populationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
         cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
         //navigate back to the reporting tab
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab and their recently updated values
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).should('contain.value','Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Typed some value for Rate Aggregation text area field')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text','Increased score indicates improvement')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
 
         //navigate to the CQl tab
+        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 30000)
+        cy.get(EditMeasurePage.cqlEditorTab).should('exist')
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         //Click on Measure Group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Click on Reporting tab
-        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        cy.get(MeasureGroupPage.reportingTab).should('be.enabled')
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab and their recently updated values
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).should('contain.value','Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Typed some value for Rate Aggregation text area field')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text','Increased score indicates improvement')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
     })
 
     it('Changes are saved across different tabs', () => {
@@ -170,12 +191,15 @@ describe('Validating Population tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Click on Reporting tab
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
@@ -185,6 +209,8 @@ describe('Validating Population tabs', () => {
 
 
         //navigate to the populations tab
+        cy.get(MeasureGroupPage.populationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
         cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
@@ -192,15 +218,22 @@ describe('Validating Population tabs', () => {
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'denom')
 
         //navigate back to the reporting tab
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab and their recently updated values
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).should('contain.value','Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Typed some value for Rate Aggregation text area field')
+
+        //navigate back to the reporting tab
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).click()
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text','Increased score indicates improvement')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
 
         //save measure group
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -218,21 +251,26 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         //Click on Measure Group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Click on Reporting tab
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab and their recently updated values
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).should('contain.value','Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Typed some value for Rate Aggregation text area field')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text','Increased score indicates improvement')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
 
         //navigate to the populations tab
+        cy.get(MeasureGroupPage.populationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
         cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
@@ -248,6 +286,8 @@ describe('Validating Population tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -257,14 +297,17 @@ describe('Validating Population tabs', () => {
 
         //make reporting the active tab
         //Click on Reporting tab
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert that error indicator appears on the population tab
         cy.get(MeasureGroupPage.populationTab)
-            .then(($message) => {assert($message.text, 'Populations 🚫') })
+            .then(($message) => { assert($message.text, 'Populations 🚫') })
         //click on the population tab and correct issue
+        cy.get(MeasureGroupPage.populationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
         cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'num')
@@ -274,13 +317,14 @@ describe('Validating Population tabs', () => {
 
         //make reporting the active tab
         //Click on Reporting tab
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert that the error indicator no longer appears on the population tab
         cy.get(MeasureGroupPage.populationTab)
-            .then(($message) => {assert($message.text, 'Populations') })
+            .then(($message) => { assert($message.text, 'Populations') })
 
         //save measure group
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -309,13 +353,19 @@ describe('Validating Population tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.populationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
+        cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
         //Click on Reporting tab
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
@@ -339,15 +389,16 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         //add multiple groups
-        for (let i = 1; i <= 4; i++){
+        for (let i = 1; i <= 4; i++) {
 
             cy.get(MeasureGroupPage.addMeasureGroupButton).should('be.visible')
             cy.get(MeasureGroupPage.addMeasureGroupButton).click()
 
         }
         //Click on Reporting tab
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert that the two fields appear on the reporting tab and are blank / without a selected value
@@ -358,6 +409,8 @@ describe('Validating Population tabs', () => {
 
         cy.get(MeasureGroupPage.measureGroupOne).click()
         //Click on Populations tab
+        cy.get(MeasureGroupPage.populationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
         cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
@@ -401,23 +454,30 @@ describe('Validating Stratification tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.populationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
+        cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
         //Click on Stratification tab
+        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30000)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).click()
 
         //create stratification fields if they do not already exist on page
         cy.get('body').then((body) => {
-            if((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
+            if ((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
                 cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
             }
-        })        
+        })
 
         //confirm stratification related fields are present
         cy.get(MeasureGroupPage.stratOne).should('exist')
@@ -443,12 +503,18 @@ describe('Validating Stratification tabs', () => {
 
         //change score type to Cohort
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30000)
+        cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).click()
         //Association -- contains these values based off score type -- score type is Cohort
         cy.get(MeasureGroupPage.stratAssociationOne)
             .should('contain.text', 'Initial Population')
         //change score type to Continuous Variable
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
+        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30000)
+        cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).click()
         //Association -- default value -- score type is Continuous Variable
         cy.get(MeasureGroupPage.stratAssociationOne)
@@ -465,6 +531,8 @@ describe('Validating Stratification tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -472,18 +540,21 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.popBasis).type('Boolean').type('{enter}')
 
         //Click on Stratification tab
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
+        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
+
 
         //create stratification fields if they do not already exist on page
         cy.get('body').then((body) => {
-            if((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
+            if ((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
                 cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
             }
-        })        
+        })
 
         //select a value only for Association
         Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'denominator')
@@ -493,16 +564,19 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //Click on Stratification tab
-        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 20700)
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
         cy.get('body').then((body) => {
-            if((body.find(MeasureGroupPage.stratAssociationOne).length !=0 )){
-                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 20700)
+            if ((body.find(MeasureGroupPage.stratAssociationOne).length != 0)) {
+                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 30700)
                 cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
                 cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
             } else {
+                Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
+                cy.get(MeasureGroupPage.stratificationTab).should('exist')
+                cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
                 cy.get(MeasureGroupPage.stratificationTab).click()
             }
         })
@@ -516,23 +590,30 @@ describe('Validating Stratification tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.populationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
+        cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
         //Click on Stratification tab
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
+        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
 
         //create stratification fields if they do not already exist on page
         cy.get('body').then((body) => {
-            if((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
+            if ((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
                 cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
             }
-        })        
+        })
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'denom')
@@ -561,16 +642,19 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         //Navigate back to stratification tab and assert the values
-        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 20700)
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
-        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')        
+        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
         cy.get('body').then((body) => {
-            if((body.find(MeasureGroupPage.stratAssociationOne).length !=0 )){
-                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 20700)
+            if ((body.find(MeasureGroupPage.stratAssociationOne).length != 0)) {
+                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 30700)
                 cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
                 cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
             } else {
+                Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
+                cy.get(MeasureGroupPage.stratificationTab).should('exist')
+                cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
                 cy.get(MeasureGroupPage.stratificationTab).click()
             }
         })
@@ -586,31 +670,43 @@ describe('Validating Stratification tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.populationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
+        cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
         //Click on Stratification tab
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
+        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
         //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.populationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
+        cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
         //Click on Stratification tab
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
+        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
 
         //create stratification fields if they do not already exist on page
         cy.get('body').then((body) => {
-            if((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
+            if ((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
                 cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
             }
-        })        
+        })
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'denom')
@@ -639,32 +735,38 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         //Remove Stratifications
-        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 20700)
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
-        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')        
+        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
         cy.get('body').then((body) => {
-            if((body.find(MeasureGroupPage.stratAssociationOne).length !=0 )){
-                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 20700)
+            if ((body.find(MeasureGroupPage.stratAssociationOne).length != 0)) {
+                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 30700)
                 cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
                 cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
             } else {
+                Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
+                cy.get(MeasureGroupPage.stratificationTab).should('exist')
+                cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
                 cy.get(MeasureGroupPage.stratificationTab).click()
             }
         })
-        cy.get(MeasureGroupPage.removeStratButton).click({force:true, multiple: true})
+        cy.get(MeasureGroupPage.removeStratButton).click({ force: true, multiple: true })
 
         //Click on Stratification tab
-        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 20700)
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
-        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')        
+        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
         cy.get('body').then((body) => {
-            if((body.find(MeasureGroupPage.stratAssociationOne).length !=0 )){
-                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 20700)
+            if ((body.find(MeasureGroupPage.stratAssociationOne).length != 0)) {
+                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 30700)
                 cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
                 cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
             } else {
+                Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
+                cy.get(MeasureGroupPage.stratificationTab).should('exist')
+                cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
                 cy.get(MeasureGroupPage.stratificationTab).click()
             }
         })
@@ -679,16 +781,19 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         //Verify Stratifications after save
-        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 20700)
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
-        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')        
+        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
         cy.get('body').then((body) => {
-            if((body.find(MeasureGroupPage.stratAssociationOne).length !=0 )){
-                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 20700)
+            if ((body.find(MeasureGroupPage.stratAssociationOne).length != 0)) {
+                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 30700)
                 cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
                 cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
             } else {
+                Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
+                cy.get(MeasureGroupPage.stratificationTab).should('exist')
+                cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
                 cy.get(MeasureGroupPage.stratificationTab).click()
             }
         })
@@ -704,6 +809,7 @@ describe('Validating Stratification tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -721,23 +827,29 @@ describe('Validating Stratification tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.populationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
+        cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
         //Click on Stratification tab
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
+        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
 
         //create stratification fields if they do not already exist on page
         cy.get('body').then((body) => {
-            if((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
+            if ((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
                 cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
             }
-        })        
+        })
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'denom')
@@ -760,8 +872,12 @@ describe('Validating Stratification tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.populationTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
+        cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
         //Set Population basis as Encounter
@@ -770,18 +886,20 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.popBasisOption).click()
 
         //Click on Stratification tab
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
+        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
 
         //create stratification fields if they do not already exist on page
         cy.get('body').then((body) => {
-            if((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
+            if ((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
                 cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
             }
-        })        
+        })
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'denom')
@@ -828,11 +946,14 @@ describe('Validating Reporting tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Click on Reporting tab
-        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
@@ -849,11 +970,14 @@ describe('Validating Reporting tabs', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Click on Reporting tab
-        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
@@ -863,7 +987,7 @@ describe('Validating Reporting tabs', () => {
 
         //save measure group
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
+        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30700)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -871,7 +995,7 @@ describe('Validating Reporting tabs', () => {
         //validation message after attempting to save
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 30700)
 
         //assert save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')

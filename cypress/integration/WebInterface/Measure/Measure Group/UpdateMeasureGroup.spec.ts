@@ -1,13 +1,13 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -398,7 +398,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
     })
 
-    it('Validate that changing the association when a value has been indicated for IP 2, allows user to save new associaiton', () =>{
+    it('Validate that changing the association when a value has been indicated for IP 2, allows user to save new associaiton', () => {
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
 
@@ -465,7 +465,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
         cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, {delay:50})
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, { delay: 50 })
         })
         //save CQL on measure
         Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
@@ -504,11 +504,18 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
         Utilities.dropdownSelect(MeasureGroupPage.secondInitialPopulationSelect, 'denom')
 
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
 
         //save
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        //confirm saving the population basis change
+        cy.get(MeasureGroupPage.updatePopulationBasisConfirmationBtn).should('exist')
+        cy.get(MeasureGroupPage.updatePopulationBasisConfirmationBtn).should('be.visible')
+        cy.get(MeasureGroupPage.updatePopulationBasisConfirmationBtn).should('be.enabled')
+        cy.get(MeasureGroupPage.updatePopulationBasisConfirmationBtn).click()
 
         //confirmed updated / saved msg
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
@@ -579,6 +586,18 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(TestCasesPage.testCaseDENEXExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseDENEXExpected).click()
         cy.get(TestCasesPage.testCaseDENEXExpected).check().should('be.checked')
+
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseNUMERExpected).click()
+        cy.get(TestCasesPage.testCaseNUMERExpected).check().should('be.checked')
+
+        cy.get(TestCasesPage.testCaseNUMEXExpected).should('exist')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).click()
+        cy.get(TestCasesPage.testCaseNUMEXExpected).check().should('be.checked')
 
         cy.get(TestCasesPage.detailsTab).click()
 
