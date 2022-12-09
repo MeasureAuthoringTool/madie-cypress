@@ -401,7 +401,7 @@ describe('Measure: CQL Editor: valueSet', () => {
 
     })
 
-    it('Value Set Invalid, 404', () => {
+    it.only('Value Set Invalid, 404', () => {
 
         //Click on Edit Button
         MeasuresPage.clickEditforCreatedMeasure()
@@ -426,7 +426,7 @@ describe('Measure: CQL Editor: valueSet', () => {
 
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLEditorPage.errorInCQLEditorWindow).should('exist')
 
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLEditorPage.errorInCQLEditorWindow).eq(5).invoke
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLEditorPage.errorInCQLEditorWindow).eq(4).invoke
         ('show').click({force:true, multiple: true})
 
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text',
