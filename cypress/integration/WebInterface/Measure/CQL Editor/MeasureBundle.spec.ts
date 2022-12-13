@@ -49,9 +49,6 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
 
     it('Log into the UI and save Measure CQL so the cqlErrors flag will update to true', () => {
 
-        //Navigate away from the page
-        cy.get(Header.measures).click()
-
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
 
@@ -131,8 +128,6 @@ describe('Bundle returns elmXML', () => {
     })
 
     it('Upon saving CQL from the UI, GET Bundle request returns elm xml', () => {
-        //Navigate away from the page
-        cy.get(Header.measures).click()
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
