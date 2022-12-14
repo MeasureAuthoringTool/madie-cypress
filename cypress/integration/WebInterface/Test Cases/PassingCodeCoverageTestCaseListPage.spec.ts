@@ -65,10 +65,6 @@ describe('Code Coverage Highlighting', () => {
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '-')
 
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '-')
-
         //click on edit button to go into the edit form for the test case
         TestCasesPage.clickEditforCreatedTestCase
 
@@ -88,14 +84,80 @@ describe('Code Coverage Highlighting', () => {
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('not.contain.text', '-')
 
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('not.contain.text', '-')
-
         cy.get(TestCasesPage.testCaseListCoveragePercTab).click()
-        cy.get('[class="qpp-c-alert__text"]').should('contain.text', 'Only first measure group coverage shown')
         cy.get(TestCasesPage.testCaseListCoverageHighlighting).should('contain.text', 'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
             '(Enc E where E.status = \'finished\') is not null')
+
+    })
+
+    it('Verify Measure highlighting for multiple Measure groups on test case list page', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //Add second Measure group
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.addMeasureGroupButton).click()
+
+        Utilities.setMeasureGroupType()
+
+        cy.get(MeasureGroupPage.popBasis).should('exist')
+        cy.get(MeasureGroupPage.popBasis).should('be.visible')
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('Encounter')
+        cy.get(MeasureGroupPage.popBasisOption).click()
+
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Qualifying Encounters')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Qualifying Encounters')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Qualifying Encounters')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
+
+        cy.get(TestCasesPage.tcPopulationCriteriaNavLink).should('contain', 'Population Criteria 1')
+        cy.get(TestCasesPage.tcPopulationCriteriaNavLink).should('contain', 'Population Criteria 2')
+
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+
+        //verify percentage number appears in tabs heading
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '77% Coverage')
+
+        //Verify Highlighting for first Measure group
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).click()
+
+        cy.get(TestCasesPage.testCaseListCoverageHighlighting).should('contain.text', 'define "Initial Population":\n' +
+            'exists "Qualifying Encounters"')
+
+        //Verify Highlighting for second Measure group
+        cy.get(TestCasesPage.tcPopulationCriteriaNavLink).contains('Population Criteria 2').click()
+
+        //verify percentage number appears in tabs heading
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '73% Coverage')
+
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).click()
+
+        cy.get(TestCasesPage.testCaseListCoverageHighlighting).should('not.contain.text', 'define "Initial Population":\n' +
+            'exists "Qualifying Encounters"')
 
     })
 })

@@ -3,7 +3,7 @@ import { Environment } from "./Environment"
 import {Utilities} from "./Utilities"
 
 export class TestCasesPage {
-    
+
     //tabs on the test case page
     public static readonly cqlHasErrorsMsg = '[data-testid="test-case-cql-has-errors-message"]'
     public static readonly detailsTab = '[data-testid="details-tab"]'
@@ -56,6 +56,7 @@ export class TestCasesPage {
     public static readonly testCaseListCoverageHighlighting = '[data-testid="code-coverage-highlighting"]'
     public static readonly selectTestCaseDropdownBtn = '.chevron-container > [data-testid="ExpandMoreIcon"]'
     public static readonly testCaseListTable = '[data-testid="test-case-tbl"]'
+    public static readonly tcPopulationCriteriaNavLink = '[data-testid="test-case-pop-criteria-nav"]'
 
     //Test Case Population Values
     public static readonly testCaseIPPExpected = '[data-testid="test-population-initialPopulation-expected"]'

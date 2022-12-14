@@ -66,7 +66,7 @@ export class TestCaseJson {
     ' }, "status": "finished", "class": {{}  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",   "code": "IMP",  "display": "inpatient encounter" },  "type": [ {{}' +
     ' "coding": [ {{}  "system": "http://snomed.info/sct", "version": "2022-09", "code": "185463005", "display": "Visit out of hours (procedure)"} ]} ], "subject": {{}' +
     ' "reference": "Patient/numer-pos-EXM135v11QICore4"},"participant": [ {{} "individual": {{} "reference": "Practitioner/30164", "display": "Dr John Doe"}' +
-    ' } ],  "period": {{}  "start": "2020-11-11T03:34:10.054Z",  "end": "2021-01-01T03:34:10.054Z"}}},{{} "fullUrl": "http://local/Patient", "resource": {{} "id":"3", "resourceType": "Patient",' +
+    ' } ],  "period": {{}  "start": "2021-11-11T03:34:10.054Z",  "end": "2022-01-01T03:34:10.054Z"}}},{{} "fullUrl": "http://local/Patient", "resource": {{} "id":"3", "resourceType": "Patient",' +
     ' "text": {{} "status": "generated", "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Lizzy Health</div>\"}, "meta": {{} "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"},' +
     ' "identifier": [ {{} "system": "http://clinfhir.com/fhir/NamingSystem/identifier",  "value": "20181011LizzyHealth"  } ],"name": [ {{} "use": "official",     "text": "Lizzy Health",' +
     ' "family": "Health", "given": [ "Lizzy"  ]  }  ],  "gender": "female",  "birthDate": "2000-10-11" }}]}'
