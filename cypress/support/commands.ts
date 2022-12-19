@@ -162,8 +162,8 @@ export function setAccessTokenCookieCAMELCASE() {
         },
 
         body: {
-            username: Environment.credentials().harpUserCCase,
-            password: Environment.credentials().passwordCCase,
+            username: (Environment.credentials().harpUser).toUpperCase,
+            password: (Environment.credentials().password),
 
             options: {
                 multiOptionalFactorEnroll: false,
