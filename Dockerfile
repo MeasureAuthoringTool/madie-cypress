@@ -25,5 +25,5 @@ RUN \
   ./aws/install
 
 COPY ./cypress ./cypress
-COPY ./cypress.json ./cypress.json
+COPY ./cypress.config.ts ./cypress.config.ts
 COPY ./tsconfig.json ./tsconfig.json
