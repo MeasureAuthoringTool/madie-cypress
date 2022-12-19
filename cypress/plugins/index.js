@@ -19,8 +19,8 @@ function getConfigurationByFile (file) {
   return fs.readJson(pathToConfigFile)
 }
 const browserify = require('@cypress/browserify-preprocessor')
-module.exports = (on) => {
-  const file = 'dev' || 'test' || 'impl'
+module.exports = (on, config) => {
+  const file = config.env.configFile
   const options = {
     browserifyOptions: {
       extensions: ['.js', '.ts'],
