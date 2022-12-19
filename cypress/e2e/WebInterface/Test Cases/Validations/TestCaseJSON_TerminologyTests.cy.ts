@@ -230,7 +230,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'All resources in bundle must have unique ID regardless of type. Multiple resources detected with ID [null]')
     })
-    it.only('JSON has Resource IDs duplicated for different resources', () => {
+    it('JSON has Resource IDs duplicated for different resources', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
