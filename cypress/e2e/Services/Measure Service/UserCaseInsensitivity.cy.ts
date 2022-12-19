@@ -7,21 +7,13 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { v4 as uuidv4 } from 'uuid'
 
 let measureName = ''
-let newMeasureName = ''
 let CQLLibraryName = ''
-let newCQLLibraryName = ''
 let model = 'QI-Core v4.1.1'
 let harpUser = Environment.credentials().harpUser
-let measureNameU = 'TestMeasure' + Date.now() + 1
-let CqlLibraryNameU = 'TestLibrary' + Date.now() + 1
-let measureScoringU = MeasureGroupPage.measureScoringUnit
-let defaultUser = ''
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
-let measureCQL = MeasureCQL.SBTEST_CQL
 let eCQMTitle = 'eCQMTitle'
-let versionIdPath = 'cypress/fixtures/versionId'
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 describe('Measure Service: Create Measure', function () {
     beforeEach('Set Access Token', function () {
@@ -30,7 +22,7 @@ describe('Measure Service: Create Measure', function () {
     after('Clean up', function () {
         Utilities.deleteMeasure(measureName, CQLLibraryName);
     });
-    it('Create New Measure, successful creation', function () {
+    it('Create New Measure, with user name typed in regular case', function () {
         measureName = 'TestMeasure' + Date.now() + randValue;
         CQLLibraryName = 'TestCql' + Date.now() + randValue;
         //create measure
@@ -57,7 +49,7 @@ describe('Measure Service: Create Measure', function () {
                 cy.writeFile('cypress/fixtures/versionId', response.body.versionId);
             });
         });
-        //log in as same user but typed in camel case
+        //log in as same user but typed in camel case and confirm that measure can be retrieved and the created by user is the same
         cy.clearCookies();
         cy.clearLocalStorage();
         cy.setAccessTokenCookieCAMELCASE();
