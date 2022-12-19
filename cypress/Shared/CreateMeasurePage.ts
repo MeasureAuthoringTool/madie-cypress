@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 export class CreateMeasurePage {
 
-    public static readonly createMeasureButton = 'button[data-testid="create-new-measure-save-button"]'
+    public static readonly createMeasureButton = 'button[data-testid="continue-button"]'
     public static readonly cancelButton = '[data-testid=create-new-measure-cancel-button]'
     public static readonly measureNameTextbox = '[data-testid=measure-name-text-field]'
     public static readonly measureModelDropdown = '#model-select'
