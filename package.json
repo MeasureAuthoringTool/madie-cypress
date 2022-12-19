@@ -12,7 +12,7 @@
 		"combine:reports": "npx mochawesome-merge 'cypress/results/*.json' > mochawesome.json",
 		"generateOne:report": "npx marge mochawesome.json",
 		"delete:mochawesome": "rm mochawesome.json",
-		"delete:reports": "rm cypress/results/*.json",
+		"delete:reports": "rm -f cypress/results/*.json",
 		"impl:all:tests": "NO_COLOR=1 $(npm bin)/cypress run --env configFile=impl --spec 'cypress/e2e/**/*.cy.ts' --browser chrome --headed;",
 		"impl:all:ui:tests": "NO_COLOR=1 $(npm bin)/cypress run --env configFile=impl --spec 'cypress/e2e/WebInterface/**/*.cy.ts' --browser chrome --headed;",
 		"impl:all:services:tests": "NO_COLOR=1 $(npm bin)/cypress run --env configFile=impl --spec 'cypress/e2e/Services/**/*.cy.ts' --browser chrome --headed;",
