@@ -1,8 +1,8 @@
-import {TestCaseJson} from "../../../Shared/TestCaseJson"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {TestCasesPage} from "../../../Shared/TestCasesPage"
-import {Utilities} from "../../../Shared/Utilities"
-import {Environment} from "../../../Shared/Environment"
+import { TestCaseJson } from "../../../Shared/TestCaseJson"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { Utilities } from "../../../Shared/Utilities"
+import { Environment } from "../../../Shared/Environment"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -24,7 +24,7 @@ describe('Delete test Case', () => {
 
     })
 
-    afterEach('Clean up',() => {
+    afterEach('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
@@ -35,26 +35,26 @@ describe('Delete test Case', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
-                cy.request({
-                    url: '/api/measures/' + measureId + '/test-cases/' + testCaseId,
-                    method: 'DELETE',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    },
-                    body: {
-                        "id": testCaseId,
-                        "title": testCaseTitle
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body).to.eql('Test case deleted successfully: ' + testCaseId)
-                })
+                    cy.request({
+                        url: '/api/measures/' + measureId + '/test-cases/' + testCaseId,
+                        method: 'DELETE',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        body: {
+                            "id": testCaseId,
+                            "title": testCaseTitle
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body).to.eql('Test case deleted successfully: ' + testCaseId)
+                    })
                 })
             })
         })
     })
 
-    it('Verify Non Measure owner unable to delete Test Case', () => {
+    it.only('Verify Non Measure owner unable to delete Test Case', () => {
 
         cy.clearCookies()
         cy.clearLocalStorage()
@@ -78,6 +78,35 @@ describe('Delete test Case', () => {
                     }).then((response) => {
                         expect(response.status).to.eql(403)
                         expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId)
+                    })
+                })
+            })
+        })
+    })
+
+    it.only('Verify owner signed in with camel cased user id can delete Test Case', () => {
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookieCAMELCASE()
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
+                    cy.request({
+                        url: '/api/measures/' + measureId + '/test-cases/' + testCaseId,
+                        method: 'DELETE',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        body: {
+                            "id": testCaseId,
+                            "title": testCaseTitle
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body).to.eql('Test case deleted successfully: ' + testCaseId)
                     })
                 })
             })

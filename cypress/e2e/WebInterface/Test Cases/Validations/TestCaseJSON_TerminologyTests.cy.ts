@@ -1,13 +1,13 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -175,7 +175,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
-        
+
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -230,7 +230,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'All resources in bundle must have unique ID regardless of type. Multiple resources detected with ID [null]')
     })
-    it('JSON has Resource IDs duplicated for different resources', () => {
+    it.only('JSON has Resource IDs duplicated for different resources', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -268,7 +268,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
-        
+
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -322,6 +322,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'All resources in bundle must have unique ID regardless of type. Multiple resources detected with ID [1]')
+        cy.pause()
     })
 })
 describe('JSON Rescource ID tests - Proportion Score Type', () => {
@@ -385,7 +386,7 @@ describe('JSON Rescource ID tests - Proportion Score Type', () => {
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
-        
+
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -473,23 +474,23 @@ describe('JSON Resource ID tests -- CV', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-    
+
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, {delay:50})
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, { delay: 50 })
         })
-    
+
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-    
+
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.setMeasureGroupType()
-    
+
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
@@ -507,7 +508,7 @@ describe('JSON Resource ID tests -- CV', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 27700)
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
-    
+
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
