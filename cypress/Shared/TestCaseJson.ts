@@ -342,7 +342,7 @@ export class TestCaseJson {
         ' "reference": "Patient/609bde3598086b0a16d79fc6" }, "period": { "start": "2022-01-16T08:00:00+00:00", "end": "2022' +
         '-02-15T09:00:00+00:00" } } }] }'
 
-    public static readonly RatioPatientTwoIPsWithMOs_IPP1_PASS = '{\n' +
+    public static readonly RatioPatientTwoIPsWithMOs_PASS = '{\n' +
         '\t"resourceType": "Bundle",\n' +
         '\t"id": "ip1-pass",\n' +
         '\t"type": "collection",\n' +
@@ -453,6 +453,275 @@ export class TestCaseJson {
         '\t\t\t}\n' +
         '\t\t}\n' +
         '\t]\n' +
+        '}'
+
+    public static readonly RatioEpisodeTwoIPsWithMOs_PASS = '{\n' +
+        '   "id":"60ad199cacdbd5186fd799f3",\n' +
+        '   "resourceType":"Bundle",\n' +
+        '   "type":"collection",\n' +
+        '   "entry":[\n' +
+        '      {\n' +
+        '         "fullUrl":"https://www.myGoodHealthcare/Patient/60ad199cacdbd5186fd799f3",\n' +
+        '         "resource":{\n' +
+        '            "id":"60ad199cacdbd5186fd799f3",\n' +
+        '            "meta":{\n' +
+        '               "profile":[\n' +
+        '                  "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"\n' +
+        '               ]\n' +
+        '            },\n' +
+        '            "resourceType":"Patient",\n' +
+        '            "extension":[\n' +
+        '               {\n' +
+        '                  "extension":[\n' +
+        '                     {\n' +
+        '                        "url":"ombCategory",\n' +
+        '                        "valueCoding":{\n' +
+        '                           "system":"urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                           "code":"2106-3",\n' +
+        '                           "display":"White",\n' +
+        '                           "userSelected":true\n' +
+        '                        }\n' +
+        '                     },\n' +
+        '                     {\n' +
+        '                        "url":"text",\n' +
+        '                        "valueString":"White"\n' +
+        '                     }\n' +
+        '                  ],\n' +
+        '                  "url":"http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"\n' +
+        '               },\n' +
+        '               {\n' +
+        '                  "extension":[\n' +
+        '                     {\n' +
+        '                        "url":"ombCategory",\n' +
+        '                        "valueCoding":{\n' +
+        '                           "system":"urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                           "code":"2135-2",\n' +
+        '                           "display":"Hispanic or Latino",\n' +
+        '                           "userSelected":true\n' +
+        '                        }\n' +
+        '                     },\n' +
+        '                     {\n' +
+        '                        "url":"text",\n' +
+        '                        "valueString":"Hispanic or Latino"\n' +
+        '                     }\n' +
+        '                  ],\n' +
+        '                  "url":"http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"\n' +
+        '               }\n' +
+        '            ],\n' +
+        '            "identifier":[\n' +
+        '               {\n' +
+        '                  "type":{\n' +
+        '                     "coding":[\n' +
+        '                        {\n' +
+        '                           "system":"http://terminology.hl7.org/CodeSystem/v2-0203",\n' +
+        '                           "code":"MR"\n' +
+        '                        }\n' +
+        '                     ]\n' +
+        '                  },\n' +
+        '                  "system":"https://bonnie-fhir.healthit.gov/",\n' +
+        '                  "value":"60ad199cacdbd5186fd799f3"\n' +
+        '               }\n' +
+        '            ],\n' +
+        '            "name":[\n' +
+        '               {\n' +
+        '                  "family":"Pass",\n' +
+        '                  "given":[\n' +
+        '                     "MO Multiple Episodes"\n' +
+        '                  ]\n' +
+        '               }\n' +
+        '            ],\n' +
+        '            "gender":"male",\n' +
+        '            "birthDate":"1946-01-15"\n' +
+        '         }\n' +
+        '      },\n' +
+        '      {\n' +
+        '         "fullUrl":"https://www.myGoodHealthcare/Encounter/inpatient-visit-99f4",\n' +
+        '         "resource":{\n' +
+        '            "id":"inpatient-visit-99f4",\n' +
+        '            "resourceType":"Encounter",\n' +
+        '            "status":"finished",\n' +
+        '            "class":{\n' +
+        '               "system":"http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '               "code":"IMP",\n' +
+        '               "display":"inpatient encounter"\n' +
+        '            },\n' +
+        '            "type":[\n' +
+        '               {\n' +
+        '                  "coding":[\n' +
+        '                     {\n' +
+        '                        "system":"http://snomed.info/sct",\n' +
+        '                        "version":"http://snomed.info/sct/731000124108/version/20220901",\n' +
+        '                        "code":"183452005",\n' +
+        '                        "display":"Emergency hospital admission (procedure)",\n' +
+        '                        "userSelected":true\n' +
+        '                     }\n' +
+        '                  ]\n' +
+        '               }\n' +
+        '            ],\n' +
+        '            "period":{\n' +
+        '               "start":"2022-03-05T08:00:00.000+00:00",\n' +
+        '               "end":"2022-03-05T08:15:00.000+00:00"\n' +
+        '            }\n' +
+        '         }\n' +
+        '      },\n' +
+        '      {\n' +
+        '         "fullUrl":"https://www.myGoodHealthcare/Encounter/ed-visit-99f4",\n' +
+        '         "resource":{\n' +
+        '            "id":"ed-visit-99f4",\n' +
+        '            "resourceType":"Encounter",\n' +
+        '            "status":"finished",\n' +
+        '            "class":{\n' +
+        '               "system":"http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '               "code":"EMER",\n' +
+        '               "display":"emergency"\n' +
+        '            },\n' +
+        '            "type":[\n' +
+        '               {\n' +
+        '                  "coding":[\n' +
+        '                     {\n' +
+        '                        "system":"http://snomed.info/sct",\n' +
+        '                        "version":"http://snomed.info/sct/731000124108/version/20220901",\n' +
+        '                        "code":"4525004",\n' +
+        '                        "display":"Emergency department patient visit (procedure)",\n' +
+        '                        "userSelected":true\n' +
+        '                     }\n' +
+        '                  ]\n' +
+        '               }\n' +
+        '            ],\n' +
+        '            "period":{\n' +
+        '               "start":"2022-05-05T08:00:00.000+00:00",\n' +
+        '               "end":"2022-05-05T08:15:00.000+00:00"\n' +
+        '            }\n' +
+        '         }\n' +
+        '      },\n' +
+        '      {\n' +
+        '         "fullUrl":"https://www.myGoodHealthcare/Condition/bladder-cancer-for-urology-care-99f5",\n' +
+        '         "resource":{\n' +
+        '            "id":"bladder-cancer-for-urology-care-99f5",\n' +
+        '            "resourceType":"Condition",\n' +
+        '            "clinicalStatus":{\n' +
+        '               "coding":[\n' +
+        '                  {\n' +
+        '                     "system":"http://terminology.hl7.org/CodeSystem/condition-clinical",\n' +
+        '                     "code":"active",\n' +
+        '                     "display":"Active",\n' +
+        '                     "userSelected":true\n' +
+        '                  }\n' +
+        '               ]\n' +
+        '            },\n' +
+        '            "verificationStatus":{\n' +
+        '               "coding":[\n' +
+        '                  {\n' +
+        '                     "system":"http://terminology.hl7.org/CodeSystem/condition-ver-status",\n' +
+        '                     "code":"confirmed",\n' +
+        '                     "display":"Confirmed",\n' +
+        '                     "userSelected":true\n' +
+        '                  }\n' +
+        '               ]\n' +
+        '            },\n' +
+        '            "code":{\n' +
+        '               "coding":[\n' +
+        '                  {\n' +
+        '                     "system":"http://snomed.info/sct",\n' +
+        '                     "version":"http://snomed.info/sct/731000124108/version/20220901",\n' +
+        '                     "code":"190389009",\n' +
+        '                     "display":"Type II diabetes mellitus with ulcer (disorder)",\n' +
+        '                     "userSelected":true\n' +
+        '                  }\n' +
+        '               ]\n' +
+        '            },\n' +
+        '            "subject":{\n' +
+        '               "reference":"https://www.myGoodHealthcare/Patient/60ad199cacdbd5186fd799f3"\n' +
+        '            },\n' +
+        '            "onsetPeriod":{\n' +
+        '               "start":"2021-03-04T08:00:00.000+00:00"\n' +
+        '            }\n' +
+        '         }\n' +
+        '      },\n' +
+        '      {\n' +
+        '         "fullUrl":"https://www.myGoodHealthcare/Encounter/inpatient-visit-1231",\n' +
+        '         "resource":{\n' +
+        '            "id":"inpatient-visit-1231",\n' +
+        '            "resourceType":"Encounter",\n' +
+        '            "status":"finished",\n' +
+        '            "class":{\n' +
+        '               "system":"http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '               "code":"IMP",\n' +
+        '               "display":"inpatient encounter"\n' +
+        '            },\n' +
+        '            "type":[\n' +
+        '               {\n' +
+        '                  "coding":[\n' +
+        '                     {\n' +
+        '                        "system":"http://snomed.info/sct",\n' +
+        '                        "version":"http://snomed.info/sct/731000124108/version/20220901",\n' +
+        '                        "code":"183452005",\n' +
+        '                        "display":"Emergency hospital admission (procedure)",\n' +
+        '                        "userSelected":true\n' +
+        '                     }\n' +
+        '                  ]\n' +
+        '               }\n' +
+        '            ],\n' +
+        '            "period":{\n' +
+        '               "start":"2022-06-05T08:00:00.000+00:00",\n' +
+        '               "end":"2022-06-05T08:15:00.000+00:00"\n' +
+        '            }\n' +
+        '         }\n' +
+        '      },\n' +
+        '      {\n' +
+        '         "fullUrl":"https://www.myGoodHealthcare/Encounter/ed-visit-584",\n' +
+        '         "resource":{\n' +
+        '            "id":"ed-visit-584",\n' +
+        '            "resourceType":"Encounter",\n' +
+        '            "status":"finished",\n' +
+        '            "class":{\n' +
+        '               "system":"http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '               "code":"EMER",\n' +
+        '               "display":"emergency"\n' +
+        '            },\n' +
+        '            "type":[\n' +
+        '               {\n' +
+        '                  "coding":[\n' +
+        '                     {\n' +
+        '                        "system":"http://snomed.info/sct",\n' +
+        '                        "version":"http://snomed.info/sct/731000124108/version/20220901",\n' +
+        '                        "code":"4525004",\n' +
+        '                        "display":"Emergency department patient visit (procedure)",\n' +
+        '                        "userSelected":true\n' +
+        '                     }\n' +
+        '                  ]\n' +
+        '               }\n' +
+        '            ],\n' +
+        '            "period":{\n' +
+        '               "start":"2022-01-05T08:00:00.000+00:00",\n' +
+        '               "end":"2022-01-05T08:15:00.000+00:00"\n' +
+        '            }\n' +
+        '         }\n' +
+        '      },\n' +
+        '      {\n' +
+        '         "fullUrl":"https://www.myGoodHealthcare/MedicationRequest/Med-Order-ABC",\n' +
+        '         "resource":{\n' +
+        '            "resourceType":"MedicationRequest",\n' +
+        '            "id":"Med-Order-ABC",\n' +
+        '            "status":"active",\n' +
+        '            "intent":"order",\n' +
+        '            "medicationCodeableConcept":{\n' +
+        '               "coding":[\n' +
+        '                  {\n' +
+        '                     "system":"http://www.nlm.nih.gov/research/umls/rxnorm",\n' +
+        '                     "version":"11072022",\n' +
+        '                     "code":"1043563",\n' +
+        '                     "display":"24 HR metformin hydrochloride 1000 MG / saxagliptin 2.5 MG Extended Release Oral Tablet"\n' +
+        '                  }\n' +
+        '               ]\n' +
+        '            },\n' +
+        '            "subject":{\n' +
+        '               "reference":"https://www.myGoodHealthcare/Patient/60ad199cacdbd5186fd799f3"\n' +
+        '            },\n' +
+        '            "authoredOn":"2020-04-25T19:32:52-05:00"\n' +
+        '         }\n' +
+        '      }\n' +
+        '   ]\n' +
         '}'
 
     public static readonly CVPatientWithMO_PASS = '{"resourceType": "Bundle","id": "IP-Pass-CVPatient","meta": {"versionId": "1",' +
