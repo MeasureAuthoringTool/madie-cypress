@@ -342,6 +342,119 @@ export class TestCaseJson {
         ' "reference": "Patient/609bde3598086b0a16d79fc6" }, "period": { "start": "2022-01-16T08:00:00+00:00", "end": "2022' +
         '-02-15T09:00:00+00:00" } } }] }'
 
+    public static readonly RatioPatientTwoIPsWithMOs_IPP1_PASS = '{\n' +
+        '\t"resourceType": "Bundle",\n' +
+        '\t"id": "ip1-pass",\n' +
+        '\t"type": "collection",\n' +
+        '\t"entry": [\n' +
+        '\t\t{\n' +
+        '\t\t\t"fullUrl": "b1ba7de7-9fa0-44fa-ac1e-a4b407d3a54b",\n' +
+        '\t\t\t"resource": {\n' +
+        '\t\t\t\t"resourceType": "Encounter",\n' +
+        '\t\t\t\t"id": "237ec3c0-b58e-4a23-82b0-98b4424d405c",\n' +
+        '\t\t\t\t"status": "finished",\n' +
+        '\t\t\t\t"class": {\n' +
+        '\t\t\t\t\t"code": "AMB",\n' +
+        '\t\t\t\t\t"system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '\t\t\t\t\t"display": "ambulatory"\n' +
+        '\t\t\t\t},\n' +
+        '\t\t\t\t"type": [\n' +
+        '\t\t\t\t\t{\n' +
+        '\t\t\t\t\t\t"coding": [\n' +
+        '\t\t\t\t\t\t\t{\n' +
+        '\t\t\t\t\t\t\t\t"code": "99215",\n' +
+        '\t\t\t\t\t\t\t\t"system": "http://www.ama-assn.org/go/cpt",\n' +
+        '\t\t\t\t\t\t\t\t"display": "Office or other outpatient visit for the evaluation and management of an established patient, which requires a medically appropriate history and/or examination and high level of medical decision making. When using time for code selection, 40-54 minutes of total time is spent on the date of the encounter"\n' +
+        '\t\t\t\t\t\t\t}\n' +
+        '\t\t\t\t\t\t]\n' +
+        '\t\t\t\t\t}\n' +
+        '\t\t\t\t],\n' +
+        '\t\t\t\t"subject": {\n' +
+        '\t\t\t\t\t"reference": "Patient/8d8dc304-a56a-4464-8e1e-703e866e989e"\n' +
+        '\t\t\t\t},\n' +
+        '\t\t\t\t"period": {\n' +
+        '\t\t\t\t\t"start": "2023-01-02T10:00:00.000Z",\n' +
+        '\t\t\t\t\t"end": "2023-01-02T10:30:00.000Z"\n' +
+        '\t\t\t\t}\n' +
+        '\t\t\t}\n' +
+        '\t\t},\n' +
+        '\t\t{\n' +
+        '\t\t\t"fullUrl": "a5ba7de7-9fa0-20fa-ac1e-a4b405d3a32b",\n' +
+        '\t\t\t"resource": {\n' +
+        '\t\t\t\t"resourceType": "Patient",\n' +
+        '\t\t\t\t"id": "8d8dc304-a56a-4464-8e1e-703e866e989e",\n' +
+        '\t\t\t\t"meta": {\n' +
+        '\t\t\t\t\t"profile": [\n' +
+        '\t\t\t\t\t\t"http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"\n' +
+        '\t\t\t\t\t]\n' +
+        '\t\t\t\t},\n' +
+        '\t\t\t\t"extension": [\n' +
+        '\t\t\t\t\t{\n' +
+        '\t\t\t\t\t\t"url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race",\n' +
+        '\t\t\t\t\t\t"extension": [\n' +
+        '\t\t\t\t\t\t\t{\n' +
+        '\t\t\t\t\t\t\t\t"url": "ombCategory",\n' +
+        '\t\t\t\t\t\t\t\t"valueCoding": {\n' +
+        '\t\t\t\t\t\t\t\t\t"code": "2028-9",\n' +
+        '\t\t\t\t\t\t\t\t\t"system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '\t\t\t\t\t\t\t\t\t"display": "Asian"\n' +
+        '\t\t\t\t\t\t\t\t}\n' +
+        '\t\t\t\t\t\t\t},\n' +
+        '\t\t\t\t\t\t\t{\n' +
+        '\t\t\t\t\t\t\t\t"url": "text",\n' +
+        '\t\t\t\t\t\t\t\t"valueString": "Asian"\n' +
+        '\t\t\t\t\t\t\t}\n' +
+        '\t\t\t\t\t\t]\n' +
+        '\t\t\t\t\t},\n' +
+        '\t\t\t\t\t{\n' +
+        '\t\t\t\t\t\t"url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity",\n' +
+        '\t\t\t\t\t\t"extension": [\n' +
+        '\t\t\t\t\t\t\t{\n' +
+        '\t\t\t\t\t\t\t\t"url": "ombCategory",\n' +
+        '\t\t\t\t\t\t\t\t"valueCoding": {\n' +
+        '\t\t\t\t\t\t\t\t\t"code": "2135-2",\n' +
+        '\t\t\t\t\t\t\t\t\t"system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '\t\t\t\t\t\t\t\t\t"display": "Hispanic or Latino"\n' +
+        '\t\t\t\t\t\t\t\t}\n' +
+        '\t\t\t\t\t\t\t},\n' +
+        '\t\t\t\t\t\t\t{\n' +
+        '\t\t\t\t\t\t\t\t"url": "text",\n' +
+        '\t\t\t\t\t\t\t\t"valueString": "Hispanic or Latino"\n' +
+        '\t\t\t\t\t\t\t}\n' +
+        '\t\t\t\t\t\t]\n' +
+        '\t\t\t\t\t}\n' +
+        '\t\t\t\t],\n' +
+        '\t\t\t\t"identifier": [\n' +
+        '\t\t\t\t\t{\n' +
+        '\t\t\t\t\t\t"use": "usual",\n' +
+        '\t\t\t\t\t\t"type": {\n' +
+        '\t\t\t\t\t\t\t"coding": [\n' +
+        '\t\t\t\t\t\t\t\t{\n' +
+        '\t\t\t\t\t\t\t\t\t"code": "MR",\n' +
+        '\t\t\t\t\t\t\t\t\t"system": "http://terminology.hl7.org/CodeSystem/v2-0203",\n' +
+        '\t\t\t\t\t\t\t\t\t"display": "Medical Record Number"\n' +
+        '\t\t\t\t\t\t\t\t}\n' +
+        '\t\t\t\t\t\t\t]\n' +
+        '\t\t\t\t\t\t},\n' +
+        '\t\t\t\t\t\t"system": "http://hospital.smarthealthit.org",\n' +
+        '\t\t\t\t\t\t"value": "685945948"\n' +
+        '\t\t\t\t\t}\n' +
+        '\t\t\t\t],\n' +
+        '\t\t\t\t"name": [\n' +
+        '\t\t\t\t\t{\n' +
+        '\t\t\t\t\t\t"family": "Eternity",\n' +
+        '\t\t\t\t\t\t"given": [\n' +
+        '\t\t\t\t\t\t\t"Luv"\n' +
+        '\t\t\t\t\t\t]\n' +
+        '\t\t\t\t\t}\n' +
+        '\t\t\t\t],\n' +
+        '\t\t\t\t"gender": "female",\n' +
+        '\t\t\t\t"birthDate": "1979-01-01"\n' +
+        '\t\t\t}\n' +
+        '\t\t}\n' +
+        '\t]\n' +
+        '}'
+
     public static readonly CVPatientWithMO_PASS = '{"resourceType": "Bundle","id": "IP-Pass-CVPatient","meta": {"versionId": "1",' +
         '"lastUpdated": "2022-09-14T15:14:42.152+00:00"},"type": "collection","entry": [  {"fullUrl": "609bde3598086b0a16d79fc6",' +
         '"resource": {"resourceType": "Patient","id": "609bde3598086b0a16d79fc6","meta": ' +
