@@ -1,9 +1,8 @@
 import { defineConfig } from 'cypress'
 
 export default defineConfig({
-  env: {},
+  env: {parseSpecialCharSequences: false},
   chromeWebSecurity: false,
-  parseSpecialCharSequences: false,
   pageLoadTimeout: 100000,
   defaultCommandTimeout: 50000,
   video: false,
