@@ -14,7 +14,7 @@ let testCaseTitleIpp1Pass = 'IPP1 PASS'
 let testCaseTitleMOFail = 'MO Fail'
 let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
-let testCaseJsonIppPass = TestCaseJson.RatioPatientTwoIPsWithMOs_IPP1_PASS
+let testCaseJsonIppPass = TestCaseJson.RatioPatientTwoIPsWithMOs_PASS
 let measureCQL = 'library MultipleIPwithObs version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
