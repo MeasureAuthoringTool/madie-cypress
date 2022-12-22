@@ -199,8 +199,7 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
 
     })
 
-    //skipping until defect MAT-5161 is fixed
-    it.skip('End to End Ratio Patient Two IPs w/ MOs, MO fail Result', () => {
+    it('End to End Ratio Patient Two IPs w/ MOs, MO fail Result', () => {
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitleMOFail, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
 
