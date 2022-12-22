@@ -73,7 +73,7 @@ let CVmeasureCQL = 'library TestLibrary1664888387806162 version \'0.0.000\'\n' +
     'define function fun(notPascalCase Integer ):\n' +
     '  true\n' +
     '  \n' +
-    'define function "isFinishedEncounter"(Enc Encounter):\n' +
+    'define function "isFinishedEncounter"():\n' +
     '  true'
 let PopIniPop = 'ipp'
 let PopNum = 'num'
@@ -266,7 +266,7 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
                             {
                                 "id": retrievedMeasureID,
                                 "criteriaReference": null,
-                                "definition": 'ToCode',
+                                "definition": 'isFinishedEncounter',
                                 "aggregateMethod": 'Count'
                             },
                         ],
@@ -296,7 +296,8 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
 
     })
 
-    it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
+    //Skipping until MAT-5170 is fixed
+    it.skip('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -327,7 +328,7 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
                     expect(response.body.entry[0].resource.group[0].population[2].code.coding[0].code).to.eql('measure-population-exclusion')
                     expect(response.body.entry[0].resource.group[0].population[2].criteria.expression).to.eql('numeratorExclusion')
                     expect(response.body.entry[0].resource.group[0].population[3].code.coding[0].code).to.eql('measure-observation')
-                    expect(response.body.entry[0].resource.group[0].population[3].criteria.expression).to.eql('ToCode')
+                    expect(response.body.entry[0].resource.group[0].population[3].criteria.expression).to.eql('isFinishedEncounter')
                     expect(response.body.entry[0].resource.group[0].population[3].extension[0].valueString).to.eql('Count')
                 })
             })
