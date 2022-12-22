@@ -663,14 +663,14 @@ describe('Measure Observations', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
-        //let measureCQL = "library SimpleFhirMeasure version '0.0.001'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.0.001' called FHIRHelpers\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"ipp\":\n  exists [\"Encounter\"] E where E.period.start during \"Measurement Period\"\n  \ndefine \"denom\":\n  \"ipp\"\n  \ndefine \"num\":\n  exists [\"Encounter\"] E where E.status ~ 'finished'\n  \ndefine \"numeratorExclusion\":\n    \"num\"\n    \ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n           version: coding.version.value,\n           display: coding.display.value\n           }\n           \ndefine function fun(notPascalCase Integer ):\n  true\n  \ndefine function \"isFinishedEncounter\"(Enc Encounter):\n  true\n  \n"
-        let measureCQL = "library SimpleFhirMeasure version '0.0.001'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"ipp\":\n  exists [\"Encounter\"] E where E.period.start during \"Measurement Period\"\n\ndefine \"denom\":\n \"ipp\"\n\ndefine \"num\":\n  exists [\"Encounter\"] E where E.status ~ 'finished'\n\ndefine \"numeratorExclusion\":\n    \"num\"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n          version: coding.version.value,\n           display: coding.display.value\n           }\n\ndefine function fun(notPascalCase Integer ):\n  true\n\ndefine function \"isFinishedEncounter\"(Enc Encounter):\n  true\n\n\n\n"
+        let measureCQL = "library SimpleFhirMeasure version '0.0.001'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"ipp\":\n  exists [\"Encounter\"] E where E.period.start during \"Measurement Period\"\n\ndefine \"denom\":\n \"ipp\"\n\ndefine \"num\":\n  exists [\"Encounter\"] E where E.status ~ 'finished'\n\ndefine \"numeratorExclusion\":\n    \"num\"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n          version: coding.version.value,\n           display: coding.display.value\n           }\n\ndefine function fun(notPascalCase Integer ):\n  true\n\ndefine function \"isFinishedEncounter\"():\n  true\n\n\n\n"
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
 
     })
 
-    it('Add Measure Observations for Ratio Measure', () => {
+    //Skipping until MAT-5170 is fixed
+    it.skip('Add Measure Observations for Ratio Measure', () => {
 
         let PopIniPop = 'ipp'
         let PopNum = 'num'
@@ -718,13 +718,13 @@ describe('Measure Observations', () => {
                         "measureObservations": [
                             {
                                 "id": "b2622e59-a169-45af-a4b5-fe298e220ae4",
-                                "definition": PopNum,
+                                "definition": "isFinishedEncounter",
                                 "criteriaReference": "89f42def-f989-4e9d-8e5f-c2c0cafc04d7",
                                 "aggregateMethod": "Count"
                             },
                             {
                                 "id": "5da9610f-bdc5-4922-bd43-48ae0a0b07a4",
-                                "definition": PopDenom,
+                                "definition": "isFinishedEncounter",
                                 "criteriaReference": "fa60458b-b2fa-4ba2-9bc4-d6db3468f895",
                                 "aggregateMethod": "Average"
                             }
@@ -740,8 +740,8 @@ describe('Measure Observations', () => {
                     expect(response.body.populations[0].definition).to.eql('ipp')
                     expect(response.body.populations[1].definition).to.eql('denom')
                     expect(response.body.populations[3].definition).to.eql('num')
-                    expect(response.body.measureObservations[0].definition).to.eql('num')
-                    expect(response.body.measureObservations[1].definition).to.eql('denom')
+                    expect(response.body.measureObservations[0].definition).to.eql('isFinishedEncounter')
+                    expect(response.body.measureObservations[1].definition).to.eql('isFinishedEncounter')
                     expect(response.body.measureObservations[0].aggregateMethod).to.eql('Count')
                     expect(response.body.measureObservations[1].aggregateMethod).to.eql('Average')
                 })
@@ -749,7 +749,8 @@ describe('Measure Observations', () => {
         })
     })
 
-    it('Add Measure Observations for Continuous Variable Measure', () => {
+    //Skipping until MAT-5170 is fixed
+    it.skip('Add Measure Observations for Continuous Variable Measure', () => {
 
         let PopIniPop = 'ipp'
         let PopDenom = 'denom'
@@ -781,7 +782,7 @@ describe('Measure Observations', () => {
                         "measureObservations": [
                             {
                                 "id": "60778b60-e913-4a6a-98ae-3f0cf488b710",
-                                "definition": "ToCode",
+                                "definition": "isFinishedEncounter",
                                 "criteriaReference": null,
                                 "aggregateMethod": "Count"
                             }
@@ -796,7 +797,7 @@ describe('Measure Observations', () => {
                     expect(response.body.scoring).to.eql('Continuous Variable')
                     expect(response.body.populations[0].definition).to.eql('ipp')
                     expect(response.body.populations[1].definition).to.eql('denom')
-                    expect(response.body.measureObservations[0].definition).to.eql('ToCode')
+                    expect(response.body.measureObservations[0].definition).to.eql('isFinishedEncounter')
                     expect(response.body.measureObservations[0].aggregateMethod).to.eql('Count')
                 })
             })
