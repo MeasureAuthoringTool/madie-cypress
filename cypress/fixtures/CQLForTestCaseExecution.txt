@@ -39,4 +39,7 @@
 
 {home}define function "isFinishedEncounter"(Enc Encounter):
 {home}  true
+
+{home}define function "booleanFunction"():
+{home}  true
 {del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}

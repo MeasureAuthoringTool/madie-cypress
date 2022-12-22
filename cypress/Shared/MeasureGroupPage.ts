@@ -111,6 +111,7 @@ export class MeasureGroupPage {
 
     //Continuous Variable Measure Observation
     public static readonly MOToCodeValue = '[data-value="ToCode"]'
+    public static readonly MOBooleanFunctionValue = '[data-value="booleanFunction"]'
 
     public static readonly cvMeasureObservation = '[id="measure-observation-cv-obs"]'
     public static readonly cvAggregateFunction = '[id="measure-observation-aggregate-cv-obs"]'
@@ -262,7 +263,12 @@ export class MeasureGroupPage {
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'denom')
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(1).click() //select isFinishedEncounter
+        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
+        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.MOBooleanFunctionValue, 20700)
+        cy.get(MeasureGroupPage.MOBooleanFunctionValue).should('exist')
+        cy.get(MeasureGroupPage.MOBooleanFunctionValue).should('be.visible')
+        cy.get(MeasureGroupPage.MOBooleanFunctionValue).click()
         cy.get(MeasureGroupPage.cvAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
         cy.get(this.saveMeasureGroupDetails).click()
