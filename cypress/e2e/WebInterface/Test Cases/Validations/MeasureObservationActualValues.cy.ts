@@ -113,7 +113,8 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(EditMeasurePage.testCasesTab).click().wait(1000)
+        cy.get('[data-testid="select-action-'+ testCaseTitle +'"]').click()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
@@ -132,7 +133,8 @@ describe('Non Boolean Measure Observation Actual values', () => {
 
     })
 
-    it('Verify Actual values for Non Boolean Ratio Measure with MO', () => {
+    //Skipping due to bug MAT-5139
+    it.skip('Verify Actual values for Non Boolean Ratio Measure with MO', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -185,7 +187,8 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(EditMeasurePage.testCasesTab).click().wait(1000)
+        cy.get('[data-testid="select-action-'+ testCaseTitle +'"]').click()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
@@ -260,7 +263,8 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(EditMeasurePage.testCasesTab).click().wait(1000)
+        cy.get('[data-testid="select-action-'+ testCaseTitle +'"]').click()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
@@ -326,7 +330,8 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(EditMeasurePage.testCasesTab).click().wait(1000)
+        cy.get('[data-testid="select-action-'+ testCaseTitle +'"]').click()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
