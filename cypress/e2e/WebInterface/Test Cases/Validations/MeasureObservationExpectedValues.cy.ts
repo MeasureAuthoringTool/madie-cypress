@@ -91,14 +91,14 @@ describe('Measure Observation Expected values', () => {
         cy.log('Adding Measure Observations')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).wait(1000).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(0).click() //select ToCode
+        cy.get(MeasureGroupPage.measureObservationSelect).eq(3).click() //select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
         cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(2).click() //select isFinishedEncounter
+        cy.get(MeasureGroupPage.measureObservationSelect).eq(3).click() //select booleanFunction
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
