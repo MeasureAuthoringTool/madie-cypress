@@ -184,9 +184,7 @@ export class TestCasesPage {
 
     public static editTestCaseAddJSON (testCaseJson:string)  :void{
 
-        cy.get('[class="action-button"]').click()
         this.clickEditforCreatedTestCase()
-
 
         //Add json to the test case
         cy.get(this.aceEditor).type(testCaseJson)
@@ -249,10 +247,10 @@ export class TestCasesPage {
     }
     public static clickEditforCreatedTestCase(): void {
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[class="action-button"]').click()
-            cy.get('[id=view-edit-test-case-'+ fileContents +']').should('be.visible')
-            cy.get('[id=view-edit-test-case-'+ fileContents +']').should('be.enabled')
-            cy.get('[id=view-edit-test-case-'+ fileContents +']').click()
+            cy.get('[data-testid=select-action-'+ fileContents +']').click()
+            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('be.visible')
+            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('be.enabled')
+            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').click()
         })
 
     }
