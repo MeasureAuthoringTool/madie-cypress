@@ -113,8 +113,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).click().wait(1000)
-        cy.get('[data-testid="select-action-'+ testCaseTitle +'"]').click()
+        cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
@@ -187,8 +186,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).click().wait(1000)
-        cy.get('[data-testid="select-action-'+ testCaseTitle +'"]').click()
+        cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
@@ -263,8 +261,7 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).click().wait(1000)
-        cy.get('[data-testid="select-action-'+ testCaseTitle +'"]').click()
+        cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
@@ -330,8 +327,7 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).click().wait(1000)
-        cy.get('[data-testid="select-action-'+ testCaseTitle +'"]').click()
+        cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on Expected/Actual tab
