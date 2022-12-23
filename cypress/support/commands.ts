@@ -162,7 +162,7 @@ export function setAccessTokenCookieCAMELCASE() {
         },
 
         body: {
-            username: (Environment.credentials().harpUser).toUpperCase,
+            username: (Environment.credentials().harpUser).toUpperCase(),
             password: (Environment.credentials().password),
 
             options: {
