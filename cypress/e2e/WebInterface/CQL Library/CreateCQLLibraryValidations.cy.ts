@@ -20,7 +20,8 @@ describe('CQL Library Validations', () => {
 
     })
 
-    it('CQL Library header (breadcrumbs, name, version/draft, model, last update)', () => {
+    //Skipping until MAT-5175 is fixed
+    it.skip('CQL Library header (breadcrumbs, name, version/draft, model, last update)', () => {
 
         const dayjs = require('dayjs')
         let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -77,7 +78,8 @@ describe('CQL Library Validations', () => {
 
     })
 
-    it('CQL Library cancel / discard changes button', () => {
+    //Skipping until MAT-5175 is fixed
+    it.skip('CQL Library cancel / discard changes button', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
@@ -221,7 +223,7 @@ describe('CQL Library Validations', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let LibraryName = CQLLibraryName+randValue
 
-        //navigate to the CQL Libaray page and create new CQL Library
+        //navigate to the CQL Library page and create new CQL Library
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
@@ -279,7 +281,8 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
     })
 
-    it('Create new CQL Library Creation with CQL', () =>{
+    //Skipping until MAT-5175 is fixed
+    it.skip('Create new CQL Library Creation with CQL', () =>{
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let LibraryName = CQLLibraryName+randValue
 
