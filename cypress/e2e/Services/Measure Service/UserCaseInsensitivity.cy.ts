@@ -14,7 +14,7 @@ let randValue = (Math.floor((Math.random() * 1000) + 1))
 
 describe('Measure Service: Create Measure', function () {
     beforeEach('Set Access Token', function () {
-        cy.setAccessTokenCookie();
+        cy.setAccessTokenCookie()
     })
     after('Clean up', function () {
         Utilities.deleteMeasure(measureName, CQLLibraryName)
@@ -64,7 +64,7 @@ describe('Measure Service: Create Measure', function () {
                 }).then(function (response) {
                     expect(response.status).to.eql(200);
                     expect(response.body.active).to.eql(true)
-                    expect(response.body.content[0].createdBy).to.eql(harpUser)
+                    expect(response.body.createdBy).to.eql(harpUser)
                 })
             })
         })
