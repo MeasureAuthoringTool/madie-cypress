@@ -14,7 +14,8 @@ describe('Create CQL Library', () => {
 
     })
 
-    it('Navigate to CQL Library Page and create New Library', () => {
+    //Skipping until MAT-5175 is fixed
+    it.skip('Navigate to CQL Library Page and create New Library', () => {
 
         let CQLLibraryName = 'TestLibrary' + Date.now()
         let CQLLibraryPublisher = 'SemanticBits'

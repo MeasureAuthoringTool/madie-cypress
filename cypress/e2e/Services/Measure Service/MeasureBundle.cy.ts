@@ -140,10 +140,10 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                         "scoringUnit": {
                             "label": "ml milliLiters",
                             "value": {
-                              "code": "ml",
-                              "name": "milliLiters",
-                              "guidance": "",
-                              "system": "https://clinicaltables.nlm.nih.gov/"
+                                "code": "ml",
+                                "name": "milliLiters",
+                                "guidance": "",
+                                "system": "https://clinicaltables.nlm.nih.gov/"
                             }
                         },
                         "measureGroupTypes": [
@@ -213,7 +213,8 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
     })
 })
 
-describe('CV Measure Bundle end point returns expected data with valid Measure CQL and elmJson', () => {
+//Skipping until MAT-5170 is fixed
+describe.skip('CV Measure Bundle end point returns expected data with valid Measure CQL and elmJson', () => {
 
     before('Create Measure',() => {
 
@@ -256,10 +257,10 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
                         "scoringUnit": {
                             "label": "ml milliLiters",
                             "value": {
-                              "code": "ml",
-                              "name": "milliLiters",
-                              "guidance": "",
-                              "system": "https://clinicaltables.nlm.nih.gov/"
+                                "code": "ml",
+                                "name": "milliLiters",
+                                "guidance": "",
+                                "system": "https://clinicaltables.nlm.nih.gov/"
                             }
                         },
                         "measureObservations": [
@@ -446,10 +447,10 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
                         "scoringUnit": {
                             "label": "ml milliLiters",
                             "value": {
-                              "code": "ml",
-                              "name": "milliLiters",
-                              "guidance": "",
-                              "system": "https://clinicaltables.nlm.nih.gov/"
+                                "code": "ml",
+                                "name": "milliLiters",
+                                "guidance": "",
+                                "system": "https://clinicaltables.nlm.nih.gov/"
                             }
                         },
                         "measureGroupTypes": [
@@ -654,5 +655,5 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
                 })
             })
         })
-    })    
+    })
 })
