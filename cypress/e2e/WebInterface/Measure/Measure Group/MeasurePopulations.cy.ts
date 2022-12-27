@@ -6,12 +6,51 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {Utilities} from "../../../../Shared/Utilities"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
 import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import {Header} from "../../../../Shared/Header";
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let measureCQL = MeasureCQL.SBTEST_CQL
+let measureCQL = 'library CQLLibrary5170 version \'0.0.000\'\n' +
+    '\n' +
+    'using FHIR version \'4.0.1\'\n' +
+    '\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    '\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    '\n' +
+    'context Patient\n' +
+    '\n' +
+    'define "ipp":\n' +
+    '  exists ["Encounter"] E where E.period.start during "Measurement Period"\n' +
+    '  \n' +
+    'define "denom":\n' +
+    '  "ipp"\n' +
+    '  \n' +
+    'define "num":\n' +
+    '  exists ["Encounter"] E where E.status ~ \'finished\'\n' +
+    '  \n' +
+    'define "numeratorExclusion":\n' +
+    '    "num"\n' +
+    '    \n' +
+    '    \n' +
+    'define function ToCode(coding FHIR.Coding):\n' +
+    ' if coding is null then\n' +
+    '   null\n' +
+    '      else\n' +
+    '        System.Code {\n' +
+    '           code: coding.code.value,\n' +
+    '           system: coding.system.value,\n' +
+    '           version: coding.version.value,\n' +
+    '           display: coding.display.value\n' +
+    '           }\n' +
+    '           \n' +
+    'define function fun(notPascalCase Integer ):\n' +
+    '  true\n' +
+    '  \n' +
+    'define function "isFinishedEncounter"():\n' +
+    '  true'
 let measureCQL_multiplePopulations = MeasureCQL.CQL_Multiple_Populations
 
 describe('Measure Populations', () => {
@@ -25,6 +64,14 @@ describe('Measure Populations', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
+        MeasuresPage.clickEditforCreatedMeasure()
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(Header.measures).click()
 
     })
 
@@ -127,7 +174,7 @@ describe('Measure Populations', () => {
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'denom')
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'num')
-        Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'ToCode')
+        Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'isFinishedEncounter')
         Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
 
         //save population definition with scoring unit

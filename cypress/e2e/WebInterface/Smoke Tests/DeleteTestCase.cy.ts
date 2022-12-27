@@ -5,9 +5,13 @@ import {Utilities} from "../../../Shared/Utilities"
 import {MeasuresPage} from "../../../Shared/MeasuresPage"
 import {TestCasesPage} from "../../../Shared/TestCasesPage"
 import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
+import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
+import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
+import {MeasureCQL} from "../../../Shared/MeasureCQL"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
+let measureCQL = MeasureCQL.ICFCleanTest_CQL
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
@@ -24,7 +28,18 @@ describe('Delete Test Case', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, measureCQL)
+        OktaLogin.Login()
+        MeasuresPage.clickEditforCreatedMeasure()
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null,null,null,null,
+            null,'Procedure')
         OktaLogin.Login()
 
     })
@@ -47,7 +62,7 @@ describe('Delete Test Case', () => {
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         cy.get(TestCasesPage.selectTestCaseDropdownBtn).click()
-        cy.get(TestCasesPage.deleteTestCaseBtn).click()
+        TestCasesPage.clickDeleteTestCaseButton()
 
         cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCaseTitle + '?')
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
@@ -74,7 +89,9 @@ describe('Delete Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.selectTestCaseDropdownBtn).click()
-        cy.get(TestCasesPage.deleteTestCaseBtn).should('not.exist')
+        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
+            cy.get('[data-testid=delete-test-case-btn-'+ fileContents +']').should('not.exist')
+        })
 
     })
 })

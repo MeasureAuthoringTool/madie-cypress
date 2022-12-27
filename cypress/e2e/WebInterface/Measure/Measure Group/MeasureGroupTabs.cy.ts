@@ -291,8 +291,8 @@ describe('Validating Population tabs', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        //select Continuous Variable scoring type and only indicate a value for one of the required fields
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
+        //select Ratio scoring type and only indicate a value for one of the required fields
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'denom')
 
         //make reporting the active tab
@@ -311,9 +311,8 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'num')
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'denom')
-        Utilities.dropdownSelect(MeasureGroupPage.measureObservationPopSelect, 'ToCode')
-        Utilities.dropdownSelect(MeasureGroupPage.measureObsAggregSelect, 'Maximum')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'num')
 
         //make reporting the active tab
         //Click on Reporting tab
@@ -730,7 +729,7 @@ describe('Validating Stratification tabs', () => {
         Utilities.dropdownSelect(MeasureGroupPage.stratAssociationFour, 'initialPopulation')
         cy.get(MeasureGroupPage.stratDescFour).type('StratificationFour')
 
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click({force:true})
 
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
@@ -751,7 +750,10 @@ describe('Validating Stratification tabs', () => {
                 cy.get(MeasureGroupPage.stratificationTab).click()
             }
         })
-        cy.get(MeasureGroupPage.removeStratButton).click({ force: true, multiple: true })
+
+        //Remove Stratification 1 and 2
+        cy.get(MeasureGroupPage.removeStratButton).eq(0).click()
+        cy.get(MeasureGroupPage.removeStratButton).eq(0).click()
 
         //Click on Stratification tab
         Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
@@ -771,35 +773,11 @@ describe('Validating Stratification tabs', () => {
             }
         })
 
-        //Verify Stratifications before save
-        cy.get(MeasureGroupPage.stratThree).should('contain.text', 'ipp')
-        cy.get(MeasureGroupPage.stratFour).should('contain.text', 'denom')
-
-        //Update Stratification 3
-        Utilities.dropdownSelect(MeasureGroupPage.stratThree, 'denom')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
-
-        //Verify Stratifications after save
-        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
-        cy.get(MeasureGroupPage.stratificationTab).should('exist')
-        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-        cy.get(MeasureGroupPage.stratificationTab).click()
-        cy.get('body').then((body) => {
-            if ((body.find(MeasureGroupPage.stratAssociationOne).length != 0)) {
-                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 30700)
-                cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
-                cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
-            } else {
-                Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
-                cy.get(MeasureGroupPage.stratificationTab).should('exist')
-                cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-                cy.get(MeasureGroupPage.stratificationTab).click()
-            }
-        })
-        cy.get(MeasureGroupPage.stratOne).should('contain.text', 'denom')
+        //Verify Stratifications after removing 1 and 2
+        cy.get(MeasureGroupPage.stratOne).should('contain.text', 'ipp')
+        cy.get(MeasureGroupPage.stratDescOne).should('contain.text', 'StratificationThree')
         cy.get(MeasureGroupPage.stratTwo).should('contain.text', 'denom')
-
+        cy.get(MeasureGroupPage.stratDescTwo).should('contain.text', 'StratificationFour')
 
     })
 

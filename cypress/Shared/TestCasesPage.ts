@@ -66,7 +66,7 @@ export class TestCasesPage {
     public static readonly testCaseDENEXExpected = '[data-testid="test-population-denominatorExclusion-expected"]'
     public static readonly testCaseMSRPOPLExpected = '[data-testid="test-population-measurePopulation-expected"]'
     public static readonly testCaseMSRPOPLEXExpected = '[data-testid="test-population-measurePopulationExclusion-expected"]'
-    public static readonly testCasePopulationHeaderForNoMeasureGroup = '.MuiAlert-message.css-1w0ym84'
+    public static readonly testCasePopulationHeaderForNoMeasureGroup = '[data-testid="execution_context_loading_errors"]'
     public static readonly testCasePopulationValuesHeader = '.GroupPopulations___StyledSpan-sc-1752rtp-1'
     public static readonly testCasePopulationValuesTable = '[data-testid="test-case-population-list-tbl"]'
     public static readonly testCasePopulationValues = '.TestCasePopulationList___StyledTr-sc-iww9ze-3'
@@ -112,7 +112,6 @@ export class TestCasesPage {
     public static readonly continueDiscardChangesBtn = '[data-testid="discard-dialog-continue-button"]'
 
     //Delete Test Case
-    public static readonly deleteTestCaseBtn = '[data-testid="delete-test-case-btn"]'
     public static readonly deleteTestCaseConfirmationText = '[class="dialog-warning-body"]'
     public static readonly deleteTestCaseContinueBtn = '[data-testid="delete-dialog-continue-button"]'
 
@@ -251,6 +250,15 @@ export class TestCasesPage {
             cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('be.visible')
             cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('be.enabled')
             cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').click()
+        })
+
+    }
+
+    public static clickDeleteTestCaseButton(): void {
+        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
+            cy.get('[data-testid=delete-test-case-btn-'+ fileContents +']').should('be.visible')
+            cy.get('[data-testid=delete-test-case-btn-'+ fileContents +']').should('be.enabled')
+            cy.get('[data-testid=delete-test-case-btn-'+ fileContents +']').click()
         })
 
     }

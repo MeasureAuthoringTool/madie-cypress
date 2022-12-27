@@ -435,7 +435,8 @@ describe('Create Measure validations', () => {
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
         //Verify error message when the CQL Library Name contains spaces
-        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).clear().type('Test 123')
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('{selectall}{backspace}')
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('Test 123')
         cy.get(CreateMeasurePage.cqlLibraryNameFieldLevelError).should('contain.text', 'Measure Library ' +
             'name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain ' +
             'spaces or other special characters.')
@@ -443,14 +444,16 @@ describe('Create Measure validations', () => {
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
         //Verify error message when the CQL Library Name contains under score
-        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).clear().type('Test_123')
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('{selectall}{backspace}')
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('Test_123')
         cy.get(CreateMeasurePage.cqlLibraryNameFieldLevelError).should('contain.text', 'Measure Library ' +
             'name must not contain \'_\' (underscores).')
         //Verify if create measure button is disabled
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
         //Verify error message when the CQL Library Name contains special characters
-        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).clear().type('Test!@@#')
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('{selectall}{backspace}')
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('Test!@@#')
         cy.get(CreateMeasurePage.cqlLibraryNameFieldLevelError).should('contain.text', 'Measure Library ' +
             'name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain ' +
             'spaces or other special characters.')
@@ -458,7 +461,8 @@ describe('Create Measure validations', () => {
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
         //Verify error message when the CQL Library Name starts with a number
-        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).clear().type('12Test')
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('{selectall}{backspace}')
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('12Test')
         cy.get(CreateMeasurePage.cqlLibraryNameFieldLevelError).should('contain.text', 'Measure Library ' +
             'name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain ' +
             'spaces or other special characters.')
@@ -466,7 +470,8 @@ describe('Create Measure validations', () => {
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
         //Verify the error message when the CQL Library Name given already exists
-        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).clear().type('TestCql1640794914452')
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('{selectall}{backspace}')
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('TestCql1640794914452')
         cy.get(CreateMeasurePage.createMeasureButton).click()
         cy.get(CreateMeasurePage.serverErrorMsg).should('contain.text', 'CQL library with given name already exists')
 
