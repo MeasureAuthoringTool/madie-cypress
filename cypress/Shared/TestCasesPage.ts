@@ -112,7 +112,6 @@ export class TestCasesPage {
     public static readonly continueDiscardChangesBtn = '[data-testid="discard-dialog-continue-button"]'
 
     //Delete Test Case
-    public static readonly deleteTestCaseBtn = '[data-testid="delete-test-case-btn"]'
     public static readonly deleteTestCaseConfirmationText = '[class="dialog-warning-body"]'
     public static readonly deleteTestCaseContinueBtn = '[data-testid="delete-dialog-continue-button"]'
 
@@ -251,6 +250,15 @@ export class TestCasesPage {
             cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('be.visible')
             cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('be.enabled')
             cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').click()
+        })
+
+    }
+
+    public static clickDeleteTestCaseButton(): void {
+        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
+            cy.get('[data-testid=delete-test-case-btn-'+ fileContents +']').should('be.visible')
+            cy.get('[data-testid=delete-test-case-btn-'+ fileContents +']').should('be.enabled')
+            cy.get('[data-testid=delete-test-case-btn-'+ fileContents +']').click()
         })
 
     }

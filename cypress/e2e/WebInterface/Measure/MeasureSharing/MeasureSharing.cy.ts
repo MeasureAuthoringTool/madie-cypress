@@ -173,7 +173,7 @@ describe('Delete Test Case with Shared user', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.selectTestCaseDropdownBtn).click()
-        cy.get(TestCasesPage.deleteTestCaseBtn).click()
+        TestCasesPage.clickDeleteTestCaseButton()
 
         cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCaseTitle + '?')
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
