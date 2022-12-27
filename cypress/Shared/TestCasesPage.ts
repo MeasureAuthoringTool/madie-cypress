@@ -66,7 +66,7 @@ export class TestCasesPage {
     public static readonly testCaseDENEXExpected = '[data-testid="test-population-denominatorExclusion-expected"]'
     public static readonly testCaseMSRPOPLExpected = '[data-testid="test-population-measurePopulation-expected"]'
     public static readonly testCaseMSRPOPLEXExpected = '[data-testid="test-population-measurePopulationExclusion-expected"]'
-    public static readonly testCasePopulationHeaderForNoMeasureGroup = '.MuiAlert-message.css-1w0ym84'
+    public static readonly testCasePopulationHeaderForNoMeasureGroup = '[data-testid="execution_context_loading_errors"]'
     public static readonly testCasePopulationValuesHeader = '.GroupPopulations___StyledSpan-sc-1752rtp-1'
     public static readonly testCasePopulationValuesTable = '[data-testid="test-case-population-list-tbl"]'
     public static readonly testCasePopulationValues = '.TestCasePopulationList___StyledTr-sc-iww9ze-3'

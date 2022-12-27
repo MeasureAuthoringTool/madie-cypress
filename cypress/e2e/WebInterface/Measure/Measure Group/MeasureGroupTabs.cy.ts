@@ -280,7 +280,7 @@ describe('Validating Population tabs', () => {
 
     })
 
-    it.only('Assert indicator on tab with error, until error is removed', () => {
+    it('Assert indicator on tab with error, until error is removed', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()

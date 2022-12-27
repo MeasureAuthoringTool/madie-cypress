@@ -406,7 +406,7 @@ describe('Create Measure validations', () => {
     })
 
     //CQL Library Name Validations
-    it.only('Verify error messages when the CQL Library Name entered is invalid or empty', () => {
+    it('Verify error messages when the CQL Library Name entered is invalid or empty', () => {
 
         let measureName = 'TestMeasure' + Date.now()
 
