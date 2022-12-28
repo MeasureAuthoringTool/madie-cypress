@@ -275,7 +275,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(MeasureGroupPage.denominatorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(0).wait(1000).click() //select ToCode
+        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(3).wait(1000).click() //select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
@@ -285,6 +285,9 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+        //Close the Toast message
+        cy.get('[data-testid="ClearIcon"]').click()
 
         //Navigate to Test case Expected values tab and verify Measure Observation Expected value exists
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -313,6 +316,9 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+        //Close the Toast message
+        cy.get('[data-testid="ClearIcon"]').click()
 
         //Navigate to Test case Expected values tab and verify Measure Observation Expected value does not exist
         cy.get(EditMeasurePage.testCasesTab).click()
