@@ -119,7 +119,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / succesful save message to appear
+        //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
@@ -495,7 +495,7 @@ describe('JSON Resource ID tests -- CV', () => {
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'denom')
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'num')
-        Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'ToCode')
+        Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'booleanFunction')
         Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
 
         //save Population Criteria

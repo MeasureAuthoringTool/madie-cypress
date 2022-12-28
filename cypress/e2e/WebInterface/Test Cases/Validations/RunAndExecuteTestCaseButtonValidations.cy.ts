@@ -246,7 +246,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'No valid test cases to execute!')
+        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'calculateTestCases: No valid test cases to execute')
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Invalid')
 
     })
@@ -340,7 +340,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'No valid test cases to execute!')
+        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'calculateTestCases: No valid test cases to execute')
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Invalid')
 
     })
@@ -1199,6 +1199,9 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
+        //Close the Toast message
+        cy.get('[data-testid="ClearIcon"]').click()
+
         //create a test case that will fail:
 
         //Navigate to Test Cases page and add Test Case details
@@ -1272,7 +1275,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'No valid test cases to execute!')
+        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'calculateTestCases: No valid test cases to execute')
 
         //refresh test case list page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -1402,7 +1405,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'No valid test cases to execute!')
+        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'calculateTestCases: No valid test cases to execute')
 
         //refresh test case list page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -1604,6 +1607,9 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
+        //Close the Toast message
+        cy.get('[data-testid="ClearIcon"]').click()
+
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
@@ -1661,14 +1667,9 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).invoke('click').check().should('be.checked')
 
-        //enter values for the expected population
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).invoke('click').type('0')
-
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click()
 
         //Verify Highlighting tab before clicking on Run Test button
         cy.get(TestCasesPage.tcHighlightingTab).click()

@@ -37,7 +37,7 @@ export class TestCasesPage {
     public static readonly testCaseJsonValidationDisplayList = '[data-testid="json-validation-errors-list"]'
     public static readonly testCaseJsonValidationErrorList = '.EditTestCase__ValidationAlertCard-sc-m537sm-4'
     public static readonly testCasePopulationList = '[data-testid="create-test-case-populations"]'
-    public static readonly testCaseExecutionError = '[data-testid="display-tests-error"]'
+    public static readonly testCaseExecutionError = '[data-testid="execution_context_loading_errors"]'
     public static readonly runTestButton = '[data-testid="run-test-case-button"]'
     public static readonly runTestAlertMsg = '[data-testid="calculation-info-alert"]'
     public static readonly testCalculationResults = '[data-testid=calculation-results]'
