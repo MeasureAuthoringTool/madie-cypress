@@ -156,7 +156,7 @@ describe('Bundle returns elmXML', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/bundles',
+                    url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -259,7 +259,7 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/bundles',
+                    url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -372,7 +372,7 @@ describe('Measure bundle end point returns stratifications', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/bundles',
+                    url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -472,7 +472,7 @@ describe('Measure bundle end point returns stratifications', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/bundles',
+                    url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -571,7 +571,7 @@ describe('Measure bundle end point returns stratifications', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/bundles',
+                    url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -695,7 +695,7 @@ describe('Verify the criteria reference for measure observations', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/bundles',
+                    url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -784,7 +784,7 @@ describe('Verify the criteria reference for measure observations', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/bundles',
+                    url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
