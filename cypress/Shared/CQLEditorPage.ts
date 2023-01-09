@@ -1,11 +1,14 @@
-import {EditMeasurePage} from "./EditMeasurePage"
+import { EditMeasurePage } from "./EditMeasurePage"
 export class CQLEditorPage {
+
+    //error tooltip container
+    public static readonly errorContainer = '#ace-editor-wrapper > div.ace_tooltip'
 
     //success save message without errors
     public static readonly successfulCQLSaveNoErrors = '[data-testid="generic-success-text-header"]'
 
     //Error/warning marker inside of the CQL Editor window
-    public static readonly errorInCQLEditorWindow = 'div.ace_gutter-cell.ace_error'
+    public static readonly errorInCQLEditorWindow = '#ace-editor-wrapper > div.ace_gutter > div > div.ace_gutter-cell.ace_error'
     public static readonly warningInCQLEditorWindow = '.ace_warning'
 
     //UMLS Not Logged in Error
