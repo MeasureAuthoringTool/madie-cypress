@@ -1,10 +1,10 @@
-import {Utilities} from "../../../Shared/Utilities"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
+import { Utilities } from "../../../Shared/Utilities"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { v4 as uuidv4 } from 'uuid'
 
 let measureName = 'MeasureBundle' + Date.now()
@@ -86,7 +86,7 @@ let PopNumex = 'numeratorExclusion'
 
 describe('Proportion Measure Bundle end point returns expected data with valid Measure CQL and elmJson', () => {
 
-    beforeEach('Create Measure and set access token',() => {
+    beforeEach('Create Measure and set access token', () => {
 
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
@@ -163,7 +163,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
     })
 
 
-    afterEach('Clean up',() => {
+    afterEach('Clean up', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
@@ -245,7 +245,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
 
 describe('CV Measure Bundle end point returns expected data with valid Measure CQL and elmJson', () => {
 
-    before('Create Measure',() => {
+    before('Create Measure', () => {
 
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
@@ -314,13 +314,13 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
 
     })
 
-    beforeEach('Set Access Token',() => {
+    beforeEach('Set Access Token', () => {
 
         cy.setAccessTokenCookie()
 
     })
 
-    after('Clean up',() => {
+    after('Clean up', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
@@ -367,7 +367,7 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
 
 describe('Measure Bundle end point returns 409 with valid Measure CQL but is missing elmJson', () => {
 
-    before('Create Measure without elmJson',() => {
+    before('Create Measure without elmJson', () => {
 
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
@@ -382,8 +382,10 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
                 headers: {
                     Authorization: 'Bearer ' + accessToken.value
                 },
-                body: {"measureName": newMeasureName, "cqlLibraryName": newCqlLibraryName, 'cql': measureCQL, "model": 'QI-Core v4.1.1', "ecqmTitle": 'eCQMTitle', "measurementPeriodStart": '2020-01-01T05:00:00.000+00:00',
-                    "measurementPeriodEnd": '2023-01-01T05:00:00.000+00:00', 'versionId': uuidv4(), 'measureSetId': uuidv4()}
+                body: {
+                    "measureName": newMeasureName, "cqlLibraryName": newCqlLibraryName, 'cql': measureCQL, "model": 'QI-Core v4.1.1', "ecqmTitle": 'eCQMTitle', "measurementPeriodStart": '2020-01-01T05:00:00.000+00:00',
+                    "measurementPeriodEnd": '2023-01-01T05:00:00.000+00:00', 'versionId': uuidv4(), 'measureSetId': uuidv4()
+                }
             }).then((response) => {
                 expect(response.status).to.eql(201)
                 cy.writeFile('cypress/fixtures/measureId', response.body.id)
@@ -392,9 +394,9 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
         })
     })
 
-    after('Clean up',() => {
+    after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName+1)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName + 1)
 
     })
 
@@ -419,7 +421,7 @@ describe('Measure Bundle end point returns 409 with valid Measure CQL but is mis
 
 describe('Measure Bundle end point returns nothing with Measure CQL missing FHIRHelpers include line', () => {
 
-    before('Create Measure',() => {
+    before('Create Measure', () => {
 
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
@@ -427,7 +429,7 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
         cy.setAccessTokenCookie()
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName+1, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 1, measureCQL)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
@@ -494,8 +496,8 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
         })
     })
 
-    after('Clean up',() => {
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName+1)
+    after('Clean up', () => {
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName + 1)
 
     })
 
@@ -545,19 +547,19 @@ describe('Measure Bundle end point returns 403 if measure was not created by cur
     newCqlLibraryName = CqlLibraryName + randValue
     let measureCQL = "library SimpleFhirMeasureLib version '0.0.004'\nusing FHIR version '4.0.1'\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\nparameter 'Measurement Period' Interval<DateTime>\ncontext Patient\ndefine 'ipp':\n  exists ['Encounter'] E where E.period.start during 'Measurement Period'\ndefine 'denom':\n  'ipp'\ndefine 'num':\n  exists ['Encounter'] E where E.status ~ 'finished'"
 
-    before('Create Measure',() => {
+    before('Create Measure', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName+2, measureCQL, true, true)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 2, measureCQL, true, true)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(true, true, 'ipp', 'num', 'denom')
     })
 
-    beforeEach('Set Access Token',() => {
+    beforeEach('Set Access Token', () => {
         cy.setAccessTokenCookie()
     })
 
-    after('Clean up',() => {
+    after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName+2, true, true)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName + 2, true, true)
 
     })
     it('Get Measure bundle resource will only return if current user is equal to createdBy user', () => {
@@ -582,7 +584,7 @@ describe('Measure Bundle end point returns 403 if measure was not created by cur
 })
 describe('Measure Bundle end point returns 409 when the measure is missing a group', () => {
 
-    before('Create Measure',() => {
+    before('Create Measure', () => {
 
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
@@ -590,17 +592,17 @@ describe('Measure Bundle end point returns 409 when the measure is missing a gro
         cy.setAccessTokenCookie()
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName+3, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 3, measureCQL)
     })
 
-    beforeEach('Set Access Token',() => {
+    beforeEach('Set Access Token', () => {
 
         cy.setAccessTokenCookie()
 
     })
 
-    after('Clean up',() => {
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName+3)
+    after('Clean up', () => {
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName + 3)
 
     })
     it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
@@ -647,7 +649,7 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
         cy.setAccessTokenCookie()
     })
 
-    afterEach('Clean up',() => {
+    afterEach('Clean up', () => {
 
         randValue = (Math.floor((Math.random() * 2000) + 5))
         newCqlLibraryName = CqlLibraryName + randValue
