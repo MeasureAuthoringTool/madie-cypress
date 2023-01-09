@@ -669,8 +669,7 @@ describe('Measure Observations', () => {
 
     })
 
-    //Skipping until MAT-5170 is fixed
-    it.skip('Add Measure Observations for Ratio Measure', () => {
+    it('Add Measure Observations for Ratio Measure', () => {
 
         let PopIniPop = 'ipp'
         let PopNum = 'num'
@@ -749,8 +748,7 @@ describe('Measure Observations', () => {
         })
     })
 
-    //Skipping until MAT-5170 is fixed
-    it.skip('Add Measure Observations for Continuous Variable Measure', () => {
+    it('Add Measure Observations for Continuous Variable Measure', () => {
 
         let PopIniPop = 'ipp'
         let PopDenom = 'denom'
