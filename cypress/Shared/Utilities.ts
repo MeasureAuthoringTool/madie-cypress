@@ -472,4 +472,17 @@ export class Utilities {
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').wait(500).type('{enter}')
     }
+
+    public static validateErrors(errorElementObject: string, errorContainer: string, errorMsg1: string, errorMsg2?: string): void {
+
+        cy.get(errorElementObject).should('exist')
+        cy.get(errorElementObject).invoke('show').click({ force: true, multiple: true })
+        cy.wait(1000)
+        cy.get(errorContainer).invoke('show').should('contain.text', errorMsg1)
+        if ((errorMsg2 != null) || (errorMsg2 != undefined)) {
+            cy.wait(1000)
+            cy.get(errorContainer).invoke('show').should('contain.text', errorMsg2)
+        }
+
+    }
 }

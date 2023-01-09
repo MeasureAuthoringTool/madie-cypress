@@ -1,10 +1,10 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import {Header} from "../../../../Shared/Header"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Header } from "../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now() + 1
 let CqlLibraryName = 'TestLibrary' + Date.now() + 1
@@ -54,10 +54,7 @@ describe.skip('UMLS / VSAC error when user is not logged into UMLS', () => {
         CQLEditorPage.validateSuccessfulCQLSave()
 
         //Validate error(s) in CQL Editor window
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLEditorPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLEditorPage.errorInCQLEditorWindow).invoke('show').click({force:true, multiple: true})
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 1:3 | Could not resolve identifier SDE in the current library.")
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 5:13 | Member SDE Sex not found for type null.")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "ELM: 1:3 | Could not resolve identifier SDE in the current library.", "ELM: 5:13 | Member SDE Sex not found for type null.")
 
         //Navigate away from the page
         cy.get(Header.measures).click()
@@ -69,12 +66,9 @@ describe.skip('UMLS / VSAC error when user is not logged into UMLS', () => {
         CQLEditorPage.clickCQLEditorTab()
 
         //Validate error(s) in CQL Editor windows
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLEditorPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLEditorPage.errorInCQLEditorWindow).invoke('show').click({force:true, multiple: true})
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 1:3 | Could not resolve identifier SDE in the current library.")
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 5:13 | Member SDE Sex not found for type null.")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "ELM: 1:3 | Could not resolve identifier SDE in the current library.", "ELM: 5:13 | Member SDE Sex not found for type null.")
 
-    })    
+    })
 })
 
 describe('Validations around code system in Measure CQL', () => {
@@ -121,9 +115,7 @@ describe('Validations around code system in Measure CQL', () => {
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLEditorPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLEditorPage.errorInCQLEditorWindow).invoke('show').click({force:true, multiple: true})
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "VSAC: 0:110 | Invalid Code system")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:110 | Invalid Code system")
 
     })
 
@@ -149,9 +141,8 @@ describe('Validations around code system in Measure CQL', () => {
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLEditorPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLEditorPage.errorInCQLEditorWindow).invoke('show').click({force:true, multiple: true})
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "VSAC: 0:72 | Version not found.")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:72 | Version not found.")
+
 
     })
 
@@ -175,9 +166,7 @@ describe('Validations around code system in Measure CQL', () => {
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLEditorPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLEditorPage.errorInCQLEditorWindow).invoke('show').click({force:true, multiple: true})
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "VSAC: 0:91 | Unable to find a code system version")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:91 | Unable to find a code system version")
 
     })
 
@@ -202,7 +191,7 @@ describe('Validations around code system in Measure CQL', () => {
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLEditorPage.errorInCQLEditorWindow).should('not.exist')
+        cy.get(CQLEditorPage.errorInCQLEditorWindow).should('not.exist')
 
 
     })
@@ -227,7 +216,7 @@ describe('Validations around code system in Measure CQL', () => {
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLEditorPage.errorInCQLEditorWindow).should('not.exist')
+        cy.get(CQLEditorPage.errorInCQLEditorWindow).should('not.exist')
 
     })
 
@@ -253,9 +242,7 @@ describe('Validations around code system in Measure CQL', () => {
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLEditorPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLEditorPage.errorInCQLEditorWindow).invoke('show').click({force:true, multiple: true})
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "VSAC: 0:107 | Version not found.")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:107 | Version not found.")
 
     })
 })
