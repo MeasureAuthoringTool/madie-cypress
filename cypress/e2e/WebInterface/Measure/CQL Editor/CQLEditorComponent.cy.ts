@@ -143,7 +143,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get('[data-testid="generic-success-text-list"] > li').should('contain.text', 'Row: 11, Col:14: ELM: 14:56 | Could not resolve membership operator for terminology target of the retrieve.')
 
         //Verify the same warning(s) appear in CQL Editor windows
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 14:56 | Could not resolve code path type for the type of the retrieve QICore.ServiceRequest.', 'ELM: 14:56 | Could not resolve membership operator for terminology target of the retrieve.')
+        Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 14:56 | Could not resolve code path type for the type of the retrieve QICore.ServiceRequest.', 'ELM: 14:56 | Could not resolve membership operator for terminology target of the retrieve.')
 
     })
 })
@@ -241,11 +241,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
         cy.get('[data-testid="generic-success-text-list"] > li').should('contain.text', 'Row: 11, Col:14: ELM: 14:56 | Could not resolve membership operator for terminology target of the retrieve.')
 
         //Verify the same warning(s) appear in CQL Editor windows
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLEditorPage.warningInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLEditorPage.warningInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', 'ELM: 14:56 | Could not resolve code path type for the type of the retrieve QICore.ServiceRequest.')
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', 'ELM: 14:56 | Could not resolve membership operator for terminology target of the retrieve.')
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 14:56 | Could not resolve code path type for the type of the retrieve QICore.ServiceRequest.', 'ELM: 14:56 | Could not resolve membership operator for terminology target of the retrieve.')
+        Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 14:56 | Could not resolve code path type for the type of the retrieve QICore.ServiceRequest.', 'ELM: 14:56 | Could not resolve membership operator for terminology target of the retrieve.')
 
     })
 })
