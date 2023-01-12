@@ -13,10 +13,19 @@
 
 const fs = require('fs-extra')
 const path = require('path')
+const unzipper = require('unzipper')
 
 function getConfigurationByFile (file) {
   const pathToConfigFile = path.resolve('./cypress/', 'config', `${file}.json`)
   return fs.readJson(pathToConfigFile)
+}
+//unzip file
+function unzipFile (zipFile, path) {
+
+  const zipPath = path + '/' + zipFile
+  const readStream = fs.createReadStream(zipPath)
+
+  readStream.pipe(unzipper.Extract({path: `${path}`}))
 }
 const browserify = require('@cypress/browserify-preprocessor')
 module.exports = (on, config) => {
@@ -41,6 +50,13 @@ module.exports = (on, config) => {
       return null
     }
   })
+  on('task', {
+    unzipFile: zipFileAndPath => {
+      unzipFile(zipFileAndPath.zipFile, zipFileAndPath.path)
+      return null
+    }
+  })
   on('file:preprocessor', browserify(options))
   return getConfigurationByFile(file)
 }
+
