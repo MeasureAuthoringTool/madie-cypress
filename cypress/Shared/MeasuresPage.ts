@@ -38,4 +38,16 @@ export class MeasuresPage {
 
         })
     }
+
+    public static exportMeasure(): void {
+
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+            cy.get('[data-testid=export-measure-' + fileContents + ']').click()
+        })
+    }
 }
