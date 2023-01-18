@@ -224,7 +224,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.confirmationMsg).should('exist')
         cy.get(TestCasesPage.confirmationMsg).should('be.visible')
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.confirmationMsgWithErrorOrWarning).should('contain.text', 'Changes updated successfully but the following error(s) were found')
 
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
@@ -317,14 +317,14 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.confirmationMsg).should('exist')
         cy.get(TestCasesPage.confirmationMsg).should('be.visible')
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.confirmationMsgWithErrorOrWarning).should('contain.text', 'Changes updated successfully but the following error(s) were found')
 
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'All resources in bundle must have unique ID regardless of type. Multiple resources detected with ID [1]')
     })
 })
-describe('JSON Rescource ID tests - Proportion Score Type', () => {
+describe('JSON Resource ID tests - Proportion Score Type', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 

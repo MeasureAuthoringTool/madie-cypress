@@ -218,7 +218,7 @@ describe('Run / Execute Test Case button validations', () => {
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.confirmationMsgWithErrorOrWarning).should('have.text', 'Changes updated successfully but the following error(s) were found')
 
         cy.log('JSON added to test case successfully')
 
@@ -432,7 +432,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.detailsTab).should('be.enabled')
         cy.get(TestCasesPage.detailsTab).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.confirmationMsgWithErrorOrWarning).should('contain.text', 'Changes updated successfully but the following error(s) were found')
 
         //Add valid json to the test case and run
         cy.get('#ace-editor-wrapper > .ace_scroller > .ace_content').type('{selectall}{backspace}{selectall}{backspace}')
@@ -1105,7 +1105,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         cy.get(TestCasesPage.detailsTab).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.confirmationMsgWithErrorOrWarning).should('have.text', 'Changes updated successfully but the following warning(s) were found')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1245,7 +1245,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         cy.get(TestCasesPage.detailsTab).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.confirmationMsgWithErrorOrWarning).should('have.text', 'Changes updated successfully but the following error(s) were found')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1375,7 +1375,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         cy.get(TestCasesPage.detailsTab).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.confirmationMsgWithErrorOrWarning).should('have.text', 'Changes updated successfully but the following error(s) were found')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 

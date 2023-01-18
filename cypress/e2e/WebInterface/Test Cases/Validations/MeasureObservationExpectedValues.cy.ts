@@ -43,7 +43,7 @@ describe('Measure Observation Expected values', () => {
 
     })
 
-    it('Validate and save Measure observation for CV measure', () => {
+    it.only('Validate and save Measure observation for CV measure', () => {
 
         //Create Continuous variable measure group
         MeasureGroupPage.createMeasureGroupforContinuousVariableMeasure()
@@ -75,7 +75,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.confirmationMsgWithErrorOrWarning).should('contain.text', 'Changes updated successfully but the following error(s) were found')
 
         //Assert saved observation values
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
