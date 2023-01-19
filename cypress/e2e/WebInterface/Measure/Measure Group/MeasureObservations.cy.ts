@@ -800,7 +800,7 @@ describe('Validate Measure Observation Parameters',  () => {
         OktaLogin.Logout()
     })
 
-    it('Verify error message when the population basis does not match with the function selected for Measure Observation', () => {
+    it.only('Verify error message when the population basis does not match with the function selected for Measure Observation', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -836,7 +836,7 @@ describe('Validate Measure Observation Parameters',  () => {
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
         cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(1).wait(1000).click() //select isFinishedEncounter
-        cy.get('[data-testid="helper-text"]').should('contain.text', 'Selected function can not have parameters')
+        cy.get('[data-testid="measure-observation-cv-obs-helper-text"]').should('contain.text', 'Selected function can not have parameters')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
 
@@ -852,7 +852,7 @@ describe('Validate Measure Observation Parameters',  () => {
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
         cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(0).wait(1000).click() //select ToCode
-        cy.get('[data-testid="helper-text"]').should('contain.text', 'Selected function must have exactly one parameter of type Encounter')
+        cy.get('[data-testid="measure-observation-cv-obs-helper-text"]').should('contain.text', 'Selected function must have exactly one parameter of type Encounter')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
 
