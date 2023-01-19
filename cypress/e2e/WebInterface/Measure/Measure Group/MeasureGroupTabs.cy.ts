@@ -729,7 +729,7 @@ describe('Validating Stratification tabs', () => {
         Utilities.dropdownSelect(MeasureGroupPage.stratAssociationFour, 'initialPopulation')
         cy.get(MeasureGroupPage.stratDescFour).type('StratificationFour')
 
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click({force:true})
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click({ force: true })
 
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
