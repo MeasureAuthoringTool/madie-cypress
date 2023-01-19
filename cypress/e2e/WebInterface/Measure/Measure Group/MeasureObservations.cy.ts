@@ -800,7 +800,7 @@ describe('Validate Measure Observation Parameters',  () => {
         OktaLogin.Logout()
     })
 
-    it.only('Verify error message when the population basis does not match with the function selected for Measure Observation', () => {
+    it('Verify error message when the population basis does not match with the function selected for Measure Observation', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
