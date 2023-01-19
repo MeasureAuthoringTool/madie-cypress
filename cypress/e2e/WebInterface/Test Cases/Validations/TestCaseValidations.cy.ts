@@ -93,7 +93,7 @@ describe('Test Case Validations', () => {
         cy.get(TestCasesPage.createTestCaseTitleInput).type(twoFiftyTwoCharacters)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseSaveButton).should('be.disabled')
-        cy.get(TestCasesPage.testCaseTitleInlineError).contains('Test Case Title cannot be more ' +
+        cy.get(TestCasesPage.createTestCaseTitleInlineError).contains('Test Case Title cannot be more ' +
             'than 250 characters.')
 
     })
@@ -121,7 +121,7 @@ describe('Test Case Validations', () => {
         cy.get(TestCasesPage.testCaseTitle).type(twoFiftyTwoCharacters, {delay: 0})
         cy.get(TestCasesPage.testCaseSeriesTextBox).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-        cy.get(TestCasesPage.testCaseTitleInlineError).contains('Test Case Title cannot be more ' +
+        cy.get(TestCasesPage.editTestCaseTitleInlineError).contains('Test Case Title cannot be more ' +
             'than 250 characters.')
     })
 })
