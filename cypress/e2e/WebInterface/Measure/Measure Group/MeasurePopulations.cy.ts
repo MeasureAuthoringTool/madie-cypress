@@ -207,11 +207,11 @@ describe('Measure Populations', () => {
         cy.get(MeasureGroupPage.popBasisOption).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
-        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of Encounter')
+        cy.get(MeasureGroupPage.initialPopulationMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of Encounter')
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'denom')
-        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of Encounter')
+        cy.get(MeasureGroupPage.measurePopulationMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of Encounter')
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'num')
-        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of Encounter')
+        cy.get(MeasureGroupPage.measurePopulationExclusionMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of Encounter')
         Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'ToCode')
         Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
 
