@@ -85,7 +85,7 @@ export class MeasureGroupPage {
     public static readonly measureObservationPopSelect = '[id="measure-observation-cv-obs"]'
     public static readonly measurePopulationOption = '[data-testid="select-option-measure-group-population"]'
     public static readonly measureObsAggregSelect = '[id="measure-observation-aggregate-cv-obs"]'
-    public static readonly populationMismatchErrorMsg = '[data-testid="helper-text"]'
+    public static readonly populationMismatchErrorMsg = '[data-testid="Stratification-select-1-helper-text"]'
     public static readonly initialPopulationMismatchErrorMsg = '[data-testid="population-select-initial-population-select-helper-text"]'
     public static readonly measurePopulationMismatchErrorMsg = '[data-testid="population-select-measure-population-select-helper-text"]'
     public static readonly measurePopulationExclusionMismatchErrorMsg = '[data-testid="population-select-measure-population-exclusion-select-helper-text"]'
