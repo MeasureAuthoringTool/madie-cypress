@@ -224,7 +224,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.confirmationMsg).should('exist')
         cy.get(TestCasesPage.confirmationMsg).should('be.visible')
-        cy.get(TestCasesPage.confirmationMsgWithErrorOrWarning).should('contain.text', 'Changes updated successfully but the following error(s) were found')
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
 
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
@@ -317,7 +317,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.confirmationMsg).should('exist')
         cy.get(TestCasesPage.confirmationMsg).should('be.visible')
-        cy.get(TestCasesPage.confirmationMsgWithErrorOrWarning).should('contain.text', 'Changes updated successfully but the following error(s) were found')
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
 
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
