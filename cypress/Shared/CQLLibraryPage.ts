@@ -43,7 +43,7 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryEditPublisherCloseIcon = '[data-testid="CloseIcon"]'
     public static readonly cqlLibraryCreatePublisherDrpDwn = '[aria-activedescendant="mui-3-option-0"]'
     public static readonly cqlLibraryEditPublisherDrpDwn = '#mui-4-option-0'
-    public static readonly cqlLibDescHelperText = '[data-testid="description-helper-text"]'
+    public static readonly cqlLibDescHelperText = '[data-testid="cql-library-description-helper-text"]'
     public static readonly cqlLibPubHelperText = '[data-testid="publisher-helper-text"]'
     public static readonly cqlLibraryExperimentalChkBox = '[id="experimental"]'
     public static readonly editLibraryOwnershipError = '[id="content"]'

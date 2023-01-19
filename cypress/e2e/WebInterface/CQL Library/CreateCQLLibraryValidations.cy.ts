@@ -1,9 +1,9 @@
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {Header} from "../../../Shared/Header"
-import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
-import {CQLLibrariesPage} from "../../../Shared/CQLLibrariesPage"
-import {Utilities} from "../../../Shared/Utilities"
-import {Global} from "../../../Shared/Global"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { Header } from "../../../Shared/Header"
+import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
+import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
+import { Utilities } from "../../../Shared/Utilities"
+import { Global } from "../../../Shared/Global"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 
@@ -24,7 +24,7 @@ describe('CQL Library Validations', () => {
 
         const dayjs = require('dayjs')
         let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCQLLibraryName = CQLLibraryName+randValue
+        let newCQLLibraryName = CQLLibraryName + randValue
         let lastUpdated = dayjs().format('M/D/YYYY')
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
@@ -34,7 +34,7 @@ describe('CQL Library Validations', () => {
 
         cy.get(Header.cqlLibraryTab).click()
 
-        cy.wait('@libraries', { timeout: 60000})
+        cy.wait('@libraries', { timeout: 60000 })
 
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
@@ -86,14 +86,14 @@ describe('CQL Library Validations', () => {
 
         cy.get(Header.cqlLibraryTab).click()
 
-        cy.wait('@libraries', { timeout: 60000})
+        cy.wait('@libraries', { timeout: 60000 })
 
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
         //Enter a name for the new CQL Library
         cy.get(CQLLibraryPage.newCQLLibName).click()
-        cy.get(CQLLibraryPage.newCQLLibName).focused().type(CQLLibraryName+randValue)
+        cy.get(CQLLibraryPage.newCQLLibName).focused().type(CQLLibraryName + randValue)
         //select a model value
         cy.get(CQLLibraryPage.cqlLibraryModelDropdown).wait(1000).click()
         cy.get(CQLLibraryPage.cqlLibraryModelQICore).click()
@@ -116,7 +116,7 @@ describe('CQL Library Validations', () => {
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
         //change up the value of the CQL Library name
-        cy.get(CQLLibraryPage.currentCQLLibName).focus().type(CQLLibraryName+randValue + 'Updated')
+        cy.get(CQLLibraryPage.currentCQLLibName).focus().type(CQLLibraryName + randValue + 'Updated')
         //verify the existence, accessibility, the text and the functionality of the Discard button
         cy.get(CQLLibraryPage.discardChanges).should('exist')
         cy.get(CQLLibraryPage.discardChanges).should('be.visible')
@@ -135,7 +135,7 @@ describe('CQL Library Validations', () => {
 
         cy.get(Header.cqlLibraryTab).click()
 
-        cy.wait('@libraries', { timeout: 60000})
+        cy.wait('@libraries', { timeout: 60000 })
 
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
@@ -201,7 +201,7 @@ describe('CQL Library Validations', () => {
 
         cy.get(Header.cqlLibraryTab).click()
 
-        cy.wait('@libraries', { timeout: 60000})
+        cy.wait('@libraries', { timeout: 60000 })
 
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
@@ -209,7 +209,7 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.newCQLLibName).should('exist')
         cy.get(CQLLibraryPage.newCQLLibName).should('be.visible')
         cy.get(CQLLibraryPage.newCQLLibName).should('be.enabled')
-        cy.get(CQLLibraryPage.newCQLLibName).type(CQLLibraryName+randValue)
+        cy.get(CQLLibraryPage.newCQLLibName).type(CQLLibraryName + randValue)
         cy.get(CQLLibraryPage.cqlLibraryModalField).wait(2000).click()
         cy.get(CQLLibraryPage.cqlLibraryCreateForm).click()
         cy.get(CQLLibraryPage.cqlLibraryCreateFormSideClickArea).click().wait(2000).click().wait(2000).click()
@@ -219,7 +219,7 @@ describe('CQL Library Validations', () => {
 
     it('CQL Library Description Validations', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let LibraryName = CQLLibraryName+randValue
+        let LibraryName = CQLLibraryName + randValue
 
         //navigate to the CQL Library page and create new CQL Library
         cy.get(Header.cqlLibraryTab).should('exist')
@@ -228,7 +228,7 @@ describe('CQL Library Validations', () => {
 
         cy.get(Header.cqlLibraryTab).click()
 
-        cy.wait('@libraries', { timeout: 60000})
+        cy.wait('@libraries', { timeout: 60000 })
 
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
@@ -241,7 +241,7 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryDesc).wait(1000).click()
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).click()
         cy.get(CQLLibraryPage.cqlLibDescHelperText).should('contain.text', 'Description is required.')
-        cy.get(CQLLibraryPage.cqlLibDescHelperText).should('have.color', '#D32F2F')
+        cy.get(CQLLibraryPage.cqlLibDescHelperText).should('have.color', '#AE1C1C')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
 
 
@@ -249,7 +249,7 @@ describe('CQL Library Validations', () => {
 
     it('CQL Library Publisher Validations', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let LibraryName = CQLLibraryName+randValue
+        let LibraryName = CQLLibraryName + randValue
 
         //navigate to the CQL Library page and create new CQL Library
         cy.get(Header.cqlLibraryTab).should('exist')
@@ -258,7 +258,7 @@ describe('CQL Library Validations', () => {
 
         cy.get(Header.cqlLibraryTab).click()
 
-        cy.wait('@libraries', { timeout: 60000})
+        cy.wait('@libraries', { timeout: 60000 })
 
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
@@ -279,9 +279,9 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
     })
 
-    it('Create new CQL Library Creation with CQL', () =>{
+    it('Create new CQL Library Creation with CQL', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let LibraryName = CQLLibraryName+randValue
+        let LibraryName = CQLLibraryName + randValue
 
         //navigate to the CQL Library page and create new CQL Library
         cy.get(Header.cqlLibraryTab).should('exist')
@@ -290,7 +290,7 @@ describe('CQL Library Validations', () => {
 
         cy.get(Header.cqlLibraryTab).click()
 
-        cy.wait('@libraries', { timeout: 60000})
+        cy.wait('@libraries', { timeout: 60000 })
 
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
