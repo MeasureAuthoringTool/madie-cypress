@@ -176,7 +176,8 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsgWithErrorOrWarning).should('contain.text', 'Changes updated successfully but the following warning(s) were found')
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
@@ -251,7 +252,8 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsgWithErrorOrWarning).should('contain.text', 'Changes updated successfully but the following warning(s) were found')
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
