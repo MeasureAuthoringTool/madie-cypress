@@ -378,13 +378,13 @@ describe('Create Measure validations', () => {
         //Verify error message when the Measure Name field is empty
         cy.get(CreateMeasurePage.measureNameTextbox).click()
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).click()
-        cy.get(CreateMeasurePage.measureNameFieldLevelError).should('contain.text', 'A Measure Name is required.')
+        cy.get(CreateMeasurePage.measureNameFieldLevelError).should('contain.text', 'Measure Name is required.')
         //Verify if create measure button is disabled
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
         //Verify error message when the Measure Name doesn't contain alphabets
         cy.get(CreateMeasurePage.measureNameTextbox).type('66777')
-        cy.get(CreateMeasurePage.measureNameFieldLevelError).should('contain.text', 'A Measure Name must contain at least one letter.')
+        cy.get(CreateMeasurePage.measureNameFieldLevelError).should('contain.text', 'Measure Name must contain at least one letter.')
         //Verify if create measure button is disabled
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
@@ -396,7 +396,7 @@ describe('Create Measure validations', () => {
 
         //Verify error message when the Measure Name has more than 500 characters
         cy.get(CreateMeasurePage.measureNameTextbox).clear().type('This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is')
-        cy.get(CreateMeasurePage.measureNameFieldLevelError).should('contain.text', 'A Measure Name cannot be more than 500 characters.')
+        cy.get(CreateMeasurePage.measureNameFieldLevelError).should('contain.text', 'Measure Name cannot be more than 500 characters.')
         //Verify if create measure button is disabled
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
@@ -491,7 +491,7 @@ describe('Create Measure validations', () => {
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).focus().blur()
-        cy.get(CreateMeasurePage.measureModelFieldLevelError).should('contain.text', 'A Measure Model is required.')
+        cy.get(CreateMeasurePage.measureModelFieldLevelError).should('contain.text', 'Measure Model is required.')
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(CqlLibraryName)
         //Verify if create measure button is disabled
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
