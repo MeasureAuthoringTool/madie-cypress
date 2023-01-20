@@ -20,8 +20,8 @@ export class CreateMeasurePage {
     public static readonly serverErrorMsgCloseIcon = '[data-testid="server-error-alerts"]'
     public static readonly measurementPeriodStartDate = '[name=measurementPeriodStart]'
     public static readonly measurementPeriodEndDate = '[name=measurementPeriodEnd]'
-    public static readonly measurementPeriodStartDateError = '[data-testid=undefined-helper-text]'
-    public static readonly measurementPeriodEndDateError = '[data-testid=measurementPeriodEndDate-helper-text]'
+    public static readonly measurementPeriodStartDateError = '[data-testid=create-measure-period-start-helper-text]'
+    public static readonly measurementPeriodEndDateError = '[data-testid=create-measure-period-end-helper-text]'
 
 
     public static clickCreateMeasureButton(): void {
