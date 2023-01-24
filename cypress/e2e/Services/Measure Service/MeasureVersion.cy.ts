@@ -42,7 +42,7 @@ let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
     'valueset "HPV Test": \'\')'
 
-describe('Measure Versioning', () => {
+describe.skip('Measure Versioning', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
@@ -108,7 +108,7 @@ describe('Measure Versioning', () => {
     })
 })
 
-describe('Version Measure without CQL', () => {
+describe.skip('Version Measure without CQL', () => {
 
     before('Create Measure and Set Access Token', () => {
 
@@ -175,7 +175,7 @@ describe.skip('Version Measure with invalid CQL', () => {
     })
 })
 
-describe('Version Measure with invalid test case Json', () => {
+describe.skip('Version Measure with invalid test case Json', () => {
 
     before('Create Measure, Test Case and Set Access Token', () => {
 

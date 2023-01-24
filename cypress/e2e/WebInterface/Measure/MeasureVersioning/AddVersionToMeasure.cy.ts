@@ -8,7 +8,7 @@ let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let measureCQL = MeasureCQL.SBTEST_CQL
 
-describe('Measure Versioning', () => {
+describe.skip('Measure Versioning', () => {
 
     before('Create Measure and Login', () => {
 

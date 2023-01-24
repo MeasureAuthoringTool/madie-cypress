@@ -28,18 +28,18 @@ export class MeasuresPage {
         }
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            // Utilities.waitForElementVisible('[data-testid=edit-measure-' + fileContents + ']', 30000)
-            // cy.get('[data-testid=edit-measure-' + fileContents + ']').should('be.visible')
-            // Utilities.waitForElementEnabled('[data-testid=edit-measure-' + fileContents + ']', 30000)
-            // cy.get('[data-testid=edit-measure-' + fileContents + ']').should('be.enabled')
-            // cy.get('[data-testid=edit-measure-' + fileContents + ']').click()
+            Utilities.waitForElementVisible('[data-testid=edit-measure-' + fileContents + ']', 30000)
+            cy.get('[data-testid=edit-measure-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=edit-measure-' + fileContents + ']', 30000)
+            cy.get('[data-testid=edit-measure-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=edit-measure-' + fileContents + ']').click()
 
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
-            cy.get('[data-testid=view-measure-' + fileContents + ']').click()
+            // Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
+            // cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
+            // Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
+            // cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
+            // cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+            // cy.get('[data-testid=view-measure-' + fileContents + ']').click()
         })
     }
 
