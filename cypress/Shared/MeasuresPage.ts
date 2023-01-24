@@ -13,6 +13,12 @@ export class MeasuresPage {
     public static readonly paginationLimitSelect = '#pagination-limit-select'
     public static readonly paginationLimitEquals25 = '[data-value="25"]'
 
+    //Measure Version
+    public static readonly measureVersionMajor = '[data-testid="radio-button-group"] > :nth-child(1)'
+    public static readonly measureVersionContinueBtn = '[data-testid="create-version-continue-button"]'
+    public static readonly measureVersionSuccessMsg = '[data-testid="success-toast"]'
+    public static readonly measureVersioningErrorMsg = '[data-testid="error-toast"]'
+
 
     public static clickEditforCreatedMeasure(secondMeasure?: boolean): void {
         let filePath = 'cypress/fixtures/measureId'
@@ -27,6 +33,13 @@ export class MeasuresPage {
             Utilities.waitForElementEnabled('[data-testid=edit-measure-' + fileContents + ']', 30000)
             cy.get('[data-testid=edit-measure-' + fileContents + ']').should('be.enabled')
             cy.get('[data-testid=edit-measure-' + fileContents + ']').click()
+
+            // Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
+            // cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
+            // Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
+            // cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
+            // cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+            // cy.get('[data-testid=view-measure-' + fileContents + ']').click()
         })
     }
 
@@ -48,6 +61,26 @@ export class MeasuresPage {
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
             cy.get('[data-testid=measure-action-' + fileContents + ']').click()
             cy.get('[data-testid=export-measure-' + fileContents + ']').click()
+        })
+    }
+
+    public static clickVersionForCreatedMeasure(): void {
+
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+            cy.get('[data-testid=create-version-measure-' + fileContents + ']').click()
+        })
+    }
+
+    public static validateVersionNumber(expectedValue: string, versionNumber: string): void {
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+
+            let element = cy.get('[data-testid=measure-action-'+ fileContents +']').parent()
+            element.parent().should('contain', expectedValue).children().eq(1).should('contain', versionNumber)
         })
     }
 }
