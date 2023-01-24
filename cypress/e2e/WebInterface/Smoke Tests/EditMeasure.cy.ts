@@ -41,6 +41,9 @@ describe('Edit Measure', () => {
         cy.get(EditMeasurePage.measureNameTextBox).type(updatedMeasureName)
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
 
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('exist')
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('be.visible')
+
         //Add Measure Steward
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
