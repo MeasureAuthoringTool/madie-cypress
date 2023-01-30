@@ -62,7 +62,67 @@ describe('Measure Service: Edit Measure', () => {
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        expect(response.body).to.eql('Measure updated successfully.')
+                        cy.log('Measure updated successfully')
+                    })
+                })
+            })
+        })
+    })
+
+    it('Verify Supplemental Data Elements and Risk Adjustment Variables are added to Update Measure Model', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            "id": id,
+                            "measureName": 'UpdatedTestMeasure' + randValue,
+                            "cqlLibraryName": 'UpdatedCqlLibrary' + randValue,
+                            "model": model,
+                            "measureScoring": "Ratio",
+                            "versionId": vId,
+                            "measureSetId": uuidv4(),
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "supplementalData": [
+                                {
+                                    "definition": "supplementalDataDefinition",
+                                    "description": "supplementalDataDescription"
+                                },
+                                {
+                                    "definition": "supplementalDataDefinition2",
+                                    "description": "supplementalDataDescription2"
+                                }
+                            ],
+                            "riskAdjustments": [
+                                {
+                                    "definition": "riskAdjustmentDefinition",
+                                    "description": "riskAdjustmentDescription"
+                                },
+                                {
+                                    "definition": "riskAdjustmentDefinition2",
+                                    "description": "riskAdjustmentDescription2"
+                                }
+                                ]
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body.supplementalData[0].definition).to.eql('supplementalDataDefinition')
+                        expect(response.body.supplementalData[0].description).to.eql('supplementalDataDescription')
+                        expect(response.body.supplementalData[1].definition).to.eql('supplementalDataDefinition2')
+                        expect(response.body.supplementalData[1].description).to.eql('supplementalDataDescription2')
+                        expect(response.body.riskAdjustments[0].definition).to.eql('riskAdjustmentDefinition')
+                        expect(response.body.riskAdjustments[0].description).to.eql('riskAdjustmentDescription')
+                        expect(response.body.riskAdjustments[1].definition).to.eql('riskAdjustmentDefinition2')
+                        expect(response.body.riskAdjustments[1].description).to.eql('riskAdjustmentDescription2')
+                        cy.log('Measure updated successfully')
                     })
                 })
             })
@@ -716,7 +776,7 @@ describe('Validate CMS ID', () => {
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        expect(response.body).to.eql("Measure updated successfully.")
+                        cy.log("Measure deleted successfully")
                     })
                 })
             })
