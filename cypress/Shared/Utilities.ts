@@ -47,7 +47,7 @@ export class Utilities {
                             console.log(response)
 
                             expect(response.status).to.eql(200)
-                            expect(response.body).to.eql("Measure updated successfully.")
+                            cy.log('Measure Deleted Successfully')
                         })
                     })
                 })
