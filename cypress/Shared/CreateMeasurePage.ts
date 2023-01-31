@@ -39,6 +39,24 @@ export class CreateMeasurePage {
             cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
         })
     }
+    public static clickCreateDraftButton(): void {
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((measureID) => {
+
+
+            let alias = 'draft' + (Date.now() + 1).toString()
+            //setup for grabbing the measure create call
+            cy.intercept('POST', '/api/measures/' + measureID + '/draft').as(alias)
+
+            cy.get(MeasuresPage.createDraftContinueBtn).click()
+
+            //saving measureID to file to use later
+            cy.wait('@' + alias).then(({ response }) => {
+                expect(response.statusCode).to.eq(201)
+                cy.writeFile('cypress/fixtures/draftId', response.body.id)
+            })
+        })
+
+    }
 
     public static CreateQICoreMeasure(measureName: string, CqlLibraryName: string, mpStartDate?: string, mpEndDate?: string): void {
 
