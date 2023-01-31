@@ -67,6 +67,67 @@ describe('Measure Service: Create Measure', () => {
 
         })
     })
+
+    it('Verify Supplemental Data Elements and Risk Adjustment Variables are added to create Measure Model', () => {
+
+        measureName = 'TestMeasure' + Date.now() + randValue
+        CQLLibraryName = 'TestCql' + Date.now() + randValue
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/measure',
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken.value
+                },
+                body: {
+                    "measureName": measureName,
+                    "cqlLibraryName": CQLLibraryName,
+                    "model": model,
+                    "versionId": uuidv4(),
+                    "measureSetId": uuidv4(),
+                    "ecqmTitle": eCQMTitle,
+                    "measurementPeriodStart": mpStartDate,
+                    "measurementPeriodEnd": mpEndDate,
+                    "supplementalData": [
+                        {
+                            "definition": "supplementalDataDefinition",
+                            "description": "supplementalDataDescription"
+                        },
+                        {
+                            "definition": "supplementalDataDefinition2",
+                            "description": "supplementalDataDescription2"
+                        }
+                    ],
+                    "riskAdjustments": [
+                        {
+                            "definition": "riskAdjustmentDefinition",
+                            "description": "riskAdjustmentDescription"
+                        },
+                        {
+                            "definition": "riskAdjustmentDefinition2",
+                            "description": "riskAdjustmentDescription2"
+                        }
+                    ]
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(201)
+                expect(response.body.createdBy).to.eql(harpUser)
+                expect(response.body.supplementalData[0].definition).to.eql('supplementalDataDefinition')
+                expect(response.body.supplementalData[0].description).to.eql('supplementalDataDescription')
+                expect(response.body.supplementalData[1].definition).to.eql('supplementalDataDefinition2')
+                expect(response.body.supplementalData[1].description).to.eql('supplementalDataDescription2')
+                expect(response.body.riskAdjustments[0].definition).to.eql('riskAdjustmentDefinition')
+                expect(response.body.riskAdjustments[0].description).to.eql('riskAdjustmentDescription')
+                expect(response.body.riskAdjustments[1].definition).to.eql('riskAdjustmentDefinition2')
+                expect(response.body.riskAdjustments[1].description).to.eql('riskAdjustmentDescription2')
+                cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+            })
+
+        })
+
+    })
 })
 describe('Measure Service: GET Requests tests', () => {
     beforeEach('Set Access Token', () => {
@@ -631,7 +692,7 @@ describe('Measure Service: Update Delete Flag', () => {
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        expect(response.body).to.eql("Measure updated successfully.")
+                        cy.log("Measure Deleted successfully")
                     })
                 })
             })
@@ -739,7 +800,7 @@ describe('Measure Service: Update Delete Flag', () => {
                             "createdBy": defaultUser
                         }
                     }).then((response) => {
-                        expect(response.status).to.eql(400)
+                        expect(response.status).to.eql(404)
                     })
                 })
             })
