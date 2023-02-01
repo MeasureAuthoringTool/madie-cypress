@@ -23,7 +23,8 @@ let elmJson = "{\"library\":{\"identifier\":{\"id\":\"SimpleFhirMeasureLib\",\"v
 let harpUser = Environment.credentials().harpUser
 let measureName = 'TestMeasure' + Date.now()
 
-describe('Version and Draft CQL Library', () => {
+//skipping until the measureVersioning flag is removed
+describe.skip('Version and Draft CQL Library', () => {
 
     beforeEach('Craete Measure, and add Cohort group', () => {
         cy.setAccessTokenCookie()

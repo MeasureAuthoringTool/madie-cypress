@@ -52,7 +52,7 @@ export class CreateMeasurePage {
             //saving measureID to file to use later
             cy.wait('@' + alias).then(({ response }) => {
                 expect(response.statusCode).to.eq(201)
-                cy.writeFile('cypress/fixtures/draftId', response.body.id)
+                cy.writeFile('cypress/fixtures/measureId', response.body.id)
             })
         })
 

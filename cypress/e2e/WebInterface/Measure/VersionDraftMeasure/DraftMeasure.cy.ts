@@ -7,24 +7,35 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
-import { contains } from "cypress/types/jquery"
 
 let MeasuresPageOne = ''
 let updatedMeasuresPageName = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let ratioMeasureCQL = MeasureCQL.ICFCleanTest_CQL
 let cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
 
-describe('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
+//skipping until the measureVersioning flag is removed
+describe.skip('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
 
     beforeEach('Craete Measure, add Cohort group and Login', () => {
         //Create Measure
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
+        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        OktaLogin.Login()
+        MeasuresPage.clickEditforCreatedMeasure()
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.measureDetailsTab).click()
+        cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
+        OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
         //CreateCohortMeasureGroupAPI
         OktaLogin.Login()
@@ -96,8 +107,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.VersionDraftErrMsgs).should('contains.text', '. Only one draft is permitted per measure.')
     })
 })
-
-describe('Draft and Version Validations -- CQL and Group are correct', () => {
+//skipping until the measureVersioning flag is removed
+describe.skip('Draft and Version Validations -- CQL and Group are correct', () => {
 
     beforeEach('Craete CQL Library and Login', () => {
         //Create Measure
@@ -129,7 +140,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
     })
     //skipping test until flag is removed
-    it.skip('Verify Draft measure CQL and Group', () => {
+    it('Verify Draft measure CQL and Group', () => {
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
@@ -167,7 +178,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.log('Search Measure with measure name')
         cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).wait(1000).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
-        MeasuresPage.clickEditforCreatedDraft()
+        MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)

@@ -23,12 +23,6 @@ export class MeasuresPage {
     public static readonly measureVersionContinueBtn = '[data-testid="create-version-continue-button"]'
     public static readonly measureVersionSuccessMsg = '[data-testid="success-toast"]'
     public static readonly measureVersioningErrorMsg = '[data-testid="error-toast"]'
-    public static readonly measureSelectBtn = '#measure-landing > div > div > div > div:nth-child(1) > div > div > div > div:nth-child(1) > table > tbody > tr > td:nth-child(4) > button'
-    public static readonly measureSelectContainer = '[class="btn-container" ]'
-
-    //<div class="btn-container"><button data-testid="view-measure-63d40acb1632e36a0f9f9653">View</button><button data-testid="create-version-measure-63d40acb1632e36a0f9f9653">Version</button></div>
-
-    //#measure-landing > div > div > div > div:nth-child(1) > div > div > div > div:nth-child(1) > table > tbody > tr > td:nth-child(4) > button
 
     public static clickEditforCreatedMeasure(secondMeasure?: boolean): void {
         let filePath = 'cypress/fixtures/measureId'
@@ -37,7 +31,7 @@ export class MeasuresPage {
             filePath = 'cypress/fixtures/measureId2'
         }
 
-        //block of code that will be used once the flag is removed
+        //block of code that will be used once the measureVersioning flag is removed
         /*         cy.readFile(filePath).should('exist').then((fileContents) => {
                     Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
@@ -49,7 +43,6 @@ export class MeasuresPage {
                     Utilities.waitForElementEnabled('[data-testid=view-measure-' + fileContents + ']', 30000)
                     cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.enabled')
                     cy.get('[data-testid=view-measure-' + fileContents + ']').click()
-        
                 }) */
         cy.readFile(filePath).should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid=edit-measure-' + fileContents + ']', 30000)
@@ -58,35 +51,6 @@ export class MeasuresPage {
             cy.get('[data-testid=edit-measure-' + fileContents + ']').should('be.enabled')
             cy.get('[data-testid=edit-measure-' + fileContents + ']').click()
         })
-    }
-    public static clickEditforCreatedDraft(secondDraft?: boolean): void {
-        let filePath = 'cypress/fixtures/draftId'
-
-        if (secondDraft === true) {
-            filePath = 'cypress/fixtures/draftId'
-        }
-
-        //block of code that will be used once the flag is removed
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
-            Utilities.waitForElementVisible('[data-testid=view-measure-' + fileContents + ']', 30000)
-            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=view-measure-' + fileContents + ']', 30000)
-            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=view-measure-' + fileContents + ']').click()
-
-        })
-        /*         cy.readFile(filePath).should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid=edit-measure-' + fileContents + ']', 30000)
-                    cy.get('[data-testid=edit-measure-' + fileContents + ']').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid=edit-measure-' + fileContents + ']', 30000)
-                    cy.get('[data-testid=edit-measure-' + fileContents + ']').should('be.enabled')
-                    cy.get('[data-testid=edit-measure-' + fileContents + ']').click()
-                }) */
     }
 
     public static validateMeasureName(expectedValue: string): void {
@@ -140,7 +104,6 @@ export class MeasuresPage {
             cy.get('[data-testid=measure-action-' + fileContents + ']').click()
             cy.get('[data-testid=draft-measure-' + fileContents + ']').click()
 
-            //<button data-testid="draft-measure-63d2951d5a023e64c3f4d77a">Draft</button>
         })
     }
 }
