@@ -27,20 +27,34 @@ let measureCQL = 'library '  + cqlLibraryName + ' version \'0.0.000\'\n' +
     'define \"num\":\n' +
     'exists [\"Encounter\": \"Office Visit\"] E where E.status ~ \'finished\'\n'
 
-let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
-    'using QICore version \'4.1.1\'\n' +
-    'include FHIRHelpers version \'4.1.000\' \n' +
-    'valueset "ONC Administrative Sex": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1\' \n' +
-    'valueset "Race": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836\'\n' +
-    'valueset "Ethnicity": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837\'\n' +
-    'valueset "Payer": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.3591\'\n' +
-    'valueset "Female": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.560.100.2\'\n' +
-    'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
-    'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
-    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-    'valueset "Pap Test": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.108.12.1017\'\n' +
-    'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
-    'valueset "HPV Test": \'\')'
+let measureCQL_WithErrors = 'library TestCql1675117344546 version \'0.0.000\'\n' +
+    'using FHIR version \'4.0.1\'\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'context Patient\n' +
+    'define "ipp":\n' +
+    ' ["Encounter"] E where E.period.start during "Measurement Period"\n' +
+    'define "ipp2":\n' +
+    ' ["Encounter"] E where E.period.start during "Measurement Period"\n' +
+    'define "ex":\n' +
+    ' ["Encounter"] E where E.period.start during "Measurement Period" and E.status = \'finished\'\n' +
+    'define "denom":\n' +
+    ' "ipp"\n' +
+    'define "num":\n' +
+    ' "ipp2"\n' +
+    'define "boolIpp":\n' +
+    ' true\n' +
+    'define "boolIpp2":\n' +
+    ' true\n' +
+    'define "boolDenom":\n' +
+    ' "boolIpp"\n' +
+    'define "boolNum":\n' +
+    ' false\n' +
+    'define function fun(notPascalCase Integer ):\n' +
+    ' true\n' +
+    'define function boolFunc():\n' +
+    ' 1\n' +
+    'define function numFunc(e Encounter):'
 
 describe.skip('Measure Versioning', () => {
 
@@ -141,7 +155,6 @@ describe.skip('Version Measure without CQL', () => {
     })
 })
 
-//Will be implemented with MAT-5154
 describe.skip('Version Measure with invalid CQL', () => {
 
     before('Create Measure and Set Access Token', () => {
@@ -149,6 +162,7 @@ describe.skip('Version Measure with invalid CQL', () => {
         cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL_WithErrors)
     })
+
     after('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, cqlLibraryName)
@@ -167,8 +181,8 @@ describe.skip('Version Measure with invalid CQL', () => {
                     },
                     method: 'PUT'
                 }).then((response) => {
-                    expect(response.status).to.eql(400)
-                    expect(response.body.message).to.eql('User ' +harpUser+ ' cannot version Measure with ID ' +measureId+ '. Measure has CQL errors.')
+                    expect(response.status).to.eql(409)
+                    expect(response.body.message).to.eql('CQL-ELM translator found errors in the CQL for measure ' +measureName+ '!')
                 })
             })
         })

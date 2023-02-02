@@ -7,6 +7,8 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
+import {TestCaseJson} from "../../../../Shared/TestCaseJson"
+import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 
 let MeasuresPageOne = ''
 let updatedMeasuresPageName = ''
@@ -14,11 +16,15 @@ let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
+let testCaseTitle = 'testCaseTitle'
+let testCaseDescription = 'testDescription' + Date.now()
+let testCaseSeries = 'SBTestSeries'
+let testCaseJson = TestCaseJson.TestCaseJson_CohortEpisodeWithStrat_PASS
 
 //skipping until the measureVersioning flag is removed
 describe.skip('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
 
-    beforeEach('Craete Measure, add Cohort group and Login', () => {
+    beforeEach('Create Measure, add Cohort group and Login', () => {
         //Create Measure
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
@@ -110,8 +116,8 @@ describe.skip('Draft and Version Validations -- add and cannot create draft of a
 //skipping until the measureVersioning flag is removed
 describe.skip('Draft and Version Validations -- CQL and Group are correct', () => {
 
-    beforeEach('Craete CQL Library and Login', () => {
-        //Create Measure
+    beforeEach('Create Measure, Group, Test case and Login', () => {
+
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure
@@ -128,19 +134,27 @@ describe.skip('Draft and Version Validations -- CQL and Group are correct', () =
         cy.get(EditMeasurePage.measureDetailsTab).click()
         cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
         OktaLogin.Logout()
-        MeasureGroupPage.CreateCohortMeasureGroupAPI()
         //CreateCohortMeasureGroupAPI
+        MeasureGroupPage.CreateCohortMeasureGroupAPI()
+        //Create Test case
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+
         OktaLogin.Login()
 
     })
 
-    afterEach('Logout', () => {
+    afterEach('Clean up and Logout', () => {
 
+        //Delete Drafted Measure
+        cy.get(EditMeasurePage.deleteMeasureButton).click()
+        cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + updatedMeasuresPageName + '?')
+        cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
+        cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')
         OktaLogin.Logout()
 
     })
     //skipping test until flag is removed
-    it('Verify Draft measure CQL and Group', () => {
+    it('Verify Draft measure CQL, Group and Test case', () => {
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
@@ -186,5 +200,15 @@ describe.skip('Draft and Version Validations -- CQL and Group are correct', () =
         //verify group info after draft
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Cohort')
+
+        //Verify Test case info after draft
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get('.TestCaseList___StyledDiv4-sc-1iefzo5-4').should('contain.text', testCaseTitle)
+        cy.get('[class="action-button"]').click()
+        cy.get('[class="btn-container"]').eq(0).click()
+        cy.get(TestCasesPage.aceEditor).should('not.be.empty')
+        cy.get(TestCasesPage.aceEditor).should('contain.text', 'Bundle')
+        cy.log('Test case details verified successfully')
+
     })
 })

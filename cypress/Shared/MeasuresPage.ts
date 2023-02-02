@@ -32,7 +32,7 @@ export class MeasuresPage {
         }
 
         //block of code that will be used once the measureVersioning flag is removed
-        /*         cy.readFile(filePath).should('exist').then((fileContents) => {
+         /*        cy.readFile(filePath).should('exist').then((fileContents) => {
                     Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
