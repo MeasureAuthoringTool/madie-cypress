@@ -1,6 +1,6 @@
-import {EditMeasurePage} from "./EditMeasurePage"
+import { EditMeasurePage } from "./EditMeasurePage"
 import { Environment } from "./Environment"
-import {Utilities} from "./Utilities"
+import { Utilities } from "./Utilities"
 
 export class TestCasesPage {
 
@@ -37,7 +37,7 @@ export class TestCasesPage {
     public static readonly editTestCaseTitleInlineError = '[data-testid="test-case-title-helper-text"]'
     public static readonly testCaseJsonValidationErrorBtn = '[data-testid="show-json-validation-errors-button"]'
     public static readonly testCaseJsonValidationDisplayList = '[data-testid="json-validation-errors-list"]'
-    public static readonly testCaseJsonValidationErrorList = '.EditTestCase__ValidationAlertCard-sc-m537sm-4'
+    public static readonly testCaseJsonValidationErrorList = '.EditTestCase__ValidationAlertCard-sc-m537sm-3'
     public static readonly testCasePopulationList = '[data-testid="create-test-case-populations"]'
     public static readonly testCaseExecutionError = '[data-testid="execution_context_loading_errors"]'
     public static readonly runTestButton = '[data-testid="run-test-case-button"]'
@@ -81,7 +81,7 @@ export class TestCasesPage {
     public static readonly measureObservationRow = '[data-testid="test-population-measurePopulationObservation-expected"]'
     public static readonly denominatorObservationRow = '[data-testid="test-population-denominatorObservation-expected"]'
     public static readonly numeratorObservationRow = '[data-testid="test-population-numeratorObservation-expected"]'
-    public static readonly measureGroup1Label ='[data-testid="measure-group-1"]'
+    public static readonly measureGroup1Label = '[data-testid="measure-group-1"]'
     public static readonly denominatorObservationExpectedRow = '[data-testid="test-population-denominatorObservation-expected"]'
 
     //Stratifications
@@ -101,11 +101,11 @@ export class TestCasesPage {
     public static readonly numeratorMeasureObservationActualValue = '[data-testid="test-population-numeratorObservation-actual"]'
 
     //New Test Case Modal
-    public static readonly createTestCaseDialog ='[data-testid="dialog-form"]'
-    public static readonly createTestCaseTitleInput ='[data-testid="create-test-case-title-input"]'
-    public static readonly createTestCaseDescriptionInput ='[data-testid="create-test-case-description-input"]'
-    public static readonly createTestCaseGroupInput ='[id="test-case-series"]'
-    public static readonly createTestCaseSaveButton ='[data-testid="create-test-case-save-button"]'
+    public static readonly createTestCaseDialog = '[data-testid="dialog-form"]'
+    public static readonly createTestCaseTitleInput = '[data-testid="create-test-case-title-input"]'
+    public static readonly createTestCaseDescriptionInput = '[data-testid="create-test-case-description-input"]'
+    public static readonly createTestCaseGroupInput = '[id="test-case-series"]'
+    public static readonly createTestCaseSaveButton = '[data-testid="create-test-case-save-button"]'
 
     //Warning Modal
     public static readonly discardChangesConfirmationModal = '[id="mui-4"]'
@@ -118,16 +118,16 @@ export class TestCasesPage {
     public static readonly deleteTestCaseContinueBtn = '[data-testid="delete-dialog-continue-button"]'
 
 
-    public static clickCreateTestCaseButton() : void {
+    public static clickCreateTestCaseButton(): void {
 
         //setup for grabbing the measure create call
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((id)=> {
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
             cy.intercept('POST', '/api/measures/' + id + '/test-cases').as('testcase')
 
             cy.get(this.createTestCaseSaveButton).click()
 
             //saving testCaseId to file to use later
-            cy.wait('@testcase').then(({response}) => {
+            cy.wait('@testcase').then(({ response }) => {
                 expect(response.statusCode).to.eq(201)
                 cy.writeFile('cypress/fixtures/testCaseId', response.body.id)
             })
@@ -136,10 +136,10 @@ export class TestCasesPage {
         })
     }
 
-    public static grabValidateTestCaseTitleAndSeries(testCaseTitle: string, testCaseSeries: string) : void{
+    public static grabValidateTestCaseTitleAndSeries(testCaseTitle: string, testCaseSeries: string): void {
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=test-case-row-'+ fileContents +']').should('be.visible')
-            cy.get('[data-testid=test-case-row-'+ fileContents +']').invoke('text').then(
+            cy.get('[data-testid=test-case-row-' + fileContents + ']').should('be.visible')
+            cy.get('[data-testid=test-case-row-' + fileContents + ']').invoke('text').then(
                 (text) => {
                     expect(text).to.include(testCaseTitle)
                     expect(text).to.include(testCaseSeries)
@@ -148,7 +148,7 @@ export class TestCasesPage {
         })
     }
 
-    public static createTestCase (testCaseTitle:string, testCaseDescription:string, testCaseSeries:string, testCaseJson:string)  :void{
+    public static createTestCase(testCaseTitle: string, testCaseDescription: string, testCaseSeries: string, testCaseJson: string): void {
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -182,12 +182,24 @@ export class TestCasesPage {
 
         this.editTestCaseAddJSON(testCaseJson)
     }
+    public static enterErroneousJson(err_TestCaseJson: string): void {
 
-    public static editTestCaseAddJSON (testCaseJson:string)  :void{
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        cy.wait(2000)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditor).type(err_TestCaseJson)
+
+        cy.log('Erroneous JSON added to test case successfully')
+    }
+
+    public static editTestCaseAddJSON(testCaseJson: string): void {
 
         this.clickEditforCreatedTestCase()
 
         //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        cy.wait(2000)
         cy.get(this.aceEditor).type(testCaseJson)
 
         cy.get(this.detailsTab).click()
@@ -209,7 +221,7 @@ export class TestCasesPage {
 
     }
 
-    public static updateTestCase (updatedTestCaseTitle:string, updatedTestCaseDescription:string, updatedTestCaseSeries:string)  :void{
+    public static updateTestCase(updatedTestCaseTitle: string, updatedTestCaseDescription: string, updatedTestCaseSeries: string): void {
 
         cy.get(this.detailsTab).click()
 
@@ -248,19 +260,19 @@ export class TestCasesPage {
     }
     public static clickEditforCreatedTestCase(): void {
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=select-action-'+ fileContents +']').click()
-            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('be.visible')
-            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('be.enabled')
-            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').click()
+            cy.get('[data-testid=select-action-' + fileContents + ']').click()
+            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.visible')
+            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').click()
         })
 
     }
 
     public static clickDeleteTestCaseButton(): void {
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=delete-test-case-btn-'+ fileContents +']').should('be.visible')
-            cy.get('[data-testid=delete-test-case-btn-'+ fileContents +']').should('be.enabled')
-            cy.get('[data-testid=delete-test-case-btn-'+ fileContents +']').click()
+            cy.get('[data-testid=delete-test-case-btn-' + fileContents + ']').should('be.visible')
+            cy.get('[data-testid=delete-test-case-btn-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=delete-test-case-btn-' + fileContents + ']').click()
         })
 
     }
@@ -268,23 +280,19 @@ export class TestCasesPage {
         let user = ''
         let measurePath = ''
         let testCasePath = ''
-        if (altUser)
-        {
+        if (altUser) {
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
         }
-        else
-        {
+        else {
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
         }
-        if (twoTestCases === true)
-        {
+        if (twoTestCases === true) {
             measurePath = 'cypress/fixtures/measureId2'
             testCasePath = 'cypress/fixtures/testCaseId2'
         }
-        else
-        {
+        else {
             measurePath = 'cypress/fixtures/measureId'
             testCasePath = 'cypress/fixtures/testCaseId'
         }

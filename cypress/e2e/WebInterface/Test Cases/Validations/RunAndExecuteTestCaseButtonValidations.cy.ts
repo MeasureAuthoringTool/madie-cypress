@@ -209,10 +209,7 @@ describe('Run / Execute Test Case button validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditor).type(invalidTestCaseJson)
+        TestCasesPage.enterErroneousJson(invalidTestCaseJson)
 
         cy.get(TestCasesPage.detailsTab).click()
 
@@ -414,10 +411,7 @@ describe('Run / Execute Test Case button validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditor).type(invalidTestCaseJson)
+        TestCasesPage.enterErroneousJson(invalidTestCaseJson)
 
         //Run Test case before save
         cy.get(TestCasesPage.runTestButton).click()
@@ -1093,10 +1087,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditor).type(warningTestCaseJson)
+        TestCasesPage.enterErroneousJson(warningTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -1233,10 +1224,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditor).type(errorTestCaseJSON_no_ResourceID)
+        TestCasesPage.enterErroneousJson(errorTestCaseJSON_no_ResourceID)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -1363,10 +1351,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditor).type(err_and_warningTestCaseJson)
+        TestCasesPage.enterErroneousJson(err_and_warningTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -1395,6 +1380,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Click on Execute Test Case button on Edit Test Case page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 20700)
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
@@ -1640,6 +1626,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //Add json to the test case
             Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+            cy.wait(2000)
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
             cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)

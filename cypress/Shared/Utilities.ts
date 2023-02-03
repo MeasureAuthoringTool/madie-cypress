@@ -463,6 +463,8 @@ export class Utilities {
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
             if ($ele.text() == "Text") {
                 cy.wrap($ele).should('exist')
@@ -470,6 +472,8 @@ export class Utilities {
                 cy.wrap($ele).click()
             }
         })
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').wait(500).type('{enter}')
     }
 
