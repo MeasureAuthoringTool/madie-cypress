@@ -109,7 +109,7 @@ describe('Measurement Period Validations', () => {
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(CreateMeasurePage.measurementPeriodEndDate).clear().type('01/01/1999')
         cy.get(CreateMeasurePage.measurementPeriodStartDate).clear().type('12/01/2022')
-        cy.get(CreateMeasurePage.measurementPeriodEndDateError).should('contain.text', 'Measurement period ' +
+        cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'Measurement period ' +
             'end date should be greater than measurement period start date.')
 
     })
@@ -120,10 +120,10 @@ describe('Measurement Period Validations', () => {
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(CreateMeasurePage.measurementPeriodStartDate).clear()
         cy.get(CreateMeasurePage.measurementPeriodStartDate).focus().blur()
-        cy.get(CreateMeasurePage.measurementPeriodStartDateError).should('contain.text', 'Measurement period start date is required')
+        cy.get(CreateMeasurePage.editMeasurementPeriodStartDateError).should('contain.text', 'Measurement period start date is required')
         cy.get(CreateMeasurePage.measurementPeriodEndDate).clear()
         cy.get(CreateMeasurePage.measurementPeriodEndDate).focus().blur()
-        cy.get(CreateMeasurePage.measurementPeriodEndDateError).should('contain.text', 'Measurement period end date is required')
+        cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'Measurement period end date is required')
     })
 
     it('Verify error message when the Measurement Period start and end dates are not in valid range', () => {
@@ -132,10 +132,10 @@ describe('Measurement Period Validations', () => {
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(CreateMeasurePage.measurementPeriodStartDate).clear().type('01/01/1800')
         cy.get(CreateMeasurePage.measurementPeriodEndDate).click()
-        cy.get(CreateMeasurePage.measurementPeriodStartDateError).should('contain.text', 'Start date should be between the years 1900 and 2099.')
+        cy.get(CreateMeasurePage.editMeasurementPeriodStartDateError).should('contain.text', 'Start date should be between the years 1900 and 2099.')
         cy.get(CreateMeasurePage.measurementPeriodEndDate).clear().type('01/01/1800')
         cy.get(CreateMeasurePage.measurementPeriodStartDate).click()
-        cy.get(CreateMeasurePage.measurementPeriodEndDateError).should('contain.text', 'End date should be between the years 1900 and 2099.')
+        cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'End date should be between the years 1900 and 2099.')
     })
 
     it('Verify error message when the Measurement Period start and end date format is not valid', () => {
@@ -144,10 +144,10 @@ describe('Measurement Period Validations', () => {
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(CreateMeasurePage.measurementPeriodStartDate).clear().type('2020/01/02')
         cy.get(CreateMeasurePage.measurementPeriodEndDate).click()
-        cy.get(CreateMeasurePage.measurementPeriodStartDateError).should('contain.text', 'Invalid date format. (mm/dd/yyyy)')
+        cy.get(CreateMeasurePage.editMeasurementPeriodStartDateError).should('contain.text', 'Invalid date format. (mm/dd/yyyy)')
         cy.get(CreateMeasurePage.measurementPeriodEndDate).clear().type('2021/01/02')
         cy.get(CreateMeasurePage.measurementPeriodStartDate).click()
-        cy.get(CreateMeasurePage.measurementPeriodEndDateError).should('contain.text', 'Invalid date format. (mm/dd/yyyy)')
+        cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'Invalid date format. (mm/dd/yyyy)')
     })
 
 })
