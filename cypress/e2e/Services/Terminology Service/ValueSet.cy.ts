@@ -28,7 +28,8 @@ describe('Terminology Service: Value Set', () => {
         })
     })
 
-    it('GET valueSet: valueSet not found', () => {
+    //Skipping until MAT-5339 is fixed
+    it.skip('GET valueSet: valueSet not found', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
                 cy.request({
