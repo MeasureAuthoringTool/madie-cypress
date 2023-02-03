@@ -845,7 +845,7 @@ export class TestCaseJson {
         '"class" : {"system" : "http://terminology.hl7.org/CodeSystem/v3-ActCode","code" : "IMP","display" : "inpatient encounter"},' +
         '"type": [ {"coding": [ {"system": "http://snomed.info/sct","code": "183452005"} ]} ],"priority": {"coding": [ {"system": "http://snomed.info/sct",' +
         '"code": "103390000","display": "Unscheduled (qualifier value)"} ]},"subject": {"reference": "Patient/609bde3598086b0a16d79fc6"},' +
-        '"period": {"start": "2022-01-16T08:00:00+00:00","end": "2022-07-15T09:00:00+00:00"}}}]}'
+        '"period": {"start": "2022-01-16T08:00:00+00:00","end": "2023-07-15T09:00:00+00:00"}}}]}'
 
     public static readonly TestCase_XML = '<?xml version="1.0" encoding="UTF-8"?>\n' +
         '\n' +
