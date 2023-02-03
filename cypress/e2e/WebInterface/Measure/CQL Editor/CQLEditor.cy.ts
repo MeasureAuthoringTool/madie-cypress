@@ -374,7 +374,7 @@ describe('Measure: CQL Editor: valueSet', () => {
 
     })
 
-    it.only('Value Set Invalid, 500', () => {
+    it('Value Set Invalid, 500', () => {
 
         //Click on Edit Button
         MeasuresPage.clickEditforCreatedMeasure()
