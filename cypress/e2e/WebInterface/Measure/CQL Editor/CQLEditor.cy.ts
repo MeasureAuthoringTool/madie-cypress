@@ -374,8 +374,7 @@ describe('Measure: CQL Editor: valueSet', () => {
 
     })
 
-    //Skipping until MAT-5339 is fixed
-    it.skip('Value Set Invalid, 404', () => {
+    it('Value Set Invalid, 404', () => {
 
         //Click on Edit Button
         MeasuresPage.clickEditforCreatedMeasure()

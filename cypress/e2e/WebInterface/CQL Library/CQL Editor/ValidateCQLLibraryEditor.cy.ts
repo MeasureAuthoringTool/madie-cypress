@@ -285,8 +285,7 @@ describe('CQL Library: CQL Editor: valueSet', () => {
 
     })
 
-    //Skipping until MAT-5339 is fixed
-    it.skip('Value Set Invalid', () => {
+    it('Value Set Invalid', () => {
         //Navigate to CQL Library Page
         cy.get(Header.cqlLibraryTab).click()
         //Click Edit CQL Library
