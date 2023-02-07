@@ -26,6 +26,8 @@
 
 import { Environment } from "../Shared/Environment"
 
+import 'cypress-file-upload'
+
 export { } // this file needs to be a module
 
 Cypress.on('uncaught:exception', (err, runnable) => {
