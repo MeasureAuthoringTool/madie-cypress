@@ -23,6 +23,8 @@ export class MeasuresPage {
     public static readonly measureVersionContinueBtn = '[data-testid="create-version-continue-button"]'
     public static readonly measureVersionSuccessMsg = '[data-testid="success-toast"]'
     public static readonly measureVersioningErrorMsg = '[data-testid="error-toast"]'
+    public static readonly measureVersionHelperText = '[data-testid="version-helper-text"]'
+
 
     public static clickEditforCreatedMeasure(secondMeasure?: boolean): void {
         let filePath = 'cypress/fixtures/measureId'
@@ -32,6 +34,7 @@ export class MeasuresPage {
         }
 
         //block of code that will be used once the measureVersioning flag is removed
+
         //            cy.readFile(filePath).should('exist').then((fileContents) => {
         //             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
         //             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
@@ -44,6 +47,7 @@ export class MeasuresPage {
         //             cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.enabled')
         //             cy.get('[data-testid=view-measure-' + fileContents + ']').click()
         //         })
+
         cy.readFile(filePath).should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid=edit-measure-' + fileContents + ']', 30000)
             cy.get('[data-testid=edit-measure-' + fileContents + ']').should('be.visible')

@@ -318,7 +318,7 @@ describe('CQL Library: CQL Editor: valueSet', () => {
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
         cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').wait(1000).click({force:true, multiple: true})
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text',
-            'ELM: 0:101 | Request failed with status code 404 for oid = 2.16.840.1.113883.3.464.1003.110.12.105900 ' +
+            'ELM: 0:101 | Request failed with status code 500 for oid = 2.16.840.1.113883.3.464.1003.110.12.105900 ' +
             'location = 18:0-18:101')
     })
 

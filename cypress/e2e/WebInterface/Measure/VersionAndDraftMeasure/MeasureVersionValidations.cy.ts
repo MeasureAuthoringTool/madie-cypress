@@ -1,13 +1,13 @@
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../Shared/Header"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../Shared/Header"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -58,6 +58,7 @@ describe.skip('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.measureVersioningErrorMsg).should('contain.text', 'Requested measure cannot be versioned')
+        cy.get(MeasuresPage.measureVersionHelperText).should('contain.text', 'Please include valid CQL in the CQL editor to version before versioning this measure')
 
     })
 
@@ -86,6 +87,7 @@ describe.skip('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.measureVersioningErrorMsg).should('contain.text', 'Requested measure cannot be versioned')
+        cy.get(MeasuresPage.measureVersionHelperText).should('contain.text', 'Please include valid CQL in the CQL editor to version before versioning this measure')
 
     })
 
@@ -116,6 +118,7 @@ describe.skip('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.measureVersioningErrorMsg).should('contain.text', 'Requested measure cannot be versioned')
+        cy.get(MeasuresPage.measureVersionHelperText).should('contain.text', 'Please include valid test cases to version before versioning this measure.')
 
     })
 })
