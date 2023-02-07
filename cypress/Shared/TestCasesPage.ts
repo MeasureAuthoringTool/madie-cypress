@@ -118,7 +118,8 @@ export class TestCasesPage {
     public static readonly deleteTestCaseContinueBtn = '[data-testid="delete-dialog-continue-button"]'
 
     //Import Test cases
-    public static readonly importTestCaseBtn = '[data-testid="import-file-input"]'
+    public static readonly importTestCaseBtn = '[data-testid=import-test-case-btn]'
+    public static readonly testCaseFileImport = '[data-testid=import-file-input]'
     public static readonly importTestCaseSuccessMsg = '[data-testid=success-toast]'
     public static readonly importTestCaseErrorMsg = '[data-testid=error-toast]'
 

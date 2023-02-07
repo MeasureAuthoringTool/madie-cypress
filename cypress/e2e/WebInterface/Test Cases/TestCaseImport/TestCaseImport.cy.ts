@@ -38,8 +38,8 @@ describe('Import Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //Upload file
-        cy.get(TestCasesPage.importTestCaseBtn).attachFile(fileToUpload)
+        //Upload valid Json file
+        cy.get(TestCasesPage.testCaseFileImport).attachFile(fileToUpload)
         cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'Test Case JSON copied into editor. QI-Core Defaults have been added. Please review and save your Test Case.')
 
         //Save uploaded Test case
@@ -56,14 +56,33 @@ describe('Import Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //Upload file
-        cy.get(TestCasesPage.importTestCaseBtn).attachFile('GenericCQLBoolean.txt')
+        //Upload Text file
+        cy.get(TestCasesPage.testCaseFileImport).attachFile('GenericCQLBoolean.txt')
         cy.get(TestCasesPage.importTestCaseErrorMsg).should('contain.text', 'An error occurred while reading the file. Please make sure the test case file is valid.')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
 
     })
 
+    //Need to revisit after MAT-5330 is fixed
+    it.skip('Verify error message when an invalid Json file is imported', () => {
+
+        //Click on Edit Button
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //Navigate to Test case list page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //Upload invalid Json file
+        cy.get(TestCasesPage.testCaseFileImport).attachFile('example.json')
+        cy.get(TestCasesPage.importTestCaseErrorMsg).should('contain.text', 'An error occurred while reading the file. Please make sure the test case file is valid.')
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
+
+    })
+
+    //Need to work with Ben to get the EICAR files allowed
     it('Verify error message when virus file is imported', () => {
 
         //const virusString = new Blob(['X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'])
@@ -77,7 +96,7 @@ describe('Import Test Case', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         // @ts-ignore
-        cy.get(TestCasesPage.importTestCaseBtn).attachFile({
+        cy.get(TestCasesPage.testCaseFileImport).attachFile({
             fileContent: virusString,
             filePath: 'VIRUS - Virus-v2-0-004-QDM-5-6.json',
             encoding: 'utf-8',
