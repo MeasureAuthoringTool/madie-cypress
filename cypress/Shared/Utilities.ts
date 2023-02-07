@@ -217,6 +217,7 @@ export class Utilities {
                 break
 
             }
+            default: { }
         }
     }
 
