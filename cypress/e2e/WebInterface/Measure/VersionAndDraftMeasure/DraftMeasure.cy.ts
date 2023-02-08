@@ -7,8 +7,8 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let MeasuresPageOne = ''
 let updatedMeasuresPageName = ''
@@ -31,7 +31,8 @@ describe.skip('Draft and Version Validations -- add and cannot create draft of a
         //Create New Measure
         CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        //MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -59,7 +60,8 @@ describe.skip('Draft and Version Validations -- add and cannot create draft of a
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
-        MeasuresPage.clickVersionForCreatedMeasure()
+        //MeasuresPage.clickVersionForCreatedMeasure()
+        MeasuresPage.measureAction("version")
         cy.get(MeasuresPage.versionMeasuresRadioButton).should('exist')
         cy.get(MeasuresPage.versionMeasuresRadioButton).should('be.enabled')
         cy.get(MeasuresPage.versionMeasuresRadioButton).eq(0).click()
@@ -71,7 +73,8 @@ describe.skip('Draft and Version Validations -- add and cannot create draft of a
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
 
-        MeasuresPage.clickDraftforCreatedMeasure()
+        //MeasuresPage.clickDraftforCreatedMeasure()
+        MeasuresPage.measureAction("draft")
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.visible')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.enabled')

@@ -1,8 +1,8 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {Utilities} from "../../../../Shared/Utilities"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { Utilities } from "../../../../Shared/Utilities"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -18,7 +18,7 @@ describe('Edit Measure Validations', () => {
 
     })
 
-    beforeEach('Login',() => {
+    beforeEach('Login', () => {
         OktaLogin.Login()
     })
 
@@ -34,7 +34,8 @@ describe('Edit Measure Validations', () => {
     it('Verify error messages when the edit measure name entered is invalid', () => {
 
         //Click on Edit Button, Verify error message when the Measure Name field is empty
-        MeasuresPage.clickEditforCreatedMeasure()
+        //MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         cy.get(EditMeasurePage.measureNameTextBox).clear()
         cy.get(EditMeasurePage.measureNameTextBox).focus().blur()
