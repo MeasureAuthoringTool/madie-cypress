@@ -46,7 +46,6 @@ describe.skip('Measure Versioning validations', () => {
         Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
-    //Need to revisit after implementing MAT-5276
     it('User can not version Measure if there is no CQL', () => {
 
         MeasuresPage.clickVersionForCreatedMeasure()
@@ -62,7 +61,6 @@ describe.skip('Measure Versioning validations', () => {
 
     })
 
-    //Need to revisit after implementing MAT-5276
     it('User can not Version if the Measure CQL has errors', () => {
 
         MeasuresPage.clickEditforCreatedMeasure()
@@ -91,7 +89,6 @@ describe.skip('Measure Versioning validations', () => {
 
     })
 
-    //Need to revisit after implementing MAT-5276
     it('User can not Version if the test case Json has errors', () => {
 
         MeasuresPage.clickEditforCreatedMeasure()
