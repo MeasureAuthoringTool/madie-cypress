@@ -6,8 +6,8 @@ import { v4 as uuidv4 } from 'uuid'
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
-let newMeasureName = measureName + randValue
-let newCQLLibraryName = cqlLibraryName + randValue
+let updatedMeasureName = ''
+let updatedCQLLibraryName = ''
 let measureCQL = MeasureCQL.SBTEST_CQL
 let model = 'QI-Core v4.1.1'
 let versionIdPath = 'cypress/fixtures/versionId'
@@ -18,22 +18,19 @@ let mpEndDate = now().format('YYYY-MM-DD')
 
 describe('Measure Service: Edit Measure', () => {
 
-    before('Create Measure', () => {
+    updatedMeasureName = measureName + 1 + randValue
+    updatedCQLLibraryName = cqlLibraryName + 1 + randValue
 
-        cy.setAccessTokenCookie()
+    beforeEach('Create Measure and Set Access Token', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
-    })
-
-    beforeEach('Set Access Token', () => {
-
         cy.setAccessTokenCookie()
 
     })
 
-    after('Clean up', () => {
+    afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure(updatedMeasureName, updatedCQLLibraryName)
 
     })
 
@@ -50,11 +47,12 @@ describe('Measure Service: Edit Measure', () => {
                         method: 'PUT',
                         body: {
                             "id": id,
-                            "measureName": 'UpdatedTestMeasure' + randValue,
-                            "cqlLibraryName": 'UpdatedCqlLibrary' + randValue,
+                            "measureName": updatedMeasureName,
+                            "cqlLibraryName": updatedCQLLibraryName,
                             "model": model,
                             "measureScoring": "Ratio",
                             "versionId": vId,
+                            "measureMetaData": {"draft": true},
                             "measureSetId": uuidv4(),
                             "ecqmTitle": "ecqmTitle",
                             "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
@@ -82,10 +80,12 @@ describe('Measure Service: Edit Measure', () => {
                         method: 'PUT',
                         body: {
                             "id": id,
-                            "measureName": 'UpdatedTestMeasure' + randValue,
-                            "cqlLibraryName": 'UpdatedCqlLibrary' + randValue,
+                            "measureName": updatedMeasureName,
+                            "cqlLibraryName": updatedCQLLibraryName,
                             "model": model,
+                            "version": "0.0.000",
                             "measureScoring": "Ratio",
+                            "measureMetaData": {"draft": true},
                             "versionId": vId,
                             "measureSetId": uuidv4(),
                             "ecqmTitle": "ecqmTitle",
@@ -129,6 +129,321 @@ describe('Measure Service: Edit Measure', () => {
         })
     })
 
+    it('Save CQL to the measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': id,
+                            'measureName': updatedMeasureName,
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cqlLibraryName': updatedCQLLibraryName,
+                            'model': model,
+                            'measureScoring': 'Ratio',
+                            'versionId': vId,
+                            'measureSetId': uuidv4(),
+                            'ecqmTitle': "eCQMTitle",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
+                            "measureMetaData": {"draft": true}
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                    })
+                })
+            })
+        })
+    })
+
+    it('Add Meta Data Measure Steward to the measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': id,
+                            'measureName': updatedMeasureName,
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cqlLibraryName': updatedCQLLibraryName,
+                            'model': model,
+                            'measureScoring': 'Ratio',
+                            'versionId': vId,
+                            'measureSetId': uuidv4(),
+                            "ecqmTitle": "eCQMTitle",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
+                            'measureMetaData': { "measureSteward": "SemanticBits", "draft": true }
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                    })
+                })
+            })
+        })
+    })
+
+    it('Add Meta Data Description to the measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': id,
+                            'measureName': updatedMeasureName,
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cqlLibraryName': updatedCQLLibraryName,
+                            'model': model,
+                            'measureScoring': 'Ratio',
+                            'versionId': vId,
+                            'measureSetId': uuidv4(),
+                            "ecqmTitle": "eCQMTitle",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
+                            'measureMetaData': { "description": "SemanticBits", "draft": true }
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                    })
+                })
+            })
+        })
+    })
+
+    it('Add Meta Data Copyright to the measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': id,
+                            'measureName': updatedMeasureName,
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cqlLibraryName': updatedCQLLibraryName,
+                            'model': model,
+                            'measureScoring': 'Ratio',
+                            'versionId': vId,
+                            'measureSetId': uuidv4(),
+                            "ecqmTitle": "eCQMTitle",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
+                            'measureMetaData': { "copyright": "copyright", "draft": true }
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                    })
+                })
+            })
+        })
+    })
+
+    it('Add Meta Data Disclaimer to the measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': id,
+                            'measureName': updatedMeasureName,
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cqlLibraryName': updatedCQLLibraryName,
+                            'model': model,
+                            'measureScoring': 'Ratio',
+                            'versionId': vId,
+                            'measureSetId': uuidv4(),
+                            "ecqmTitle": "eCQMTitle",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
+                            'measureMetaData': { "disclaimer": "disclaimer", "draft": true }
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                    })
+                })
+            })
+        })
+    })
+
+    it('Add Meta Data Rationale to the measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': id,
+                            'measureName': updatedMeasureName,
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cqlLibraryName': updatedCQLLibraryName,
+                            'model': model,
+                            'measureScoring': 'Ratio',
+                            'versionId': vId,
+                            'measureSetId': uuidv4(),
+                            "ecqmTitle": "eCQMTitle",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
+                            'measureMetaData': { "rationale": "rationale", "draft": true }
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                    })
+                })
+            })
+        })
+    })
+
+    it('Add Meta Data Author to the measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': id,
+                            'measureName': updatedMeasureName,
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cqlLibraryName': updatedCQLLibraryName,
+                            'model': model,
+                            'measureScoring': 'Ratio',
+                            'versionId': vId,
+                            'measureSetId': uuidv4(),
+                            "ecqmTitle": "eCQMTitle",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
+                            'measureMetaData': { "author": "author", "draft": true }
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                    })
+                })
+            })
+        })
+    })
+
+    it('Add Meta Data Guidance to the measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': id,
+                            'measureName': updatedMeasureName,
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cqlLibraryName': updatedCQLLibraryName,
+                            'model': model,
+                            'measureScoring': 'Ratio',
+                            'versionId': vId,
+                            'measureSetId': uuidv4(),
+                            "ecqmTitle": "eCQMTitle",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
+                            'measureMetaData': { "guidance": "guidance", "draft": true }
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                    })
+                })
+            })
+        })
+    })
+
+    it('Add Meta Data Risk Adjustment to the measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': id,
+                            'measureName': updatedMeasureName,
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cqlLibraryName': updatedCQLLibraryName,
+                            'model': model,
+                            'measureScoring': 'Ratio',
+                            'versionId': vId,
+                            'measureSetId': uuidv4(),
+                            "ecqmTitle": "eCQMTitle",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
+                            'measureMetaData': { "riskAdjustment": "Risk Adjustment", "draft": true }
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                    })
+                })
+            })
+        })
+    })
+})
+
+describe('Edit Measure Validations', () => {
+
+    updatedMeasureName = measureName + 2 + randValue
+    updatedCQLLibraryName = cqlLibraryName + 2 + randValue
+
+    beforeEach('Create Measure ans Set Access token', () => {
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        cy.setAccessTokenCookie()
+    })
+
+    afterEach('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+
+    })
+
     it('Verify error message when the measure name is empty', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -144,7 +459,7 @@ describe('Measure Service: Edit Measure', () => {
                     body: {
                         'id': id,
                         'measureName': "",
-                        'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
+                        'cqlLibraryName': updatedCQLLibraryName,
                         'model': model,
                         'measureScoring': 'Ratio',
                         "ecqmTitle": "eCQMTitle",
@@ -175,7 +490,7 @@ describe('Measure Service: Edit Measure', () => {
                         body: {
                             'id': id,
                             'measureName': '12343456456',
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
+                            'cqlLibraryName': updatedCQLLibraryName,
                             'model': model,
                             'measureScoring': 'Ratio',
                             "ecqmTitle": "eCQMTitle",
@@ -209,7 +524,7 @@ describe('Measure Service: Edit Measure', () => {
                         body: {
                             'id': id,
                             'measureName': 'Test_Measure',
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
+                            'cqlLibraryName': updatedCQLLibraryName,
                             'model': model,
                             'measureScoring': 'Ratio',
                             "ecqmTitle": "eCQMTitle",
@@ -247,7 +562,7 @@ describe('Measure Service: Edit Measure', () => {
                                 'qwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwerty' +
                                 'qwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwerty' +
                                 'qwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwertyqwqwertyqwertyqwertyqwertyqwertyq',
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
+                            'cqlLibraryName': updatedCQLLibraryName,
                             'model': model,
                             'measureScoring': 'Ratio',
                             "ecqmTitle": "eCQMTitle",
@@ -266,324 +581,23 @@ describe('Measure Service: Edit Measure', () => {
         })
     })
 
-    it('Save CQL to the measure', () => {
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        method: 'PUT',
-                        body: {
-                            'id': id,
-                            'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
-                            'model': model,
-                            'measureScoring': 'Ratio',
-                            'versionId': vId,
-                            'measureSetId': uuidv4(),
-                            'ecqmTitle': "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                    })
-                })
-            })
-        })
-    })
-
-    it('Add Meta Data Measure Steward to the measure', () => {
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        method: 'PUT',
-                        body: {
-                            'id': id,
-                            'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
-                            'model': model,
-                            'measureScoring': 'Ratio',
-                            'versionId': vId,
-                            'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "measureSteward": "SemanticBits" }
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                    })
-                })
-            })
-        })
-    })
-
-    it('Add Meta Data Description to the measure', () => {
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        method: 'PUT',
-                        body: {
-                            'id': id,
-                            'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
-                            'model': model,
-                            'measureScoring': 'Ratio',
-                            'versionId': vId,
-                            'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "description": "SemanticBits" }
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                    })
-                })
-            })
-        })
-    })
-
-    it('Add Meta Data Copyright to the measure', () => {
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        method: 'PUT',
-                        body: {
-                            'id': id,
-                            'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
-                            'model': model,
-                            'measureScoring': 'Ratio',
-                            'versionId': vId,
-                            'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "copyright": "copyright" }
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                    })
-                })
-            })
-        })
-    })
-
-    it('Add Meta Data Disclaimer to the measure', () => {
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        method: 'PUT',
-                        body: {
-                            'id': id,
-                            'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
-                            'model': model,
-                            'measureScoring': 'Ratio',
-                            'versionId': vId,
-                            'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "disclaimer": "disclaimer" }
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                    })
-                })
-            })
-        })
-    })
-
-    it('Add Meta Data Rationale to the measure', () => {
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        method: 'PUT',
-                        body: {
-                            'id': id,
-                            'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
-                            'model': model,
-                            'measureScoring': 'Ratio',
-                            'versionId': vId,
-                            'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "rationale": "rationale" }
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                    })
-                })
-            })
-        })
-    })
-
-    it('Add Meta Data Author to the measure', () => {
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        method: 'PUT',
-                        body: {
-                            'id': id,
-                            'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
-                            'model': model,
-                            'measureScoring': 'Ratio',
-                            'versionId': vId,
-                            'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "author": "author" }
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                    })
-                })
-            })
-        })
-    })
-
-    it('Add Meta Data Guidance to the measure', () => {
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        method: 'PUT',
-                        body: {
-                            'id': id,
-                            'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
-                            'model': model,
-                            'measureScoring': 'Ratio',
-                            'versionId': vId,
-                            'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "guidance": "guidance" }
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                    })
-                })
-            })
-        })
-    })
-
-    it('Add Meta Data Risk Adjustment to the measure', () => {
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        method: 'PUT',
-                        body: {
-                            'id': id,
-                            'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
-                            'model': model,
-                            'measureScoring': 'Ratio',
-                            'versionId': vId,
-                            'measureSetId': uuidv4(),
-                            "ecqmTitle": "eCQMTitle",
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "riskAdjustment": "Risk Adjustment" }
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                    })
-                })
-            })
-        })
-    })
 })
 
 describe('Measurement Period Validations', () => {
 
-    before('Create Measure', () => {
+    updatedMeasureName = measureName + 3 + randValue
+    updatedCQLLibraryName = cqlLibraryName + 3 + randValue
+
+    beforeEach('Create Measure', () => {
 
         cy.setAccessTokenCookie()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
     })
 
-    beforeEach('Set Access Token', () => {
+    afterEach('Clean up', () => {
 
-        cy.setAccessTokenCookie()
-
-    })
-
-    after('Clean up', () => {
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = cqlLibraryName + randValue
-
-        Utilities.deleteMeasure(measureName, newCqlLibraryName)
+        Utilities.deleteMeasure(updatedMeasureName, updatedCQLLibraryName)
 
     })
 
@@ -601,8 +615,8 @@ describe('Measurement Period Validations', () => {
                         method: 'PUT',
                         body: {
                             'id': id,
-                            'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
+                            'measureName': updatedMeasureName,
+                            'cqlLibraryName': updatedCQLLibraryName,
                             'model': model,
                             'versionId': vId,
                             'measureSetId': uuidv4(),
@@ -610,7 +624,8 @@ describe('Measurement Period Validations', () => {
                             'cql': measureCQL,
                             "measurementPeriodStart": mpEndDate,
                             "measurementPeriodEnd": mpStartDate,
-                            'measureScoring': 'Ratio'
+                            'measureScoring': 'Ratio',
+                            "measureMetaData": {"draft": true}
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(400)
@@ -635,8 +650,8 @@ describe('Measurement Period Validations', () => {
                         method: 'PUT',
                         body: {
                             'id': id,
-                            'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
+                            'measureName': updatedMeasureName,
+                            'cqlLibraryName': updatedCQLLibraryName,
                             'model': model,
                             'versionId': vId,
                             'measureSetId': uuidv4(),
@@ -669,8 +684,8 @@ describe('Measurement Period Validations', () => {
                         method: 'PUT',
                         body: {
                             'id': id,
-                            'measureName': 'UpdatedTestMeasure' + Date.now(),
-                            'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
+                            'measureName': updatedMeasureName,
+                            'cqlLibraryName': updatedCQLLibraryName,
                             'model': model,
                             'versionId': vId,
                             'measureSetId': uuidv4(),
@@ -703,8 +718,8 @@ describe('Measurement Period Validations', () => {
                     method: 'PUT',
                     body: {
                         'id': id,
-                        'measureName': 'UpdatedTestMeasure' + Date.now(),
-                        'cqlLibraryName': 'UpdatedCqlLibrary' + Date.now(),
+                        'measureName': updatedMeasureName,
+                        'cqlLibraryName': updatedCQLLibraryName,
                         'model': model,
                         "ecqmTitle": "eCQMTitle",
                         'cql': measureCQL,
@@ -722,6 +737,9 @@ describe('Measurement Period Validations', () => {
 })
 
 describe('Validate CMS ID', () => {
+
+    updatedMeasureName = measureName + 4 +randValue
+    updatedCQLLibraryName = cqlLibraryName + 4 + randValue
 
     before('Set Access Token and create Measure', () => {
 
@@ -771,8 +789,8 @@ describe('Validate CMS ID', () => {
                             Authorization: 'Bearer ' + accessToken.value
                         },
                         body: {
-                            "id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": "ecqmTitle", "cmsId": "99999",
-                            "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate, "active": false, 'versionId': vId, 'measureSetId': uuidv4()
+                            "id": id, "measureName": updatedMeasureName, "cqlLibraryName": updatedCQLLibraryName, "ecqmTitle": "ecqmTitle", "cmsId": "99999",
+                            "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate, "active": false, 'versionId': vId, 'measureSetId': uuidv4(), "measureMetaData": {"draft": true}
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -798,8 +816,8 @@ describe('Validate CMS ID', () => {
                         method: 'PUT',
                         body: {
                             "id": id,
-                            "measureName": 'UpdatedTestMeasure' + randValue,
-                            "cqlLibraryName": 'UpdatedCqlLibrary' + randValue,
+                            "measureName": updatedMeasureName,
+                            "cqlLibraryName": updatedCQLLibraryName,
                             "model": model,
                             "measureScoring": "Ratio",
                             "versionId": vId,
@@ -807,7 +825,8 @@ describe('Validate CMS ID', () => {
                             "cmsId": "55555",
                             "ecqmTitle": "ecqmTitle",
                             "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
-                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z"
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "measureMetaData": {"draft": true}
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(400)
