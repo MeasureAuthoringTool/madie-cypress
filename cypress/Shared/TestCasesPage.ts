@@ -30,6 +30,7 @@ export class TestCasesPage {
     public static readonly confirmationMsgWithErrorOrWarning = '#content > div > h3'
     public static readonly testCaseSeriesList = 'tbody > tr > :nth-child(3)'
     public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
+    public static readonly aceEditorJsonInput = '[data-testid="test-case-json-editor-input"]'
     public static readonly testCaseTitle = '[data-testid="test-case-title"]'
     public static readonly executeTestCaseButton = '[data-testid="execute-test-cases-button"]'
     public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
@@ -190,9 +191,10 @@ export class TestCasesPage {
     public static enterErroneousJson(err_TestCaseJson: string): void {
 
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-        cy.wait(2000)
+        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
         cy.get(TestCasesPage.aceEditor).type(err_TestCaseJson)
 
         cy.log('Erroneous JSON added to test case successfully')
@@ -204,7 +206,12 @@ export class TestCasesPage {
 
         //Add json to the test case
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-        cy.wait(2000)
+
+        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+
         cy.get(this.aceEditor).type(testCaseJson)
 
         cy.get(this.detailsTab).click()
