@@ -102,7 +102,7 @@ describe('Run / Execute Test Case button validations', () => {
 
     it('Run / Execute Test Case button is disabled  -- Missing group / population selections', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit", false)
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
@@ -123,8 +123,8 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
 
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.wait(2000)
 
+        Utilities.waitForElementVisible(TestCasesPage.runTestButton, 37700)
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.disabled')
 
@@ -529,8 +529,10 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         //Add json to the test case
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 20000)
+        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -669,8 +671,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         //Add json to the test case
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -789,8 +793,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         //Add json to the test case
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -853,8 +859,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         //Add json to the test case
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -955,8 +963,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         //Add json to the test case
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -968,6 +978,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully!')
 
         //Click on Execute Test Case button on Edit Test Case page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
@@ -1120,6 +1131,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
         //Click on Execute Test Case button on Edit Test Case page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
@@ -1253,6 +1265,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Click on Execute Test Case button on Edit Test Case page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 20700)
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
@@ -1511,8 +1524,10 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
         //Add json to the test case
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 42700)
+        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -1546,6 +1561,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
         //Click on Execute Test Case button on Edit Test Case page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
@@ -1626,9 +1642,10 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //Add json to the test case
             Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-            cy.wait(2000)
+            Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
+            cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
             cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -1662,6 +1679,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
             //Click on Execute Test Case button on Edit Test Case page
+            cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
             cy.get(TestCasesPage.executeTestCaseButton).should('exist')
             cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
@@ -1736,6 +1754,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
             //Click on Execute Test Case button on Edit Test Case page
+            cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
             cy.get(TestCasesPage.executeTestCaseButton).should('exist')
             cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
@@ -1803,6 +1822,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
             //Click on Execute Test Case button on Edit Test Case page
+            cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
             cy.get(TestCasesPage.executeTestCaseButton).should('exist')
             cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')

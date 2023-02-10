@@ -131,6 +131,13 @@ export class Utilities {
         cy.get(element, { timeout: timeout }).should('be.visible')
     }
 
+    public static waitForElementWriteEnabled = (element: string, timeout: number) => {
+        cy.get(element, { timeout: timeout }).should('exist')
+        cy.get(element, { timeout: timeout }).should('be.visible')
+        cy.get(element, { timeout: timeout }).should('not.be.disabled')
+        cy.get(element, { timeout: timeout }).should('not.have.attr', 'readonly', 'readonly')
+    }
+
     public static validateTCPopValueCheckBoxes(measureScoreValue: string | string[]): void {
         switch ((measureScoreValue.valueOf()).toString()) {
             case "Ratio": {
