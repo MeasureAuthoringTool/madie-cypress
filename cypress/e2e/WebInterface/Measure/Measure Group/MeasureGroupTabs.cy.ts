@@ -980,3 +980,55 @@ describe('Validating Reporting tabs', () => {
 
     })
 })
+
+describe('Risk Adjustment variables on Measure group page', () => {
+
+    beforeEach('Create measure, Measure Group and login', () => {
+
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = CqlLibraryName + randValue
+
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', 'num', 'denom')
+        OktaLogin.Login()
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.Logout()
+
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let newCqlLibraryName = CqlLibraryName + randValue
+
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('Add Risk adjustment variables to the Measure group', () => {
+
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Click on Risk Adjustment tab
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('ipp').click()
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).type('Initial Population Description')
+
+        //Will be uncommented once save functionality is implemented
+        //cy.get('[data-testid="measure-Risk Adjustment-save"]').click()
+
+        //Click on clear Icon and verify description field is removed
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionCancelIcon).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('not.exist')
+
+    })
+})

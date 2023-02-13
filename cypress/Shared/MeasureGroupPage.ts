@@ -154,6 +154,15 @@ export class MeasureGroupPage {
     //update button
     public static readonly confirmScoreUnitValueUpdateBtn = '[data-testid="group-form-update-btn"]'
 
+    //left panel
+    public static readonly leftPanelRiskAdjustmentTab = '[data-testid=leftPanelMeasurePopulationsRiskAdjustmentTab]'
+
+    //Risk Adjustment
+    public static readonly riskAdjustmentDefinitionSelect = '.MuiInputBase-root > #risk-adjustment'
+    public static readonly riskAdjustmentDefinitionDropdown = '#risk-adjustment-listbox'
+    public static readonly riskAdjustmentDefinitionCancelIcon = '[data-testid=CancelIcon]'
+    public static readonly riskAdjustmentDescriptionTextBox = '[class=risk-description]'
+
 
     public static createMeasureGroupforProportionMeasure(): void {
 
