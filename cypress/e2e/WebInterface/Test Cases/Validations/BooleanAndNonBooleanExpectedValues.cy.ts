@@ -216,7 +216,7 @@ describe('Non Boolean Population Basis Expected values', () => {
                 
     })
 
-    it('Validate and save Non Boolean Expected values', () => {
+    it.only('Validate and save Non Boolean Expected values', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()

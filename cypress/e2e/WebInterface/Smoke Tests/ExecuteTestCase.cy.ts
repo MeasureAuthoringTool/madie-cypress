@@ -25,6 +25,9 @@ describe('Execute Test Case', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+
         OktaLogin.Login()
 
     })
@@ -45,7 +48,10 @@ describe('Execute Test Case', () => {
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        //navigate to the test case list page
+        cy.get(EditMeasurePage.testCasesTab).should('exist')
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -86,7 +92,10 @@ describe('Execute Test Case', () => {
         //Add Measure Group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        //navigate to the test case list page
+        cy.get(EditMeasurePage.testCasesTab).should('exist')
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -124,7 +133,10 @@ describe('Execute Test Case', () => {
         //Add Measure Group
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        //navigate to the test case list page
+        cy.get(EditMeasurePage.testCasesTab).should('exist')
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
