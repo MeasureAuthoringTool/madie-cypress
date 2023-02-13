@@ -290,7 +290,7 @@ export class TestCasesPage {
     }
     public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, twoTestCases?: boolean, altUser?: boolean): string {
         let user = ''
-        let measurePath = ''
+        let measurePath = 'cypress/fixtures/measureId'
         let testCasePath = ''
         if (altUser) {
             cy.setAccessTokenCookieALT()
@@ -301,11 +301,9 @@ export class TestCasesPage {
             user = Environment.credentials().harpUser
         }
         if (twoTestCases === true) {
-            measurePath = 'cypress/fixtures/measureId2'
             testCasePath = 'cypress/fixtures/testCaseId2'
         }
         else {
-            measurePath = 'cypress/fixtures/measureId'
             testCasePath = 'cypress/fixtures/testCaseId'
         }
 

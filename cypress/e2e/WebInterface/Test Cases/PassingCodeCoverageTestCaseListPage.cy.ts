@@ -38,7 +38,12 @@ describe('Code Coverage Highlighting', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'Boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false,
+            'Initial Population', 'Initial Population', 'Initial Population', 'Boolean')
+
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson, true)
+
         OktaLogin.Login()
     })
     afterEach('Logout', () => {
@@ -51,9 +56,6 @@ describe('Code Coverage Highlighting', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
-
-        //create test case
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
         //navigate to the test case list page
         cy.get(EditMeasurePage.testCasesTab).should('exist')
@@ -121,8 +123,6 @@ describe('Code Coverage Highlighting', () => {
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
         cy.get(TestCasesPage.tcPopulationCriteriaNavLink).should('contain', 'Population Criteria 1')
         cy.get(TestCasesPage.tcPopulationCriteriaNavLink).should('contain', 'Population Criteria 2')
