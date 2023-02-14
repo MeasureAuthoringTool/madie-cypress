@@ -981,7 +981,7 @@ describe('Validating Reporting tabs', () => {
     })
 })
 
-describe('Risk Adjustment variables on Measure group page', () => {
+describe('Supplemental data elements and Risk Adjustment variables on Measure group page', () => {
 
     beforeEach('Create measure, Measure Group and login', () => {
 
@@ -1027,8 +1027,64 @@ describe('Risk Adjustment variables on Measure group page', () => {
         //cy.get('[data-testid="measure-Risk Adjustment-save"]').click()
 
         //Click on clear Icon and verify description field is removed
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionCancelIcon).click()
+        cy.get(MeasureGroupPage.cancelIcon).click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('not.exist')
 
+    })
+
+    it('Add Supplemental data elements to the Measure group', () => {
+
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Click on Supplemental data tab
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('ipp').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('Initial Population Description')
+
+        //Save Supplemental data
+        cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
+        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
+
+        //Click on clear Icon and verify description field is removed
+        cy.get(MeasureGroupPage.cancelIcon).click({force:true})
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('not.exist')
+
+        //Save Supplemental data
+        cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
+        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
+
+    })
+
+    it('Clicking on Discard changes button will revert the changes made before save', () => {
+
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Click on Supplemental data tab
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('ipp').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('Initial Population Description')
+
+        //Click on Discard changes button
+        cy.get(MeasureGroupPage.supplementalDataElementsDiscardChangesBtn).click()
+        cy.get(MeasureGroupPage.supplementalDataElementsDiscardChangesConfirmationMsg).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(MeasureGroupPage.supplementalDataElementsDiscardChangesContinueBtn).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionTextBox).should('be.empty')
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('not.exist')
     })
 })

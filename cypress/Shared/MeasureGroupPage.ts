@@ -156,12 +156,24 @@ export class MeasureGroupPage {
 
     //left panel
     public static readonly leftPanelRiskAdjustmentTab = '[data-testid=leftPanelMeasurePopulationsRiskAdjustmentTab]'
+    public static leftPanelSupplementalDataTab = '[data-testid=leftPanelMeasurePopulationsSupplementalDataTab]'
 
-    //Risk Adjustment
-    public static readonly riskAdjustmentDefinitionSelect = '.MuiInputBase-root > #risk-adjustment'
-    public static readonly riskAdjustmentDefinitionDropdown = '#risk-adjustment-listbox'
-    public static readonly riskAdjustmentDefinitionCancelIcon = '[data-testid=CancelIcon]'
+    //Risk Adjustment variables
+    public static readonly riskAdjustmentDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
+    public static readonly riskAdjustmentDefinitionDropdown = '[id="risk-adjustment-listbox"]'
+    public static readonly cancelIcon = '[data-testid=CancelIcon]'
     public static readonly riskAdjustmentDescriptionTextBox = '[class=risk-description]'
+
+    //Supplemental data elements
+    public static readonly supplementalDataDefinitionSelect = '[data-testid=supplementalDataElements]'
+    public static readonly supplementalDataDefinitionDropdown = '#supplementalDataElements-listbox'
+    public static readonly supplementalDataDefinitionDescriptionTextBox = '[class="sc-iqcoie glofVe"]'
+    public static readonly saveSupplementalDataElements = '[data-testid="supplementalDataElement-save"]'
+    public static readonly supplementalDataElementsSaveSuccessMsg = '[data-testid="supplementalDataElement-success"]'
+    public static readonly supplementalDataElementsDiscardChangesBtn = '[data-testid=cancel-button]'
+    public static readonly supplementalDataElementsDiscardChangesConfirmationMsg = '.MuiDialogContent-root'
+    public static readonly supplementalDataElementsDiscardChangesContinueBtn = '[data-testid="discard-dialog-continue-button"]'
+    public static readonly supplementalDataDefinitionTextBox = '#supplementalDataElements'
 
 
     public static createMeasureGroupforProportionMeasure(): void {
