@@ -10,7 +10,7 @@ let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
-let fileToUpload = ['NumFail_MedAdminStatus.json', 'DenFail_MedRequestStatus.json', 'ServiceRequest_WithNullStatus.json', 'ServiceRequest_WithNullIntent.json', 'CoverageStatus_null.json']
+let fileToUpload = ['PatientFilesForJsonImport/NumFail_MedAdminStatus.json', 'PatientFilesForJsonImport/DenFail_MedRequestStatus.json', 'PatientFilesForJsonImport/ServiceRequest_WithNullStatus.json', 'PatientFilesForJsonImport/ServiceRequest_WithNullIntent.json', 'PatientFilesForJsonImport/CoverageStatus_null.json']
 let ValueToBeAdded = ['subject', 'subject', '"status": "active"', '"intent": "order"', '"status": "active"']
 let Resource = ['Medicare Administration Status', 'Medicare Request Status', 'Service Request With Status', 'Service Request With Intent', 'Coverage Status']
 
