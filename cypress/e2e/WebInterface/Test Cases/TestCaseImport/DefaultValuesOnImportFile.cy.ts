@@ -39,7 +39,7 @@ describe('Validate Test case Json on import', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        for (let i = 0; i <= 2; i++) {
+        for (let i = 0; i <= 3; i++) {
 
             TestCasesPage.ImportTestCaseFile(fileToUpload[i])
 
