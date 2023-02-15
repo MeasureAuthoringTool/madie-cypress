@@ -10,8 +10,9 @@ let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
-let fileToUpload = ['NumFail_MedAdminStatus.json', 'DenFail_MedRequestStatus.json', 'ServiceRequest_WithNullStatus.json', 'ServiceRequest_WithNullIntent.json']
-let ValueToBeAdded = ['subject', 'subject', '"status": "active"', '"intent": "order"']
+let fileToUpload = ['NumFail_MedAdminStatus.json', 'DenFail_MedRequestStatus.json', 'ServiceRequest_WithNullStatus.json', 'ServiceRequest_WithNullIntent.json', 'CoverageStatus_null.json']
+let ValueToBeAdded = ['subject', 'subject', '"status": "active"', '"intent": "order"', '"status": "active"']
+let Resource = ['Medicare Administration Status', 'Medicare Request Status', 'Service Request With Status', 'Service Request With Intent', 'Coverage Status']
 
 describe('Validate Test case Json on import', () => {
 
@@ -39,11 +40,13 @@ describe('Validate Test case Json on import', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        for (let i = 0; i <= 3; i++) {
+        for (let i = 0; i <= 4; i++) {
 
             TestCasesPage.ImportTestCaseFile(fileToUpload[i])
 
             TestCasesPage.ValidateValueAddedToTestCaseJson(ValueToBeAdded[i])
+
+            cy.log('Default Value for ' + Resource[i] + ' verified Successfully')
         }
 
     })
