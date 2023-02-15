@@ -335,4 +335,26 @@ export class TestCasesPage {
         })
         return user
     }
+
+    public static ImportTestCaseFile(TestCaseFile: string | string[]): void {
+
+        //Upload valid Json file
+        cy.get(this.testCaseFileImport).attachFile(TestCaseFile)
+
+        cy.get(this.importTestCaseSuccessMsg).should('contain.text', 'Test Case JSON copied into editor. QI-Core Defaults have been added. Please review and save your Test Case.')
+
+        //Save uploaded Test case
+        cy.get(this.editTestCaseSaveButton).click()
+    }
+
+    public static ValidateValueAddedToTestCaseJson(ValueToBeAdded: string | string[]): void {
+
+        cy.get(this.aceEditor).should('exist')
+        cy.get(this.aceEditor).should('be.visible')
+        //cy.get(this.aceEditorJsonInput).should('exist')
+        cy.get(this.aceEditor).invoke('text').then(
+            (text) => {
+                expect(text).to.contain(ValueToBeAdded)
+            })
+    }
 }

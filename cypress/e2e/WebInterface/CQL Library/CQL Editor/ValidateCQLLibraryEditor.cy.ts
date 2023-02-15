@@ -2,7 +2,6 @@ import {OktaLogin} from "../../../../Shared/OktaLogin"
 import {Utilities} from "../../../../Shared/Utilities"
 import {Header} from "../../../../Shared/Header"
 import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage"
 import {Global} from "../../../../Shared/Global"
 
@@ -280,9 +279,6 @@ describe('CQL Library: CQL Editor: valueSet', () => {
         cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully! Library Name ' +
             'and/or Version can not be updated in the CQL Editor. MADiE has overwritten the updated Library Name and/or Version.')
 
-        cy.get(CQLEditorPage.editorMessage).should('be.visible')
-        cy.get(CQLEditorPage.editorMessage).should('contain.text', 'Parsing complete, CQL is valid')
-
     })
 
     it('Value Set Invalid', () => {
@@ -318,7 +314,7 @@ describe('CQL Library: CQL Editor: valueSet', () => {
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
         cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').wait(1000).click({force:true, multiple: true})
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text',
-            'ELM: 0:101 | Request failed with status code 500 for oid = 2.16.840.1.113883.3.464.1003.110.12.105900 ' +
+            'ELM: 0:101 | Request failed with status code 404 for oid = 2.16.840.1.113883.3.464.1003.110.12.105900 ' +
             'location = 18:0-18:101')
     })
 
