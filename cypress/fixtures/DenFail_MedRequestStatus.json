@@ -1,0 +1,238 @@
+{
+  "id": "63ea80fbde242552c9dcbbb6",
+  "resourceType": "Bundle",
+  "type": "collection",
+  "entry": [
+    {
+      "fullUrl": "hypoglycemics-severe-hypoglycemia-8e8b",
+      "resource": {
+        "id": "hypoglycemics-severe-hypoglycemia-8e8b",
+        "resourceType": "MedicationRequest",
+        "status": "stopped",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "1361493",
+              "display": "glimepiride 6 MG Oral Tablet",
+              "userSelected": true
+            }
+          ]
+        },
+        "authoredOn": "2024-01-07T08:00:00.000+00:00"
+      }
+    },
+    {
+      "fullUrl": "63ea80fbde242552c9dcbbb6",
+      "resource": {
+        "id": "63ea80fbde242552c9dcbbb6",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"
+          ]
+        },
+        "resourceType": "Patient",
+        "extension": [
+          {
+            "extension": [
+              {
+                "url": "ombCategory",
+                "valueCoding": {
+                  "system": "urn:oid:2.16.840.1.113883.6.238",
+                  "code": "2054-5",
+                  "display": "Black or African American",
+                  "userSelected": true
+                }
+              },
+              {
+                "url": "text",
+                "valueString": "Black or African American"
+              }
+            ],
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"
+          },
+          {
+            "extension": [
+              {
+                "url": "ombCategory",
+                "valueCoding": {
+                  "system": "urn:oid:2.16.840.1.113883.6.238",
+                  "code": "2186-5",
+                  "display": "Not Hispanic or Latino",
+                  "userSelected": true
+                }
+              },
+              {
+                "url": "text",
+                "valueString": "Not Hispanic or Latino"
+              }
+            ],
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"
+          }
+        ],
+        "identifier": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MR"
+                }
+              ]
+            },
+            "system": "https://bonnie-fhir.healthit.gov/",
+            "value": "63ea80fbde242552c9dcbbb6"
+          }
+        ],
+        "name": [
+          {
+            "family": "DenFail",
+            "given": [
+              "MedRequestStatus"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1965-02-09"
+      }
+    },
+    {
+      "fullUrl": "payer-e9f1",
+      "resource": {
+        "id": "payer-e9f1",
+        "resourceType": "Coverage",
+        "type": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/sop",
+              "version": "9.2",
+              "code": "1",
+              "display": "MEDICARE",
+              "userSelected": true
+            }
+          ]
+        },
+        "period": {
+          "start": "2024-01-01T08:00:00.000+00:00",
+          "end": "2024-12-01T08:15:00.000+00:00"
+        }
+      }
+    },
+    {
+      "fullUrl": "encounter-inpatient-e9f2",
+      "resource": {
+        "id": "encounter-inpatient-e9f2",
+        "resourceType": "Encounter",
+        "status": "finished",
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "version": "2022-09",
+                "code": "183452005",
+                "display": "Emergency hospital admission (procedure)",
+                "userSelected": true
+              }
+            ]
+          }
+        ],
+        "period": {
+          "start": "2024-01-02T08:00:00.000+00:00",
+          "end": "2024-01-09T08:15:00.000+00:00"
+        }
+      }
+    },
+    {
+      "fullUrl": "diabetes-e9f4",
+      "resource": {
+        "id": "diabetes-e9f4",
+        "resourceType": "Condition",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "active",
+              "userSelected": true
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "version": "2022-09",
+              "code": "102781000119107",
+              "display": "Sensory neuropathy due to type 1 diabetes mellitus (disorder)",
+              "userSelected": true
+            }
+          ]
+        },
+        "onsetDateTime": "2024-01-01T08:00:00.000+00:00",
+        "recordedDate": "2024-01-02T06:00:00.000+00:00"
+      }
+    },
+
+    {
+      "fullUrl": "hypoglycemics-severe-hypoglycemia-8e8y",
+      "resource": {
+        "id": "hypoglycemics-severe-hypoglycemia-8e8y",
+        "resourceType": "MedicationRequest",
+        "status": "stopped",
+        "intent": "order",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnory",
+              "code": "1361499",
+              "display": "glimepiride 6 MG Oral Tablet",
+              "userSelected": true
+            }
+          ]
+        },
+        "authoredOn": "2024-01-07T08:00:00.000+00:00"
+      }
+    },
+    {
+      "fullUrl": "radiation-treatment-management-b0c9",
+      "resource": {
+        "id": "radiation-treatment-management-b0c9",
+        "resourceType": "Procedure",
+        "status": "completed",
+        "code": {
+          "coding": [
+            {
+              "system": "http://www.ama-assn.org/go/cpt",
+              "version": "2023",
+              "code": "77427",
+              "display": "Radiation treatment management, 5 treatments",
+              "userSelected": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "fullUrl": "radiation-treatment-management-b0ca",
+      "resource": {
+        "id": "radiation-treatment-management-b0ca",
+        "resourceType": "Procedure",
+        "status": "completed",
+        "code": {
+          "coding": [
+            {
+              "system": "http://www.ama-assn.org/go/cpt",
+              "version": "2023",
+              "code": "77427",
+              "display": "Radiation treatment management, 5 treatments",
+              "userSelected": true
+            }
+          ]
+        },
+        "performedDateTime": "2024-02-06T08:00:00.000+00:00"
+      }
+    }
+  ]
+}
