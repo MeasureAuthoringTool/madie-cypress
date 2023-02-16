@@ -8,8 +8,8 @@ import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 
-let measureName = 'RatioPatientSingleIPNoMO' + Date.now()
-let CqlLibraryName = 'RatioPatientSingleIPNoMO' + Date.now()
+let measureName = 'RatioPatientSingleIPNoMO_DRC' + Date.now()
+let CqlLibraryName = 'RatioPatientSingleIPNoMO_DRC' + Date.now()
 let testCaseTitleIppPass = 'IPP PASS'
 let testCaseTitleDrcPass = 'DRC PASS'
 let testCaseDescription = 'PASS' + Date.now()
