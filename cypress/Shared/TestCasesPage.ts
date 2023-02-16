@@ -339,12 +339,12 @@ export class TestCasesPage {
     public static ImportTestCaseFile(TestCaseFile: string | string[]): void {
 
         //Upload valid Json file
-        cy.get(this.testCaseFileImport).attachFile(TestCaseFile)
+        cy.get(this.testCaseFileImport).attachFile(TestCaseFile).wait(1000)
 
         cy.get(this.importTestCaseSuccessMsg).should('contain.text', 'Test Case JSON copied into editor. QI-Core Defaults have been added. Please review and save your Test Case.')
 
         //Save uploaded Test case
-        cy.get(this.editTestCaseSaveButton).click()
+        cy.get(this.editTestCaseSaveButton).click({force:true})
     }
 
     public static ValidateValueAddedToTestCaseJson(ValueToBeAdded: string | string[]): void {
