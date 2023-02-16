@@ -83,7 +83,7 @@ describe('Import Test Case', () => {
     })
 
     //Need to work with Ben to get the EICAR files allowed
-    it('Verify error message when virus file is imported', () => {
+    it.skip('Verify error message when virus file is imported', () => {
 
         //const virusString = new Blob(['X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'])
         const virusString = 'X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'
@@ -107,5 +107,20 @@ describe('Import Test Case', () => {
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
 
+    })
+
+    it('Verify error message when bulk Json file is imported', () => {
+
+        //Click on Edit Button
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //Navigate to Test case list page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //Upload a bulk Json file
+        cy.get(TestCasesPage.testCaseFileImport).attachFile('BulkPatientFile.json')
+        cy.get(TestCasesPage.importTestCaseErrorMsg).should('contain.text', 'No test case resources were found in imported file.')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
     })
 })

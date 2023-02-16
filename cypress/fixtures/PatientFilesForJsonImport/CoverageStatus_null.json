@@ -1,0 +1,214 @@
+{
+  "id": "63e99e14801e2fa1931ce74a",
+  "resourceType": "Bundle",
+  "type": "collection",
+  "entry": [
+    {
+      "fullUrl": "http://coverage/1",
+      "resource": {
+        "resourceType": "Coverage",
+        "beneficiary": {
+          "reference": "Patient/63e99e14801e2fa1931ce74a"
+        },
+        "id": "1",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-coverage"
+          ]
+        },
+        "payor": [
+          {
+            "reference": "Organization/123456"
+          }
+        ],
+        "status": null
+      }
+    },
+    {
+      "fullUrl": "63e99e14801e2fa1931ce74a",
+      "resource": {
+        "id": "63e99e14801e2fa1931ce74a",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"
+          ]
+        },
+        "resourceType": "Patient",
+        "extension": [
+          {
+            "extension": [
+              {
+                "url": "ombCategory",
+                "valueCoding": {
+                  "system": "urn:oid:2.16.840.1.113883.6.238",
+                  "code": "2028-9",
+                  "display": "Asian",
+                  "userSelected": true
+                }
+              },
+              {
+                "url": "text",
+                "valueString": "Asian"
+              }
+            ],
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"
+          },
+          {
+            "extension": [
+              {
+                "url": "ombCategory",
+                "valueCoding": {
+                  "system": "urn:oid:2.16.840.1.113883.6.238",
+                  "code": "2186-5",
+                  "display": "Not Hispanic or Latino",
+                  "userSelected": true
+                }
+              },
+              {
+                "url": "text",
+                "valueString": "Not Hispanic or Latino"
+              }
+            ],
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"
+          }
+        ],
+        "identifier": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MR"
+                }
+              ]
+            },
+            "system": "https://bonnie-fhir.healthit.gov/",
+            "value": "63e99e14801e2fa1931ce74a"
+          }
+        ],
+        "name": [
+          {
+            "family": "IPFail",
+            "given": [
+              "NoCoverage"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1965-02-09"
+      }
+    },
+    {
+      "fullUrl": "encounter-inpatient-e9f2",
+      "resource": {
+        "id": "encounter-inpatient-e9f2",
+        "resourceType": "Encounter",
+        "status": "finished",
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "version": "2022-09",
+                "code": "183452005",
+                "display": "Emergency hospital admission (procedure)",
+                "userSelected": true
+              }
+            ]
+          }
+        ],
+        "period": {
+          "start": "2024-01-02T08:00:00.000+00:00",
+          "end": "2024-01-09T08:15:00.000+00:00"
+        },
+        "subject": {
+          "reference": "Patient/63e99e14801e2fa1931ce74a"
+        }
+      }
+    },
+    {
+      "fullUrl": "diabetes-e9f4",
+      "resource": {
+        "id": "diabetes-e9f4",
+        "resourceType": "Condition",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "active",
+              "userSelected": true
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "version": "2022-09",
+              "code": "102781000119107",
+              "display": "Sensory neuropathy due to type 1 diabetes mellitus (disorder)",
+              "userSelected": true
+            }
+          ]
+        },
+        "onsetDateTime": "2024-01-01T08:00:00.000+00:00",
+        "recordedDate": "2024-01-02T06:00:00.000+00:00",
+        "subject": {
+          "reference": "Patient/63e99e14801e2fa1931ce74a"
+        }
+      }
+    },
+    {
+      "fullUrl": "http://Organization/123456",
+      "resource": {
+        "resourceType": "Organization",
+        "active": true,
+        "address": [
+          {
+            "use": "billing",
+            "type": "postal",
+            "line": [
+              "P.O. Box 660044"
+            ],
+            "city": "Dallas",
+            "state": "TX",
+            "postalCode": "75266-0044",
+            "country": "USA"
+          }
+        ],
+        "id": "123456",
+        "identifier": [
+          {
+            "use": "temp",
+            "system": "urn:oid:2.16.840.1.113883.4.4",
+            "value": "21-3259825"
+          }
+        ],
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-organization"
+          ]
+        },
+        "name": "Blue Cross Blue Shield of Texas",
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "(+1) 972-766-6900"
+          }
+        ],
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/organization-type",
+                "code": "pay",
+                "display": "Payer"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
