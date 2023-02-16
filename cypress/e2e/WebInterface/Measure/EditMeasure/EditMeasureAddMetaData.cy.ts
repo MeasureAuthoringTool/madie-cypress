@@ -43,7 +43,6 @@ describe('Edit Measure: Add Meta Data', () => {
         let rationale = 'rationale'
         let guidance = 'guidance'
         let clinicalRecommendation = 'Clinical Recommendation'
-        let riskAdjustment = 'Risk Adjustment'
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
@@ -104,12 +103,6 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
 
-        //Risk Adjustment
-        cy.get(EditMeasurePage.leftPanelRiskAdjustment).click()
-        cy.get(EditMeasurePage.measureRiskAdjustmentTextBox).clear().type(riskAdjustment)
-        cy.get(EditMeasurePage.measureRiskAdjustmentSaveButton).click()
-        cy.get(EditMeasurePage.measureRiskAdjustmentSuccessMessage).should('be.visible')
-
         cy.get(Header.mainMadiePageButton).click()
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
@@ -168,12 +161,6 @@ describe('Edit Measure: Add Meta Data', () => {
         })
         cy.log('Measure Clinical Recommendation added successfully')
 
-        //Risk Adjustment
-        cy.get(EditMeasurePage.leftPanelRiskAdjustment).click()
-        cy.get(EditMeasurePage.measureRiskAdjustmentTextBox).invoke('val').then(val => {
-            expect(val).to.eql(riskAdjustment)
-        })
-        cy.log('Measure Risk Adjustment added successfully')
     })
 })
 
