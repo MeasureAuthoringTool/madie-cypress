@@ -42,8 +42,8 @@ describe('Terminology Service: Value Set', () => {
                         oid: '2.16.840.1.11356762.1.4.1'
                     }
                 }).then((response) => {
-                    expect(response.status).to.eql(500)
-                    expect(response.statusText).to.eql('Internal Server Error')
+                    expect(response.status).to.eql(404)
+                    expect(response.statusText).to.eql('Not Found')
                     expect(response.isOkStatusCode).to.eql(false)
                 })
         })

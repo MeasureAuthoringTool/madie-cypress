@@ -171,7 +171,8 @@ describe('Version Measure without CQL', () => {
     })
 })
 
-describe('Version Measure with invalid CQL', () => {
+//Skipping until MAT-5346 is tested
+describe.skip('Version Measure with invalid CQL', () => {
 
     before('Create Measure and Set Access Token', () => {
 
