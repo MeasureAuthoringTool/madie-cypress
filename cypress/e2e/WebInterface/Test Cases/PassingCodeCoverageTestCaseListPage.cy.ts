@@ -46,6 +46,7 @@ describe('Code Coverage Highlighting', () => {
 
         OktaLogin.Login()
     })
+
     afterEach('Logout', () => {
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)

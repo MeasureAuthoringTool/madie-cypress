@@ -8,8 +8,8 @@ import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 
-let measureName = 'RatioPatientSingleIPNoMO_DRC' + Date.now()
-let CqlLibraryName = 'RatioPatientSingleIPNoMO_DRC' + Date.now()
+let measureName = 'RatioPatientSingleIPNoMODRC' + Date.now()
+let CqlLibraryName = 'RatioPatientSingleIPNoMODRC' + Date.now()
 let testCaseTitleIppPass = 'IPP PASS'
 let testCaseTitleDrcPass = 'DRC PASS'
 let testCaseDescription = 'PASS' + Date.now()
@@ -144,7 +144,8 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
