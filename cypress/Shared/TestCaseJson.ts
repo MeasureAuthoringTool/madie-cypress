@@ -57,33 +57,141 @@ export class TestCaseJson {
     ' [ {{} "system": "http://clinfhir.com/fhir/NamingSystem/identifier","value": "20181011LizzyHealth"} ],"name": [ {{} "use": "official",' +
     ' "text": "Lizzy Health","family": "Health","given": [ "Lizzy" ]} ],"gender": "female","birthDate": "2000-10-11"}} ]}'
 
-    public static readonly TestCaseJson_Valid_w_All_Encounter = '{ "resourceType": "Bundle", "id": "Denom-Pass-RatioEpisodeMultiIPWithMO", ' +
-        '"meta": { "versionId": "1", "lastUpdated": "2022-09-14T15:14:42.152+00:00" }, "type": "collection", "entry": [ { "fullUrl": "609bde' +
-        '3598086b0a16d79fc6", "resource": { "resourceType": "Patient", "id": "609bde3598086b0a16d79fc6", "meta": { "profile": [ "http://hl7.o' +
-        'rg/fhir/us/qicore/StructureDefinition/qicore-patient" ] }, "text": { "status": "generated", "div": "<div xmlns=\\"http://www.w3.org/' +
-        '1999/xhtml\\"><div class=\\"hapiHeaderText\\">LocationPeriodStartTimeMissing <b>MSRPOPLEXSTRAT2PASS </b></div><table class=\\"hapiPro' +
-        'pertyTable\\"><tbody><tr><td>Identifier</td><td>8065dc8d26797064d8766be71f2bf020</td></tr><tr><td>Date of birth</td><td><span>10 Febr' +
-        'uary 1954</span></td></tr></tbody></table></div>" }, "extension": [ { "extension": [ { "url": "ombCategory", "valueCoding": { "system"' +
-        ': "urn:oid:2.16.840.1.113883.6.238", "code": "2106-3", "display": "White" } }, { "url": "ombCategory", "valueCoding": { "system": "urn' +
-        ':oid:2.16.840.1.113883.6.238", "code": "1002-5", "display": "American Indian or Alaska Native" } }, { "url": "ombCategory", "valueCodi' +
-        'ng": { "system": "urn:oid:2.16.840.1.113883.6.238", "code": "2028-9", "display": "Asian" } }, { "url": "detailed", "valueCoding": { "sy' +
-        'stem": "urn:oid:2.16.840.1.113883.6.238", "code": "1586-7", "display": "Shoshone" } }, { "url": "detailed", "valueCoding": { "system": ' +
-        '"urn:oid:2.16.840.1.113883.6.238", "code": "2036-2", "display": "Filipino" } }, { "url": "text", "valueString": "Mixed" } ], "url": "ht' +
-        'tp://hl7.org/fhir/us/core/StructureDefinition/us-core-race" }, { "extension": [ { "url": "ombCategory", "valueCoding": { "system": "urn' +
-        ':oid:2.16.840.1.113883.6.238", "code": "2135-2", "display": "Hispanic or Latino" } }, { "url": "detailed", "valueCoding": { "system": "' +
-        'urn:oid:2.16.840.1.113883.6.238", "code": "2184-0", "display": "Dominican" } }, { "url": "detailed", "valueCoding": { "system": "urn:oid' +
-        ':2.16.840.1.113883.6.238", "code": "2148-5", "display": "Mexican" } }, { "url": "text", "valueString": "Hispanic or Latino" } ], "url": "' +
-        'http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity" }, { "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-b' +
-        'irthsex", "valueCode": "F" }, { "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity", "valueCodeableConcept": ' +
-        '{ "coding": [ { "system": "http://terminology.hl7.org/CodeSystem/v3-NullFlavor", "code": "ASKU", "display": "asked but unknown" } ], "tex' +
-        't": "asked but unknown" } } ], "identifier": [ { "type": { "coding": [ { "system": "http://terminology.hl7.org/CodeSystem/v2-0203", "code"' +
-        ': "MR" } ] }, "system": "http://MyGoodHealthare.com/MedicalRecord", "value": "8065dc8d26797064d8766be71f2bf020" } ], "active": true, "name' +
-        '": [ { "use": "usual", "family": "IPPass", "given": [ "IPPass" ] } ], "gender": "male", "birthDate": "1954-02-10" } }, { "fullUrl": "5c6c6' +
-        '1ceb84846536a9a98f9", "resource": { "resourceType": "Encounter", "id": "5c6c61ceb84846536a9a98f9", "meta": { "profile": [ "http://hl7.org/f' +
-        'hir/us/qicore/StructureDefinition/qicore-encounter" ] }, "status": "finished", "class": { "system": "http://terminology.hl7.org/CodeSystem/' +
-        'v3-ActCode", "code": "IMP", "display": "inpatient encounter" }, "type": [ { "coding": [ { "system": "http://snomed.info/sct", "code": "18345' +
-        '2005" } ] } ], "subject": { "reference": "Patient/609bde3598086b0a16d79fc6" }, "period": { "start": "2012-01-16T08:00:00+00:00", "end": "201' +
-        '2-02-15T09:00:00+00:00" } } } ] }'
+    public static readonly TestCaseJson_Valid_w_All_Encounter = '{\n' +
+        '  "resourceType": "Bundle",\n' +
+        '  "id": "1366",\n' +
+        '  "meta": {\n' +
+        '    "versionId": "1",\n' +
+        '    "lastUpdated": "2022-03-30T19:02:32.620+00:00"\n' +
+        '  },\n' +
+        '  "type": "collection",\n' +
+        '  "entry": [\n' +
+        '    {\n' +
+        '      "fullUrl": "http://local/Encounter/1",\n' +
+        '      "resource": {\n' +
+        '        "id": "Encounter-1",\n' +
+        '        "resourceType": "Encounter",\n' +
+        '        "meta": {\n' +
+        '          "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter",\n' +
+        '          "versionId": "1",\n' +
+        '          "lastUpdated": "2021-10-13T03:34:10.160+00:00",\n' +
+        '          "source": "#nEcAkGd8PRwPP5fA"\n' +
+        '        },\n' +
+        '        "text": {\n' +
+        '          "status": "generated",\n' +
+        '          "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Sep 9th 2021 for Asthma<a name=\\"mm\\"/></div>"\n' +
+        '        },\n' +
+        '        "status": "finished",\n' +
+        '        "class": {\n' +
+        '          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '          "code": "IMP",\n' +
+        '          "display": "inpatient encounter"\n' +
+        '        },\n' +
+        '        "type": [\n' +
+        '          {\n' +
+        '            "text": "OutPatient"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "subject": {\n' +
+        '          "reference": "Patient/1"\n' +
+        '        },\n' +
+        '        "participant": [\n' +
+        '          {\n' +
+        '            "individual": {\n' +
+        '              "reference": "Practitioner/30164",\n' +
+        '              "display": "Dr John Doe"\n' +
+        '            }\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "period": {\n' +
+        '          "start": "2021-01-01T03:34:10.054Z"\n' +
+        '        }\n' +
+        '      }\n' +
+        '    },\n' +
+        '    {\n' +
+        '      "fullUrl": "http://local/Encounter/2",\n' +
+        '      "resource": {\n' +
+        '        "id": "Encounter-2",\n' +
+        '        "resourceType": "Encounter",\n' +
+        '        "meta": {\n' +
+        '          "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter",\n' +
+        '          "versionId": "1",\n' +
+        '          "lastUpdated": "2021-10-13T03:34:10.160+00:00",\n' +
+        '          "source": "#nEcAkGd8PRwPP5fA"\n' +
+        '        },\n' +
+        '        "text": {\n' +
+        '          "status": "generated",\n' +
+        '          "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Sep 9th 2021 for Asthma<a name=\\"mm\\"/></div>"\n' +
+        '        },\n' +
+        '        "status": "finished",\n' +
+        '        "class": {\n' +
+        '          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '          "code": "IMP",\n' +
+        '          "display": "inpatient encounter"\n' +
+        '        },\n' +
+        '        "type": [\n' +
+        '          {\n' +
+        '            "coding": [\n' +
+        '              {\n' +
+        '                "system": "http://snomed.info/sct",\n' +
+        '                "version": "2022-09",\n' +
+        '                "code": "185463005",\n' +
+        '                "display": "Visit out of hours (procedure)"\n' +
+        '              }\n' +
+        '            ]\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "subject": {\n' +
+        '          "reference": "Patient/numer-pos-EXM135v11QICore4"\n' +
+        '        },\n' +
+        '        "participant": [\n' +
+        '          {\n' +
+        '            "individual": {\n' +
+        '              "reference": "Practitioner/30164",\n' +
+        '              "display": "Dr John Doe"\n' +
+        '            }\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "period": {\n' +
+        '          "start": "2021-11-11T03:34:10.054Z",\n' +
+        '          "end": "2022-01-01T03:34:10.054Z"\n' +
+        '        }\n' +
+        '      }\n' +
+        '    },\n' +
+        '    {\n' +
+        '      "fullUrl": "http://local/Patient",\n' +
+        '      "resource": {\n' +
+        '        "id": "3",\n' +
+        '        "resourceType": "Patient",\n' +
+        '        "text": {\n' +
+        '          "status": "generated",\n' +
+        '          "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Lizzy Health</div>"\n' +
+        '        },\n' +
+        '        "meta": {\n' +
+        '          "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"\n' +
+        '        },\n' +
+        '        "identifier": [\n' +
+        '          {\n' +
+        '            "system": "http://clinfhir.com/fhir/NamingSystem/identifier",\n' +
+        '            "value": "20181011LizzyHealth"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "name": [\n' +
+        '          {\n' +
+        '            "use": "official",\n' +
+        '            "text": "Lizzy Health",\n' +
+        '            "family": "Health",\n' +
+        '            "given": [\n' +
+        '              "Lizzy"\n' +
+        '            ]\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "gender": "female",\n' +
+        '        "birthDate": "2000-10-11"\n' +
+        '      }\n' +
+        '    }\n' +
+        '  ]\n' +
+        '}'
 
     public static readonly validTestCaseJsonFHIR_and_QICORE = '{{}"resourceType": "Bundle", "id": "1366", "meta": {{}   "versionId": "1",' +
     ' "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {{}   "fullUrl": "http://local/Encounter",' +

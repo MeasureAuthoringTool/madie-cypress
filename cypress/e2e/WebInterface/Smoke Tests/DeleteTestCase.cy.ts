@@ -1,13 +1,13 @@
-import { TestCaseJson } from "../../../Shared/TestCaseJson"
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { Utilities } from "../../../Shared/Utilities"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { TestCasesPage } from "../../../Shared/TestCasesPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
-import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import {TestCaseJson} from "../../../Shared/TestCaseJson"
+import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
+import {OktaLogin} from "../../../Shared/OktaLogin"
+import {Utilities} from "../../../Shared/Utilities"
+import {MeasuresPage} from "../../../Shared/MeasuresPage"
+import {TestCasesPage} from "../../../Shared/TestCasesPage"
+import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
+import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
+import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
+import {MeasureCQL} from "../../../Shared/MeasureCQL"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -15,7 +15,7 @@ let measureCQL = MeasureCQL.ICFCleanTest_CQL
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
-let testCaseJson = TestCaseJson.TestCaseJson_Valid
+let testCaseJson = TestCaseJson.TestCaseJson_Valid_w_All_Encounter
 let newMeasureName = ''
 let newCqlLibraryName = ''
 
@@ -28,7 +28,8 @@ describe('Delete Test Case', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
+            '2012-01-02', '2013-01-01')
         OktaLogin.Login()
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -38,8 +39,8 @@ describe('Delete Test Case', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null,
-            null, 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null,null,null,null,
+            null,'Procedure')
         OktaLogin.Login()
 
     })
@@ -90,7 +91,7 @@ describe('Delete Test Case', () => {
 
         cy.get(TestCasesPage.selectTestCaseDropdownBtn).click()
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=delete-test-case-btn-' + fileContents + ']').should('not.exist')
+            cy.get('[data-testid=delete-test-case-btn-'+ fileContents +']').should('not.exist')
         })
 
     })
