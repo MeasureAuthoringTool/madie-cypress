@@ -1,13 +1,13 @@
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {Global} from "../../../../Shared/Global"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { Global } from "../../../../Shared/Global"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -24,7 +24,7 @@ describe('Non Boolean Population Basis Expected values', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -185,7 +185,7 @@ describe('Non Boolean Population Basis Expected values', () => {
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         TestCasesPage.clickEditforCreatedTestCase()
-        
+
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
@@ -213,7 +213,7 @@ describe('Non Boolean Population Basis Expected values', () => {
 
         //verify that the discard modal appears
         Global.clickOnDiscardChanges()
-                
+
     })
 
     it.only('Validate and save Non Boolean Expected values', () => {
@@ -282,7 +282,7 @@ describe('Boolean Population Basis Expected Values', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -384,7 +384,7 @@ describe('Boolean Population Basis Expected Values', () => {
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         //Assert Expected values for Population Basis Boolean (Cohort Measure Group)
-        
+
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Group 2 - Cohort | boolean')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.checked')
     })
@@ -468,7 +468,7 @@ describe('Expected values for second initial population', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()

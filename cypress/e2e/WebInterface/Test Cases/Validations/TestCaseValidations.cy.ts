@@ -1,13 +1,13 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {Global} from "../../../../Shared/Global"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { Global } from "../../../../Shared/Global"
 
 let measureName = 'TestMeasure' + Date.now()
 let newMeasureName = ''
@@ -19,7 +19,7 @@ let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
 let testCaseSeries = 'SBTestSeries'
 let twoFiftyTwoCharacters = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr'
-let updatedTestCaseDescription = testCaseDescription + ' '+ 'UpdatedTestCaseDescription'
+let updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDescription'
 let updatedTestCaseSeries = 'CMSTestSeries'
 
 
@@ -72,7 +72,7 @@ describe('Test Case Validations', () => {
 
         //Update Test Case Description with more than 250 characters
         cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).type(twoFiftyTwoCharacters, {delay: 0})
+        cy.get(TestCasesPage.testCaseDescriptionTextBox).type(twoFiftyTwoCharacters, { delay: 0 })
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
     })
 
@@ -118,7 +118,7 @@ describe('Test Case Validations', () => {
         cy.get(TestCasesPage.testCaseTitle).type('{selectall}{backspace}{selectall}{backspace}')
 
         //Update Test Case Description with more than 250 characters
-        cy.get(TestCasesPage.testCaseTitle).type(twoFiftyTwoCharacters, {delay: 0})
+        cy.get(TestCasesPage.testCaseTitle).type(twoFiftyTwoCharacters, { delay: 0 })
         cy.get(TestCasesPage.testCaseSeriesTextBox).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.editTestCaseTitleInlineError).contains('Test Case Title cannot be more ' +
@@ -133,7 +133,7 @@ describe('Attempting to create a test case without a title', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -239,7 +239,7 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        
+
         //verify that the discard modal appears
         Global.clickOnDiscardChanges()
 
@@ -267,7 +267,7 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        
+
         //verify that the discard modal appears
         Global.clickOnDiscardChanges()
     })
@@ -276,25 +276,25 @@ describe('Attempting to create a test case without a title', () => {
         MeasuresPage.clickEditforCreatedMeasure()
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
-        
+
         //Click on Edit for Test Case
         TestCasesPage.clickEditforCreatedTestCase()
-        
+
         //navigate to the details page
         cy.get(TestCasesPage.detailsTab).should('exist')
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).should('be.enabled')
         cy.get(TestCasesPage.detailsTab).click()
-        
+
         //Update Test Case Series
         cy.get(TestCasesPage.testCaseSeriesTextBox).clear()
         cy.get(TestCasesPage.testCaseSeriesTextBox).type(updatedTestCaseSeries).type('{enter}')
-        
+
         //attempt to navigate away from the test case page
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
-                
+
         //verify that the discard modal appears
         Global.clickOnDiscardChanges()
     })

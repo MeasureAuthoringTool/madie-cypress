@@ -1,13 +1,13 @@
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {TestCasesPage} from "../../../Shared/TestCasesPage"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
-import {TestCaseJson} from "../../../Shared/TestCaseJson"
-import {Utilities} from "../../../Shared/Utilities"
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage";
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { TestCaseJson } from "../../../Shared/TestCaseJson"
+import { Utilities } from "../../../Shared/Utilities"
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage";
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -15,7 +15,7 @@ let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let updatedTestCaseTitle = testCaseTitle + " some update"
-let updatedTestCaseDescription = testCaseDescription + ' '+ 'UpdatedTestCaseDescription'
+let updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDescription'
 let updatedTestCaseSeries = 'CMSTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
@@ -28,7 +28,7 @@ describe('Create Test Case', () => {
         cy.setAccessTokenCookie()
 
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -36,7 +36,7 @@ describe('Create Test Case', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false,null,null,null,null, 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, null, null, null, null, 'Procedure')
     })
     beforeEach('Login', () => {
         OktaLogin.Login()
