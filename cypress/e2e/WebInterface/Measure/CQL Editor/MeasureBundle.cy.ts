@@ -24,7 +24,7 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
         cy.setAccessTokenCookie()
 
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()

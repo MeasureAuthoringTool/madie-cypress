@@ -29,7 +29,7 @@ describe.skip('Draft and Version Validations -- add and cannot create draft of a
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         OktaLogin.Login()
         //MeasuresPage.clickEditforCreatedMeasure()
         MeasuresPage.measureAction("edit")
@@ -124,7 +124,7 @@ describe.skip('Draft and Version Validations -- CQL and Group are correct', () =
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()

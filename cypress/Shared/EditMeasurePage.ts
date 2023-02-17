@@ -28,7 +28,7 @@ export class EditMeasurePage {
     public static readonly leftPanelRationale = '[data-testid="leftPanelMeasureRationale"]'
     public static readonly leftPanelStewardDevelopers = '[data-testid="leftPanelMeasureSteward"]'
     public static readonly leftPanelGuidance = '[data-testid="leftPanelMeasureGuidance"]'
-    public static readonly leftPanelMClinicalGuidanceRecommendation = '[data-testid="leftPanelMeasureClinicalGuidance"]'
+    public static readonly leftPanelMClinicalGuidanceRecommendation = '[data-testid="leftPanelMeasureClinicalRecommendation"]'
     public static readonly leftPanelModelAndMeasurementPeriod = '[data-testid="leftPanelModelAndMeasurementPeriod"]'
     public static readonly leftPanelRiskAdjustment = '[data-testid="leftPanelMeasureRiskAdjustment"]'
 

@@ -32,7 +32,7 @@ describe.skip('Version and Draft CQL Library', () => {
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()

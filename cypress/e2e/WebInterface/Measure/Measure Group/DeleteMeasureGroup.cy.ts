@@ -1,14 +1,14 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {Global} from "../../../../Shared/Global"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { Global } from "../../../../Shared/Global"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureOne = 'TestMeasure' + Date.now()
 let CqlLibraryName1 = 'TestLibrary' + Date.now()
@@ -28,7 +28,7 @@ describe('Validate Measure Group deletion functionality', () => {
         newCqlLibraryName = CqlLibraryName1 + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(measureOne, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureOne, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -38,8 +38,8 @@ describe('Validate Measure Group deletion functionality', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null,null,null,null,
-            null,'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null,
+            null, 'Procedure')
         TestCasesPage.CreateTestCaseAPI(title1, series, description, validJsonValue)
         OktaLogin.Login()
     })
@@ -90,7 +90,7 @@ describe('Validate Measure Group deletion functionality', () => {
 
         //clicking "yes" to confirm deletion of group
         cy.get(MeasureGroupPage.yesDeleteModalbtn).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.yesDeleteModalbtn).click({force:true})
+        cy.get(MeasureGroupPage.yesDeleteModalbtn).click({ force: true })
 
         //confirm that the modal has closed
         cy.get(MeasureGroupPage.deleteMeasureGroupModal).should('not.exist')
@@ -150,7 +150,7 @@ describe('Validate Measure Group deletion functionality', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        for (let i = 0; i <= 3; i++){
+        for (let i = 0; i <= 3; i++) {
             //click on the add measture grop button to create new group
             cy.get(MeasureGroupPage.addMeasureGroupButton).should('exist')
             cy.get(MeasureGroupPage.addMeasureGroupButton).should('be.visible')
@@ -217,13 +217,13 @@ describe('Validate Measure Group deletion functionality', () => {
 
         //confirm test case is still present on measure
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=test-case-row-'+ fileContents +']', { timeout: 80000 }).should('exist')
-            cy.get('[data-testid=edit-test-case-'+ fileContents +']', { timeout: 80000 }).should('be.visible')
-            cy.get('[data-testid=edit-test-case-'+ fileContents +']', { timeout: 80000 }).click()
+            cy.get('[data-testid=test-case-row-' + fileContents + ']', { timeout: 80000 }).should('exist')
+            cy.get('[data-testid=edit-test-case-' + fileContents + ']', { timeout: 80000 }).should('be.visible')
+            cy.get('[data-testid=edit-test-case-' + fileContents + ']', { timeout: 80000 }).click()
         })
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((mId) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((tId)=> {
-                cy.intercept('GET', 'https://dev-madie.hcqis.org/measures/' + mId + '/edit/test-cases/'+ tId, [])
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((tId) => {
+                cy.intercept('GET', 'https://dev-madie.hcqis.org/measures/' + mId + '/edit/test-cases/' + tId, [])
 
             })
         })
@@ -266,17 +266,17 @@ describe('Validate Measure Group deletion functionality', () => {
 
         //confirm test case is still present on measure
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=test-case-row-'+ fileContents +']', { timeout: 80000 }).should('exist')
-            cy.get('[data-testid=select-action-'+ fileContents +']', { timeout: 80000 }).should('be.visible')
-            cy.get('[data-testid=select-action-'+ fileContents +']', { timeout: 80000 }).click()
-            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']', { timeout: 80000 }).should('be.visible')
-            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']', { timeout: 80000 }).click()
+            cy.get('[data-testid=test-case-row-' + fileContents + ']', { timeout: 80000 }).should('exist')
+            cy.get('[data-testid=select-action-' + fileContents + ']', { timeout: 80000 }).should('be.visible')
+            cy.get('[data-testid=select-action-' + fileContents + ']', { timeout: 80000 }).click()
+            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']', { timeout: 80000 }).should('be.visible')
+            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']', { timeout: 80000 }).click()
         })
         //<button data-testid="view-edit-test-case-6376a9e6397dda4088e73cd9">edit</button>
         //<button class="action-button" css="[object Object]" data-testid="select-action-6376a9e6397dda4088e73cd9"><div class="action">Select</div><div class="chevron-container"><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ExpandMoreIcon"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"></path></svg></div></button>
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((mId) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((tId)=> {
-                cy.intercept('GET', 'https://dev-madie.hcqis.org/measures/' + mId + '/edit/test-cases/'+ tId, [])
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((tId) => {
+                cy.intercept('GET', 'https://dev-madie.hcqis.org/measures/' + mId + '/edit/test-cases/' + tId, [])
             })
         })
     })
@@ -288,7 +288,7 @@ describe('Ownership test when deleting groups', () => {
         newCqlLibraryName = CqlLibraryName1 + randValue
 
         //create new measure via temp user
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(measureTwo, newCqlLibraryName+"second", measureCQL, true, true )
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, newCqlLibraryName + "second", measureCQL, true, true)
         OktaLogin.AltLogin()
         MeasuresPage.clickEditforCreatedMeasure(true)
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -300,17 +300,17 @@ describe('Ownership test when deleting groups', () => {
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(true, true, null,
             null, null, 'Procedure')
-        TestCasesPage.CreateTestCaseAPI(title1+"second", series, description, validJsonValue, true, true)
+        TestCasesPage.CreateTestCaseAPI(title1 + "second", series, description, validJsonValue, true, true)
         OktaLogin.Login()
     })
 
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureTwo, newCqlLibraryName+"second", true, true)
+        Utilities.deleteMeasure(measureTwo, newCqlLibraryName + "second", true, true)
 
     })
-    
+
     it('User can only delete groups from a measure that they own', () => {
 
         //Verify the Measure on My Measures Page List

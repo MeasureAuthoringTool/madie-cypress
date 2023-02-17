@@ -256,7 +256,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -627,7 +627,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()

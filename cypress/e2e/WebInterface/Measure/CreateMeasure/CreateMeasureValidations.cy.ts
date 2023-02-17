@@ -1,11 +1,11 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {LandingPage} from "../../../../Shared/LandingPage"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {Global} from "../../../../Shared/Global"
-import {Utilities} from "../../../../Shared/Utilities"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { LandingPage } from "../../../../Shared/LandingPage"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { Global } from "../../../../Shared/Global"
+import { Utilities } from "../../../../Shared/Utilities"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
@@ -19,7 +19,7 @@ describe('Validations on Measure Details page', () => {
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
         OktaLogin.Login()
     })
 
@@ -240,7 +240,7 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.enabled')
 
         //save Steward & Developers
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).click({force: true}).wait(1000)
+        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).click({ force: true }).wait(1000)
 
         //validate success message
         cy.get(EditMeasurePage.measureStewardDevelopersSuccessMessage).should('exist')
@@ -360,7 +360,7 @@ describe('Create Measure validations', () => {
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
         OktaLogin.Login()
     })
 
@@ -537,7 +537,7 @@ describe('Measurement Period Validations', () => {
     let measureName = 'TestMeasure' + Date.now()
     let CqlLibraryName = 'TestLibrary' + Date.now()
 
-    beforeEach('Login',() => {
+    beforeEach('Login', () => {
         OktaLogin.Login()
     })
 

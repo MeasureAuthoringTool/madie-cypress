@@ -1,8 +1,8 @@
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -15,7 +15,7 @@ describe.skip('FHIR Measure Export', () => {
     before('Create New Measure and Login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateAPIQICoreMeasureWithCQL(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
 
     })
