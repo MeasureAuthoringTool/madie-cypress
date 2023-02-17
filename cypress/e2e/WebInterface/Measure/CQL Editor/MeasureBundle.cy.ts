@@ -19,7 +19,7 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
 
-    before('Create Measure and login', () => {
+    beforeEach('Create Measure and login', () => {
 
         cy.setAccessTokenCookie()
 
@@ -40,7 +40,7 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
         OktaLogin.Login()
     })
 
-    after('Clean up', () => {
+    afterEach('Clean up', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
@@ -100,7 +100,7 @@ describe('Bundle returns elmXML', () => {
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
 
-    before('Create Measure', () => {
+    beforeEach('Create Measure', () => {
 
         cy.setAccessTokenCookie()
 
@@ -121,7 +121,7 @@ describe('Bundle returns elmXML', () => {
         OktaLogin.Login()
     })
 
-    after('Clean up', () => {
+    afterEach('Clean up', () => {
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
@@ -179,7 +179,7 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
 
-    before('Create Measure', () => {
+    beforeEach('Create Measure', () => {
 
         cy.setAccessTokenCookie()
 
@@ -200,7 +200,7 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
         OktaLogin.Login()
     })
 
-    after('Clean up', () => {
+    afterEach('Clean up', () => {
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
