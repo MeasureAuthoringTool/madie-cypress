@@ -1,13 +1,15 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {LandingPage} from "../../../../Shared/LandingPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { LandingPage } from "../../../../Shared/LandingPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 
-let measureCQL = "library SimpleFhirMeasureLib version '0.0.004'\nusing FHIR version '4.0.1'\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\nparameter 'Measurement Period' Interval<DateTime>\ncontext Patient\ndefine 'ipp':\n  exists ['Encounter'] E where E.period.start during 'Measurement Period'\ndefine 'denom':\n  'ipp'\ndefine 'num':\n  exists ['Encounter'] E where E.status ~ 'finished'"
+let measureCQL = MeasureCQL.ICFCleanTest_CQL
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestLibrary' + Date.now()
 
@@ -17,46 +19,46 @@ let TCDescription = 'DENOMFail1651609688032'
 
 describe('Read only for measure, measure group, and test cases that user does not own', () => {
 
-    before('Create Measure, Measure Group, and Test Case with alt user', () => {
+    beforeEach('Create Measure, Measure Group, and Test Case with alt userLogin', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL, true, true)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(true, true, 'ipp', 'num', 'denom')
-        TestCasesPage.CreateTestCaseAPI(TCTitle, TCSeries, TCDescription, '', true, true)
-
-    })
-    beforeEach('Login', () => {
-
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL, false, true)
+        OktaLogin.AltLogin()
+        MeasuresPage.clickEditforCreatedMeasure()
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, true, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
+        TestCasesPage.CreateTestCaseAPI(TCTitle, TCSeries, TCDescription, '', false, true)
         OktaLogin.Login()
     })
 
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, cqlLibraryName, false, true)
 
     })
 
-    after('Clean up', () => {
-
-        Utilities.deleteMeasure(measureName, cqlLibraryName,true, true)
-
-    })
-
-    it('Measure fields on detail page are not editable', () =>{
+    it('Measure fields on detail page are not editable', () => {
 
         //page loads
-        cy.location('pathname', {timeout: 60000}).should('include', '/measures')
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 3000)
-        Utilities.waitForElementEnabled(LandingPage.myMeasuresTab, 3000)
+        cy.location('pathname', { timeout: 60000 }).should('include', '/measures')
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 30000)
+        Utilities.waitForElementEnabled(LandingPage.myMeasuresTab, 30000)
 
         //navigate to the all measures tab
-        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 3000)
+        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.visible')
-        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 3000)
+        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
 
         //edit the measure that was not created by logged in user
-        MeasuresPage.clickEditforCreatedMeasure(true)
+        MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
 
         cy.get(CreateMeasurePage.measurementPeriodStartDate).should('be.disabled')
@@ -92,17 +94,17 @@ describe('Read only for measure, measure group, and test cases that user does no
 
     })
 
-    it('CQL value on the measure CQL Editor tab cannot be changed', () =>{
+    it('CQL value on the measure CQL Editor tab cannot be changed', () => {
 
         //navigate to the all measures tab
-        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 3000)
+        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.visible')
-        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 3000)
+        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
 
         //edit the measure that was not created by current owner
-        MeasuresPage.clickEditforCreatedMeasure(true)
+        MeasuresPage.clickEditforCreatedMeasure()
 
         //confirm that the CQL Editor tab is available and click on it
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
@@ -113,31 +115,31 @@ describe('Read only for measure, measure group, and test cases that user does no
 
     })
 
-    it('Test Cases are read / view only', () =>{
+    it('Test Cases are read / view only', () => {
 
         //navigate to the all measures tab
-        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 3000)
+        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.visible')
-        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 3000)
+        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
 
         //edit the measure that was not created by logged in owner
-        MeasuresPage.clickEditforCreatedMeasure(true)
+        MeasuresPage.clickEditforCreatedMeasure()
 
         //confirm that the test case tab is available and click on it
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
 
-            cy.get('[data-testid=select-action-'+ fileContents +']').click()
+            cy.get('[data-testid=select-action-' + fileContents + ']').click()
 
             //confirm that view button for test case is available and click on the view button
-            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('have.text', 'view')
-            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('be.visible')
-            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').should('be.enabled')
-            cy.get('[data-testid=view-edit-test-case-'+ fileContents +']').click()
+            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('have.text', 'view')
+            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.visible')
+            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').click()
         })
 
         //confirm that the text boxes, for the test case fields are not visible
@@ -151,19 +153,19 @@ describe('Read only for measure, measure group, and test cases that user does no
     it('Fields on Measure Group page are not editable', () => {
 
         //page loads
-        cy.location('pathname', {timeout: 60000}).should('include', '/measures')
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 3000)
-        Utilities.waitForElementEnabled(LandingPage.myMeasuresTab, 3000)
+        cy.location('pathname', { timeout: 60000 }).should('include', '/measures')
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 30000)
+        Utilities.waitForElementEnabled(LandingPage.myMeasuresTab, 30000)
 
         //navigate to the all measures tab
-        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 3000)
+        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.visible')
-        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 3000)
+        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
 
         //edit the measure group that was not created by logged in owner
-        MeasuresPage.clickEditforCreatedMeasure(true)
+        MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Verify that the Add Population Criteria button is not shown
@@ -176,9 +178,9 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).should('not.be.enabled')
 
         //Population fields are read only
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'ipp').should('not.be.enabled')
-        cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', 'denom').should('not.be.enabled')
-        cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'num').should('not.be.enabled')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Surgical Absence of Cervix').should('not.be.enabled')
+        cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', 'Surgical Absence of Cervix').should('not.be.enabled')
+        cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'Surgical Absence of Cervix').should('not.be.enabled')
         cy.get(MeasureGroupPage.denominatorExceptionSelect).should('not.be.enabled')
         cy.get(MeasureGroupPage.denominatorExclusionSelect).should('not.be.enabled')
         cy.get(MeasureGroupPage.numeratorExclusionSelect).should('not.be.enabled')
