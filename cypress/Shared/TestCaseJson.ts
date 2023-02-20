@@ -350,39 +350,204 @@ export class TestCaseJson {
         'em": "http://snomed.info/sct", "code": "183452005" } ] } ], "subject": { "reference": "Patient/609bde3598086b0a16d79fc6" }, "per' +
         'iod": { "start": "2012-01-16T08:00:00+00:00", "end": "2012-02-15T09:00:00+00:00" } } } ] }'
 
-    public static readonly RatioPatientSingleIPNoMO_DRC_PASS ='{"resourceType": "Bundle", "id": "Numex-Pass-RatioPatien' +
-        'tMultiIPWithMO", "meta": { "versionId": "1", "lastUpdated": "2022-09-14T15:14:42.152+00:00" }, "type": "collec' +
-        'tion", "entry": [ { "fullUrl": "609bde3598086b0a16d79fc6", "resource": { "resourceType": "Patient", "id": "609b' +
-        'de3598086b0a16d79fc6", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient' +
-        '" ] }, "text": { "status": "generated", "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\"><div class=\\"hap' +
-        'iHeaderText\\">LocationPeriodStartTimeMissing <b>MSRPOPLEXSTRAT2PASS </b></div><table class=\\"hapiPropertyTabl' +
-        'e\\"><tbody><tr><td>Identifier</td><td>8065dc8d26797064d8766be71f2bf020</td></tr><tr><td>Date of birth</td><td>' +
-        '<span>10 February 1954</span></td></tr></tbody></table></div>" }, "extension" : [ { "extension" : [ { "url" : "' +
-        'ombCategory", "valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238", "code" : "2106-3", "display" : "W' +
-        'hite" } }, { "url" : "ombCategory", "valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238", "code" : "1' +
-        '002-5", "display" : "American Indian or Alaska Native" } }, { "url" : "ombCategory", "valueCoding" : { "system" ' +
-        ': "urn:oid:2.16.840.1.113883.6.238", "code" : "2028-9", "display" : "Asian" } }, { "url" : "detailed", "valueCod' +
-        'ing" : { "system" : "urn:oid:2.16.840.1.113883.6.238", "code" : "1586-7", "display" : "Shoshone" } }, { "url" :' +
-        ' "detailed", "valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238", "code" : "2036-2", "display" : "Fi' +
-        'lipino" } }, { "url" : "text", "valueString" : "Mixed" } ], "url" : "http://hl7.org/fhir/us/core/StructureDefin' +
-        'ition/us-core-race" }, { "extension" : [ { "url" : "ombCategory", "valueCoding" : { "system" : "urn:oid:2.16.84' +
-        '0.1.113883.6.238", "code" : "2135-2", "display" : "Hispanic or Latino" } }, { "url" : "detailed", "valueCoding"' +
-        ' : { "system" : "urn:oid:2.16.840.1.113883.6.238", "code" : "2184-0", "display" : "Dominican" } }, { "url" : "d' +
-        'etailed", "valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238", "code" : "2148-5", "display" : "Mexic' +
-        'an" } }, { "url" : "text", "valueString" : "Hispanic or Latino" } ], "url" : "http://hl7.org/fhir/us/core/Struc' +
-        'tureDefinition/us-core-ethnicity" }, { "url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthse' +
-        'x", "valueCode" : "F" }, { "url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity", "v' +
-        'alueCodeableConcept" : { "coding" : [ { "system" : "http://terminology.hl7.org/CodeSystem/v3-NullFlavor", "code' +
-        '" : "ASKU", "display" : "asked but unknown" } ], "text" : "asked but unknown" } } ], "identifier": [ { "type": ' +
-        '{ "coding": [ { "system": "http://terminology.hl7.org/CodeSystem/v2-0203", "code": "MR" } ] }, "system": "http:' +
-        '//MyGoodHealthare.com/MedicalRecord", "value": "8065dc8d26797064d8766be71f2bf020" } ], "active": true, "name": ' +
-        '[ { "use": "usual", "family": "Denex", "given": [ "DenexPass" ] } ], "gender": "male", "birthDate": "1954-02-10' +
-        '" } }, { "fullUrl": "5c6c61ceb84846536a9a98f9", "resource": { "resourceType": "Encounter", "id": "5c6c61ceb8484' +
-        '6536a9a98f9", "status": "finished", "class" : { "system" : "http://terminology.hl7.org/CodeSystem/v3-ActCode", ' +
-        '"code" : "EMER", "display" : "emergency" }, "type": [ { "coding": [ { "system": "http://snomed.info/sct", "code' +
-        '": "183452005" } ] } ], "priority": { "coding": [ { "system": "http://snomed.info/sct", "code": "103390000", "d' +
-        'isplay": "Unscheduled (qualifier value)" } ] }, "subject": { "reference": "Patient/609bde3598086b0a16d79fc6" },' +
-        ' "period": { "start": "2022-01-16T08:00:00+00:00", "end": "2022-02-15T09:00:00+00:00" } } }] }'
+    public static readonly RatioPatientSingleIPNoMO_DRC_PASS ='{\n' +
+        '  "resourceType": "Bundle",\n' +
+        '  "id": "Numex-Pass-RatioPatientMultiIPWithMO",\n' +
+        '  "meta": {\n' +
+        '    "versionId": "1",\n' +
+        '    "lastUpdated": "2022-09-14T15:14:42.152+00:00"\n' +
+        '  },\n' +
+        '  "type": "collection",\n' +
+        '  "entry": [\n' +
+        '    {\n' +
+        '      "fullUrl": "609bde3598086b0a16d79fc6",\n' +
+        '      "resource": {\n' +
+        '        "resourceType": "Patient",\n' +
+        '        "id": "609bde3598086b0a16d79fc6",\n' +
+        '        "meta": {\n' +
+        '          "profile": [\n' +
+        '            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"\n' +
+        '          ]\n' +
+        '        },\n' +
+        '        "text": {\n' +
+        '          "status": "generated",\n' +
+        '          "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\"><div class=\\"hapiHeaderText\\">LocationPeriodStartTimeMissing <b>MSRPOPLEXSTRAT2PASS </b></div><table class=\\"hapiPropertyTable\\"><tbody><tr><td>Identifier</td><td>8065dc8d26797064d8766be71f2bf020</td></tr><tr><td>Date of birth</td><td><span>10 February 1954</span></td></tr></tbody></table></div>"\n' +
+        '        },\n' +
+        '        "extension": [\n' +
+        '          {\n' +
+        '            "extension": [\n' +
+        '              {\n' +
+        '                "url": "ombCategory",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "2106-3",\n' +
+        '                  "display": "White"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "ombCategory",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "1002-5",\n' +
+        '                  "display": "American Indian or Alaska Native"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "ombCategory",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "2028-9",\n' +
+        '                  "display": "Asian"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "detailed",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "1586-7",\n' +
+        '                  "display": "Shoshone"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "detailed",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "2036-2",\n' +
+        '                  "display": "Filipino"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "text",\n' +
+        '                "valueString": "Mixed"\n' +
+        '              }\n' +
+        '            ],\n' +
+        '            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"\n' +
+        '          },\n' +
+        '          {\n' +
+        '            "extension": [\n' +
+        '              {\n' +
+        '                "url": "ombCategory",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "2135-2",\n' +
+        '                  "display": "Hispanic or Latino"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "detailed",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "2184-0",\n' +
+        '                  "display": "Dominican"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "detailed",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "2148-5",\n' +
+        '                  "display": "Mexican"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "text",\n' +
+        '                "valueString": "Hispanic or Latino"\n' +
+        '              }\n' +
+        '            ],\n' +
+        '            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"\n' +
+        '          },\n' +
+        '          {\n' +
+        '            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",\n' +
+        '            "valueCode": "F"\n' +
+        '          },\n' +
+        '          {\n' +
+        '            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity",\n' +
+        '            "valueCodeableConcept": {\n' +
+        '              "coding": [\n' +
+        '                {\n' +
+        '                  "system": "http://terminology.hl7.org/CodeSystem/v3-NullFlavor",\n' +
+        '                  "code": "ASKU",\n' +
+        '                  "display": "asked but unknown"\n' +
+        '                }\n' +
+        '              ],\n' +
+        '              "text": "asked but unknown"\n' +
+        '            }\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "identifier": [\n' +
+        '          {\n' +
+        '            "type": {\n' +
+        '              "coding": [\n' +
+        '                {\n' +
+        '                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",\n' +
+        '                  "code": "MR"\n' +
+        '                }\n' +
+        '              ]\n' +
+        '            },\n' +
+        '            "system": "http://MyGoodHealthare.com/MedicalRecord",\n' +
+        '            "value": "8065dc8d26797064d8766be71f2bf020"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "active": true,\n' +
+        '        "name": [\n' +
+        '          {\n' +
+        '            "use": "usual",\n' +
+        '            "family": "Denex",\n' +
+        '            "given": [\n' +
+        '              "DenexPass"\n' +
+        '            ]\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "gender": "male",\n' +
+        '        "birthDate": "1954-02-10"\n' +
+        '      }\n' +
+        '    },\n' +
+        '    {\n' +
+        '      "fullUrl": "5c6c61ceb84846536a9a98f9",\n' +
+        '      "resource": {\n' +
+        '        "resourceType": "Encounter",\n' +
+        '        "id": "5c6c61ceb84846536a9a98f9",\n' +
+        '        "meta": {\n' +
+        '          "profile": [\n' +
+        '            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"\n' +
+        '          ]\n' +
+        '        },\n' +
+        '        "status": "finished",\n' +
+        '        "class": {\n' +
+        '          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '          "code": "EMER",\n' +
+        '          "display": "emergency"\n' +
+        '        },\n' +
+        '        "type": [\n' +
+        '          {\n' +
+        '            "coding": [\n' +
+        '              {\n' +
+        '                "system": "http://snomed.info/sct",\n' +
+        '                "code": "183452005"\n' +
+        '              }\n' +
+        '            ]\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "priority": {\n' +
+        '          "coding": [\n' +
+        '            {\n' +
+        '              "system": "http://snomed.info/sct",\n' +
+        '              "code": "103390000",\n' +
+        '              "display": "Unscheduled (qualifier value)"\n' +
+        '            }\n' +
+        '          ]\n' +
+        '        },\n' +
+        '        "subject": {\n' +
+        '          "reference": "Patient/609bde3598086b0a16d79fc6"\n' +
+        '        },\n' +
+        '        "period": {\n' +
+        '          "start": "2022-01-16T08:00:00+00:00",\n' +
+        '          "end": "2022-02-15T09:00:00+00:00"\n' +
+        '        }\n' +
+        '      }\n' +
+        '    }\n' +
+        '  ]\n' +
+        '}'
 
     public static readonly RatioEpisodeSingleIPNoMO_IPP_PASS ='{ "resourceType": "Bundle", "id": "Denom-Pass-RatioEpisode' +
         'MultiIPWithMO", "meta": { "versionId": "1", "lastUpdated": "2022-09-14T15:14:42.152+00:00" }, "type": "collection' +
@@ -413,45 +578,248 @@ export class TestCaseJson {
         '" } ] } ], "subject": { "reference": "Patient/609bde3598086b0a16d79fc6" }, "period": { "start": "2012-01-16T08:00:00' +
         '+00:00", "end": "2012-02-15T09:00:00+00:00" } } } ] }'
 
-    public static readonly RatioEpisodeSingleIPNoMO_MultipleEpisodes_PASS ='{"resourceType": "Bundle", "id": "2Enc-1Num' +
-        'ex-RatioEpisodeMultiIPWithMO", "meta": { "versionId": "1", "lastUpdated": "2022-09-14T15:14:42.152+00:00" }, "t' +
-        'ype": "collection", "entry": [ { "fullUrl": "609bde3598086b0a16d79fc6", "resource": { "resourceType": "Patient"' +
-        ', "id": "609bde3598086b0a16d79fc6", "meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qi' +
-        'core-patient" ] }, "text": { "status": "generated", "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\"><div c' +
-        'lass=\\"hapiHeaderText\\">LocationPeriodStartTimeMissing <b>MSRPOPLEXSTRAT2PASS </b></div><table class=\\"hapiPr' +
-        'opertyTable\\"><tbody><tr><td>Identifier</td><td>8065dc8d26797064d8766be71f2bf020</td></tr><tr><td>Date of birth' +
-        '</td><td><span>10 February 1954</span></td></tr></tbody></table></div>" }, "extension" : [ { "extension" : [ { "' +
-        'url" : "ombCategory", "valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238", "code" : "2106-3", "display' +
-        '" : "White" } }, { "url" : "ombCategory", "valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238", "code"' +
-        ' : "1002-5", "display" : "American Indian or Alaska Native" } }, { "url" : "ombCategory", "valueCoding" : { "sys' +
-        'tem" : "urn:oid:2.16.840.1.113883.6.238", "code" : "2028-9", "display" : "Asian" } }, { "url" : "detailed", "val' +
-        'ueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238", "code" : "1586-7", "display" : "Shoshone" } }, { "ur' +
-        'l" : "detailed", "valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238", "code" : "2036-2", "display" : ' +
-        '"Filipino" } }, { "url" : "text", "valueString" : "Mixed" } ], "url" : "http://hl7.org/fhir/us/core/StructureDef' +
-        'inition/us-core-race" }, { "extension" : [ { "url" : "ombCategory", "valueCoding" : { "system" : "urn:oid:2.16.8' +
-        '40.1.113883.6.238", "code" : "2135-2", "display" : "Hispanic or Latino" } }, { "url" : "detailed", "valueCoding"' +
-        ' : { "system" : "urn:oid:2.16.840.1.113883.6.238", "code" : "2184-0", "display" : "Dominican" } }, { "url" : "de' +
-        'tailed", "valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238", "code" : "2148-5", "display" : "Mexican' +
-        '" } }, { "url" : "text", "valueString" : "Hispanic or Latino" } ], "url" : "http://hl7.org/fhir/us/core/Structur' +
-        'eDefinition/us-core-ethnicity" }, { "url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex", "' +
-        'valueCode" : "F" }, { "url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity", "valueCod' +
-        'eableConcept" : { "coding" : [ { "system" : "http://terminology.hl7.org/CodeSystem/v3-NullFlavor", "code" : "ASK' +
-        'U", "display" : "asked but unknown" } ], "text" : "asked but unknown" } } ], "identifier": [ { "type": { "coding' +
-        '": [ { "system": "http://terminology.hl7.org/CodeSystem/v2-0203", "code": "MR" } ] }, "system": "http://MyGoodHe' +
-        'althare.com/MedicalRecord", "value": "8065dc8d26797064d8766be71f2bf020" } ], "active": true, "name": [ { "use": ' +
-        '"usual", "family": "Denex", "given": [ "DenexPass" ] } ], "gender": "male", "birthDate": "1954-02-10" } }, { "fu' +
-        'llUrl": "5c6c61ceb84846536a9a98f9", "resource": { "resourceType": "Encounter", "id": "5c6c61ceb84846536a9a98f9", ' +
-        '"status": "finished", "class" : { "system" : "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code" : "EMER",' +
-        ' "display" : "emergency" }, "type": [ { "coding": [ { "system": "http://snomed.info/sct", "code": "183452005" } ]' +
-        ' } ], "priority": { "coding": [ { "system": "http://snomed.info/sct", "code": "103390000", "display": "Unschedule' +
-        'd (qualifier value)" } ] }, "subject": { "reference": "Patient/609bde3598086b0a16d79fc6" }, "period": { "start": ' +
-        '"2022-01-16T08:00:00+00:00", "end": "2022-02-15T09:00:00+00:00" } } }, { "fullUrl": "5c6c61ccb4846536a9a98f9", "r' +
-        'esource": { "resourceType": "Encounter", "id": "5c6c61ccb4846536a9a98f9", "status": "finished", "class" : { "syst' +
-        'em" : "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code" : "IMP", "display" : "inpatient" }, "type": [ { ' +
-        '"coding": [ { "system": "http://snomed.info/sct", "code": "183452005" } ] } ], "priority": { "coding": [ { "syste' +
-        'm": "http://snomed.info/sct", "code": "103390000", "display": "Unscheduled (qualifier value)" } ] }, "subject": {' +
-        ' "reference": "Patient/609bde3598086b0a16d79fc6" }, "period": { "start": "2022-01-16T08:00:00+00:00", "end": "2022' +
-        '-02-15T09:00:00+00:00" } } }] }'
+    public static readonly RatioEpisodeSingleIPNoMO_MultipleEpisodes_PASS ='{\n' +
+        '  "resourceType": "Bundle",\n' +
+        '  "id": "2Enc-1Numex-RatioEpisodeMultiIPWithMO",\n' +
+        '  "meta": {\n' +
+        '    "versionId": "1",\n' +
+        '    "lastUpdated": "2022-09-14T15:14:42.152+00:00"\n' +
+        '  },\n' +
+        '  "type": "collection",\n' +
+        '  "entry": [\n' +
+        '    {\n' +
+        '      "fullUrl": "609bde3598086b0a16d79fc6",\n' +
+        '      "resource": {\n' +
+        '        "resourceType": "Patient",\n' +
+        '        "id": "609bde3598086b0a16d79fc6",\n' +
+        '        "meta": {\n' +
+        '          "profile": [\n' +
+        '            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"\n' +
+        '          ]\n' +
+        '        },\n' +
+        '        "text": {\n' +
+        '          "status": "generated",\n' +
+        '          "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\"><div class=\\"hapiHeaderText\\">LocationPeriodStartTimeMissing <b>MSRPOPLEXSTRAT2PASS </b></div><table class=\\"hapiPropertyTable\\"><tbody><tr><td>Identifier</td><td>8065dc8d26797064d8766be71f2bf020</td></tr><tr><td>Date of birth</td><td><span>10 February 1954</span></td></tr></tbody></table></div>"\n' +
+        '        },\n' +
+        '        "extension": [\n' +
+        '          {\n' +
+        '            "extension": [\n' +
+        '              {\n' +
+        '                "url": "ombCategory",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "2106-3",\n' +
+        '                  "display": "White"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "ombCategory",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "1002-5",\n' +
+        '                  "display": "American Indian or Alaska Native"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "ombCategory",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "2028-9",\n' +
+        '                  "display": "Asian"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "detailed",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "1586-7",\n' +
+        '                  "display": "Shoshone"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "detailed",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "2036-2",\n' +
+        '                  "display": "Filipino"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "text",\n' +
+        '                "valueString": "Mixed"\n' +
+        '              }\n' +
+        '            ],\n' +
+        '            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"\n' +
+        '          },\n' +
+        '          {\n' +
+        '            "extension": [\n' +
+        '              {\n' +
+        '                "url": "ombCategory",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "2135-2",\n' +
+        '                  "display": "Hispanic or Latino"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "detailed",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "2184-0",\n' +
+        '                  "display": "Dominican"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "detailed",\n' +
+        '                "valueCoding": {\n' +
+        '                  "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                  "code": "2148-5",\n' +
+        '                  "display": "Mexican"\n' +
+        '                }\n' +
+        '              },\n' +
+        '              {\n' +
+        '                "url": "text",\n' +
+        '                "valueString": "Hispanic or Latino"\n' +
+        '              }\n' +
+        '            ],\n' +
+        '            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"\n' +
+        '          },\n' +
+        '          {\n' +
+        '            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",\n' +
+        '            "valueCode": "F"\n' +
+        '          },\n' +
+        '          {\n' +
+        '            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity",\n' +
+        '            "valueCodeableConcept": {\n' +
+        '              "coding": [\n' +
+        '                {\n' +
+        '                  "system": "http://terminology.hl7.org/CodeSystem/v3-NullFlavor",\n' +
+        '                  "code": "ASKU",\n' +
+        '                  "display": "asked but unknown"\n' +
+        '                }\n' +
+        '              ],\n' +
+        '              "text": "asked but unknown"\n' +
+        '            }\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "identifier": [\n' +
+        '          {\n' +
+        '            "type": {\n' +
+        '              "coding": [\n' +
+        '                {\n' +
+        '                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",\n' +
+        '                  "code": "MR"\n' +
+        '                }\n' +
+        '              ]\n' +
+        '            },\n' +
+        '            "system": "http://MyGoodHealthare.com/MedicalRecord",\n' +
+        '            "value": "8065dc8d26797064d8766be71f2bf020"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "active": true,\n' +
+        '        "name": [\n' +
+        '          {\n' +
+        '            "use": "usual",\n' +
+        '            "family": "Denex",\n' +
+        '            "given": [\n' +
+        '              "DenexPass"\n' +
+        '            ]\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "gender": "male",\n' +
+        '        "birthDate": "1954-02-10"\n' +
+        '      }\n' +
+        '    },\n' +
+        '    {\n' +
+        '      "fullUrl": "5c6c61ceb84846536a9a98f9",\n' +
+        '      "resource": {\n' +
+        '        "resourceType": "Encounter",\n' +
+        '        "id": "5c6c61ceb84846536a9a98f9",\n' +
+        '        "meta": {\n' +
+        '          "profile": [\n' +
+        '            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"\n' +
+        '          ]\n' +
+        '        },\n' +
+        '        "status": "finished",\n' +
+        '        "class": {\n' +
+        '          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '          "code": "EMER",\n' +
+        '          "display": "emergency"\n' +
+        '        },\n' +
+        '        "type": [\n' +
+        '          {\n' +
+        '            "coding": [\n' +
+        '              {\n' +
+        '                "system": "http://snomed.info/sct",\n' +
+        '                "code": "183452005"\n' +
+        '              }\n' +
+        '            ]\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "priority": {\n' +
+        '          "coding": [\n' +
+        '            {\n' +
+        '              "system": "http://snomed.info/sct",\n' +
+        '              "code": "103390000",\n' +
+        '              "display": "Unscheduled (qualifier value)"\n' +
+        '            }\n' +
+        '          ]\n' +
+        '        },\n' +
+        '        "subject": {\n' +
+        '          "reference": "Patient/609bde3598086b0a16d79fc6"\n' +
+        '        },\n' +
+        '        "period": {\n' +
+        '          "start": "2022-01-16T08:00:00+00:00",\n' +
+        '          "end": "2022-02-15T09:00:00+00:00"\n' +
+        '        }\n' +
+        '      }\n' +
+        '    },\n' +
+        '    {\n' +
+        '      "fullUrl": "5c6c61ccb4846536a9a98f9",\n' +
+        '      "resource": {\n' +
+        '        "resourceType": "Encounter",\n' +
+        '        "id": "5c6c61ccb4846536a9a98f9",\n' +
+        '        "meta": {\n' +
+        '          "profile": [\n' +
+        '            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"\n' +
+        '          ]\n' +
+        '        },\n' +
+        '        "status": "finished",\n' +
+        '        "class": {\n' +
+        '          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '          "code": "IMP",\n' +
+        '          "display": "inpatient"\n' +
+        '        },\n' +
+        '        "type": [\n' +
+        '          {\n' +
+        '            "coding": [\n' +
+        '              {\n' +
+        '                "system": "http://snomed.info/sct",\n' +
+        '                "code": "183452005"\n' +
+        '              }\n' +
+        '            ]\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "priority": {\n' +
+        '          "coding": [\n' +
+        '            {\n' +
+        '              "system": "http://snomed.info/sct",\n' +
+        '              "code": "103390000",\n' +
+        '              "display": "Unscheduled (qualifier value)"\n' +
+        '            }\n' +
+        '          ]\n' +
+        '        },\n' +
+        '        "subject": {\n' +
+        '          "reference": "Patient/609bde3598086b0a16d79fc6"\n' +
+        '        },\n' +
+        '        "period": {\n' +
+        '          "start": "2022-01-16T08:00:00+00:00",\n' +
+        '          "end": "2022-02-15T09:00:00+00:00"\n' +
+        '        }\n' +
+        '      }\n' +
+        '    }\n' +
+        '  ]\n' +
+        '}'
 
 
     public static readonly RatioPatientTwoIPsWithMOs_PASS = '{\n' +

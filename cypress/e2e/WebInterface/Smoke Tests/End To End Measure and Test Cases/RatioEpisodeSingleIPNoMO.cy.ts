@@ -190,7 +190,8 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
