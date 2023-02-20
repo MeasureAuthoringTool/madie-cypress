@@ -1023,13 +1023,40 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).type('Initial Population Description')
 
-        //Will be uncommented once save functionality is implemented
-        //cy.get('[data-testid="measure-Risk Adjustment-save"]').click()
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
+        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
         //Click on clear Icon and verify description field is removed
         cy.get(MeasureGroupPage.cancelIcon).click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('not.exist')
 
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
+        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+
+    })
+
+    it('Clicking on Discard changes button on Risk Adjustment page will revert the changes made before save', () => {
+
+        MeasuresPage.clickEditforCreatedMeasure()
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Click on Risk Adjustment tab
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('ipp').click()
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).type('Initial Population Description')
+
+        //Click on Discard changes button
+        cy.get(MeasureGroupPage.discardChangesBtn).click()
+        cy.get(MeasureGroupPage.discardChangesConfirmationMsg).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(MeasureGroupPage.discardChangesContinueBtn).click()
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).should('be.empty')
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('not.exist')
     })
 
     it('Add Supplemental data elements to the Measure group', () => {
@@ -1063,7 +1090,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
     })
 
-    it('Clicking on Discard changes button will revert the changes made before save', () => {
+    it('Clicking on Discard changes button on Supplemental data elements page will revert the changes made before save', () => {
 
         MeasuresPage.clickEditforCreatedMeasure()
 
@@ -1081,9 +1108,9 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('Initial Population Description')
 
         //Click on Discard changes button
-        cy.get(MeasureGroupPage.supplementalDataElementsDiscardChangesBtn).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsDiscardChangesConfirmationMsg).should('contain.text', 'Are you sure you want to discard your changes?')
-        cy.get(MeasureGroupPage.supplementalDataElementsDiscardChangesContinueBtn).click()
+        cy.get(MeasureGroupPage.discardChangesBtn).click()
+        cy.get(MeasureGroupPage.discardChangesConfirmationMsg).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(MeasureGroupPage.discardChangesContinueBtn).click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionTextBox).should('be.empty')
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('not.exist')
     })

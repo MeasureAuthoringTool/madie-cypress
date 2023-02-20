@@ -161,8 +161,11 @@ export class MeasureGroupPage {
     //Risk Adjustment variables
     public static readonly riskAdjustmentDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
     public static readonly riskAdjustmentDefinitionDropdown = '[id="risk-adjustment-listbox"]'
+    public static readonly riskAdjustmentTextBox = '.MuiInputBase-root > #risk-adjustment'
     public static readonly cancelIcon = '[data-testid=CancelIcon]'
     public static readonly riskAdjustmentDescriptionTextBox = '[class=risk-description]'
+    public static readonly saveRiskAdjustments = '[data-testid="measure-Risk Adjustment-save"]'
+    public static readonly riskAdjustmentSaveSuccessMsg = '[class="toast success"]'
 
     //Supplemental data elements
     public static readonly supplementalDataDefinitionSelect = '[data-testid=supplementalDataElements]'
@@ -170,9 +173,9 @@ export class MeasureGroupPage {
     public static readonly supplementalDataDefinitionDescriptionTextBox = '[class="sc-iqcoie glofVe"]'
     public static readonly saveSupplementalDataElements = '[data-testid="supplementalDataElement-save"]'
     public static readonly supplementalDataElementsSaveSuccessMsg = '[data-testid="supplementalDataElement-success"]'
-    public static readonly supplementalDataElementsDiscardChangesBtn = '[data-testid=cancel-button]'
-    public static readonly supplementalDataElementsDiscardChangesConfirmationMsg = '.MuiDialogContent-root'
-    public static readonly supplementalDataElementsDiscardChangesContinueBtn = '[data-testid="discard-dialog-continue-button"]'
+    public static readonly discardChangesBtn = '[data-testid=cancel-button]'
+    public static readonly discardChangesConfirmationMsg = '.MuiDialogContent-root'
+    public static readonly discardChangesContinueBtn = '[data-testid="discard-dialog-continue-button"]'
     public static readonly supplementalDataDefinitionTextBox = '#supplementalDataElements'
 
 
