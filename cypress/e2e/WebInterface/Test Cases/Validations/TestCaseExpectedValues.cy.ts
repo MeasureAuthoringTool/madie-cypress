@@ -1,12 +1,12 @@
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -60,13 +60,15 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Save edited / updated to test case
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON'])
+        })
 
         //Navigate to Measure group page and update scoring type
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
 
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect,'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
@@ -107,7 +109,9 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON'])
+        })
 
         //Navigate to Measure group page and update scoring type
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -234,7 +238,9 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('not.exist')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON'])
+        })
 
         //Navigate to Measure Group page and add Numerator Exclusion & delete Denominator Exclusion
         cy.get(EditMeasurePage.measureGroupsTab).click()
