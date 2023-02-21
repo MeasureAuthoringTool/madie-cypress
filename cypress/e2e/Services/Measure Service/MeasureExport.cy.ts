@@ -1,10 +1,5 @@
 import { Utilities } from "../../../Shared/Utilities"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
-import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
-import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { v4 as uuidv4 } from 'uuid'
 
 let measureName = 'MeasureBundle' + Date.now()
@@ -12,7 +7,6 @@ let CqlLibraryName = 'MeasureBundle' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let newmeasureCQL = MeasureCQL.CQL_Multiple_Populations
 
 let measureCQL = 'library SimpleFhirMeasure version \'0.0.001\'\n' +
     '\n' +
@@ -37,44 +31,7 @@ let measureCQL = 'library SimpleFhirMeasure version \'0.0.001\'\n' +
     '      \n' +
     'define "numeratorExclusion":\n' +
     '    "num"'
-let CVmeasureCQL = 'library TestLibrary1664888387806162 version \'0.0.000\'\n' +
-    '\n' +
-    'using FHIR version \'4.0.1\'\n' +
-    '\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
-    'define "ipp":\n' +
-    '  exists ["Encounter"] E where E.period.start during "Measurement Period"\n' +
-    '  \n' +
-    'define "denom":\n' +
-    '  "ipp"\n' +
-    '  \n' +
-    'define "num":\n' +
-    '  exists ["Encounter"] E where E.status ~ \'finished\'\n' +
-    '  \n' +
-    'define "numeratorExclusion":\n' +
-    '    "num"\n' +
-    '    \n' +
-    'define function ToCode(coding FHIR.Coding):\n' +
-    ' if coding is null then\n' +
-    '   null\n' +
-    '      else\n' +
-    '        System.Code {\n' +
-    '           code: coding.code.value,\n' +
-    '           system: coding.system.value,\n' +
-    '           version: coding.version.value,\n' +
-    '           display: coding.display.value\n' +
-    '           }\n' +
-    '           \n' +
-    'define function fun(notPascalCase Integer ):\n' +
-    '  true\n' +
-    '  \n' +
-    'define function "isFinishedEncounter"():\n' +
-    '  true'
+
 let PopIniPop = 'ipp'
 let PopNum = 'num'
 let PopDenom = 'denom'
@@ -82,7 +39,7 @@ let PopDenex = 'ipp'
 let PopDenexcep = 'denom'
 let PopNumex = 'numeratorExclusion'
 
-describe('Proportion Measure Bundle end point returns expected data with valid Measure CQL and elmJson', () => {
+describe('Measure Export', () => {
 
     beforeEach('Create Measure and set access token', () => {
 
