@@ -64,8 +64,7 @@ describe('Import Test Case', () => {
 
     })
 
-    //Need to revisit after MAT-5330 is fixed
-    it.skip('Verify error message when an invalid Json file is imported', () => {
+    it('Verify error message when an invalid Json file is imported', () => {
 
         //Click on Edit Button
         MeasuresPage.clickEditforCreatedMeasure()
@@ -76,7 +75,7 @@ describe('Import Test Case', () => {
 
         //Upload invalid Json file
         cy.get(TestCasesPage.testCaseFileImport).attachFile('example.json')
-        cy.get(TestCasesPage.importTestCaseErrorMsg).should('contain.text', 'An error occurred while reading the file. Please make sure the test case file is valid.')
+        cy.get(TestCasesPage.importTestCaseErrorMsg).should('contain.text', 'No test case resources were found in imported file.')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
 
