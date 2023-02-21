@@ -1,10 +1,10 @@
-import {Utilities} from "../../../Shared/Utilities"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {TestCaseJson} from "../../../Shared/TestCaseJson"
-import {Environment} from "../../../Shared/Environment"
-import {TestCasesPage} from "../../../Shared/TestCasesPage"
-import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
+import { Utilities } from "../../../Shared/Utilities"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { TestCaseJson } from "../../../Shared/TestCaseJson"
+import { Environment } from "../../../Shared/Environment"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
 
 let measureName = 'TestMeasure' + Date.now()
@@ -25,7 +25,7 @@ const now = require('dayjs')
 let mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
 
-let measureCQL = 'library '  + cqlLibraryName + ' version \'0.0.000\'\n' +
+let measureCQL = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
     'using FHIR version \'4.0.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
@@ -99,16 +99,16 @@ describe('Measure Versioning', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
-                cy.request({
-                    url: '/api/measures/' + measureId + '/version/?versionType=major',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    },
-                    method: 'PUT'
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql('1.0.000')
-                })
+                    cy.request({
+                        url: '/api/measures/' + measureId + '/version/?versionType=major',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT'
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body.version).to.eql('1.0.000')
+                    })
                 })
             })
         })
@@ -127,7 +127,7 @@ describe('Measure Versioning', () => {
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(403)
-                    expect(response.body.message).to.eql('User ' +harpUser+ ' is not authorized for Measure with ID ' +measureId2)
+                    expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId2)
                 })
             })
         })
@@ -164,15 +164,15 @@ describe('Version Measure without CQL', () => {
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(400)
-                    expect(response.body.message).to.eql('User ' +harpUser+ ' cannot version Measure with ID ' +measureId+ '. Measure has no CQL.')
+                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has no CQL.')
                 })
             })
         })
     })
 })
 
-//Skipping until MAT-5346 is tested
-describe.skip('Version Measure with invalid CQL', () => {
+
+describe('Version Measure with invalid CQL', () => {
 
     before('Create Measure and Set Access Token', () => {
 
@@ -202,7 +202,7 @@ describe.skip('Version Measure with invalid CQL', () => {
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('CQL-ELM translator found errors in the CQL for measure ' +newMeasureName+ '!')
+                    expect(response.body.message).to.eql('CQL-ELM translator found errors in the CQL for measure ' + newMeasureName + '!')
                 })
             })
         })
@@ -240,7 +240,7 @@ describe('Version Measure with invalid test case Json', () => {
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(400)
-                    expect(response.body.message).to.eql('User ' +harpUser+ ' cannot version Measure with ID ' +measureId+ '. Measure has invalid test cases.')
+                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has invalid test cases.')
                 })
             })
         })
@@ -339,7 +339,7 @@ describe('Edit validations for versioned Measure', () => {
                                     "name": "denominator",
                                     "definition": 'num'
                                 }
-                                ],
+                            ],
                             "measureGroupTypes": [
                                 "Outcome"
                             ],
@@ -382,8 +382,8 @@ describe('Delete validations for versioned Measure', () => {
 
     before('Create Measure, Measure group and Test case', () => {
 
-        newMeasureName = measureName  + 6 + randValue
-        newCQLLibraryName = cqlLibraryName  + 6 + randValue
+        newMeasureName = measureName + 6 + randValue
+        newCQLLibraryName = cqlLibraryName + 6 + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL_ProportionMeasure)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
