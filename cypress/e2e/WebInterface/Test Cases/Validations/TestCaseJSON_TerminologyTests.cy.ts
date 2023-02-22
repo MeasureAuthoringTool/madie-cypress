@@ -214,7 +214,7 @@ describe('JSON Resource ID tests', () => {
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditor).type(missingResourceIDTCJson)
+        cy.get(TestCasesPage.aceEditor).type(missingResourceIDTCJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -424,7 +424,7 @@ describe('JSON Resource ID tests - Proportion Score Type', () => {
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditor).type(validTestCaseJson)
+        cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')

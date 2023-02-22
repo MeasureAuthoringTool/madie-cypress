@@ -113,6 +113,7 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
     })
 
