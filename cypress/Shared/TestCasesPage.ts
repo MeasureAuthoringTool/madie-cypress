@@ -1,8 +1,13 @@
+import { TIMEOUT } from "dns"
 import { EditMeasurePage } from "./EditMeasurePage"
 import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 
 export class TestCasesPage {
+
+    //edit test case without knowing test case ID
+    public static actionBtnNoId = '[class="action-button"]'
+    public static editBtnNoId = '[class="btn-container"]'
 
     //tabs on the test case page
     public static readonly cqlHasErrorsMsg = '[data-testid="test-case-cql-has-errors-message"]'
@@ -31,6 +36,7 @@ export class TestCasesPage {
     public static readonly testCaseSeriesList = 'tbody > tr > :nth-child(3)'
     public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
     public static readonly aceEditorJsonInput = '[data-testid="test-case-json-editor-input"]'
+
     public static readonly testCaseTitle = '[data-testid="test-case-title"]'
     public static readonly executeTestCaseButton = '[data-testid="execute-test-cases-button"]'
     public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
@@ -114,6 +120,7 @@ export class TestCasesPage {
     public static readonly importTestCaseModalBtn = '[data-testid="test-case-import-import-btn"]'
     public static readonly importInProgress = '[class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-1mbw3kc"]'
     public static readonly testCaseImportErrorAtValidating = '[data-testid="test-case-import-error-div"]'
+    public static readonly importTestCaseModalList = '[data-testid="test-case-preview-list"]'
 
     //Warning Modal
     public static readonly discardChangesConfirmationModal = '[id="mui-4"]'
@@ -156,11 +163,12 @@ export class TestCasesPage {
             cy.get(this.importTestCaseModalBtn).click()
             //spinner indicating that import progress is busy is shown / is visible
             cy.get(this.importInProgress).should('be.visible')
+            //wait until the import buttong appears on the page, again
+            Utilities.waitForElementVisible(this.importTestCasesBtn, 50000)
 
             //list is returned
             cy.wait('@testCaseList').then(({ response }) => {
                 expect(response.statusCode).to.eq(201)
-
             })
         })
     }
