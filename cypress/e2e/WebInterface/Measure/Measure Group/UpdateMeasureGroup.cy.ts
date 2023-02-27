@@ -5,8 +5,6 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
@@ -14,10 +12,6 @@ let CqlLibraryName = 'TestLibrary' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let ratioMeasureCQL = MeasureCQL.ICFCleanTest_CQL
-let testCaseTitle = 'test case title'
-let testCaseDescription = 'DENOMFail' + Date.now()
-let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
-let testCaseSeries = 'SBTestSeries'
 
 describe('Validate Measure Group', () => {
 
@@ -97,7 +91,7 @@ describe('Validate Measure Group', () => {
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
         cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Procedure')
+        cy.get(MeasureGroupPage.popBasis).type('Procedure').wait(1000)
         cy.get(MeasureGroupPage.popBasisOption).click()
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
@@ -262,7 +256,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / succesful save message to appear
+        //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 22700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
@@ -398,7 +392,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
     })
 
-    it('Validate that changing the association when a value has been indicated for IP 2, allows user to save new associaiton', () => {
+    it('Validate that changing the association when a value has been indicated for IP 2, allows user to save new association', () => {
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
 
