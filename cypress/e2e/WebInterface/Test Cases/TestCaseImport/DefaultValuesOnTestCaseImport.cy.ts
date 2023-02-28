@@ -14,12 +14,14 @@ let fileToUpload = ['PatientFilesForJsonImport/NumFail_MedAdminStatus.json', 'Pa
     'PatientFilesForJsonImport/ServiceRequest_WithNullIntent.json', 'PatientFilesForJsonImport/CoverageStatus_null.json', 'PatientFilesForJsonImport/MedicationRequest_WithNullIntent.json',
     'PatientFilesForJsonImport/MedicationRequest_WithNullStatus.json', 'PatientFilesForJsonImport/IPFail_ExpiredCoverage.json', 'PatientFilesForJsonImport/Patient_WithCondition.json',
     'PatientFilesForJsonImport/Patient_WithObservation.json', 'PatientFilesForJsonImport/Patient_WithProcedure.json', 'PatientFilesForJsonImport/Patient_withNullProcedure.status.json',
-    'PatientFilesForJsonImport/Patient_WithServiceRequest.json', 'PatientFilesForJsonImport/Patient_WithNullEncounterStatus.json', 'PatientFilesForJsonImport/IPPFail_EncounterStatus.json']
+    'PatientFilesForJsonImport/Patient_WithServiceRequest.json', 'PatientFilesForJsonImport/Patient_WithNullEncounterStatus.json', 'PatientFilesForJsonImport/IPPFail_EncounterStatus.json',
+    'PatientFilesForJsonImport/Patient_With_Condition_Encounter.json', 'PatientFilesForJsonImport/Patient_With_Condition_Stand alone.json']
 let ValueToBeAdded = ['subject', 'subject', '"status": "active"', '"intent": "order"', '"status": "active"', '"intent": "order"','"status": "active"',
-    'beneficiary', 'subject', 'subject', 'subject', '"status": "completed"', 'subject', '"status": "finished"', 'subject']
+    'beneficiary', 'subject', 'subject', 'subject', '"status": "completed"', 'subject', '"status": "finished"', 'subject', '"code": "encounter-diagnosis"',
+    '"code": "problem-list-item"']
 let Resource = ['Medication Administration Status', 'Medication Request Status', 'Service Request With Status', 'Service Request With Intent',
     'Coverage Status', 'MedicationRequestWithIntent', 'MedicationRequestWithStatus', 'Coverage', 'Condition', 'Observation', 'Procedure',
-    'Procedure With Status', 'Service Request', 'Encounter With Status', 'Encounter']
+    'Procedure With Status', 'Service Request', 'Encounter With Status', 'Encounter', 'Condition.Encounter Category', 'Condition.Stand alone Category']
 
 describe('Validate Test case Json on import', () => {
 
@@ -47,7 +49,7 @@ describe('Validate Test case Json on import', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        for (let i = 0; i <= 14; i++) {
+        for (let i = 0; i <= 16; i++) {
 
             TestCasesPage.ImportTestCaseFile(fileToUpload[i])
 
