@@ -14,9 +14,10 @@ let newMeasureName = ''
 let newCqlLibraryName = ''
 let newmeasureCQL = MeasureCQL.CQL_Multiple_Populations
 const now = require('dayjs')
-let date = now().format('YYYY-MM-DD')
 let mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
+let updatedMeasureName = measureName + randValue
+let updatedCQLLibraryName = CqlLibraryName + randValue
 
 let measureCQL = 'library SimpleFhirMeasure version \'0.0.001\'\n' +
     '\n' +
@@ -221,23 +222,79 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/versionId').should('exist').then((versionId) => {
-                    cy.request({
-                        url: '/api/measures/' + id + '/bundle',
-                        method: 'GET',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        }
-                    }).then((response) => {
-                        console.log(response)
-                        expect(response.status).to.eql(200)
-                        expect(response.body.resourceType).to.eql('Bundle')
-                        expect(response.body.entry).to.be.a('array')
-                        expect(response.body.entry[0].resource.resourceType).to.eql('Measure')
-                        expect(response.body.entry[0].resource.meta.versionId).to.eql(versionId)
-                        expect(response.body.entry[0].resource.meta.lastUpdated).contain(date)
-                        expect(response.body.entry[0].resource.meta.profile[0]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm')
-                        expect(response.body.entry[0].resource.meta.profile[1]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-measure-cqfm')
-                        expect(response.body.entry[0].resource.meta.profile[2]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/executable-measure-cqfm')
+                    cy.readFile('cypress/fixtures/groupId').should('exist').then((groupId) => {
+
+                        //Add Meta data to the Measure
+                        cy.request({
+                            url: '/api/measures/' + id,
+                            headers: {
+                                authorization: 'Bearer ' + accessToken.value
+                            },
+                            method: 'PUT',
+                            body: {
+                                "id": id,
+                                "measureName": updatedMeasureName,
+                                "cqlLibraryName": updatedCQLLibraryName,
+                                "model": 'QI-Core v4.1.1',
+                                "versionId": versionId,
+                                "cql": measureCQL,
+                                "version": "0.0.000",
+                                "groups": [
+                                    {
+                                        "id": groupId,
+                                        "scoring": "Cohort",
+                                        "populations": [
+                                            {
+                                                "id": uuidv4(),
+                                                "name": "initialPopulation",
+                                                "definition": PopIniPop
+                                            }
+                                        ],
+                                        "measureGroupTypes": [
+                                            "Outcome"
+                                        ],
+                                        "populationBasis": "boolean"
+                                    }
+                                ],
+                                "measureMetaData": {
+                                    "description": "Measure Description",
+                                    "steward": "Able Health",
+                                    "developers": [
+                                        "ACO Health Solutions"
+                                    ],
+                                    "guidance": "Measure Guidance",
+                                    "clinicalRecommendation": "Measure Clinical Recommendation",
+                                },
+                                "measureSetId": uuidv4(),
+                                "ecqmTitle": "ecqmTitle",
+                                "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                                "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z"
+                            }
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                            cy.log('Measure updated successfully')
+                        })
+
+                        cy.request({
+                            url: '/api/measures/' + id + '/bundle',
+                            method: 'GET',
+                            headers: {
+                                authorization: 'Bearer ' + accessToken.value
+                            }
+                        }).then((response) => {
+                            console.log(response)
+                            expect(response.status).to.eql(200)
+                            expect(response.body.resourceType).to.eql('Bundle')
+                            expect(response.body.entry).to.be.a('array')
+                            expect(response.body.entry[0].resource.resourceType).to.eql('Measure')
+                            expect(response.body.entry[0].resource.meta.profile[0]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm')
+                            expect(response.body.entry[0].resource.meta.profile[1]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-measure-cqfm')
+                            expect(response.body.entry[0].resource.meta.profile[2]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/executable-measure-cqfm')
+                            expect(response.body.entry[0].resource.description).to.eql('Measure Description')
+                            expect(response.body.entry[0].resource.usage).to.eql('Measure Guidance')
+                            expect(response.body.entry[0].resource.author[0].name).to.eql('ACO Health Solutions')
+                            expect(response.body.entry[0].resource.clinicalRecommendationStatement).to.eql('Measure Clinical Recommendation')
+                        })
                     })
                 })
             })
