@@ -35,18 +35,18 @@ export class MeasuresPage {
 
         //block of code that will be used once the measureVersioning flag is removed
 
-        //            cy.readFile(filePath).should('exist').then((fileContents) => {
-        //             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-        //             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-        //             Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-        //             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-        //             cy.get('[data-testid=measure-action-' + fileContents + ']').click()
-        //             Utilities.waitForElementVisible('[data-testid=view-measure-' + fileContents + ']', 30000)
-        //             cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
-        //             Utilities.waitForElementEnabled('[data-testid=view-measure-' + fileContents + ']', 30000)
-        //             cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.enabled')
-        //             cy.get('[data-testid=view-measure-' + fileContents + ']').click()
-        //         })
+                //    cy.readFile(filePath).should('exist').then((fileContents) => {
+                //     Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
+                //     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
+                //     Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
+                //     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
+                //     cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+                //     Utilities.waitForElementVisible('[data-testid=view-measure-' + fileContents + ']', 30000)
+                //     cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
+                //     Utilities.waitForElementEnabled('[data-testid=view-measure-' + fileContents + ']', 30000)
+                //     cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.enabled')
+                //     cy.get('[data-testid=view-measure-' + fileContents + ']').click()
+                // })
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid=edit-measure-' + fileContents + ']', 30000)
@@ -74,7 +74,14 @@ export class MeasuresPage {
             Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
             cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+
+            cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
+
             cy.get('[data-testid=export-measure-' + fileContents + ']').click()
+
+            cy.wait('@measureExport', { timeout: 60000 }).then(({response}) => {
+                expect(response.statusCode).to.eq(200)
+            })
         })
     }
 
