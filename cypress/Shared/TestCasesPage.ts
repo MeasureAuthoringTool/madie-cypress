@@ -5,9 +5,12 @@ import { Utilities } from "./Utilities"
 
 export class TestCasesPage {
 
+    //TC error concerning CQL and PC mismatch
+    public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
+
     //edit test case without knowing test case ID
-    public static actionBtnNoId = '[class="action-button"]'
-    public static editBtnNoId = '[class="btn-container"]'
+    public static readonly actionBtnNoId = '[class="action-button"]'
+    public static readonly editBtnNoId = '[class="btn-container"]'
 
     //tabs on the test case page
     public static readonly cqlHasErrorsMsg = '[data-testid="test-case-cql-has-errors-message"]'
@@ -36,7 +39,6 @@ export class TestCasesPage {
     public static readonly testCaseSeriesList = 'tbody > tr > :nth-child(3)'
     public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
     public static readonly aceEditorJsonInput = '[data-testid="test-case-json-editor-input"]'
-
     public static readonly testCaseTitle = '[data-testid="test-case-title"]'
     public static readonly executeTestCaseButton = '[data-testid="execute-test-cases-button"]'
     public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
