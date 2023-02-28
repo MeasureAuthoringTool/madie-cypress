@@ -7,6 +7,9 @@ import { v4 as uuidv4 } from 'uuid'
 
 export class MeasureGroupPage {
 
+    //mismatch CQL error
+    public static readonly CQLPCMismatchError = '[class="madie-alert error"]'
+
     //CQL has errors message
     public static readonly CQLHasErrorMsg = '[data-testid="error-alerts"]'
 
