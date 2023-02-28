@@ -54,6 +54,7 @@ const clientId = Environment.authentication().clientId
 const authCodeUrl = authUri + '/v1/authorize'
 const tokenUrl = authUri + '/v1/token'
 const codeVerifier = Cypress.env('MADIE_CODEVERIFIER')
+require('cypress-delete-downloads-folder').addCustomCommand()
 
 
 export function setAccessTokenCookie() {

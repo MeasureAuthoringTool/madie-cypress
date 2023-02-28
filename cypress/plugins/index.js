@@ -14,6 +14,7 @@
 const fs = require('fs-extra')
 const path = require('path')
 const unzipper = require('unzipper')
+const { removeDirectory } = require('cypress-delete-downloads-folder')
 
 function getConfigurationByFile (file) {
   const pathToConfigFile = path.resolve('./cypress/', 'config', `${file}.json`)
@@ -55,6 +56,9 @@ module.exports = (on, config) => {
       unzipFile(zipFileAndPath.zipFile, zipFileAndPath.path)
       return null
     }
+  })
+  on('task', {
+    removeDirectory
   })
   on('file:preprocessor', browserify(options))
   return getConfigurationByFile(file)
