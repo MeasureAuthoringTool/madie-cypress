@@ -64,7 +64,7 @@
 		"windows:test:all:tests:report": "npm run windows:delete:reports; npm run windows:delete:mochawesome; npm run windows:test:all:tests; npm run windows:combine:reports; npm run generateOne:report"
 	},
 	"devDependencies": {
-		"@cypress/browserify-preprocessor": "^2.2.4",
+		"@cypress/browserify-preprocessor": "^3.0.2",
 		"@types/node": "^12.20.27",
 		"axe-core": "^4.3.3",
 		"cypress": "^12.1.0",
