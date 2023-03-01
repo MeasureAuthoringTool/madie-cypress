@@ -59,8 +59,7 @@ let measureCQL = 'library MultipleIPwithObs version \'0.0.000\'\n' +
     'define function "MOMale"():\n' +
     'Patient.gender = \'male\''
 
-//Skipping until link for adding Second Initial Population is fixed, as part of MAT-5373
-describe.skip('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
+describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
 
     before('Create Measure and Test Case', () => {
 
