@@ -827,3 +827,122 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
         })
     })
 })
+
+describe('Measure bundle end point returns Measure Population Description', () => {
+
+    beforeEach('Create Measure, Measure group and Set Access token', () => {
+
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = CqlLibraryName + randValue
+
+        cy.setAccessTokenCookie()
+
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, CVmeasureCQL)
+
+    })
+
+    afterEach('Clean up', () => {
+
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('Get Measure bundle data and verify that the description fields for Measure Population criteria are added', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+
+                cy.request({
+                    url: '/api/measures/' + id + '/groups/',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": id,
+                        "scoring": "Ratio",
+                        "populationBasis": "Boolean",
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop,
+                                "description": "Initial Population 1 Description"
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop,
+                                "description": "Initial Population 2 Description"
+                            },
+                            {
+                                "id": "809794a0-7768-407b-a28e-74226168fafe",
+                                "name": "denominator",
+                                "definition": PopDenom,
+                                "description": "Denominator Description"
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorExclusion",
+                                "definition": PopIniPop,
+                                "description": "Denominator Exclusion Description"
+                            },
+                            {
+                                "id": "63895363-9f2a-43fe-b63a-7b3bd4b25f08",
+                                "name": "numerator",
+                                "definition": PopNum,
+                                "description": "Numerator Description"
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numeratorExclusion",
+                                "definition": PopNumex,
+                                "description": "Numerator Exclusion Description"
+                            }
+                         ],
+                        "measureObservations": [
+                            {
+                                "id": uuidv4(),
+                                "definition": "isFinishedEncounter",
+                                "description": "Denominator Observation Description",
+                                "criteriaReference": "809794a0-7768-407b-a28e-74226168fafe",
+                                "aggregateMethod": "Count"
+                            },
+                            {
+                                "id": uuidv4(),
+                                "definition": "isFinishedEncounter",
+                                "description": "Numerator Observation Description",
+                                "criteriaReference": "63895363-9f2a-43fe-b63a-7b3bd4b25f08",
+                                "aggregateMethod": "Average"
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ]
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    cy.writeFile('cypress/fixtures/groupId', response.body.id)
+                })
+                cy.request({
+                    url: '/api/measures/' + id + '/bundle',
+                    method: 'GET',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.entry[0].resource.group[0].population[0].description).to.eql('Initial Population 1 Description')
+                    expect(response.body.entry[0].resource.group[0].population[1].description).to.eql('Initial Population 2 Description')
+                    expect(response.body.entry[0].resource.group[0].population[2].description).to.eql('Denominator Description')
+                    expect(response.body.entry[0].resource.group[0].population[3].description).to.eql('Denominator Exclusion Description')
+                    expect(response.body.entry[0].resource.group[0].population[4].description).to.eql('Numerator Description')
+                    expect(response.body.entry[0].resource.group[0].population[5].description).to.eql('Numerator Exclusion Description')
+                    expect(response.body.entry[0].resource.group[0].population[6].description).to.eql('Denominator Observation Description')
+                    expect(response.body.entry[0].resource.group[0].population[7].description).to.eql('Numerator Observation Description')
+                })
+            })
+        })
+    })
+})
