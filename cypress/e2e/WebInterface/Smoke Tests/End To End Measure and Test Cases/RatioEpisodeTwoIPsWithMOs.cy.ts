@@ -58,8 +58,7 @@ let measureCQL = 'library HHSH version \'0.0.000\'\n' +
     '        with TheEncounter E \n' +
     '            such that MedOrder.authoredOn before start of E.period )'
 
-//Skipping until link for adding Second Initial Population is fixed, as part of MAT-5373
-describe.skip('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
+describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
     before('Create Measure and Test Case', () => {
 
