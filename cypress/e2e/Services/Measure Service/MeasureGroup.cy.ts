@@ -1067,7 +1067,7 @@ describe('Measure Stratifications', () => {
         })
     })
 })
-describe.only('Creating a group / PC with description for various fields', () => {
+describe('Creating a group / PC with description for various fields', () => {
 
     beforeEach('Set Access Token', () => {
 
