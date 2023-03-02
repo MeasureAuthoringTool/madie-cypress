@@ -132,8 +132,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
 
     })
 
-    //Skipping due to bug MAT-5139
-    it.skip('Verify Actual values for Non Boolean Ratio Measure with MO', () => {
+    it('Verify Actual values for Non Boolean Ratio Measure with MO', () => {
 
         //Click on Edit Measure
         MeasuresPage.clickEditforCreatedMeasure()
