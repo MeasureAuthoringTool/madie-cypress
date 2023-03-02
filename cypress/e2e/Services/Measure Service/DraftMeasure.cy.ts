@@ -1,4 +1,3 @@
-import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Environment } from "../../../Shared/Environment"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
@@ -26,7 +25,7 @@ let measureName = 'TestMeasure' + Date.now()
 //skipping until the measureVersioning flag is removed
 describe.skip('Version and Draft CQL Library', () => {
 
-    beforeEach('Craete Measure, and add Cohort group', () => {
+    beforeEach('Create Measure, and add Cohort group', () => {
         cy.setAccessTokenCookie()
         //Create Measure
         newMeasureName = 'TestMeasure' + Date.now() + randValue
@@ -186,9 +185,11 @@ describe.skip('Version and Draft CQL Library', () => {
         })
     })
 })
-describe('Version and Draft CQL Library', () => {
 
-    beforeEach('Craete Measure, and add Cohort group', () => {
+//skipping until the measureVersioning flag is removed
+describe.skip('Version and Draft CQL Library', () => {
+
+    beforeEach('Create Measure, and add Cohort group', () => {
         cy.setAccessTokenCookie()
         //Create Measure
         newMeasureName = 'TestMeasure' + Date.now() + randValue
