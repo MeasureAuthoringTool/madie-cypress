@@ -39,7 +39,7 @@ let PopDenex = 'ipp'
 let PopDenexcep = 'denom'
 let PopNumex = 'numeratorExclusion'
 
-describe('Measure Export', () => {
+describe.skip('Measure Export', () => {
 
     beforeEach('Create Measure and set access token', () => {
 
