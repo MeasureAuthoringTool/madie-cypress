@@ -1,5 +1,7 @@
 import { EditMeasurePage } from "./EditMeasurePage"
 export class CQLEditorPage {
+    //error toast message when a CQL change has an affect on PC
+    public static readonly measureErrorToast = '[data-testid="measure-errors-toast"]'
 
     //error tooltip container
     public static readonly errorContainer = '#ace-editor-wrapper > div.ace_tooltip'

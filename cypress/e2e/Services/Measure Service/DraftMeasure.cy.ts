@@ -1,4 +1,3 @@
-import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Environment } from "../../../Shared/Environment"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
@@ -26,7 +25,7 @@ let measureName = 'TestMeasure' + Date.now()
 //skipping until the measureVersioning flag is removed
 describe.skip('Version and Draft CQL Library', () => {
 
-    beforeEach('Craete Measure, and add Cohort group', () => {
+    beforeEach('Create Measure, and add Cohort group', () => {
         cy.setAccessTokenCookie()
         //Create Measure
         newMeasureName = 'TestMeasure' + Date.now() + randValue
@@ -181,6 +180,327 @@ describe.skip('Version and Draft CQL Library', () => {
                             expect(response.body.message).to.eql('Can not create a draft for the measure "' + newerMeasureName + '". Only one draft is permitted per measure.')
                         })
                     })
+                })
+            })
+        })
+    })
+})
+
+//skipping until the measureVersioning flag is removed
+describe.skip('Version and Draft CQL Library', () => {
+
+    beforeEach('Create Measure, and add Cohort group', () => {
+        cy.setAccessTokenCookie()
+        //Create Measure
+        newMeasureName = 'TestMeasure' + Date.now() + randValue
+        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        OktaLogin.Login()
+        MeasuresPage.measureAction('edit', true)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.measureDetailsTab).click()
+        cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
+        OktaLogin.Logout()
+        cy.setAccessTokenCookie()
+        MeasureGroupPage.CreateCohortMeasureGroupAPI()
+    })
+    it('Draftable end point return measure set id that was used in request and false if the measure is not version', () => {
+        cy.setAccessTokenCookie()
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
+                cy.request({
+                    url: '/api/measures/draftstatus?measureSetIds=' + mSetId,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'GET',
+
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body).has.property(mSetId).and.is.eql(false)
+                })
+            })
+        })
+
+    })
+    it('Draftable end point return measure set id that was used in request and false if another measure, in that measure family, is in a draft status', () => {
+        let newerMeasureName = ''
+        cy.setAccessTokenCookie()
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.request({
+                    url: '/api/measures/' + measureId + '/version/?versionType=major',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'PUT'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.version).to.eql('1.0.000')
+                    newerMeasureName = response.body.measureName
+                })
+            })
+        })
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(mIdFilePath).should('exist').then((measureAID) => {
+                cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
+                    cy.readFile(mVersionIdPath).should('exist').then((mVersionId) => {
+                        cy.request({
+                            url: '/api/measures/' + measureAID + '/draft',
+                            method: 'POST',
+                            headers: {
+                                authorization: 'Bearer ' + accessToken.value
+                            },
+                            body: {
+                                'measureSetId': mSetId,
+                                'measureName': measureName,
+                                'cqlLibraryName': newCqlLibraryName,
+                                'model': 'QI-Core v4.1.1',
+                                'createdBy': harpUser,
+                                'cql': cohortMeasureCQL,
+                                'elmJson': elmJson,
+                                "ecqmTitle": "ecqmTitle",
+                                'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
+                                'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
+                                'versionId': mVersionId,
+                            }
+
+                        }).then((response) => {
+                            expect(response.status).to.eql(201)
+                            cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                        })
+                    })
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.request({
+                    url: '/api/measures/' + measureId + '/version/?versionType=minor',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'PUT'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.version).to.eql('1.1.000')
+                    newerMeasureName = response.body.measureName
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(mIdFilePath).should('exist').then((measureAID) => {
+                cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
+                    cy.readFile(mVersionIdPath).should('exist').then((mVersionId) => {
+                        cy.request({
+                            url: '/api/measures/' + measureAID + '/draft',
+                            method: 'POST',
+                            headers: {
+                                authorization: 'Bearer ' + accessToken.value
+                            },
+                            body: {
+                                'measureSetId': mSetId,
+                                'measureName': measureName,
+                                'cqlLibraryName': newCqlLibraryName,
+                                'model': 'QI-Core v4.1.1',
+                                'createdBy': harpUser,
+                                'cql': cohortMeasureCQL,
+                                'elmJson': elmJson,
+                                "ecqmTitle": "ecqmTitle",
+                                'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
+                                'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
+                                'versionId': mVersionId,
+
+                            }
+
+                        }).then((response) => {
+                            expect(response.status).to.eql(201)
+
+                        })
+                    })
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
+                cy.request({
+                    url: '/api/measures/draftstatus?measureSetIds=' + mSetId,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'GET',
+
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body).has.property(mSetId).and.is.eql(false)
+                })
+            })
+        })
+
+    })
+    it('Draftable end point return measure set id that was used in request and true if the measure is versioned, regardless of version type (major, minor, or patch)', () => {
+        let newerMeasureName = ''
+        cy.setAccessTokenCookie()
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.request({
+                    url: '/api/measures/' + measureId + '/version/?versionType=major',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'PUT'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.version).to.eql('1.0.000')
+                    newerMeasureName = response.body.measureName
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
+                cy.request({
+                    url: '/api/measures/draftstatus?measureSetIds=' + mSetId,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'GET',
+
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body).has.property(mSetId).and.is.eql(true)
+                })
+            })
+        })
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(mIdFilePath).should('exist').then((measureAID) => {
+                cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
+                    cy.readFile(mVersionIdPath).should('exist').then((mVersionId) => {
+                        cy.request({
+                            url: '/api/measures/' + measureAID + '/draft',
+                            method: 'POST',
+                            headers: {
+                                authorization: 'Bearer ' + accessToken.value
+                            },
+                            body: {
+                                'measureSetId': mSetId,
+                                'measureName': measureName,
+                                'cqlLibraryName': newCqlLibraryName,
+                                'model': 'QI-Core v4.1.1',
+                                'createdBy': harpUser,
+                                'cql': cohortMeasureCQL,
+                                'elmJson': elmJson,
+                                "ecqmTitle": "ecqmTitle",
+                                'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
+                                'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
+                                'versionId': mVersionId,
+                            }
+
+                        }).then((response) => {
+                            expect(response.status).to.eql(201)
+                            cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                        })
+                    })
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.request({
+                    url: '/api/measures/' + measureId + '/version/?versionType=minor',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'PUT'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.version).to.eql('1.1.000')
+                    newerMeasureName = response.body.measureName
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
+                cy.request({
+                    url: '/api/measures/draftstatus?measureSetIds=' + mSetId,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'GET',
+
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body).has.property(mSetId).and.is.eql(true)
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(mIdFilePath).should('exist').then((measureAID) => {
+                cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
+                    cy.readFile(mVersionIdPath).should('exist').then((mVersionId) => {
+                        cy.request({
+                            url: '/api/measures/' + measureAID + '/draft',
+                            method: 'POST',
+                            headers: {
+                                authorization: 'Bearer ' + accessToken.value
+                            },
+                            body: {
+                                'measureSetId': mSetId,
+                                'measureName': measureName,
+                                'cqlLibraryName': newCqlLibraryName,
+                                'model': 'QI-Core v4.1.1',
+                                'createdBy': harpUser,
+                                'cql': cohortMeasureCQL,
+                                'elmJson': elmJson,
+                                "ecqmTitle": "ecqmTitle",
+                                'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
+                                'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
+                                'versionId': mVersionId,
+                            }
+
+                        }).then((response) => {
+                            expect(response.status).to.eql(201)
+                            cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                        })
+                    })
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.request({
+                    url: '/api/measures/' + measureId + '/version/?versionType=patch',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'PUT'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.version).to.eql('1.1.001')
+                    newerMeasureName = response.body.measureName
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
+                cy.request({
+                    url: '/api/measures/draftstatus?measureSetIds=' + mSetId,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'GET',
+
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body).has.property(mSetId).and.is.eql(true)
                 })
             })
         })

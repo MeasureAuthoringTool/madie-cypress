@@ -1067,4 +1067,522 @@ describe('Measure Stratifications', () => {
         })
     })
 })
+describe('Creating a group / PC with description for various fields', () => {
+
+    beforeEach('Set Access Token', () => {
+
+        cy.setAccessTokenCookie()
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = CqlLibraryName + randValue
+        let measureCQL = "library SimpleFhirMeasure version '0.0.001'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"ipp\":\n  exists [\"Encounter\"] E where E.period.start during \"Measurement Period\"\n\ndefine \"denom\":\n \"ipp\"\n\ndefine \"num\":\n  exists [\"Encounter\"] E where E.status ~ 'finished'\n\ndefine \"numeratorExclusion\":\n    \"num\"\n\ndefine function ToCode(coding FHIR.Coding):\n if coding is null then\n   null\n      else\n        System.Code {\n           code: coding.code.value,\n           system: coding.system.value,\n          version: coding.version.value,\n           display: coding.display.value\n           }\n\ndefine function fun(notPascalCase Integer ):\n  true\n\ndefine function \"isFinishedEncounter\"():\n  true\n\n\n\n"
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+    })
+
+    afterEach('Clean up', () => {
+
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+    it('Description is added to all fields are saved -- no second IP', () => {
+
+        let PopIniPop = 'ipp'
+        let PopNum = 'num'
+        let PopDenom = 'denom'
+        let NumExc = 'numeratorExclusion'
+
+        //if descriptions are added, they are returned and saved to the database
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups/',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": fileContents,
+                        "scoring": "Ratio",
+                        "populationBasis": "Boolean",
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop,
+                                "description": "Initial Population Description"
+                            },
+                            {
+                                "id": "89f42def-f989-4e9d-8e5f-c2c0cafc04d7",
+                                "name": "denominator",
+                                "definition": PopDenom,
+                                "description": "Denominator Description"
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorExclusion",
+                                "definition": PopIniPop,
+                                "description": "Denominator Exclusion Description"
+                            },
+                            {
+                                "id": "fa60458b-b2fa-4ba2-9bc4-d6db3468f895",
+                                "name": "numerator",
+                                "definition": PopNum,
+                                "description": "Numerator Description"
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numeratorExclusion",
+                                "definition": NumExc,
+                                "description": "Numerator Exclusion Description"
+                            }
+                        ],
+                        "measureObservations": [
+                            {
+                                "id": "b2622e59-a169-45af-a4b5-fe298e220ae4",
+                                "definition": "isFinishedEncounter",
+                                "description": "denominator observation description",
+                                "criteriaReference": "89f42def-f989-4e9d-8e5f-c2c0cafc04d7",
+                                "aggregateMethod": "Count"
+                            },
+                            {
+                                "id": "5da9610f-bdc5-4922-bd43-48ae0a0b07a4",
+                                "definition": "isFinishedEncounter",
+                                "description": "numerator observation description",
+                                "criteriaReference": "fa60458b-b2fa-4ba2-9bc4-d6db3468f895",
+                                "aggregateMethod": "Average"
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ]
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.scoring).to.eql('Ratio')
+                    expect(response.body.populations[0].definition).to.eql('ipp')
+                    expect(response.body.populations[0].description).to.eql('Initial Population Description')
+                    expect(response.body.populations[1].definition).to.eql('denom')
+                    expect(response.body.populations[1].description).to.eql('Denominator Description')
+                    expect(response.body.populations[2].definition).to.eql('ipp')
+                    expect(response.body.populations[2].description).to.eql('Denominator Exclusion Description')
+                    expect(response.body.populations[3].definition).to.eql('num')
+                    expect(response.body.populations[3].description).to.eql('Numerator Description')
+                    expect(response.body.populations[4].definition).to.eql('numeratorExclusion')
+                    expect(response.body.populations[4].description).to.eql('Numerator Exclusion Description')
+                    expect(response.body.measureObservations[0].definition).to.eql('isFinishedEncounter')
+                    expect(response.body.measureObservations[0].description).to.eql('denominator observation description')
+                    expect(response.body.measureObservations[1].definition).to.eql('isFinishedEncounter')
+                    expect(response.body.measureObservations[1].description).to.eql('numerator observation description')
+                    expect(response.body.measureObservations[0].aggregateMethod).to.eql('Count')
+                    expect(response.body.measureObservations[1].aggregateMethod).to.eql('Average')
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups/',
+                    method: 'PUT',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": fileContents,
+                        "scoring": "Ratio",
+                        "populationBasis": "Boolean",
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop,
+                                "description": null
+                            },
+                            {
+                                "id": "89f42def-f989-4e9d-8e5f-c2c0cafc04d7",
+                                "name": "denominator",
+                                "definition": PopDenom,
+                                "description": null
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorExclusion",
+                                "definition": PopIniPop,
+                                "description": null
+                            },
+                            {
+                                "id": "fa60458b-b2fa-4ba2-9bc4-d6db3468f895",
+                                "name": "numerator",
+                                "definition": PopNum,
+                                "description": null
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numeratorExclusion",
+                                "definition": NumExc,
+                                "description": null
+                            }
+                        ],
+                        "measureObservations": [
+                            {
+                                "id": "b2622e59-a169-45af-a4b5-fe298e220ae4",
+                                "definition": "isFinishedEncounter",
+                                "description": null,
+                                "criteriaReference": "89f42def-f989-4e9d-8e5f-c2c0cafc04d7",
+                                "aggregateMethod": "Count"
+                            },
+                            {
+                                "id": "5da9610f-bdc5-4922-bd43-48ae0a0b07a4",
+                                "definition": "isFinishedEncounter",
+                                "description": null,
+                                "criteriaReference": "fa60458b-b2fa-4ba2-9bc4-d6db3468f895",
+                                "aggregateMethod": "Average"
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ]
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.scoring).to.eql('Ratio')
+                    expect(response.body.populations[0].definition).to.eql('ipp')
+                    expect(response.body.populations[0].description).is.null
+                    expect(response.body.populations[1].definition).to.eql('denom')
+                    expect(response.body.populations[1].description).is.null
+                    expect(response.body.populations[2].definition).to.eql('ipp')
+                    expect(response.body.populations[2].description).is.null
+                    expect(response.body.populations[3].definition).to.eql('num')
+                    expect(response.body.populations[3].description).is.null
+                    expect(response.body.populations[4].definition).to.eql('numeratorExclusion')
+                    expect(response.body.populations[4].description).is.null
+                    expect(response.body.measureObservations[0].definition).to.eql('isFinishedEncounter')
+                    expect(response.body.measureObservations[0].description).is.null
+                    expect(response.body.measureObservations[1].definition).to.eql('isFinishedEncounter')
+                    expect(response.body.measureObservations[1].description).is.null
+                    expect(response.body.measureObservations[0].aggregateMethod).to.eql('Count')
+                    expect(response.body.measureObservations[1].aggregateMethod).to.eql('Average')
+                })
+            })
+        })
+
+    })
+    it('Description is added to all fields are saved -- second IP', () => {
+
+        let PopIniPop = 'ipp'
+        let PopNum = 'num'
+        let PopDenom = 'denom'
+        let NumExc = 'numeratorExclusion'
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups/',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": fileContents,
+                        "scoring": "Ratio",
+                        "populationBasis": "Boolean",
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop,
+                                "description": "Initial Population 1 Description"
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop,
+                                "description": "Initial Population 2 Description"
+                            },
+                            {
+                                "id": "89f42def-f989-4e9d-8e5f-c2c0cafc04d7",
+                                "name": "denominator",
+                                "definition": PopDenom,
+                                "description": "Denominator Description"
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorExclusion",
+                                "definition": PopIniPop,
+                                "description": "Denominator Exclusion Description"
+                            },
+                            {
+                                "id": "fa60458b-b2fa-4ba2-9bc4-d6db3468f895",
+                                "name": "numerator",
+                                "definition": PopNum,
+                                "description": "Numerator Description"
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numeratorExclusion",
+                                "definition": NumExc,
+                                "description": "Numerator Exclusion Description"
+                            }
+                        ],
+                        "measureObservations": [
+                            {
+                                "id": "b2622e59-a169-45af-a4b5-fe298e220ae4",
+                                "definition": "isFinishedEncounter",
+                                "description": "denominator observation description",
+                                "criteriaReference": "89f42def-f989-4e9d-8e5f-c2c0cafc04d7",
+                                "aggregateMethod": "Count"
+                            },
+                            {
+                                "id": "5da9610f-bdc5-4922-bd43-48ae0a0b07a4",
+                                "definition": "isFinishedEncounter",
+                                "description": "numerator observation description",
+                                "criteriaReference": "fa60458b-b2fa-4ba2-9bc4-d6db3468f895",
+                                "aggregateMethod": "Average"
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ]
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.scoring).to.eql('Ratio')
+                    expect(response.body.populations[0].definition).to.eql('ipp')
+                    expect(response.body.populations[0].description).to.eql('Initial Population 1 Description')
+                    expect(response.body.populations[1].definition).to.eql('ipp')
+                    expect(response.body.populations[1].description).to.eql('Initial Population 2 Description')
+                    expect(response.body.populations[2].definition).to.eql('denom')
+                    expect(response.body.populations[2].description).to.eql('Denominator Description')
+                    expect(response.body.populations[3].definition).to.eql('ipp')
+                    expect(response.body.populations[3].description).to.eql('Denominator Exclusion Description')
+                    expect(response.body.populations[4].definition).to.eql('num')
+                    expect(response.body.populations[4].description).to.eql('Numerator Description')
+                    expect(response.body.populations[5].definition).to.eql('numeratorExclusion')
+                    expect(response.body.populations[5].description).to.eql('Numerator Exclusion Description')
+                    expect(response.body.measureObservations[0].definition).to.eql('isFinishedEncounter')
+                    expect(response.body.measureObservations[0].description).to.eql('denominator observation description')
+                    expect(response.body.measureObservations[1].definition).to.eql('isFinishedEncounter')
+                    expect(response.body.measureObservations[1].description).to.eql('numerator observation description')
+                    expect(response.body.measureObservations[0].aggregateMethod).to.eql('Count')
+                    expect(response.body.measureObservations[1].aggregateMethod).to.eql('Average')
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups/',
+                    method: 'PUT',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": fileContents,
+                        "scoring": "Ratio",
+                        "populationBasis": "Boolean",
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop,
+                                "description": null
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop,
+                                "description": null
+                            },
+                            {
+                                "id": "89f42def-f989-4e9d-8e5f-c2c0cafc04d7",
+                                "name": "denominator",
+                                "definition": PopDenom,
+                                "description": null
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorExclusion",
+                                "definition": PopIniPop,
+                                "description": null
+                            },
+                            {
+                                "id": "fa60458b-b2fa-4ba2-9bc4-d6db3468f895",
+                                "name": "numerator",
+                                "definition": PopNum,
+                                "description": null
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numeratorExclusion",
+                                "definition": NumExc,
+                                "description": null
+                            }
+                        ],
+                        "measureObservations": [
+                            {
+                                "id": "b2622e59-a169-45af-a4b5-fe298e220ae4",
+                                "definition": "isFinishedEncounter",
+                                "description": null,
+                                "criteriaReference": "89f42def-f989-4e9d-8e5f-c2c0cafc04d7",
+                                "aggregateMethod": "Count"
+                            },
+                            {
+                                "id": "5da9610f-bdc5-4922-bd43-48ae0a0b07a4",
+                                "definition": "isFinishedEncounter",
+                                "description": null,
+                                "criteriaReference": "fa60458b-b2fa-4ba2-9bc4-d6db3468f895",
+                                "aggregateMethod": "Average"
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ]
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.scoring).to.eql('Ratio')
+                    expect(response.body.populations[0].definition).to.eql('ipp')
+                    expect(response.body.populations[0].description).is.null
+                    expect(response.body.populations[1].definition).to.eql('ipp')
+                    expect(response.body.populations[1].description).is.null
+                    expect(response.body.populations[2].definition).to.eql('denom')
+                    expect(response.body.populations[2].description).is.null
+                    expect(response.body.populations[3].definition).to.eql('ipp')
+                    expect(response.body.populations[3].description).is.null
+                    expect(response.body.populations[4].definition).to.eql('num')
+                    expect(response.body.populations[4].description).is.null
+                    expect(response.body.populations[5].definition).to.eql('numeratorExclusion')
+                    expect(response.body.populations[5].description).is.null
+                    expect(response.body.measureObservations[0].definition).to.eql('isFinishedEncounter')
+                    expect(response.body.measureObservations[0].description).is.null
+                    expect(response.body.measureObservations[1].definition).to.eql('isFinishedEncounter')
+                    expect(response.body.measureObservations[1].description).is.null
+                    expect(response.body.measureObservations[0].aggregateMethod).to.eql('Count')
+                    expect(response.body.measureObservations[1].aggregateMethod).to.eql('Average')
+                })
+            })
+        })
+    })
+    it('Description is added to all fields are saved -- CV Score -- Measure Population', () => {
+
+        let PopIniPop = 'ipp'
+        let PopDenom = 'denom'
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups/',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": fileContents,
+                        "scoring": "Continuous Variable",
+                        "populationBasis": "Boolean",
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop,
+                                "associationType": null,
+                                "description": "Initial Population Description on CV"
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "measurePopulation",
+                                "definition": PopDenom,
+                                "associationType": null,
+                                "description": "Measure Population Description on CV"
+                            }
+                        ],
+                        "measureObservations": [
+                            {
+                                "id": "60778b60-e913-4a6a-98ae-3f0cf488b710",
+                                "definition": "isFinishedEncounter",
+                                "description": "Measure Observations description on CV",
+                                "criteriaReference": null,
+                                "aggregateMethod": "Count"
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ]
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.scoring).to.eql('Continuous Variable')
+                    expect(response.body.populations[0].definition).to.eql('ipp')
+                    expect(response.body.populations[0].description).to.eql('Initial Population Description on CV')
+                    expect(response.body.populations[1].definition).to.eql('denom')
+                    expect(response.body.populations[1].description).to.eql('Measure Population Description on CV')
+                    expect(response.body.measureObservations[0].definition).to.eql('isFinishedEncounter')
+                    expect(response.body.measureObservations[0].description).to.eql('Measure Observations description on CV')
+                    expect(response.body.measureObservations[0].aggregateMethod).to.eql('Count')
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups/',
+                    method: 'PUT',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": fileContents,
+                        "scoring": "Continuous Variable",
+                        "populationBasis": "Boolean",
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop,
+                                "associationType": null,
+                                "description": null
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "measurePopulation",
+                                "definition": PopDenom,
+                                "associationType": null,
+                                "description": null
+                            }
+                        ],
+                        "measureObservations": [
+                            {
+                                "id": "60778b60-e913-4a6a-98ae-3f0cf488b710",
+                                "definition": "isFinishedEncounter",
+                                "description": null,
+                                "criteriaReference": null,
+                                "aggregateMethod": "Count"
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ]
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.scoring).to.eql('Continuous Variable')
+                    expect(response.body.populations[0].definition).to.eql('ipp')
+                    expect(response.body.populations[0].description).is.null
+                    expect(response.body.populations[1].definition).to.eql('denom')
+                    expect(response.body.populations[1].description).is.null
+                    expect(response.body.measureObservations[0].definition).to.eql('isFinishedEncounter')
+                    expect(response.body.measureObservations[0].description).is.null
+                    expect(response.body.measureObservations[0].aggregateMethod).to.eql('Count')
+                })
+            })
+        })
+    })
+})
+
 
