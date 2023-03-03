@@ -4,6 +4,8 @@ import {Header} from "../../../../Shared/Header"
 import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
 import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage"
 import {Global} from "../../../../Shared/Global"
+import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 
 let apiCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -142,12 +144,10 @@ describe('Validate CQL on CQL Library page', () => {
             'and/or Version can not be updated in the CQL Editor. MADiE has overwritten the updated Library Name and/or Version.')
 
         //Validate error(s) in CQL Editor after saving
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').wait(1000).click({force:true, multiple: true})
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', '"status":404,"error":"Not Found","path":"/api/fhir/libraries/cql"}"')
+        cy.scrollTo('top')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, '"status\\":404,\\"error\\":\\"Not Found\\",\\"path\\":\\"/api/fhir/libraries/cql\\"}\\"')
 
         //Navigate away from the page
         cy.get(Header.mainMadiePageButton).click()
@@ -156,12 +156,10 @@ describe('Validate CQL on CQL Library page', () => {
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         //Validate error(s) in CQL Editor persists after saving
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').wait(1000).click({force:true, multiple: true})
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', '"status":404,"error":"Not Found","path":"/api/fhir/libraries/cql"}"')
+        cy.scrollTo('top')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, '"status\\":404,\\"error\\":\\"Not Found\\",\\"path\\":\\"/api/fhir/libraries/cql\\"}\\"')
 
     })
 
