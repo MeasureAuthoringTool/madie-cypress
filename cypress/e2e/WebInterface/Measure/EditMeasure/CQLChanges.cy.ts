@@ -47,7 +47,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         ' flag to be set to the mismatch flag. Correcting the CQL to removes the errors flag', () => {
             //Click on Edit Measure
             //MeasuresPage.clickEditforCreatedMeasure()
-            MeasuresPage.measureAction('edit', true)
+            MeasuresPage.measureAction('edit', false)
 
             cy.get(EditMeasurePage.cqlEditorTab).click()
             cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
@@ -152,7 +152,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             //log back in
             OktaLogin.Login()
             //click edit on measure with error
-            MeasuresPage.measureAction('edit', true)
+            MeasuresPage.measureAction('edit', false)
             //navigate to the CQL Editor tab
             cy.get(EditMeasurePage.cqlEditorTab).should('exist')
             cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
@@ -193,7 +193,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         ' flag to be set to the mismatch flag. Correcting the PC selections to match CQL expectations removes the errors flag', () => {
             //Click on Edit Measure
             //MeasuresPage.clickEditforCreatedMeasure()
-            MeasuresPage.measureAction('edit', true)
+            MeasuresPage.measureAction('edit', false)
 
             cy.get(EditMeasurePage.cqlEditorTab).click()
             cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
@@ -298,7 +298,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             //log back in
             OktaLogin.Login()
             //click edit on measure with error
-            MeasuresPage.measureAction('edit', true)
+            MeasuresPage.measureAction('edit', false)
             //Click on the measure group tab
             cy.get(EditMeasurePage.measureGroupsTab).should('exist')
             cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
