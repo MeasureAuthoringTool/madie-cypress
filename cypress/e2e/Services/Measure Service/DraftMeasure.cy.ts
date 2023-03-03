@@ -185,9 +185,8 @@ describe.skip('Version and Draft CQL Library', () => {
         })
     })
 })
-
 //skipping until the measureVersioning flag is removed
-describe.skip('Version and Draft CQL Library', () => {
+describe.skip('Draftable API end point tests', () => {
 
     beforeEach('Create Measure, and add Cohort group', () => {
         cy.setAccessTokenCookie()

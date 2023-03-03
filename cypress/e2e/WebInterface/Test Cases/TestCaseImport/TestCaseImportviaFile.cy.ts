@@ -30,7 +30,8 @@ let testCaseJsonTstLargeBatch02 = TestCaseJson.largeBatchTC4ImportId2
 let testCaseJsonTstLargeBatch03 = TestCaseJson.largeBatchTC4ImportId3
 let testCaseJsonTstLargeBatch04 = TestCaseJson.largeBatchTC4ImportId4
 let testCaseJsonTstLargeBatch05 = TestCaseJson.largeBatchTC4ImportId5
-describe('Import Test cases onto an existing measure via file', () => {
+//skipping all test case import tests until flag is removed
+describe.skip('Import Test cases onto an existing measure via file', () => {
 
     beforeEach('Login and Create Measure', () => {
 
