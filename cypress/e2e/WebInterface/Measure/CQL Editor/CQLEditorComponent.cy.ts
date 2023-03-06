@@ -53,18 +53,35 @@ let measureCQL_WithErrors = 'library ' + newCqlLibraryName + ' version \'0.0.000
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
     'valueset "HPV Test": \'\')'
 
-let measureCQL_WithWarnings = 'library ' + newCqlLibraryName + ' version \'0.0.000\'\n' +
+let measureCQL_WithWarnings = 'library Library6567767 version \'0.0.000\'\n' +
+    '\n' +
     'using QICore version \'4.1.0\'\n' +
+    '\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n' +
+    '\n' +
     'valueset "Hospice care ambulatory": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1108.15\'\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '  default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
+    'valueset "Medical Reason": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1007\' \n' +
+    'valueset "Patient Reason": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1008\' \n' +
+    '\n' +
+    'parameter "Measurement Period" Interval<DateTime> default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
+    '  \n' +
     'context Patient\n' +
+    '\n' +
+    'define "Initial Population":\n' +
+    '    "Has Hospice"\n' +
+    '    or "Hospice Was Not Ordered"\n' +
+    '\n' +
+    'define "Hospice Was Not Ordered":\n' +
+    '    exists (\n' +
+    '        [ServiceNotRequested: "Hospice care ambulatory"] HospiceNotOrdered\n' +
+    '          where HospiceNotOrdered.reasonRefused in "Medical Reason"\n' +
+    '            or HospiceNotOrdered.reasonRefused in "Patient Reason"\n' +
+    '    )\n' +
+    '    \n' +
     'define "Has Hospice":\n' +
-    '\t exists (\n' +
-    '      [ServiceRequest: "Hospice care ambulatory"] HospiceOrder\n' +
-    '        where HospiceOrder.intent = \'order\'\n' +
+    '    exists (\n' +
+    '        [ServiceRequest: "Hospice care ambulatory"] HospiceOrder\n' +
+    '          where HospiceOrder.intent = \'order\'\n' +
     '            and HospiceOrder.authoredOn in "Measurement Period"\n' +
     '    ){del}{del}{del}{del}'
 
@@ -139,11 +156,11 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         //Verify warnings in CQL Editor component
         cy.get('[data-testid="generic-success-text-sub-header"]').should('contain.text', '2 CQL errors found:')
-        cy.get('[data-testid="generic-success-text-list"] > li').should('contain.text', 'Row: 11, Col:14: ELM: 14:56 | Could not resolve code path type for the type of the retrieve QICore.ServiceRequest.')
-        cy.get('[data-testid="generic-success-text-list"] > li').should('contain.text', 'Row: 11, Col:14: ELM: 14:56 | Could not resolve membership operator for terminology target of the retrieve.')
+        cy.get('[data-testid="generic-success-text-list"] > li').should('contain', 'Could not resolve code path type for the type of the retrieve QICore.ServiceNotRequested.')
+        cy.get('[data-testid="generic-success-text-list"] > li').should('contain', 'Could not resolve membership operator for terminology target of the retrieve.')
 
         //Verify the same warning(s) appear in CQL Editor windows
-        Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 14:56 | Could not resolve code path type for the type of the retrieve QICore.ServiceRequest.', 'ELM: 14:56 | Could not resolve membership operator for terminology target of the retrieve.')
+        Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'Could not resolve code path type for the type of the retrieve QICore.ServiceNotRequested.', 'Could not resolve membership operator for terminology target of the retrieve.')
 
     })
 })
@@ -237,11 +254,11 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
 
         //Verify warnings in CQL Editor component
         cy.get('[data-testid="generic-success-text-sub-header"]').should('contain.text', '2 CQL errors found:')
-        cy.get('[data-testid="generic-success-text-list"] > li').should('contain.text', 'Row: 11, Col:14: ELM: 14:56 | Could not resolve code path type for the type of the retrieve QICore.ServiceRequest.')
-        cy.get('[data-testid="generic-success-text-list"] > li').should('contain.text', 'Row: 11, Col:14: ELM: 14:56 | Could not resolve membership operator for terminology target of the retrieve.')
+        cy.get('[data-testid="generic-success-text-list"] > li').should('contain', 'Could not resolve code path type for the type of the retrieve QICore.ServiceNotRequested.')
+        cy.get('[data-testid="generic-success-text-list"] > li').should('contain', 'Could not resolve membership operator for terminology target of the retrieve.')
 
         //Verify the same warning(s) appear in CQL Editor windows
-        Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 14:56 | Could not resolve code path type for the type of the retrieve QICore.ServiceRequest.', 'ELM: 14:56 | Could not resolve membership operator for terminology target of the retrieve.')
+        Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'Could not resolve code path type for the type of the retrieve QICore.ServiceNotRequested.', 'Could not resolve membership operator for terminology target of the retrieve.')
 
     })
 })
