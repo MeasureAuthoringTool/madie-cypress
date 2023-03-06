@@ -21,18 +21,17 @@ let testCaseDescription = 'testDescription' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_CohortEpisodeWithStrat_PASS
 
-//skipping until the measureVersioning flag is removed
-describe.skip('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
+describe('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
-        //Create Measure
+
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         OktaLogin.Login()
-        //MeasuresPage.clickEditforCreatedMeasure()
-        MeasuresPage.measureAction("edit")
+
+        MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -43,8 +42,9 @@ describe.skip('Draft and Version Validations -- add and cannot create draft of a
         cy.get(EditMeasurePage.measureDetailsTab).click()
         cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
         OktaLogin.Logout()
-        MeasureGroupPage.CreateCohortMeasureGroupAPI()
+
         //CreateCohortMeasureGroupAPI
+        MeasureGroupPage.CreateCohortMeasureGroupAPI()
         OktaLogin.Login()
 
     })
@@ -60,32 +60,19 @@ describe.skip('Draft and Version Validations -- add and cannot create draft of a
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
-        //MeasuresPage.clickVersionForCreatedMeasure()
-        MeasuresPage.measureAction("version")
-        cy.get(MeasuresPage.versionMeasuresRadioButton).should('exist')
-        cy.get(MeasuresPage.versionMeasuresRadioButton).should('be.enabled')
-        cy.get(MeasuresPage.versionMeasuresRadioButton).eq(0).click()
+        MeasuresPage.clickVersionForCreatedMeasure()
 
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
+        cy.get(MeasuresPage.versionMeasuresRadioButton).eq(0).click()
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
 
-        //MeasuresPage.clickDraftforCreatedMeasure()
-        MeasuresPage.measureAction("draft")
-        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
-        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.visible')
-        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.enabled')
+        MeasuresPage.clickDraftforCreatedMeasure()
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
-
-        cy.get(MeasuresPage.createDraftContinueBtn).should('exist')
-        cy.get(MeasuresPage.createDraftContinueBtn).should('be.visible')
-        cy.get(MeasuresPage.createDraftContinueBtn).should('be.enabled')
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+
         cy.log('Draft Created Successfully')
     })
 
@@ -116,8 +103,8 @@ describe.skip('Draft and Version Validations -- add and cannot create draft of a
         cy.get(MeasuresPage.VersionDraftErrMsgs).should('contains.text', '. Only one draft is permitted per measure.')
     })
 })
-//skipping until the measureVersioning flag is removed
-describe.skip('Draft and Version Validations -- CQL and Group are correct', () => {
+
+describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
     beforeEach('Create Measure, Group, Test case and Login', () => {
 
@@ -126,6 +113,7 @@ describe.skip('Draft and Version Validations -- CQL and Group are correct', () =
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         OktaLogin.Login()
+
         MeasuresPage.clickEditforCreatedMeasure()
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
@@ -137,6 +125,7 @@ describe.skip('Draft and Version Validations -- CQL and Group are correct', () =
         cy.get(EditMeasurePage.measureDetailsTab).click()
         cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
         OktaLogin.Logout()
+
         //CreateCohortMeasureGroupAPI
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
         //Create Test case
@@ -156,7 +145,7 @@ describe.skip('Draft and Version Validations -- CQL and Group are correct', () =
         OktaLogin.Logout()
 
     })
-    //skipping test until flag is removed
+
     it('Verify Draft measure CQL, Group and Test case', () => {
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()

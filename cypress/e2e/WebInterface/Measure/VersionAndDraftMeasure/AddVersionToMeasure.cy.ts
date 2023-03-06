@@ -17,7 +17,7 @@ let testCaseDescription = 'Description' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.CohortEpisodeEncounter_PASS
 
-describe.skip('Measure Versioning', () => {
+describe('Measure Versioning', () => {
 
     before('Create Measure and Login', () => {
 
