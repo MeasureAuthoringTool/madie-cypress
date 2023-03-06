@@ -31,7 +31,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         OktaLogin.Login()
 
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -43,7 +43,6 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
         OktaLogin.Logout()
 
-        //CreateCohortMeasureGroupAPI
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
         OktaLogin.Login()
 
@@ -60,7 +59,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
-        MeasuresPage.clickVersionForCreatedMeasure()
+        MeasuresPage.measureAction('version')
 
         cy.get(MeasuresPage.versionMeasuresRadioButton).eq(0).click()
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
@@ -68,7 +67,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
 
-        MeasuresPage.clickDraftforCreatedMeasure()
+        MeasuresPage.measureAction('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
@@ -81,7 +80,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedMeasuresPageOne' + Date.now()
 
-        MeasuresPage.clickVersionForCreatedMeasure()
+        MeasuresPage.measureAction('version')
 
         cy.get(MeasuresPage.versionMeasuresRadioButton).eq(0).click()
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
@@ -89,14 +88,14 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
 
-        MeasuresPage.clickDraftforCreatedMeasure()
+        MeasuresPage.measureAction('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
 
         cy.log('Draft Created Successfully')
 
-        MeasuresPage.clickDraftforCreatedMeasure()
+        MeasuresPage.measureAction('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName + '1')
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftErrMsgs).should('contains.text', 'Can not create a draft for the measure ')
@@ -114,7 +113,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         OktaLogin.Login()
 
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -151,7 +150,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
         //version and draft measure
-        MeasuresPage.clickVersionForCreatedMeasure()
+        MeasuresPage.measureAction('version')
         cy.get(MeasuresPage.versionMeasuresRadioButton).should('exist')
         cy.get(MeasuresPage.versionMeasuresRadioButton).should('be.enabled')
         cy.get(MeasuresPage.versionMeasuresRadioButton).eq(0).click()
@@ -163,7 +162,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
 
-        MeasuresPage.clickDraftforCreatedMeasure()
+        MeasuresPage.measureAction('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.visible')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.enabled')
@@ -172,7 +171,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(MeasuresPage.createDraftContinueBtn).should('exist')
         cy.get(MeasuresPage.createDraftContinueBtn).should('be.visible')
         cy.get(MeasuresPage.createDraftContinueBtn).should('be.enabled')
-        //cy.get(MeasuresPage.createDraftContinueBtn).click()
+
         CreateMeasurePage.clickCreateDraftButton()
 
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
@@ -184,7 +183,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.log('Search Measure with measure name')
         cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).wait(1000).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)
@@ -197,7 +196,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get('.TestCaseList___StyledDiv4-sc-1iefzo5-4').should('contain.text', testCaseTitle)
         cy.get('[class="action-button"]').click()
-        cy.get('[class="btn-container"]').eq(0).click()
+        cy.get('[class="btn-container"]').contains('edit').click()
         cy.get(TestCasesPage.aceEditor).should('not.be.empty')
         cy.get(TestCasesPage.aceEditor).should('contain.text', 'Bundle')
         cy.log('Test case details verified successfully')

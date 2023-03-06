@@ -1,12 +1,12 @@
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -34,7 +34,7 @@ describe('Measure Versioning', () => {
 
     it('Add Version to the Measure and verify that the versioned Measure is in read only', () => {
 
-        MeasuresPage.clickVersionForCreatedMeasure()
+        MeasuresPage.measureAction('version')
 
         cy.get(MeasuresPage.measureVersionMajor).should('exist')
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -47,7 +47,7 @@ describe('Measure Versioning', () => {
         cy.log('Version Created Successfully')
 
         //Verify that the fields on Measure details page, CQL Editor page and Test case page are read only
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction('edit')
 
         //Navigate to Measure details page
         cy.get(EditMeasurePage.measureNameTextBox).should('not.be.enabled')
