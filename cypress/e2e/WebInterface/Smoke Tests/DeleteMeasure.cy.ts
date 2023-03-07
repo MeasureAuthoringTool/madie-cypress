@@ -70,7 +70,7 @@ describe('Delete Measure', () => {
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        MeasuresPage.clickEditforCreatedMeasure(true)
+        MeasuresPage.measureAction("edit")
 
         //Delete Measure Button should not be visible for non owner of the Measure
         cy.get(EditMeasurePage.deleteMeasureButton).should('not.be.enabled')
