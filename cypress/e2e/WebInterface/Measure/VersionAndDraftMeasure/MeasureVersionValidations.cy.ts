@@ -48,7 +48,7 @@ describe('Measure Versioning validations', () => {
 
     it('User can not version Measure if there is no CQL', () => {
 
-        MeasuresPage.clickVersionForCreatedMeasure()
+        MeasuresPage.measureAction('version')
 
         cy.get(MeasuresPage.measureVersionMajor).should('exist')
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -63,7 +63,7 @@ describe('Measure Versioning validations', () => {
 
     it('User can not Version if the Measure CQL has errors', () => {
 
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -76,7 +76,7 @@ describe('Measure Versioning validations', () => {
         //Navigate to Measures Page
         cy.get(Header.measures).click()
 
-        MeasuresPage.clickVersionForCreatedMeasure()
+        MeasuresPage.measureAction('version')
 
         cy.get(MeasuresPage.measureVersionMajor).should('exist')
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -91,7 +91,7 @@ describe('Measure Versioning validations', () => {
 
     it('User can not Version if the test case Json has errors', () => {
 
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -106,7 +106,7 @@ describe('Measure Versioning validations', () => {
         //Navigate to Measures Page
         cy.get(Header.measures).click()
 
-        MeasuresPage.clickVersionForCreatedMeasure()
+        MeasuresPage.measureAction('version')
 
         cy.get(MeasuresPage.measureVersionMajor).should('exist')
         cy.get(MeasuresPage.measureVersionMajor).click()

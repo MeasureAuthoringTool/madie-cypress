@@ -35,18 +35,18 @@ export class MeasuresPage {
 
         //block of code that will be used once the measureVersioning flag is removed
 
-                   cy.readFile(filePath).should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').click()
-                    Utilities.waitForElementVisible('[data-testid=view-measure-' + fileContents + ']', 30000)
-                    cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid=view-measure-' + fileContents + ']', 30000)
-                    cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.enabled')
-                    cy.get('[data-testid=view-measure-' + fileContents + ']').click()
-                })
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+            Utilities.waitForElementVisible('[data-testid=view-measure-' + fileContents + ']', 30000)
+            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=view-measure-' + fileContents + ']', 30000)
+            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=view-measure-' + fileContents + ']').click()
+        })
 
         // cy.readFile(filePath).should('exist').then((fileContents) => {
         //     Utilities.waitForElementVisible('[data-testid=edit-measure-' + fileContents + ']', 30000)
@@ -79,7 +79,7 @@ export class MeasuresPage {
 
             cy.get('[data-testid=export-measure-' + fileContents + ']').click()
 
-            cy.wait('@measureExport', { timeout: 60000 }).then(({response}) => {
+            cy.wait('@measureExport', { timeout: 60000 }).then(({ response }) => {
                 expect(response.statusCode).to.eq(200)
             })
         })
@@ -117,82 +117,54 @@ export class MeasuresPage {
 
         })
     }
-    public static measureAction(action: string, flag?: boolean, secondMeasure?: boolean): void {
-        if ((flag == undefined) || (flag === null)) { flag = false }
+    public static measureAction(action: string, secondMeasure?: boolean): void {
         let filePath = 'cypress/fixtures/measureId'
 
         if (secondMeasure === true) {
             filePath = 'cypress/fixtures/measureId2'
         }
-        switch ((action.valueOf()).toString().toLowerCase()) {
-            case "edit": {
-                switch ((flag.valueOf()).toString().toLowerCase()) {
-                    case "false": {
-                        cy.readFile(filePath).should('exist').then((fileContents) => {
-                            Utilities.waitForElementVisible('[data-testid=edit-measure-' + fileContents + ']', 30000)
-                            cy.get('[data-testid=edit-measure-' + fileContents + ']').should('be.visible')
-                            Utilities.waitForElementEnabled('[data-testid=edit-measure-' + fileContents + ']', 30000)
-                            cy.get('[data-testid=edit-measure-' + fileContents + ']').should('be.enabled')
-                            cy.get('[data-testid=edit-measure-' + fileContents + ']').click()
-                        })
-                        break
-                    }
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+            switch ((action.valueOf()).toString().toLowerCase()) {
+                case "edit": {
+                    Utilities.waitForElementVisible('[data-testid=view-measure-' + fileContents + ']', 30000)
+                    cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
+                    Utilities.waitForElementEnabled('[data-testid=view-measure-' + fileContents + ']', 30000)
+                    cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.enabled')
+                    cy.get('[data-testid=view-measure-' + fileContents + ']').click()
 
-                    case "true": {
-                        cy.readFile(filePath).should('exist').then((fileContents) => {
-                            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-                            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-                            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-                            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-                            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
-                            Utilities.waitForElementVisible('[data-testid=view-measure-' + fileContents + ']', 30000)
-                            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
-                            Utilities.waitForElementEnabled('[data-testid=view-measure-' + fileContents + ']', 30000)
-                            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.enabled')
-                            cy.get('[data-testid=view-measure-' + fileContents + ']').click()
-                        })
-                        break
-
-                    }
-                    default: { }
+                    break
                 }
-                break
-            }
-            case 'export': {
-                cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+                case 'export': {
+                    Utilities.waitForElementVisible('[data-testid=export-measure-' + fileContents + ']', 30000)
+                    cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
+                    Utilities.waitForElementEnabled('[data-testid=export-measure-' + fileContents + ']', 30000)
+                    cy.get('[data-testid=export-measure-' + fileContents + ']').should('be.enabled')
                     cy.get('[data-testid=export-measure-' + fileContents + ']').click()
-                })
-                break
-            }
-            case 'version': {
-                cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+                    break
+                }
+                case 'version': {
+                    Utilities.waitForElementVisible('[data-testid=create-version-measure-' + fileContents + ']', 30000)
+                    cy.get('[data-testid=create-version-measure-' + fileContents + ']').should('be.visible')
+                    Utilities.waitForElementEnabled('[data-testid=create-version-measure-' + fileContents + ']', 30000)
+                    cy.get('[data-testid=create-version-measure-' + fileContents + ']').should('be.enabled')
                     cy.get('[data-testid=create-version-measure-' + fileContents + ']').click()
-                })
-                break
-            }
-            case 'draft': {
-                cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-                    cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+                    break
+                }
+                case 'draft': {
+                    Utilities.waitForElementVisible('[data-testid=draft-measure-' + fileContents + ']', 30000)
+                    cy.get('[data-testid=draft-measure-' + fileContents + ']').should('be.visible')
+                    Utilities.waitForElementEnabled('[data-testid=draft-measure-' + fileContents + ']', 30000)
+                    cy.get('[data-testid=draft-measure-' + fileContents + ']').should('be.enabled')
                     cy.get('[data-testid=draft-measure-' + fileContents + ']').click()
-
-                })
-                break
+                    break
+                }
+                default: { }
             }
-            default: { }
-        }
+        })
     }
 }
