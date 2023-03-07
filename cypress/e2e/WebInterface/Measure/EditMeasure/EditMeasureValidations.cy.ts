@@ -34,7 +34,6 @@ describe('Edit Measure Validations', () => {
     it('Verify error messages when the edit measure name entered is invalid', () => {
 
         //Click on Edit Button, Verify error message when the Measure Name field is empty
-        //MeasuresPage.clickEditforCreatedMeasure()
         MeasuresPage.measureAction("edit")
 
         cy.get(EditMeasurePage.measureNameTextBox).clear()
@@ -62,7 +61,7 @@ describe('Edit Measure Validations', () => {
 
     it('Verify error message when the eCQM abbreviated title entered is invalid or empty', () => {
 
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //eCQM abbreviated title empty
         cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).clear().focus().blur()
@@ -106,7 +105,7 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period end date is after the start date', () => {
 
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(CreateMeasurePage.measurementPeriodEndDate).clear().type('01/01/1999')
         cy.get(CreateMeasurePage.measurementPeriodStartDate).clear().type('12/01/2022')
@@ -117,7 +116,7 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period start and end dates are empty', () => {
 
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(CreateMeasurePage.measurementPeriodStartDate).clear()
         cy.get(CreateMeasurePage.measurementPeriodStartDate).focus().blur()
@@ -129,7 +128,7 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period start and end dates are not in valid range', () => {
 
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(CreateMeasurePage.measurementPeriodStartDate).clear().type('01/01/1800')
         cy.get(CreateMeasurePage.measurementPeriodEndDate).click()
@@ -141,7 +140,7 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period start and end date format is not valid', () => {
 
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(CreateMeasurePage.measurementPeriodStartDate).clear().type('2020/01/02')
         cy.get(CreateMeasurePage.measurementPeriodEndDate).click()
