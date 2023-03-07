@@ -1,10 +1,10 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName1 = 'TestLibrary' + Date.now()
@@ -40,7 +40,7 @@ describe('Validate Measure Group additions', () => {
     it('Able to add complete group to a measure whom already has a group and previous group is not affected', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file
@@ -117,27 +117,27 @@ describe('Validate Measure Group additions', () => {
         cy.get(MeasureGroupPage.measureGroupOne).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupOne).click()
 
-        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text','Proportion')
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text','Surgical Absence of Cervix')
-        cy.get(MeasureGroupPage.denominatorSelect).should('contain.text','Surgical Absence of Cervix')
-        cy.get(MeasureGroupPage.denominatorExclusionSelect).should('contain.text','Surgical Absence of Cervix')
-        cy.get(MeasureGroupPage.denominatorExceptionSelect).should('contain.text','Surgical Absence of Cervix')
-        cy.get(MeasureGroupPage.numeratorSelect).should('contain.text','Surgical Absence of Cervix')
-        cy.get(MeasureGroupPage.numeratorExclusionSelect).should('contain.text','Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Proportion')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', 'Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.denominatorExclusionSelect).should('contain.text', 'Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.denominatorExceptionSelect).should('contain.text', 'Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.numeratorExclusionSelect).should('contain.text', 'Surgical Absence of Cervix')
 
         cy.get(MeasureGroupPage.measureGroupTwo).should('exist')
         cy.get(MeasureGroupPage.measureGroupTwo).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupTwo).click()
 
-        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text','Cohort')
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text','Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Cohort')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Surgical Absence of Cervix')
 
     })
 
     it('Ensure numbering of groups is updated when group is created and saved out of sequential order', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //clear current CQL Editor contents
@@ -154,7 +154,7 @@ describe('Validate Measure Group additions', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        for (let i = 1; i <= 4; i++){
+        for (let i = 1; i <= 4; i++) {
             cy.get(MeasureGroupPage.addMeasureGroupButton).should('be.visible')
             cy.get(MeasureGroupPage.addMeasureGroupButton).click()
         }
@@ -176,7 +176,7 @@ describe('Validate Measure Group additions', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
 
         Utilities.waitForElementVisible(MeasureGroupPage.initialPopulationSelect, 20700)
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect,'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
 
 
 
@@ -193,8 +193,8 @@ describe('Validate Measure Group additions', () => {
         cy.get(MeasureGroupPage.measureGroupThree).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupThree).click()
 
-        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text','Cohort')
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text','Initial Population')
+        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Cohort')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Initial Population')
 
         cy.get(MeasureGroupPage.measureGroupOne).should('exist')
         cy.get(MeasureGroupPage.measureGroupTwo).should('exist')

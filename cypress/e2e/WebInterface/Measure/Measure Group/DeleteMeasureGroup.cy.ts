@@ -30,7 +30,7 @@ describe('Validate Measure Group deletion functionality', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureOne, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -53,7 +53,7 @@ describe('Validate Measure Group deletion functionality', () => {
 
     it('Delete button brings up confirmation modal', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -74,7 +74,7 @@ describe('Validate Measure Group deletion functionality', () => {
 
     it('Confirmation modal has Yes button and clicking yes when there is only one group removes group a blank group remains', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -106,7 +106,7 @@ describe('Validate Measure Group deletion functionality', () => {
 
     it('Confirmation modal has a Keep button and clicking on it will result in the group persisting', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -144,7 +144,7 @@ describe('Validate Measure Group deletion functionality', () => {
     //This test  case needs review for validity
     it.skip('Test Cases still loads after a one from multiple groups are deleted', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -231,7 +231,7 @@ describe('Validate Measure Group deletion functionality', () => {
 
     it('Test Cases still loads after all groups are deleted', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -290,7 +290,8 @@ describe('Ownership test when deleting groups', () => {
         //create new measure via temp user
         CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, newCqlLibraryName + "second", measureCQL, true, true)
         OktaLogin.AltLogin()
-        MeasuresPage.clickEditforCreatedMeasure(true)
+        MeasuresPage.measureAction('edit', true)
+
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -323,7 +324,7 @@ describe('Ownership test when deleting groups', () => {
         cy.get(MeasuresPage.measureListTitles).should('contain', measureTwo)
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure(true)
+        MeasuresPage.measureAction('edit', true)
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')

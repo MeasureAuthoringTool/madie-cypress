@@ -32,7 +32,7 @@ describe('Import Test Case', () => {
     it('Successful Json file Import', () => {
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -50,7 +50,7 @@ describe('Import Test Case', () => {
     it('Verify error message when a Text file is imported', () => {
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -67,7 +67,7 @@ describe('Import Test Case', () => {
     it('Verify error message when an invalid Json file is imported', () => {
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -88,7 +88,7 @@ describe('Import Test Case', () => {
         const virusString = 'X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -111,7 +111,7 @@ describe('Import Test Case', () => {
     it('Verify error message when bulk Json file is imported', () => {
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()

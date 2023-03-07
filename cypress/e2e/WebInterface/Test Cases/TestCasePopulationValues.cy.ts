@@ -49,7 +49,7 @@ describe('Test Case Expected Measure Group population values based on initial me
     it('Verify the Test Case Populations when Measure group is not added', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -100,7 +100,7 @@ describe('Test Case Expected Measure Group population values based on initial me
         'save / update of the scoring value is executed', () => {
 
             //Click on Edit Measure
-            MeasuresPage.clickEditforCreatedMeasure()
+            MeasuresPage.measureAction("edit")
             //navigate to CQL Editor page / tab
             cy.get(EditMeasurePage.cqlEditorTab).click()
             //read and write CQL from flat file
@@ -159,7 +159,7 @@ describe('Test Case Expected Measure Group population values based on initial me
         'unit value is saved / updated', () => {
 
             //Click on Edit Measure
-            MeasuresPage.clickEditforCreatedMeasure()
+            MeasuresPage.measureAction("edit")
             //navigate to CQL Editor page / tab
             cy.get(EditMeasurePage.cqlEditorTab).click()
             //read and write CQL from flat file
@@ -284,7 +284,7 @@ describe('Test Case Expected Measure Group population values based on initial me
     it('Test Case Population value options are limited to those that are defined from Measure Group -- required populations', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -380,7 +380,7 @@ describe('Test Case Population dependencies', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, proportionMeasureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -403,7 +403,7 @@ describe('Test Case Population dependencies', () => {
     it('Verify Test Case population dependencies for Proportion Measures', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Initial PopulationOne')
@@ -597,7 +597,7 @@ describe('Test Case Expected Measure Group population values based on initial me
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -616,7 +616,7 @@ describe('Test Case Expected Measure Group population values based on initial me
     })
     it('Test Case Population value options are limited to those that are defined from Measure Group', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.setMeasureGroupType()

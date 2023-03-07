@@ -39,7 +39,7 @@ describe('Validating Population tabs', () => {
     it('Can successfully update / change score value and save on population tab', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -76,7 +76,7 @@ describe('Validating Population tabs', () => {
 
     it('Can successfully update / change population value and save on population tab', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -105,7 +105,7 @@ describe('Validating Population tabs', () => {
 
     it('Changes are retained while moving across different tabs', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -188,7 +188,7 @@ describe('Validating Population tabs', () => {
     it('Changes are saved across different tabs', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -283,7 +283,7 @@ describe('Validating Population tabs', () => {
     it('Assert indicator on tab with error, until error is removed', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -349,7 +349,7 @@ describe('Validating Population tabs', () => {
     it('Assert all fields, in all tabs, are for the measure group that is selected', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -450,7 +450,7 @@ describe('Validating Stratification tabs', () => {
     })
     it('Stratification tab includes new fields and those fields have expected values', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -527,7 +527,7 @@ describe('Validating Stratification tabs', () => {
 
     it('Stratification does not save, if association is the only field that has a value selected', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -586,7 +586,7 @@ describe('Validating Stratification tabs', () => {
     it('Add multiple stratifications to the measure group', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -666,7 +666,7 @@ describe('Validating Stratification tabs', () => {
     it('Removing stratifications from a measure group', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -784,7 +784,7 @@ describe('Validating Stratification tabs', () => {
     it('Stratification tab is not present / available when the Ratio scoring value is selected', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -802,7 +802,7 @@ describe('Validating Stratification tabs', () => {
     it('Stratification added successfully when population basis match with Stratification return type', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -847,7 +847,7 @@ describe('Validating Stratification tabs', () => {
     it('Verify error message when the Stratification return type does not match with population basis', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -921,7 +921,7 @@ describe('Validating Reporting tabs', () => {
     it('Reporting tab contains Rate Aggregation text area and Improvement Notation drop-down box', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -945,7 +945,7 @@ describe('Validating Reporting tabs', () => {
     it('Can successfully update / change Reporting tab values and save on Reporting tab', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -1010,7 +1010,7 @@ describe.skip('Supplemental data elements and Risk Adjustment variables on Measu
 
     it('Add Risk adjustment variables to the Measure group', () => {
 
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -1038,7 +1038,7 @@ describe.skip('Supplemental data elements and Risk Adjustment variables on Measu
 
     it('Clicking on Discard changes button on Risk Adjustment page will revert the changes made before save', () => {
 
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -1062,7 +1062,7 @@ describe.skip('Supplemental data elements and Risk Adjustment variables on Measu
 
     it('Add Supplemental data elements to the Measure group', () => {
 
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -1082,7 +1082,7 @@ describe.skip('Supplemental data elements and Risk Adjustment variables on Measu
         cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
 
         //Click on clear Icon and verify description field is removed
-        cy.get(MeasureGroupPage.cancelIcon).click({force:true})
+        cy.get(MeasureGroupPage.cancelIcon).click({ force: true })
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('not.exist')
 
         //Save Supplemental data
@@ -1093,7 +1093,7 @@ describe.skip('Supplemental data elements and Risk Adjustment variables on Measu
 
     it('Clicking on Discard changes button on Supplemental data elements page will revert the changes made before save', () => {
 
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)

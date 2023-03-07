@@ -185,7 +185,7 @@ export class MeasureGroupPage {
     public static createMeasureGroupforProportionMeasure(): void {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -228,7 +228,7 @@ export class MeasureGroupPage {
     public static createMeasureGroupforRatioMeasure(): void {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -262,7 +262,7 @@ export class MeasureGroupPage {
     public static createMeasureGroupforContinuousVariableMeasure(): void {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

@@ -691,7 +691,7 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, newmeasureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -900,7 +900,7 @@ describe('Measure bundle end point returns Measure Population Description', () =
                                 "definition": PopNumex,
                                 "description": "Numerator Exclusion Description"
                             }
-                         ],
+                        ],
                         "measureObservations": [
                             {
                                 "id": uuidv4(),

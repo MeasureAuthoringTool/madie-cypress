@@ -25,7 +25,7 @@ describe('Code Coverage Highlighting', () => {
     beforeEach('Create Measure', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -56,7 +56,7 @@ describe('Code Coverage Highlighting', () => {
     it('Validate Passing and Code Coverage tabs contain the initial "-" value, and displays a percentage when Test Case is ran', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //navigate to the test case list page
         cy.get(EditMeasurePage.testCasesTab).should('exist')
@@ -96,7 +96,7 @@ describe('Code Coverage Highlighting', () => {
     it('Verify Measure highlighting for multiple Measure groups on test case list page', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Add second Measure group
         cy.get(EditMeasurePage.measureGroupsTab).click()

@@ -1,9 +1,9 @@
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {Header} from "../../../Shared/Header"
-import {Utilities} from "../../../Shared/Utilities"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { Header } from "../../../Shared/Header"
+import { Utilities } from "../../../Shared/Utilities"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -18,7 +18,7 @@ describe('Edit Measure', () => {
 
     })
 
-    beforeEach('Login',() => {
+    beforeEach('Login', () => {
         OktaLogin.Login()
     })
 
@@ -35,7 +35,7 @@ describe('Edit Measure', () => {
     it('Edit Measure Name and verify the measure name is updated on Measures page', () => {
 
         //Edit Measure Name
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         cy.get(EditMeasurePage.measureNameTextBox).clear()
         cy.get(EditMeasurePage.measureNameTextBox).type(updatedMeasureName)
@@ -67,9 +67,9 @@ describe('Edit Measure', () => {
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
         //save button should become available, now, because a value is, now, in both fields
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.enabled')
-        
+
         //save Steward & Developers
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).click({force:true})
+        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).click({ force: true })
 
         //validate success message
         cy.get(EditMeasurePage.measureStewardDevelopersSuccessMessage).should('exist')

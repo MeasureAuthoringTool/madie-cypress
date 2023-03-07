@@ -45,7 +45,7 @@ describe('Edit Measure: Add Meta Data', () => {
         let clinicalRecommendation = 'Clinical Recommendation'
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Enter meta data
 
@@ -110,7 +110,7 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(LandingPage.myMeasuresTab).should('be.visible')
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //verification of data entry
         //steward
@@ -184,7 +184,7 @@ describe('Verify Measure Id and Version Id', () => {
         CreateMeasurePage.CreateQICoreMeasure(measureName, CqlLibraryName)
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         cy.get(EditMeasurePage.measureId).should('exist')
         cy.get(EditMeasurePage.measureId).should('have.attr', 'readonly', 'readonly')

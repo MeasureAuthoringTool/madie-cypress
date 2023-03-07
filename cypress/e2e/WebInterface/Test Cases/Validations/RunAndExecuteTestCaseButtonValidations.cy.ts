@@ -44,7 +44,7 @@ describe('Run / Execute Test Case button validations', () => {
     it('Run Test Case button is disabled  -- CQL Errors', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

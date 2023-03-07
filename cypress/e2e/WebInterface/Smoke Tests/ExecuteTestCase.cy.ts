@@ -1,11 +1,11 @@
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {TestCasesPage} from "../../../Shared/TestCasesPage"
-import {TestCaseJson} from "../../../Shared/TestCaseJson"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
-import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {Utilities} from "../../../Shared/Utilities"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { TestCaseJson } from "../../../Shared/TestCaseJson"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { Utilities } from "../../../Shared/Utilities"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -46,7 +46,7 @@ describe('Execute Test Case', () => {
     it('Verify that the Execute Test Case button is disabled when Measure has no Group', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //navigate to the test case list page
         cy.get(EditMeasurePage.testCasesTab).should('exist')
