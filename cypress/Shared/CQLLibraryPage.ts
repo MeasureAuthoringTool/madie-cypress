@@ -147,7 +147,8 @@ export class CQLLibraryPage {
                     'createdBy': user,
                     "description": "description",
                     "publisher": CQLLibraryPublisher,
-                    'cql': ""
+                    'cql': "",
+                    "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
