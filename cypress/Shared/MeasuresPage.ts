@@ -60,7 +60,7 @@ export class MeasuresPage {
     public static validateMeasureName(expectedValue: string): void {
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
 
-            let element = cy.get('[data-testid=edit-measure-' + fileContents + ']').parent()
+            let element = cy.get('[data-testid=measure-action-' + fileContents + ']').parent()
             element.parent().should('contain', expectedValue)
 
         })
