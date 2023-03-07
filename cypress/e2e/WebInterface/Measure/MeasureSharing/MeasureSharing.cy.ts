@@ -122,6 +122,9 @@ describe('Measure Sharing', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
 
         //Create New Test case
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
