@@ -47,7 +47,7 @@ describe('Test Case Validations', () => {
     it('Create Test Case: Description more than 250 characters', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -61,7 +61,7 @@ describe('Test Case Validations', () => {
     it('Edit Test Case: Description more than 250 characters', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
@@ -79,7 +79,7 @@ describe('Test Case Validations', () => {
     it('Create Test Case: Title more than 250 characters', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -101,7 +101,7 @@ describe('Test Case Validations', () => {
     it('Edit Test Case: Title more than 250 characters', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
@@ -135,7 +135,7 @@ describe('Attempting to create a test case without a title', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -155,7 +155,7 @@ describe('Attempting to create a test case without a title', () => {
     it('Create Test Case without a title', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -173,7 +173,7 @@ describe('Attempting to create a test case without a title', () => {
     it('Edit and update test case to have no title', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
@@ -212,7 +212,7 @@ describe('Attempting to create a test case without a title', () => {
 
     it('Validate dirty check on the test case title, in the test case details tab', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
@@ -246,7 +246,7 @@ describe('Attempting to create a test case without a title', () => {
     })
     it('Validate dirty check on the test case description, in the test case details tab', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
@@ -273,7 +273,7 @@ describe('Attempting to create a test case without a title', () => {
     })
     it('Validate dirty check on the test case series, in the test case details tab', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 

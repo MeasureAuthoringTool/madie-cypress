@@ -26,7 +26,7 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -49,7 +49,7 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
     it('Log into the UI and save Measure CQL so the cqlErrors flag will update to true', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -107,7 +107,7 @@ describe('Bundle returns elmXML', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -129,7 +129,7 @@ describe('Bundle returns elmXML', () => {
     it('Upon saving CQL from the UI, GET Bundle request returns elm xml', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -186,7 +186,7 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -208,7 +208,7 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
     it('Measure bundle end point returns scoring type for multiple Measure groups', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -291,7 +291,7 @@ describe('Measure bundle end point returns stratifications', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -312,7 +312,7 @@ describe('Measure bundle end point returns stratifications', () => {
     it('Measure bundle end point returns stratifications for Cohort Measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -400,7 +400,7 @@ describe('Measure bundle end point returns stratifications', () => {
     it('Measure bundle end point returns stratifications for Continuous Variable Measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -503,7 +503,7 @@ describe('Measure bundle end point returns stratifications', () => {
     it('Measure bundle end point returns stratifications for Proportion Measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -624,7 +624,7 @@ describe('Verify the criteria reference for measure observations', () => {
     it('Measure bundle end point returns criteria reference for CV measure observations and is equal to measure population id', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -716,7 +716,7 @@ describe('Verify the criteria reference for measure observations', () => {
     it('Measure bundle end point returns criteria reference for Ratio measure observations and is equal to measure population id', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

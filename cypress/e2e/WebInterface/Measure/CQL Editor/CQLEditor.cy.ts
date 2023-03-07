@@ -38,7 +38,7 @@ describe('Validate CQL Editor tab sticky footer', () => {
 
     it('Validate Save and Discard buttons -- text, functionality, and availability', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //create test case
         //Navigate to Test Cases page and add Test Case details
@@ -95,7 +95,7 @@ describe('Measure: CQL Editor', () => {
     it('Verify errors appear on CQL Editor page and in the CQL Editor object, on save and on tab / page load', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -129,7 +129,7 @@ describe('Measure: CQL Editor', () => {
         'included library is not found', () => {
 
             //Click on Edit Measure
-            MeasuresPage.clickEditforCreatedMeasure()
+            MeasuresPage.measureAction("edit")
 
             //Click on the CQL Editor tab
             CQLEditorPage.clickCQLEditorTab()
@@ -167,7 +167,7 @@ describe('Measure: CQL Editor', () => {
     it.skip('Graceful error msg if model is missing in CQL', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -197,7 +197,7 @@ describe('Measure: CQL Editor', () => {
     it('Verify Library name and version are replaced with the actual Library Name and Version for the Measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -235,7 +235,7 @@ describe('Measure: CQL Editor', () => {
     it('CQL updates when CQL Library name is updated in Measure Details', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -272,7 +272,7 @@ describe('Measure: CQL Editor', () => {
     it('Verify error appears on CQL Editor when concept construct is used', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -298,7 +298,7 @@ describe('Measure: CQL Editor', () => {
     it('Dirty Check Modal is displayed', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -339,7 +339,7 @@ describe('Measure: CQL Editor: valueSet', () => {
     it.skip('UMLS Error: User Not Logged in', () => {
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/EXM124v7QICore4Entry.txt').should('exist').then((fileContents) => {
@@ -359,7 +359,7 @@ describe('Measure: CQL Editor: valueSet', () => {
     it('Value Sets are valid', () => {
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/EXM124v7QICore4Entry.txt').should('exist').then((fileContents) => {
@@ -377,7 +377,7 @@ describe('Measure: CQL Editor: valueSet', () => {
     it('Value Set Invalid, 404', () => {
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/EXM124v7QICore4EntryInvalidValueSet.txt').should('exist').then((fileContents) => {
@@ -404,7 +404,7 @@ describe('Measure: CQL Editor: valueSet', () => {
     it('Value Set Invalid, 400 undefined', () => {
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/ValueSetTestingEntryInValid400.txt').should('exist').then((fileContents) => {
@@ -456,7 +456,7 @@ describe('CQL errors with included libraries', () => {
     it('Verify errors appear on CQL Editor page when multiple versions of CQL library is included ', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()

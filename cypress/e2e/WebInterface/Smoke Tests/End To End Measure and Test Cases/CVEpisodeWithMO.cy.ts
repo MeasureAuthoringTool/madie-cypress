@@ -1,12 +1,12 @@
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 
 let measureName = 'CVEpisodeWithMO' + Date.now()
 let CqlLibraryName = 'CVEpisodeWithMO' + Date.now()
@@ -76,7 +76,7 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
     it('End to End CV Episode Measure with MO, Pass Result', () => {
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')

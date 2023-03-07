@@ -1,10 +1,10 @@
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {Header} from "../../../Shared/Header"
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
-import {Utilities} from "../../../Shared/Utilities"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { Header } from "../../../Shared/Header"
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { Utilities } from "../../../Shared/Utilities"
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 
@@ -17,7 +17,7 @@ describe('Save CQL on CQL Editor Page', () => {
 
     })
 
-    beforeEach('Login',() => {
+    beforeEach('Login', () => {
         OktaLogin.Login()
     })
 
@@ -34,13 +34,13 @@ describe('Save CQL on CQL Editor Page', () => {
     it('Create New Measure and Add CQL to the Measure', () => {
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/EXM124v7QICore4Entry.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
-        
+
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -48,7 +48,7 @@ describe('Save CQL on CQL Editor Page', () => {
         cy.get(Header.measures).click()
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.get(EditMeasurePage.cqlEditorTextBox).invoke('text').then((text) => {

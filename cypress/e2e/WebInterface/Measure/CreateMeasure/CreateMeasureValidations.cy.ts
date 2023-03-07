@@ -31,7 +31,7 @@ describe('Validations on Measure Details page', () => {
     it('Verify Steward & Developers section of Measure Details page', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
@@ -51,7 +51,7 @@ describe('Validations on Measure Details page', () => {
     it('Verify fields on the Steward & Developers section of Measure Details page are required and the messaging around the requirement', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
@@ -88,7 +88,7 @@ describe('Validations on Measure Details page', () => {
     it('Validate Save buttons accessibility (Save when both fields have value)', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
@@ -114,7 +114,7 @@ describe('Validations on Measure Details page', () => {
     it('Validate Discard button accessibility and text / label on button', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
@@ -157,7 +157,7 @@ describe('Validations on Measure Details page', () => {
     it('Validate dirty check on Steward & Developers section of Measure Details page', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
@@ -215,7 +215,7 @@ describe('Validations on Measure Details page', () => {
     it('Validate success message once both fields have value and are saved', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
@@ -270,7 +270,7 @@ describe('Validations on Measure Details page', () => {
     it('Validating the Clinical Recommendation page and the fields, buttons, and messaging for that page', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //navigate to the clinical recommendation page
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).should('exist')

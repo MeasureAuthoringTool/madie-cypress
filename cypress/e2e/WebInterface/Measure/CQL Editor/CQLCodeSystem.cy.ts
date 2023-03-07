@@ -39,7 +39,7 @@ describe.skip('UMLS / VSAC error when user is not logged into UMLS', () => {
     it.skip('Verify proper error(s) appear in CQL Editor, when a user is not connected / logged into UMLS', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -60,7 +60,7 @@ describe.skip('UMLS / VSAC error when user is not logged into UMLS', () => {
         cy.get(Header.measures).click()
 
         //Navigate back to the CQL Editor page
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -98,7 +98,7 @@ describe('Validations around code system in Measure CQL', () => {
     it('Verify proper error(s) appear in CQL Editor, when codesystem URL is incorrect', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -122,7 +122,7 @@ describe('Validations around code system in Measure CQL', () => {
     it('Verify proper error(s) appear in CQL Editor, when a user includes version and there is no vsac version', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -149,7 +149,7 @@ describe('Validations around code system in Measure CQL', () => {
     it('Verify proper error(s) appear in CQL Editor, when a user does not include version and there is no vsac', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -174,7 +174,7 @@ describe('Validations around code system in Measure CQL', () => {
     it('Verify proper error(s) appear in CQL Editor, when a user provides no version and vsac exists', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -199,7 +199,7 @@ describe('Validations around code system in Measure CQL', () => {
     it('Verify proper error(s) appear in CQL Editor, when a user provides a FHIR version', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -223,7 +223,7 @@ describe('Validations around code system in Measure CQL', () => {
     it('Verify proper error(s) appear in CQL Editor, when user provides a FHIR version and there is no vsac version', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()

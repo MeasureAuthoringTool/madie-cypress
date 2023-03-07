@@ -1,13 +1,13 @@
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {Global} from "../../../../Shared/Global"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Global } from "../../../../Shared/Global"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -204,13 +204,13 @@ describe('Measure observation expected result', () => {
     it('Verify Measure Observation expected result for CV measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, {delay: 50})
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, { delay: 50 })
         })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -263,7 +263,7 @@ describe('Measure observation expected result', () => {
     it('Verify Measure Observation expected result for Ratio measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

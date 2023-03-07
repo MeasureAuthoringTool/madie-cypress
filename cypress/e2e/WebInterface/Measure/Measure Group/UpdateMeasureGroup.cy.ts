@@ -40,7 +40,7 @@ describe('Validate Measure Group', () => {
     it('All population selections are saved to the database', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file
@@ -114,7 +114,7 @@ describe('Validate Measure Group', () => {
     it('Validate that required populations have to have a selected value before measure group can be saved', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file
@@ -174,7 +174,7 @@ describe('Validate Measure Group', () => {
     it('Validate that non-required populations do not need to be selected before saving', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file
@@ -252,7 +252,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -277,7 +277,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
     it('Validate that when an second Initial Population is added, associations appear for IP1 and IP2', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -308,7 +308,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
     })
     it('Validate that when the association for IP1 changes, IP2 associations also change', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -336,7 +336,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
     it('Validate association for IP2 is read only', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -360,7 +360,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
     it('Validate that save can occur once a value has been indicated for IP2', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -394,7 +394,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
 
     it('Validate that changing the association when a value has been indicated for IP 2, allows user to save new association', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -460,7 +460,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -481,7 +481,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
     })
     it('Validate that when an second Initial Population is deleted / removed, the associations are removed', () => {
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -524,7 +524,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
     it('Validate that when an second Initial Population is added, a delete / remove button becomes available', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -549,7 +549,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
     it('Validate that when the delete / remove button is clicked, for the second IP, the IP is removed', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -602,7 +602,7 @@ describe('Delete second Initial Population -- Ratio score only', () => {
     it('Validate that when the delete button is clicked, for the second IP, the first IP remains the same', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')

@@ -1,13 +1,13 @@
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../Shared/Header"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../Shared/Header"
 
 let measureName = 'CohortPatientBoolean' + Date.now()
 let CqlLibraryName = 'CohortPatientBoolean' + Date.now()
@@ -41,7 +41,7 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
     it('End to End Cohort Patient Boolean, Pass Result', () => {
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/CQLForCohortPatientBoolean.txt').should('exist').then((fileContents) => {

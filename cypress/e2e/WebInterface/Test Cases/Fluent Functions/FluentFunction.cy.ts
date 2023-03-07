@@ -1,12 +1,12 @@
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../Shared/Header"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -27,7 +27,7 @@ describe('Fluent Function Capability', () => {
 
     })
 
-    beforeEach('Login',() => {
+    beforeEach('Login', () => {
         OktaLogin.Login()
     })
 
@@ -44,7 +44,7 @@ describe('Fluent Function Capability', () => {
     it('Verify Fluent function for the Measure', () => {
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').should('exist').then((fileContents) => {
@@ -59,7 +59,7 @@ describe('Fluent Function Capability', () => {
         cy.get(Header.measures).click()
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
