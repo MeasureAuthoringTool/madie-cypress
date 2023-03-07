@@ -38,34 +38,21 @@ let measureCQL = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
     'define \"num\":\n' +
     'exists [\"Encounter\": \"Office Visit\"] E where E.status ~ \'finished\'\n'
 
-let measureCQL_WithErrors = 'library TestCql1675117344546 version \'0.0.000\'\n' +
-    'using FHIR version \'4.0.1\'\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    'context Patient\n' +
-    'define "ipp":\n' +
-    ' ["Encounter"] E where E.period.start during "Measurement Period"\n' +
-    'define "ipp2":\n' +
-    ' ["Encounter"] E where E.period.start during "Measurement Period"\n' +
-    'define "ex":\n' +
-    ' ["Encounter"] E where E.period.start during "Measurement Period" and E.status = \'finished\'\n' +
-    'define "denom":\n' +
-    ' "ipp"\n' +
-    'define "num":\n' +
-    ' "ipp2"\n' +
-    'define "boolIpp":\n' +
-    ' true\n' +
-    'define "boolIpp2":\n' +
-    ' true\n' +
-    'define "boolDenom":\n' +
-    ' "boolIpp"\n' +
-    'define "boolNum":\n' +
-    ' false\n' +
-    'define function fun(notPascalCase Integer ):\n' +
-    ' true\n' +
-    'define function boolFunc():\n' +
-    ' 1\n' +
-    'define function numFunc(e Encounter):'
+let measureCQL_WithParsingAndVSACErrors = 'library APICQLLibrary35455 version \'0.0.000\'\n' +
+    'using QICore version \'4.1.1\'\n' +
+    'include FHIRHelpers version \'4.1.000\' \n' +
+    'valueset "ONC Administrative Sex": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4\' \n' +
+    'valueset "Race": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836\'\n' +
+    'valueset "Ethnicity": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837\'\n' +
+    'valueset "Payer": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.3591\'\n' +
+    'valueset "Female": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.560.100.2\'\n' +
+    'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
+    'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
+    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+    'valueset "Pap Test": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.108.12.1017\'\n' +
+    'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
+    'valueset "HPV Test": \'\'\n' +
+    'define "ipp": true)'
 
 describe('Measure Versioning', () => {
 
@@ -180,7 +167,39 @@ describe('Version Measure with invalid CQL', () => {
         newCQLLibraryName = cqlLibraryName + 3 + randValue
 
         cy.setAccessTokenCookie()
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL_WithErrors)
+
+        //Create New Measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                failOnStatusCode: false,
+                url: '/api/measure',
+                headers: {
+                    authorization: 'Bearer ' + accessToken.value
+                },
+                method: 'POST',
+                body: {
+                    'measureName': newMeasureName,
+                    'cqlLibraryName': newCQLLibraryName,
+                    'model': 'QI-Core v4.1.1',
+                    "ecqmTitle": 'eCQMTitle',
+                    'cql': measureCQL_WithParsingAndVSACErrors,
+                    'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
+                    'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
+                    'versionId': uuidv4(),
+                    'measureSetId': uuidv4()
+
+                }
+            }).then((response) => {
+                console.log(response)
+                expect(response.status).to.eql(201)
+                expect(response.body.id).to.be.exist
+                expect(response.body.errors[0]).to.eql('ERRORS_ELM_JSON')
+
+                cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+            })
+        })
     })
 
     after('Clean up', () => {
@@ -201,8 +220,8 @@ describe('Version Measure with invalid CQL', () => {
                     },
                     method: 'PUT'
                 }).then((response) => {
-                    expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('CQL-ELM translator found errors in the CQL for measure ' + newMeasureName + '!')
+                    expect(response.status).to.eql(400)
+                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has CQL errors.')
                 })
             })
         })
