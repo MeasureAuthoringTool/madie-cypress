@@ -112,7 +112,7 @@ describe('Measure: CQL Editor', () => {
         CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor window
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "ELM: 1:3 | Could not resolve identifier SDE in the current library.", "ELM: 5:13 | Member SDE Sex not found for type null.")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "ELM: 1:3 | Could not resolve identifier SDE in the current library.ELM: 5:13 | Member SDE Sex not found for type null.")
 
         //Navigate away from CQL Editor tab
         cy.get(EditMeasurePage.measureDetailsTab).click()
@@ -121,7 +121,7 @@ describe('Measure: CQL Editor', () => {
         CQLEditorPage.clickCQLEditorTab()
 
         //Validate error(s) in CQL Editor windows
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "ELM: 1:3 | Could not resolve identifier SDE in the current library.", "ELM: 5:13 | Member SDE Sex not found for type null.")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "ELM: 1:3 | Could not resolve identifier SDE in the current library.ELM: 5:13 | Member SDE Sex not found for type null.")
 
     })
 
@@ -148,7 +148,7 @@ describe('Measure: CQL Editor', () => {
             cy.scrollTo('top')
             cy.get(EditMeasurePage.cqlEditorTextBox).click()
             cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
-            Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, '"status":404,"error":"Not Found","path":"/api/fhir/libraries/cql"}"')
+            Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, '"status\\":404,\\"error\\":\\"Not Found\\",\\"path\\":\\"/api/fhir/libraries/cql\\"}\\"')
 
             //Navigate away from CQL Editor tab
             cy.get(EditMeasurePage.measureDetailsTab).click()
@@ -160,7 +160,7 @@ describe('Measure: CQL Editor', () => {
             CQLEditorPage.clickCQLEditorTab()
 
             //Validate error(s) in CQL Editor persists after saving
-            Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, '"status":404,"error":"Not Found","path":"/api/fhir/libraries/cql"}"')
+            Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, '"status\\":404,\\"error\\":\\"Not Found\\",\\"path\\":\\"/api/fhir/libraries/cql\\"}\\"')
 
         })
     // skipping due to bug 5077
@@ -178,7 +178,7 @@ describe('Measure: CQL Editor', () => {
 
         //save the value in the CQL Editor
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / succesful save message to appear
+        //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 

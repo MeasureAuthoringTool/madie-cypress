@@ -490,10 +490,10 @@ export class Utilities {
         cy.get(errorElementObject).should('exist')
         cy.get(errorElementObject).invoke('show').click({ force: true, multiple: true })
         cy.wait(1000)
-        cy.get(errorContainer).invoke('show').should('contain.text', errorMsg1)
+        cy.get(errorContainer).invoke('show').should('contain', errorMsg1)
         if ((errorMsg2 != null) || (errorMsg2 != undefined)) {
             cy.wait(1000)
-            cy.get(errorContainer).invoke('show').should('contain.text', errorMsg2)
+            cy.get(errorContainer).invoke('show').should('contain', errorMsg2)
         }
 
     }
