@@ -1,11 +1,11 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {Utilities} from "../../../../Shared/Utilities"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { Utilities } from "../../../../Shared/Utilities"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage";
 
 let measureName = 'TestMeasure' + Date.now()
 let measureCQL = 'library SimpleFhirLibrary version \'0.0.004\''//MeasureCQL.SBTEST_CQL
@@ -36,9 +36,9 @@ describe('Test Case Page CQL page object', () => {
 
     })
 
-    it('Updates applied and saved from the Measure CQL page / tab are updated and reflective in the Test Case Page', () =>{
+    it('Updates applied and saved from the Measure CQL page / tab are updated and reflective in the Test Case Page', () => {
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //create test case
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTerminologyFHIR_and_QICORETestCaseJson)
@@ -47,7 +47,7 @@ describe('Test Case Page CQL page object', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //confirm that CQL field, on the Test Case page, cannot be edited
-        cy.get(TestCasesPage.tcCQLArea).should('contain.text', measureCQL) 
+        cy.get(TestCasesPage.tcCQLArea).should('contain.text', measureCQL)
 
         //navigate to the CQL Editor tab, for the measure
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
@@ -70,16 +70,16 @@ describe('Test Case Page CQL page object', () => {
 
         //edit created test case
         TestCasesPage.clickEditforCreatedTestCase()
- 
+
         //confirm that CQL field, on the Test Case page, reflects the additional text
         cy.log(measureCQL)
         cy.get(TestCasesPage.tcCQLArea).should('contain.text', 'using FHIR version \'4.0.1\'')
 
     })
 
-    it('A message is displayed if there are issues with the CQL', () =>{
+    it('A message is displayed if there are issues with the CQL', () => {
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //navigate to the CQL Editor tab, for the measure
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
@@ -100,7 +100,7 @@ describe('Test Case Page CQL page object', () => {
 
         //edit created test case
         TestCasesPage.clickEditforCreatedTestCase()
-        
+
         //add section / line to validate message letting user know of error with CQL
         cy.get(TestCasesPage.cqlHasErrorsMsg).should('exist')
         cy.get(TestCasesPage.cqlHasErrorsMsg).should('be.visible')

@@ -29,7 +29,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -50,7 +50,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
     it('"Please complete the CQL Editor process before continuing" appears when there are issues with entered CQL', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file
@@ -87,7 +87,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
     it('Scoring unit, UCUM, population association, population basis, measure group type and description saves and persists', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file
@@ -155,7 +155,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(LandingPage.myMeasuresTab).should('exist')
         cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -176,7 +176,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
     it('Add second initial population for Ratio Measure', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file
@@ -242,7 +242,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(LandingPage.myMeasuresTab).should('exist')
         cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //verify that the population and the scoring unit that was saved, together, appears
@@ -263,7 +263,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
         cy.get(LandingPage.myMeasuresTab).should('exist')
         cy.get(LandingPage.myMeasuresTab).should('be.visible')
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Change scoring type & population
@@ -321,7 +321,7 @@ describe('Validate Population Basis', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -342,7 +342,7 @@ describe('Validate Population Basis', () => {
 
     it('Verify default Value and if no value is selected for Population Basis, the save button is unavailable', () => {
         //click on Edit button to edit measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file

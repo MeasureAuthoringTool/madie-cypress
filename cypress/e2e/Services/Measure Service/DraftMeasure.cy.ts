@@ -32,7 +32,7 @@ describe('Version and Draft CQL Library', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')

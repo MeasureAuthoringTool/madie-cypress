@@ -1,12 +1,12 @@
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'RatioPatientSingleIPNoMODRC' + Date.now()
 let CqlLibraryName = 'RatioPatientSingleIPNoMODRC' + Date.now()
@@ -97,7 +97,7 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
     it('End to End Cohort Ratio Patient Single IP w/o MO w/ DRC, IPP Pass Result', () => {
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
@@ -175,7 +175,7 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

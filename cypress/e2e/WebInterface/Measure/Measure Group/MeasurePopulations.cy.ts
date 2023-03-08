@@ -1,12 +1,12 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../Shared/Header";
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../Shared/Header";
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -64,7 +64,7 @@ describe('Measure Populations', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -85,7 +85,7 @@ describe('Measure Populations', () => {
     it('Validate if the Measure populations reset on Measure Group Scoring change', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -153,7 +153,7 @@ describe('Measure Populations', () => {
     it('Measure group created successfully when the population basis match with population return type', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -187,7 +187,7 @@ describe('Measure Populations', () => {
     it('Verify error message when the population basis does not match with population return type', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -232,7 +232,7 @@ describe('Warning Messages on Population updates', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL_multiplePopulations)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -252,7 +252,7 @@ describe('Warning Messages on Population updates', () => {
     it('Verify warning message when the Measure scoring is updated', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the population criteria tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -278,7 +278,7 @@ describe('Warning Messages on Population updates', () => {
     it('Verify warning message when the Population basis is updated', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the population criteria tab
         cy.get(EditMeasurePage.measureGroupsTab).click()

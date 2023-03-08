@@ -23,7 +23,7 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL, false, true)
         OktaLogin.AltLogin()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -58,7 +58,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(LandingPage.allMeasuresTab).click()
 
         //edit the measure that was not created by logged in user
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
 
         cy.get(CreateMeasurePage.measurementPeriodStartDate).should('be.disabled')
@@ -104,7 +104,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(LandingPage.allMeasuresTab).click()
 
         //edit the measure that was not created by current owner
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //confirm that the CQL Editor tab is available and click on it
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
@@ -125,7 +125,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(LandingPage.allMeasuresTab).click()
 
         //edit the measure that was not created by logged in owner
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //confirm that the test case tab is available and click on it
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -165,7 +165,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(LandingPage.allMeasuresTab).click()
 
         //edit the measure group that was not created by logged in owner
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Verify that the Add Population Criteria button is not shown

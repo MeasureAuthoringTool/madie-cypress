@@ -1,13 +1,13 @@
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {Header} from "../../../../Shared/Header"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {LandingPage} from "../../../../Shared/LandingPage"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { Header } from "../../../../Shared/Header"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { LandingPage } from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -49,7 +49,7 @@ describe('Measure Observations', () => {
         cy.get(LandingPage.myMeasuresTab).should('exist')
         cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Add Denominator Observation
@@ -86,9 +86,9 @@ describe('Measure Observations', () => {
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
         cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //verify the saved Measure Observations
@@ -104,7 +104,7 @@ describe('Measure Observations', () => {
     it('Add Measure Observations for Continuous Variable Measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -164,9 +164,9 @@ describe('Measure Observations', () => {
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
         cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //verify the saved Measure Observations
@@ -185,9 +185,9 @@ describe('Measure Observations', () => {
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
         cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Add Denominator Observation
@@ -223,9 +223,9 @@ describe('Measure Observations', () => {
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
         cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //verify the saved Measure Observations
@@ -251,7 +251,7 @@ describe('Measure Observations', () => {
     it('Verify drop down values for Measure observation aggregate function', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -321,9 +321,9 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
         cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Add Denominator Observation
@@ -360,9 +360,9 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
         cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //verify the saved Measure Observations
@@ -382,13 +382,13 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
         cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).should('exist')
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
 
         //enter edit page
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -414,7 +414,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
     it('Measure Observations and stratification cannot be changed by non-owner', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -472,9 +472,9 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
         cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //verify the saved Measure Observations
@@ -493,13 +493,13 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
         cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).should('exist')
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
 
         //enter edit page
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -529,7 +529,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
     })
 })
 
-describe('Measure Observation - Expected Values',  () => {
+describe('Measure Observation - Expected Values', () => {
 
     beforeEach('Create New Measure and Login', () => {
 
@@ -554,7 +554,7 @@ describe('Measure Observation - Expected Values',  () => {
     it('Verify Expected values for Boolean Type Continuous Variable Measure Observations', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -664,9 +664,9 @@ describe('Measure Observation - Expected Values',  () => {
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
         cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')        
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Add Denominator Observation
@@ -778,7 +778,7 @@ describe('Measure Observation - Expected Values',  () => {
     })
 })
 
-describe('Validate Measure Observation Parameters',  () => {
+describe('Validate Measure Observation Parameters', () => {
 
     beforeEach('Create New Measure and Login', () => {
 
@@ -803,7 +803,7 @@ describe('Validate Measure Observation Parameters',  () => {
     it('Verify error message when the population basis does not match with the function selected for Measure Observation', () => {
 
         //Click on Edit Measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

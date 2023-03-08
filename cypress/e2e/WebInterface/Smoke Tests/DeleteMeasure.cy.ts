@@ -1,8 +1,8 @@
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
-import {Utilities} from "../../../Shared/Utilities"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { Utilities } from "../../../Shared/Utilities"
 
 let measureOne = ''
 let CqlLibraryOne = ''
@@ -38,13 +38,13 @@ describe('Delete Measure', () => {
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(measureTwo, CqlLibraryTwo,true, true)
+        Utilities.deleteMeasure(measureTwo, CqlLibraryTwo, true, true)
 
     })
 
     it('Verify Measure Owner can Delete Measure', () => {
 
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         cy.get(EditMeasurePage.deleteMeasureButton).click()
         cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + measureOne + '?')
@@ -70,7 +70,7 @@ describe('Delete Measure', () => {
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        MeasuresPage.clickEditforCreatedMeasure(true)
+        MeasuresPage.measureAction("edit")
 
         //Delete Measure Button should not be visible for non owner of the Measure
         cy.get(EditMeasurePage.deleteMeasureButton).should('not.be.enabled')

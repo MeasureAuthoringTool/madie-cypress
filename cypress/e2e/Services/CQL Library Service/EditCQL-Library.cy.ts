@@ -1,5 +1,5 @@
-import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
-import {Environment} from "../../../Shared/Environment"
+import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
+import { Environment } from "../../../Shared/Environment"
 
 let CQLLibraryName = ''
 let updatedCQLLibraryName = ''
@@ -46,12 +46,16 @@ describe('Edit CQL Library', () => {
                     body: {
                         "id": cqlLibraryId,
                         "cqlLibraryName": updatedCQLLibraryName,
-                        "model": model
+                        "model": model,
+                        "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
                     expect(response.body.id).to.be.exist
                     expect(response.body.cqlLibraryName).to.eql(updatedCQLLibraryName)
+                    expect(response.body.programUseContext.code).to.eql('a')
+                    expect(response.body.programUseContext.display).to.eql('b')
+                    expect(response.body.programUseContext.codeSystem).to.eql('c')
                 })
             })
         })

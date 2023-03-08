@@ -40,7 +40,7 @@ describe.skip('Import Test cases onto an existing measure via file', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, mesureCQLPFTests)
         OktaLogin.Login()
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -66,7 +66,7 @@ describe.skip('Import Test cases onto an existing measure via file', () => {
         cy.get(Header.measures).click()
 
         //click on created measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //click on the test case tab
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -124,7 +124,7 @@ describe.skip('Import Test cases onto an existing measure via file', () => {
         cy.get(Header.measures).click()
 
         //click on created measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //click on the test case tab
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -202,7 +202,7 @@ describe.skip('Import Test cases onto an existing measure via file', () => {
             })
             OktaLogin.Login()
             //click on created measure
-            MeasuresPage.clickEditforCreatedMeasure()
+            MeasuresPage.measureAction("edit")
             cy.get(EditMeasurePage.testCasesTab).click()
         }
 
@@ -213,7 +213,7 @@ describe.skip('Import Test cases onto an existing measure via file', () => {
         cy.get(Header.measures).click()
 
         //click on created measure
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //click on the test case tab
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -286,7 +286,7 @@ describe.skip('Import Test cases onto an existing measure via file', () => {
             })
             OktaLogin.Login()
             //click on created measure
-            MeasuresPage.clickEditforCreatedMeasure()
+            MeasuresPage.measureAction("edit")
             cy.get(EditMeasurePage.testCasesTab).click()
         }
 
@@ -296,7 +296,7 @@ describe.skip('Import Test cases onto an existing measure via file', () => {
         cy.get(Header.measures).click()
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -319,7 +319,7 @@ describe.skip('Import Test cases onto an existing measure via file', () => {
         cy.get(Header.measures).click()
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()

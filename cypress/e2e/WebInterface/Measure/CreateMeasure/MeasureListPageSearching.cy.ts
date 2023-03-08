@@ -1,8 +1,8 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {LandingPage} from "../../../../Shared/LandingPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { LandingPage } from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -22,7 +22,7 @@ describe('Measure List Page Searching', () => {
     it('Measure search on My Measures and All Measures tab', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasure(measureName,CqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasure(measureName, CqlLibraryName)
 
         //Search for the Measure using Measure name
         cy.log('Search Measure with measure name')
@@ -40,8 +40,8 @@ describe('Measure List Page Searching', () => {
         cy.get(LandingPage.myMeasuresTab).wait(1000).click()
         cy.get(MeasuresPage.searchInputBox).clear().type('eCQMTitle01').wait(1000).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', measureName)
-        MeasuresPage.clickEditforCreatedMeasure()
-        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).should('have.value','eCQMTitle01')
+        MeasuresPage.measureAction("edit")
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).should('have.value', 'eCQMTitle01')
 
         //Delete the Measure & search for deleted Measure under My Measures tab
         cy.log('Delete Measure')

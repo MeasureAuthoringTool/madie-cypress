@@ -1,15 +1,21 @@
-import {Environment} from "../../../Shared/Environment"
-import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
+import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
+import { Environment } from "../../../Shared/Environment"
 
 let CQLLibraryName = ''
-let harpUser = Environment.credentials().harpUser
 let model = 'QI-Core v4.1.1'
+let CQLLibraryPublisher = 'SemanticBits'
+let harpUser = Environment.credentials().harpUser
 
 describe('CQL Library Service: Create CQL Library', () => {
 
     beforeEach('Set Access Token', () => {
 
+        CQLLibraryName = 'TestCqlLibrary' + Date.now()
+
         cy.setAccessTokenCookie()
+
+        //Create CQL Library with Regular User
+        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
 
     })
 
@@ -26,13 +32,17 @@ describe('CQL Library Service: Create CQL Library', () => {
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
-                    "model": model
+                    "model": model,
+                    "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 expect(response.body.cqlLibraryName).to.eql(CQLLibraryName)
                 expect(response.body.createdBy).to.eql(harpUser)
+                expect(response.body.programUseContext.code).to.eql('a')
+                expect(response.body.programUseContext.display).to.eql('b')
+                expect(response.body.programUseContext.codeSystem).to.eql('c')
             })
         })
     })
@@ -51,6 +61,28 @@ describe('CQL Library Service: Create CQL Library', () => {
                 expect(response.body).to.not.be.null
                 expect(response.body).to.be.a('array')
                 expect(response.body[0].id).to.be.exist
+            })
+        })
+    })
+
+    it('Get specific CQL Library', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+                cy.request({
+                    url: '/api/cql-libraries/' + cqlLibraryId,
+                    method: 'GET',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body).to.not.be.null
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.programUseContext.code).to.eql('a')
+                    expect(response.body.programUseContext.display).to.eql('b')
+                    expect(response.body.programUseContext.codeSystem).to.eql('c')
+                })
             })
         })
     })

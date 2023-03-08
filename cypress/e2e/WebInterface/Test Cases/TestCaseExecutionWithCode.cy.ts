@@ -1,11 +1,11 @@
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {TestCasesPage} from "../../../Shared/TestCasesPage"
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {Utilities} from "../../../Shared/Utilities"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
-import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { Utilities } from "../../../Shared/Utilities"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -36,7 +36,7 @@ describe('Test Case Execution with codes', () => {
     it('Verify Test Case Execution for the CQL that uses codes', () => {
 
         //Click on Edit Button
-        MeasuresPage.clickEditforCreatedMeasure()
+        MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/CQLWithCodes.txt').should('exist').then((fileContents) => {
