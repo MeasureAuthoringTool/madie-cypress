@@ -82,9 +82,9 @@ export class EditMeasurePage {
     public static readonly measureRationaleSuccessMessage = '[data-testid="measureRationaleSuccess"]'
 
     //Guidance Page
-    public static readonly measureGuidanceTextBox = '[data-testid="measureGuidanceInput"]'
-    public static readonly measureGuidanceSaveButton = '[data-testid="measureGuidanceSave"]'
-    public static readonly measureGuidanceSuccessMessage = '[data-testid="measureGuidanceSuccess"]'
+    public static readonly measureGuidanceTextBox = '[data-testid="measureGuidance (Usage)Input"]'
+    public static readonly measureGuidanceSaveButton = '[data-testid="measureGuidance (Usage)Save"]'
+    public static readonly measureGuidanceSuccessMessage = '[data-testid="measureGuidance (Usage)Success"]'
 
     //Clinical Guidance / Recommendation Page
     public static readonly measureClinicalRecommendationTextBox = '[data-testid="measureClinical Recommendation StatementInput"]'
