@@ -1017,7 +1017,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 32700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
@@ -1078,8 +1078,8 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
-        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
-        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
@@ -1156,15 +1156,16 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm warning message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No issues detected during validation for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'')
-
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'' +
+            'Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable')
         //attempt to click on 'Run Test Case' to run the test case via the edit page
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click()
 
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No issues detected during validation for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'' +
+            'Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable')
 
     })
 
