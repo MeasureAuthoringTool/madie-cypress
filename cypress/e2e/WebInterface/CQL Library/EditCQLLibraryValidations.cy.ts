@@ -1,7 +1,7 @@
-import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {CQLLibrariesPage} from "../../../Shared/CQLLibrariesPage"
-import {Header} from "../../../Shared/Header"
+import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
+import { Header } from "../../../Shared/Header"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let CQLLibraryPublisher = 'SemanticBits'
@@ -9,13 +9,8 @@ let CQLLibraryPublisher = 'SemanticBits'
 
 describe('Edit CQL Library validations', () => {
 
-    before('Create CQL Library', () => {
-
-        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
-
-    })
-
     beforeEach('Login', () => {
+        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
 
         OktaLogin.Login()
     })
@@ -124,7 +119,7 @@ describe('Edit CQL Library validations', () => {
 
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        
+
         //experimental check box make sure it is still checked
         cy.get(CQLLibraryPage.cqlLibraryExperimentalChkBox).should('exist')
         cy.get(CQLLibraryPage.cqlLibraryExperimentalChkBox).should('be.checked')
@@ -137,6 +132,90 @@ describe('Edit CQL Library validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryStickySave).should('exist')
         cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.visible')
         cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.enabled')
-        
+
+    })
+
+    it('CQL Library Edit page validation that the "Program Use Context" field can be changed and cleared -- not required', () => {
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
+        //Click Edit CQL Library
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+
+        //clear Program Use Context and save
+        cy.get(CQLLibraryPage.cqlLibraryProgramUseContext).should('exist')
+        cy.get(CQLLibraryPage.cqlLibraryProgramUseContext).should('be.visible')
+        cy.get(CQLLibraryPage.cqlLibraryProgramUseContext).click().type('{del}').focused().blur()
+
+        //click save
+        cy.get(CQLLibraryPage.cqlLibraryStickySave).should('exist')
+        cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.visible')
+        cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.enabled')
+        cy.get(CQLLibraryPage.cqlLibraryStickySave).click()
+
+        //success message
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL Library saved successfully')
+
+        //navigate to library list page
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
+        //Click Edit CQL Library
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+
+        //confirm that Program Use Context is empty
+        cy.get(CQLLibraryPage.cqlLibraryProgramUseContext).should('exist')
+        cy.get(CQLLibraryPage.cqlLibraryProgramUseContext).should('be.visible')
+        cy.get(CQLLibraryPage.cqlLibraryProgramUseContext).should('contain.text', '')
+
+        //enter a new value in the Program Use Context field
+        cy.get(CQLLibraryPage.cqlLibraryProgramUseContext).should('exist')
+        cy.get(CQLLibraryPage.cqlLibraryProgramUseContext).should('be.visible')
+        cy.get(CQLLibraryPage.cqlLibraryProgramUseContext).click().type('MIPS').type('{downArrow}{enter}')
+
+
+        //click save
+        cy.get(CQLLibraryPage.cqlLibraryStickySave).should('exist')
+        cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.visible')
+        cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.enabled')
+        cy.get(CQLLibraryPage.cqlLibraryStickySave).click()
+
+        //success message
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL Library saved successfully')
+
+        //navigate to library list page
+        cy.get(Header.cqlLibraryTab).wait(1000).click()
+
+        //Click Edit CQL Library
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+
+        //confirm that Program Use Context is empty
+        cy.get(CQLLibraryPage.cqlLibraryProgramUseContext).should('exist')
+        cy.get(CQLLibraryPage.cqlLibraryProgramUseContext).should('be.visible')
+        cy.get(CQLLibraryPage.cqlLibraryProgramUseContext).should('contain.value', 'MIPS')
+
+        OktaLogin.Logout()
+
+        cy.setAccessTokenCookie()
+
+        //validating data that can be pulled from the db
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+                cy.request({
+                    url: '/api/cql-libraries/' + cqlLibraryId,
+                    method: 'GET',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body).to.not.be.null
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.programUseContext.code).to.eql('mips')
+                    expect(response.body.programUseContext.display).to.eql('MIPS')
+                    expect(response.body.programUseContext.codeSystem).to.eql('http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs')
+                })
+            })
+        })
     })
 })

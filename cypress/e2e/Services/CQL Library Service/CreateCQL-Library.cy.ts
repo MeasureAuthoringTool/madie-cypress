@@ -33,6 +33,7 @@ describe('CQL Library Service: Create CQL Library', () => {
                 body: {
                     "cqlLibraryName": CQLLibraryName,
                     "model": model,
+                    "cql": "",
                     "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
                 }
             }).then((response) => {
@@ -137,7 +138,8 @@ describe('CQL Library Name validations', () => {
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
-                    "model": model
+                    "model": model,
+                    "cql": ""
                 }
             }).then((response) => {
                 expect(response.status).to.eql(400)

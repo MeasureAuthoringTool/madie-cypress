@@ -5,6 +5,7 @@ import { Utilities } from "./Utilities"
 
 export class CQLLibraryPage {
 
+    public static readonly cqlLibraryProgramUseContext = '[id="programUseContext"]'
     public static readonly createCQLLibraryBtn = '[data-testid="create-new-cql-library-button"]'
     public static readonly cqlLibraryNameTextbox = '[data-testid="cql-library-name-text-field-input"]'
     public static readonly cqlLibraryModelDropdown = '[data-testid="cql-library-model-select"]'
@@ -16,7 +17,6 @@ export class CQLLibraryPage {
     public static readonly LibFilterLabel = '[id="mui-1-label"]'
     public static readonly LibTableRows = '[data-testid="row-item"]'
     public static readonly ClearSearchBox = '[data-testid="ClearIcon"]'
-    //<svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ClearIcon"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
     public static readonly cqlLibraryModelQICore = '[data-testid="cql-library-model-option-QI-Core v4.1.1"]'
     public static readonly saveCQLLibraryBtn = '[data-testid="continue-button"]'
     public static readonly updateCQLLibraryBtn = '[data-testid="cql-library-save-button"]'
