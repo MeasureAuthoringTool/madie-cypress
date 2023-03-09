@@ -99,13 +99,12 @@ describe('FHIR Measure Export', () => {
 
     })
 
-    after('Clean up', () => {
+    after('Log out', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    it('Validate the zip file Export is downloaded and can be unzipped, verify the files contained in the zip', () => {
+    it('Validate the zip file Export is downloaded and can be unzipped', () => {
 
         MeasuresPage.measureAction('version')
 
@@ -124,6 +123,10 @@ describe('FHIR Measure Export', () => {
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('exist')
         cy.log('Successfully verified zip file export')
+
+    })
+
+    it('Unzip the downloaded file and verify file types', () => {
 
         // unzipping the Measure Export
         cy.task('unzipFile', { zipFile: 'eCQMTitle-v1.0.000-FHIR4.zip', path: downloadsFolder })
