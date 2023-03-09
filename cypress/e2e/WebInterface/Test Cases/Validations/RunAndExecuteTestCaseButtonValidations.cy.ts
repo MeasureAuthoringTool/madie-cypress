@@ -1156,8 +1156,6 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm warning message
-        //cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No issues detected during validation for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'')
-
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'' +
             'Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable')
         //attempt to click on 'Run Test Case' to run the test case via the edit page
