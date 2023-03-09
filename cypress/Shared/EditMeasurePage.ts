@@ -8,6 +8,7 @@ export class EditMeasurePage {
     public static readonly cqlEditorTab = '[data-testid=cql-editor-tab]'
     public static readonly measureGroupsTab = '[data-testid=groups-tab]'
     public static readonly testCasesTab = '[data-testid=patients-tab]'
+    public static readonly reviewInfoTab = '[data-testid=review-tab]'
 
     //Measurement Information
     public static readonly measurementInformationForm = '[data-testid="measure-information-edit"]'
