@@ -8,6 +8,7 @@ export class EditMeasurePage {
     public static readonly cqlEditorTab = '[data-testid=cql-editor-tab]'
     public static readonly measureGroupsTab = '[data-testid=groups-tab]'
     public static readonly testCasesTab = '[data-testid=patients-tab]'
+    public static readonly reviewInfoTab = '[data-testid=review-tab]'
 
     //Measurement Information
     public static readonly measurementInformationForm = '[data-testid="measure-information-edit"]'
@@ -82,9 +83,9 @@ export class EditMeasurePage {
     public static readonly measureRationaleSuccessMessage = '[data-testid="measureRationaleSuccess"]'
 
     //Guidance Page
-    public static readonly measureGuidanceTextBox = '[data-testid="measureGuidanceInput"]'
-    public static readonly measureGuidanceSaveButton = '[data-testid="measureGuidanceSave"]'
-    public static readonly measureGuidanceSuccessMessage = '[data-testid="measureGuidanceSuccess"]'
+    public static readonly measureGuidanceTextBox = '[data-testid="measureGuidance (Usage)Input"]'
+    public static readonly measureGuidanceSaveButton = '[data-testid="measureGuidance (Usage)Save"]'
+    public static readonly measureGuidanceSuccessMessage = '[data-testid="measureGuidance (Usage)Success"]'
 
     //Clinical Guidance / Recommendation Page
     public static readonly measureClinicalRecommendationTextBox = '[data-testid="measureClinical Recommendation StatementInput"]'

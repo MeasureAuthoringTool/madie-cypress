@@ -47,6 +47,7 @@ describe('Edit CQL Library', () => {
                         "id": cqlLibraryId,
                         "cqlLibraryName": updatedCQLLibraryName,
                         "model": model,
+                        "cql": "",
                         "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
                     }
                 }).then((response) => {
