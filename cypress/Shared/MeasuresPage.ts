@@ -94,6 +94,7 @@ export class MeasuresPage {
                     cy.wait('@measureExport', { timeout: 60000 }).then(({ response }) => {
                         expect(response.statusCode).to.eq(200)
                     })
+                    cy.get('.toast').should('contain.text', 'Measure exported successfully')
                     break
                 }
                 case 'version': {
