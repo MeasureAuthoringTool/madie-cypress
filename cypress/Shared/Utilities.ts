@@ -28,31 +28,34 @@ export class Utilities {
             measureSetIdPath = 'cypress/fixtures/measureSetId2'
         }
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(path).should('exist').then((id) => {
-                cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.readFile(measureSetIdPath).should('exist').then((measureSetId) => {
-                        cy.request({
-                            failOnStatusCode: false,
-                            url: '/api/measures/' + id,
-                            method: 'PUT',
-                            headers: {
-                                Authorization: 'Bearer ' + accessToken.value
-                            },
-                            body: {
-                                "id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": ecqmTitle,
-                                "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate, "active": false, 'versionId': vId, 'measureSetId': measureSetId
-                            }
-                        }).then((response) => {
-                            console.log(response)
 
-                            expect(response.status).to.eql(200)
-                            cy.log('Measure Deleted Successfully')
-                        })
-                    })
-                })
-            })
-        })
+        //commenting out this code until https://jira.cms.gov/browse/MAT-5467 is fixed
+
+        // cy.getCookie('accessToken').then((accessToken) => {
+        //     cy.readFile(path).should('exist').then((id) => {
+        //         cy.readFile(versionIdPath).should('exist').then((vId) => {
+        //             cy.readFile(measureSetIdPath).should('exist').then((measureSetId) => {
+        //                 cy.request({
+        //                     failOnStatusCode: false,
+        //                     url: '/api/measures/' + id,
+        //                     method: 'PUT',
+        //                     headers: {
+        //                         Authorization: 'Bearer ' + accessToken.value
+        //                     },
+        //                     body: {
+        //                         "id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": ecqmTitle,
+        //                         "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate, "active": false, 'versionId': vId, 'measureSetId': measureSetId
+        //                     }
+        //                 }).then((response) => {
+        //                     console.log(response)
+        //
+        //                     expect(response.status).to.eql(200)
+        //                     cy.log('Measure Deleted Successfully')
+        //                 })
+        //             })
+        //         })
+        //     })
+        // })
     }
 
     public static textValues = {
