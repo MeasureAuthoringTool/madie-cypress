@@ -267,10 +267,14 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                                 ],
                                 "measureMetaData": {
                                     "description": "Measure Description",
-                                    "steward": "Able Health",
-                                    "developers": [
-                                        "ACO Health Solutions"
-                                    ],
+                                    "steward": {"name": "Able Health",
+                                        "id": "64120f265de35122e68dac40",
+                                        "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
+                                        "url": "https://www.healthcatalyst.com/insights/introducing-able-health-quality-measures-solution"},
+                                    "developers": [{ "name": "ACO Health Solutions",
+                                        "id": "64120f265de35122e68dac67",
+                                        "oid": "02c84f54-919b-5867-bf51-a1438f2710e2",
+                                        "url": "https://www.acohealthsolutions.com/" }],
                                     "guidance": "Measure Guidance",
                                     "clinicalRecommendation": "Measure Clinical Recommendation",
                                 },
