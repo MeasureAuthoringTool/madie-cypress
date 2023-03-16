@@ -191,6 +191,9 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                     expect(response.body.entry[0].resource.effectivePeriod).to.have.property('start')
                     expect(response.body.entry[0].resource.effectivePeriod).to.have.property('end')
                     expect(response.body.entry[0].resource.library[0]).is.not.empty
+                    expect(response.body.entry[0].resource.identifier[0].value).to.eql('eCQMTitle')
+                    expect(response.body.entry[0].resource.identifier[1].value).is.not.empty
+                    expect(response.body.entry[0].resource.identifier[2].value).is.not.empty
                     expect(response.body.entry[0].resource.group[0].extension[1].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-populationBasis')
                     expect(response.body.entry[0].resource.group[0].extension[1].valueCode).to.eql('boolean')
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
