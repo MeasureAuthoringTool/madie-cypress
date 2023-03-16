@@ -648,6 +648,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
             })
         })
     })
+
     describe('Measure Bundle end point returns 403 if measure was not created by current user', () => {
 
         newMeasureName = measureName + randValue

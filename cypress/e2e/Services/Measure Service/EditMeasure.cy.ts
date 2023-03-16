@@ -642,7 +642,6 @@ describe('Edit Measure Validations', () => {
             })
         })
     })
-
 })
 
 describe('Measurement Period Validations', () => {
