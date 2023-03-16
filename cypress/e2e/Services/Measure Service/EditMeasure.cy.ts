@@ -30,7 +30,7 @@ describe('Measure Service: Edit Measure', () => {
 
     afterEach('Clean up', () => {
 
-        //Utilities.deleteMeasure(updatedMeasureName, updatedCQLLibraryName)
+        Utilities.deleteMeasure(updatedMeasureName, updatedCQLLibraryName)
 
     })
 
@@ -185,7 +185,10 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"measureSteward": "SemanticBits", "draft": true}
+                            'measureMetaData': {"steward": {"name": "SemanticBits",
+                                    "id": "64120f265de35122e68dac40",
+                                    "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
+                                    "url": "https://semanticbits.com/"}, "draft": true}
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)

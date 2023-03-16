@@ -19,11 +19,12 @@ let mpEndDate = now().format('YYYY-MM-DD')
 let updatedMeasureName = measureName + randValue
 let updatedCQLLibraryName = CqlLibraryName + randValue
 
-let measureCQL = 'library SimpleFhirMeasure version \'0.0.001\'\n' +
+let measureCQL = 'library MeasureBundleLibrary1678980273052215 version \'0.0.000\'\n' +
     '\n' +
     'using FHIR version \'4.0.1\'\n' +
     '\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    'include Hospice version \'6.0.000\' called Hospice\n' +
     '\n' +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     '\n' +
@@ -41,7 +42,10 @@ let measureCQL = 'library SimpleFhirMeasure version \'0.0.001\'\n' +
     '    exists ["Encounter"] E where E.status ~ \'finished\'\n' +
     '      \n' +
     'define "numeratorExclusion":\n' +
-    '    "num"'
+    '    Hospice."Has Hospice Services"\n' +
+    '    \n' +
+    'define "test":\n' +
+    '    true'
 let CVmeasureCQL = 'library TestLibrary1664888387806162 version \'0.0.000\'\n' +
     '\n' +
     'using FHIR version \'4.0.1\'\n' +
@@ -194,6 +198,8 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                     expect(response.body.entry[0].resource.identifier[0].value).to.eql('eCQMTitle')
                     expect(response.body.entry[0].resource.identifier[1].value).is.not.empty
                     expect(response.body.entry[0].resource.identifier[2].value).is.not.empty
+                    expect(response.body.entry[0].resource.publisher).to.eql('SemanticBits')
+                    expect(response.body.entry[0].resource.contact[0].telecom[0].value).to.eql('https://semanticbits.com/')
                     expect(response.body.entry[0].resource.group[0].extension[1].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-populationBasis')
                     expect(response.body.entry[0].resource.group[0].extension[1].valueCode).to.eql('boolean')
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')

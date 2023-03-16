@@ -134,7 +134,11 @@ export class CreateMeasurePage {
                     'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
                     'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
                     'versionId': uuidv4(),
-                    'measureSetId': uuidv4()
+                    'measureSetId': uuidv4(),
+                    'measureMetaData': {"steward": {"name": "SemanticBits",
+                                                    "id": "64120f265de35122e68dac40",
+                                                    "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
+                                                    "url": "https://semanticbits.com/"}}
 
                 }
             }).then((response) => {
