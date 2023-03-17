@@ -29,7 +29,7 @@ describe('Measure Review Info Page', () => {
         OktaLogin.Login()
     })
 
-    after('Logout and Cleanup', () => {
+    after('Cleanup', () => {
 
         Utilities.deleteMeasure(updatedMeasuresPageName, CqlLibraryName)
     })
