@@ -96,4 +96,9 @@ export class EditMeasurePage {
     public static readonly measureRiskAdjustmentTextBox = '[data-testid="measureRisk AdjustmentInput"]'
     public static readonly measureRiskAdjustmentSaveButton = '[data-testid="measureRisk AdjustmentSave"]'
     public static readonly measureRiskAdjustmentSuccessMessage = '[data-testid="measureRisk AdjustmentSuccess"]'
+
+    //Review Info Page
+    public static readonly reviewInfoFields = '.help-image'
+    public static readonly approvalDate = '[data-testid="approval-date-input"]'
+    public static readonly lastReviewDate = '[data-testid="review-date-input"]'
 }
