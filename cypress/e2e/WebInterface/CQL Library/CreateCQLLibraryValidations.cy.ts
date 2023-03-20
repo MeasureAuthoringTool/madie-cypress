@@ -69,7 +69,7 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.headerDetails).should('be.visible')
         cy.get(CQLLibraryPage.headerDetails).should('include.text', 'Libraries/Details')
         cy.get(CQLLibraryPage.headerDetails).should('include.text', newCQLLibraryName)
-        cy.get(CQLLibraryPage.headerDetails).should('include.text', 'v0.0.000')
+        cy.get(CQLLibraryPage.headerDetails).should('include.text', 'Version 0.0.000')
         cy.get(CQLLibraryPage.headerDetails).should('include.text', 'Draft')
         cy.get(CQLLibraryPage.headerDetails).should('include.text', 'QI-Core v4.1.1')
         cy.get(CQLLibraryPage.headerDetails).should('include.text', lastUpdated)
