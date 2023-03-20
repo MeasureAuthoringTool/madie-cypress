@@ -7,6 +7,8 @@ import { v4 as uuidv4 } from 'uuid'
 
 export class MeasureGroupPage {
 
+    public static readonly pcErrorAlertToast = '[data-testid="population-criteria-error"]'
+
     //mismatch CQL error
     public static readonly CQLPCMismatchError = '[class="madie-alert error"]'
 
@@ -159,12 +161,12 @@ export class MeasureGroupPage {
 
     //left panel
     public static readonly leftPanelRiskAdjustmentTab = '[data-testid=leftPanelMeasurePopulationsRiskAdjustmentTab]'
-    public static leftPanelSupplementalDataTab = '[data-testid=leftPanelMeasurePopulationsSupplementalDataTab]'
+    public static readonly leftPanelSupplementalDataTab = '[data-testid=leftPanelMeasurePopulationsSupplementalDataTab]'
 
     //Risk Adjustment variables
     public static readonly riskAdjustmentDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
     public static readonly riskAdjustmentDefinitionDropdown = '[id="risk-adjustment-listbox"]'
-    public static readonly riskAdjustmentTextBox = '.MuiInputBase-root > #risk-adjustment'
+    public static readonly riskAdjustmentTextBox = '[data-testid="Num-description"]'
     public static readonly cancelIcon = '[data-testid=CancelIcon]'
     public static readonly riskAdjustmentDescriptionTextBox = '[class=risk-description]'
     public static readonly saveRiskAdjustments = '[data-testid="measure-Risk Adjustment-save"]'
@@ -176,6 +178,7 @@ export class MeasureGroupPage {
     public static readonly supplementalDataDefinitionDescriptionTextBox = '[class="sc-iqcoie glofVe"]'
     public static readonly saveSupplementalDataElements = '[data-testid="supplementalDataElement-save"]'
     public static readonly supplementalDataElementsSaveSuccessMsg = '[data-testid="supplementalDataElement-success"]'
+    public static readonly removeCloseDefinitionSelection = '[data-testid="CancelIcon"]'
     public static readonly discardChangesBtn = '[data-testid=cancel-button]'
     public static readonly discardChangesConfirmationMsg = '.MuiDialogContent-root'
     public static readonly discardChangesContinueBtn = '[data-testid="discard-dialog-continue-button"]'

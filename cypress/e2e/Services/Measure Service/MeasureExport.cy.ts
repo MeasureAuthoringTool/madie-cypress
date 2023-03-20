@@ -1,6 +1,6 @@
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { v4 as uuidv4 } from 'uuid'
-import {Utilities} from "../../../Shared/Utilities"
+import { Utilities } from "../../../Shared/Utilities"
 
 let measureName = 'MeasureExport' + Date.now()
 let CqlLibraryName = 'MeasureExportLibrary' + Date.now()
@@ -135,7 +135,7 @@ describe('Measure Export', () => {
 
     afterEach('Clean up', () => {
 
-        //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
 
@@ -173,7 +173,7 @@ describe('Error Message on Measure Export when the Measure does not have CQL', (
 
     after('Cleanup', () => {
 
-        //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
@@ -211,7 +211,7 @@ describe('Error Message on Measure Export when the Measure CQL has errors', () =
 
     after('Cleanup', () => {
 
-        //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Verify error message on Measure Export when the Measure CQL has errors', () => {
@@ -249,7 +249,7 @@ describe('Error Message on Measure Export when the Measure does not have Populat
 
     after('Cleanup', () => {
 
-        //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Verify error message on Measure Export when the Measure does not have Population Criteria', () => {
