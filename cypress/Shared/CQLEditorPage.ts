@@ -1,5 +1,9 @@
 import { EditMeasurePage } from "./EditMeasurePage"
 export class CQLEditorPage {
+
+
+    //button to save CQL
+    public static readonly saveCQLButton = '[data-testid="save-cql-btn"]'
     //error toast message when a CQL change has an affect on PC
     public static readonly measureErrorToast = '[data-testid="measure-errors-toast"]'
 
@@ -8,6 +12,7 @@ export class CQLEditorPage {
 
     //success save message without errors
     public static readonly successfulCQLSaveNoErrors = '[data-testid="generic-success-text-header"]'
+
 
     //Error/warning marker inside of the CQL Editor window
     public static readonly errorInCQLEditorWindow = '#ace-editor-wrapper > div.ace_gutter > div > div.ace_gutter-cell.ace_error'
