@@ -39,7 +39,6 @@ describe('Measure Review Info Page', () => {
         OktaLogin.Logout()
     })
 
-    //Need to revisit once MAT-5473 is fixed
     it('Validate fields on Measure Review Info page', () => {
 
         MeasuresPage.measureAction("edit")
@@ -47,8 +46,8 @@ describe('Measure Review Info Page', () => {
         //Click on Review Info tab
         cy.get(EditMeasurePage.reviewInfoTab).click()
 
-        cy.get(EditMeasurePage.approvalDate).should('not.exist')
-        cy.get(EditMeasurePage.lastReviewDate).should('not.exist')
+        cy.get(EditMeasurePage.approvalDate).should('have.value', '-')
+        cy.get(EditMeasurePage.lastReviewDate).should('have.value', '-')
     })
 
     it('Verify Approval Date and Last review Dates exist versioned Measures and do not exist for Drafted Measures', () => {
@@ -106,8 +105,8 @@ describe('Measure Review Info Page', () => {
         //Click on Review Info tab
         cy.get(EditMeasurePage.reviewInfoTab).click()
 
-        cy.get(EditMeasurePage.approvalDate).should('not.exist')
-        cy.get(EditMeasurePage.lastReviewDate).should('not.exist')
+        cy.get(EditMeasurePage.approvalDate).should('have.value', '-')
+        cy.get(EditMeasurePage.lastReviewDate).should('have.value', '-')
 
     })
 })

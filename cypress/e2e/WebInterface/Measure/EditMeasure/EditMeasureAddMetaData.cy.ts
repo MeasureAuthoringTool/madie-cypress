@@ -49,6 +49,15 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //Enter meta data
 
+        //Program Use Context on Name, Version & ID page
+        cy.get(EditMeasurePage.programUseContextTextBox).click()
+        cy.get(EditMeasurePage.programUseContextTextBox).type('EH/CAH')
+        cy.get(EditMeasurePage.programUseContextOption).click()
+        cy.get(EditMeasurePage.measurementInformationSaveButton).click()
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('exist')
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('be.visible')
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
+
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
         cy.get(EditMeasurePage.measureDescriptionTextBox).clear().type(description)
@@ -113,6 +122,13 @@ describe('Edit Measure: Add Meta Data', () => {
         MeasuresPage.measureAction("edit")
 
         //verification of data entry
+
+        //Program Use Context on Name, Version & ID page
+        cy.get(EditMeasurePage.programUseContextTextBox).invoke('val').then(val => {
+            expect(val).to.eql('EH/CAH')
+        })
+        cy.log('Program Use Context added successfully')
+
         //steward
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
         cy.get(EditMeasurePage.measureStewardObjHoldingValue).should('include.value', 'Able Health')

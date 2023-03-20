@@ -20,6 +20,10 @@ export class EditMeasurePage {
     public static readonly versionId = '[data-testid="version-id-input"]'
     public static readonly successfulMeasureSaveMsg = '[data-testid="edit-measure-information-success-text"]'
 
+    //Program Use Context
+    public static readonly programUseContextTextBox = '[id="programUseContext"]'
+    public static readonly programUseContextOption = '#programUseContext-listbox'
+
     //left panel
     public static readonly leftPanelMeasureInformation = '[data-testid="leftPanelMeasureInformation"]'
     public static readonly leftPanelMeasureSteward = '[data-testid="leftPanelMeasureSteward"]'
