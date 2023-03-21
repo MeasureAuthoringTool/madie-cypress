@@ -4,13 +4,18 @@ import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../Shared/Header"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
+let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
 
 
 describe('Edit CQL Library validations', () => {
 
-    beforeEach('Login', () => {
-        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
+    beforeEach('Create CQL Library and Login', () => {
+
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        newCQLLibraryName = CQLLibraryName + randValue + randValue + 2
+
+        CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
 
         OktaLogin.Login()
     })
@@ -71,7 +76,7 @@ describe('Edit CQL Library validations', () => {
 
         //Assert validation on Publisher field
         cy.get(CQLLibraryPage.cqlLibraryEditPublisher).click()
-        cy.get(CQLLibraryPage.cqlLibraryEditPublisherCloseIcon).click()
+        cy.get(CQLLibraryPage.cqlLibraryEditPublisherCloseIcon).eq(0).click()
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).dblclick()
         cy.get(CQLLibraryPage.cqlLibraryDesc).click()
         cy.get(CQLLibraryPage.cqlLibPubHelperText).should('contain.text', 'Publisher is required.')
@@ -136,6 +141,7 @@ describe('Edit CQL Library validations', () => {
     })
 
     it('CQL Library Edit page validation that the "Program Use Context" field can be changed and cleared -- not required', () => {
+
         cy.get(Header.cqlLibraryTab).wait(1000).click()
 
         //Click Edit CQL Library

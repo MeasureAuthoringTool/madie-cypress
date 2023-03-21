@@ -30,7 +30,7 @@ describe('Delete Measure', () => {
 
     })
 
-    afterEach('Login', () => {
+    afterEach('Logout', () => {
 
         OktaLogin.Logout()
 
@@ -70,7 +70,7 @@ describe('Delete Measure', () => {
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.measureAction("edit", true)
 
         //Delete Measure Button should not be visible for non owner of the Measure
         cy.get(EditMeasurePage.deleteMeasureButton).should('not.be.enabled')
