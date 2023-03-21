@@ -195,7 +195,7 @@ describe('Draftable API end point tests', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction('edit', true)
+        MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')

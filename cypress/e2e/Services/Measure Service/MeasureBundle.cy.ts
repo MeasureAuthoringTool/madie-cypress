@@ -344,7 +344,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                     expect(response.body.entry[1].resource.identifier[0].use).to.eql('official')
                     expect(response.body.entry[1].resource.identifier[0].system).to.eql('https://madie.cms.gov/login')
                     expect(response.body.entry[1].resource.title).to.eql(newCqlLibraryName)
-                    expect(response.body.entry[2].resource.publisher).to.eql('ICF')
+                    expect(response.body.entry[2].resource.publisher).to.eql('National Committee for Quality Assurance')
                 })
             })
         })
