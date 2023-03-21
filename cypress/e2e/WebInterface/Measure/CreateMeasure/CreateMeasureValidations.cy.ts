@@ -62,6 +62,9 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureStewardDrpDwn).should('exist')
         cy.get(EditMeasurePage.measureStewardDrpDwn).should('be.visible')
         cy.get(EditMeasurePage.measureStewardDrpDwn).click()
+        cy.get(EditMeasurePage.measureStewardDrpDwn).clear()
+        cy.get(EditMeasurePage.measureStewardDrpDwn).focused().blur()
+
 
         //remove focus from Steward drop down field
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
@@ -75,6 +78,8 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('exist')
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('be.visible')
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).click()
+        cy.get(EditMeasurePage.measureStewardDrpDwn).clear()
+        cy.get(EditMeasurePage.measureStewardDrpDwn).focused().blur()
 
         //remove focus from Developers drop down field
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
@@ -138,6 +143,9 @@ describe('Validations on Measure Details page', () => {
         cy.get(Global.discardChangesContinue).click()
 
         //verify that empty fields
+        cy.get(EditMeasurePage.measureStewardDrpDwn).click()
+        cy.get(EditMeasurePage.measureStewardDrpDwn).clear()
+        cy.get(EditMeasurePage.measureStewardDrpDwn).focused().blur()
         cy.get(EditMeasurePage.measureStewardObjHoldingValue).should('be.empty')
         cy.get(EditMeasurePage.measureDevelopersObjHoldingValue).should('be.empty')
 
@@ -191,6 +199,9 @@ describe('Validations on Measure Details page', () => {
         cy.get(Global.discardChangesContinue).click()
 
         //verify that empty fields
+        cy.get(EditMeasurePage.measureStewardDrpDwn).click()
+        cy.get(EditMeasurePage.measureStewardDrpDwn).clear()
+        cy.get(EditMeasurePage.measureStewardDrpDwn).focused().blur()
         cy.get(EditMeasurePage.measureStewardObjHoldingValue).should('be.empty')
         cy.get(EditMeasurePage.measureDevelopersObjHoldingValue).should('be.empty')
 
@@ -471,7 +482,7 @@ describe('Create Measure validations', () => {
 
         //Verify the error message when the CQL Library Name given already exists
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('{selectall}{backspace}')
-        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('TestCql1640794914452')
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(newCqlLibraryName/*'TestCql1640794914452'*/)
         cy.get(CreateMeasurePage.createMeasureButton).click()
         cy.get(CreateMeasurePage.serverErrorMsg).should('contain.text', 'CQL library with given name already exists')
 
