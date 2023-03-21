@@ -7,29 +7,21 @@ import { Utilities } from "../../../Shared/Utilities"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
-let measureScoring = 'Ratio'
 let updatedMeasureName = 'UpdatedTestMeasure' + Date.now()
 
 describe('Edit Measure', () => {
-    before('Create Measure', () => {
+
+    before('Create Measure and Login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureScoring)
-
-    })
-
-    beforeEach('Login', () => {
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
     })
 
-    afterEach('Logout', () => {
-        OktaLogin.Logout()
-    })
-
-    after('Clean up', () => {
+    after('Clean up and Logout', () => {
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        OktaLogin.Logout()
     })
 
     it('Edit Measure Name and verify the measure name is updated on Measures page', () => {
