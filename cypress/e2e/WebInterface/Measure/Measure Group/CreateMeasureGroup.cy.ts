@@ -57,9 +57,17 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.readFile('cypress/fixtures/GenericCQLBoolean.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
-        for (let i = 0; i <= 5; i++) {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type('{backspace}')
-        }
+        //save CQL on measure
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
+            '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
+            '{downArrow}{downArrow}{downArrow}{downArrow}{backspace}{backspace}{backspace}' +
+            '{backspace}{backspace}')
         //save CQL on measure
         Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
