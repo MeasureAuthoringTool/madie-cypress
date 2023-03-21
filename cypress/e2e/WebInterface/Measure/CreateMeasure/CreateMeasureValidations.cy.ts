@@ -482,7 +482,7 @@ describe('Create Measure validations', () => {
 
         //Verify the error message when the CQL Library Name given already exists
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('{selectall}{backspace}')
-        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(newCqlLibraryName/*'TestCql1640794914452'*/)
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(newCqlLibraryName)
         cy.get(CreateMeasurePage.createMeasureButton).click()
         cy.get(CreateMeasurePage.serverErrorMsg).should('contain.text', 'CQL library with given name already exists')
 
