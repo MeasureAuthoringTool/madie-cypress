@@ -13,7 +13,7 @@ let CqlLibraryName = 'TestLibrary' + Date.now()
 const path = require('path')
 //const downloadsFolder = Cypress.config('downloadsFolder')
 const downloadsFolder = Cypress.config('downloadsFolder')
-//const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
+const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
 let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     '\n' +
@@ -79,7 +79,7 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
 
 describe.skip('FHIR Measure Export', () => {
 
-    //deleteDownloadsFolderBeforeAll()
+    deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create New Measure and Login', () => {
 
