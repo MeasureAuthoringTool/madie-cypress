@@ -224,11 +224,9 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                     expect(response.body.entry[1].resource.dataRequirement[0].codeFilter[0].path).to.eql('code')
                     expect(response.body.entry[1].resource.dataRequirement[0].codeFilter[0].valueSet).to.eql('http://cts.nlm.nih.' +
                         'gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001')
-
-                    //commenting these out until MAT-5432 is finished
-                    //expect(response.body.entry[1].resource.useContext[0].valueCodeableConcept.coding[0].code).to.eql('mips')
-                    //expect(response.body.entry[1].resource.useContext[0].valueCodeableConcept.coding[0].display).to.eql('MIPS')
-                    //expect(response.body.entry[1].resource.useContext[0].valueCodeableConcept.coding[0].system).to.eql('http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs')
+                    expect(response.body.entry[1].resource.useContext[0].valueCodeableConcept.coding[0].code).to.eql('mips')
+                    expect(response.body.entry[1].resource.useContext[0].valueCodeableConcept.coding[0].display).to.eql('MIPS')
+                    expect(response.body.entry[1].resource.useContext[0].valueCodeableConcept.coding[0].system).to.eql('http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs')
                 })
             })
         })

@@ -54,10 +54,9 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
 
     before('Create Measure, Test Case and Login', () => {
 
-        OktaLogin.Login()
-        //Create New Measure
+
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-            '2022-01-01', '2022-12-31')
+            '2023-01-01', '2023-12-31')
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
