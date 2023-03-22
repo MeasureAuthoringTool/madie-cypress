@@ -7,6 +7,16 @@ export class MeasuresPage {
     public static readonly allMeasuresTab = '[data-testid=all-measures-tab]'
     public static readonly searchInputBox = '[data-testid="searchMeasure-input"]'
 
+    //export
+    public static readonly exportingDialog = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 ' +
+        'MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-mbdu2s"]'
+    public static readonly exportingSpinner = '[<circle class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate ' +
+        'css-14891ef" cx="44" cy="44" r="20.2" fill="none" stroke-width="3.6"></circle>]'
+    public static readonly exportFinishedCheck = '[data-testid="CheckCircleOutlineIcon"]'
+    public static readonly exportFinishedContinueBtn = '[data-testid="ds-btn"]'
+    public static readonly exportingDialogContent = '[id="export-dialog-content"]'
+    public static readonly exportingDialogXIcon = '[data-testid="CancelOutlinedIcon"]'
+
     //Pagination
     public static readonly paginationNextButton = '[data-testid="NavigateNextIcon"]'
     public static readonly paginationPreviousButton = '[data-testid=NavigateBeforeIcon]'

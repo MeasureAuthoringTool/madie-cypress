@@ -1,7 +1,8 @@
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -59,6 +60,9 @@ describe('Error Message on Measure Export when the Measure does not have CQL', (
             Utilities.waitForElementEnabled('[data-testid=export-measure-' + fileContents + ']', 30000)
             cy.get('[data-testid=export-measure-' + fileContents + ']').should('be.enabled')
             cy.get('[data-testid=export-measure-' + fileContents + ']').click()
+            cy.get(MeasuresPage.VersionDraftErrMsgs).should('contain.text', 'Unable to Export measure. Measure Bundle could not be generated as Measure does not contain CQL.')
+            cy.get(MeasuresPage.exportingDialogContent).should('contain.text', 'Unable to Export measure. Measure Bundle could not be generated as Measure does not contain CQL.')
+            cy.get(MeasuresPage.exportingDialogXIcon).should('be.visible')
 
 
             cy.get('[class="toast danger"]').should('contain.text', 'Unable to Export measure. Measure Bundle could not be generated as Measure does not contain CQL.')
@@ -101,6 +105,9 @@ describe('Error Message on Measure Export when the Measure CQL has errors', () =
             Utilities.waitForElementEnabled('[data-testid=export-measure-' + fileContents + ']', 30000)
             cy.get('[data-testid=export-measure-' + fileContents + ']').should('be.enabled')
             cy.get('[data-testid=export-measure-' + fileContents + ']').click()
+            cy.get(MeasuresPage.VersionDraftErrMsgs).should('contain.text', 'Unable to Export measure. Measure Bundle could not be generated as Measure contains errors.')
+            cy.get(MeasuresPage.exportingDialogContent).should('contain.text', 'Unable to Export measure. Measure Bundle could not be generated as Measure contains errors.')
+            cy.get(MeasuresPage.exportingDialogXIcon).should('be.visible')
 
 
             cy.get('[class="toast danger"]').should('contain.text', 'Unable to Export measure. Measure Bundle could not be generated as Measure contains errors.')
@@ -142,6 +149,9 @@ describe('Error Message on Measure Export when the Population Criteria is missin
             Utilities.waitForElementEnabled('[data-testid=export-measure-' + fileContents + ']', 30000)
             cy.get('[data-testid=export-measure-' + fileContents + ']').should('be.enabled')
             cy.get('[data-testid=export-measure-' + fileContents + ']').click()
+            cy.get(MeasuresPage.VersionDraftErrMsgs).should('contain.text', 'Unable to Export measure. Measure Bundle could not be generated as Measure does not contain Population Criteria.')
+            cy.get(MeasuresPage.exportingDialogContent).should('contain.text', 'Unable to Export measure. Measure Bundle could not be generated as Measure does not contain Population Criteria.')
+            cy.get(MeasuresPage.exportingDialogXIcon).should('be.visible')
 
 
             cy.get('[class="toast danger"]').should('contain.text', 'Unable to Export measure. Measure Bundle could not be generated as Measure does not contain Population Criteria.')
