@@ -73,7 +73,7 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     'define "Denom":\n' +
     'true'
 
-describe('Validations between Supplemental Data and Risk Adjustments with the CQL definitions', () => {
+describe('Validations between Risk Adjustments with the CQL definitions', () => {
 
     beforeEach('Create New Measure and Login', () => {
 
@@ -100,23 +100,23 @@ describe('Validations between Supplemental Data and Risk Adjustments with the CQ
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
-    it('Removing definition related to the SD alerts user.', () => {
+    it('Removing definition related to the RA alerts user.', () => {
         cy.get(Header.measures).click()
         MeasuresPage.measureAction("edit")
         //navigate to the PC page / tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        //click on the Supplemental button / link on the left page to populate fields on the right
-        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+        //click on the Risk Adjustment button / link on the left page to populate fields on the right
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
 
-        //set supplemental data definition to e Denom
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('Denom').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('Initial Population Description')
+        //set Risk Adjustment data definition to e Denom
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Denom').click()
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).should('exist')
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).type('Initial Population Description')
 
-        //save the supplemental data
-        cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
+        //save the Risk Adjustment data
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
+        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
         //navigate to the CQL tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -145,11 +145,11 @@ describe('Validations between Supplemental Data and Risk Adjustments with the CQ
         //navigate back to the group page
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        //navigate to the supplemental data tab and clear it's values
-        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
+        //navigate to the Risk Adjustment data tab and clear it's values
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
         cy.get(MeasureGroupPage.removeCloseDefinitionSelection).click()
-        cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
+        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
         cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
@@ -181,38 +181,38 @@ describe('Validations between Supplemental Data and Risk Adjustments with the CQ
         cy.get(MeasureGroupPage.CQLHasErrorMsg).should('not.exist')
 
         //navigate back to SA and RA tabs and set their definitions to something in the CQl and save and no errors or alerts should appear
-        //click on the Supplemental button / link on the left page to populate fields on the right
-        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+        //click on the Risk Adjustment button / link on the left page to populate fields on the right
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
 
-        //set supplemental data definition to e Denom
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('Denom').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('SA Description')
-        //save the supplemental data
-        cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
+        //set Risk Adjustment definition to e Denom
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Denom').click()
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).should('exist')
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).type('SA Description')
+        //save the Risk Adjustment
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
+        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
 
     })
-    it('Fixing SD to point to something that is, now, in CQL, resolves alert.', () => {
+    it('Fixing RA to point to something that is, now, in CQL, resolves alert.', () => {
 
         cy.get(Header.measures).click()
         MeasuresPage.measureAction("edit")
         //navigate to the PC page / tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        //click on the Supplemental button / link on the left page to populate fields on the right
-        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+        //click on the Risk Adjustment button / link on the left page to populate fields on the right
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
 
-        //set supplemental data definition to e Denom
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('Denom').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('Initial Population Description')
+        //set Risk Adjustment definition to e Denom
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Denom').click()
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).should('exist')
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).type('Initial Population Description')
 
-        //save the supplemental data
-        cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
+        //save the Risk Adjustment
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
+        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
         //navigate to the CQL tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -242,25 +242,25 @@ describe('Validations between Supplemental Data and Risk Adjustments with the CQ
         //navigate back to the group page
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        //navigate to the supplemental data tab and clear it's, current, value and add another value (to the same for SA and RA)
-        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
+        //navigate to the Risk Adjustment tab and clear it's, current, value and add another value (to the same for SA and RA)
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
         cy.get(MeasureGroupPage.removeCloseDefinitionSelection).click()
-        cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
 
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
+        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg, { timeout: 25000 }).should('not.be.visible')
+        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg, { timeout: 25000 }).should('not.be.visible')
 
-        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
 
-        //set supplemental data definition to e Denom
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('Initial Population').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('SA Description')
+        //set Risk Adjustment definition to e Denom
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Initial Population').click()
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).should('exist')
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).type('SA Description')
 
-        //save the supplemental data
-        cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
+        //save the Risk Adjustment
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
+        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
         cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
@@ -275,18 +275,18 @@ describe('Validations between Supplemental Data and Risk Adjustments with the CQ
         MeasuresPage.measureAction("edit")
         //navigate to the PC page / tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        //click on the Supplemental button / link on the left page to populate fields on the right
-        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+        //click on the Risk Adjustment button / link on the left page to populate fields on the right
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
 
-        //set supplemental data definition to e Denom
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('Denom').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('Initial Population Description')
+        //set Risk Adjustment definition to e Denom
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Denom').click()
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).should('exist')
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).type('Initial Population Description')
 
-        //save the supplemental data
-        cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
+        //save the Risk Adjustment
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
+        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
         //navigate to the CQL tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
