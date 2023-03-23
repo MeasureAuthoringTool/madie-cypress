@@ -122,6 +122,10 @@ describe.skip('FHIR Measure Export', () => {
         cy.log('Version Created Successfully')
 
         MeasuresPage.measureAction('export')
+        cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
+        cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')
+        Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 10000)
+        cy.get(MeasuresPage.exportFinishedContinueBtn).click()
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('exist')
         cy.log('Successfully verified zip file export')
