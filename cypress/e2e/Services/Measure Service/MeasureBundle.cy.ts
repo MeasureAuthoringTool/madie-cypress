@@ -181,7 +181,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
 
     })
 
-    it.only('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
+    it('Get Measure bundle data from madie-fhir-service and confirm all pertinent data is present', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
