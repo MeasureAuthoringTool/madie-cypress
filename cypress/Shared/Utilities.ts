@@ -1,9 +1,56 @@
 import { TestCasesPage } from "./TestCasesPage"
 import { Header } from "./Header"
 import { MeasureGroupPage } from "./MeasureGroupPage"
-import { CQLLibraryPage } from "./CQLLibraryPage";
+import { CQLLibraryPage } from "./CQLLibraryPage"
+import { v4 as uuidv4 } from 'uuid'
 
 export class Utilities {
+
+    public static UpdateMeasureAddMetaDataAPI (measureName: string, CqlLibraryName: string, measureCQL: string): void {
+
+        const now = require('dayjs')
+
+        let mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
+        let mpEndDate = now().format('YYYY-MM-DD')
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
+                    cy.request({
+                        failOnStatusCode: false,
+                        url: '/api/measures/' + id,
+                        method: 'PUT',
+                        headers: {
+                            Authorization: 'Bearer ' + accessToken.value
+                        },
+                        body: {
+                            'id': id,
+                            'measureName': measureName,
+                            'cqlLibraryName': CqlLibraryName,
+                            'ecqmTitle': 'eCQMTitle',
+                            'versionId': vId,
+                            'measureSetId': uuidv4(),
+                            'model': 'QI-Core v4.1.1',
+                            'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
+                            'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
+                            'cql': measureCQL,
+                            'measureMetaData': {"steward": {"name": "SemanticBits",
+                                    "id": "64120f265de35122e68dac40",
+                                    "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
+                                    "url": "https://semanticbits.com/"}},
+                            'programUseContext': {"code": "mips",
+                                "display": "MIPS",
+                                "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"}
+                        }
+                    }).then((response) => {
+                        console.log(response)
+                        expect(response.status).to.eql(200)
+                        cy.log("Measure Updated successfully")
+                    })
+                })
+            })
+        })
+    }
 
     public static deleteMeasure(measureName: string, cqlLibraryName: string, deleteSecondMeasure?: boolean, altUser?: boolean): void {
 
