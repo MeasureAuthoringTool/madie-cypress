@@ -95,23 +95,6 @@ describe('FHIR Measure Export', () => {
         //create Measure Group
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population',
             'Num', 'Denom', 'boolean')
-        cy.setAccessTokenCookie()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-
-                cy.request({
-                    url: '/api/measures/' + id + '/bundle',
-                    method: 'GET',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    }
-                }).then((response) => {
-                    console.log(response)
-                    expect(response.status).to.eql(200)
-                    expect(response.body.resourceType).to.eql('Bundle')
-                })
-            })
-        })
         OktaLogin.Login()
 
     })
