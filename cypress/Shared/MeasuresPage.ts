@@ -8,10 +8,8 @@ export class MeasuresPage {
     public static readonly searchInputBox = '[data-testid="searchMeasure-input"]'
 
     //export
-    public static readonly exportingDialog = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 ' +
-        'MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-mbdu2s"]'
-    public static readonly exportingSpinner = '[<circle class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate ' +
-        'css-14891ef" cx="44" cy="44" r="20.2" fill="none" stroke-width="3.6"></circle>]'
+    public static readonly exportingDialog = '[class="MuiBox-root css-1c2c0mn"]'
+    public static readonly exportingSpinner = '[class="MuiCircularProgress-svg css-13o7eu2"]'
     public static readonly exportFinishedCheck = '[data-testid="CheckCircleOutlineIcon"]'
     public static readonly exportFinishedContinueBtn = '[data-testid="ds-btn"]'
     public static readonly exportingDialogContent = '[id="export-dialog-content"]'
@@ -101,9 +99,10 @@ export class MeasuresPage {
                     Utilities.waitForElementEnabled('[data-testid=export-measure-' + fileContents + ']', 30000)
                     cy.get('[data-testid=export-measure-' + fileContents + ']').should('be.enabled')
                     cy.get('[data-testid=export-measure-' + fileContents + ']').click()
-                    cy.wait('@measureExport', { timeout: 60000 }).then(({ response }) => {
-                        expect(response.statusCode).to.eq(200)
-                    })
+
+                    cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
+                    cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')
+                    Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 50000)
                     cy.get('.toast').should('contain.text', 'Measure exported successfully')
                     break
                 }
