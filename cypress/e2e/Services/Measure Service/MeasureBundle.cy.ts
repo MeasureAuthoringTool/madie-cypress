@@ -103,9 +103,13 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
 
+        //add meta data, still in progress, needs more work cvasile 2/23/23
+        //Utilities.UpdateMeasureAddMetaDataAPI(newMeasureName, newCqlLibraryName, measureCQL)
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
+                    failOnStatusCode: false,
                     url: '/api/measures/' + retrievedMeasureID + '/groups/',
                     method: 'POST',
                     headers: {
@@ -113,7 +117,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                     },
                     body: {
                         "scoring": 'Proportion',
-                        "populationBasis": 'Boolean',
+                        "populationBasis": 'boolean',
                         "populations": [
                             {
                                 "id": uuidv4(),
@@ -160,6 +164,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                         ]
                     }
                 }).then((response) => {
+                    console.log(response)
                     expect(response.status).to.eql(201)
                     expect(response.body.id).to.be.exist
                     cy.writeFile('cypress/fixtures/groupId', response.body.id)
