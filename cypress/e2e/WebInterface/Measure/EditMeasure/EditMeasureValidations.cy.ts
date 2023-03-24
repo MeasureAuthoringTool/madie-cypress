@@ -9,11 +9,9 @@ let CqlLibraryName = 'TestLibrary' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
 
-
 describe('Edit Measure Validations', () => {
     before('Create Measure', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
 
     })
@@ -75,6 +73,27 @@ describe('Edit Measure Validations', () => {
         cy.get(CreateMeasurePage.eCQMAbbreviatedTitleFieldLevelError).should('contain.text', 'eCQM Abbreviated Title cannot be more than 32 characters')
 
         cy.get(EditMeasurePage.measurementInformationSaveButton).should('be.disabled')
+    })
+
+    it('Verify error message when the endorsement id is null or invalid', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Add invalid Endorser Number
+        cy.get(EditMeasurePage.endorsingOrganizationTextBox).click()
+        cy.get(EditMeasurePage.endorsingOrganizationTextBox).type('NQF')
+        cy.get(EditMeasurePage.endorsingOrganizationOption).click()
+        cy.get(EditMeasurePage.endorsementNumber).type('23!@$')
+        cy.get(EditMeasurePage.measurementInformationSaveButton).click()
+
+        cy.get(EditMeasurePage.endorserFieldsErrorMsg).should('contain.text', 'Endorser Number must be alpha numeric')
+
+        //Add Endorsing Organization without Endorser Number
+        cy.get(EditMeasurePage.endorsementNumber).clear()
+        cy.get(EditMeasurePage.measurementInformationSaveButton).click()
+
+        cy.get(EditMeasurePage.endorserFieldsErrorMsg).should('contain.text', 'Endorser Number is Required')
+
     })
 })
 
