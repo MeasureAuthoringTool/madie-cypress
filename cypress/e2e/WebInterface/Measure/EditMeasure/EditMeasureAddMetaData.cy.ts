@@ -49,6 +49,21 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //Enter meta data
 
+        //Endorser Fields on Name, Version & ID page
+
+        //Verify that the Endorsement Number field is disabled before adding Endorsement Organization
+        cy.get(EditMeasurePage.endorsementNumber).should('be.disabled')
+        //Save Endorsement Organization
+        cy.get(EditMeasurePage.endorsingOrganizationTextBox).click()
+        cy.get(EditMeasurePage.endorsingOrganizationTextBox).type('NQF')
+        cy.get(EditMeasurePage.endorsingOrganizationOption).click()
+        cy.get(EditMeasurePage.endorsementNumber).should('be.enabled')
+        cy.get(EditMeasurePage.endorsementNumber).type('345678')
+        cy.get(EditMeasurePage.measurementInformationSaveButton).click()
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('exist')
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('be.visible')
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
+
         //Program Use Context on Name, Version & ID page
         cy.get(EditMeasurePage.programUseContextTextBox).click()
         cy.get(EditMeasurePage.programUseContextTextBox).type('EH/CAH')
@@ -122,6 +137,15 @@ describe('Edit Measure: Add Meta Data', () => {
         MeasuresPage.measureAction("edit")
 
         //verification of data entry
+
+        //Endorsing Organization and number on Name, Version & ID page
+        cy.get(EditMeasurePage.endorsingOrganizationTextBox).invoke('val').then(endorsingOrg => {
+            cy.get(EditMeasurePage.endorsementNumber).invoke('val').then(endorsementNumber => {
+                expect(endorsingOrg).to.eql('NQF')
+                expect(endorsementNumber).to.eql('345678')
+            })
+        })
+        cy.log('Endorsing Organization and number added successfully')
 
         //Program Use Context on Name, Version & ID page
         cy.get(EditMeasurePage.programUseContextTextBox).invoke('val').then(val => {

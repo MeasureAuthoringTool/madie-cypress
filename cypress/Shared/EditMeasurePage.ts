@@ -24,6 +24,12 @@ export class EditMeasurePage {
     public static readonly programUseContextTextBox = '[id="programUseContext"]'
     public static readonly programUseContextOption = '#programUseContext-listbox'
 
+    //Endorser fields
+    public static readonly endorsementNumber = '[data-testid="endorsement-number-input"]'
+    public static readonly endorsingOrganizationTextBox = '[id="endorser"]'
+    public static readonly endorsingOrganizationOption = '#endorser-option-0'
+    public static readonly endorserFieldsErrorMsg = '[class="toast danger"]'
+
     //left panel
     public static readonly leftPanelMeasureInformation = '[data-testid="leftPanelMeasureInformation"]'
     public static readonly leftPanelMeasureSteward = '[data-testid="leftPanelMeasureSteward"]'
