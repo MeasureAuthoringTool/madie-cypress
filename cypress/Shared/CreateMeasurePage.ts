@@ -10,6 +10,7 @@ export class CreateMeasurePage {
     public static readonly measureNameTextbox = '[data-testid=measure-name-text-field]'
     public static readonly measureModelDropdown = '#model-select'
     public static readonly measureModelQICore = '[data-testid="measure-model-option-QI-Core v4.1.1"]'
+    public static readonly measureModelQDMv5_6 = '[data-testid="measure-model-option-QDM v5.6"]'
     public static readonly measureModelFieldLevelError = '.MuiFormHelperText-root'
     public static readonly eCQMAbbreviatedTitleTextbox = '[data-testid="ecqm-input"]'
     public static readonly eCQMAbbreviatedTitleFieldLevelError = '[data-testid="ecqmTitle-helper-text"]'
@@ -135,13 +136,19 @@ export class CreateMeasurePage {
                     'measureSetId': uuidv4(),
                     'cql': measureCQL,
                     'elmJson': elmJson,
-                    'measureMetaData': {"steward": {"name": "SemanticBits",
+                    'measureMetaData': {
+                        "steward": {
+                            "name": "SemanticBits",
                             "id": "64120f265de35122e68dac40",
                             "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
-                            "url": "https://semanticbits.com/"}},
-                    'programUseContext': {"code": "mips",
+                            "url": "https://semanticbits.com/"
+                        }
+                    },
+                    'programUseContext': {
+                        "code": "mips",
                         "display": "MIPS",
-                        "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"}
+                        "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
+                    }
                 }
             }).then((response) => {
                 console.log(response)
