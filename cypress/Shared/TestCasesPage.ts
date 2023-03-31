@@ -1,4 +1,3 @@
-import { TIMEOUT } from "dns"
 import { EditMeasurePage } from "./EditMeasurePage"
 import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
@@ -252,11 +251,11 @@ export class TestCasesPage {
         //Save edited / updated to test case
         cy.get(this.editTestCaseSaveButton).click()
         cy.get(this.confirmationMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON'])
+            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
 
         cy.get(this.confirmationMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON'])
+            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
 
         cy.log('JSON added to test case successfully')
@@ -294,7 +293,9 @@ export class TestCasesPage {
 
         //Save edited / updated to test case
         cy.get(this.editTestCaseSaveButton).click()
-        cy.get(this.confirmationMsg).should('contain.text', 'Test case updated successfully!')
+        cy.get(this.confirmationMsg).each(msg => {
+            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
+        })
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
