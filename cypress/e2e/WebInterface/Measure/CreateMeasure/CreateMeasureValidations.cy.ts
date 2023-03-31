@@ -491,8 +491,8 @@ describe('Create Measure validations', () => {
 
     })
 
-    //Measure Type Validations
-    it('Verify error message when the Measure Type field is empty', () => {
+    //Measure Model Validations
+    it('Verify error message when the Measure Model field is empty', () => {
 
         let measureName = 'MeasureTypeTest' + Date.now()
         let CqlLibraryName = 'MeasureTypeTestLibrary' + Date.now()
@@ -507,6 +507,25 @@ describe('Create Measure validations', () => {
         //Verify if create measure button is disabled
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
+        cy.get(CreateMeasurePage.cancelButton).click()
+
+    })
+    //skipping this test, which was for MAT-5449, until the QDM feature flag is removed.
+    it.skip('Verify measure model options are, both, available', () => {
+
+        let measureName = 'MeasureTypeTest' + Date.now()
+        let CqlLibraryName = 'MeasureTypeTestLibrary' + Date.now()
+
+
+        //Click on New Measure Button
+        cy.get(LandingPage.newMeasureButton).click()
+        cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
+        cy.get(CreateMeasurePage.measureModelDropdown).click()
+        cy.get(CreateMeasurePage.measureModelQICore).click()
+        cy.get(CreateMeasurePage.measureModelDropdown).should('contain.text', 'QI-Core v4.1.1')
+        cy.get(CreateMeasurePage.measureModelDropdown).click()
+        cy.get(CreateMeasurePage.measureModelQDMv5_6).click()
+        cy.get(CreateMeasurePage.measureModelDropdown).should('contain.text', 'QDM v5.6')
         cy.get(CreateMeasurePage.cancelButton).click()
 
     })
