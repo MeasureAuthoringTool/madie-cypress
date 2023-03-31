@@ -37,8 +37,8 @@ export class TestCaseJson {
 
     public static readonly TestCaseJson_missingResourceIDs = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1",' +
         ' "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter",' +
-        ' "resource": { "resourceType": "Encounter","meta": { "versionId": "1","lastUpdated": "2021-10-13T03:34:10.160+00:00","source":"#nEcAkGd8PRwPP5fA"},' +
-        ' "text": { "status": "generated","div":"<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Sep 9th 2021 for Asthma<a name=\\"mm\\"/></div>\"},' +
+        ' "resource": { "resourceType": "Encounter","meta": { "profile": [ "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter" ],"versionId": "1","lastUpdated": "2021-10-13T03:34:10.160+00:00",' +
+        ' "source":"#nEcAkGd8PRwPP5fA"}, "text": { "status": "generated","div":"<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Sep 9th 2021 for Asthma<a name=\\"mm\\"/></div>\"},' +
         ' "status": "finished","class": { "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode","code": "IMP","display":"inpatient encounter"},' +
         ' "type": [ { "text": "OutPatient"} ],"subject": { "reference": "Patient/1"},"participant": [ { "individual": { "reference": "Practitioner/30164",' +
         ' "display": "Dr John Doe"}} ],"period": { "start": "2021-01-01T03:34:10.054Z"}}}, { "fullUrl": "http://local/Patient","resource": { "resourceType":' +
@@ -48,7 +48,7 @@ export class TestCaseJson {
 
     public static readonly TestCaseJson_resourceIDsDup = '{{}"resourceType": "Bundle", "id": "1366", "meta": {{}   "versionId": "1",' +
         ' "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {{}   "fullUrl": "http://local/Encounter",' +
-        ' "resource": {{} "id":"1", "resourceType": "Encounter","meta": {{} "versionId": "1","lastUpdated": "2021-10-13T03:34:10.160+00:00","source":"#nEcAkGd8PRwPP5fA"},' +
+        ' "resource": {{} "id":"1", "resourceType": "Encounter","meta": {{} "profile": [ "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter" ],"versionId": "1","lastUpdated": "2021-10-13T03:34:10.160+00:00","source":"#nEcAkGd8PRwPP5fA"},' +
         ' "text": {{} "status": "generated","div":"<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Sep 9th 2021 for Asthma<a name=\\"mm\\"/></div>\"},' +
         ' "status": "finished","class": {{} "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode","code": "IMP","display":"inpatient encounter"},' +
         ' "type": [ {{} "text": "OutPatient"} ],"subject": {{} "reference": "Patient/1"},"participant": [ {{} "individual": {{} "reference": "Practitioner/30164",' +
@@ -56,6 +56,31 @@ export class TestCaseJson {
         ' "Patient","text": {{} "status": "generated","div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Lizzy Health</div>\"}, "meta": {{} "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"}, "identifier":' +
         ' [ {{} "system": "http://clinfhir.com/fhir/NamingSystem/identifier","value": "20181011LizzyHealth"} ],"name": [ {{} "use": "official",' +
         ' "text": "Lizzy Health","family": "Health","given": [ "Lizzy" ]} ],"gender": "female","birthDate": "2000-10-11"}} ]}'
+
+    public static readonly TestCaseJson_missingMetaProfile = '{ "resourceType": "Bundle","id": "IP-Pass-CVPatient","meta": { "versionId": "1",' +
+        '"lastUpdated": "2022-09-14T15:14:42.152+00:00"  },"type": "collection","entry": [ { "fullUrl": "609bde3598086b0a16d79fc6","resource": { "resourceType": "Patient",' +
+        '"meta": { "profile": [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient" ] },"id": "609bde3598086b0a16d79fc6","text": { "status":' +
+        '"generated","div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\"><div class=\\"hapiHeaderText\\">LocationPeriodStartTimeMissing <b>MSRPOPLEXSTRAT2PASS </b></div><table ' +
+        'class=\\"hapiPropertyTable\\"><tbody><tr><td>Identifier</td><td>8065dc8d26797064d8766be71f2bf020</td></tr><tr><td>Date of birth</td><td><span>10 February 1954</span></td></tr></tbody></table></div>"' +
+        '},"extension" : [{ "extension" : [{ "url" : "ombCategory", "valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238","code" : "2106-3",' +
+        '"display" : "White" } },{ "url" : "ombCategory","valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238","code" : "1002-5","display" : "American Indian or Alaska Native"' +
+        '}}, { "url" : "ombCategory","valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238","code" : "2028-9","display" : "Asian"}' +
+        ' },{ "url" : "detailed","valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238","code" : "1586-7","display" : "Shoshone"}},' +
+        '{ "url" : "detailed","valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238","code" : "2036-2","display" : "Filipino"} },' +
+        '{ "url" : "text","valueString" : "Mixed"  }],"url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"}, { "extension" : ' +
+        '[ { "url" : "ombCategory","valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238","code" : "2135-2","display" : "Hispanic or Latino"' +
+        '} },{ "url" : "detailed","valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238","code" : "2184-0","display" : "Dominican"}}, { "url" : "detailed",' +
+        '"valueCoding" : { "system" : "urn:oid:2.16.840.1.113883.6.238","code" : "2148-5","display" : "Mexican"} }, { "url" : "text","valueString" :' +
+        ' "Hispanic or Latino"} ],"url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"}, { "url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",' +
+        '"valueCode" : "F" }, { "url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity","valueCodeableConcept" : { "coding" : ' +
+        '[{ "system" : "http://terminology.hl7.org/CodeSystem/v3-NullFlavor","code" : "ASKU","display" : "asked but unknown"} ],' +
+        '"text" : "asked but unknown" } } ],"identifier": [ { "type": { "coding": [ { "system": "http://terminology.hl7.org/CodeSystem/v2-0203",' +
+        '"code": "MR"} ] },"system": "http://MyGoodHealthare.com/MedicalRecord","value": "8065dc8d26797064d8766be71f2bf020"} ],"active": true,' +
+        '"name": [ { "use": "usual","family": "IPPass","given": [ "IPPass" ] } ],"gender": "male","birthDate": "1954-02-10" } }, {' +
+        '"fullUrl": "5c6c61ceb84846536a9a98f9","resource": { "resourceType": "Encounter","id": "5c6c61ceb84846536a9a98f9","status": "finished",' +
+        '"class" : { "system" : "http://terminology.hl7.org/CodeSystem/v3-ActCode","code" : "IMP","display" : "inpatient encounter"},' +
+        '"type": [ { "coding": [ {"system": "http://snomed.info/sct","code": "183452005" } ] } ],"subject": { "reference": "Patient/609bde3598086b0a16d79fc6"  },' +
+        '"period": { "start": "2012-01-16T08:00:00+00:00","end": "2012-02-15T09:00:00+00:00" }} }]}'
 
     public static readonly TestCaseJson_Valid_w_All_Encounter = '{\n' +
         '  "resourceType": "Bundle",\n' +
