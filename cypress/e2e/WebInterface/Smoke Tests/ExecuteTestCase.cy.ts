@@ -80,7 +80,7 @@ describe('Execute Test Case', () => {
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
 
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
@@ -114,7 +114,7 @@ describe('Execute Test Case', () => {
         //Save updated test case
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -167,7 +167,7 @@ describe('Execute Test Case', () => {
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

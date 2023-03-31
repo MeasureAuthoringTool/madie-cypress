@@ -2,7 +2,7 @@ export class TestCaseJson {
 
     public static readonly TestCaseJson_Valid = '{ "resourceType": "Bundle", "id": "1366", "meta": { "versionId": "1", ' +
         '"lastUpdated": "2022-03-30T19:02:32.620+00:00" }, "type": "collection", "entry": [ { "fullUrl": "http://local/Encounter", ' +
-        '"resource": { "id": "1", "resourceType": "Encounter", "meta": { "versionId": "1", "lastUpdated": "2021-10-13T03:34:10.160+00:00", ' +
+        '"resource": { "id": "1", "resourceType": "Encounter", "meta": { "profile": [ "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter" ],"versionId": "1", "lastUpdated": "2021-10-13T03:34:10.160+00:00", ' +
         '"source": "#nEcAkGd8PRwPP5fA" }, "text": { "status": "generated", "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Sep ' +
         '9th 2021 for Asthma<a name=\\"mm\\"/></div>" }, "status": "in-progress", "class": { "system": "http://terminology.hl7.org/' +
         'CodeSystem/v3-ActCode", "code": "IMP", "display": "inpatient encounter" }, "type": [ { "text": "OutPatient" } ], "subject": ' +
