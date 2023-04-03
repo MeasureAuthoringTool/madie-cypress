@@ -136,7 +136,7 @@ export class CreateMeasurePage {
                     'measureSetId': uuidv4(),
                     'cql': measureCQL,
                     'elmJson': elmJson,
-                    'measureMetaData': {"steward": {
+                    'measureMetaData': {
                             "description": "SemanticBits",
                             "steward": {
                             "name": "SemanticBits",
