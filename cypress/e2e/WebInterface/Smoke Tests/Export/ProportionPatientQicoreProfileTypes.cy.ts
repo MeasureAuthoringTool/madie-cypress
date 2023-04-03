@@ -221,8 +221,6 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
     after('Log out', () => {
 
         OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Validate the zip file Export is downloaded and can be unzipped', () => {
