@@ -11,6 +11,7 @@ let newMeasureName = ''
 let CQLLibraryName = ''
 let newCQLLibraryName = ''
 let model = 'QI-Core v4.1.1'
+let QDMModel = 'QDM v5.6'
 let harpUser = Environment.credentials().harpUser
 let measureNameU = 'TestMeasure' + Date.now() + 1
 let CqlLibraryNameU = 'TestLibrary' + Date.now() + 1
@@ -36,7 +37,7 @@ describe('Measure Service: Create Measure', () => {
         Utilities.deleteMeasure(measureName, CQLLibraryName)
 
     })
-    //create measure
+    //create QI-Core measure
     it('Create New Measure, successful creation', () => {
         measureName = 'TestMeasure' + Date.now() + randValue
         CQLLibraryName = 'TestCql' + Date.now() + randValue
@@ -63,6 +64,35 @@ describe('Measure Service: Create Measure', () => {
                 expect(response.body.createdBy).to.eql(harpUser)
                 cy.writeFile('cypress/fixtures/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+            })
+
+        })
+    })
+    //create a QDM measure
+    it('Create New Measure, successful creation', () => {
+        measureName = 'TestMeasure' + Date.now() + randValue
+        CQLLibraryName = 'TestCql' + Date.now() + randValue
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/measure',
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken.value
+                },
+                body: {
+                    "measureName": measureName,
+                    "cqlLibraryName": CQLLibraryName,
+                    "model": QDMModel,
+                    "versionId": uuidv4(),
+                    "measureSetId": uuidv4(),
+                    "ecqmTitle": eCQMTitle,
+                    "measurementPeriodStart": mpStartDate,
+                    "measurementPeriodEnd": mpEndDate
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(201)
+                expect(response.body.createdBy).to.eql(harpUser)
             })
 
         })
