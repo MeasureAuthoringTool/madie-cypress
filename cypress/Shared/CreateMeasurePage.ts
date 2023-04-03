@@ -136,15 +136,22 @@ export class CreateMeasurePage {
                     'measureSetId': uuidv4(),
                     'cql': measureCQL,
                     'elmJson': elmJson,
-                    'measureMetaData': {
-                        "steward": {
+                    'measureMetaData': {"steward": {
                             "name": "SemanticBits",
                             "id": "64120f265de35122e68dac40",
                             "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
                             "url": "https://semanticbits.com/"
-                        }
+
+                        }, "developers": [
+                            {
+                                "id": "64120f265de35122e68dabf7",
+                                "name": "Academy of Nutrition and Dietetics",
+                                "oid": "2.16.840.1.113883.3.6308",
+                                "url": "www.eatrightpro.org"
+                            }
+                        ]
                     },
-                    'programUseContext': {
+                   'programUseContext': {
                         "code": "mips",
                         "display": "MIPS",
                         "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
