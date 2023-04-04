@@ -1,20 +1,47 @@
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { Header } from "../../../Shared/Header"
 import { Utilities } from "../../../Shared/Utilities"
+import { v4 as uuidv4 } from 'uuid'
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let updatedMeasureName = 'UpdatedTestMeasure' + Date.now()
+const now = require('dayjs')
+let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
+let mpEndDate = now().format('YYYY-MM-DD')
 
 describe('Edit Measure', () => {
 
     before('Create Measure and Login', () => {
 
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        cy.setAccessTokenCookie()
+
+        //Create Measure with out Steward and Developer
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/measure',
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken.value
+                },
+                body: {
+                    "measureName": measureName,
+                    "cqlLibraryName": CqlLibraryName,
+                    "model": 'QI-Core v4.1.1',
+                    "versionId": uuidv4(),
+                    "measureSetId": uuidv4(),
+                    "ecqmTitle": 'eCQMTitle',
+                    'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
+                    'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z"
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(201)
+                cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+            })
+        })
         OktaLogin.Login()
     })
 
