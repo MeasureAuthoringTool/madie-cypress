@@ -231,7 +231,7 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(TestCasesPage.detailsTab).should('exist')
             cy.get(TestCasesPage.detailsTab).should('be.visible')
             cy.get(TestCasesPage.detailsTab).click()
-            cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully!')
+            cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
             //navigate back to the measure group tab / page and...
             //change score unit value and save / update measure with new value
             cy.get(EditMeasurePage.measureGroupsTab).click()
