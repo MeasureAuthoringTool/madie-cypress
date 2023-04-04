@@ -66,7 +66,7 @@ export class EditMeasurePage {
     public static readonly measureDeveloperDrpDwn = '[data-testid="developers"]'
     public static readonly measureDevelopersDrpDwnOption = '#developers-option-0'
     public static readonly measureDevelopersObjHoldingValue = '#developers'
-    //<span class="MuiChip-label MuiChip-labelMedium css-9iedg7">ACO Health Solutions</span>
+    public static readonly measureDeveloperCancelIcon = '[data-testid="CancelIcon"]'
     public static readonly measureStewardDevelopersSaveButton = '[data-testid="steward-and-developers-save"]'
     public static readonly measureStewardDevelopersSuccessMessage = '[data-testid="steward-and-developers-success"]'
     public static readonly measureStewardAlertMsg = '[data-testid="steward-helper-text"]'
