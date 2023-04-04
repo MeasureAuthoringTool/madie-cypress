@@ -7,6 +7,9 @@ let CqlLibraryName = 'MeasureExportLibrary' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
+const now = require('dayjs')
+let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
+let mpEndDate = now().format('YYYY-MM-DD')
 let measureCQL_WithErrors = 'library APICQLLibrary35455 version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' \n' +
@@ -159,6 +162,7 @@ describe('Measure Export', () => {
     })
 })
 
+//Need to revisit the error message after bug fix
 describe('Error Message on Measure Export when the Measure does not have CQL', () => {
 
     before('Create New Measure and Login', () => {
@@ -190,13 +194,14 @@ describe('Error Message on Measure Export when the Measure does not have CQL', (
                 }).then((response) => {
                     console.log(response)
                     expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since there is no associated CQL.')
+                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since there is no population criteria on the measure.')
                 })
             })
         })
     })
 })
 
+//Need to revisit the error message after bug fix
 describe('Error Message on Measure Export when the Measure CQL has errors', () => {
 
     before('Create New Measure and Login', () => {
@@ -228,7 +233,7 @@ describe('Error Message on Measure Export when the Measure CQL has errors', () =
                 }).then((response) => {
                     console.log(response)
                     expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since CQL errors exist.')
+                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since there is no population criteria on the measure.')
                 })
             })
         })
@@ -266,7 +271,151 @@ describe('Error Message on Measure Export when the Measure does not have Populat
                 }).then((response) => {
                     console.log(response)
                     expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since there are no associated population criteria.')
+                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since there is no population criteria on the measure.')
+                })
+            })
+        })
+    })
+})
+
+describe('Error Message on Measure Export when the Measure does not have Steward and Developer', () => {
+
+    before('Create New Measure and Login', () => {
+
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = CqlLibraryName + randValue
+
+        cy.setAccessTokenCookie()
+
+        //Create Measure with out Steward and Developer
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/measure',
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken.value
+                },
+                body: {
+                    "measureName": newMeasureName,
+                    "cqlLibraryName": newCqlLibraryName,
+                    "model": 'QI-Core v4.1.1',
+                    "versionId": uuidv4(),
+                    "measureSetId": uuidv4(),
+                    "ecqmTitle": 'eCQMTitle',
+                    'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
+                    'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
+                    'measureMetaData': {
+                        "description": "SemanticBits"}
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(201)
+                cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+            })
+
+        })
+
+    })
+
+    after('Cleanup', () => {
+
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+    })
+
+    it('Verify error message on Measure Export when the Measure does not have Steward and Developer', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + id + '/exports',
+                    method: 'GET',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    }
+                }).then((response) => {
+                    console.log(response)
+                    expect(response.status).to.eql(409)
+                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since there are no associated developers in metadata.')
+                })
+            })
+        })
+    })
+})
+
+describe('Error Message on Measure Export when the Measure does not have Description', () => {
+
+    before('Create New Measure and Login', () => {
+
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = CqlLibraryName + randValue
+
+        cy.setAccessTokenCookie()
+
+        //Create Measure with out Steward and Developer
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/measure',
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken.value
+                },
+                body: {
+                    "measureName": newMeasureName,
+                    "cqlLibraryName": newCqlLibraryName,
+                    "model": 'QI-Core v4.1.1',
+                    "versionId": uuidv4(),
+                    "measureSetId": uuidv4(),
+                    "ecqmTitle": 'eCQMTitle',
+                    'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
+                    'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
+                    'measureMetaData': {
+                        "steward": {
+                            "name": "SemanticBits",
+                            "id": "64120f265de35122e68dac40",
+                            "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
+                            "url": "https://semanticbits.com/"
+
+                        }, "developers": [
+                            {
+                                "id": "64120f265de35122e68dabf7",
+                                "name": "Academy of Nutrition and Dietetics",
+                                "oid": "2.16.840.1.113883.3.6308",
+                                "url": "www.eatrightpro.org"
+                            }
+                        ]
+                    }
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(201)
+                cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+            })
+
+        })
+
+    })
+
+    after('Cleanup', () => {
+
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+    })
+
+    it('Verify error message on Measure Export when the Measure does not have Description', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + id + '/exports',
+                    method: 'GET',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    }
+                }).then((response) => {
+                    console.log(response)
+                    expect(response.status).to.eql(409)
+                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since there is no description in metadata.')
                 })
             })
         })

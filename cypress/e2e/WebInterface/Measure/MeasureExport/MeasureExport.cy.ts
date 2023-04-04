@@ -103,7 +103,6 @@ describe('FHIR Measure Export', () => {
 
         OktaLogin.Logout()
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Validate the zip file Export is downloaded and can be unzipped', () => {
