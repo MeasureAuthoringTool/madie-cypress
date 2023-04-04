@@ -752,7 +752,7 @@ describe('Test Case Json Validations', () => {
                         'series': "Test Series",
                         'title': "Title",
                         'description': "description",
-                        'json': TestCaseJson.API_TestCaseJson_Valid
+                        'json': TestCaseJson.TestCaseJson_Valid
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)
