@@ -75,7 +75,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         //Assert saved observation values
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -138,6 +138,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.denominatorObservationRow).clear().type('1.3')
         cy.get(TestCasesPage.numeratorObservationRow).clear().type('5')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 10000)
 
         //Assert saved observation values
         cy.get(EditMeasurePage.testCasesTab).click()
