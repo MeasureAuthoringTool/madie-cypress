@@ -511,7 +511,8 @@ export class Utilities {
             valueDataElement == MeasureGroupPage.measureScoringProportion ||
             valueDataElement == MeasureGroupPage.measureScoringRatio ||
             valueDataElement == MeasureGroupPage.measureScoringCV ||
-            valueDataElement == CQLLibraryPage.cqlLibraryModelQICore
+            valueDataElement == CQLLibraryPage.cqlLibraryModelQICore ||
+            valueDataElement == CQLLibraryPage.cqlLibraryModelQDM
         ) {
             cy.get(dropdownDataElement).click()
             cy.get(valueDataElement).click()
