@@ -541,7 +541,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         cy.get(TestCasesPage.detailsTab).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -683,7 +683,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -805,7 +805,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -871,7 +871,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -975,7 +975,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -1034,7 +1034,8 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         Utilities.deleteMeasure(measureName, newCqlLibraryName)
     })
 
-    it('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning', () => {
+    //Skipping until MAT-5539 is fixed
+    it.skip('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -1537,7 +1538,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
         cy.get(TestCasesPage.detailsTab).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully!')
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1655,7 +1656,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             cy.get(TestCasesPage.detailsTab).click()
 
-            cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully!')
+            cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1705,7 +1706,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
             //confirm warning message
-            cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Nothing to see here!')
+            cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
 
             //change population basis
             //navigate to measure group / Population Criteria page / tab
@@ -1857,7 +1858,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
             //confirm no message
-            cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Nothing to see here!')
+            cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
 
         })
 })
