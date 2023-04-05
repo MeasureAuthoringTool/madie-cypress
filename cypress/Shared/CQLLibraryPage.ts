@@ -56,6 +56,8 @@ export class CQLLibraryPage {
     //Error marker inside of the CQL Editor window
     public static readonly errorInCQLEditorWindow = 'div.ace_gutter-cell.ace_error'
 
+    //QDM Library
+    public static readonly cqlLibraryModelQDM = '[data-testid="cql-library-model-option-QDM v5.6"]'
 
     public static createCQLLibrary(CQLLibraryName: string, CQLLibraryPublisher: string): void {
 
@@ -86,7 +88,7 @@ export class CQLLibraryPage {
 
         this.validateCQlLibraryName(CQLLibraryName)
         this.validateCQlLibraryModel('QI-Core')
-        cy.log('CQL Library Created Successfully')
+        cy.log('QI-Core CQL Library Created Successfully')
     }
 
     public static validateCQlLibraryName(expectedValue: string): void {
