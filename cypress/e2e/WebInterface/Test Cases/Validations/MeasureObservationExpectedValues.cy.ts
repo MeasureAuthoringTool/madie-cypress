@@ -75,7 +75,6 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).click()
-        //cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully!')
         cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         //Assert saved observation values
