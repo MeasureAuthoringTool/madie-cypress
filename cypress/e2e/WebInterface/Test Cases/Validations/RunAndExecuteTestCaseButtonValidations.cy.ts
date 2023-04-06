@@ -1034,8 +1034,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         Utilities.deleteMeasure(measureName, newCqlLibraryName)
     })
 
-    //Skipping until MAT-5539 is fixed
-    it.skip('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning', () => {
+    it('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
