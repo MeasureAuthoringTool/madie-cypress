@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 export class Utilities {
 
-    public static UpdateMeasureAddMetaDataAPI (measureName: string, CqlLibraryName: string, measureCQL: string): void {
+    public static UpdateMeasureAddMetaDataAPI(measureName: string, CqlLibraryName: string, measureCQL: string): void {
 
         const now = require('dayjs')
 
@@ -36,13 +36,19 @@ export class Utilities {
                             'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
                             'cql': measureCQL,
                             'elmJson': elmJson,
-                            'measureMetaData': {"steward": {"name": "SemanticBits",
+                            'measureMetaData': {
+                                "steward": {
+                                    "name": "SemanticBits",
                                     "id": "64120f265de35122e68dac40",
                                     "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
-                                    "url": "https://semanticbits.com/"}},
-                            'programUseContext': {"code": "mips",
+                                    "url": "https://semanticbits.com/"
+                                }
+                            },
+                            'programUseContext': {
+                                "code": "mips",
                                 "display": "MIPS",
-                                "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"}
+                                "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
+                            }
                         }
                     }).then((response) => {
                         console.log(response)
@@ -178,6 +184,10 @@ export class Utilities {
 
     public static waitForElementVisible = (element: string, timeout: number) => {
         cy.get(element, { timeout: timeout }).should('be.visible')
+    }
+
+    public static waitForElementDisabled = (element: string, timeout: number) => {
+        cy.get(element, { timeout: timeout }).should('be.disabled')
     }
 
     public static waitForElementWriteEnabled = (element: string, timeout: number) => {
@@ -501,7 +511,8 @@ export class Utilities {
             valueDataElement == MeasureGroupPage.measureScoringProportion ||
             valueDataElement == MeasureGroupPage.measureScoringRatio ||
             valueDataElement == MeasureGroupPage.measureScoringCV ||
-            valueDataElement == CQLLibraryPage.cqlLibraryModelQICore
+            valueDataElement == CQLLibraryPage.cqlLibraryModelQICore ||
+            valueDataElement == CQLLibraryPage.cqlLibraryModelQDM
         ) {
             cy.get(dropdownDataElement).click()
             cy.get(valueDataElement).click()

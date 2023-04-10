@@ -107,6 +107,7 @@ export class TestCasesPage {
     public static readonly cvMeasureObservationActualValue = '[data-testid="test-population-measurePopulationObservation-actual"]'
     public static readonly denominatorMeasureObservationActualValue = '[data-testid="test-population-denominatorObservation-actual"]'
     public static readonly numeratorMeasureObservationActualValue = '[data-testid="test-population-numeratorObservation-actual"]'
+    public static readonly measureActualCheckbox = '[class="madie-check actual"]'
 
     //New Test Case Modal
     public static readonly createTestCaseDialog = '[data-testid="dialog-form"]'
@@ -198,9 +199,9 @@ export class TestCasesPage {
         cy.get(this.createTestCaseDialog).should('exist')
         cy.get(this.createTestCaseDialog).should('be.visible')
 
-        cy.get(this.createTestCaseTitleInput).should('exist')
-        Utilities.waitForElementVisible(this.createTestCaseTitleInput, 20000)
-        Utilities.waitForElementEnabled(this.createTestCaseTitleInput, 20000)
+        cy.get(this.createTestCaseTitleInput).should('exist').wait(500)
+        Utilities.waitForElementVisible(this.createTestCaseTitleInput, 30000)
+        Utilities.waitForElementEnabled(this.createTestCaseTitleInput, 30000)
         cy.get(this.createTestCaseTitleInput).type(testCaseTitle.toString())
         cy.get(this.createTestCaseDescriptionInput).should('exist')
         cy.get(this.createTestCaseDescriptionInput).should('be.visible')
@@ -227,7 +228,7 @@ export class TestCasesPage {
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
-        cy.get(TestCasesPage.aceEditor).type(err_TestCaseJson, { parseSpecialCharSequences: false })
+        cy.get(TestCasesPage.aceEditor).wait(500).type(err_TestCaseJson, { parseSpecialCharSequences: false })
 
         cy.log('Erroneous JSON added to test case successfully')
     }
@@ -242,7 +243,7 @@ export class TestCasesPage {
         Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(500)
 
         cy.get(this.aceEditor).type(testCaseJson, { parseSpecialCharSequences: false })
 

@@ -19,9 +19,9 @@ describe('CQL Library Service: Create CQL Library', () => {
 
     })
 
-    it('Create CQL Library, successful creation', () => {
+    it('Create QI-Core CQL Library, successful creation', () => {
 
-        CQLLibraryName = 'TestCqlLibrary' + Date.now()
+        CQLLibraryName = 'QICoreCqlLibrary' + Date.now()
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
@@ -40,6 +40,37 @@ describe('CQL Library Service: Create CQL Library', () => {
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 expect(response.body.cqlLibraryName).to.eql(CQLLibraryName)
+                expect(response.body.model).to.eql(model)
+                expect(response.body.createdBy).to.eql(harpUser)
+                expect(response.body.programUseContext.code).to.eql('a')
+                expect(response.body.programUseContext.display).to.eql('b')
+                expect(response.body.programUseContext.codeSystem).to.eql('c')
+            })
+        })
+    })
+
+    it('Create QDM CQL Library, successful creation', () => {
+
+        CQLLibraryName = 'QDMCqlLibrary' + Date.now()
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/cql-libraries',
+                method: 'POST',
+                headers: {
+                    authorization: 'Bearer ' + accessToken.value
+                },
+                body: {
+                    "cqlLibraryName": CQLLibraryName,
+                    "model": 'QDM v5.6',
+                    "cql": "",
+                    "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(201)
+                expect(response.body.id).to.be.exist
+                expect(response.body.cqlLibraryName).to.eql(CQLLibraryName)
+                expect(response.body.model).to.eql('QDM v5.6')
                 expect(response.body.createdBy).to.eql(harpUser)
                 expect(response.body.programUseContext.code).to.eql('a')
                 expect(response.body.programUseContext.display).to.eql('b')

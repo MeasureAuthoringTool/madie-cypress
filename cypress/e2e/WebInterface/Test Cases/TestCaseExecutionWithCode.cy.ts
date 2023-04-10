@@ -13,8 +13,7 @@ let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 
-//Skipping until MAT-5539 is fixed
-describe.skip('Test Case Execution with codes', () => {
+describe('Test Case Execution with codes', () => {
 
     before('Create Measure and Test case', () => {
 
