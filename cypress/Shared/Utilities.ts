@@ -186,6 +186,10 @@ export class Utilities {
         cy.get(element, { timeout: timeout }).should('be.visible')
     }
 
+    public static waitForElementToNotExist = (element: string, timeout: number) => {
+        cy.get(element, { timeout: timeout }).should('not.exist')
+    }
+
     public static waitForElementDisabled = (element: string, timeout: number) => {
         cy.get(element, { timeout: timeout }).should('be.disabled')
     }
