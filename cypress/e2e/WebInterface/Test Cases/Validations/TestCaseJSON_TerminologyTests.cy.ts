@@ -692,7 +692,7 @@ describe('Tests around cardinality violations', () => {
     afterEach('Log out', () => {
 
         OktaLogin.Logout()
-        //Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
     it('Verify error is returned when there is a model violation -- use an object where expecting an array', () => {
         cy.get(Header.measures).click()
