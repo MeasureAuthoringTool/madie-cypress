@@ -277,7 +277,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
 
     })
-    it.only('Placing definition back into CQL and saving resolves the alert.', () => {
+    it('Placing definition back into CQL and saving resolves the alert.', () => {
         cy.get(Header.measures).click()
         MeasuresPage.measureAction("edit")
         //navigate to the PC page / tab
