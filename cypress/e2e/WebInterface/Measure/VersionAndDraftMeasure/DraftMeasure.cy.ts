@@ -93,13 +93,16 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
 
-        cy.log('Draft Created Successfully')
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
 
-        MeasuresPage.measureAction('draft')
-        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName + '1')
-        cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get(MeasuresPage.VersionDraftErrMsgs).should('contains.text', 'Can not create a draft for the measure ')
-        cy.get(MeasuresPage.VersionDraftErrMsgs).should('contains.text', '. Only one draft is permitted per measure.')
+            //Verify version button is not visible
+            cy.get('[data-testid=draft-measure-' + fileContents + ']').should('not.exist')
+        })
     })
 })
 
