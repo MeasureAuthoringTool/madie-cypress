@@ -1876,4 +1876,373 @@ export class TestCaseJson {
 
     public static readonly API_TestCaseJson_InValid = '{\n  \"resourceType\": \"Account\",\n  \"id\": \"508\",\n  \"meta\": {\n    \"versionId\": \"1\",\n    \"lastUpdated\": \"2022-03-01T17:36:04.110+00:00\",\n    \"profile\": [ \"http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient\" ]\n  },\n  \"text\": {\n    \"status\": \"extensions\",\n    \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><p><b>Generated Narrative</b></p></div>\"\n  },\n  \"identifier\": [ {\n    \"use\": \"usual\",\n    \"type\": {\n      \"coding\": [ {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n        \"code\": \"MR\",\n        \"display\": \"Medical Record Number\"\n      } ],\n      \"text\": \"Medical Record Number\"\n    },\n    \"system\": \"http://hospital.smarthealthit.org\",\n    \"value\": \"1032702\"\n  } ],\n  \"name\": [ {\n    \"given\": [ \"Tester\" ]\n  } ],\n  \"gender\": \"female\"\n}'
 
+    public static readonly tcCardErrorJson = '{' +
+        '    "id": "62bc69333e113102f8cedca6",' +
+        '    "resourceType": "Bundle",' +
+        '    "type": "collection",' +
+        '    "entry": [' +
+        '      {' +
+        '        "fullUrl": "62bc69333e113102f8cedca6",' +
+        '       "resource": {' +
+        '          "id": "62bc69333e113102f8cedca6",' +
+        '          "meta": {' +
+        '            "profile": [' +
+        '              "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"' +
+        '            ]' +
+        '          },' +
+        '          "resourceType": "Patient",' +
+        '          "extension": [' +
+        '            {' +
+        '              "extension": [' +
+        '                {' +
+        '                  "url": "ombCategory",' +
+        '                  "valueCoding": {' +
+        '                    "system": "urn:oid:2.16.840.1.113883.6.238",' +
+        '                    "code": "1002-5",' +
+        '                    "display": "American Indian or Alaska Native",' +
+        '                    "userSelected": "true"' +
+        '                  }' +
+        '                },' +
+        '                {' +
+        '                  "url": "text",' +
+        '                  "valueString": "American Indian or Alaska Native"' +
+        '                }' +
+        '                ' +
+        '              ],' +
+        '              "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"' +
+        '            },' +
+        '            {' +
+        '              "extension": [' +
+        '                {' +
+        '                  "url": "ombCategory",' +
+        '                  "valueCoding": {' +
+        '                    "system": "urn:oid:2.16.840.1.113883.6.238",' +
+        '                    "code": "2135-2",' +
+        '                    "display": "Hispanic or Latino",' +
+        '                    "userSelected": "true"' +
+        '                  }' +
+        '                },' +
+        '                {' +
+        '                  "url": "text",' +
+        '                  "valueString": "Hispanic or Latino"' +
+        '                }' +
+        '              ],' +
+        '              "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"' +
+        '            }' +
+        '          ],' +
+        '          "identifier": [' +
+        '            {' +
+        '              "type": {' +
+        '                "coding": [' +
+        '                  {' +
+        '                    "system": "http://terminology.hl7.org/CodeSystem/v2-0203",' +
+        '                    "code": "MR"' +
+        '                 }' +
+        '                ]' +
+        '              },' +
+        '              "system": "https://bonnie-fhir.healthit.gov/",' +
+        '              "value": "62bc69333e113102f8cedca6"' +
+        '            }' +
+        '          ],' +
+        '          "name": [' +
+        '            {' +
+        '              "family": "NUMERPass",' +
+        '              "given": [' +
+        '                "BCGAt6MoEdge"' +
+        '              ]' +
+        '            }' +
+        '          ],' +
+        '          "gender": "female",' +
+        '          "birthDate": "1945-02-01"' +
+        '        }' +
+        '     },' +
+        '      {' +
+        '        "fullUrl": "office-visit-dca7",' +
+        '        "resource": {' +
+        '          "id": "office-visit-dca7",' +
+        '          "resourceType": "Encounter",' +
+        '          "meta": {' +
+        '            "profile": [' +
+        '              "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"' +
+        '            ]' +
+        '          },' +
+        '          "status": "finished",' +
+        '          "class": {' +
+        '            "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",' +
+        '            "code": "AMB",' +
+        '            "display": "ambulatory"' +
+        '          },' +
+        '          "type": [' +
+        '            {' +
+        '              "coding": [' +
+        '                {' +
+        '                  "system": "http://snomed.info/sct",' +
+        '                 "version": "2021-09",' +
+        '                  "code": "185463005",' +
+        '                  "display": "Visit out of hours (procedure)",' +
+        '                  "userSelected": "true"' +
+        '               }' +
+        '              ]' +
+        '            }' +
+        '          ],' +
+        '          "subject": {' +
+        '            "reference": "Patient/62bc69333e113102f8cedca6"' +
+        '          },' +
+        '          "period": {' +
+        '            "start": "2022-02-01T08:00:00.000+00:00",' +
+        '            "end": "2022-02-01T09:15:00.000+00:00"' +
+        '          }' +
+        '        }' +
+        '      },' +
+        '      {' +
+        '        "fullUrl": "prostate-cancer-dca8",' +
+        '        "resource": {' +
+        '          "id": "prostate-cancer-dca8",' +
+        '          "resourceType": "Condition",' +
+        '          "meta": {' +
+        '            "profile": [' +
+        '             "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-condition"' +
+        '           ]' +
+        '         },' +
+        '         "clinicalStatus": {' +
+        '            "coding": [' +
+        '              {' +
+        '                "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",' +
+        '                "code": "active",' +
+        '                "display": "Active",' +
+        '                "userSelected": "true"' +
+        '              }' +
+        '            ]' +
+        '          },' +
+        '          "verificationStatus": {' +
+        '            "coding": [' +
+        '              {' +
+        '                "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",' +
+        '                "code": "confirmed",' +
+        '                "display": "Confirmed",' +
+        '                "userSelected": "true"' +
+        '              }' +
+        '            ]' +
+        '          },' +
+        '          "category": [' +
+        '            {' +
+        '              "coding": [' +
+        '                {' +
+        '                  "system": "http://terminology.hl7.org/CodeSystem/condition-category",' +
+        '                  "code": "problem-list-item",' +
+        '                  "display": "Problem List Item"' +
+        '                }' +
+        '              ]' +
+        '           }' +
+        '          ],' +
+        '         "code": {' +
+        '            "coding": [' +
+        '             {' +
+        '                "system": "http://hl7.org/fhir/sid/icd-10-cm",' +
+        '                "version": "2021",' +
+        '                "code": "C67.3",' +
+        '                "display": "Malignant neoplasm of anterior wall of bladder",' +
+        '                "userSelected": "true"' +
+        '              }' +
+        '            ]' +
+        '          },' +
+        '          "subject": {' +
+        '            "reference": "Patient/62bc69333e113102f8cedca6"' +
+        '          },' +
+        '          "onsetDateTime": "2022-02-01T08:00:00.000+00:00"' +
+        '        }' +
+        '     },' +
+        '      {' +
+        '        "fullUrl": "http://GoodHealthcare.com/Observation/numer-pass-CMS646v0QICore4-4",' +
+        '        "resource": {' +
+        '          "resourceType": "Observation",' +
+        '          "id": "numer-pass-CMS646v0QICore4-4",' +
+        '          "meta": {' +
+        '            "profile": [' +
+        '              "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-observation"' +
+        '            ]' +
+        '          },' +
+        '          "status": "final",' +
+        '          "category": [' +
+        '            {' +
+        '              "coding": [' +
+        '                {' +
+        '                  "system": "http://terminology.hl7.org/CodeSystem/observation-category",' +
+        '                  "code": "procedure",' +
+        '                  "display": "Procedure"' +
+        '                }' +
+        '              ]' +
+        '            }' +
+        '          ],' +
+        '          ' +
+        '          "code": {' +
+        '            "coding": [' +
+        '              {' +
+        '                "system": "http://loinc.org",' +
+        '                "code": "21902-2",' +
+        '                "display": "Stage group.pathology Cancer"' +
+        '              }' +
+        '            ]' +
+        '          },' +
+        '          "subject": {' +
+        '            "reference": "Patient/numer-pass-CMS646v0QICore4"' +
+        '          },' +
+        '          "partOf": ' +
+        '            {' +
+        '              "reference": "Procedure/numer-pass-CMS646v0QICore4-3"' +
+        '            },' +
+        '          "effectivePeriod": {' +
+        '            "start": "2021-09-30T08:00:00.000+00:00",' +
+        '            "end": "2021-09-30T08:15:00.000+00:00"' +
+        '          },' +
+        '          "issued": "2022-02-02T08:15:00.000+00:00",' +
+        '          "valueCodeableConcept": {' +
+        '            "coding": [' +
+        '              {' +
+        '                "system": "http://snomed.info/sct",' +
+        '                "code": "369934002",' +
+        '                "display": "Tis: Carcinoma in situ (flat tumor of urinary bladder) (finding)",' +
+        '                "userSelected": "true"' +
+        '              }' +
+        '            ]' +
+        '          }' +
+        '        }' +
+        '      },' +
+        '      {' +
+        '        "fullUrl": "46454164",' +
+        '        "resource": {' +
+        '          "id": "46454164",' +
+        '          "resourceType": "MedicationAdministration",' +
+        '          "meta": {' +
+        '            "profile": [' +
+        '              "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-medicationadministration"' +
+        '            ]' +
+        '          },' +
+        '          "status": "in-progress",' +
+        '          "medicationCodeableConcept": {' +
+        '            "coding": [' +
+        '              {' +
+        '                "system": "http://www.nlm.nih.gov/research/umls/rxnorm",' +
+        '               "code": "1653579",' +
+        '                "display": "BCG, live, Tice strain 50 MG Injection",' +
+        '                "userSelected": "true"' +
+        '             }' +
+        '            ]' +
+        '          },' +
+        '          "subject": {' +
+        '            "reference": "Patient/62bc69333e113102f8cedca6"' +
+        '          },' +
+        '          "requester": {' +
+        '            "reference": "Practitioner/13143134531634"' +
+        '          },' +
+        '          "effectiveDateTime": "2022-08-01T08:00:00.000+00:00"' +
+        '        }' +
+        '      },' +
+        '      {' +
+        '        "fullUrl": "13143134531634",' +
+        '        "resource": {' +
+        '          "resourceType": "Practitioner",' +
+        '          "id": "13143134531634",' +
+        '         "meta": {' +
+        '            "profile": [' +
+        '              "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-practitioner"' +
+        '            ]' +
+        '          },' +
+        '          "identifier": [' +
+        '            {' +
+        '              "use": "temp",' +
+        '              "system": "urn:oid:2.16.840.1.113883.4.336",' +
+        '              "value": "Practitioner-23"' +
+        '            }' +
+        '          ],' +
+        '          "active": "true",' +
+        '          "name": [' +
+        '            {' +
+        '              "family": "Careful",' +
+        '              "given": [' +
+        '                "Adam"' +
+        '              ],' +
+        '              "prefix": [' +
+        '                "Dr"' +
+        '              ]' +
+        '            }' +
+        '          ],' +
+        '          "address": [' +
+        '            {' +
+        '              "use": "home",' +
+        '              "line": [' +
+        '                "534 Erewhon St"' +
+        '              ],' +
+        '              "city": "PleasantVille",' +
+        '              "state": "UT",' +
+        '              "postalCode": "84414"' +
+        '            }' +
+        '          ],' +
+        '          "qualification": [' +
+        '            {' +
+        '              "identifier": [' +
+        '                {' +
+        '                  "system": "http://example.org/UniversityIdentifier",' +
+        '                  "value": "12345"' +
+        '                }' +
+        '              ],' +
+        '              "code": {' +
+        '                "coding": [' +
+        '                  {' +
+        '                    "system": "http://terminology.hl7.org/CodeSystem/v2-0360%7C2.7",' +
+        '                    "code": "BS",' +
+        '                    "display": "Bachelor of Science"' +
+        '                  }' +
+        '                ],' +
+        '                "text": "Bachelor of Science"' +
+        '              },' +
+        '              "period": {' +
+        '                "start": "1995"' +
+        '              },' +
+        '              "issuer": {' +
+        '                "display": "Example University"' +
+        '              }' +
+        '            }' +
+        '          ]' +
+        '        }' +
+        '      },' +
+        '      {' +
+        '        "fullUrl": "http://GoodHealthcare.com/Procedure/numer-pass-CMS646v0QICore4-3",' +
+        '        "resource": {' +
+        '          "resourceType": "Procedure",' +
+        '          "id": "numer-pass-CMS646v0QICore4-3",' +
+        '          "meta": {' +
+        '            "profile": [' +
+        '              "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-procedure"' +
+        '            ]' +
+        '          },' +
+        '          "extension": [' +
+        '            {' +
+        '              "url": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-recorded",' +
+        '              "valueDateTime": "2022-02-01T08:00:00.000+00:00"' +
+        '            }' +
+        '          ],' +
+        '          "status": "completed",' +
+        '          "code": {' +
+        '            "coding": [' +
+        '              {' +
+        '                "system": "http://snomed.info/sct",' +
+        '                "code": "254292007",' +
+        '                "display": "Tumor staging",' +
+        '                "userSelected": "true"' +
+        '              }' +
+        '            ]' +
+        '          },' +
+        '          "subject": {' +
+        '            "reference": "Patient/numer-pass-CMS646v0QICore4"' +
+        '          },' +
+        '          "performedPeriod": {' +
+        '            "start": "2022-02-01T08:00:00.000+00:00",' +
+        '            "end": "2022-02-01T08:15:00.000+00:00"' +
+        '          }' +
+        '        }' +
+        '      }' +
+        '    ]' +
+        '  }'
+
 }
