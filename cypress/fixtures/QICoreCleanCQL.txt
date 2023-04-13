@@ -1,5 +1,5 @@
 library CQLLibraryName1662122577742 version '0.0.000'
-using QICore version '4.1.0'
+using QICore version '4.1.1'
 include FHIRHelpers version '4.1.000' called FHIRHelpers
 codesystem "SNOMEDCT:2017-09": 'http://snomed.info/sct/731000124108' version 'http://snomed.info/sct/731000124108/version/201709'
 valueset "Hysterectomy with No Residual Cervix": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014'
