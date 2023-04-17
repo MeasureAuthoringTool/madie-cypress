@@ -67,7 +67,6 @@ export class TestCasesPage {
     public static readonly selectTestCaseDropdownBtn = '.chevron-container > [data-testid="ExpandMoreIcon"]'
     public static readonly testCaseListTable = '[data-testid="test-case-tbl"]'
     public static readonly tcPopulationCriteriaNavLink = '[data-testid="test-case-pop-criteria-nav"]'
-    public static readonly tcEditDetailsScroller = '[class = "MuiTabs-scroller MuiTabs-fixed css-1anid1y"]'
 
     //Test Case Population Values
     public static readonly testCaseIPPExpected = '[data-testid="test-population-initialPopulation-expected"]'
