@@ -175,7 +175,7 @@ export class MeasureGroupPage {
     //Supplemental data elements
     public static readonly supplementalDataDefinitionSelect = '[data-testid=supplementalDataElements]'
     public static readonly supplementalDataDefinitionDropdown = '#supplementalDataElements-listbox'
-    public static readonly supplementalDataDefinitionDescriptionTextBox = '[class="sc-iqcoie glofVe"]'
+    public static readonly supplementalDataDefinitionDescriptionTextBox = '[id="description"]'
     public static readonly saveSupplementalDataElements = '[data-testid="supplementalDataElement-save"]'
     public static readonly supplementalDataElementsSaveSuccessMsg = '[data-testid="supplementalDataElement-success"]'
     public static readonly removeCloseDefinitionSelection = '[data-testid="CancelIcon"]'

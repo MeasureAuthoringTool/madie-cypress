@@ -1,6 +1,6 @@
 library EXM124v7QICore4 version '7.0.000'
 
-using QICore version '4.1.0'
+using QICore version '4.1.1'
 
 include FHIRHelpers version '4.1.000'
 

@@ -193,7 +193,7 @@ export class CQLLibraryPage {
                     'model': 'QI-Core v4.1.1',
                     'cql': "library SupplementalDataElementsQICore4 version '2.0.0'\n" +
                         "\n" +
-                        "using QICore version '4.1.0'\n" +
+                        "using QICore version '4.1.1'\n" +
                         "\n" +
                         "valueset \"ONC Administrative Sex\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1'",
                     "description": "description",
