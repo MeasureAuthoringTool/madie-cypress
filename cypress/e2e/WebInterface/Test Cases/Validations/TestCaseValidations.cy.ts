@@ -180,6 +180,9 @@ describe('Attempting to create a test case without a title', () => {
         //Click on Edit for Test Case
         TestCasesPage.clickEditforCreatedTestCase()
 
+        Utilities.waitForElementVisible(TestCasesPage.testCaseJsonValidationErrorBtn, 30000)
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
+
         //navigate to the details page
         cy.get(TestCasesPage.detailsTab).should('exist')
         cy.get(TestCasesPage.detailsTab).should('be.visible')
@@ -219,6 +222,9 @@ describe('Attempting to create a test case without a title', () => {
         //Click on Edit for Test Case
         TestCasesPage.clickEditforCreatedTestCase()
 
+        Utilities.waitForElementVisible(TestCasesPage.testCaseJsonValidationErrorBtn, 30000)
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
+
         //navigate to the details page
         cy.get(TestCasesPage.detailsTab).should('exist')
         cy.get(TestCasesPage.detailsTab).should('be.visible')
@@ -253,6 +259,9 @@ describe('Attempting to create a test case without a title', () => {
         //Click on Edit for Test Case
         TestCasesPage.clickEditforCreatedTestCase()
 
+        Utilities.waitForElementVisible(TestCasesPage.testCaseJsonValidationErrorBtn, 30000)
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
+
         //navigate to the details page
         cy.get(TestCasesPage.detailsTab).should('exist')
         cy.get(TestCasesPage.detailsTab).should('be.visible')
@@ -279,6 +288,9 @@ describe('Attempting to create a test case without a title', () => {
 
         //Click on Edit for Test Case
         TestCasesPage.clickEditforCreatedTestCase()
+
+        Utilities.waitForElementVisible(TestCasesPage.testCaseJsonValidationErrorBtn, 30000)
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //navigate to the details page
         cy.get(TestCasesPage.detailsTab).should('exist')
