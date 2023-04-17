@@ -13,7 +13,7 @@ export class TestCasesPage {
 
     //tabs on the test case page
     public static readonly cqlHasErrorsMsg = '[data-testid="test-case-cql-has-errors-message"]'
-    public static readonly detailsTab = '#test-case-nav-container > div > div > button:nth-child(4)'
+    public static readonly detailsTab = '[data-testid="details-tab"]'
     public static readonly tctMeasureCQLSubTab = '[data-testid="measurecql-tab"]'
     public static readonly tctExpectedActualSubTab = '[data-testid="expectoractual-tab"]'
 
@@ -41,7 +41,7 @@ export class TestCasesPage {
     public static readonly testCaseTitle = '[data-testid="test-case-title"]'
     public static readonly executeTestCaseButton = '[data-testid="execute-test-cases-button"]'
     public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
-    public static readonly createTestCaseTitleInlineError = '[data-testid="create-test-case-title-helper-text"]'//'[data-testid="title-helper-text"]'
+    public static readonly createTestCaseTitleInlineError = '[data-testid="create-test-case-title-helper-text"]'
     public static readonly editTestCaseTitleInlineError = '[data-testid="test-case-title-helper-text"]'
     public static readonly testCaseJsonValidationErrorBtn = '[data-testid="show-json-validation-errors-button"]'
     public static readonly testCaseJsonValidationDisplayList = '[data-testid="json-validation-errors-list"]'
