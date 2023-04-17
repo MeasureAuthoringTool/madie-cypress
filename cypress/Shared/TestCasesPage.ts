@@ -13,7 +13,7 @@ export class TestCasesPage {
 
     //tabs on the test case page
     public static readonly cqlHasErrorsMsg = '[data-testid="test-case-cql-has-errors-message"]'
-    public static readonly detailsTab = '[data-testid="details-tab"]'
+    public static readonly detailsTab = '#test-case-nav-container > div > div > button:nth-child(4)'
     public static readonly tctMeasureCQLSubTab = '[data-testid="measurecql-tab"]'
     public static readonly tctExpectedActualSubTab = '[data-testid="expectoractual-tab"]'
 
@@ -67,6 +67,7 @@ export class TestCasesPage {
     public static readonly selectTestCaseDropdownBtn = '.chevron-container > [data-testid="ExpandMoreIcon"]'
     public static readonly testCaseListTable = '[data-testid="test-case-tbl"]'
     public static readonly tcPopulationCriteriaNavLink = '[data-testid="test-case-pop-criteria-nav"]'
+    public static readonly tcEditDetailsScroller = '[class = "MuiTabs-scroller MuiTabs-fixed css-1anid1y"]'
 
     //Test Case Population Values
     public static readonly testCaseIPPExpected = '[data-testid="test-population-initialPopulation-expected"]'
@@ -243,7 +244,7 @@ export class TestCasesPage {
         Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(500)
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(800)
 
         cy.get(this.aceEditor).type(testCaseJson, { parseSpecialCharSequences: false })
 

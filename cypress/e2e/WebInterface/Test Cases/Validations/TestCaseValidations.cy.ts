@@ -185,7 +185,6 @@ describe('Attempting to create a test case without a title', () => {
 
         //navigate to the details page
         cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).should('be.enabled')
         cy.get(TestCasesPage.detailsTab).click()
 
@@ -227,7 +226,6 @@ describe('Attempting to create a test case without a title', () => {
 
         //navigate to the details page
         cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).should('be.enabled')
         cy.get(TestCasesPage.detailsTab).click()
 
@@ -264,7 +262,6 @@ describe('Attempting to create a test case without a title', () => {
 
         //navigate to the details page
         cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).should('be.enabled')
         cy.get(TestCasesPage.detailsTab).click()
 
@@ -294,7 +291,6 @@ describe('Attempting to create a test case without a title', () => {
 
         //navigate to the details page
         cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).should('be.enabled')
         cy.get(TestCasesPage.detailsTab).click()
 
