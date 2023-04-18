@@ -160,7 +160,7 @@ export class MeasureGroupPage {
     public static readonly confirmScoreUnitValueUpdateBtn = '[data-testid="group-form-update-btn"]'
 
     //left panel
-    public static readonly leftPanelRiskAdjustmentTab = '[data-testid=leftPanelMeasurePopulationsRiskAdjustmentTab]'
+    public static readonly leftPanelRiskAdjustmentTab = '#sideNavMeasurePopulationsRiskAdjustment'//'[data-testid=leftPanelMeasurePopulationsRiskAdjustmentTab]'
     public static readonly leftPanelSupplementalDataTab = '[data-testid=leftPanelMeasurePopulationsSupplementalDataTab]'
 
     //Risk Adjustment variables
