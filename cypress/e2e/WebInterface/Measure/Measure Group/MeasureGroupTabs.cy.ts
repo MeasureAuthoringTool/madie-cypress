@@ -1116,3 +1116,40 @@ describe.skip('Supplemental data elements and Risk Adjustment variables on Measu
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('not.exist')
     })
 })
+
+describe('Validating Population tabs specific to QDM', () => {
+    beforeEach('Create measure and login', () => {
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = CqlLibraryName + randValue
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', 'num', 'denom')
+        OktaLogin.Login()
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.Logout()
+
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let newCqlLibraryName = CqlLibraryName + randValue
+
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('Verify that the Base Configuration sub-tab is present', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
+    })
+})
