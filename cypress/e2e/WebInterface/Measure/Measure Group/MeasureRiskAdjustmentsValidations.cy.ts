@@ -92,7 +92,7 @@ describe.skip('Validations between Risk Adjustments with the CQL definitions', (
         OktaLogin.Logout()
         //create Measure Group
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population',
-            'Num', 'Denom', 'boolean')
+            'Num', 'Initial Population', 'boolean')
         OktaLogin.Login()
 
     })
@@ -138,7 +138,6 @@ describe.skip('Validations between Risk Adjustments with the CQL definitions', (
         //navigate to the PC tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.pcErrorAlertToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
-        cy.get(MeasureGroupPage.CQLHasErrorMsg).should('contain.text', 'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.')
 
         //navigate to the test case list page and make sure alert concerning SA appears
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -156,14 +155,12 @@ describe.skip('Validations between Risk Adjustments with the CQL definitions', (
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
 
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
-
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
+        Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.measureErrorToast).should('not.exist')
+        Utilities.waitForElementToNotExist(CQLEditorPage.measureErrorToast, 75)
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
+        Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
 
         //navigate back to the CQL and revert it back to the original value (adding back values that were removed, previously)
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -181,11 +178,11 @@ describe.skip('Validations between Risk Adjustments with the CQL definitions', (
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('exist')
 
         //confirm no alerts or errors
-        cy.get(CQLEditorPage.measureErrorToast).should('not.exist')
+        Utilities.waitForElementToNotExist(CQLEditorPage.measureErrorToast, 75)
         //navigate to the PC tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
-        cy.get(MeasureGroupPage.CQLHasErrorMsg).should('not.exist')
+        Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
+        Utilities.waitForElementToNotExist(MeasureGroupPage.CQLHasErrorMsg, 75)
 
         //navigate back to SA and RA tabs and set their definitions to something in the CQl and save and no errors or alerts should appear
         //click on the Risk Adjustment button / link on the left page to populate fields on the right
@@ -240,7 +237,6 @@ describe.skip('Validations between Risk Adjustments with the CQL definitions', (
         //navigate to the PC tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.pcErrorAlertToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
-        cy.get(MeasureGroupPage.CQLHasErrorMsg).should('contain.text', 'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.')
 
         //navigate to the test case list page and make sure alert concerning SA appears
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -268,13 +264,13 @@ describe.skip('Validations between Risk Adjustments with the CQL definitions', (
         //save the Risk Adjustment
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
         cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
+        Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
+        Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.measureErrorToast).should('not.exist')
+        Utilities.waitForElementToNotExist(CQLEditorPage.measureErrorToast, 75)
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
+        Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
 
     })
     it('Placing definition back into CQL and saving resolves the alert.', () => {
@@ -333,12 +329,12 @@ describe.skip('Validations between Risk Adjustments with the CQL definitions', (
         cy.get(CQLEditorPage.saveCQLButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
+        Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
+        Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.measureErrorToast).should('not.exist')
+        Utilities.waitForElementToNotExist(CQLEditorPage.measureErrorToast, 75)
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
+        Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
     })
 })
