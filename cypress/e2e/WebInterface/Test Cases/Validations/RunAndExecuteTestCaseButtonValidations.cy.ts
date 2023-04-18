@@ -1015,8 +1015,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         Utilities.deleteMeasure(measureName, newCqlLibraryName)
     })
 
-    //Skipping until WAF issue is fixed
-    it.skip('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning', () => {
+    it('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -1250,15 +1249,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 20700)
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'calculateTestCases: No valid test cases to execute')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
 
         //refresh test case list page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -1282,8 +1273,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
     })
 
-    //Skipping until WAF issue is fixed
-    it.skip('Cannot "Run Test Case" or "Execute Test Case" when a test case has an error and warning', () => {
+    it('Cannot "Run Test Case" or "Execute Test Case" when a test case has an error and warning', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
