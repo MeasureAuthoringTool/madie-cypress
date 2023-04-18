@@ -76,6 +76,7 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
 //Skipping until feature flag for RAV is removed
 describe.skip('Validations between Risk Adjustments with the CQL definitions', () => {
 
+
     beforeEach('Create New Measure and Login', () => {
 
         //Create New Measure
@@ -151,7 +152,12 @@ describe.skip('Validations between Risk Adjustments with the CQL definitions', (
         cy.get(MeasureGroupPage.removeCloseDefinitionSelection).click()
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
         cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
+
         cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
+
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(MeasureGroupPage.pcErrorAlertToast).should('not.exist')
         cy.get(EditMeasurePage.cqlEditorTab).click()

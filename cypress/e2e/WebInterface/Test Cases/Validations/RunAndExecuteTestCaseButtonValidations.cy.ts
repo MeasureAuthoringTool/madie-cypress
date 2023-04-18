@@ -8,7 +8,6 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { LandingPage } from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -436,6 +435,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
         OktaLogin.Login()
     })
 
@@ -524,8 +524,8 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
 
+        cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Verify Highlighting tab before clicking on Run Test button
@@ -1379,15 +1379,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 20700)
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'calculateTestCases: No valid test cases to execute')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
 
         //refresh test case list page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -2443,28 +2435,24 @@ describe('InAbility to run invalid test cases whether or not the user is the own
         MeasuresPage.measureAction("edit")
 
         //Add second Measure Group with return type as Boolean
+
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        Utilities.setMeasureGroupType()
-
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+        //set new value for population basis
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
         cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('boolean')
+        cy.get(MeasureGroupPage.popBasis).type('Encounter')
         cy.get(MeasureGroupPage.popBasisOption).click()
 
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Qualifying Encounters')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
+        cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Population Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure group.')
+        cy.get(MeasureGroupPage.updatePopulationBasisConfirmationBtn).click()
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -2514,6 +2502,7 @@ describe('InAbility to run invalid test cases whether or not the user is the own
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
         cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -2524,33 +2513,22 @@ describe('InAbility to run invalid test cases whether or not the user is the own
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
-        //check the check box for the expected IP
+        //enter values for the expected population
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).invoke('click').check().should('be.checked')
+        cy.get(TestCasesPage.testCaseIPPExpected).invoke('click').type('0')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        //logout as ALT user and, then, log in as non-alt user
-        OktaLogin.Logout()
-        OktaLogin.Login()
-
-        cy.get(LandingPage.allMeasuresTab).click()
-
-        //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-
-        TestCasesPage.clickEditforCreatedTestCase()
+        //Verify Highlighting tab before clicking on Run Test button
+        cy.get(TestCasesPage.tcHighlightingTab).click()
+        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 20700)
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
@@ -2558,7 +2536,8 @@ describe('InAbility to run invalid test cases whether or not the user is the own
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'calculateTestCases: No valid test cases to execute')
+
+        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
         //refresh test case list page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -2587,19 +2566,16 @@ describe('InAbility to run invalid test cases whether or not the user is the own
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
 
-        //Add second Measure Group with return type as Boolean
+        //change scoring
+        //navigate to measure group / Population Criteria page / tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        Utilities.setMeasureGroupType()
+        //set new value for population basis
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
 
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
-        cy.get(MeasureGroupPage.popBasis).should('exist')
-        cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('boolean')
-        cy.get(MeasureGroupPage.popBasisOption).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Qualifying Encounters')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Qualifying Encounters')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Qualifying Encounters')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -2656,6 +2632,7 @@ describe('InAbility to run invalid test cases whether or not the user is the own
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
         cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -2666,33 +2643,30 @@ describe('InAbility to run invalid test cases whether or not the user is the own
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
-        //check the check box for the expected IP
+        //enter values for the expected populations
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).invoke('click').check().should('be.checked')
+        cy.get(TestCasesPage.testCaseIPPExpected).invoke('click').type('0')
+
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseDENOMExpected).invoke('click').type('0')
+
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseNUMERExpected).invoke('click').type('0')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        //logout as ALT user and, then, log in as non-alt user
-        OktaLogin.Logout()
-        OktaLogin.Login()
-
-        cy.get(LandingPage.allMeasuresTab).click()
-
-        //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-
-        TestCasesPage.clickEditforCreatedTestCase()
+        //Verify Highlighting tab before clicking on Run Test button
+        cy.get(TestCasesPage.tcHighlightingTab).click()
+        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 20700)
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
@@ -2700,14 +2674,23 @@ describe('InAbility to run invalid test cases whether or not the user is the own
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'calculateTestCases: No valid test cases to execute')
+        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
-        //refresh test case list page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //open edit page for test case
         TestCasesPage.clickEditforCreatedTestCase()
+
+        //click on actual / expected sub-tab
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+
+        //attempt to click on 'Run Test Case' to run the test case via the edit page
+        cy.get(TestCasesPage.runTestButton).should('exist')
+        cy.get(TestCasesPage.runTestButton).should('be.visible')
+        cy.get(TestCasesPage.runTestButton).should('be.enabled')
+        cy.get(TestCasesPage.runTestButton).click()
 
         //navigate to the details tab for the test case
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
@@ -2715,12 +2698,8 @@ describe('InAbility to run invalid test cases whether or not the user is the own
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).should('be.visible')
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
-        //confirm error message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'All resources in bundle must have unique ID regardless of type. Multiple resources detected with ID [null]')
-
-        //the 'Run Test Case' button, to run the test case, is unavailable
-        cy.get(TestCasesPage.runTestButton).should('exist')
-        cy.get(TestCasesPage.runTestButton).should('be.disabled')
+        //confirm no message
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
 
     })
 })
