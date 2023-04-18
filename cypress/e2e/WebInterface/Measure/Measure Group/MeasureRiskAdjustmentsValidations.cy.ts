@@ -101,7 +101,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
-    it.only('Removing definition related to the RA alerts user.', () => {
+    it('Removing definition related to the RA alerts user.', () => {
         cy.get(Header.measures).click()
         MeasuresPage.measureAction("edit")
         //navigate to the PC page / tab
