@@ -8,8 +8,6 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { LandingPage } from "../../../../Shared/LandingPage"
-
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
