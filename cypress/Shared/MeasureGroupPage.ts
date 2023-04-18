@@ -162,6 +162,7 @@ export class MeasureGroupPage {
     //left panel
     public static readonly leftPanelRiskAdjustmentTab = '[data-testid=leftPanelMeasurePopulationsRiskAdjustmentTab]'
     public static readonly leftPanelSupplementalDataTab = '[data-testid=leftPanelMeasurePopulationsSupplementalDataTab]'
+    public static readonly leftPanelBaseConfigTab = '[datatestid="leftPanelMeasureBaseConfigurationTab"]'
 
     //Risk Adjustment variables
     public static readonly riskAdjustmentDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
