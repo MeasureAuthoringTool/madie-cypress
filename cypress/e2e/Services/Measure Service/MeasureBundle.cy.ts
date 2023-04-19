@@ -367,6 +367,93 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
     })
 })
 
+describe('Measure Observation Validation', () => {
+
+    before('Create Measure', () => {
+
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = CqlLibraryName + randValue
+
+        cy.setAccessTokenCookie()
+
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPIWithoutELMJson(newMeasureName, newCqlLibraryName, measureCQL)
+
+    })
+
+    beforeEach('Set Access Token', () => {
+
+        cy.setAccessTokenCookie()
+
+    })
+
+    after('Clean up', () => {
+
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('Backend user cannot create or add a Measure Observation if one is not defined in the CQL', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + retrievedMeasureID + '/groups/',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "scoring": 'Continuous Variable',
+                        "populationBasis": 'Boolean',
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": 'ipp'
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "measurePopulation",
+                                "definition": 'num'
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "measurePopulationExclusion",
+                                "definition": 'numeratorExclusion'
+                            },
+                        ],
+                        "scoringUnit": {
+                            "label": "ml milliLiters",
+                            "value": {
+                                "code": "ml",
+                                "name": "milliLiters",
+                                "guidance": "",
+                                "system": "https://clinicaltables.nlm.nih.gov/"
+                            }
+                        },
+                        "measureObservations": [
+                            {
+                                "id": retrievedMeasureID,
+                                "criteriaReference": null,
+                                "definition": 'isFinishedEncounter',
+                                "aggregateMethod": 'Count'
+                            },
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ]
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(409)
+                    expect(response.body.message).to.be.eq('Measure CQL does not have observation definition')
+                })
+            })
+        })
+    })
+})
+
 describe('CV Measure Bundle end point returns expected data with valid Measure CQL and elmJson', () => {
 
     before('Create Measure', () => {
@@ -382,6 +469,7 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
+
                     url: '/api/measures/' + retrievedMeasureID + '/groups/',
                     method: 'POST',
                     headers: {
