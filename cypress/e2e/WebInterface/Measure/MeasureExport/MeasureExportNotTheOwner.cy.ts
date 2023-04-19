@@ -75,7 +75,7 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     'define "Denom":\n' +
     'true'
 
-describe('FHIR Measure Export', () => {
+describe('FHIR Measure Export, Not the Owner', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -95,7 +95,7 @@ describe('FHIR Measure Export', () => {
         //create Measure Group
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population',
             'Num', 'Denom', 'boolean')
-        OktaLogin.Login()
+        OktaLogin.AltLogin()
 
     })
 
@@ -107,22 +107,13 @@ describe('FHIR Measure Export', () => {
 
     it('Validate the zip file Export is downloaded', () => {
 
-        MeasuresPage.measureAction('version')
-
-        cy.get(MeasuresPage.measureVersionMajor).should('exist')
-        cy.get(MeasuresPage.measureVersionMajor).click()
-
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-
-        MeasuresPage.validateVersionNumber(measureName, '1.0.000')
-        cy.log('Version Created Successfully')
+        //Navigate to All Measures tab
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        cy.get(MeasuresPage.allMeasuresTab).click()
 
         MeasuresPage.measureAction('export')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
         cy.get(MeasuresPage.exportFinishedContinueBtn).click()
@@ -132,14 +123,14 @@ describe('FHIR Measure Export', () => {
     it('Unzip the downloaded file and verify file types', () => {
 
         // unzipping the Measure Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle-v1.0.000-FHIR4.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle-v0.0.000-FHIR4.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
 
         //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v1.0.000-FHIR.html' &&
-            'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v0.0.000-FHIR.html' &&
+            'eCQMTitle-v0.0.000-FHIR.xml' && 'eCQMTitle-v0.0.000-FHIR.json')
 
         // cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v1.0.000-FHIR.html' &&
         //     'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json' && 'FHIRHelpers-4.1.000.cql' && 'CQMCommon-1.0.000.cql' && 'FHIRCommon-4.1.000.cql'
@@ -149,5 +140,4 @@ describe('FHIR Measure Export', () => {
         //     && measureName+'-1.0.000.xml' && measureName+'-1.0.000.json')
 
     })
-
 })
