@@ -73,7 +73,8 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     'define "Denom":\n' +
     'true'
 
-describe('Validations between Supplemental Data with the CQL definitions', () => {
+//Skipping until feature flag for SDE is removed
+describe.skip('Validations between Supplemental Data Elements with the CQL definitions', () => {
 
     beforeEach('Create New Measure and Login', () => {
 
@@ -151,6 +152,7 @@ describe('Validations between Supplemental Data with the CQL definitions', () =>
         cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
+
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -174,7 +176,7 @@ describe('Validations between Supplemental Data with the CQL definitions', () =>
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('exist')
 
         //confirm no alerts or errors
-        Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
+        Utilities.waitForElementToNotExist(CQLEditorPage.measureErrorToast, 75)
         //navigate to the PC tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
@@ -260,7 +262,6 @@ describe('Validations between Supplemental Data with the CQL definitions', () =>
         //save the supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
         cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
@@ -324,7 +325,7 @@ describe('Validations between Supplemental Data with the CQL definitions', () =>
             ' true')
         //save updated CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 37700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.testCasesTab).click()

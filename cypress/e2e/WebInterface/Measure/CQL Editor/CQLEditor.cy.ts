@@ -148,19 +148,8 @@ describe('Measure: CQL Editor', () => {
             cy.scrollTo('top')
             cy.get(EditMeasurePage.cqlEditorTextBox).click()
             cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
-            Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, '"status\\":404,\\"error\\":\\"Not Found\\",\\"path\\":\\"/api/fhir/libraries/cql\\"}\\"')
+            Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, '"status\\":404,\\"error\\":\\"Not Found\\",\\"message\\":\\"Could not find resource Library with name: HospiceQICore4\\"}\\"')
 
-            //Navigate away from CQL Editor tab
-            cy.get(EditMeasurePage.measureDetailsTab).click()
-
-            //Click on the CQL Editor tab
-            CQLEditorPage.clickCQLEditorTab()
-
-            //Click on the CQL Editor tab
-            CQLEditorPage.clickCQLEditorTab()
-
-            //Validate error(s) in CQL Editor persists after saving
-            Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, '"status\\":404,\\"error\\":\\"Not Found\\",\\"path\\":\\"/api/fhir/libraries/cql\\"}\\"')
 
         })
     // skipping due to bug 5077

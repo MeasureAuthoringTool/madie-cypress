@@ -52,10 +52,6 @@ describe('Measure Highlighting', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.detailsTab).should('be.visible')
-        cy.get(TestCasesPage.detailsTab).should('be.enabled')
-        cy.get(TestCasesPage.detailsTab).click()
-
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click()

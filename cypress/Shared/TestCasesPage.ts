@@ -41,7 +41,7 @@ export class TestCasesPage {
     public static readonly testCaseTitle = '[data-testid="test-case-title"]'
     public static readonly executeTestCaseButton = '[data-testid="execute-test-cases-button"]'
     public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
-    public static readonly createTestCaseTitleInlineError = '[data-testid="create-test-case-title-helper-text"]'//'[data-testid="title-helper-text"]'
+    public static readonly createTestCaseTitleInlineError = '[data-testid="create-test-case-title-helper-text"]'
     public static readonly editTestCaseTitleInlineError = '[data-testid="test-case-title-helper-text"]'
     public static readonly testCaseJsonValidationErrorBtn = '[data-testid="show-json-validation-errors-button"]'
     public static readonly testCaseJsonValidationDisplayList = '[data-testid="json-validation-errors-list"]'
@@ -243,7 +243,7 @@ export class TestCasesPage {
         Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(500)
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(800)
 
         cy.get(this.aceEditor).type(testCaseJson, { parseSpecialCharSequences: false })
 

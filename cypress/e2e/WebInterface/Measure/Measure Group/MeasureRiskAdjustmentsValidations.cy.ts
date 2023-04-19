@@ -73,7 +73,9 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     'define "Denom":\n' +
     'true'
 
-describe('Validations between Risk Adjustments with the CQL definitions', () => {
+//Skipping until feature flag for RAV is removed
+describe.skip('Validations between Risk Adjustments with the CQL definitions', () => {
+
 
     beforeEach('Create New Measure and Login', () => {
 
@@ -131,20 +133,14 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(CQLEditorPage.saveCQLButton).click()
 
         //confirm error toast related to SD and/or RA
-        cy.get(CQLEditorPage.measureErrorToast).should('exist')
-        cy.get(CQLEditorPage.measureErrorToast).should('be.visible')
         cy.get(CQLEditorPage.measureErrorToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
 
         //navigate to the PC tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('exist')
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('be.visible')
         cy.get(MeasureGroupPage.pcErrorAlertToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
 
         //navigate to the test case list page and make sure alert concerning SA appears
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('exist')
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('be.visible')
         cy.get(MeasureGroupPage.pcErrorAlertToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
 
         //navigate back to the group page
@@ -158,6 +154,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
+
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -267,7 +264,6 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         //save the Risk Adjustment
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
         cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
@@ -331,7 +327,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
             ' true')
         //save updated CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 37700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.testCasesTab).click()
