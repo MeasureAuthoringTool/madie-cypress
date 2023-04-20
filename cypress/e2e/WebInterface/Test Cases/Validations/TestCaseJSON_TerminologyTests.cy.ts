@@ -16,6 +16,7 @@ let testCaseTitle = 'test case title'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let missingResourceIDTCJson = TestCaseJson.TestCaseJson_missingResourceIDs
 let missingResourceIDTCJsonButHasFullUrlExt = TestCaseJson.TestCaseJson_missingResourceIDsHasfullUrlExt
+let emptyResourceIDTCJson = TestCaseJson.TestCaseJson_emptyResourceIDs
 let dupResourceIDTCJson = TestCaseJson.TestCaseJson_resourceIDsDup
 let missingMetaProfile = TestCaseJson.TestCaseJson_missingMetaProfile
 let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
@@ -169,7 +170,7 @@ describe('Warning modal on Test Case JSON Editor', () => {
 
     })
 })
-describe.only('JSON Resource ID tests', () => {
+describe('JSON Resource ID tests', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
@@ -201,6 +202,100 @@ describe.only('JSON Resource ID tests', () => {
         let newCqlLibraryName = CqlLibraryName + randValue
 
         Utilities.deleteMeasure(measureName, newCqlLibraryName)
+    })
+
+    it('JSON contains empty Resource ID values', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Add second Measure Group with return type as Boolean
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
+            if ($ele.text() == "Text") {
+                cy.wrap($ele).should('exist')
+                cy.wrap($ele).focus()
+                cy.wrap($ele).click()
+            }
+        })
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
+
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+        cy.get(MeasureGroupPage.popBasis).should('exist')
+        cy.get(MeasureGroupPage.popBasis).should('be.visible')
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('boolean')
+        cy.get(MeasureGroupPage.popBasisOption).click()
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
+
+
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click()
+
+        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
+
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+
+        TestCasesPage.clickCreateTestCaseButton()
+
+        //Verify created test case Title and Series exists on Test Cases Page
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
+
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //Add json to the test case
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditor).type(emptyResourceIDTCJson, { parseSpecialCharSequences: false })
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
+        cy.get(TestCasesPage.confirmationMsg).should('exist')
+        cy.get(TestCasesPage.confirmationMsg).should('be.visible')
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'HAPI-1821: [element="id"] Invalid attribute value "": Attribute value must not be empty ("")')
     })
 
     it('JSON missing Resource IDs but the fullUrl value has an exentension that will be used as id', () => {
