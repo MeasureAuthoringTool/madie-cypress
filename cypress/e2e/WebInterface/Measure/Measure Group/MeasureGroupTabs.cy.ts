@@ -981,8 +981,7 @@ describe('Validating Reporting tabs', () => {
     })
 })
 
-//skipping until this feature is turned on
-describe.skip('Supplemental data elements and Risk Adjustment variables on Measure group page', () => {
+describe('Supplemental data elements and Risk Adjustment variables on Measure group page', () => {
 
     beforeEach('Create measure, Measure Group and login', () => {
 
