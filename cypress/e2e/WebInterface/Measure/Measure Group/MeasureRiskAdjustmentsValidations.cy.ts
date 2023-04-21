@@ -73,8 +73,7 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     'define "Denom":\n' +
     'true'
 
-//Skipping until feature flag for RAV is removed
-describe.skip('Validations between Risk Adjustments with the CQL definitions', () => {
+describe('Validations between Risk Adjustments with the CQL definitions', () => {
 
 
     beforeEach('Create New Measure and Login', () => {
