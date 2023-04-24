@@ -73,8 +73,7 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     'define "Denom":\n' +
     'true'
 
-//Skipping until feature flag for SDE is removed
-describe.skip('Validations between Supplemental Data Elements with the CQL definitions', () => {
+describe('Validations between Supplemental Data Elements with the CQL definitions', () => {
 
     beforeEach('Create New Measure and Login', () => {
 
