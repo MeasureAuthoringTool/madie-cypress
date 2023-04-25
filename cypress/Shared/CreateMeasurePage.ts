@@ -87,7 +87,36 @@ export class CreateMeasurePage {
 
         cy.get(MeasuresPage.measureListTitles).should('be.visible')
 
-        cy.log('Measure created successfully')
+        cy.log('QICore Measure created successfully')
+    }
+
+    public static CreateQDMMeasure(measureName: string, CqlLibraryName: string, mpStartDate?: string, mpEndDate?: string): void {
+
+        const now = require('dayjs')
+
+        if (mpStartDate === undefined) {
+            mpStartDate = now().subtract('1', 'year').format('MM/DD/YYYY')
+        }
+
+        if (mpEndDate === undefined) {
+            mpEndDate = now().format('MM/DD/YYYY')
+        }
+
+        cy.get(LandingPage.newMeasureButton).click()
+        cy.get(this.measureNameTextbox).type(measureName)
+        cy.get(this.measureModelDropdown).click()
+        cy.get(this.measureModelQDMv5_6).click()
+        cy.get(this.eCQMAbbreviatedTitleTextbox).type('eCQMTitle01')
+        cy.get(this.cqlLibraryNameTextbox).type(CqlLibraryName)
+
+        cy.get(CreateMeasurePage.measurementPeriodStartDate).type(mpStartDate)
+        cy.get(CreateMeasurePage.measurementPeriodEndDate).type(mpEndDate)
+
+        this.clickCreateMeasureButton()
+
+        cy.get(MeasuresPage.measureListTitles).should('be.visible')
+
+        cy.log('QDM Measure created successfully')
     }
 
     public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
