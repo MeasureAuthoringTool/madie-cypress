@@ -59,6 +59,10 @@ export class EditMeasurePage {
     public static readonly successfulMeasureDeleteMsg = '[data-testid=edit-measure-information-success-text]'
 
     //Measure Meta Data
+    //Model & Mesasurement Start and End date(s)
+    public static readonly mpStart = '[name="measurementPeriodStart"]'
+    public static readonly mpEnd = '[id="measurementPeriodEndDate"]'
+
     //Measure Steward & Developers Page
     public static readonly measureStewardDrpDwn = '[data-testid="steward"]'
     public static readonly measureStewardDrpDwnOption = '#steward-option-0'
