@@ -43,25 +43,6 @@ export class MeasuresPage {
         })
     }
 
-    /*     public static exportMeasure(): void {
-    
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-                Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-                cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-                Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-                cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-                cy.get('[data-testid=measure-action-' + fileContents + ']').click()
-    
-                cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
-    
-                cy.get('[data-testid=export-measure-' + fileContents + ']').click()
-    
-                cy.wait('@measureExport', { timeout: 60000 }).then(({ response }) => {
-                    expect(response.statusCode).to.eq(200)
-                })
-            })
-        } */
-
     public static validateVersionNumber(expectedValue: string, versionNumber: string): void {
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
 
