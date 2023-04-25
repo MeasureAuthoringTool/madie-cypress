@@ -2,8 +2,8 @@ import {OktaLogin} from "../../../Shared/OktaLogin"
 import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
 import {Utilities} from "../../../Shared/Utilities"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+let measureName = ''
+let CqlLibraryName = ''
 
 describe('Create New Measure', () => {
 
@@ -11,20 +11,28 @@ describe('Create New Measure', () => {
         OktaLogin.Login()
     })
 
-    afterEach('Logout', () => {
+    afterEach('Logout and Cleanup', () => {
         OktaLogin.Logout()
-    })
-
-    after('Clean up', () => {
-
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
-    it('Login to Madie and Create New Measure', () => {
+    it('Create QI Core Measure', () => {
+
+        measureName = 'QICoreTestMeasure' + Date.now()
+        CqlLibraryName = 'QICoreTestLibrary' + Date.now()
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasure(measureName,CqlLibraryName)
+
+    })
+
+    it('Create QDM Measure', () => {
+
+        measureName = 'QDMTestMeasure' + Date.now()
+        CqlLibraryName = 'QDMTestLibrary' + Date.now()
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasure(measureName,CqlLibraryName)
 
     })
 })
