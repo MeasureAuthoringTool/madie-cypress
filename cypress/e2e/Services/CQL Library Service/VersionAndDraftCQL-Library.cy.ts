@@ -1,5 +1,5 @@
-import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
-import {Environment} from "../../../Shared/Environment"
+import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
+import { Environment } from "../../../Shared/Environment"
 
 let CqlLibraryOne = ''
 let CqlLibraryTwo = ''
@@ -195,8 +195,43 @@ describe('Draft and Version Validations', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('Could not update resource CQL Library with id: ' +cqlLibraryId+ '. Resource is not a Draft.')
+                    expect(response.body.message).to.eql('Could not update resource CQL Library with id: ' + cqlLibraryId + '. Resource is not a Draft.')
                 })
+            })
+        })
+    })
+
+    it('Elm data is generated on the fly per GET versioned library request', () => {
+        //Add Version to the CQL Library
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+                cy.request({
+                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
+                    method: 'PUT',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    }
+
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.version).to.eql("1.0.000")
+
+                })
+
+            })
+        })
+        //hit the cql-library-service versioned end point and validate that elm data is returned / generated
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/cql-libraries/versioned?name=' + CqlLibraryOne + '&version=1.0.000',
+                method: 'GET',
+                headers: {
+                    authorization: 'Bearer ' + accessToken.value
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(200)
+                expect(response.body.elmJson).to.not.be.null
+                expect(response.body.elmXml).to.not.be.null
             })
         })
     })
@@ -231,7 +266,7 @@ describe('Version CQL Library without CQL', () => {
 
                 }).then((response) => {
                     expect(response.status).to.eql(400)
-                    expect(response.body.message).to.eql('User ' +harpUser+ ' cannot version resource CQL Library with id: ' +cqlLibraryId+ ' as there is no associated Cql with this library')
+                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot version resource CQL Library with id: ' + cqlLibraryId + ' as there is no associated Cql with this library')
 
                 })
 
