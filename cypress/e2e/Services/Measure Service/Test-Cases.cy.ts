@@ -899,3 +899,119 @@ describe('Measure Service: Test Case Endpoint: Authentication', () => {
         })
     })
 })
+describe('Measure Service: Test Case Endpoint: User validation with test case import', () => {
+    beforeEach('Create Measure and measure group', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+
+        cy.setAccessTokenCookie()
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups/',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "scoring": measureScoring,
+                        "populationBasis": 'Boolean',
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominator",
+                                "definition": PopDenom
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorExclusion",
+                                "definition": PopDenex
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorException",
+                                "definition": PopDenexcep
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numerator",
+                                "definition": PopNum
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numeratorExclusion",
+                                "definition": PopNumex
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ]
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    cy.writeFile('cypress/fixtures/groupId', response.body.id)
+                })
+            })
+        })
+
+
+    })
+    afterEach('Clean up measures', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+
+    })
+    it('Non-owner or non-shared user cannot hit the end point to add test cases to a measure', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookieALT()
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + id + '/test-cases/list',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: [{
+                        "name": TCName + '1',
+                        "title": TCTitle + '1',
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJson,
+
+                    },
+                    {
+                        "name": TCName + '2',
+                        "title": TCTitle + '2',
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJson,
+
+                    },
+                    {
+                        "name": TCName + '3',
+                        "title": TCTitle + '3',
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJson,
+
+                    },]
+                }).then((response) => {
+                    expect(response.status).to.eql(403)
+                })
+            })
+        })
+    })
+
+})
