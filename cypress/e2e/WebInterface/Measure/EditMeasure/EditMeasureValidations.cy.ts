@@ -31,7 +31,8 @@ let versionIdPath = 'cypress/fixtures/versionId'
 
 describe('Edit Measure Validations', () => {
     before('Create Measure', () => {
-
+        measureName = 'TestMeasure' + Date.now() + randValue
+        CqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
 
     })
