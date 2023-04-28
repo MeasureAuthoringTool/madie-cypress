@@ -705,8 +705,8 @@ describe('Setting time / date value in EST reflects as the same in user time zon
                     "versionId": uuidv4(),
                     "measureSetId": uuidv4(),
                     "ecqmTitle": eCQMTitle,
-                    "measurementPeriodStart": mpStartDate,
-                    "measurementPeriodEnd": mpEndDate
+                    "measurementPeriodStart": '2012-01-01T05:00:00.000+00:00',
+                    "measurementPeriodEnd": '2012-12-31T05:00:00.000+00:00'
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)

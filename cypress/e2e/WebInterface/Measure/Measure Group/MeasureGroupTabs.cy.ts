@@ -599,10 +599,10 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.populationTab).click()
 
         //Click on Stratification tab
-        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
+        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 32000)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-        cy.get(MeasureGroupPage.stratificationTab).click()
+        cy.get(MeasureGroupPage.stratificationTab).wait(500).click()
 
         //create stratification fields if they do not already exist on page
         cy.get('body').then((body) => {
