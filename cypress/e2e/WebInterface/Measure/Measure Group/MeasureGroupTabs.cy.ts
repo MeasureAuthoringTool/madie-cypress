@@ -1090,7 +1090,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
     })
 
-    it.only('Clicking on Discard changes button on Supplemental data elements page will revert the changes made before save', () => {
+    it('Clicking on Discard changes button on Supplemental data elements page will revert the changes made before save', () => {
 
         MeasuresPage.measureAction("edit")
 
