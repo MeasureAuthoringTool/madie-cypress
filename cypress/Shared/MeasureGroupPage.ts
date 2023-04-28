@@ -160,9 +160,17 @@ export class MeasureGroupPage {
     public static readonly confirmScoreUnitValueUpdateBtn = '[data-testid="group-form-update-btn"]'
 
     //left panel
-    public static readonly leftPanelRiskAdjustmentTab = '#sideNavMeasurePopulationsRiskAdjustment'//'[data-testid=leftPanelMeasurePopulationsRiskAdjustmentTab]'
+    public static readonly leftPanelRiskAdjustmentTab = '#sideNavMeasurePopulationsRiskAdjustment'
     public static readonly leftPanelSupplementalDataTab = '[datatestid=leftPanelMeasurePopulationsSupplementalDataTab]'
     public static readonly leftPanelBaseConfigTab = '[datatestid="leftPanelMeasureBaseConfigurationTab"]'
+
+    //QDM Base Configuration fields
+    public static readonly qdmScoring = '[data-testid="scoring-select"]'
+    public static readonly qdmScoringCohort = '[data-testid="scoring-option-COHORT"]'
+    public static readonly qdmScoringRatio = '[data-testid="scoring-option-RATIO"]'
+    public static readonly qdmScoringCV = '[data-testid="scoring-option-CONTINUOUS_VARIABLE"]'
+    public static readonly qdmScoringProportion = '[data-testid="scoring-option-PROPORTION"]'
+    public static readonly qdmType = '[id="base-configuration-types"]'
 
     //Risk Adjustment variables
     public static readonly riskAdjustmentDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
