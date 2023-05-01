@@ -6,6 +6,7 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Header } from "../../../../Shared/Header"
+import { Global } from "../../../../Shared/Global"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -80,7 +81,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
 
             //discard current changges
             cy.get(MeasureGroupPage.qdmDiscardButton).click()
-            cy.get(MeasureGroupPage.qdmDiscardModalContinueButton).click()
+            Global.clickOnDiscardChanges()
 
             //navigate to the main measures page
             cy.get(Header.measures).click()
@@ -203,7 +204,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(Header.measures).click()
 
         //continue with navigating away from the Base Configuration page
-        cy.get(MeasureGroupPage.qdmDiscardModalContinueButton).click()
+        Global.clickOnDiscardChanges()
 
         //verify user has navigated to the main measures page
         cy.url().should('eq', 'https://dev-madie.hcqis.org/measures')
