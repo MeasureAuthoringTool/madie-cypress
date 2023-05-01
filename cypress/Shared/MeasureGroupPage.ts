@@ -171,6 +171,16 @@ export class MeasureGroupPage {
     public static readonly qdmScoringCV = '[data-testid="scoring-option-CONTINUOUS_VARIABLE"]'
     public static readonly qdmScoringProportion = '[data-testid="scoring-option-PROPORTION"]'
     public static readonly qdmType = '[id="base-configuration-types"]'
+    public static readonly qdmTypeOptionZero = '[id="base-configuration-types-option-0"]'
+    public static readonly qdmTypeValuePill = '[class="MuiChip-label MuiChip-labelSmall css-1pjtbja"]'
+    public static readonly qdmDiscardButton = '[data-testid="cancel-button"]'
+    public static readonly qdmDirtyCheckDiscardModal = '[data-testid="discard-dialog"]'
+    public static readonly qdmDiscardModalContinueButton = '[data-testid="discard-dialog-continue-button"]'
+    public static readonly qdmDiscardModalCancelButton = '[data-testid="discard-dialog-cancel-button"]'
+    public static readonly qdmBCSaveButton = '[data-testid="measure-Base Configuration-save"]'
+    public static readonly qdmBCSaveButtonSuccessMsg = '[data-testid="edit-base-configuration-success-text"]'
+    public static readonly qdmTypeHelperText = '[data-testid="base-configuration-types-helper-text"]'
+    public static readonly qdmScoringHelperText = '[data-testid="scoring-select-helper-text"]'
 
     //Risk Adjustment variables
     public static readonly riskAdjustmentDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
