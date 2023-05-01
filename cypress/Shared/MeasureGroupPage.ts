@@ -160,14 +160,22 @@ export class MeasureGroupPage {
     public static readonly confirmScoreUnitValueUpdateBtn = '[data-testid="group-form-update-btn"]'
 
     //left panel
-    public static readonly leftPanelRiskAdjustmentTab = '#sideNavMeasurePopulationsRiskAdjustment'//'[data-testid=leftPanelMeasurePopulationsRiskAdjustmentTab]'
+    public static readonly leftPanelRiskAdjustmentTab = '#sideNavMeasurePopulationsRiskAdjustment'
     public static readonly leftPanelSupplementalDataTab = '[datatestid=leftPanelMeasurePopulationsSupplementalDataTab]'
     public static readonly leftPanelBaseConfigTab = '[datatestid="leftPanelMeasureBaseConfigurationTab"]'
+
+    //QDM Base Configuration fields
+    public static readonly qdmScoring = '[data-testid="scoring-select"]'
+    public static readonly qdmScoringCohort = '[data-testid="scoring-option-COHORT"]'
+    public static readonly qdmScoringRatio = '[data-testid="scoring-option-RATIO"]'
+    public static readonly qdmScoringCV = '[data-testid="scoring-option-CONTINUOUS_VARIABLE"]'
+    public static readonly qdmScoringProportion = '[data-testid="scoring-option-PROPORTION"]'
+    public static readonly qdmType = '[id="base-configuration-types"]'
 
     //Risk Adjustment variables
     public static readonly riskAdjustmentDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
     public static readonly riskAdjustmentDefinitionDropdown = '[id="risk-adjustment-listbox"]'
-    public static readonly riskAdjustmentTextBox = '[class="risk-description"]'
+    public static readonly riskAdjustmentTextBox = '[id="risk-adjustment"]'
     public static readonly cancelIcon = '[data-testid=CancelIcon]'
     public static readonly riskAdjustmentDescriptionTextBox = '[class=risk-description]'
     public static readonly saveRiskAdjustments = '[data-testid="measure-Risk Adjustment-save"]'
@@ -176,7 +184,7 @@ export class MeasureGroupPage {
     //Supplemental data elements
     public static readonly supplementalDataDefinitionSelect = '[data-testid=supplementalDataElements]'
     public static readonly supplementalDataDefinitionDropdown = '#supplementalDataElements-listbox'
-    public static readonly supplementalDataDefinitionDescriptionTextBox = '[id="description"]'
+    public static readonly supplementalDataDefinitionDescriptionTextBox = '[class="sc-crXcEl cAFOFV"]'
     public static readonly saveSupplementalDataElements = '[data-testid="supplementalDataElement-save"]'
     public static readonly supplementalDataElementsSaveSuccessMsg = '[data-testid="supplementalDataElement-success"]'
     public static readonly removeCloseDefinitionSelection = '[data-testid="CancelIcon"]'
