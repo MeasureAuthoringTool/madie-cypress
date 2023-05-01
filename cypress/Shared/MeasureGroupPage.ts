@@ -175,7 +175,7 @@ export class MeasureGroupPage {
     //Risk Adjustment variables
     public static readonly riskAdjustmentDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
     public static readonly riskAdjustmentDefinitionDropdown = '[id="risk-adjustment-listbox"]'
-    public static readonly riskAdjustmentTextBox = '[id="risk-adjustment"]'
+    public static readonly riskAdjustmentTextBox = '[class="risk-description"]'
     public static readonly cancelIcon = '[data-testid=CancelIcon]'
     public static readonly riskAdjustmentDescriptionTextBox = '[class=risk-description]'
     public static readonly saveRiskAdjustments = '[data-testid="measure-Risk Adjustment-save"]'

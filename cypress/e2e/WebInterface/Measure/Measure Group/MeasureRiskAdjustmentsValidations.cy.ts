@@ -113,6 +113,9 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         //set Risk Adjustment data definition to e Denom
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Denom').click()
         cy.get(MeasureGroupPage.riskAdjustmentTextBox).should('exist')
+        Utilities.waitForElementVisible(MeasureGroupPage.riskAdjustmentTextBox, 30000)
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).focus()
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).invoke('click')
         cy.get(MeasureGroupPage.riskAdjustmentTextBox).type('Initial Population Description')
 
         //save the Risk Adjustment data
@@ -191,6 +194,9 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         //set Risk Adjustment definition to e Denom
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Denom').click()
         cy.get(MeasureGroupPage.riskAdjustmentTextBox).should('exist')
+        Utilities.waitForElementVisible(MeasureGroupPage.riskAdjustmentTextBox, 30000)
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).focus()
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).invoke('click')
         cy.get(MeasureGroupPage.riskAdjustmentTextBox).type('SA Description')
         //save the Risk Adjustment
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
@@ -211,6 +217,9 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         //set Risk Adjustment definition to e Denom
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Denom').click()
         cy.get(MeasureGroupPage.riskAdjustmentTextBox).should('exist')
+        Utilities.waitForElementVisible(MeasureGroupPage.riskAdjustmentTextBox, 30000)
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).focus()
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).invoke('click')
         cy.get(MeasureGroupPage.riskAdjustmentTextBox).type('Initial Population Description')
 
         //save the Risk Adjustment
@@ -258,6 +267,9 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         //set Risk Adjustment definition to e Denom
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Initial Population').click()
         cy.get(MeasureGroupPage.riskAdjustmentTextBox).should('exist')
+        Utilities.waitForElementVisible(MeasureGroupPage.riskAdjustmentTextBox, 30000)
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).focus()
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).invoke('click')
         cy.get(MeasureGroupPage.riskAdjustmentTextBox).type('SA Description')
 
         //save the Risk Adjustment
@@ -284,6 +296,9 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         //set Risk Adjustment definition to e Denom
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Denom').click()
         cy.get(MeasureGroupPage.riskAdjustmentTextBox).should('exist')
+        Utilities.waitForElementVisible(MeasureGroupPage.riskAdjustmentTextBox, 30000)
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).focus()
+        cy.get(MeasureGroupPage.riskAdjustmentTextBox).invoke('click')
         cy.get(MeasureGroupPage.riskAdjustmentTextBox).type('Initial Population Description')
 
         //save the Risk Adjustment
