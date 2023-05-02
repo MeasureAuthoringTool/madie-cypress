@@ -26,7 +26,7 @@ let versionIdPath = 'cypress/fixtures/versionId'
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 
 
-describe('Measure Service: Create Measure', () => {
+describe('Measure Service: QICore Measure', () => {
 
     beforeEach('Set Access Token', () => {
 
@@ -64,36 +64,6 @@ describe('Measure Service: Create Measure', () => {
                 expect(response.body.createdBy).to.eql(harpUser)
                 cy.writeFile('cypress/fixtures/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-            })
-
-        })
-    })
-    //Skipping until feature flag removed for QDM
-    it.skip('Create QDM Measure, successful creation', () => {
-        measureName = 'TestMeasure' + Date.now() + randValue
-        CQLLibraryName = 'TestCql' + Date.now() + randValue
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/measure',
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + accessToken.value
-                },
-                body: {
-                    "measureName": measureName,
-                    "cqlLibraryName": CQLLibraryName,
-                    "model": QDMModel,
-                    "versionId": uuidv4(),
-                    "measureSetId": uuidv4(),
-                    "measureScoring": "Cohort",
-                    "ecqmTitle": eCQMTitle,
-                    "measurementPeriodStart": mpStartDate,
-                    "measurementPeriodEnd": mpEndDate
-                }
-            }).then((response) => {
-                expect(response.status).to.eql(201)
-                expect(response.body.createdBy).to.eql(harpUser)
             })
 
         })
@@ -160,6 +130,97 @@ describe('Measure Service: Create Measure', () => {
 
     })
 })
+
+//Skipping until feature flag removed for QDM
+describe.skip('Measure Service: QDM Measure', () => {
+
+    beforeEach('Set Access Token', () => {
+
+        cy.setAccessTokenCookie()
+    })
+    afterEach('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, CQLLibraryName)
+
+    })
+
+    it('Create QDM Measure, successful creation', () => {
+
+        measureName = 'QDMMeasure' + Date.now() + randValue
+        CQLLibraryName = 'TestCql' + Date.now() + randValue
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/measure',
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken.value
+                },
+                body: {
+                    "measureName": measureName,
+                    "cqlLibraryName": CQLLibraryName,
+                    "model": QDMModel,
+                    "versionId": uuidv4(),
+                    "measureSetId": uuidv4(),
+                    "measureScoring": "Cohort",
+                    "ecqmTitle": eCQMTitle,
+                    "measurementPeriodStart": mpStartDate,
+                    "measurementPeriodEnd": mpEndDate
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(201)
+                expect(response.body.createdBy).to.eql(harpUser)
+                cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+            })
+
+        })
+    })
+
+    it('Base Configuration fields - QDM Measure', () => {
+
+        measureName = 'QDMMeasure' + Date.now() + randValue
+        CQLLibraryName = 'TestCql' + Date.now() + randValue
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/measure',
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken.value
+                },
+                body: {
+                    "measureName": measureName,
+                    "cqlLibraryName": CQLLibraryName,
+                    "model": QDMModel,
+                    "versionId": uuidv4(),
+                    "measureSetId": uuidv4(),
+                    "measureScoring": "Cohort",
+                    "baseConfigurationTypes": [
+                        "Efficiency",
+                        "Outcome",
+                        "Process"
+                    ],
+                    "patientBasis": true,
+                    "ecqmTitle": eCQMTitle,
+                    "measurementPeriodStart": mpStartDate,
+                    "measurementPeriodEnd": mpEndDate
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(201)
+                expect(response.body.createdBy).to.eql(harpUser)
+                cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                expect(response.body.baseConfigurationTypes[0]).to.eql('Efficiency')
+                expect(response.body.baseConfigurationTypes[1]).to.eql('Outcome')
+                expect(response.body.baseConfigurationTypes[2]).to.eql('Process')
+                expect(response.body.patientBasis).to.eql(true)
+            })
+
+        })
+    })
+})
+
 describe('Measure Service: GET Requests tests', () => {
     beforeEach('Set Access Token', () => {
 
@@ -1144,6 +1205,8 @@ describe('Measure Service: eCQM abbreviated title validations', () => {
 
     })
 })
+
+
 
 
 
