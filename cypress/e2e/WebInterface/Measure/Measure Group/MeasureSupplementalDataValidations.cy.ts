@@ -112,6 +112,9 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         //set supplemental data definition to e Denom
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('Denom').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
+        Utilities.waitForElementVisible(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox, 30000)
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).focus()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).invoke('click')
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('Initial Population Description')
 
         //save the supplemental data
@@ -189,6 +192,9 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         //set supplemental data definition to e Denom
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('Denom').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
+        Utilities.waitForElementVisible(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox, 30000)
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).focus()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).invoke('click')
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('SA Description')
         //save the supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
@@ -209,6 +215,9 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         //set supplemental data definition to e Denom
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('Denom').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
+        Utilities.waitForElementVisible(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox, 30000)
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).focus()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).invoke('click')
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('Initial Population Description')
 
         //save the supplemental data
@@ -256,6 +265,9 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         //set supplemental data definition to e Denom
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('Initial Population').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
+        Utilities.waitForElementVisible(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox, 30000)
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).focus()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).invoke('click')
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('SA Description')
 
         //save the supplemental data
@@ -282,6 +294,9 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         //set supplemental data definition to e Denom
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('Denom').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
+        Utilities.waitForElementVisible(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox, 30000)
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).focus()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).invoke('click')
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('Initial Population Description')
 
         //save the supplemental data
