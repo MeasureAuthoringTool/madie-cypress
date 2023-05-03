@@ -14,7 +14,8 @@ let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.SBTEST_CQL
 
-describe('Validating Population tabs and fields, specific to QDM', () => {
+//Skipping tests until the QDM flag is removed
+describe.skip('Validating Population tabs and fields, specific to QDM', () => {
     beforeEach('Create measure and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureName + randValue
@@ -38,8 +39,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
 
     })
     //this test is work in progress and will need to continue to be built out as the base configuration page becomes more complete
-    //this test will also need to be skipped until the QDM flag is removed
-    it.skip('Verify that the Base Configuration fields are present, contain values when necessary, and, if required, ' +
+    it('Verify that the Base Configuration fields are present, contain values when necessary, and, if required, ' +
         'the save button is not available until all required fields have a value', () => {
 
             MeasuresPage.measureAction("edit")
@@ -121,8 +121,8 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
 
         })
-    //this test will need to be skipped until the QDM flag is removed
-    it.skip('Ditry check validation', () => {
+
+    it('Dirty check validation', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 

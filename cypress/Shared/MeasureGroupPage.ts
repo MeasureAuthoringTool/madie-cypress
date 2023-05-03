@@ -360,7 +360,7 @@ export class MeasureGroupPage {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -455,7 +455,7 @@ export class MeasureGroupPage {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -534,7 +534,7 @@ export class MeasureGroupPage {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -548,27 +548,7 @@ export class MeasureGroupPage {
                                 "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPopP
-                            }/* ,
-                            {
-                                "id": uuidv4(),
-                                "name": "denominator",
-                                "definition": PopDenomP
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "denominatorExclusion",
-                                "definition": PopDenomP
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "numerator",
-                                "definition": PopNumP
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "numeratorExclusion",
-                                "definition": PopNumP
-                            } */
+                            }
                         ],
                         "measureGroupTypes": [
                             "Outcome"

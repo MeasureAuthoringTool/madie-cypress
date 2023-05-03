@@ -52,7 +52,7 @@ describe('Version and Draft CQL Library', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.request({
-                    url: '/api/measures/' + measureId + '/version/?versionType=major',
+                    url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
@@ -104,7 +104,7 @@ describe('Version and Draft CQL Library', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.request({
-                    url: '/api/measures/' + measureId + '/version/?versionType=major',
+                    url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
@@ -234,7 +234,7 @@ describe('Draftable API end point tests', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.request({
-                    url: '/api/measures/' + measureId + '/version/?versionType=major',
+                    url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
@@ -282,7 +282,7 @@ describe('Draftable API end point tests', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.request({
-                    url: '/api/measures/' + measureId + '/version/?versionType=minor',
+                    url: '/api/measures/' + measureId + '/version?versionType=minor',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
@@ -350,7 +350,7 @@ describe('Draftable API end point tests', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.request({
-                    url: '/api/measures/' + measureId + '/version/?versionType=major',
+                    url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
@@ -413,7 +413,7 @@ describe('Draftable API end point tests', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.request({
-                    url: '/api/measures/' + measureId + '/version/?versionType=minor',
+                    url: '/api/measures/' + measureId + '/version?versionType=minor',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
@@ -475,7 +475,7 @@ describe('Draftable API end point tests', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.request({
-                    url: '/api/measures/' + measureId + '/version/?versionType=patch',
+                    url: '/api/measures/' + measureId + '/version?versionType=patch',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },

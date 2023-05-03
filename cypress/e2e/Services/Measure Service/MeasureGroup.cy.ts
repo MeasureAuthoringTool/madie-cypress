@@ -43,7 +43,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -96,7 +96,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -153,7 +153,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -209,7 +209,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -266,7 +266,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -329,7 +329,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -384,7 +384,7 @@ describe('Measure Service: Measure Group Endpoints', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -461,7 +461,7 @@ describe('Measure Populations', () => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -525,7 +525,7 @@ describe('Measure Populations', () => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -590,7 +590,7 @@ describe('Measure Populations', () => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -678,7 +678,7 @@ describe('Measure Observations', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -756,7 +756,7 @@ describe('Measure Observations', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -834,7 +834,7 @@ describe('Measure Stratifications', () => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -915,7 +915,7 @@ describe('Measure Stratifications', () => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -994,7 +994,7 @@ describe('Measure Stratifications', () => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -1096,7 +1096,7 @@ describe('Creating a group / PC with description for various fields', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -1183,7 +1183,7 @@ describe('Creating a group / PC with description for various fields', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -1279,7 +1279,7 @@ describe('Creating a group / PC with description for various fields', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -1374,7 +1374,7 @@ describe('Creating a group / PC with description for various fields', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -1475,7 +1475,7 @@ describe('Creating a group / PC with description for various fields', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -1530,7 +1530,7 @@ describe('Creating a group / PC with description for various fields', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'PUT',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
