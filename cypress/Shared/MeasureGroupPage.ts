@@ -162,7 +162,7 @@ export class MeasureGroupPage {
     //left panel
     public static readonly leftPanelRiskAdjustmentTab = '#sideNavMeasurePopulationsRiskAdjustment'
     public static readonly leftPanelSupplementalDataTab = '[datatestid=leftPanelMeasurePopulationsSupplementalDataTab]'
-    public static readonly leftPanelBaseConfigTab = '[datatestid="leftPanelMeasureBaseConfigurationTab"]'
+    public static readonly leftPanelBaseConfigTab = '[data-testid="leftPanelMeasureBaseConfigurationTab"]'
 
     //QDM Base Configuration fields
     public static readonly qdmScoring = '[data-testid="scoring-select"]'
@@ -171,6 +171,7 @@ export class MeasureGroupPage {
     public static readonly qdmScoringCV = '[data-testid="scoring-option-CONTINUOUS_VARIABLE"]'
     public static readonly qdmScoringProportion = '[data-testid="scoring-option-PROPORTION"]'
     public static readonly qdmType = '[id="base-configuration-types"]'
+    public static readonly patientBasisRadioBtn = '[name="mui-6"]'
     public static readonly qdmTypeOptionZero = '[id="base-configuration-types-option-0"]'
     public static readonly qdmTypeValuePill = '[class="MuiChip-label MuiChip-labelSmall css-1pjtbja"]'
     public static readonly qdmDiscardButton = '[data-testid="cancel-button"]'
