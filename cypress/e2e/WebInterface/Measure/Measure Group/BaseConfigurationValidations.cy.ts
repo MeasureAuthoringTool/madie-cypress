@@ -15,7 +15,7 @@ let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.SBTEST_CQL
 
 //Skipping tests until the QDM flag is removed
-describe('Validating Population tabs and fields, specific to QDM', () => {
+describe.skip('Validating Population tabs and fields, specific to QDM', () => {
     beforeEach('Create measure and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureName + randValue
@@ -39,7 +39,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
 
     })
     //this test is work in progress and will need to continue to be built out as the base configuration page becomes more complete
-    it.only('Verify that the Base Configuration fields are present, contain values when necessary, and, if required, ' +
+    it('Verify that the Base Configuration fields are present, contain values when necessary, and, if required, ' +
         'the save button is not available until all required fields have a value', () => {
 
         MeasuresPage.measureAction("edit")
