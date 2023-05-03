@@ -60,43 +60,6 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
             cy.get(MeasureGroupPage.qdmTypeHelperText).should('contain.text', 'At least one type is required')
             cy.get(MeasureGroupPage.qdmScoringHelperText).should('contain.text', 'Valid Scoring is required for QDM Measure.')
 
-            //validate that a value can be selected for the Type field
-            cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
-            cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
-            cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
-            cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
-
-            //verify availability of the discard button and the un-availability of the save button
-            cy.get(MeasureGroupPage.qdmDiscardButton).should('be.enabled')
-            cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.disabled')
-
-            //validate the values and the selection of the values, for the scoring field
-            //select 'Cohort' scoring on measure
-            Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
-            cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
-
-            //verify availability of the discard and save buttons
-            cy.get(MeasureGroupPage.qdmDiscardButton).should('be.enabled')
-            cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
-
-            //discard current changges
-            cy.get(MeasureGroupPage.qdmDiscardButton).click()
-            Global.clickOnDiscardChanges()
-
-            //navigate to the main measures page
-            cy.get(Header.measures).click()
-
-            MeasuresPage.measureAction("edit")
-
-            //Click on Measure Group tab
-            Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-            cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-            cy.get(EditMeasurePage.measureGroupsTab).click()
-
-            //click on / navigate to the Base Configuration sub-tab
-            cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-            cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
-
             //select 'Cohort' scoring on measure
             Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
             cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
@@ -110,6 +73,9 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
             cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
             cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
             cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
+
+            //Select No for patient Basis
+            cy.get(MeasureGroupPage.patientBasisRadioBtn).eq(1).click()
 
             //verify availability of the discard button and the availability of the save button
             cy.get(MeasureGroupPage.qdmDiscardButton).should('be.enabled')
@@ -148,10 +114,10 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
         //click on discard changes button
         cy.get(MeasureGroupPage.qdmDiscardButton).click()
 
-        //click on 'No, Keep Wworking' button
+        //click on 'No, Keep working' button
         cy.get(MeasureGroupPage.qdmDiscardModalCancelButton).click()
 
-        //verify state of Base Configuration page is as it was priot to clicking on the Discard button
+        //verify state of Base Configuration page is as it was prior to clicking on the Discard button
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
 
         //verify availability of the discard and save buttons
@@ -172,10 +138,10 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
         //click on discard changes button
         cy.get(MeasureGroupPage.qdmDiscardButton).click()
 
-        //click on 'No, Keep Wworking' button
+        //click on 'No, Keep working' button
         cy.get(MeasureGroupPage.qdmDiscardModalCancelButton).click()
 
-        //verify state of Base Configuration page is as it was priot to clicking on the Discard button
+        //verify state of Base Configuration page is as it was prior to clicking on the Discard button
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
         cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
 
@@ -196,7 +162,7 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
         //cancel navigation
         cy.get(MeasureGroupPage.qdmDiscardModalCancelButton).click()
 
-        //verify state of Base Configuration page is as it was priot to clicking on the Discard button
+        //verify state of Base Configuration page is as it was prior to clicking on the Discard button
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
         cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
 
