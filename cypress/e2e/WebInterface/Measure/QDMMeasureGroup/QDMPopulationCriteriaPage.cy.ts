@@ -180,6 +180,7 @@ describe.skip('No values in QDM PC fields, when no CQL', () => {
         OktaLogin.Logout()
 
     })
+
     //no definitions in CQL -- no values for PC fields
     it('Verify that when there is no CQL or no definitions in the CQL, QDM Population Criteria fields have no values', () => {
 

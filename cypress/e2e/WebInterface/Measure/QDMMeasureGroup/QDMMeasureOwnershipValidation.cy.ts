@@ -14,6 +14,7 @@ let altCqlLibraryName = ''
 let measureCQL = MeasureCQL.SBTEST_CQL
 let measureScoring = 'Cohort'
 
+//Skipping until QDM feature flag is removed
 describe.skip('Measure Ownership Validations on Population criteria page', () => {
 
     beforeEach('Create measure and login', () => {
