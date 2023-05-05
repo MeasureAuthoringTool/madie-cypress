@@ -1,19 +1,17 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
-import assert = require("assert")
-import { Global } from "../../../../Shared/Global"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
+let measureScoring = 'Cohort'
 let measureCQL = 'library Library1234556 version \'0.0.000\'\n' +
     'using QDM version \'5.6\'\n' +
     '\n' +
@@ -32,7 +30,7 @@ let measureCQL = 'library Library1234556 version \'0.0.000\'\n' +
     '  ["Patient Characteristic Race": "Race"]\n' +
     'define "SDE Sex":\n' +
     '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
-    'define "i":\n' +
+    'define "ipp":\n' +
     '\ttrue\n' +
     'define "d":\n' +
     '\t true\n' +
@@ -47,10 +45,8 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
 
     beforeEach('Create Measure and login', () => {
 
-        cy.setAccessTokenCookie()
-
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName,measureScoring, false, measureCQL)
         OktaLogin.Login()
     })
 
@@ -59,39 +55,14 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
         OktaLogin.Logout()
 
     })
-    it('Verify Populcation Criteria page is properly populated, per Scoring type.', () => {
+    it('Verify Population Criteria page is properly populated, per Scoring type.', () => {
 
         MeasuresPage.measureAction("edit")
 
-        //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //click on / navigate to the Base Configuration sub-tab
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
-
-        //validate that a value can be selected for the Type field
-        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
-        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
-        cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
-
-        //select 'Cohort' scoring on measure
-        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
-        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
-
-        //*check* the 'No' radio button
-        cy.contains('label', 'No')
-            .prevAll() // select the previous element
-            .get(MeasureGroupPage.qdmPatientBasis)
-            .should('have.attr', 'type', 'radio')
-            .check()
-
-        //click on the save button and confirm save success message
-        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
@@ -100,7 +71,7 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
 
         cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).should('contain.text', 'd')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).should('contain.text', 'i')
+        cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).should('contain.text', 'ipp')
         cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).should('contain.text', 'n')
         cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).should('contain.text', 'SDE Ethnicity')
         cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).should('contain.text', 'SDE Payer')
@@ -121,31 +92,6 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        //click on / navigate to the Base Configuration sub-tab
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
-
-        //validate that a value can be selected for the Type field
-        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
-        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
-        cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
-
-        //select 'Cohort' scoring on measure
-        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
-        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
-
-        //*check* the 'No' radio button
-        cy.contains('label', 'No')
-            .prevAll() // select the previous element
-            .get(MeasureGroupPage.qdmPatientBasis)
-            .should('have.attr', 'type', 'radio')
-            .check()
-
-        //click on the save button and confirm save success message
-        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
-
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
@@ -158,11 +104,65 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
         cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         cy.get(MeasureGroupPage.QDMAddPopCriteriaBtn).click()
-        cy.pause()
-
 
     })
+
+    it('Add UCUM Scoring Unit to Population Criteria', () => {
+
+        //click on Edit button to edit measure
+        MeasuresPage.measureAction("edit")
+
+        //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Add UCUM scoring unit
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
+        cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
+            if ($ele.text() == "Text") {
+                cy.wrap($ele).should('exist')
+                cy.wrap($ele).focus()
+                cy.wrap($ele).click()
+            }
+        })
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
+        //Select mL milliliters from the dropdown
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
+
+        //Add Initial Population
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+
+        //save population definition with scoring unit
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+
+        //navigate away from measure group page
+        cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+        //navigate back to the measure group page
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //verify All data persists on Criteria page
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'ipp')
+        cy.get(MeasureGroupPage.ucumScoringUnitCurrentValue).should('contain.value', 'mL milliliter')
+
+        //Navigate to Base Configuration page and verify All data persists on the page
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
+        cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Cohort')
+        cy.get('.MuiChip-label').should('contain.text', 'Process')
+    })
+
 })
+
 describe.skip('No values in QDM PC fields, when no CQL', () => {
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
@@ -170,10 +170,8 @@ describe.skip('No values in QDM PC fields, when no CQL', () => {
 
     beforeEach('Create Measure and login', () => {
 
-        cy.setAccessTokenCookie()
-
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName,measureScoring, false, measureCQL)
         OktaLogin.Login()
     })
 
@@ -182,6 +180,7 @@ describe.skip('No values in QDM PC fields, when no CQL', () => {
         OktaLogin.Logout()
 
     })
+
     //no definitions in CQL -- no values for PC fields
     it('Verify that when there is no CQL or no definitions in the CQL, QDM Population Criteria fields have no values', () => {
 
@@ -191,31 +190,6 @@ describe.skip('No values in QDM PC fields, when no CQL', () => {
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //click on / navigate to the Base Configuration sub-tab
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
-
-        //validate that a value can be selected for the Type field
-        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
-        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
-        cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
-
-        //select 'Cohort' scoring on measure
-        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
-        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
-
-        //*check* the 'No' radio button
-        cy.contains('label', 'No')
-            .prevAll() // select the previous element
-            .get(MeasureGroupPage.qdmPatientBasis)
-            .should('have.attr', 'type', 'radio')
-            .check()
-
-        //click on the save button and confirm save success message
-        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')

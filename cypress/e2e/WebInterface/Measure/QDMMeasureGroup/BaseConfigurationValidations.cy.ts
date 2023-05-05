@@ -48,6 +48,7 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
+
     //this test is work in progress and will need to continue to be built out as the base configuration page becomes more complete
     it('Verify that the Base Configuration fields are present, contain values when necessary, and, if required, ' +
         'the save button is not available until all required fields have a value', () => {
@@ -337,6 +338,5 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
             .should('have.attr', 'type', 'radio')  // confirm it's type radio
             .should('not.be.enabled')
 
-        cy.pause()
     })
 })
