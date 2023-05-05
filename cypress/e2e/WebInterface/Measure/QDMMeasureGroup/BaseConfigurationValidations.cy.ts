@@ -49,7 +49,6 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
 
     })
 
-    //this test is work in progress and will need to continue to be built out as the base configuration page becomes more complete
     it('Verify that the Base Configuration fields are present, contain values when necessary, and, if required, ' +
         'the save button is not available until all required fields have a value', () => {
 
@@ -307,8 +306,7 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
             .should('have.attr', 'type', 'radio')  // confirm it's type radio
             .should('be.checked')
     })
-    //this test needs to be revisited, after MAT-5536 is fully implemented, to make sure the last to assertions, regarding the radio buttons, work as 
-    //expected an additional assertion needs to be added as well to validate that the save button is present but disabled
+    //non-owner of measure cannot edit Base Configuration fields
     it('Non-owner of measure cannot edit any of the the Base Configuration fields', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
         MeasuresPage.measureAction("edit", true)
@@ -337,6 +335,10 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
             .get(MeasureGroupPage.qdmPatientBasis)
             .should('have.attr', 'type', 'radio')  // confirm it's type radio
             .should('not.be.enabled')
+
+        //verify the unavailability of the discard and save buttons
+        cy.get(MeasureGroupPage.qdmDiscardButton).should('not.be.enabled')
+        cy.get(MeasureGroupPage.qdmBCSaveButton).should('not.be.enabled')
 
     })
 })
