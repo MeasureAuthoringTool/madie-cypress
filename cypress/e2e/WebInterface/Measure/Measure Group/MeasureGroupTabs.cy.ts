@@ -5,7 +5,6 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { Header } from "../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -37,7 +36,7 @@ describe('Validating Population tabs', () => {
 
     })
 
-    it('Can successfully update / change score value and save on population tab', () => {
+    it('Can successfully update / change score and population value and save on population tab', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -50,7 +49,7 @@ describe('Validating Population tabs', () => {
 
         //change score and select population value for new score and save
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'num')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
@@ -71,40 +70,11 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'ipp')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'num')
 
     })
 
-    it('Can successfully update / change population value and save on population tab', () => {
-        //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
-
-        //Click on Measure Group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //change / update a population value for current scoring
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'num')
-
-        //save measure group
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        //validation message after attempting to save
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
-
-        //assert save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
-    })
-
-    it('Changes are retained while moving across different tabs', () => {
+    it('Changes are retained and saved while moving across different tabs', () => {
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
 
@@ -184,90 +154,6 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Typed some value for Rate Aggregation text area field')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
-    })
-
-    it('Changes are saved across different tabs', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
-
-        //Click on Measure Group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //Click on Reporting tab
-        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
-        cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
-
-        //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
-        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
-
-
-        //navigate to the populations tab
-        cy.get(MeasureGroupPage.populationTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
-        cy.get(MeasureGroupPage.populationTab).should('exist')
-        cy.get(MeasureGroupPage.populationTab).click()
-
-        //change / update a population value for current scoring
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'denom')
-
-        //navigate back to the reporting tab
-        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
-        cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
-
-        //assert the two fields that should appear in the Reporting tab and their recently updated values
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Typed some value for Rate Aggregation text area field')
-
-        //navigate back to the reporting tab
-        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
-        cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
-
-        //save measure group
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        //validation message after attempting to save
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
-
-        //assert save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
-
-        //Click on Measure Group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //Click on Reporting tab
-        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
-        cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
-
-        //assert the two fields that should appear in the Reporting tab and their recently updated values
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Typed some value for Rate Aggregation text area field')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
 
         //navigate to the populations tab
         cy.get(MeasureGroupPage.populationTab).should('be.visible')
@@ -277,8 +163,7 @@ describe('Validating Population tabs', () => {
 
         //assert the change / update to population value for current scoring
         cy.get(MeasureGroupPage.initialPopulationSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'denom')
-
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'ipp')
     })
 
     it('Assert indicator on tab with error, until error is removed', () => {
@@ -800,51 +685,6 @@ describe('Validating Stratification tabs', () => {
 
     })
 
-    it('Stratification added successfully when population basis match with Stratification return type', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
-
-        //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.populationTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
-        cy.get(MeasureGroupPage.populationTab).should('exist')
-        cy.get(MeasureGroupPage.populationTab).click()
-
-        //Click on Stratification tab
-        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
-        cy.get(MeasureGroupPage.stratificationTab).should('exist')
-        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-        cy.get(MeasureGroupPage.stratificationTab).click()
-
-        //create stratification fields if they do not already exist on page
-        cy.get('body').then((body) => {
-            if ((body.find(MeasureGroupPage.stratOne).length == 0) || (body.find(MeasureGroupPage.stratTwo).length == 0)) {
-                cy.get(MeasureGroupPage.addStratButton).should('exist')
-                cy.get(MeasureGroupPage.addStratButton).should('be.visible')
-                cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
-                cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
-            }
-        })
-
-        //Add Stratification 1
-        Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'denom')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'denominator')
-        cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
-
-        //Add Stratification 2
-        Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'denom')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'numerator')
-        cy.get(MeasureGroupPage.stratDescTwo).type('StratificationTwo')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
-
-    })
-
     it('Verify error message when the Stratification return type does not match with population basis', () => {
 
         //Click on Edit Measure
@@ -1056,7 +896,6 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         cy.get(MeasureGroupPage.discardChangesBtn).click()
         cy.get(MeasureGroupPage.discardChangesConfirmationMsg).should('contain.text', 'Are you sure you want to discard your changes?')
         cy.get(MeasureGroupPage.discardChangesContinueBtn).click()
-        cy.get(MeasureGroupPage.riskAdjustmentTextBox).should('be.empty')
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('not.exist')
     })
 

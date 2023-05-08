@@ -87,7 +87,7 @@ describe('Measure Versioning', () => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
                     cy.request({
-                        url: '/api/measures/' + measureId + '/version/?versionType=major',
+                        url: '/api/measures/' + measureId + '/version?versionType=major',
                         headers: {
                             authorization: 'Bearer ' + accessToken.value
                         },
@@ -107,7 +107,7 @@ describe('Measure Versioning', () => {
             cy.readFile('cypress/fixtures/measureId2').should('exist').then((measureId2) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + measureId2 + '/version/?versionType=major',
+                    url: '/api/measures/' + measureId2 + '/version?versionType=major',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
@@ -144,7 +144,7 @@ describe('Version Measure without CQL', () => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + measureId + '/version/?versionType=major',
+                    url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
@@ -214,7 +214,7 @@ describe('Version Measure with invalid CQL', () => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + measureId + '/version/?versionType=major',
+                    url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
@@ -252,7 +252,7 @@ describe('Version Measure with invalid test case Json', () => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + measureId + '/version/?versionType=major',
+                    url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
@@ -290,7 +290,7 @@ describe('Edit validations for versioned Measure', () => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
                     cy.request({
-                        url: '/api/measures/' + measureId + '/version/?versionType=major',
+                        url: '/api/measures/' + measureId + '/version?versionType=major',
                         headers: {
                             authorization: 'Bearer ' + accessToken.value
                         },
@@ -329,7 +329,7 @@ describe('Edit validations for versioned Measure', () => {
                     cy.log('Verify error message on editing Measure group')
                     cy.request({
                         failOnStatusCode: false,
-                        url: '/api/measures/' + measureId + '/groups/',
+                        url: '/api/measures/' + measureId + '/groups',
                         method: 'PUT',
                         headers: {
                             authorization: 'Bearer ' + accessToken.value
@@ -421,7 +421,7 @@ describe('Delete validations for versioned Measure', () => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
                     cy.request({
-                        url: '/api/measures/' + measureId + '/version/?versionType=major',
+                        url: '/api/measures/' + measureId + '/version?versionType=major',
                         headers: {
                             authorization: 'Bearer ' + accessToken.value
                         },

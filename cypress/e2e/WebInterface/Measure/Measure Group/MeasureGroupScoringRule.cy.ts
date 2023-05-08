@@ -10,25 +10,17 @@ let CqlLibraryName = 'TestLibrary' + Date.now()
 
 describe('Measure Group', () => {
 
-    before('Create Measure', () => {
+    beforeEach('Create Measure and Login', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
-
-    })
-    beforeEach('Login', () => {
-
         OktaLogin.Login()
+
     })
 
-    afterEach('Logout', () => {
+    afterEach('Logout and Cleanup', () => {
 
         OktaLogin.Logout()
-
-    })
-
-    after('Clean up', () => {
-
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })

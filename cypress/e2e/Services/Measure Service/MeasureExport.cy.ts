@@ -72,7 +72,7 @@ describe('Measure Export', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
-                    url: '/api/measures/' + retrievedMeasureID + '/groups/',
+                    url: '/api/measures/' + retrievedMeasureID + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value

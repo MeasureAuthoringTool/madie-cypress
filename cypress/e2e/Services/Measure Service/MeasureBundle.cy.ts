@@ -110,7 +110,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
             cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + retrievedMeasureID + '/groups/',
+                    url: '/api/measures/' + retrievedMeasureID + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -399,7 +399,7 @@ describe('Measure Observation Validation', () => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + retrievedMeasureID + '/groups/',
+                    url: '/api/measures/' + retrievedMeasureID + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -470,7 +470,7 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
             cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
 
-                    url: '/api/measures/' + retrievedMeasureID + '/groups/',
+                    url: '/api/measures/' + retrievedMeasureID + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -653,7 +653,7 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
-                    url: '/api/measures/' + retrievedMeasureID + '/groups/',
+                    url: '/api/measures/' + retrievedMeasureID + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -1015,7 +1015,7 @@ describe('Measure bundle end point returns Measure Population Description', () =
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
 
                 cy.request({
-                    url: '/api/measures/' + id + '/groups/',
+                    url: '/api/measures/' + id + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value

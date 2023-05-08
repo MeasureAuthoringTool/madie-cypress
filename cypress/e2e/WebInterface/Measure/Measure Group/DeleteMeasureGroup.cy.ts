@@ -8,7 +8,6 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Global } from "../../../../Shared/Global"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureOne = 'TestMeasure' + Date.now()
 let CqlLibraryName1 = 'TestLibrary' + Date.now()
@@ -29,15 +28,6 @@ describe('Validate Measure Group deletion functionality', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureOne, newCqlLibraryName, measureCQL)
-        OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null,
             null, 'Procedure')
         TestCasesPage.CreateTestCaseAPI(title1, series, description, validJsonValue)
@@ -51,28 +41,7 @@ describe('Validate Measure Group deletion functionality', () => {
 
     })
 
-    it('Delete button brings up confirmation modal', () => {
-        //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
-
-        //Click on Measure Group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //click on Delete button for group
-        cy.get(MeasureGroupPage.deleteGroupbtn).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.deleteGroupbtn).click()
-
-        //presence of modal / confirmation modal appears
-        cy.get(MeasureGroupPage.deleteMeasureGroupModal).should('exist')
-        cy.get(MeasureGroupPage.deleteMeasureGroupModal).should('be.visible')
-
-        //modal has messaging asking the user to confirm the deletion
-        cy.get(MeasureGroupPage.deleteMeasureGroupConfirmationMsg).should('exist')
-        cy.get(MeasureGroupPage.deleteMeasureGroupConfirmationMsg).contains('Measure Group 1 will be deleted. Are you sure you want to delete this measure group?')
-    })
-
-    it('Confirmation modal has Yes button and clicking yes when there is only one group removes group a blank group remains', () => {
+    it('Delete button brings up confirmation modal and clicking yes, removes the existing Measure group', () => {
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
 
@@ -87,6 +56,14 @@ describe('Validate Measure Group deletion functionality', () => {
         //click on Delete button for group
         cy.get(MeasureGroupPage.deleteGroupbtn).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.deleteGroupbtn).click()
+
+        //presence of modal / confirmation modal appears
+        cy.get(MeasureGroupPage.deleteMeasureGroupModal).should('exist')
+        cy.get(MeasureGroupPage.deleteMeasureGroupModal).should('be.visible')
+
+        //modal has messaging asking the user to confirm the deletion
+        cy.get(MeasureGroupPage.deleteMeasureGroupConfirmationMsg).should('exist')
+        cy.get(MeasureGroupPage.deleteMeasureGroupConfirmationMsg).contains('Measure Group 1 will be deleted. Are you sure you want to delete this measure group?')
 
         //clicking "yes" to confirm deletion of group
         cy.get(MeasureGroupPage.yesDeleteModalbtn).should('exist').should('be.visible').should('be.enabled')
@@ -289,19 +266,9 @@ describe('Ownership test when deleting groups', () => {
 
         //create new measure via temp user
         CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, newCqlLibraryName + "second", measureCQL, true, true)
-        OktaLogin.AltLogin()
-        MeasuresPage.measureAction('edit', true)
-
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / succesful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(true, true, null,
             null, null, 'Procedure')
-        TestCasesPage.CreateTestCaseAPI(title1 + "second", series, description, validJsonValue, true, true)
+
         OktaLogin.Login()
     })
 

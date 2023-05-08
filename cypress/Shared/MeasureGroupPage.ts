@@ -9,6 +9,16 @@ export class MeasureGroupPage {
 
     public static readonly pcErrorAlertToast = '[data-testid="population-criteria-error"]'
 
+    //populcation criteria
+    public static readonly QDMPopulationCriteria1 = '[data-testid="leftPanelMeasureInformation-MeasureGroup1"]'
+    public static readonly QDMPopCriteria1Desc = '[data-testid="groupDescriptionInput"]'
+    public static readonly QDMPopCriteria1IP = '[data-testid="population-select-initial-population"]'
+    public static readonly QDMPopCriteria1IPOptions = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiPaper-root MuiMenu-paper MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-177ic5c"]'
+    public static readonly QDMPopCriteria1IPDesc = '[data-testid="populations[0].description-description"]'
+    public static readonly QDMPopCriteria1SaveBtn = '[data-testid="group-form-submit-btn"]'
+    public static readonly QDMAddPopCriteriaBtn = '[data-testid="add-measure-group-button"]'
+    public static readonly QDMPopCriteriaSaveSuccessMsg = '[data-testid="population-criteria-success"]'
+
     //mismatch CQL error
     public static readonly CQLPCMismatchError = '[class="madie-alert error"]'
 
@@ -162,7 +172,7 @@ export class MeasureGroupPage {
     //left panel
     public static readonly leftPanelRiskAdjustmentTab = '#sideNavMeasurePopulationsRiskAdjustment'
     public static readonly leftPanelSupplementalDataTab = '[datatestid=leftPanelMeasurePopulationsSupplementalDataTab]'
-    public static readonly leftPanelBaseConfigTab = '[datatestid="leftPanelMeasureBaseConfigurationTab"]'
+    public static readonly leftPanelBaseConfigTab = '[data-testid="leftPanelMeasureBaseConfigurationTab"]'
 
     //QDM Base Configuration fields
     public static readonly qdmScoring = '[data-testid="scoring-select"]'
@@ -171,6 +181,8 @@ export class MeasureGroupPage {
     public static readonly qdmScoringCV = '[data-testid="scoring-option-CONTINUOUS_VARIABLE"]'
     public static readonly qdmScoringProportion = '[data-testid="scoring-option-PROPORTION"]'
     public static readonly qdmType = '[id="base-configuration-types"]'
+    public static readonly patientBasisRadioBtn = '[name="mui-6"]'
+    public static readonly qdmPatientBasis = '[class="PrivateSwitchBase-input css-1m9pwf3"]'
     public static readonly qdmTypeOptionZero = '[id="base-configuration-types-option-0"]'
     public static readonly qdmTypeValuePill = '[class="MuiChip-label MuiChip-labelSmall css-1pjtbja"]'
     public static readonly qdmDiscardButton = '[data-testid="cancel-button"]'
@@ -360,7 +372,7 @@ export class MeasureGroupPage {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -455,7 +467,7 @@ export class MeasureGroupPage {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -534,7 +546,7 @@ export class MeasureGroupPage {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((fileContents) => {
                 cy.request({
-                    url: '/api/measures/' + fileContents + '/groups/',
+                    url: '/api/measures/' + fileContents + '/groups',
                     method: 'POST',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
@@ -548,27 +560,7 @@ export class MeasureGroupPage {
                                 "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPopP
-                            }/* ,
-                            {
-                                "id": uuidv4(),
-                                "name": "denominator",
-                                "definition": PopDenomP
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "denominatorExclusion",
-                                "definition": PopDenomP
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "numerator",
-                                "definition": PopNumP
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "numeratorExclusion",
-                                "definition": PopNumP
-                            } */
+                            }
                         ],
                         "measureGroupTypes": [
                             "Outcome"
