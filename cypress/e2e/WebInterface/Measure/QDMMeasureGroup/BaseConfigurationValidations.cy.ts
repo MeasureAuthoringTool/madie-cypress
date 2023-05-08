@@ -59,6 +59,10 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
             cy.get(EditMeasurePage.measureGroupsTab).should('exist')
             cy.get(EditMeasurePage.measureGroupsTab).click()
 
+            //confirm Base Config alert message apppears
+            Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
+            cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
+
             //click on / navigate to the Base Configuration sub-tab
             cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
             cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
@@ -151,7 +155,11 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
             cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
 
             //Select No for patient Basis
-            cy.get(MeasureGroupPage.patientBasisRadioBtn).eq(1).click()
+            cy.contains('label', 'No')
+                .prevAll() // select the previous element
+                .get(MeasureGroupPage.qdmPatientBasis)
+                .should('have.attr', 'type', 'radio')
+                .check()
 
             //verify availability of the discard button and the availability of the save button
             cy.get(MeasureGroupPage.qdmDiscardButton).should('be.enabled')
@@ -174,6 +182,10 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //confirm Base Config alert message apppears
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
@@ -315,6 +327,10 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //confirm Base Config alert message apppears
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
