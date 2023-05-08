@@ -194,6 +194,9 @@ export class MeasureGroupPage {
     public static readonly qdmTypeHelperText = '[data-testid="base-configuration-types-helper-text"]'
     public static readonly qdmScoringHelperText = '[data-testid="scoring-select-helper-text"]'
 
+    //QDM Base Configuration alert
+    public static readonly qdmBCCriteriaReqAlertMsg = '[data-testid="error-alerts"]'
+
     //Risk Adjustment variables
     public static readonly riskAdjustmentDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
     public static readonly riskAdjustmentDefinitionDropdown = '[id="risk-adjustment-listbox"]'
