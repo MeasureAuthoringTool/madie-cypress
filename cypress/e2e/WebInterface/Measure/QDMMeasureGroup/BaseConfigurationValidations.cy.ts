@@ -357,4 +357,90 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('not.be.enabled')
 
     })
+    //additional work will need to be done with this test once MAT-5554 is finished
+    it('Changing the scoring elcits the Change Scoring prompt', () => {
+        //1) prompt appears afer a user changes the scoring value and, then, clicks on save
+        //navigate to the main measures page
+        cy.get(Header.measures).click()
+
+        MeasuresPage.measureAction("edit")
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //confirm Base Config alert message apppears
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
+
+        //click on / navigate to the Base Configuration sub-tab
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
+
+        //select 'Cohort' scoring on measure
+        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
+        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
+
+        //validate that a value can be selected for the Type field
+        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
+        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
+        cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
+        cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
+
+        //verify availability of the save button
+        cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
+        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
+
+        //navigate to the main measures page
+        cy.get(Header.measures).click()
+
+        //verify user has navigated to the main measures page
+        cy.url().should('eq', 'https://dev-madie.hcqis.org/measures')
+
+        MeasuresPage.measureAction("edit")
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //click on / navigate to the Base Configuration sub-tab
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
+
+        //select 'Cohort' scoring on measure
+        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringProportion)
+        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Proportion')
+
+        //confirm that Change Scoring modal / prompt is present via it's buttons
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmChangeScoringCancel, 30000)
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmChangeScoringSaveChanges, 30000)
+
+        cy.get(MeasureGroupPage.qdmChangeScoringCancel).click()
+
+        //if the No, Keep Working button is clicked, values on the page remain the same and nothing is saved
+        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Proportion')
+        cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
+        //verify availability of the discard and save buttons
+        cy.get(MeasureGroupPage.qdmDiscardButton).should('be.enabled')
+        cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
+        //validate that 'Yes" radio button is selected / checked
+        cy.contains('label', 'Yes')
+            .nextAll() // select the next element
+            .get(MeasureGroupPage.qdmPatientBasis)
+            .should('have.attr', 'type', 'radio')  // confirm it's type radio
+            .should('be.checked')
+
+        cy.pause()
+
+
+        //2) no data is saved or cleared when the user clicks on the "No, Keep Working" button in the change scoring modal
+
+        //3) data is saved and all populations are cleared, when the user clicks on the "Yes, Save Changes"
+
+        //4) after #3, user can navigate away and back to the BC page and see the values that was recently saved
+    })
 })

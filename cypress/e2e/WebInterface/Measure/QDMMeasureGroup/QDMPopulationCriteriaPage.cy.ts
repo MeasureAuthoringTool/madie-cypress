@@ -46,7 +46,7 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
     beforeEach('Create Measure and login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName,measureScoring, false, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, measureCQL)
         OktaLogin.Login()
     })
 
@@ -104,6 +104,10 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
         cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         cy.get(MeasureGroupPage.QDMAddPopCriteriaBtn).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.QDMPopulationCriteria2, 30000)
+
+        cy.get(MeasureGroupPage.QDMPopCriteria2IP).should('be.visible')
+        cy.get(MeasureGroupPage.QDMPopCriteria2IP).should('contain.text', 'Select Initial Population')
 
     })
 
@@ -194,7 +198,7 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
 
         //Assert Rate Aggregation text box
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
-        cy.get(MeasureGroupPage.rateAggregation).should('contain.value','Aggregation')
+        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Aggregation')
     })
 })
 
@@ -206,7 +210,7 @@ describe.skip('No values in QDM PC fields, when no CQL', () => {
     beforeEach('Create Measure and login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName,measureScoring, false, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, measureCQL)
         OktaLogin.Login()
     })
 
