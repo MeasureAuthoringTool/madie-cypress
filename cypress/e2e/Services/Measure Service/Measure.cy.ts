@@ -165,13 +165,15 @@ describe.skip('Measure Service: QDM Measure', () => {
                     "measureScoring": "Cohort",
                     "ecqmTitle": eCQMTitle,
                     "measurementPeriodStart": mpStartDate,
-                    "measurementPeriodEnd": mpEndDate
+                    "measurementPeriodEnd": mpEndDate,
+                    "rateAggregation": "Aggregation"
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
                 expect(response.body.createdBy).to.eql(harpUser)
                 cy.writeFile('cypress/fixtures/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                expect(response.body.rateAggregation).to.eql('Aggregation')
             })
 
         })
@@ -1205,9 +1207,3 @@ describe('Measure Service: eCQM abbreviated title validations', () => {
 
     })
 })
-
-
-
-
-
-

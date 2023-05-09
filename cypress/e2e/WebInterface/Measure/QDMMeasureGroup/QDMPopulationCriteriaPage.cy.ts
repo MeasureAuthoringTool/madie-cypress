@@ -161,6 +161,41 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
         cy.get('.MuiChip-label').should('contain.text', 'Process')
     })
 
+    it('Add Rate Aggregation to Population Criteria', () => {
+
+        //click on Edit button to edit measure
+        MeasuresPage.measureAction("edit")
+
+        //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Navigate to Reporting page
+        cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
+        cy.get(MeasureGroupPage.rateAggregation).type('Aggregation')
+
+        //save population definition with scoring unit
+        cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.visible')
+        cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.enabled')
+        cy.get(MeasureGroupPage.measureReportingSaveBtn).click()
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureReportingMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureReportingMsg).should('contain.text', 'Measure Reporting Updated Successfully')
+
+        //navigate away from measure group page
+        cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+        //navigate back to the measure group page
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Assert Rate Aggregation text box
+        cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
+        cy.get(MeasureGroupPage.rateAggregation).should('contain.value','Aggregation')
+    })
 })
 
 describe.skip('No values in QDM PC fields, when no CQL', () => {

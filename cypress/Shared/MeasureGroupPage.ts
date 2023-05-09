@@ -9,7 +9,7 @@ export class MeasureGroupPage {
 
     public static readonly pcErrorAlertToast = '[data-testid="population-criteria-error"]'
 
-    //populcation criteria
+    //population criteria
     public static readonly QDMPopulationCriteria1 = '[data-testid="leftPanelMeasureInformation-MeasureGroup1"]'
     public static readonly QDMPopCriteria1Desc = '[data-testid="groupDescriptionInput"]'
     public static readonly QDMPopCriteria1IP = '[data-testid="population-select-initial-population"]'
@@ -71,6 +71,8 @@ export class MeasureGroupPage {
     //Reporting tab fields
     public static readonly rateAggregation = '[data-testid="rateAggregationText"]'
     public static readonly improvementNotationSelect = '[id="improvement-notation-select"]'
+    public static readonly measureReportingSaveBtn = '[data-testid="measure-Reporting-save"]'
+    public static readonly successfulSaveMeasureReportingMsg = '[class="toast success"]'
     //Measure Group Type
     public static readonly measureGroupTypeSelect = '[data-testid="measure-group-type-dropdown"]'
     public static readonly measureGroupTypeCheckbox = '[id="measure-group-type"]'
@@ -173,6 +175,7 @@ export class MeasureGroupPage {
     public static readonly leftPanelRiskAdjustmentTab = '#sideNavMeasurePopulationsRiskAdjustment'
     public static readonly leftPanelSupplementalDataTab = '[datatestid=leftPanelMeasurePopulationsSupplementalDataTab]'
     public static readonly leftPanelBaseConfigTab = '[data-testid="leftPanelMeasureBaseConfigurationTab"]'
+    public static readonly qdmMeasureReportingTab = '[datatestid=leftPanelMeasureReportingTab]'
 
     //QDM Base Configuration fields
     public static readonly qdmScoring = '[data-testid="scoring-select"]'

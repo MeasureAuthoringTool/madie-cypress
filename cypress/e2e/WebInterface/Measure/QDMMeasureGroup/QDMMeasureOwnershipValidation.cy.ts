@@ -57,5 +57,9 @@ describe.skip('Measure Ownership Validations on Population criteria page', () =>
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).should('not.be.enabled')
         cy.get(MeasureGroupPage.initialPopulationSelect).should('not.be.enabled')
 
+        //Navigate to Reporting tab
+        cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
+        cy.get(MeasureGroupPage.rateAggregation).should('not.be.enabled')
+
     })
 })
