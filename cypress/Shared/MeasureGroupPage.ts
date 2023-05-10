@@ -198,6 +198,8 @@ export class MeasureGroupPage {
     public static readonly qdmBCSaveButtonSuccessMsg = '[data-testid="edit-base-configuration-success-text"]'
     public static readonly qdmTypeHelperText = '[data-testid="base-configuration-types-helper-text"]'
     public static readonly qdmScoringHelperText = '[data-testid="scoring-select-helper-text"]'
+    public static readonly updatePatientBasisCancelBtn = '[data-testid=update-measure-group-patient-basis-modal-cancel-btn]'
+    public static readonly updatePatientBasisContinueBtn = '[data-testid=update-measure-group-patient-basis-modal-agree-btn]'
 
     //QDM BC Scoring Change propmt
     public static readonly qdmChangeScoringCancel = '[data-testid="update-measure-group-scoring-modal-cancel-btn"]'
