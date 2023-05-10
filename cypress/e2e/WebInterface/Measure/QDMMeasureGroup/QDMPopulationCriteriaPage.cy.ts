@@ -70,19 +70,18 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).should('contain.text', 'd')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).should('contain.text', 'ipp')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).should('contain.text', 'n')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).should('contain.text', 'SDE Ethnicity')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).should('contain.text', 'SDE Payer')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).should('contain.text', 'SDE Race')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).should('contain.text', 'SDE Sex')
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('contain.text', 'd')
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('contain.text', 'ipp')
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('contain.text', 'n')
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('contain.text', 'SDE Ethnicity')
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('contain.text', 'SDE Payer')
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('contain.text', 'SDE Race')
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('contain.text', 'SDE Sex')
 
         cy.get(MeasureGroupPage.QDMPopCriteria1IPDesc).should('be.visible')
 
     })
 
-    //this test will need additional work once the fix is in for the "Add Population Criteria" functionality, for a QDM measure
     it('Confirm that a new Population Criteria can be added', () => {
 
         MeasuresPage.measureAction("edit")
@@ -98,7 +97,7 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).contains('d').click()
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('d').click()
 
         cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
         cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
@@ -210,7 +209,7 @@ describe.skip('No values in QDM PC fields, when no CQL', () => {
     beforeEach('Create Measure and login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false)
         OktaLogin.Login()
     })
 
@@ -236,8 +235,60 @@ describe.skip('No values in QDM PC fields, when no CQL', () => {
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IPOptions).should('contain.text', '')
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('be.empty')
 
         cy.get(MeasureGroupPage.QDMPopCriteria1IPDesc).should('be.visible')
+    })
+})
+describe.skip('Save Populcation Criteria on QDM measure', () => {
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    newMeasureName = measureName + randValue
+    newCqlLibraryName = CqlLibraryName + randValue
+
+    beforeEach('Create Measure and login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, measureCQL)
+        OktaLogin.Login()
+    })
+
+    afterEach('Clean up and Logout', () => {
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        OktaLogin.Logout()
+
+    })
+    it('Confirm that initial and new Population Criteria can have values saved', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
+
+        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
+        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
+
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('d').click()
+
+        cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
+        cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
+
+        cy.get(MeasureGroupPage.QDMAddPopCriteriaBtn).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.QDMPopulationCriteria2, 30000)
+
+        cy.get(MeasureGroupPage.QDMPopCriteria2IP).should('be.visible')
+        cy.get(MeasureGroupPage.QDMPopCriteria2IP).should('contain.text', 'Select Initial Population')
+
+        cy.get(MeasureGroupPage.QDMPopCriteria2IP).click()
+
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('d').click()
+
+        cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
+        cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
+
     })
 })
