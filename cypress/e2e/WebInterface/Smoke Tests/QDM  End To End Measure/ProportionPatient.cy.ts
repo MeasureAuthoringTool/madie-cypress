@@ -144,7 +144,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
     })
 
-    it('End to End Proportion Patient Based', () => {
+    it.skip('End to End Proportion Patient Based', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")

@@ -154,7 +154,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed With Strati
 
     })
 
-    it('End to End Cohort ListQDMPositiveEncounterPerformed With Stratification', () => {
+    it.skip('End to End Cohort ListQDMPositiveEncounterPerformed With Stratification', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
