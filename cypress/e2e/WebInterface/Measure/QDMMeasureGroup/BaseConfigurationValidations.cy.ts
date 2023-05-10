@@ -359,7 +359,7 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
 })
 
 //Skipping tests until the QDM flag is removed
-describe('Updates on Base Configuration page', () => {
+describe.skip('Updates on Base Configuration page', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
@@ -379,7 +379,7 @@ describe('Updates on Base Configuration page', () => {
 
     })
 
-    it.only('Changing the scoring elcits the Change Scoring prompt', () => {
+    it('Changing the scoring elcits the Change Scoring prompt', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
