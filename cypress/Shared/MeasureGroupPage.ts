@@ -15,7 +15,7 @@ export class MeasureGroupPage {
     public static readonly QDMPopCriteria1Desc = '[data-testid="groupDescriptionInput"]'
     public static readonly QDMPopCriteria1IP = '[data-testid="population-select-initial-population"]'
     public static readonly QDMPopCriteria2IP = '[id="population-select-initial-population-select"]'
-    public static readonly QDMPopCriteria1IPOptions = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiPaper-root MuiMenu-paper MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-177ic5c"]'
+    public static readonly QDMPopCriteriaIPOptions = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'//'[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiPaper-root MuiMenu-paper MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-177ic5c"]'
     public static readonly QDMPopCriteria1IPDesc = '[data-testid="populations[0].description-description"]'
     public static readonly QDMPopCriteria1SaveBtn = '[data-testid="group-form-submit-btn"]'
     public static readonly QDMAddPopCriteriaBtn = '[data-testid="add-measure-group-button"]'
