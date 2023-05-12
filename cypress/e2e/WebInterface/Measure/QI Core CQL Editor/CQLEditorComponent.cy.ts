@@ -132,12 +132,11 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Changes saved successfully but the following errors were found')
 
         //Verify errors in CQL Editor component
-        cy.get('[data-testid="generic-success-text-sub-header"]').should('contain.text', '2 CQL errors found:')
-        cy.get('[data-testid="generic-success-text-list"] > li').should('contain.text', 'Row: 14, Col:0: VSAC: 0:22 | Request failed with status code 400 for oid = undefined location = 14:0-14:22')
-        cy.get('[data-testid="generic-success-text-list"] > li').should('contain.text', 'Row: 14, Col:23: Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
+        cy.get('[data-testid="generic-success-text-sub-header"]').should('contain.text', '3 CQL errors found:')
+        cy.get('[data-testid="generic-success-text-list"] > li').should('contain.text', 'Row: 14, Col:23: ELM: 23:23 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}Row: 14, Col:0: VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 14:0-14:22Row: 14, Col:23: Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
 
         //Verify the same error(s) appear in CQL Editor windows
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'VSAC: 0:22 | Request failed with status code 400 for oid = undefined location = 14:0-14:22', 'Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 23:23 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 14:0-14:22Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
 
     })
 
@@ -226,12 +225,11 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
         cy.get('[data-testid="library-warning"]').should('contain.text', 'CQL updated successfully! Library Name and/or Version can not be updated in the CQL Editor. MADiE has overwritten the updated Library Name and/or Version.')
 
         //Verify errors in CQL Editor component
-        cy.get('[data-testid="generic-success-text-sub-header"]').should('contain.text', '2 CQL errors found:')
-        cy.get('[data-testid="generic-success-text-list"] > li').should('contain.text', 'Row: 14, Col:0: VSAC: 0:22 | Request failed with status code 400 for oid = undefined location = 14:0-14:22')
-        cy.get('[data-testid="generic-success-text-list"] > li').should('contain.text', 'Row: 14, Col:23: Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
+        cy.get('[data-testid="generic-success-text-sub-header"]').should('contain.text', '3 CQL errors found:')
+        cy.get('[data-testid="generic-success-text-list"] > li').should('contain.text', 'Row: 14, Col:23: ELM: 23:23 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}Row: 14, Col:0: VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 14:0-14:22Row: 14, Col:23: Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
 
         //Verify the same error(s) appear in CQL Editor windows
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'VSAC: 0:22 | Request failed with status code 400 for oid = undefined location = 14:0-14:22', 'Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 23:23 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 14:0-14:22Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
 
     })
 

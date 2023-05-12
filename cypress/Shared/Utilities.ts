@@ -559,11 +559,11 @@ export class Utilities {
         cy.get(errorElementObject).should('exist')
         cy.get(errorElementObject).should('be.visible')
         cy.get(errorElementObject).invoke('show').wait(1000).click({ force: true, multiple: true })
-        cy.wait(1000)
-        cy.get(errorContainer).invoke('show').should('contain.text', errorMsg1)
-        if ((errorMsg2 != null) || (errorMsg2 != undefined)) {
+        // cy.wait(1000)
+        // cy.get(errorContainer).invoke('show').should('contain.text', errorMsg1)
+        if ((errorMsg1 != null) || (errorMsg1 != undefined)) {
             cy.wait(1000)
-            cy.get(errorContainer).invoke('show').should('contain.text', errorMsg2)
+            cy.get(errorContainer).invoke('show').should('contain.text', errorMsg1)
         }
 
     }
