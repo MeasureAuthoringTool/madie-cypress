@@ -5,6 +5,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now()
@@ -47,6 +48,12 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, measureCQL)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Login()
     })
 
