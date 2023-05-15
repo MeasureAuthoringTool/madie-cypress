@@ -166,7 +166,8 @@ describe.skip('Measure Service: QDM Measure', () => {
                     "ecqmTitle": eCQMTitle,
                     "measurementPeriodStart": mpStartDate,
                     "measurementPeriodEnd": mpEndDate,
-                    "rateAggregation": "Aggregation"
+                    "rateAggregation": "Aggregation",
+                    "improvementNotation": "Increased score indicates improvement"
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
@@ -174,6 +175,7 @@ describe.skip('Measure Service: QDM Measure', () => {
                 cy.writeFile('cypress/fixtures/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
                 expect(response.body.rateAggregation).to.eql('Aggregation')
+                expect(response.body.improvementNotation).to.eql('Increased score indicates improvement')
             })
 
         })
