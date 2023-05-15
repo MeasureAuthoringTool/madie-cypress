@@ -24,7 +24,7 @@ describe.skip('Measure Ownership Validations on Population criteria page', () =>
         altCqlLibraryName = CqlLibraryName + altRandValue
 
         //Create QDM Measure with ALT user
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, false,measureCQL, false, true)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, true,measureCQL, false, true)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp')
         OktaLogin.Login()
 
@@ -60,6 +60,7 @@ describe.skip('Measure Ownership Validations on Population criteria page', () =>
         //Navigate to Reporting tab
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
         cy.get(MeasureGroupPage.rateAggregation).should('not.be.enabled')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('not.be.enabled')
 
     })
 })

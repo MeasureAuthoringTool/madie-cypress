@@ -164,7 +164,8 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
         cy.get('.MuiChip-label').should('contain.text', 'Process')
     })
 
-    it('Add Rate Aggregation to Population Criteria', () => {
+    //Reporting tab fields
+    it('Add Rate Aggregation and Improvement Notation to Population Criteria', () => {
 
         //click on Edit button to edit measure
         MeasuresPage.measureAction("edit")
@@ -176,7 +177,10 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
 
         //Navigate to Reporting page
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
+        //Add Rate Aggregation
         cy.get(MeasureGroupPage.rateAggregation).type('Aggregation')
+        //Add Improvement Notation
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.visible')
@@ -195,9 +199,10 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        //Assert Rate Aggregation text box
+        //Assert Rate Aggregation and Improvement Notation text box
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
         cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Aggregation')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
     })
 })
 
