@@ -94,6 +94,12 @@ export class TestCasesPage {
     public static readonly measureGroup1Label = '[data-testid="measure-group-1"]'
     public static readonly denominatorObservationExpectedRow = '[data-testid="test-population-denominatorObservation-expected"]'
 
+    //QDM Test Case Page
+    public static readonly elementsTab = '[data-testid=elements-tab]'
+    public static readonly jsonTab = '[data-testid=json-tab]'
+    public static readonly highlightingTab = '[data-testid=highlighting-tab]'
+    public static readonly expectedOrActualTab = '[data-testid=expectoractual-tab]'
+
     //Stratifications
     public static readonly denominatorStratificationOneExpectedValue = '[data-testid="test-population-Strata-1 Denominator-expected"]'
     public static readonly numeratorStratificationTwoExpectedValue = '[data-testid="test-population-Strata-2 Numerator-expected"]'
