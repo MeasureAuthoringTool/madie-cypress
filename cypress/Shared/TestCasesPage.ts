@@ -3,6 +3,8 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 
 export class TestCasesPage {
+    //QDM Bread Crumb
+    public static readonly testCasesBCLink = '[data-testid="qdm-test-cases"]'
 
     //TC error concerning CQL and PC mismatch
     public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
@@ -185,6 +187,36 @@ export class TestCasesPage {
                 })
 
         })
+    }
+    public static createQDMTestCase(testCaseTitle: string, testCaseDescription: string, testCaseSeries: string): void {
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(this.newTestCaseButton).should('be.visible')
+        cy.get(this.newTestCaseButton).should('be.enabled')
+        cy.get(this.newTestCaseButton).click()
+
+        cy.get(this.createTestCaseDialog).should('exist')
+        cy.get(this.createTestCaseDialog).should('be.visible')
+
+        cy.get(this.createTestCaseTitleInput).should('exist').wait(500)
+        Utilities.waitForElementVisible(this.createTestCaseTitleInput, 30000)
+        Utilities.waitForElementEnabled(this.createTestCaseTitleInput, 30000)
+        cy.get(this.createTestCaseTitleInput).type(testCaseTitle.toString())
+        cy.get(this.createTestCaseDescriptionInput).should('exist')
+        cy.get(this.createTestCaseDescriptionInput).should('be.visible')
+        cy.get(this.createTestCaseDescriptionInput).should('be.enabled')
+        cy.get(this.createTestCaseDescriptionInput).focus()
+        cy.get(this.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(this.createTestCaseGroupInput).should('exist')
+        cy.get(this.createTestCaseGroupInput).should('be.visible')
+        cy.get(this.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+
+        this.clickCreateTestCaseButton()
+
+        cy.log('Test Case created successfully')
+
     }
 
     public static createTestCase(testCaseTitle: string, testCaseDescription: string, testCaseSeries: string, testCaseJson: string): void {
