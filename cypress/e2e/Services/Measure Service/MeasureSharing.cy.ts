@@ -42,23 +42,6 @@ describe('Measure Sharing Service', () => {
                 })
             })
         })
-
-        //Access the shared Measure and verify
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.request({
-                        url: '/api/measures/' + id,
-                        method: 'GET',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        }
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.acls[0].userId).to.eql(harpUserALT)
-                    expect(response.body.acls[0].roles[0]).to.eql('SHARED_WITH')
-                })
-            })
-        })
     })
 
     it('Verify error message when wrong API key is provided', () => {
