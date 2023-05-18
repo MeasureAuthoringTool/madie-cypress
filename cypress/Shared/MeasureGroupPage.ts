@@ -9,7 +9,7 @@ export class MeasureGroupPage {
 
     public static readonly pcErrorAlertToast = '[data-testid="population-criteria-error"]'
 
-    //population criteria
+    //QDM population criteria
     public static readonly QDMPopulationCriteria1 = '[data-testid="leftPanelMeasureInformation-MeasureGroup1"]'
     public static readonly QDMPopulationCriteria2 = '[data-testid="leftPanelMeasureInformation-MeasureGroup2"]'
     public static readonly QDMPopCriteria1Desc = '[data-testid="groupDescriptionInput"]'
@@ -20,6 +20,7 @@ export class MeasureGroupPage {
     public static readonly QDMPopCriteria1SaveBtn = '[data-testid="group-form-submit-btn"]'
     public static readonly QDMAddPopCriteriaBtn = '[data-testid="add-measure-group-button"]'
     public static readonly QDMPopCriteriaSaveSuccessMsg = '[data-testid="population-criteria-success"]'
+    public static readonly QDMIPPCHelperText = '[data-testid="population-select-initial-population-select-helper-text"]'
 
     //mismatch CQL error
     public static readonly CQLPCMismatchError = '[class="madie-alert error"]'
