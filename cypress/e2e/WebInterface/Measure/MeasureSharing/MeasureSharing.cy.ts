@@ -13,8 +13,9 @@ import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
-let newCqlLibraryName = cqlLibraryName + 'someUpdate'
+let updatedCqlLibraryName = cqlLibraryName + 'someUpdate'
 let updatedMeasureName = measureName + 'someUpdate'
+let versionNumber = '1.0.000'
 let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
 let measureCQL = MeasureCQL.SBTEST_CQL
@@ -25,16 +26,20 @@ let testCaseJson = TestCaseJson.TestCaseJson_Valid
 
 describe('Measure Sharing', () => {
 
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = measureName + randValue
+    let newCqlLibraryName = cqlLibraryName + randValue
+
     beforeEach('Create Measure and Set Access Token', () => {
 
         cy.setAccessTokenCookie()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
     })
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
         OktaLogin.Logout()
     })
 
@@ -61,11 +66,12 @@ describe('Measure Sharing', () => {
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
-        cy.get(MeasuresPage.measureListTitles).should('contain', measureName)
+        cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
 
     })
 
-    it('Verify Measure can be edited by the shared user', () => {
+    //Skipping until MAT-5668 is implemented
+    it.skip('Verify Measure can be edited by the shared user', () => {
 
         //Share Measure with ALT User
         cy.getCookie('accessToken').then((accessToken) => {
@@ -91,7 +97,7 @@ describe('Measure Sharing', () => {
         //Edit Measure details
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
-        cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(newCqlLibraryName)
+        cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(updatedCqlLibraryName)
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
         cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
 
@@ -132,13 +138,81 @@ describe('Measure Sharing', () => {
     })
 })
 
-describe('Delete Test Case with Shared user', () => {
+describe('Measure Sharing - Multiple instances', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = measureName + randValue
+    let newCqlLibraryName = cqlLibraryName + randValue
 
     beforeEach('Create Measure and Set Access Token', () => {
 
         cy.setAccessTokenCookie()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        OktaLogin.Login()
+    })
+
+    afterEach('LogOut', () => {
+
+        OktaLogin.Logout()
+    })
+
+    it('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
+
+        //Version the Measure
+        MeasuresPage.measureAction('version')
+        cy.get(MeasuresPage.versionMeasuresRadioButton).eq(0).click()
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        MeasuresPage.validateVersionNumber(newMeasureName, versionNumber)
+        cy.log('Version Created Successfully')
+
+        //Draft the Versioned Measure
+        MeasuresPage.measureAction('draft')
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasureName)
+        cy.get(MeasuresPage.createDraftContinueBtn).click()
+        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.log('Draft Created Successfully')
+
+        //Share Measure with ALT User
+        cy.setAccessTokenCookie()
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        'api-key': measureSharingAPIKey
+                    },
+                    method: 'PUT'
+
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                })
+            })
+        })
+
+        //Login as ALT User
+        OktaLogin.AltLogin()
+        cy.get(LandingPage.myMeasuresTab).click()
+        cy.get('.MeasureList___StyledTd-sc-pt5u8-5').should('contain', newMeasureName)
+        cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasureName)
+    })
+})
+
+//Skipping until MAT-5668 is implemented
+describe.skip('Delete Test Case with Shared user', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = measureName + randValue
+    let newCqlLibraryName = cqlLibraryName + randValue
+
+    beforeEach('Create Measure and Set Access Token', () => {
+
+        cy.setAccessTokenCookie()
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
     })
 
