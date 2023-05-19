@@ -7,13 +7,16 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureScoring = 'Cohort'
-let measureCQL = 'library Library1234556 version \'0.0.000\'\n' +
+let booleanPatientBasisQDM_CQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
+let nonbooleanListOfSameTypeQDM_CQL = MeasureCQL.returnNonBooleanListOfSameTypeQDM_CQL
+let simpleQDMMeasureCQL = MeasureCQL.simpleQDM_CQL/* 'library Library1234556 version \'0.0.000\'\n' +
     'using QDM version \'5.6\'\n' +
     '\n' +
     'valueset "Ethnicity": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837\'\n' +
@@ -36,7 +39,7 @@ let measureCQL = 'library Library1234556 version \'0.0.000\'\n' +
     'define "d":\n' +
     '\t true\n' +
     'define "n":\n' +
-    '\ttrue'
+    '\ttrue' */
 
 describe.skip('Validate QDM Population Criteria section -- scoring and populations', () => {
 
@@ -47,7 +50,7 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
     beforeEach('Create Measure and login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, simpleQDMMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -260,7 +263,7 @@ describe.skip('Save Populcation Criteria on QDM measure', () => {
     beforeEach('Create Measure and login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, simpleQDMMeasureCQL)
         OktaLogin.Login()
     })
 
@@ -301,6 +304,182 @@ describe.skip('Save Populcation Criteria on QDM measure', () => {
 
         cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
         cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
+
+    })
+})
+
+describe.skip('Validations: Population Criteria: Return Types -- Boolean', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    newMeasureName = measureName + randValue
+    newCqlLibraryName = CqlLibraryName + randValue
+
+    beforeEach('Create Measure and login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, booleanPatientBasisQDM_CQL)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Login()
+    })
+
+    afterEach('Clean up and Logout', () => {
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        OktaLogin.Logout()
+
+    })
+    it('Validations when the Patient Basis is set to "Yes" and return type should be boolean', () => {
+        MeasuresPage.measureAction("edit")
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //confirm Base Config alert message appears
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
+
+        //click on / navigate to the Base Configuration sub-tab
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
+
+        //validate that a value can be selected for the Type field
+        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
+        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
+        cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
+        cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
+
+        //select 'Cohort' scoring on measure
+        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
+        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
+
+        //validate that 'Yes" radio button is selected / checked
+        cy.contains('label', 'Yes')
+            .nextAll() // select the next element
+            .get(MeasureGroupPage.qdmPatientBasis)
+            .should('have.attr', 'type', 'radio')  // confirm it's type radio
+            .check()
+            .should('be.checked')
+
+        cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
+        //click on the save button and confirm save success message
+        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
+
+        //navigate to the PC page
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
+
+        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
+        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
+
+        //select a value that will return the correct boolean type
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('Initial Population').click()
+        //no error should appear
+        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('not.exist')
+
+        cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
+        cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
+
+        //select a value that will return the correct boolean type
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('Bilateral Mastectomy Diagnosis').click()
+        //no error should appear
+        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
+        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('contain.text', 'For Patient-based Measures, selected definitions must return a Boolean.')
+
+    })
+})
+//needs to be re-visited once MAT-5537 is fully testable
+describe.skip('Validations: Population Criteria: Return Types -- Non-Boolean', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    newMeasureName = measureName + randValue
+    newCqlLibraryName = CqlLibraryName + randValue
+
+    beforeEach('Create Measure and login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, nonbooleanListOfSameTypeQDM_CQL)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Login()
+    })
+
+    afterEach('Clean up and Logout', () => {
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        OktaLogin.Logout()
+
+    })
+    it('Validations when the Patient Basis is set to "Yes" and return type should be boolean', () => {
+        MeasuresPage.measureAction("edit")
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //confirm Base Config alert message appears
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
+
+        //click on / navigate to the Base Configuration sub-tab
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
+
+        //validate that a value can be selected for the Type field
+        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
+        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
+        cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
+        cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
+
+        //select 'Cohort' scoring on measure
+        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
+        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
+
+        //validate that 'Yes" radio button is selected / checked
+        cy.contains('label', 'No')
+            .nextAll() // select the next element
+            .get(MeasureGroupPage.qdmPatientBasis)
+            .should('have.attr', 'type', 'radio')  // confirm it's type radio
+            .check()
+            .should('be.checked')
+
+        cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
+        //click on the save button and confirm save success message
+        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
+
+        //navigate to the PC page
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
+
+        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
+        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
+
+        //select a value that will return the correct boolean type
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('Initial Population').click()
+        //no error should appear
+        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('not.exist')
+
+        cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
+        cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
+
+        //select a value that will return the correct boolean type
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('Bilateral Mastectomy Diagnosis').click()
+        //no error should appear
+        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
+        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('contain.text', 'For Patient-based Measures, selected definitions must return a Boolean.')
 
     })
 })
