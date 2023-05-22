@@ -569,6 +569,100 @@ describe('Measure Service: Test Case Endpoints', () => {
     })
 })
 
+//Skipping until feature flag for QDM Test case is removed
+describe.skip('Measure Service : QDM Test Case Endpoints', () => {
+
+    let randValue = (Math.floor((Math.random() * 2000) + 3))
+    let cqlLibraryNameDeux = cqlLibraryName + randValue + 3
+    before('Create Measure', () => {
+        cy.setAccessTokenCookie()
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, cqlLibraryName)
+    })
+
+    beforeEach('Set Access Token', () => {
+
+        cy.setAccessTokenCookie()
+
+    })
+
+    after('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryNameDeux)
+
+    })
+
+    it('Create QDM Test Case', () => {
+
+        let randValue = (Math.floor((Math.random() * 2000) + 3))
+        let title = 'QDM test case title'
+        let series = 'QDM test case series'
+        let description = 'DENOME pass Test HB <120'
+        //Add Test Case to the Measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/test-cases',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: {
+                        'name': TCName + randValue + 4,
+                        'series': series,
+                        'title': title,
+                        'description': description,
+                        'json': "{\"qdmVersion\":\"5.6\",\"dataElements\":[{\"dataElementCodes\":[{\"code\":\"21112-8\",\"system\":\"2.16.840.1.113883.6.1\",\"version\":null,\"display\":\"Birth date\"}],\"qdmTitle\":\"Patient Characteristic Birthdate\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.54\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"birthdate\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicBirthdate\",\"description\":\"Patient Characteristic Birthdate: Birth date\",\"codeListId\":\"drc-c48426f721cede4d865df946157d5e2dc90bd32763ffcb982ca45b3bd97a29db\",\"birthDatetime\":\"1972-11-12T18:12:53Z\"},{\"dataElementCodes\":[{\"code\":\"F\",\"system\":\"2.16.840.1.113883.5.1\",\"version\":\"2022-11\",\"display\":\"Female\"}],\"qdmTitle\":\"Patient Characteristic Sex\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.55\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"gender\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicSex\",\"description\":\"Patient Characteristic Sex: ONCAdministrativeSex\",\"codeListId\":\"2.16.840.1.113762.1.4.1\",\"_id\":\"646b6c65065bd70000e9a53e\"},{\"dataElementCodes\":[{\"code\":\"2131-1\",\"system\":\"2.16.840.1.113883.6.238\",\"version\":\"1.2\",\"display\":\"Asian\"}],\"qdmTitle\":\"Patient Characteristic Race\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.59\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"race\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicRace\",\"description\":\"Patient Characteristic Race: Race\",\"codeListId\":\"2.16.840.1.114222.4.11.836\",\"_id\":\"646b69f71fe4c50000f194ef\"}],\"_id\":\"64668b465c9e600000fc43e5\",\"birthDatetime\":\"1972-11-12T18:12:53.807+00:00\"}"
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.series).to.eql(series)
+                    expect(response.body.title).to.eql(title)
+                    expect(response.body.description).to.eql(description)
+                    expect(response.body.json).to.be.exist
+                    cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                })
+            })
+        })
+    })
+
+    it('Edit QDM Test Case', () => {
+
+        //Edit created Test Case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testcaseid) => {
+                    cy.request({
+                        url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': testcaseid,
+                            'name': "IPPPass",
+                            'series': "WhenBP<120",
+                            'title': "test case title edited",
+                            'description': "IPP Pass Test BP <120",
+                            'json': "{\"qdmVersion\":\"5.6\",\"dataElements\":[{\"dataElementCodes\":[{\"code\":\"21112-8\",\"system\":\"2.16.840.1.113883.6.1\",\"version\":null,\"display\":\"Birth date\"}],\"qdmTitle\":\"Patient Characteristic Birthdate\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.54\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"birthdate\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicBirthdate\",\"description\":\"Patient Characteristic Birthdate: Birth date\",\"codeListId\":\"drc-c48426f721cede4d865df946157d5e2dc90bd32763ffcb982ca45b3bd97a29db\",\"birthDatetime\":\"1972-11-12T18:12:53Z\"},{\"dataElementCodes\":[{\"code\":\"F\",\"system\":\"2.16.840.1.113883.5.1\",\"version\":\"2022-11\",\"display\":\"Female\"}],\"qdmTitle\":\"Patient Characteristic Sex\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.55\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"gender\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicSex\",\"description\":\"Patient Characteristic Sex: ONCAdministrativeSex\",\"codeListId\":\"2.16.840.1.113762.1.4.1\",\"_id\":\"646b6c65065bd70000e9a53e\"},{\"dataElementCodes\":[{\"code\":\"2131-1\",\"system\":\"2.16.840.1.113883.6.238\",\"version\":\"1.2\",\"display\":\"Asian\"}],\"qdmTitle\":\"Patient Characteristic Race\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.59\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"race\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicRace\",\"description\":\"Patient Characteristic Race: Race\",\"codeListId\":\"2.16.840.1.114222.4.11.836\",\"_id\":\"646b69f71fe4c50000f194ef\"}],\"_id\":\"64668b465c9e600000fc43e5\",\"birthDatetime\":\"1972-11-12T18:12:53.807+00:00\"}"
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body.id).to.eql(testcaseid)
+                        expect(response.body.json).to.be.exist
+                        expect(response.body.series).to.eql("WhenBP<120")
+                        expect(response.body.title).to.eql('test case title edited')
+                        expect(response.body.json).to.be.exist
+                        cy.writeFile('cypress/fixtures/testCaseId', response.body.id)
+                    })
+                })
+            })
+        })
+    })
+})
+
 describe('Measure Service: Test Case Endpoints: Validations', () => {
 
     before('Create Measure', () => {
@@ -991,22 +1085,22 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
                         "json": TCJson,
 
                     },
-                    {
-                        "name": TCName + '2',
-                        "title": TCTitle + '2',
-                        "series": TCSeries,
-                        "description": TCDescription,
-                        "json": TCJson,
+                        {
+                            "name": TCName + '2',
+                            "title": TCTitle + '2',
+                            "series": TCSeries,
+                            "description": TCDescription,
+                            "json": TCJson,
 
-                    },
-                    {
-                        "name": TCName + '3',
-                        "title": TCTitle + '3',
-                        "series": TCSeries,
-                        "description": TCDescription,
-                        "json": TCJson,
+                        },
+                        {
+                            "name": TCName + '3',
+                            "title": TCTitle + '3',
+                            "series": TCSeries,
+                            "description": TCDescription,
+                            "json": TCJson,
 
-                    },]
+                        },]
                 }).then((response) => {
                     expect(response.status).to.eql(403)
                 })

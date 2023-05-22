@@ -17,7 +17,7 @@ let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 
-//Skipping until QDM feature flag is removed
+//Skipping until QDM Test Case feature flag is removed
 describe.skip('Create and Update QDM Test Case', () => {
 
     beforeEach('Create measure and login', () => {
@@ -53,9 +53,14 @@ describe.skip('Create and Update QDM Test Case', () => {
         //enter a value of the dob
         cy.get(TestCasesPage.QDMDob).type('01/01/2020')
 
-        //save dob value
+        //Add Race to the Test Case
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).click() //Select White
+
+        //save the Test Case
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //Place holder for Edit QDM Test Case
         //Left panel tabs

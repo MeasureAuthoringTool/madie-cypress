@@ -8,9 +8,12 @@ export class TestCasesPage {
 
     //QDM Test Case Demographics elements
     public static readonly QDMDob = '[class="MuiFormControl-root MuiTextField-root css-5tchl9"]'
+    public static readonly QDMRace = '[id="demographics-race-select-id"]'
+    public static readonly QDMRaceOption = '[data-value="White"]'
 
     //QDM misc test case page objects
     public static readonly QDMTCSaveBtn = '[data-testid="qdm-test-case-save-button"]'
+    public static readonly tcSaveSuccessMsg = '[class="toast success"]'
 
     //TC error concerning CQL and PC mismatch
     public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
