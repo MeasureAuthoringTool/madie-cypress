@@ -146,7 +146,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
 
     })
 
-    it.skip('End to End CV ListQDMPositiveEncounterPerformed With MO And Stratification', () => {
+    it('End to End CV ListQDMPositiveEncounterPerformed With MO And Stratification', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
