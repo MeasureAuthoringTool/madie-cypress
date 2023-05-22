@@ -1,12 +1,12 @@
-import {MeasureCQL} from "../../../../../Shared/MeasureCQL"
-import {CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
-import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
-import {OktaLogin} from "../../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../../Shared/EditMeasurePage"
-import {TestCasesPage} from "../../../../../Shared/TestCasesPage"
-import {TestCaseJson} from "../../../../../Shared/TestCaseJson"
+import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -18,7 +18,7 @@ let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 
 //Skipping until QDM feature flag is removed
-describe('Create and Update QDM Test Case', () => {
+describe.skip('Create and Update QDM Test Case', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -49,6 +49,13 @@ describe('Create and Update QDM Test Case', () => {
 
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
+
+        //enter a value of the dob
+        cy.get(TestCasesPage.QDMDob).type('01/01/2020')
+
+        //save dob value
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
 
         //Place holder for Edit QDM Test Case
         //Left panel tabs
