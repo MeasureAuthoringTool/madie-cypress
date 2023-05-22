@@ -170,11 +170,16 @@ describe.skip('Validating the creation of QDM Test Case', () => {
         //navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()
 
+        //enter a value of the dob
+        cy.get(TestCasesPage.QDMDob).type('01/01/2020')
+
+        //save dob value
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
         //click on bread crumb to navigate back to the main test case list page
         cy.get(TestCasesPage.testCasesBCLink).should('contain.text', 'Test Cases').wait(500).click()
 
         //verify that the user is, now, on the test case list page
-
         cy.readFile(measurePath).should('exist').then((measureId) => {
             cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + measureId + '/edit/test-cases')
         })

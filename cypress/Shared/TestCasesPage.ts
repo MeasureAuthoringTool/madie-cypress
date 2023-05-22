@@ -6,6 +6,12 @@ export class TestCasesPage {
     //QDM Bread Crumb
     public static readonly testCasesBCLink = '[data-testid="qdm-test-cases"]'
 
+    //QDM Test Case Demographics elements
+    public static readonly QDMDob = '[class="MuiFormControl-root MuiTextField-root css-5tchl9"]'
+
+    //QDM misc test case page objects
+    public static readonly QDMTCSaveBtn = '[data-testid="qdm-test-case-save-button"]'
+
     //TC error concerning CQL and PC mismatch
     public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
 
