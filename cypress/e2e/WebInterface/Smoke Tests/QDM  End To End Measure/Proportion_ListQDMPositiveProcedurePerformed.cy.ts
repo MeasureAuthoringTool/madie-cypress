@@ -201,7 +201,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
 
     })
 
-    it.skip('End to End Proportion ListQDMPositiveProcedurePerformed', () => {
+    it('End to End Proportion ListQDMPositiveProcedurePerformed', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")

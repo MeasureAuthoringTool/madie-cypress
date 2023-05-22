@@ -24,8 +24,7 @@ describe('Create CQL Library', () => {
         CQLLibraryPage.createCQLLibrary(CQLLibraryName, CQLLibraryPublisher)
     })
 
-    //Skipping until feature flag for QDM is removed
-    it.skip('Navigate to CQL Library Page and create New QDM CQL Library', () => {
+    it('Navigate to CQL Library Page and create New QDM CQL Library', () => {
 
         let CQLLibraryName = 'QDMCQLLibrary' + Date.now()
         let CQLLibraryPublisher = 'SemanticBits'

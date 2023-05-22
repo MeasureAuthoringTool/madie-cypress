@@ -35,8 +35,7 @@ let measureCQL = 'library ' + newCqlLibraryName + ' version \'0.0.000\'\n' +
     'define "n":\n' +
     '  true'
 
-//Skipping until feature flag for QDM is removed
-describe.skip('Validate errors/warnings/success messages on CQL editor component on save', () => {
+describe('Validate errors/warnings/success messages on CQL editor component on save', () => {
 
     beforeEach('Create measure and login', () => {
 

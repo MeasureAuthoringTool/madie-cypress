@@ -41,7 +41,7 @@ let simpleQDMMeasureCQL = MeasureCQL.simpleQDM_CQL/* 'library Library1234556 ver
     'define "n":\n' +
     '\ttrue' */
 
-describe.skip('Validate QDM Population Criteria section -- scoring and populations', () => {
+describe('Validate QDM Population Criteria section -- scoring and populations', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
@@ -216,7 +216,7 @@ describe.skip('Validate QDM Population Criteria section -- scoring and populatio
     })
 })
 
-describe.skip('No values in QDM PC fields, when no CQL', () => {
+describe('No values in QDM PC fields, when no CQL', () => {
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
@@ -255,7 +255,7 @@ describe.skip('No values in QDM PC fields, when no CQL', () => {
         cy.get(MeasureGroupPage.QDMPopCriteria1IPDesc).should('be.visible')
     })
 })
-describe.skip('Save Populcation Criteria on QDM measure', () => {
+describe('Save Populcation Criteria on QDM measure', () => {
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
@@ -308,7 +308,7 @@ describe.skip('Save Populcation Criteria on QDM measure', () => {
     })
 })
 
-describe.skip('Validations: Population Criteria: Return Types -- Boolean', () => {
+describe('Validations: Population Criteria: Return Types -- Boolean', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
