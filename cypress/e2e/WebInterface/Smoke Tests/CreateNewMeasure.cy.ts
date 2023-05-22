@@ -26,8 +26,7 @@ describe('Create New Measure', () => {
 
     })
 
-    //Skipping until feature flag for QDM is removed
-    it.skip('Create QDM Measure', () => {
+    it('Create QDM Measure', () => {
 
         measureName = 'QDMTestMeasure' + Date.now()
         CqlLibraryName = 'QDMTestLibrary' + Date.now()

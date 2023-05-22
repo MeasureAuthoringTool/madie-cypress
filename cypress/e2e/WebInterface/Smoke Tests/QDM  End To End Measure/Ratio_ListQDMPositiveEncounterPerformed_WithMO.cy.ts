@@ -253,7 +253,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
     })
 
-    it.skip('End to End Ratio ListQDMPositiveEncounterPerformed with MO', () => {
+    it('End to End Ratio ListQDMPositiveEncounterPerformed with MO', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")

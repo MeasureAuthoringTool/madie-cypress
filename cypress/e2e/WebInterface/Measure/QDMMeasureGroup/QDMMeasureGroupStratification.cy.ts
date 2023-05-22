@@ -126,7 +126,7 @@ let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     'define "October 1 Two Years Prior to the Measurement Period":\n' +
     '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)'
 
-describe.skip('Validating Stratification tabs', () => {
+describe('Validating Stratification tabs', () => {
 
     beforeEach('Create Measure', () => {
 

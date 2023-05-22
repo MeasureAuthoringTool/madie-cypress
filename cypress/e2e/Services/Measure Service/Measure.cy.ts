@@ -131,8 +131,7 @@ describe('Measure Service: QICore Measure', () => {
     })
 })
 
-//Skipping until feature flag removed for QDM
-describe.skip('Measure Service: QDM Measure', () => {
+describe('Measure Service: QDM Measure', () => {
 
     beforeEach('Set Access Token', () => {
 
@@ -277,8 +276,7 @@ describe('Measure Service: Error validations', () => {
         cy.setAccessTokenCookie()
     })
     //Measure Name Validations
-    //Skipping until MAT-5635 is fixed
-    it.skip('Validation Error: Measure Name empty', () => {
+    it('Validation Error: Measure Name empty', () => {
         measureName = ''
         CQLLibraryName = 'TestCql' + Date.now()
 

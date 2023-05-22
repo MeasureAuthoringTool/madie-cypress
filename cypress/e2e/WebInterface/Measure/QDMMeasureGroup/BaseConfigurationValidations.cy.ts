@@ -17,8 +17,7 @@ let altCqlLibraryName = ''
 let measureScoring = 'Cohort'
 let measureCQL = MeasureCQL.SBTEST_CQL
 
-//Skipping tests until the QDM flag is removed
-describe.skip('Validating Population tabs and fields, specific to QDM', () => {
+describe('Validating Population tabs and fields, specific to QDM', () => {
     beforeEach('Create measure and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureName + randValue
@@ -358,8 +357,7 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
     })
 })
 
-//Skipping tests until the QDM flag is removed
-describe.skip('Updates on Base Configuration page', () => {
+describe('Updates on Base Configuration page', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
