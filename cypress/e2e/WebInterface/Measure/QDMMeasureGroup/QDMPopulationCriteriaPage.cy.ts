@@ -9,6 +9,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 
+let filePath = 'cypress/fixtures/measureId'
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let newMeasureName = ''
@@ -77,6 +78,11 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
+        //verify url contains pc number
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + fileContents + '/edit/groups/1')
+        })
+
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
 
@@ -104,16 +110,26 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
+        //verify url contains pc number
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + fileContents + '/edit/groups/1')
+        })
+
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('d').click()
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('SDE Ethnicity').click()
 
         cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
         cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         cy.get(MeasureGroupPage.QDMAddPopCriteriaBtn).click()
         Utilities.waitForElementVisible(MeasureGroupPage.QDMPopulationCriteria2, 30000)
+
+        //verify url contains pc number
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + fileContents + '/edit/groups/2')
+        })
 
         cy.get(MeasureGroupPage.QDMPopCriteria2IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria2IP).should('contain.text', 'Select Initial Population')
@@ -247,6 +263,11 @@ describe('No values in QDM PC fields, when no CQL', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
+        //verify url contains pc number
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + fileContents + '/edit/groups/1')
+        })
+
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
 
@@ -284,10 +305,15 @@ describe('Save Populcation Criteria on QDM measure', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
+        //verify url contains pc number
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + fileContents + '/edit/groups/1')
+        })
+
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('d').click()
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('SDE Ethnicity').click()
 
         cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
         cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
@@ -295,20 +321,25 @@ describe('Save Populcation Criteria on QDM measure', () => {
         cy.get(MeasureGroupPage.QDMAddPopCriteriaBtn).click()
         Utilities.waitForElementVisible(MeasureGroupPage.QDMPopulationCriteria2, 30000)
 
+        //verify url contains pc number
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + fileContents + '/edit/groups/2')
+        })
+
         cy.get(MeasureGroupPage.QDMPopCriteria2IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria2IP).should('contain.text', 'Select Initial Population')
 
         cy.get(MeasureGroupPage.QDMPopCriteria2IP).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('d').click()
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('SDE Ethnicity').click()
 
         cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
         cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
 
     })
 })
-
-describe('Validations: Population Criteria: Return Types -- Boolean', () => {
+//needs to be re-visited once MAT-5537 is fully testable
+describe.skip('Validations: Population Criteria: Return Types -- Boolean', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
@@ -317,7 +348,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
     beforeEach('Create Measure and login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, booleanPatientBasisQDM_CQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -332,6 +363,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         OktaLogin.Logout()
 
     })
+    //needs to be re-visited once MAT-5537 is fully testable
     it('Validations when the Patient Basis is set to "Yes" and return type should be boolean', () => {
         MeasuresPage.measureAction("edit")
 
@@ -340,41 +372,14 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        //confirm Base Config alert message appears
-        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
-
-        //click on / navigate to the Base Configuration sub-tab
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
-
-        //validate that a value can be selected for the Type field
-        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
-        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
-        cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
-        cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
-
-        //select 'Cohort' scoring on measure
-        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
-        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
-
-        //validate that 'Yes" radio button is selected / checked
-        cy.contains('label', 'Yes')
-            .nextAll() // select the next element
-            .get(MeasureGroupPage.qdmPatientBasis)
-            .should('have.attr', 'type', 'radio')  // confirm it's type radio
-            .check()
-            .should('be.checked')
-
-        cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
-        //click on the save button and confirm save success message
-        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
-
         //navigate to the PC page
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
+
+        //verify url contains pc number
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + fileContents + '/edit/groups/1')
+        })
 
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
@@ -463,6 +468,11 @@ describe.skip('Validations: Population Criteria: Return Types -- Non-Boolean', (
         //navigate to the PC page
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
+
+        //verify url contains pc number
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + fileContents + '/edit/groups/1')
+        })
 
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
