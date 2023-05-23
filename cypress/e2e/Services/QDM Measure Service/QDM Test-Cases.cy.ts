@@ -7,6 +7,7 @@ import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import { v4 as uuidv4 } from 'uuid'
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestLibrary' + Date.now()
@@ -33,29 +34,46 @@ describe.skip('Test Case population values based on Measure Group population def
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //navigate to the PC page
-        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-        cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
-
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
-
-        //select a value that will return the correct boolean type
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('Initial Population').click()
-        //no error should appear
-        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('not.exist')
-
-        cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
-        cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
         OktaLogin.Logout()
         cy.setAccessTokenCookie()
 
+        //create group
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "scoring": "Cohort",
+                        "populationBasis": "true",
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": "Initial Population",
+                                "associationType": null,
+                                "description": ""
+                            }
+                        ],
+                        "measureObservations": null,
+                        "groupDescription": "",
+                        "improvementNotation": "",
+                        "rateAggregation": "",
+                        "measureGroupTypes": null,
+                        "scoringUnit": "",
+                        "stratifications": [],
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    cy.writeFile('cypress/fixtures/groupId', response.body.id)
+                })
+            })
+        })
+        //create test case
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
@@ -87,39 +105,118 @@ describe.skip('Test Case population values based on Measure Group population def
             })
         })
         cy.setAccessTokenCookie()
+        //leaving this section of commented out code because we may need it later if, later on, 
+        //we have to associate a test case with a group before we can create the test case
+        //----------------------------------------------------//
+        /*         cy.getCookie('accessToken').then((accessToken) => {
+                    cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                        cy.readFile('cypress/fixtures/groupId').should('exist').then((groupIdFc) => {
+                            cy.request({
+                                url: '/api/measures/' + id + '/test-cases',
+                                headers: {
+                                    authorization: 'Bearer ' + accessToken.value
+                                },
+                                method: 'POST',
+                                body: {
+                                    "name": TCName,
+                                    "title": TCTitle,
+                                    "series": TCSeries,
+                                    "createdAt": "2022-05-05T18:14:37.791Z",
+                                    "createdBy": "SBXDV.bwelch",
+                                    "lastModifiedAt": "2022-05-05T18:14:37.791Z",
+                                    "lastModifiedBy": "SBXDV.bwelch",
+                                    "description": TCDescription,
+                                    "json": TCJson,
+                                    "hapiOperationOutcome": {
+                                        "code": 201,
+                                        "message": null,
+                                        "outcomeResponse": null
+                                    },
+                                    "groupPopulations": [{
+                                        "groupId": groupIdFc,
+                                        "scoring": measureScoring,
+                                        "populationValues": [
+                                            {
+                                                "name": "initialPopulation",
+                                                "expected": false,
+                                                "actual": false
+                                            },
+                                            {
+                                                "name": "denominator",
+                                                "expected": false,
+                                                "actual": false
+                                            },
+                                            {
+                                                "name": "denominatorExclusion",
+                                                "expected": false,
+                                                "actual": false
+                                            },
+                                            {
+                                                "name": "denominatorException",
+                                                "expected": false,
+                                                "actual": false
+                                            },
+                                            {
+                                                "name": "numerator",
+                                                "expected": false,
+                                                "actual": false
+                                            },
+                                            {
+                                                "name": "numeratorExclusion",
+                                                "expected": false,
+                                                "actual": false
+                                            }
+        
+                                        ]
+                                    }]
+                                }
+                            }).then((response) => {
+                                expect(response.status).to.eql(201)
+                                expect(response.body.id).to.be.exist
+                                expect(response.body.series).to.eql(TCSeries)
+                                expect(response.body.title).to.eql(TCTitle)
+                                expect(response.body.description).to.eql(TCDescription)
+                                expect(response.body.json).to.be.exist
+                                cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                            })
+                        })
+                    })
+                }) */
+        //---------------------------------------------------//
+
     })
     afterEach('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, cqlLibraryName)
 
     })
-    /*     it('Test Case population value check boxes match that of the measure group definitons -- all are defined', () => {
-            cy.getCookie('accessToken').then((accessToken) => {
-                cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                    cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
-                        cy.request({
-                            url: '/api/measures/' + id + '/test-cases/' + testCaseId,
-                            headers: {
-                                authorization: 'Bearer ' + accessToken.value
-                            },
-                            method: 'GET',
-                        }).then((response) => {
-                            expect(response.status).to.eql(200)
-                            expect(response.body.id).to.eql(testCaseId)
-                            expect(response.body.series).to.eql(TCSeries)
-                            expect(response.body.json).to.be.exist
-                            expect(response.body.title).to.eql(TCTitle)
-                            expect(response.body.groupPopulations[0].populationValues[0].name).to.eq('initialPopulation')
-                            expect(response.body['groupPopulations'][0].populationValues[1].name).to.eq('denominator')
-                            expect(response.body['groupPopulations'][0].populationValues[2].name).to.eq('denominatorExclusion')
-                            expect(response.body['groupPopulations'][0].populationValues[3].name).to.eq('denominatorException')
-                            expect(response.body['groupPopulations'][0].populationValues[4].name).to.eq('numerator')
-                            expect(response.body['groupPopulations'][0].populationValues[5].name).to.eq('numeratorExclusion')
-                        })
+    it('Test Case population value check boxes match that of the measure group definitons -- all are defined', () => {
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
+                    cy.request({
+                        url: '/api/measures/' + id + '/test-cases/' + testCaseId,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'GET',
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body.id).to.eql(testCaseId)
+                        expect(response.body.series).to.eql(TCSeries)
+                        expect(response.body.json).to.be.exist
+                        expect(response.body.title).to.eql(TCTitle)
+                        expect(response.body.groupPopulations[0].populationValues[0].name).to.eq('initialPopulation')
+                        expect(response.body['groupPopulations'][0].populationValues[1].name).to.eq('denominator')
+                        expect(response.body['groupPopulations'][0].populationValues[2].name).to.eq('denominatorExclusion')
+                        expect(response.body['groupPopulations'][0].populationValues[3].name).to.eq('denominatorException')
+                        expect(response.body['groupPopulations'][0].populationValues[4].name).to.eq('numerator')
+                        expect(response.body['groupPopulations'][0].populationValues[5].name).to.eq('numeratorExclusion')
                     })
                 })
             })
-        }) */
+        })
+    })
 
 
 })
