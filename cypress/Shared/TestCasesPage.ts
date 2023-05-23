@@ -9,7 +9,9 @@ export class TestCasesPage {
     //QDM Test Case Demographics elements
     public static readonly QDMDob = '[class="MuiFormControl-root MuiTextField-root css-5tchl9"]'
     public static readonly QDMRace = '[id="demographics-race-select-id"]'
-    public static readonly QDMRaceOption = '[data-value="White"]'
+    public static readonly QDMRaceOption = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
+    public static readonly QDMGender = '[id="demographics-gender-select-id"]'
+    public static readonly QDMGenderOption = '.MuiList-root'
 
     //QDM misc test case page objects
     public static readonly QDMTCSaveBtn = '[data-testid="qdm-test-case-save-button"]'

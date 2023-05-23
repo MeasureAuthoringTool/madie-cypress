@@ -50,12 +50,12 @@ describe.skip('Create and Update QDM Test Case', () => {
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //enter a value of the dob
+        //enter a value of the dob, Race and gender
         cy.get(TestCasesPage.QDMDob).type('01/01/2020')
-
-        //Add Race to the Test Case
         cy.get(TestCasesPage.QDMRace).click()
-        cy.get(TestCasesPage.QDMRaceOption).click() //Select White
+        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
+        cy.get(TestCasesPage.QDMGender).click()
+        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
 
         //save the Test Case
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
