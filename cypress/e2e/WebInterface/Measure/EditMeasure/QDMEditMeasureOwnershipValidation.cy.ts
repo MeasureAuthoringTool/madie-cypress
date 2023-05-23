@@ -6,6 +6,7 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -13,9 +14,12 @@ let altMeasureName = ''
 let altCqlLibraryName = ''
 let measureCQL = MeasureCQL.SBTEST_CQL
 let measureScoring = 'Cohort'
+let TCSeries = 'SBTestSeries'
+let TCTitle = 'test case title'
+let TCDescription = 'DENOMFail1651609688032'
 
-//Skipping until QDM feature flag is removed
-describe.skip('Measure Ownership Validations on Population criteria page', () => {
+
+describe('Measure Ownership Validations for QDM Measures', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -23,9 +27,11 @@ describe.skip('Measure Ownership Validations on Population criteria page', () =>
         altMeasureName = measureName + altRandValue
         altCqlLibraryName = CqlLibraryName + altRandValue
 
-        //Create QDM Measure with ALT user
+        //Create QDM Measure, PC and Test Case with ALT user
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, true,measureCQL, false, true)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp')
+        //Skipping until QDM Test Case feature flag is removed
+        //TestCasesPage.CreateQDMTestCaseAPI(TCTitle, TCSeries, TCDescription, '', false, true)
         OktaLogin.Login()
 
     })
@@ -61,6 +67,39 @@ describe.skip('Measure Ownership Validations on Population criteria page', () =>
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
         cy.get(MeasureGroupPage.rateAggregation).should('not.be.enabled')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('not.be.enabled')
+
+    })
+
+    //Skipping until QDM Test Case feature flag is removed
+    it.skip('Fields on Test Case page are not editable by Non Measure Owner', () => {
+
+        //navigate to the all measures tab
+        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
+        cy.get(LandingPage.allMeasuresTab).should('be.visible')
+        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
+        cy.get(LandingPage.allMeasuresTab).should('be.enabled')
+        cy.get(LandingPage.allMeasuresTab).click()
+
+        //click on Edit button to edit measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
+
+            cy.get('[data-testid=select-action-' + fileContents + ']').click()
+
+            //confirm that view button for test case is available and click on the view button
+            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('have.text', 'view')
+            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.visible')
+            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').click()
+        })
+
+        cy.get(TestCasesPage.QDMRace).should('not.be.enabled')
+        cy.get(TestCasesPage.QDMGender).should('not.be.enabled')
 
     })
 })
