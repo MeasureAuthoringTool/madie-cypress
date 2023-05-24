@@ -16,6 +16,9 @@ let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
+let updatedTestCaseTitle = testCaseTitle + ' ' + 'UpdatedTestCaseTitle'
+let updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDescription'
+let updatedTestCaseSeries = 'ICFTestSeries'
 
 //Skipping until QDM Test Case feature flag is removed
 describe.skip('Create and Update QDM Test Case', () => {
@@ -57,20 +60,27 @@ describe.skip('Create and Update QDM Test Case', () => {
         cy.get(TestCasesPage.QDMGender).click()
         cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
 
+        //Navigate to Details tab and Edit
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.testCaseTitle).clear().type(updatedTestCaseTitle)
+        cy.get(TestCasesPage.testCaseDescriptionTextBox).clear().type(updatedTestCaseDescription)
+        cy.get(TestCasesPage.testCaseSeriesTextBox).clear().type(updatedTestCaseSeries).type('{enter}')
+
         //save the Test Case
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
-        //Place holder for Edit QDM Test Case
-        //Left panel tabs
-        cy.get(TestCasesPage.elementsTab).should('contain.text', 'Elements')
-        cy.get(TestCasesPage.jsonTab).should('contain.text', 'JSON')
+        //Navigate to Test case list page
+        cy.get(EditMeasurePage.testCasesTab).click()
 
-        //Right panel tabs
-        cy.get(TestCasesPage.highlightingTab).should('contain.text', 'Highlighting')
-        cy.get(TestCasesPage.expectedOrActualTab).should('contain.text', 'Expected / Actual')
-        cy.get(TestCasesPage.detailsTab).should('contain.text', 'Details')
-
+        //Navigate back to Edit test case page and assert fields
+        TestCasesPage.clickEditforCreatedTestCase()
+        cy.get('#birth-date').should('contain.value', '01/01/2020')
+        cy.get(TestCasesPage.QDMRace).should('contain.text', 'White')
+        cy.get(TestCasesPage.QDMGender).should('contain.text', 'Male')
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.testCaseTitle).should('contain.value', updatedTestCaseTitle)
+        cy.get(TestCasesPage.testCaseDescriptionTextBox).should('contain.value', updatedTestCaseDescription)
     })
 })

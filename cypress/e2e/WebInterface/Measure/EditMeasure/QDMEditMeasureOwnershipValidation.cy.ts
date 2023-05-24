@@ -87,19 +87,16 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-
-            cy.get('[data-testid=select-action-' + fileContents + ']').click()
-
-            //confirm that view button for test case is available and click on the view button
-            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('have.text', 'view')
-            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.visible')
-            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').click()
-        })
+        TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.QDMRace).should('not.be.enabled')
         cy.get(TestCasesPage.QDMGender).should('not.be.enabled')
+
+        //Navigate to Details tab
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.testCaseTitle).should('not.be.enabled')
+        cy.get(TestCasesPage.testCaseDescriptionTextBox).should('not.be.enabled')
+        cy.get(TestCasesPage.testCaseSeriesTextBox).should('not.be.enabled')
 
     })
 })
