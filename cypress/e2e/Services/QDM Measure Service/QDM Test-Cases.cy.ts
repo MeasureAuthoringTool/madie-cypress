@@ -318,8 +318,8 @@ describe.skip('Measure Service: Test Case Endpoints: Validations', () => {
 
         cy.setAccessTokenCookie()
 
-        measureName = 'TestMeasure' + Date.now()
-        CQLLibraryName = 'TestCql' + Date.now()
+        measureName = 'QDMTestMeasure' + Date.now()
+        CQLLibraryName = 'QDMTestCql' + Date.now()
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CQLLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL, false, false)

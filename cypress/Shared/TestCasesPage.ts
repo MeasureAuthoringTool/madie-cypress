@@ -16,6 +16,7 @@ export class TestCasesPage {
     //QDM misc test case page objects
     public static readonly QDMTCSaveBtn = '[data-testid="qdm-test-case-save-button"]'
     public static readonly tcSaveSuccessMsg = '[class="toast success"]'
+    public static readonly editTestCaseDescriptionInlineError= '[data-testid="test-case-description-helper-text"]'
 
     //TC error concerning CQL and PC mismatch
     public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
