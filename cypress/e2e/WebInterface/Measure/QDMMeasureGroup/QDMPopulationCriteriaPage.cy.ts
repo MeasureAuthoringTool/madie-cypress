@@ -309,8 +309,8 @@ describe('Save Population Criteria on QDM measure', () => {
 
     })
 })
-//needs to be re-visited once MAT-5537 is fully testable
-describe.skip('Validations: Population Criteria: Return Types -- Boolean', () => {
+
+describe('Validations: Population Criteria: Return Types -- Boolean', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
@@ -334,7 +334,7 @@ describe.skip('Validations: Population Criteria: Return Types -- Boolean', () =>
         OktaLogin.Logout()
 
     })
-    //needs to be re-visited once MAT-5537 is fully testable
+
     it('Validations when the Patient Basis is set to "Yes" and return type should be boolean', () => {
         MeasuresPage.measureAction("edit")
 
@@ -361,13 +361,14 @@ describe.skip('Validations: Population Criteria: Return Types -- Boolean', () =>
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('not.exist')
 
         cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg, 30000)
         cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
 
-        //select a value that will return the correct boolean type
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
         cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('Bilateral Mastectomy Diagnosis').click()
-        //no error should appear
+
+        //helper text / error message should appear
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('contain.text', 'For Patient-based Measures, selected definitions must return a Boolean.')
 
@@ -383,7 +384,7 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
     beforeEach('Create Measure and login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, nonbooleanListOfSameTypeQDM_CQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, booleanPatientBasisQDM_CQL)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -398,7 +399,9 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         OktaLogin.Logout()
 
     })
+
     it('Validations when the Patient Basis is set to "No" and return type should be Non-boolean', () => {
+
         MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
@@ -420,19 +423,14 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
 
         //select a value that will return the correct boolean type
         cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('Initial Population').click()
-        //no error should appear
-        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('not.exist')
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
-        cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
+        //helper text / error message should appear
+        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
+        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('contain.text', 'For Episode-based Measures, selected definitions must return a list of the same type (Non-Boolean)')
 
         //select a value that will return the correct boolean type
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('IPPBoolean').click()
-        //no error should appear
-        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
-        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('contain.text', 'For Episode-based Measures, selected definitions must return a list of the same type (Non-Boolean).')
-
+        cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg, 30000)
+        cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
     })
 })

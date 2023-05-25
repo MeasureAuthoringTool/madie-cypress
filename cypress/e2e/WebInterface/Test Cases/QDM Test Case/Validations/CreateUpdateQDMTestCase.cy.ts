@@ -15,7 +15,8 @@ let measureScoring = 'Cohort'
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
-let testCaseJson = TestCaseJson.TestCaseJson_Valid
+let testCaseJson = TestCaseJson.QDMTestCaseJson
+let booleanPatientBasisQDM_CQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 let updatedTestCaseTitle = testCaseTitle + ' ' + 'UpdatedTestCaseTitle'
 let updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDescription'
 let updatedTestCaseSeries = 'ICFTestSeries'
@@ -82,5 +83,45 @@ describe.skip('Create and Update QDM Test Case', () => {
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.testCaseTitle).should('contain.value', updatedTestCaseTitle)
         cy.get(TestCasesPage.testCaseDescriptionTextBox).should('contain.value', updatedTestCaseDescription)
+    })
+})
+
+describe.skip('Attempt to update test case when non-owner', () => {
+
+    beforeEach('Create measure and login', () => {
+
+        //Create QDM Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL, false, true)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'Initial Population')
+        //create test case
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson, false, true)
+        OktaLogin.Login()
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName, false, true)
+
+    })
+
+    it('QDM Test Case Demographic fields are not available / editable for non-owner', () => {
+        cy.get(MeasuresPage.allMeasuresTab).click()
+
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Navigate to Edit Test Case page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //enter a value of the dob, Race and gender
+        cy.get(TestCasesPage.QDMDob).should('be.disabled')
+        cy.get(TestCasesPage.QDMRace).should('not.be.enabled')
+        cy.get(TestCasesPage.QDMGender).should('not.be.enabled')
+
     })
 })
