@@ -8,7 +8,15 @@ import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { Environment } from "../../../Shared/Environment"
 
+
+let harpUser = Environment.credentials().harpUserALT
+let testCaseTitle = 'Title for Auto Test'
+let testCaseDescription = 'DENOMFail' + Date.now()
+let testCaseSeries = 'SBTestSeries'
+let testCaseJson = TestCaseJson.QDMTestCaseJson
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestLibrary' + Date.now()
 let CQLLibraryName = ''
@@ -221,7 +229,7 @@ describe.skip('Test Case population values based on Measure Group population def
 
 })
 //Skipping until feature flag for QDM Test case is removed
-describe.skip('Measure Service: Test Case Endpoints: Create', () => {
+describe.skip('Measure Service: Test Case Endpoints: Create and Edit', () => {
     let randValue = (Math.floor((Math.random() * 2000) + 3))
     let cqlLibraryNameDeux = cqlLibraryName + randValue + 2
     let newTCJson = TestCaseJson.QDMTestCaseJson_for_update
@@ -451,4 +459,75 @@ describe.skip('Measure Service: Test Case Endpoints: Validations', () => {
             })
         })
     })
+})
+
+/*        //Create QDM Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryNameDeux, measureScoring, true, booleanPatientBasisQDM_CQL, false, true)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'Initial Population')
+        //create test case
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson, false, true)
+
+        -----------
+
+        expect(response.status).to.eql(403)
+        expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId)
+*/
+
+//Skipping until feature flag for QDM Test case is removed
+describe.skip('Measure Service: Test Case Endpoints: Attempt to edit when user is not owner', () => {
+    let randValue = (Math.floor((Math.random() * 2000) + 3))
+    let cqlLibraryNameDeux = cqlLibraryName + randValue + 2
+    let newTCJson = TestCaseJson.QDMTestCaseJson_for_update
+    before('Create Measure', () => {
+        cy.setAccessTokenCookieALT()
+
+        //Create QDM Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryNameDeux, measureScoring, true, booleanPatientBasisQDM_CQL, false, true)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'Initial Population')
+        //create test case
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson, false, true)
+    })
+
+    beforeEach('Set Token', () => {
+        cy.setAccessTokenCookie()
+    })
+
+    after('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryNameDeux, false, true)
+
+    })
+
+
+
+    it('QDM Test Case Demographic fields are not available / editable for non-owner', () => {
+
+        //Edit created Test Case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testcaseid) => {
+                    cy.request({
+                        failOnStatusCode: false,
+                        url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': testcaseid,
+                            'name': "IPPPass",
+                            'series': "WhenBP<120",
+                            'title': TCTitle,
+                            'description': "IPP Pass Test BP <120",
+                            'json': newTCJson
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(403)
+                        expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId)
+                    })
+                })
+            })
+        })
+    })
+
 })
