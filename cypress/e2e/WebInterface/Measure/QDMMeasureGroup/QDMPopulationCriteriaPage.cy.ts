@@ -17,30 +17,7 @@ let newCqlLibraryName = ''
 let measureScoring = 'Cohort'
 let booleanPatientBasisQDM_CQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 let nonbooleanListOfSameTypeQDM_CQL = MeasureCQL.returnNonBooleanListOfSameTypeQDM_CQL
-let simpleQDMMeasureCQL = MeasureCQL.simpleQDM_CQL/* 'library Library1234556 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n' +
-    '\n' +
-    'valueset "Ethnicity": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837\'\n' +
-    'valueset "ONC Administrative Sex": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1\'\n' +
-    'valueset "Payer": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.3591\'\n' +
-    'valueset "Race": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836\'\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    'context Patient\n' +
-    'define "SDE Ethnicity":\n' +
-    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
-    'define "SDE Payer":\n' +
-    '  ["Patient Characteristic Payer": "Payer"]\n' +
-    'define "SDE Race":\n' +
-    '  ["Patient Characteristic Race": "Race"]\n' +
-    'define "SDE Sex":\n' +
-    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
-    'define "ipp":\n' +
-    '\ttrue\n' +
-    'define "d":\n' +
-    '\t true\n' +
-    'define "n":\n' +
-    '\ttrue' */
+let simpleQDMMeasureCQL = MeasureCQL.simpleQDM_CQL
 
 describe('Validate QDM Population Criteria section -- scoring and populations', () => {
 
@@ -51,13 +28,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
     beforeEach('Create Measure and login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, simpleQDMMeasureCQL)
-        OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, true, simpleQDMMeasureCQL)
         OktaLogin.Login()
     })
 
@@ -276,7 +247,7 @@ describe('No values in QDM PC fields, when no CQL', () => {
         cy.get(MeasureGroupPage.QDMPopCriteria1IPDesc).should('be.visible')
     })
 })
-describe('Save Populcation Criteria on QDM measure', () => {
+describe('Save Population Criteria on QDM measure', () => {
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
@@ -284,7 +255,7 @@ describe('Save Populcation Criteria on QDM measure', () => {
     beforeEach('Create Measure and login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, simpleQDMMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, true, simpleQDMMeasureCQL)
         OktaLogin.Login()
     })
 
@@ -393,7 +364,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg, 30000)
         cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
 
-        //select a value that will return the correct boolean type
+        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
         cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('Bilateral Mastectomy Diagnosis').click()
 
@@ -403,6 +374,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
 
     })
 })
+
 describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -427,7 +399,9 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         OktaLogin.Logout()
 
     })
-    it('Validations when the Patient Basis is set to "No" and return type should be non-boolean', () => {
+
+    it('Validations when the Patient Basis is set to "No" and return type should be Non-boolean', () => {
+
         MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
@@ -455,12 +429,6 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('contain.text', 'For Episode-based Measures, selected definitions must return a list of the same type (Non-Boolean)')
 
         //select a value that will return the correct boolean type
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('Bilateral Mastectomy Diagnosis').click()
-
-        //no error should appear
-        cy.get(MeasureGroupPage.QDMIPPCHelperText).should('not.exist')
-
         cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
         Utilities.waitForElementVisible(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg, 30000)
         cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')

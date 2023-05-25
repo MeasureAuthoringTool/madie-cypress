@@ -198,7 +198,9 @@ export class MeasureCQL {
         '  ["Procedure, Performed": "Cataract Surgery"] CataractSurgery\n' +
         '    where Global."NormalizeInterval" ( CataractSurgery.relevantDatetime, CataractSurgery.relevantPeriod ) during "Measurement Period"\n' +
         '      and Global."NormalizeInterval" ( CataractSurgery.relevantDatetime, CataractSurgery.relevantPeriod ) starts 92 days or more before \n' +
-        '      end of "Measurement Period"'
+        '      end of "Measurement Period"\n' +
+        'define "IPPBoolean":\n' +
+           'true'
 
     public static readonly returnBooleanPatientBasedQDM_CQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
         '\n' +

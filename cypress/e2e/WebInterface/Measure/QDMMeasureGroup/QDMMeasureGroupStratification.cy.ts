@@ -435,11 +435,11 @@ describe('Validating Stratification tabs', () => {
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Bilateral Mastectomy Diagnosis')
-        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of boolean')
+        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should('contain.text', 'For Patient-based Measures, selected definitions must return a Boolean.')
 
         //Add Stratification 2
         Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'Bilateral Mastectomy Procedure')
-        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of boolean')
+        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should('contain.text', 'For Patient-based Measures, selected definitions must return a Boolean.')
 
         //Verify save button is disabled
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
