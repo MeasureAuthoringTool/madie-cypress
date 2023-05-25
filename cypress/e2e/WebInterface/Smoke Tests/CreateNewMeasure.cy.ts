@@ -1,6 +1,7 @@
 import {OktaLogin} from "../../../Shared/OktaLogin"
 import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {Utilities} from "../../../Shared/Utilities"
+import {MeasuresPage} from "../../../Shared/MeasuresPage"
+import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
 
 let measureName = ''
 let CqlLibraryName = ''
@@ -11,9 +12,26 @@ describe('Create New Measure', () => {
         OktaLogin.Login()
     })
 
-    afterEach('Logout and Cleanup', () => {
+    afterEach('Cleanup and Logout', () => {
+
+        //Delete Measure
+        MeasuresPage.measureAction("edit")
+
+        cy.get(EditMeasurePage.deleteMeasureButton).click()
+        cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + measureName + '?')
+        cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
+
+        cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')
+
+        //Verify the deleted measure on My Measures page list
+        cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
+
+        //Navigate to All Measures tab
+        cy.get(MeasuresPage.allMeasuresTab).click()
+        //Verify the deleted measure on All Measures page list
+        cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
+
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Create QI Core Measure', () => {
@@ -36,8 +54,3 @@ describe('Create New Measure', () => {
 
     })
 })
-
-
-
-
-
