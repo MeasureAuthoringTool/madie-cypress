@@ -70,8 +70,7 @@ describe('Measure Sharing', () => {
 
     })
 
-    //Skipping until MAT-5668 is implemented
-    it.skip('Verify Measure can be edited by the shared user', () => {
+    it('Verify Measure can be edited by the shared user', () => {
 
         //Share Measure with ALT User
         cy.getCookie('accessToken').then((accessToken) => {
@@ -201,8 +200,7 @@ describe('Measure Sharing - Multiple instances', () => {
     })
 })
 
-//Skipping until MAT-5668 is implemented
-describe.skip('Delete Test Case with Shared user', () => {
+describe('Delete Test Case with Shared user', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     let newMeasureName = measureName + randValue
