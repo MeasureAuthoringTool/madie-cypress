@@ -44,6 +44,9 @@ export class EditMeasurePage {
     public static readonly leftPanelRiskAdjustment = '[data-testid="leftPanelMeasureRiskAdjustment"]'
 
     //Measure CQL Page
+    //warnings / earrors in CQL that appear at the top of page
+    public static readonly libWarningTopMsg = '[data-testid="library-warning"]'
+
     //cql editor box on page
     public static readonly cqlEditorTextBox = '.ace_content'
     //save button on page

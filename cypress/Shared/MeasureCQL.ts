@@ -1,5 +1,113 @@
 
 export class MeasureCQL {
+    public static readonly ICFCleanTestQICore_CQL_without_using = 'library SimpleFhirLibrary version \'0.0.004\'\n' +
+
+
+
+
+
+        'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+
+        'codesystem \"SNOMEDCT:2017-09\": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'\n' +
+
+        'valueset \"Hysterectomy with No Residual Cervix\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
+        'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+
+
+
+        'parameter \"Measurement Period\" Interval<DateTime>\n' +
+
+
+
+        'context Patient\n' +
+
+
+
+        'define \"Surgical Absence of Cervix\":\n' +
+        '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
+        '		where NoCervixHysterectomy.status = \'completed\''
+
+
+    public static readonly ICFCleanTestQICore_CQL_with_incorrect_using = 'library SimpleFhirLibrary version \'0.0.004\'\n' +
+
+
+        'using QICore version \'4.1.00000\'\n' +
+
+
+
+        'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+
+        'codesystem \"SNOMEDCT:2017-09\": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'\n' +
+
+        'valueset \"Hysterectomy with No Residual Cervix\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
+        'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+
+
+
+        'parameter \"Measurement Period\" Interval<DateTime>\n' +
+
+
+
+        'context Patient\n' +
+
+
+
+        'define \"Surgical Absence of Cervix\":\n' +
+        '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
+        '		where NoCervixHysterectomy.status = \'completed\''
+
+
+    public static readonly simpleQDM_CQL_with_incorrect_using = 'library Library1234556 version \'0.0.000\'\n' +
+        'using QDM version \'5.6000\'\n' +
+        '\n' +
+        'valueset "Ethnicity": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "ONC Administrative Sex": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1\'\n' +
+        'valueset "Payer": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Race": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836\'\n' +
+        '\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+        'context Patient\n' +
+        'define "SDE Ethnicity":\n' +
+        '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+        'define "SDE Payer":\n' +
+        '  ["Patient Characteristic Payer": "Payer"]\n' +
+        'define "SDE Race":\n' +
+        '  ["Patient Characteristic Race": "Race"]\n' +
+        'define "SDE Sex":\n' +
+        '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+        'define "ipp":\n' +
+        '\ttrue\n' +
+        'define "d":\n' +
+        '\t true\n' +
+        'define "n":\n' +
+        '\ttrue'
+
+
+    public static readonly simpleQDM_CQL_without_using = 'library Library1234556 version \'0.0.000\'\n' +
+
+        'valueset "Ethnicity": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "ONC Administrative Sex": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1\'\n' +
+        'valueset "Payer": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Race": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836\'\n' +
+        '\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+        'context Patient\n' +
+        'define "SDE Ethnicity":\n' +
+        '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+        'define "SDE Payer":\n' +
+        '  ["Patient Characteristic Payer": "Payer"]\n' +
+        'define "SDE Race":\n' +
+        '  ["Patient Characteristic Race": "Race"]\n' +
+        'define "SDE Sex":\n' +
+        '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+        'define "ipp":\n' +
+        '\ttrue\n' +
+        'define "d":\n' +
+        '\t true\n' +
+        'define "n":\n' +
+        '\ttrue'
+
+
     public static readonly simpleQDM_CQL = 'library Library1234556 version \'0.0.000\'\n' +
         'using QDM version \'5.6\'\n' +
         '\n' +
