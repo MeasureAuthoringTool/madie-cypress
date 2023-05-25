@@ -7,7 +7,7 @@ export class TestCasesPage {
     public static readonly testCasesBCLink = '[data-testid="qdm-test-cases"]'
 
     //QDM Test Case Demographics elements
-    public static readonly QDMDob = '[class="MuiFormControl-root MuiTextField-root css-5tchl9"]'
+    public static readonly QDMDob = '[id="birth-date"]'
     public static readonly QDMRace = '[id="demographics-race-select-id"]'
     public static readonly QDMRaceOption = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
     public static readonly QDMGender = '[id="demographics-gender-select-id"]'
