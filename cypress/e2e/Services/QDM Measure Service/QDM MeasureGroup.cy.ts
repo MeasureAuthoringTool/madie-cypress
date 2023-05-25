@@ -13,7 +13,7 @@ let cqlLibraryName = 'TestLibrary' + Date.now()
 let measureScoring = 'Cohort'
 let booleanPatientBasisQDM_CQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
-describe('Test Case invalid population criteria value CQL and patient basis', () => {
+describe('Validations: Population Criteria: Return Types -- Boolean', () => {
     beforeEach('Create Measure and save CQL, in the UI', () => {
 
         cy.setAccessTokenCookie()
@@ -75,7 +75,7 @@ describe('Test Case invalid population criteria value CQL and patient basis', ()
     })
 })
 
-describe('Test Case invalid population criteria value CQL and patient basis', () => {
+describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => {
     beforeEach('Create Measure and save CQL, in the UI', () => {
 
         cy.setAccessTokenCookie()
