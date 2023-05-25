@@ -474,7 +474,7 @@ describe.skip('Measure Service: Test Case Endpoints: Validations', () => {
 */
 
 //Skipping until feature flag for QDM Test case is removed
-describe.only('Measure Service: Test Case Endpoints: Attempt to edit when user is not owner', () => {
+describe.skip('Measure Service: Test Case Endpoints: Attempt to edit when user is not owner', () => {
     let randValue = (Math.floor((Math.random() * 2000) + 3))
     let cqlLibraryNameDeux = cqlLibraryName + randValue + 2
     let newTCJson = TestCaseJson.QDMTestCaseJson_for_update
