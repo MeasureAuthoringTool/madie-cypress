@@ -87,6 +87,7 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
+
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.QDMRace).should('not.be.enabled')
@@ -98,5 +99,5 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         cy.get(TestCasesPage.testCaseDescriptionTextBox).should('not.be.enabled')
         cy.get(TestCasesPage.testCaseSeriesTextBox).should('not.be.enabled')
 
-    })
+     })
 })
