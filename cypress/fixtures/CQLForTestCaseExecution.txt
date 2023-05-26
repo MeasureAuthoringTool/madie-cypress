@@ -9,7 +9,7 @@
 {home}context Patient
 
 {home}define "ipp":
-{home}  exists ["Encounter"] E where E.period.start during "Measurement Period"
+{home}  true
 
 {home}define "denom":
 {home}  "ipp"
@@ -23,16 +23,8 @@
 {home}define "numEnc":
 {home}     ["Encounter"] E where E.status ~ 'finished'
 
-{home}define function ToCode(coding FHIR.Coding):
-{home} if coding is null then
-{home}   null
-{home}      else
-{home}        System.Code {
-{home}           code: coding.code.value,
-{home}           system: coding.system.value,
-{home}           version: coding.version.value,
-{home}           display: coding.display.value
-{home}           }
+{home}define function ToCode(e Encounter):
+{home}              duration in days of e.period
 
 {home}define function fun(notPascalCase Integer ):
 {home}  true
