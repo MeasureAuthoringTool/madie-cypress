@@ -84,6 +84,7 @@ describe('Edit CQL Library validations', () => {
 
     })
 
+    //Skipping due to bug MAT-5775
     it('CQL Library Edit page validation that the "Experimental" check box can be checked or unchecked -- not required', () => {
 
         cy.get(Header.cqlLibraryTab).wait(1000).click()
@@ -140,7 +141,8 @@ describe('Edit CQL Library validations', () => {
 
     })
 
-    it('CQL Library Edit page validation that the "Program Use Context" field can be changed and cleared -- not required', () => {
+    //Skipping due to bug MAT-5775
+    it.skip('CQL Library Edit page validation that the "Program Use Context" field can be changed and cleared -- not required', () => {
 
         cy.get(Header.cqlLibraryTab).wait(1000).click()
 

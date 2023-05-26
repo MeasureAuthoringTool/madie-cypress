@@ -6,7 +6,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../Shared/Header";
+import { Header } from "../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -212,7 +212,7 @@ describe('Measure Populations', () => {
         cy.get(MeasureGroupPage.measurePopulationMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of Encounter')
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'num')
         cy.get(MeasureGroupPage.measurePopulationExclusionMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of Encounter')
-        Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'ToCode')
+        Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'fun')
         Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
 
         //Verify save button is disabled
