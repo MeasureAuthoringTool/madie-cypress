@@ -835,6 +835,7 @@ describe('Validate CMS ID', () => {
                     expect(response.status).to.eql(201)
                     cy.writeFile('cypress/fixtures/measureId', response.body.id)
                     cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
                 })
             })
         })
@@ -848,19 +849,32 @@ describe('Validate CMS ID', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        method: 'PUT',
-                        headers: {
-                            Authorization: 'Bearer ' + accessToken.value
-                        },
-                        body: {
-                            "id": id, "measureName": updatedMeasureName, "cqlLibraryName": updatedCQLLibraryName, "ecqmTitle": "ecqmTitle", "cmsId": "99999", "version": "0.0.000",
-                            "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate, "active": false, 'versionId': vId, 'measureSetId': uuidv4(), "measureMetaData": {"draft": true}
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        cy.log("Measure deleted successfully")
+                    cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
+                        cy.request({
+                            url: '/api/measures/' + id,
+                            method: 'PUT',
+                            headers: {
+                                Authorization: 'Bearer ' + accessToken.value
+                            },
+                            body: {
+                                "id": id,
+                                "measureName": updatedMeasureName,
+                                "cqlLibraryName": updatedCQLLibraryName,
+                                "ecqmTitle": "ecqmTitle",
+                                "cmsId": "99999",
+                                "version": "0.0.000",
+                                "model": 'QI-Core v4.1.1',
+                                "measurementPeriodStart": mpStartDate,
+                                "measurementPeriodEnd": mpEndDate,
+                                "active": false,
+                                'versionId': vId,
+                                'measureSetId': measureSetId,
+                                "measureMetaData": {"draft": true}
+                            }
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                            cy.log("Measure deleted successfully")
+                        })
                     })
                 })
             })
