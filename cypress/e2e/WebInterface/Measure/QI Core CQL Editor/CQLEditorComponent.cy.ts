@@ -27,7 +27,7 @@ let measureCQL_valid = 'library ' + newCqlLibraryName + ' version \'0.0.000\'\n'
     'context Patient\n' +
     '\n' +
     'define "ipp":\n' +
-    '  exists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period" \n' +
+    '  exists ["Encounter": "Office Visit"] E where E.period.low during "Measurement Period" \n' +
     '  \n' +
     'define "denom":\n' +
     '    "ipp"\n' +
@@ -98,7 +98,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
 
@@ -114,7 +114,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
     })
 
@@ -151,7 +151,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithWarnings)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Changes saved successfully but the following errors were found')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
         //Verify warnings in CQL Editor component
         cy.get('[data-testid="generic-success-text-sub-header"]').should('contain.text', '2 CQL errors found:')
@@ -222,7 +222,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Changes saved successfully but the following errors were found')
-        cy.get('[data-testid="library-warning"]').should('contain.text', 'CQL updated successfully! Library Name and/or Version can not be updated in the CQL Editor. MADiE has overwritten the updated Library Name and/or Version.')
+        cy.get('[data-testid="library-warning"]').should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
         //Verify errors in CQL Editor component
         cy.get('[data-testid="generic-success-text-sub-header"]').should('contain.text', '3 CQL errors found:')
@@ -248,7 +248,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Changes saved successfully but the following errors were found')
-        cy.get('[data-testid="library-warning"]').should('contain.text', 'CQL updated successfully! Library Name and/or Version can not be updated in the CQL Editor. MADiE has overwritten the updated Library Name and/or Version.')
+        cy.get('[data-testid="library-warning"]').should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
         //Verify warnings in CQL Editor component
         cy.get('[data-testid="generic-success-text-sub-header"]').should('contain.text', '2 CQL errors found:')
