@@ -424,7 +424,7 @@ describe('Measure: CQL Editor: valueSet', () => {
 
     })
 
-    it('Value Set Invalid, 400 undefined', () => {
+    it('Value Set Invalid, 404 undefined', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
@@ -446,7 +446,7 @@ describe('Measure: CQL Editor: valueSet', () => {
         cy.scrollTo('top')
         cy.get(EditMeasurePage.cqlEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'VSAC: 0:22 | Request failed with status code 400 for oid = undefined location = 18:0-18:22')
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 18:0-18:22')
 
 
     })

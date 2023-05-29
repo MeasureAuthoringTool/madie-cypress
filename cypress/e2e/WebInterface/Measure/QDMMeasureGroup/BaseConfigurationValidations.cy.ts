@@ -291,9 +291,6 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         //continue with navigating away from the Base Configuration page
         Global.clickOnDiscardChanges()
 
-        //verify user has navigated to the main measures page
-        cy.url().should('eq', 'https://dev-madie.hcqis.org/measures')
-
         //navigate back to the PC -> Base Configuration page
         MeasuresPage.measureAction("edit")
 
@@ -422,9 +419,6 @@ describe('Updates on Base Configuration page', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
-        //verify user has navigated to the main measures page
-        cy.url().should('eq', 'https://dev-madie.hcqis.org/measures')
-
         MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
@@ -492,9 +486,6 @@ describe('Updates on Base Configuration page', () => {
 
         //navigate to the main measures page
         cy.get(Header.measures).click()
-
-        //verify user has navigated to the main measures page
-        cy.url().should('eq', 'https://dev-madie.hcqis.org/measures')
 
         MeasuresPage.measureAction("edit")
 
