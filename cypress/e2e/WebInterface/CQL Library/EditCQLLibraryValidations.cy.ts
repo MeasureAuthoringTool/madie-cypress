@@ -90,7 +90,6 @@ describe('Edit CQL Library validations', () => {
 
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        //cy.pause()
 
         //enter description detail
         cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
