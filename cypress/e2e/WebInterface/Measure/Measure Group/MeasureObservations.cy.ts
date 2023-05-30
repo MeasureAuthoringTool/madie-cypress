@@ -851,7 +851,7 @@ describe('Validate Measure Observation Parameters', () => {
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(0).wait(1000).click() //select ToCode
+        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(1).wait(1000).click() //select fun
         cy.get('[data-testid="measure-observation-cv-obs-helper-text"]').should('contain.text', 'Selected function must have exactly one parameter of type Encounter')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')

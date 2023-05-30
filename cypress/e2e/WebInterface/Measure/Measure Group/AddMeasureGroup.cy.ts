@@ -4,8 +4,9 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../Shared/Utilities"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 
+let filePath = 'cypress/fixtures/measureId'
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName1 = 'TestLibrary' + Date.now()
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
@@ -39,8 +40,18 @@ describe('Validate Measure Group additions', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
+        //verify url contains pc number
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.url().should('contain',  fileContents + '/edit/groups/1')
+        })
+
         cy.get(MeasureGroupPage.addMeasureGroupButton).should('be.visible')
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
+
+        //verify url contains pc number
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.url().should('contain', fileContents + '/edit/groups/2')
+        })
 
         Utilities.setMeasureGroupType()
 

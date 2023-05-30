@@ -6,11 +6,45 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { Global } from "../../../../Shared/Global"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 
+let randValue = (Math.floor((Math.random() * 1000) + 1))
 let measureName = 'TestMeasure' + Date.now() + 1
-let CqlLibraryName = 'TestLibrary' + Date.now() + 1
 let newMeasureName = ''
 let newCqlLibraryName = ''
+
+let CqlLibraryName = 'TestLibrary' + Date.now() + 1
+let newCQLTestMeasureName = measureName + randValue
+let newCQLTestCqlLibraryName = CqlLibraryName + randValue
+let measureQICoreCQL_without_using = MeasureCQL.ICFCleanTestQICore_CQL_without_using
+let measureQICoreCQL_with_incorrect_using = MeasureCQL.ICFCleanTestQICore_CQL_with_incorrect_using
+let measureQICoreCQL_with_different_Lib_name = 'library ' + newCQLTestCqlLibraryName + 'b' + ' version \'0.0.004\'\n' +
+
+
+    'using QICore version \'4.1.0\'\n' +
+
+
+
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+
+    'codesystem \"SNOMEDCT:2017-09\": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'\n' +
+
+    'valueset \"Hysterectomy with No Residual Cervix\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
+    'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+
+
+
+    'parameter \"Measurement Period\" Interval<DateTime>\n' +
+
+
+
+    'context Patient\n' +
+
+
+
+    'define \"Surgical Absence of Cervix\":\n' +
+    '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
+    '		where NoCervixHysterectomy.status = \'completed\''
 
 describe('Validate CQL Editor tab sticky footer', () => {
 
@@ -390,7 +424,7 @@ describe('Measure: CQL Editor: valueSet', () => {
 
     })
 
-    it('Value Set Invalid, 400 undefined', () => {
+    it('Value Set Invalid, 404 undefined', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
@@ -412,7 +446,7 @@ describe('Measure: CQL Editor: valueSet', () => {
         cy.scrollTo('top')
         cy.get(EditMeasurePage.cqlEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'VSAC: 0:22 | Request failed with status code 400 for oid = undefined location = 18:0-18:22')
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 18:0-18:22')
 
 
     })
@@ -467,6 +501,72 @@ describe('CQL errors with included libraries', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 1:56 | Identifier FHIRHelpers is already in use in this library.')
+
+    })
+})
+//a later follow-up story to MAT-5538 will be implemented and these tests will be used to verify the change for QI Core
+describe.skip('Measure: CQL Editor: using line', () => {
+
+    beforeEach('Create measure and login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(newCQLTestMeasureName, newCQLTestCqlLibraryName)
+        OktaLogin.Login()
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(newCQLTestMeasureName, newCQLTestCqlLibraryName)
+
+    })
+    it('Verify error message when there is no using statement in the CQL', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureQICoreCQL_without_using)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'CQL updated successfully but was missing a Using statement.  Please add in a valid model and version.')
+
+    })
+    it('Verify error message when there is an using statement in the CQL, but it is not accurate', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureQICoreCQL_with_incorrect_using)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.pause()
+        cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+
+    })
+    it('Verify error message when there is an using statement in the CQL, but it is not accurate, and the library name used is not correct', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureQICoreCQL_with_different_Lib_name)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
     })
 })

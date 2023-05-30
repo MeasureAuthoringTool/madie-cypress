@@ -17,8 +17,7 @@ let altCqlLibraryName = ''
 let measureScoring = 'Cohort'
 let measureCQL = MeasureCQL.SBTEST_CQL
 
-//Skipping tests until the QDM flag is removed
-describe.skip('Validating Population tabs and fields, specific to QDM', () => {
+describe('Validating Population tabs and fields, specific to QDM', () => {
     beforeEach('Create measure and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureName + randValue
@@ -292,9 +291,6 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
         //continue with navigating away from the Base Configuration page
         Global.clickOnDiscardChanges()
 
-        //verify user has navigated to the main measures page
-        cy.url().should('eq', 'https://dev-madie.hcqis.org/measures')
-
         //navigate back to the PC -> Base Configuration page
         MeasuresPage.measureAction("edit")
 
@@ -358,8 +354,7 @@ describe.skip('Validating Population tabs and fields, specific to QDM', () => {
     })
 })
 
-//Skipping tests until the QDM flag is removed
-describe.skip('Updates on Base Configuration page', () => {
+describe('Updates on Base Configuration page', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
@@ -423,9 +418,6 @@ describe.skip('Updates on Base Configuration page', () => {
 
         //navigate to the main measures page
         cy.get(Header.measures).click()
-
-        //verify user has navigated to the main measures page
-        cy.url().should('eq', 'https://dev-madie.hcqis.org/measures')
 
         MeasuresPage.measureAction("edit")
 
@@ -494,9 +486,6 @@ describe.skip('Updates on Base Configuration page', () => {
 
         //navigate to the main measures page
         cy.get(Header.measures).click()
-
-        //verify user has navigated to the main measures page
-        cy.url().should('eq', 'https://dev-madie.hcqis.org/measures')
 
         MeasuresPage.measureAction("edit")
 

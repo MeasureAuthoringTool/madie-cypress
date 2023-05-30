@@ -131,8 +131,7 @@ describe('Measure Service: QICore Measure', () => {
     })
 })
 
-//Skipping until feature flag removed for QDM
-describe.skip('Measure Service: QDM Measure', () => {
+describe('Measure Service: QDM Measure', () => {
 
     beforeEach('Set Access Token', () => {
 
@@ -277,8 +276,7 @@ describe('Measure Service: Error validations', () => {
         cy.setAccessTokenCookie()
     })
     //Measure Name Validations
-    //Skipping until MAT-5635 is fixed
-    it.skip('Validation Error: Measure Name empty', () => {
+    it('Validation Error: Measure Name empty', () => {
         measureName = ''
         CQLLibraryName = 'TestCql' + Date.now()
 
@@ -764,29 +762,31 @@ describe('Measure Service: Update Delete Flag', () => {
     it('Update / delete measure', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        method: 'PUT',
-                        headers: {
-                            Authorization: 'Bearer ' + accessToken.value
-                        },
-                        body: {
-                            "id": id,
-                            "measureName": newMeasureName,
-                            "cqlLibraryName": newCQLLibraryName,
-                            "model": 'QI-Core v4.1.1',
-                            "versionId": vId,
-                            "measureSetId": uuidv4(),
-                            "ecqmTitle": eCQMTitle,
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
-                            "active": false,
-                            "createdBy": defaultUser
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        cy.log("Measure Deleted successfully")
+                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
+                    cy.readFile(versionIdPath).should('exist').then((vId) => {
+                        cy.request({
+                            url: '/api/measures/' + id,
+                            method: 'PUT',
+                            headers: {
+                                Authorization: 'Bearer ' + accessToken.value
+                            },
+                            body: {
+                                "id": id,
+                                "measureName": newMeasureName,
+                                "cqlLibraryName": newCQLLibraryName,
+                                "model": 'QI-Core v4.1.1',
+                                "versionId": vId,
+                                "measureSetId": measureSetId,
+                                "ecqmTitle": eCQMTitle,
+                                "measurementPeriodStart": mpStartDate,
+                                "measurementPeriodEnd": mpEndDate,
+                                "active": false,
+                                "createdBy": defaultUser
+                            }
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                            cy.log("Measure Deleted successfully")
+                        })
                     })
                 })
             })
@@ -912,28 +912,30 @@ describe('Measure Service: Update Delete Flag', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        method: 'PUT',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        body: {
-                            "id": id,
-                            "measureName": newMeasureName,
-                            "cqlLibraryName": newCQLLibraryName,
-                            "model": model,
-                            "versionId": vId,
-                            "measureSetId": uuidv4(),
-                            "ecqmTitle": eCQMTitle,
-                            "measurementPeriodStart": mpStartDate,
-                            "measurementPeriodEnd": mpEndDate,
-                            "active": false,
-                            "createdBy": defaultUser
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
+                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
+                    cy.readFile(versionIdPath).should('exist').then((vId) => {
+                        cy.request({
+                            url: '/api/measures/' + id,
+                            method: 'PUT',
+                            headers: {
+                                authorization: 'Bearer ' + accessToken.value
+                            },
+                            body: {
+                                "id": id,
+                                "measureName": newMeasureName,
+                                "cqlLibraryName": newCQLLibraryName,
+                                "model": model,
+                                "versionId": vId,
+                                "measureSetId": measureSetId,
+                                "ecqmTitle": eCQMTitle,
+                                "measurementPeriodStart": mpStartDate,
+                                "measurementPeriodEnd": mpEndDate,
+                                "active": false,
+                                "createdBy": defaultUser
+                            }
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                        })
                     })
                 })
             })

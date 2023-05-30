@@ -126,7 +126,7 @@ let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     'define "October 1 Two Years Prior to the Measurement Period":\n' +
     '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)'
 
-describe.skip('Validating Stratification tabs', () => {
+describe('Validating Stratification tabs', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -435,11 +435,11 @@ describe.skip('Validating Stratification tabs', () => {
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Bilateral Mastectomy Diagnosis')
-        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of boolean')
+        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should('contain.text', 'For Patient-based Measures, selected definitions must return a Boolean.')
 
         //Add Stratification 2
         Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'Bilateral Mastectomy Procedure')
-        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should('contain.text', 'The selected definition does not align with the Population Basis field selection of boolean')
+        cy.get(MeasureGroupPage.populationMismatchErrorMsg).should('contain.text', 'For Patient-based Measures, selected definitions must return a Boolean.')
 
         //Verify save button is disabled
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')

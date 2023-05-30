@@ -6,6 +6,18 @@ export class TestCasesPage {
     //QDM Bread Crumb
     public static readonly testCasesBCLink = '[data-testid="qdm-test-cases"]'
 
+    //QDM Test Case Demographics elements
+    public static readonly QDMDob = '[id="birth-date"]'
+    public static readonly QDMRace = '[id="demographics-race-select-id"]'
+    public static readonly QDMRaceOption = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
+    public static readonly QDMGender = '[id="demographics-gender-select-id"]'
+    public static readonly QDMGenderOption = '.MuiList-root'
+
+    //QDM misc test case page objects
+    public static readonly QDMTCSaveBtn = '[data-testid="qdm-test-case-save-button"]'
+    public static readonly tcSaveSuccessMsg = '[class="toast success"]'
+    public static readonly editTestCaseDescriptionInlineError= '[data-testid="test-case-description-helper-text"]'
+
     //TC error concerning CQL and PC mismatch
     public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
 
@@ -362,6 +374,54 @@ export class TestCasesPage {
 
     }
     public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, twoTestCases?: boolean, altUser?: boolean): string {
+        let user = ''
+        let measurePath = 'cypress/fixtures/measureId'
+        let testCasePath = ''
+        if (altUser) {
+            cy.setAccessTokenCookieALT()
+            user = Environment.credentials().harpUserALT
+        }
+        else {
+            cy.setAccessTokenCookie()
+            user = Environment.credentials().harpUser
+        }
+        if (twoTestCases === true) {
+            testCasePath = 'cypress/fixtures/testCaseId2'
+        }
+        else {
+            testCasePath = 'cypress/fixtures/testCaseId'
+        }
+
+        //Add Test Case to the Measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(measurePath).should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/test-cases',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: {
+                        'name': "TEST",
+                        'series': series,
+                        'title': title,
+                        'description': description,
+                        'json': jsonValue
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.series).to.eql(series)
+                    expect(response.body.title).to.eql(title)
+                    expect(response.body.description).to.eql(description)
+                    cy.writeFile(testCasePath, response.body.id)
+                })
+            })
+        })
+        return user
+    }
+
+    public static CreateQDMTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, twoTestCases?: boolean, altUser?: boolean): string {
         let user = ''
         let measurePath = 'cypress/fixtures/measureId'
         let testCasePath = ''

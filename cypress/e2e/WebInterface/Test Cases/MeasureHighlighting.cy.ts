@@ -62,7 +62,7 @@ describe('Measure Highlighting', () => {
 
         cy.get(TestCasesPage.testCalculationResults).should('contain', 'Population Criteria 1')
 
-        cy.get(TestCasesPage.testCalculationResults).should('contain.text','define "ipp":\n' +
-            '  exists ["Encounter"] E where E.period.start during "Measurement Period"')
+        cy.get(TestCasesPage.testCalculationResults).should('contain','define "num":\n' +
+            '  exists ["Encounter"] E where E.status ~ \'finished\'')
     })
 })
