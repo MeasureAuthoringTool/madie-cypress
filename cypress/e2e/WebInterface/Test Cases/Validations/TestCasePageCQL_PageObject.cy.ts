@@ -5,10 +5,10 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { Utilities } from "../../../../Shared/Utilities"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage";
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
-let measureCQL = 'library SimpleFhirLibrary version \'0.0.004\''//MeasureCQL.SBTEST_CQL
+let measureCQL = 'library SimpleFhirLibrary version \'0.0.004\''
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'test case title'
 let testCaseDescription = 'DENOMFail' + Date.now()
@@ -17,21 +17,16 @@ let testCaseSeries = 'SBTestSeries'
 
 describe('Test Case Page CQL page object', () => {
 
-    before('Create Measure', () => {
+    beforeEach('Create Measure, TestCase and Login', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-    })
-
-    beforeEach('Login', () => {
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTerminologyFHIR_and_QICORETestCaseJson)
         OktaLogin.Login()
     })
-    afterEach('Logout', () => {
+
+    afterEach('Logout and Clean up', () => {
+
         OktaLogin.Logout()
-
-    })
-
-    after('Clean up', () => {
-
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
@@ -40,8 +35,8 @@ describe('Test Case Page CQL page object', () => {
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
 
-        //create test case
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTerminologyFHIR_and_QICORETestCaseJson)
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //edit created test case
         TestCasesPage.clickEditforCreatedTestCase()
@@ -55,7 +50,7 @@ describe('Test Case Page CQL page object', () => {
 
         //type in an additional value to the already existing value in the editor
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('using FHIR version \'4.0.1\'')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('using QICore version \'4.1.1\'')
 
         //saving new CQL value
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
@@ -73,7 +68,7 @@ describe('Test Case Page CQL page object', () => {
 
         //confirm that CQL field, on the Test Case page, reflects the additional text
         cy.log(measureCQL)
-        cy.get(TestCasesPage.tcCQLArea).should('contain.text', 'using FHIR version \'4.0.1\'')
+        cy.get(TestCasesPage.tcCQLArea).should('contain.text', 'using QICore version \'4.1.1\'')
 
     })
 
@@ -95,8 +90,8 @@ describe('Test Case Page CQL page object', () => {
 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        //create test case
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTerminologyFHIR_and_QICORETestCaseJson)
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //edit created test case
         TestCasesPage.clickEditforCreatedTestCase()

@@ -7,7 +7,7 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { Global } from "../../../../Shared/Global"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage";
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -17,7 +17,6 @@ let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = 'test'
 let newMeasureName = measureName + randValue
-let newCqlLibraryName = CqlLibraryName + randValue
 let measureCQL = MeasureCQL.CQL_Multiple_Populations
 
 describe('Non Boolean Population Basis Expected values', () => {
