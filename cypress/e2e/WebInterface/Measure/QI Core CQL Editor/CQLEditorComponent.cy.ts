@@ -98,7 +98,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
 
@@ -140,7 +140,8 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
     })
 
-    it('Verify warnings appear on CQL Editor component and in the CQL Editor object, on save and on tab / page load', () => {
+    //Skipping until a CQL with warning is added
+    it.skip('Verify warnings appear on CQL Editor component and in the CQL Editor object, on save and on tab / page load', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -233,7 +234,8 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
 
     })
 
-    it('Verify warnings appear on CQL Editor component and in the CQL Editor object, on CQL update and on tab / page load', () => {
+    //Skipping until a CQL with warning is added
+    it.skip('Verify warnings appear on CQL Editor component and in the CQL Editor object, on CQL update and on tab / page load', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
