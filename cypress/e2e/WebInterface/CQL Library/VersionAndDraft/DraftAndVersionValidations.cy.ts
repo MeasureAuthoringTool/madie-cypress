@@ -90,8 +90,7 @@ describe('Draft and Version Validations', () => {
         cy.log('Draft was not created due to the attempt to use the name of an already existing Library')
     })
 
-    //Skipping until MAT-5775 is fixed
-    it.skip('User can not version CQL Library if there is no CQL', () => {
+    it('User can not version CQL Library if there is no CQL', () => {
 
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
