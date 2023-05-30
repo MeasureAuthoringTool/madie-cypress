@@ -24,6 +24,29 @@ let cardInvalidTCJson = TestCaseJson.tcCardErrorJson
 let testCaseSeries = 'SBTestSeries'
 let measureCQL = MeasureCQL.CQL_Multiple_Populations
 let measureCQLPFTests = MeasureCQL.CQL_Populations
+let CQLForCVMeasure = 'library SimpleFhirMeasure version \'0.0.001\'\n' +
+    'using FHIR version \'4.0.1\'\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'context Patient\n' +
+    'define "ipp":\n' +
+    '  true\n' +
+    'define "denom":\n' +
+    '  "ipp"\n' +
+    'define "num":\n' +
+    '  exists ["Encounter"] E where E.status ~ \'finished\'\n' +
+    'define "numeratorExclusion":\n' +
+    '    "num"\n' +
+    'define "numEnc":\n' +
+    '     ["Encounter"] E where E.status ~ \'finished\'\n' +
+    'define function ToCode(e Encounter):\n' +
+    '              duration in days of e.period\n' +
+    'define function fun(notPascalCase Integer ):\n' +
+    '  true\n' +
+    'define function "isFinishedEncounter"(Enc Encounter):\n' +
+    '  true\n' +
+    'define function "booleanFunction"():\n' +
+    '  true'
 
 let measureCQLCardTests = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     '\n' +
@@ -483,7 +506,7 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'All resources must have an IdAll resources must have an IdNo code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdError: All resources must have an IdWarning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
     })
     it('JSON has Resource IDs duplicated for different resources', () => {
 
@@ -754,7 +777,7 @@ describe('JSON Resource ID tests -- CV', () => {
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, CQLForCVMeasure)
         OktaLogin.Login()
 
     })
@@ -772,27 +795,6 @@ describe('JSON Resource ID tests -- CV', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
-
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        //navigate to CQL Editor page / tab
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, { delay: 50 })
-        })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -875,6 +877,7 @@ describe('Tests around cardinality violations', () => {
         //create Measure Group
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population',
             'Num', 'Initial Population', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, cardInvalidTCJson)
         OktaLogin.Login()
 
     })
@@ -888,8 +891,8 @@ describe('Tests around cardinality violations', () => {
         cy.get(Header.measures).click()
         MeasuresPage.measureAction("edit")
 
-        //Navigate to Test Cases page and add Test Case details
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, cardInvalidTCJson)
+        //Navigate to Test Cases page
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to test cases' details page
         TestCasesPage.clickEditforCreatedTestCase()

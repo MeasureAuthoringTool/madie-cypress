@@ -711,7 +711,7 @@ export class MeasureCQL {
 
         'define \"ipp\":\n' +
 
-        'exists [\"Encounter\": \"Office Visit\"] E where E.period.start during \"Measurement Period\"\n' +
+        'exists [\"Encounter\": \"Office Visit\"] E where E.period.low during \"Measurement Period\"\n' +
 
 
 
