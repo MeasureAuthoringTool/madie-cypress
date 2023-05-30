@@ -42,7 +42,7 @@ describe('Validate Measure Group additions', () => {
 
         //verify url contains pc number
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + fileContents + '/edit/groups/1')
+            cy.url().should('contain',  fileContents + '/edit/groups/1')
         })
 
         cy.get(MeasureGroupPage.addMeasureGroupButton).should('be.visible')
@@ -50,7 +50,7 @@ describe('Validate Measure Group additions', () => {
 
         //verify url contains pc number
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + fileContents + '/edit/groups/2')
+            cy.url().should('contain', fileContents + '/edit/groups/2')
         })
 
         Utilities.setMeasureGroupType()

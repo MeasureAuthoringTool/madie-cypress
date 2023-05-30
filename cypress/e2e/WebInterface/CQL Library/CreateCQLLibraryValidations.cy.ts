@@ -319,8 +319,8 @@ describe('CQL Library Validations', () => {
         Utilities.typeFileContents('cypress/fixtures/AdultOutpatientEncountersQICore4Entry.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully! Library Name ' +
-            'and/or Version can not be updated in the CQL Editor. MADiE has overwritten the updated Library Name and/or Version.')
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect.' +
+            ' MADiE has overwritten them to ensure proper CQL.')
 
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()

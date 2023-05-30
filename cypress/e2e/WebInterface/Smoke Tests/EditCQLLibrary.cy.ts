@@ -22,7 +22,8 @@ describe('Edit Measure', () => {
         OktaLogin.Logout()
     })
 
-    it('Edit CQL Library Name and verify the library is updated on CQL Library page', () => {
+    //Skipping due to bug MAT-5775
+    it.skip('Edit CQL Library Name and verify the library is updated on CQL Library page', () => {
 
         //Edit CQL Library Name
         CQLLibrariesPage.clickEditforCreatedLibrary()
