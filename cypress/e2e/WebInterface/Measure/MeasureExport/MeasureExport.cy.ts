@@ -99,12 +99,6 @@ describe('FHIR Measure Export', () => {
 
     })
 
-    after('Log out', () => {
-
-        OktaLogin.Logout()
-
-    })
-
     it('Validate the zip file Export is downloaded', () => {
 
         MeasuresPage.measureAction('version')
@@ -125,8 +119,7 @@ describe('FHIR Measure Export', () => {
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
-        cy.get(MeasuresPage.exportFinishedContinueBtn).click()
-
+        OktaLogin.Logout()
     })
 
     it('Unzip the downloaded file and verify file types', () => {

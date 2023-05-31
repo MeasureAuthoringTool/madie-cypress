@@ -10,6 +10,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import {Header} from "../../../../Shared/Header";
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -149,6 +150,14 @@ describe('Measure Sharing - Multiple instances', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{end} {enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(Header.measures).click()
     })
 
     afterEach('LogOut', () => {
@@ -157,6 +166,7 @@ describe('Measure Sharing - Multiple instances', () => {
     })
 
     it('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
+
 
         //Version the Measure
         MeasuresPage.measureAction('version')
