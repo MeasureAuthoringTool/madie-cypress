@@ -7,6 +7,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Header } from "../../../../Shared/Header"
 import { Global } from "../../../../Shared/Global"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -15,7 +16,7 @@ let newCqlLibraryName = ''
 let altMeasureName = ''
 let altCqlLibraryName = ''
 let measureScoring = 'Cohort'
-let measureCQL = MeasureCQL.SBTEST_CQL
+let measureCQL = MeasureCQL.simpleQDM_CQL
 
 describe('Validating Population tabs and fields, specific to QDM', () => {
     beforeEach('Create measure and login', () => {
@@ -30,7 +31,21 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         CreateMeasurePage.CreateQDMMeasureAPI(altMeasureName, altCqlLibraryName, measureCQL, true, true)
+        OktaLogin.AltLogin()
+        cy.get(MeasuresPage.allMeasuresTab).click()
+        MeasuresPage.measureAction("edit", true)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         OktaLogin.Login()
 
@@ -365,6 +380,12 @@ describe('Updates on Base Configuration page', () => {
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, true, measureCQL)
         OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Login()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -411,7 +432,7 @@ describe('Updates on Base Configuration page', () => {
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('denom').click()
+        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('d').click()
 
         cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
         cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')

@@ -111,10 +111,10 @@ export class MeasureCQL {
     public static readonly simpleQDM_CQL = 'library Library1234556 version \'0.0.000\'\n' +
         'using QDM version \'5.6\'\n' +
         '\n' +
-        'valueset "Ethnicity": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837\'\n' +
-        'valueset "ONC Administrative Sex": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1\'\n' +
-        'valueset "Payer": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.3591\'\n' +
-        'valueset "Race": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836\'\n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+        'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
         '\n' +
         'parameter "Measurement Period" Interval<DateTime>\n' +
         'context Patient\n' +
@@ -308,7 +308,7 @@ export class MeasureCQL {
         '      and Global."NormalizeInterval" ( CataractSurgery.relevantDatetime, CataractSurgery.relevantPeriod ) starts 92 days or more before \n' +
         '      end of "Measurement Period"\n' +
         'define "IPPBoolean":\n' +
-           'true'
+        'true'
 
     public static readonly returnBooleanPatientBasedQDM_CQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
         '\n' +
