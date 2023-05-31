@@ -6,7 +6,7 @@ import {MeasureCQL} from "../../../../Shared/MeasureCQL"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 import {Header} from "../../../../Shared/Header"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
