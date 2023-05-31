@@ -93,11 +93,15 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
 
+
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.reload(true)
+            cy.scrollTo('top')
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=measure-action-' + fileContents + ']').scrollIntoView()
             cy.get('[data-testid=measure-action-' + fileContents + ']').click()
 
             //Verify version button is not visible
