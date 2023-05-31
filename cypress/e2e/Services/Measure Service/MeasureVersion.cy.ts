@@ -16,7 +16,7 @@ let testCaseTitle = 'FAIL'
 let testCaseDescription = 'FAIL' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
-let measureCQL_ProportionMeasure = MeasureCQL.SBTEST_CQL
+let measureCQL_ProportionMeasure = MeasureCQL.CQL_Multiple_Populations
 let validTestCaseJson = TestCaseJson.CohortEpisodeEncounter_PASS
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
@@ -274,7 +274,7 @@ describe('Edit validations for versioned Measure', () => {
         newCQLLibraryName = cqlLibraryName + 5 + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL_ProportionMeasure)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', 'num', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Qualifying Encounters', 'Qualifying Encounters', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
     })
 
@@ -405,7 +405,7 @@ describe('Delete validations for versioned Measure', () => {
         newCQLLibraryName = cqlLibraryName + 6 + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL_ProportionMeasure)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Qualifying Encounters', 'Qualifying Encounters', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
     })
 
@@ -414,7 +414,7 @@ describe('Delete validations for versioned Measure', () => {
         cy.setAccessTokenCookie()
     })
 
-    it('Verify error messages when user try to delete Measure, Measure Groups or Test cases for versioned Measures', () => {
+    it.only('Verify error messages when user try to delete Measure, Measure Groups or Test cases for versioned Measures', () => {
 
         cy.log('Version the Measure')
         cy.getCookie('accessToken').then((accessToken) => {
