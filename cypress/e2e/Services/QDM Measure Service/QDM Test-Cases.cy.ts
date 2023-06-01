@@ -11,8 +11,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { Environment } from "../../../Shared/Environment"
 
-
-let harpUser = Environment.credentials().harpUserALT
+let harpUser = Environment.credentials().harpUser
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
@@ -198,7 +197,7 @@ describe.skip('Test Case population values based on Measure Group population def
         Utilities.deleteMeasure(measureName, cqlLibraryName)
 
     })
-    it('Test Case population value check boxes match that of the measure group definitons -- all are defined', () => {
+    it.skip('Test Case population value check boxes match that of the measure group definitons -- all are defined', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
@@ -213,6 +212,7 @@ describe.skip('Test Case population values based on Measure Group population def
                         expect(response.body.id).to.eql(testCaseId)
                         expect(response.body.series).to.eql(TCSeries)
                         expect(response.body.json).to.be.exist
+                        expect(response.body.json).to.eql(TCJson)
                         expect(response.body.title).to.eql(TCTitle)
                         expect(response.body.groupPopulations[0].populationValues[0].name).to.eq('initialPopulation')
                         expect(response.body['groupPopulations'][0].populationValues[1].name).to.eq('denominator')
@@ -278,6 +278,7 @@ describe.skip('Measure Service: Test Case Endpoints: Create and Edit', () => {
                     expect(response.body.title).to.eql(title)
                     expect(response.body.description).to.eql(description)
                     expect(response.body.json).to.be.exist
+                    expect(response.body.json).to.eql(TCJson)
                     cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
                 })
             })
@@ -308,6 +309,7 @@ describe.skip('Measure Service: Test Case Endpoints: Create and Edit', () => {
                         expect(response.status).to.eql(200)
                         expect(response.body.id).to.eql(testcaseid)
                         expect(response.body.json).to.be.exist
+                        expect(response.body.json).to.eql(newTCJson)
                         expect(response.body.series).to.eql("WhenBP<120")
                         expect(response.body.title).to.eql(TCTitle)
                         expect(response.body.json).to.be.exist
@@ -525,6 +527,103 @@ describe.skip('Measure Service: Test Case Endpoints: Attempt to edit when user i
                         expect(response.status).to.eql(403)
                         expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId)
                     })
+                })
+            })
+        })
+    })
+})
+describe.skip('Measure Service: Test Case Endpoint: User validation with test case import', () => {
+    beforeEach('Create Measure and measure group', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+
+        cy.setAccessTokenCookie()
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL, false, true)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'Initial Population')
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "scoring": measureScoring,
+                        "populationBasis": "true",
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": "Initial Population",
+                                "associationType": null,
+                                "description": ""
+                            }
+                        ],
+                        "measureObservations": null,
+                        "groupDescription": "",
+                        "improvementNotation": "",
+                        "rateAggregation": "",
+                        "measureGroupTypes": null,
+                        "scoringUnit": "",
+                        "stratifications": [],
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    cy.writeFile('cypress/fixtures/groupId', response.body.id)
+                })
+            })
+        })
+
+
+    })
+    afterEach('Clean up measures', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName, false, true)
+
+    })
+    it('Non-owner or non-shared user cannot hit the end point to add test cases to a measure', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + id + '/test-cases/list',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: [{
+                        "name": TCName + '1',
+                        "title": TCTitle + '1',
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJson,
+
+                    },
+                    {
+                        "name": TCName + '2',
+                        "title": TCTitle + '2',
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJson,
+
+                    },
+                    {
+                        "name": TCName + '3',
+                        "title": TCTitle + '3',
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJson,
+
+                    },]
+                }).then((response) => {
+                    expect(response.status).to.eql(403)
                 })
             })
         })

@@ -12,11 +12,13 @@ export class TestCasesPage {
     public static readonly QDMRaceOption = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
     public static readonly QDMGender = '[id="demographics-gender-select-id"]'
     public static readonly QDMGenderOption = '.MuiList-root'
+    public static readonly QDMEthnicity = '[id="demographics-ethnicity-select-id"]'
+    public static readonly QEMEthnicityOptions = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiPaper-root MuiMenu-paper MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-177ic5c"]'
 
     //QDM misc test case page objects
-    public static readonly QDMTCSaveBtn = '[data-testid="qdm-test-case-save-button"]'
+    public static readonly QDMTCSaveBtn = '[data-testid="edit-test-case-save-button"]'
     public static readonly tcSaveSuccessMsg = '[class="toast success"]'
-    public static readonly editTestCaseDescriptionInlineError= '[data-testid="test-case-description-helper-text"]'
+    public static readonly editTestCaseDescriptionInlineError = '[data-testid="test-case-description-helper-text"]'
 
     //TC error concerning CQL and PC mismatch
     public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
