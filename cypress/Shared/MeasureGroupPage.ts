@@ -21,6 +21,7 @@ export class MeasureGroupPage {
     public static readonly QDMAddPopCriteriaBtn = '[data-testid="add-measure-group-button"]'
     public static readonly QDMPopCriteriaSaveSuccessMsg = '[data-testid="population-criteria-success"]'
     public static readonly QDMIPPCHelperText = '[data-testid="population-select-initial-population-select-helper-text"]'
+    public static readonly QDMRiskAdjustmentDescriptionTextBox = '[data-testid=riskAdjustmentDescription]'
 
     //mismatch CQL error
     public static readonly CQLPCMismatchError = '[class="madie-alert error"]'

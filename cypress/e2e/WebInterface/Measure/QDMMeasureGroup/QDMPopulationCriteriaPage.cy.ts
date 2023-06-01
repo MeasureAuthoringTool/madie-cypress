@@ -185,6 +185,28 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Aggregation')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
     })
+
+    it('Add Risk Adjustment Variable and Description to Population Criteria', () => {
+
+        //click on Edit button to edit measure
+        MeasuresPage.measureAction("edit")
+
+        //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //click on the Risk Adjustment button / link on the left page to populate fields on the right
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('ipp').click()
+        cy.get(MeasureGroupPage.QDMRiskAdjustmentDescriptionTextBox).type('Initial Population Description')
+
+        //save the Risk Adjustment data
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
+        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+
+    })
 })
 
 describe('No values in QDM PC fields, when no CQL', () => {

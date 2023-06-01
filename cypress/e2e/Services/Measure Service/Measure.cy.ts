@@ -222,6 +222,53 @@ describe('Measure Service: QDM Measure', () => {
 
         })
     })
+
+    it('Verify Risk Adjustment Variables are added to create Measure Model - QDM', () => {
+
+        measureName = 'TestMeasure' + Date.now() + randValue
+        CQLLibraryName = 'TestCql' + Date.now() + randValue
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/measure',
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + accessToken.value
+                },
+                body: {
+                    "measureName": measureName,
+                    "cqlLibraryName": CQLLibraryName,
+                    "model": QDMModel,
+                    "versionId": uuidv4(),
+                    "measureSetId": uuidv4(),
+                    "ecqmTitle": eCQMTitle,
+                    "measurementPeriodStart": mpStartDate,
+                    "measurementPeriodEnd": mpEndDate,
+                    "riskAdjustments": [
+                        {
+                            "definition": "riskAdjustmentDefinition",
+                            "description": "riskAdjustmentDescription"
+                        },
+                        {
+                            "definition": "riskAdjustmentDefinition2",
+                            "description": "riskAdjustmentDescription2"
+                        }
+                    ]
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(201)
+                expect(response.body.createdBy).to.eql(harpUser)
+                expect(response.body.riskAdjustments[0].definition).to.eql('riskAdjustmentDefinition')
+                expect(response.body.riskAdjustments[0].description).to.eql('riskAdjustmentDescription')
+                expect(response.body.riskAdjustments[1].definition).to.eql('riskAdjustmentDefinition2')
+                expect(response.body.riskAdjustments[1].description).to.eql('riskAdjustmentDescription2')
+                cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+            })
+
+        })
+
+    })
 })
 
 describe('Measure Service: GET Requests tests', () => {
