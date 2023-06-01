@@ -10,7 +10,7 @@ import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
-let measureCQL = MeasureCQL.SBTEST_CQL
+let measureCQL = MeasureCQL.simpleQDM_CQL
 let measureScoring = 'Cohort'
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
@@ -55,11 +55,13 @@ describe.skip('Create and Update QDM Test Case', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        cy.get(TestCasesPage.QDMDob).type('01/01/2020')
+        cy.get(TestCasesPage.QDMDob).type('01/01/2020').click()
         cy.get(TestCasesPage.QDMRace).click()
         cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
         cy.get(TestCasesPage.QDMGender).click()
         cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
 
         //Navigate to Details tab and Edit
         cy.get(TestCasesPage.detailsTab).click()
@@ -80,6 +82,7 @@ describe.skip('Create and Update QDM Test Case', () => {
         cy.get('#birth-date').should('contain.value', '01/01/2020')
         cy.get(TestCasesPage.QDMRace).should('contain.text', 'White')
         cy.get(TestCasesPage.QDMGender).should('contain.text', 'Male')
+        cy.get(TestCasesPage.QDMEthnicity).should('contain.text', 'Not Hispanic or Latino')
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.testCaseTitle).should('contain.value', updatedTestCaseTitle)
         cy.get(TestCasesPage.testCaseDescriptionTextBox).should('contain.value', updatedTestCaseDescription)
@@ -122,6 +125,7 @@ describe.skip('Attempt to update test case when non-owner', () => {
         cy.get(TestCasesPage.QDMDob).should('be.disabled')
         cy.get(TestCasesPage.QDMRace).should('not.be.enabled')
         cy.get(TestCasesPage.QDMGender).should('not.be.enabled')
+        cy.get(TestCasesPage.QDMEthnicity).should('not.be.enabled')
 
     })
 })
