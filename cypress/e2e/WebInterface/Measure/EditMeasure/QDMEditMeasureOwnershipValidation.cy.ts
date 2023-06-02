@@ -90,8 +90,10 @@ describe('Measure Ownership Validations for QDM Measures', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
+        cy.get(TestCasesPage.QDMDob).should('be.disabled')
         cy.get(TestCasesPage.QDMRace).should('not.be.enabled')
         cy.get(TestCasesPage.QDMGender).should('not.be.enabled')
+        cy.get(TestCasesPage.QDMEthnicity).should('not.be.enabled')
 
         //Navigate to Details tab
         cy.get(TestCasesPage.detailsTab).click()
@@ -99,5 +101,9 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         cy.get(TestCasesPage.testCaseDescriptionTextBox).should('not.be.enabled')
         cy.get(TestCasesPage.testCaseSeriesTextBox).should('not.be.enabled')
 
-     })
+        //Navigate to Expected/Actual tab
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.enabled')
+
+    })
 })
