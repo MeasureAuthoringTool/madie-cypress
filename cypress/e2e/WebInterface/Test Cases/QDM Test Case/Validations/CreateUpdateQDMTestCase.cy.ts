@@ -36,6 +36,75 @@ describe.skip('Create and Update QDM Test Case', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
+    it('Test Case dob validations: no dob', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //create test case
+        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+
+        //Navigate to Edit Test Case page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //select the dob field, enter nothing for DOB, and, then, enter a value for Race 
+        cy.get(TestCasesPage.QDMDob).click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
+
+        //confirm helpter text / validation message for the DOB field
+        cy.get(TestCasesPage.QDMDOBHelperTxt).should('contain.text', 'Birthdate is required')
+
+    })
+    it('Test Case dob validations: null for dob value', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //create test case
+        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+
+        //Navigate to Edit Test Case page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //select the dob field, enter nothing for DOB, and, then, enter a value for Race 
+        cy.get(TestCasesPage.QDMDob).type('null').click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
+
+        //confirm helpter text / validation message for the DOB field
+        cy.get(TestCasesPage.QDMDOBHelperTxt).should('contain.text', 'Birthdate is required')
+
+    })
+    it('Test Case dob validations: wrong format for dob value', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //create test case
+        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+
+        //Navigate to Edit Test Case page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //select the dob field, enter nothing for DOB, and, then, enter a value for Race 
+        cy.get(TestCasesPage.QDMDob).type('2020/01/01').click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
+
+        //confirm helpter text / validation message for the DOB field
+        cy.get(TestCasesPage.QDMDOBHelperTxt).should('contain.text', 'Birthdate is required')
+
+    })
 
     it('Create and Update Test Case for QDM Measure', () => {
 

@@ -15,6 +15,9 @@ export class TestCasesPage {
     public static readonly QDMEthnicity = '[id="demographics-ethnicity-select-id"]'
     public static readonly QEMEthnicityOptions = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiPaper-root MuiMenu-paper MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-177ic5c"]'
 
+    //QDM Test Case Demographics herlper text elements
+    public static readonly QDMDOBHelperTxt = '[id="birth-date-helper-text"]'
+
     //QDM misc test case page objects
     public static readonly QDMTCSaveBtn = '[data-testid="edit-test-case-save-button"]'
     public static readonly tcSaveSuccessMsg = '[class="toast success"]'
