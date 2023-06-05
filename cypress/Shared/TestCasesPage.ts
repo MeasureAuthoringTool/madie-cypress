@@ -137,7 +137,7 @@ export class TestCasesPage {
     //New Test Case Modal
     public static readonly createTestCaseDialog = '[data-testid="dialog-form"]'
     public static readonly createTestCaseTitleInput = '[data-testid="create-test-case-title-input"]'
-    public static readonly createTestCaseDescriptionInput = '[data-testid="create-test-case-description-input"]'
+    public static readonly createTestCaseDescriptionInput = '[data-testid="create-test-case-description"]'
     public static readonly createTestCaseGroupInput = '[id="test-case-series"]'
     public static readonly createTestCaseSaveButton = '[data-testid="create-test-case-save-button"]'
 
