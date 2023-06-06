@@ -63,6 +63,16 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).should('not.be.enabled')
         cy.get(MeasureGroupPage.initialPopulationSelect).should('not.be.enabled')
 
+        //Navigate to Supplemental data elements tab
+        cy.get(MeasureGroupPage.QDMSupplementalDataElementsTab).click()
+        cy.get(MeasureGroupPage.QDMSupplementalDataDefinitionTextBox).should('not.be.enabled')
+        cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox).should('not.be.enabled')
+
+        //Navigate to Risk Adjustment Variables tab
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
+        cy.get(MeasureGroupPage.QDMRiskAdjustmentDefinitionTextBox).should('not.be.enabled')
+        cy.get(MeasureGroupPage.QDMRiskAdjustmentDescriptionTextBox).should('not.be.enabled')
+
         //Navigate to Reporting tab
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
         cy.get(MeasureGroupPage.rateAggregation).should('not.be.enabled')

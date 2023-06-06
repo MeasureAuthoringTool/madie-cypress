@@ -21,7 +21,16 @@ export class MeasureGroupPage {
     public static readonly QDMAddPopCriteriaBtn = '[data-testid="add-measure-group-button"]'
     public static readonly QDMPopCriteriaSaveSuccessMsg = '[data-testid="population-criteria-success"]'
     public static readonly QDMIPPCHelperText = '[data-testid="population-select-initial-population-select-helper-text"]'
+
+    //QDM Supplemental Data Elements and Risk Adjustment variables
+    public static readonly QDMSupplementalDataElementsTab = '[id="sideNavMeasurePopulationsSupplementalData"]'
+    public static readonly QDMSupplementalDataDescriptionTextBox = '[data-testid=supplementalDataDescription]'
+    public static readonly QDMSupplementalDataDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
+    public static readonly QDMSupplementalDataElementsListBox = '[id="supplemental-data-listbox"]'
+    public static readonly QDMSaveSupplementalDataElements = '[data-testid="measure-Supplemental Data-save"]'
+    public static readonly QDMSupplementalDataDefinitionTextBox = '[id="supplemental-data"]'
     public static readonly QDMRiskAdjustmentDescriptionTextBox = '[data-testid=riskAdjustmentDescription]'
+    public static readonly QDMRiskAdjustmentDefinitionTextBox = '[id="risk-adjustment"]'
 
     //mismatch CQL error
     public static readonly CQLPCMismatchError = '[class="madie-alert error"]'
@@ -76,7 +85,7 @@ export class MeasureGroupPage {
     public static readonly rateAggregation = '[data-testid="rateAggregationText"]'
     public static readonly improvementNotationSelect = '[id="improvement-notation-select"]'
     public static readonly measureReportingSaveBtn = '[data-testid="measure-Reporting-save"]'
-    public static readonly successfulSaveMeasureReportingMsg = '[class="toast success"]'
+    public static readonly successfulSaveMsg = '[class="toast success"]'
     //Measure Group Type
     public static readonly measureGroupTypeSelect = '[data-testid="measure-group-type-dropdown"]'
     public static readonly measureGroupTypeCheckbox = '[id="measure-group-type"]'
