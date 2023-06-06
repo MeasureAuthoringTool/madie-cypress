@@ -168,8 +168,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.enabled')
         cy.get(MeasureGroupPage.measureReportingSaveBtn).click()
         //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureReportingMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureReportingMsg).should('contain.text', 'Measure Reporting Updated Successfully')
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Measure Reporting Updated Successfully')
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -186,7 +186,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
     })
 
-    it('Add Risk Adjustment Variable and Description to Population Criteria', () => {
+    it('Add Risk Adjustment Variables and Supplemental Data Elements to Population Criteria', () => {
 
         //click on Edit button to edit measure
         MeasuresPage.measureAction("edit")
@@ -206,6 +206,15 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
         cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
+        //click on the Supplemental Data button / link on the left page to populate fields on the right
+        cy.get(MeasureGroupPage.QDMSupplementalDataElementsTab).click()
+        cy.get(MeasureGroupPage.QDMSupplementalDataDefinitionSelect).click()
+        cy.get(MeasureGroupPage.QDMSupplementalDataElementsListBox).contains('ipp').click()
+        cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox).type('Initial Population Description')
+
+        //save Supplemental data Elements
+        cy.get(MeasureGroupPage.QDMSaveSupplementalDataElements).click()
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
     })
 })
 
