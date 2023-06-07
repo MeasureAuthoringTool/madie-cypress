@@ -165,6 +165,9 @@ export class TestCasesPage {
     public static readonly importTestCaseSuccessMsg = '[data-testid=success-toast]'
     public static readonly importTestCaseErrorMsg = '[data-testid=error-toast]'
 
+    //QDM Test Case Elements Tab
+    public static readonly QDMElementsTab = '[data-testid=qdm-Elements-sub-heading]'
+
     public static clickCreateTestCaseButton(): void {
 
         //setup for grabbing the measure create call
