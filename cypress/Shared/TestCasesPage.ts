@@ -137,7 +137,7 @@ export class TestCasesPage {
     //New Test Case Modal
     public static readonly createTestCaseDialog = '[data-testid="dialog-form"]'
     public static readonly createTestCaseTitleInput = '[data-testid="create-test-case-title-input"]'
-    public static readonly createTestCaseDescriptionInput = '[data-testid="create-test-case-description-input"]'
+    public static readonly createTestCaseDescriptionInput = '[data-testid="create-test-case-description"]'
     public static readonly createTestCaseGroupInput = '[id="test-case-series"]'
     public static readonly createTestCaseSaveButton = '[data-testid="create-test-case-save-button"]'
 
@@ -164,6 +164,9 @@ export class TestCasesPage {
     public static readonly testCaseFileImport = '[data-testid=import-file-input]'
     public static readonly importTestCaseSuccessMsg = '[data-testid=success-toast]'
     public static readonly importTestCaseErrorMsg = '[data-testid=error-toast]'
+
+    //QDM Test Case Elements Tab
+    public static readonly QDMElementsTab = '[data-testid=qdm-Elements-sub-heading]'
 
     public static clickCreateTestCaseButton(): void {
 
