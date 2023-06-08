@@ -40,6 +40,7 @@ export class CreateMeasurePage {
             expect(response.statusCode).to.eq(201)
             cy.writeFile('cypress/fixtures/measureId', response.body.id)
             cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+            cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
         })
     }
     public static clickCreateDraftButton(): void {
@@ -120,7 +121,7 @@ export class CreateMeasurePage {
     }
 
     public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
-                                         twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
+        twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
 
         let user = ''
         const now = require('dayjs')
@@ -209,7 +210,7 @@ export class CreateMeasurePage {
     }
 
     public static CreateQICoreMeasureAPIWithoutELMJson(measureName: string, CqlLibraryName: string, measureCQL?: string,
-                                                       twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
+        twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
 
         let user = ''
         const now = require('dayjs')
@@ -298,7 +299,7 @@ export class CreateMeasurePage {
     }
 
     public static CreateQDMMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
-                                      twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
+        twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
 
         let user = ''
         const now = require('dayjs')
