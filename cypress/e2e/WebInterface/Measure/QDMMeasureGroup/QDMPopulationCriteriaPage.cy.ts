@@ -101,6 +101,9 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
+        //navigate to the criteria section of the PC
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+
         //Add UCUM scoring unit
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
         cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
@@ -133,6 +136,9 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         //navigate back to the measure group page
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //navigate to the criteria section of the PC
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         //verify All data persists on Criteria page
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'ipp')
