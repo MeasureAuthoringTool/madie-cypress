@@ -1137,20 +1137,18 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm warning message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Meta.profile: Resource of type [Encounter] is missing the Meta.profile. Resource Id: [1]. ' +
-            'Resources missing Meta.profile may cause incorrect results while executing this test case.Warning: CodeSystem is unknown and can\'t be validated: ' +
-            'http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'' +
-            'Warning: Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'' +
+            'Warning: Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)' +
+            'Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
         //attempt to click on 'Run Test Case' to run the test case via the edit page
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click()
 
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Meta.profile: Resource of type [Encounter] is missing the Meta.profile. Resource Id: [1]. ' +
-            'Resources missing Meta.profile may cause incorrect results while executing this test case.Warning: CodeSystem is unknown and can\'t be validated: ' +
-            'http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'' +
-            'Warning: Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'' +
+            'Warning: Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)' +
+            'Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
 
     })
 

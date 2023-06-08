@@ -5,6 +5,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { Header } from "../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -452,17 +453,18 @@ describe('Validating Stratification tabs', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-        cy.get(MeasureGroupPage.stratificationTab).click()
+        cy.get(MeasureGroupPage.stratificationTab).wait(500).click()
         cy.get('body').then((body) => {
             if ((body.find(MeasureGroupPage.stratAssociationOne).length != 0)) {
                 Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 30700)
+                cy.get(MeasureGroupPage.stratificationTab).wait(500).click()
                 cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
                 cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
             } else {
                 Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
                 cy.get(MeasureGroupPage.stratificationTab).should('exist')
                 cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-                cy.get(MeasureGroupPage.stratificationTab).click()
+                cy.get(MeasureGroupPage.stratificationTab).wait(500).click()
             }
         })
         //Association -- default value -- score type is Proportion
@@ -847,6 +849,127 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
+    it('Verify that description entered for each RA Definition is accurate', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Click on Risk Adjustment tab
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
+        //select a definition and enter a description for ipp
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('ipp').click()
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
+            .first() // select the first element
+            .type('Initial Population Description')
+        //select a definition and enter a description for denom
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('denom').click()
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
+        cy.get(MeasureGroupPage.RAPage)
+            .find('[class="right"]')
+            .find(MeasureGroupPage.RAPageContainer)
+            .find(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
+            .last() // select the last element
+            .prev()
+            .type('Denominator Description')
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
+        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+
+        //navigate to the main MADiE page
+        cy.get(Header.mainMadiePageButton).click()
+
+        MeasuresPage.measureAction("edit")
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Click on Risk Adjustment tab
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
+
+        //verify values in the description fields
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
+            .first() // select the first element
+            .should('contain.text', 'Initial Population Description')
+
+        cy.get(MeasureGroupPage.RAPage)
+            .find('[class="right"]')
+            .find(MeasureGroupPage.RAPageContainer)
+            .find(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
+            .last() // select the last element
+            .prev()
+            .should('contain.text', 'Denominator Description')
+    })
+    //skipping until bug MAT-5829 is fixed
+    it.skip('Verify that description entered for each SDE Definition is accurate', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Click on Supplemental data tab
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('ipp').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
+            .first() // select the first element
+            .type('Initial Population Description')
+        //select a definition and enter a description for denom
+        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('denom').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
+
+        cy.get(MeasureGroupPage.SDEPageContent)
+            .find('[class="right-box"]')
+            .find(MeasureGroupPage.SDEContainer)
+            .find('[class="MuiFormControl-root MuiFormControl-fullWidth css-tzsjye"]')
+            .find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
+            .last() // select the last element
+            .prev()
+            .type('Denominator Description')
+        //Save Supplemental data
+        cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
+        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
+
+        //navigate to the main MADiE page
+        cy.get(Header.mainMadiePageButton).click()
+
+        MeasuresPage.measureAction("edit")
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Click on Supplemental data tab
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
+
+        //verify values in the description fields
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
+            .first() // select the first element
+            .should('contain.text', 'Initial Population Description')
+
+        cy.get(MeasureGroupPage.SDEPageContent)
+            .find('[class="right-box"]')
+            .find(MeasureGroupPage.SDEContainer)
+            .find('[class="MuiFormControl-root MuiFormControl-fullWidth css-tzsjye"]')
+            .find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
+            .last() // select the last element
+            .prev()
+            .should('contain.text', 'Denominator Description')
+    })
 
     it('Add Risk adjustment variables to the Measure group', () => {
 
@@ -862,8 +985,9 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('ipp').click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).type('Initial Population Description')
-
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
+            .first() // select the first element
+            .type('Initial Population Description')
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
         cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
@@ -890,7 +1014,9 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('ipp').click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).type('Initial Population Description')
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
+            .first() // select the first element
+            .type('Initial Population Description')
 
         //Click on Discard changes button
         cy.get(MeasureGroupPage.discardChangesBtn).click()
@@ -898,6 +1024,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         cy.get(MeasureGroupPage.discardChangesContinueBtn).click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('not.exist')
     })
+
 
     it('Add Supplemental data elements to the Measure group', () => {
 
@@ -914,7 +1041,14 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('ipp').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('Initial Population Description')
+        cy.get(MeasureGroupPage.SDEPageContent)
+            .find('[class="right-box"]')
+            .find(MeasureGroupPage.SDEContainer)
+            .find('[class="MuiFormControl-root MuiFormControl-fullWidth css-tzsjye"]')
+            .find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
+            .last() // select the last element
+            .prev()
+            .type('Denominator Description')
 
         //Save Supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
@@ -930,6 +1064,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
     })
 
+    //Ethan is working on dup class element issue
     it('Clicking on Discard changes button on Supplemental data elements page will revert the changes made before save', () => {
 
         MeasuresPage.measureAction("edit")
@@ -945,7 +1080,14 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('ipp').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('Initial Population Description')
+        cy.get(MeasureGroupPage.SDEPageContent)
+            .find('[class="right-box"]')
+            .find(MeasureGroupPage.SDEContainer)
+            .find('[class="MuiFormControl-root MuiFormControl-fullWidth css-tzsjye"]')
+            .find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
+            .last() // select the last element
+            .prev()
+            .type('Denominator Description')
 
         //Click on Discard changes button
         cy.get(MeasureGroupPage.discardChangesBtn).click()

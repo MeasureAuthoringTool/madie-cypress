@@ -416,19 +416,19 @@ describe('Create Measure validations', () => {
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
         //Verify error message when the Measure Name doesn't contain alphabets
-        cy.get(CreateMeasurePage.measureNameTextbox).type('66777')
+        cy.get(CreateMeasurePage.measureNameTextbox).type('66777').wait(500)
         cy.get(CreateMeasurePage.measureNameFieldLevelError).should('contain.text', 'Measure Name must contain at least one letter.')
         //Verify if create measure button is disabled
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
         //Verify error message when the Measure Name has '_'
-        cy.get(CreateMeasurePage.measureNameTextbox).clear().type('Test_Measure')
+        cy.get(CreateMeasurePage.measureNameTextbox).clear().wait(500).type('Test_Measure').wait(500)
         cy.get(CreateMeasurePage.measureNameFieldLevelError).should('contain.text', 'Measure Name must not contain \'_\' (underscores).')
         //Verify if create measure button is disabled
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
         //Verify error message when the Measure Name has more than 500 characters
-        cy.get(CreateMeasurePage.measureNameTextbox).clear().type('This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is')
+        cy.get(CreateMeasurePage.measureNameTextbox).clear().wait(500).type('This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is for measure name validation.This test is').wait(500)
         cy.get(CreateMeasurePage.measureNameFieldLevelError).should('contain.text', 'Measure Name cannot be more than 500 characters.')
         //Verify if create measure button is disabled
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')

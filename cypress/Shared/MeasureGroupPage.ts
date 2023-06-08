@@ -220,6 +220,8 @@ export class MeasureGroupPage {
     public static readonly qdmBCCriteriaReqAlertMsg = '[data-testid="error-alerts"]'
 
     //Risk Adjustment variables
+    public static readonly RAPage = '[data-testid="risk-adjustment"]'
+    public static readonly RAPageContainer = '[class="risk-container"]'
     public static readonly riskAdjustmentDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
     public static readonly riskAdjustmentDefinitionDropdown = '[id="risk-adjustment-listbox"]'
     public static readonly riskAdjustmentTextBox = '[class="risk-description"]'
@@ -229,9 +231,11 @@ export class MeasureGroupPage {
     public static readonly riskAdjustmentSaveSuccessMsg = '[class="toast success"]'
 
     //Supplemental data elements
+    public static readonly SDEPageContent = '[class="content"]'
+    public static readonly SDEContainer = '[class="sc-fEOsli hQkopF"]'
     public static readonly supplementalDataDefinitionSelect = '[data-testid=supplementalDataElements]'
     public static readonly supplementalDataDefinitionDropdown = '#supplementalDataElements-listbox'
-    public static readonly supplementalDataDefinitionDescriptionTextBox = '[class="sc-crXcEl cAFOFV"]'
+    public static readonly supplementalDataDefinitionDescriptionTextBox = '[class="text-area-variable"]'
     public static readonly saveSupplementalDataElements = '[data-testid="supplementalDataElement-save"]'
     public static readonly supplementalDataElementsSaveSuccessMsg = '[data-testid="supplementalDataElement-success"]'
     public static readonly removeCloseDefinitionSelection = '[data-testid="CancelIcon"]'
