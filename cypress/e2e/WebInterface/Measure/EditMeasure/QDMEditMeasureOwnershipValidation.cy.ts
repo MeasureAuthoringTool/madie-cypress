@@ -6,7 +6,7 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -28,7 +28,7 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         altCqlLibraryName = CqlLibraryName + altRandValue
 
         //Create QDM Measure, PC and Test Case with ALT user
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, true,measureCQL, false, true)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, true, measureCQL, false, true)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp')
         //Skipping until QDM Test Case feature flag is removed
         //TestCasesPage.CreateQDMTestCaseAPI(TCTitle, TCSeries, TCDescription, '', false, true)
@@ -59,6 +59,9 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //navigate to the criteria section of the PC
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).should('not.be.enabled')
         cy.get(MeasureGroupPage.initialPopulationSelect).should('not.be.enabled')

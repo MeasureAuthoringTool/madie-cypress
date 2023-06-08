@@ -72,6 +72,9 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             cy.get(EditMeasurePage.measureGroupsTab).should('exist')
             cy.get(EditMeasurePage.measureGroupsTab).click()
 
+            //navigate to the criteria section of the PC
+            cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+
             //confirm Base Config alert message appears
             Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
             cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
@@ -149,10 +152,6 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             cy.get(EditMeasurePage.measureGroupsTab).should('exist')
             cy.get(EditMeasurePage.measureGroupsTab).click()
 
-            //click on / navigate to the Base Configuration sub-tab
-            cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-            cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
-
             //select 'Cohort' scoring on measure
             Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
             cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
@@ -195,6 +194,9 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //navigate to the criteria section of the PC
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
@@ -314,10 +316,6 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        //click on / navigate to the Base Configuration sub-tab
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
-
         //verify that values have been cleared from fields on the Base Configuration page
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Select Scoring')
         cy.get(MeasureGroupPage.qdmType).should('contain.value', '')
@@ -337,6 +335,9 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //navigate to the criteria section of the PC
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         //confirm Base Config alert message apppears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
@@ -406,10 +407,6 @@ describe('Updates on Base Configuration page', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        //click on / navigate to the Base Configuration sub-tab
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
-
         //select 'Cohort' scoring on measure
         Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
@@ -446,10 +443,6 @@ describe('Updates on Base Configuration page', () => {
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //click on / navigate to the Base Configuration sub-tab
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
 
         //select 'Cohort' scoring on measure
         Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringProportion)
@@ -515,10 +508,6 @@ describe('Updates on Base Configuration page', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        //click on / navigate to the Base Configuration sub-tab
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
-
         //most recently saved BC page data is retained
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Proportion')
         cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Process')
@@ -575,7 +564,7 @@ describe('Updates on Base Configuration page', () => {
         //Click on 'Yes, Save Changes' button
         cy.get(MeasureGroupPage.updatePatientBasisContinueBtn).click()
         //Verify that the radio button 'Yes' is enabled
-        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).should('be.enabled')
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).should('be.enabled').wait(500)
 
         //Navigate to Criteria page and verify the populations are cleared
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
