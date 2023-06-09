@@ -534,8 +534,18 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         //Click on Run Test button and verify the text on Highlighting tab
         cy.get(TestCasesPage.runTestButton).click()
-        cy.get(TestCasesPage.testCalculationResults).should('include.text', 'Population Criteria 1\ndefine fluent function "isFinishedEncounter"(Enc Encounter):\n(Enc E where E.status = \'finished\') is not null')
-        cy.get(TestCasesPage.testCalculationResults).should('include.text', 'Population Criteria 2')
+        cy.get(TestCasesPage.testCalculationResults)
+            .find('[data-statement-name="Initial Population"]')
+            .should('contain.text', 'define "Initial Population"')
+            .should('contain.text', 'exists')
+            .should('contain.text', '"Qualifying Encounters"')
+        cy.get(TestCasesPage.testCalculationResults)
+            .find('[data-statement-name="Qualifying Encounters"]')
+            .should('contain.text', '\ndefine "Qualifying Encounters":\n(\n[Encounter: "Office Visit"]\nunion [Encounter: ' +
+                '"Annual Wellness Visit"]\nunion [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\nunion ' +
+                '[Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\nunion [Encounter: "Home Healthcare Services"]\n) ' +
+                'ValidEncounter\nwhere ValidEncounter.period during "Measurement Period"\nand ValidEncounter.isFinishedEncounter()\n')
+        cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Population Criteria 2')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('exist')
@@ -551,7 +561,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
         //Check Test Execution for second Population criteria
-        cy.get('[class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1vvwef1"]').click()
+        cy.get('[class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-151p887"]').click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Fail')
     })
 })
