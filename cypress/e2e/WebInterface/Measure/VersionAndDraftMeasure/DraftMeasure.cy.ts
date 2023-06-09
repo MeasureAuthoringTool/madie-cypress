@@ -5,7 +5,6 @@ import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
@@ -27,22 +26,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
-        //Create New Measure
+        //Create New Measure and Measure Group
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
-        OktaLogin.Login()
-
-        MeasuresPage.measureAction('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.measureDetailsTab).click()
-        cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
-        OktaLogin.Logout()
-
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
         OktaLogin.Login()
 
@@ -118,19 +103,6 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
-        OktaLogin.Login()
-
-        MeasuresPage.measureAction('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(EditMeasurePage.measureDetailsTab).click()
-        cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
-        OktaLogin.Logout()
 
         //CreateCohortMeasureGroupAPI
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
@@ -190,8 +162,23 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.log('Search Measure with measure name')
         cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).wait(1000).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
-        MeasuresPage.measureAction('edit')
+        //MeasuresPage.measureAction('edit')
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+            Utilities.waitForElementVisible('[data-testid=view-measure-' + fileContents + ']', 35000)
+            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=view-measure-' + fileContents + ']', 35000)
+            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=view-measure-' + fileContents + ']').click()
+        })
+
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)
 
@@ -201,12 +188,11 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
         //Verify Test case info after draft
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get('.TestCaseList___StyledDiv4-sc-1iefzo5-4').should('contain.text', testCaseTitle)
+        cy.get('.TestCaseList___StyledDiv4-sc-miorgt-4').should('contain.text', testCaseTitle)
         cy.get('[class="action-button"]').click()
         cy.get('[class="btn-container"]').contains('edit').click()
         cy.get(TestCasesPage.aceEditor).should('not.be.empty')
         cy.get(TestCasesPage.aceEditor).should('contain.text', 'Bundle')
         cy.log('Test case details verified successfully')
-
     })
 })
