@@ -1,16 +1,22 @@
-import {CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../../Shared/EditMeasurePage"
-import {TestCasesPage} from "../../../../../Shared/TestCasesPage"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
+import { Global } from "../../../../../Shared/Global"
 
+let testCaseDescription = 'DENOMFail' + Date.now()
+let testCasePath = 'cypress/fixtures/testCaseId'
 let measureName = 'QDMTestMeasure' + Date.now()
+let measurePath = 'cypress/fixtures/measureId'
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'test case title'
-let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let twoFiftyTwoCharacters = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr'
+
+
 
 //Skipping until QDM Test Case feature flag is removed
 describe.skip('Create Test Case Validations', () => {
@@ -218,5 +224,58 @@ describe.skip('Edit Test Case Validations', () => {
         cy.get(TestCasesPage.QDMDOBHelperTxt).should('contain.text', 'Birthdate is required')
 
     })
+
+    //dirty check validation
+    it('Validate dirty check when user attempts to navigate away from the QDM Test Case edit page', () => {
+        //Click on Edit Measure
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Click on Edit for Test Case
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //navigate to the details page
+        cy.get(TestCasesPage.elementsTab).should('exist')
+        cy.get(TestCasesPage.elementsTab).should('be.enabled')
+        cy.get(TestCasesPage.elementsTab).click()
+
+        //enter a value of the dob
+        cy.get(TestCasesPage.QDMDob).type('01/01/2000').click()
+
+        //attempt to navigate away from the test case page
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        Utilities.waitForElementVisible(Global.discardChangesConfirmationModal, 37000)
+
+        //verify that the discard modal appears
+        Global.clickOnDirtyCheckCancelChanges()
+
+        //verify that the user remains on the test case edit page
+        cy.readFile(measurePath).should('exist').then((measureId) => {
+            cy.readFile(testCasePath).should('exist').then((testCaseId) => {
+                cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + measureId + '/edit/test-cases/' + testCaseId)
+            })
+
+        })
+        //attempt to navigate away from the test case page
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        Utilities.waitForElementVisible(Global.discardChangesConfirmationModal, 37000)
+        //verify that the discard modal appears
+        Global.clickOnDirtyCheckDiscardChanges()
+        //verify that the user is, now, on the PC -> Base Configuration page
+        cy.readFile(measurePath).should('exist').then((measureId) => {
+            cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + measureId + '/edit/base-configuration')
+        })
+
+    })
+
 })
 
