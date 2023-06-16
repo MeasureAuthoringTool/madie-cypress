@@ -4,10 +4,14 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { LandingPage } from "../../../../../Shared/LandingPage"
+import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { Global } from "../../../../../Shared/Global"
+import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 
 let testCaseDescription = 'DENOMFail' + Date.now()
+let QDMTCJson = TestCaseJson.QDMTestCaseJson
 let testCasePath = 'cypress/fixtures/testCaseId'
 let measureName = 'QDMTestMeasure' + Date.now()
 let measurePath = 'cypress/fixtures/measureId'
@@ -15,8 +19,72 @@ let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'test case title'
 let testCaseSeries = 'SBTestSeries'
 let twoFiftyTwoCharacters = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr'
+let altMeasureName = ''
+let altCqlLibraryName = ''
+let measureCQL = MeasureCQL.SBTEST_CQL
+let measureScoring = 'Cohort'
 
 
+//Skipping until QDM Test Case feature flag is removed
+describe.skip('Test Case Ownership Validations for QDM Measures', () => {
+
+    beforeEach('Create measure and login', () => {
+
+        let altRandValue = (Math.floor((Math.random() * 1000) + 2))
+        altMeasureName = measureName + altRandValue
+        altCqlLibraryName = CqlLibraryName + altRandValue
+
+        //Create QDM Measure, PC and Test Case with ALT user
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, true, measureCQL, false, true)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp')
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, true)
+        OktaLogin.Login()
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(altMeasureName, altCqlLibraryName, false, true)
+
+    })
+    it('Fields on Test Case page are not editable by Non Measure Owner', () => {
+
+        //navigate to the all measures tab
+        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
+        cy.get(LandingPage.allMeasuresTab).should('be.visible')
+        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
+        cy.get(LandingPage.allMeasuresTab).should('be.enabled')
+        cy.get(LandingPage.allMeasuresTab).click()
+
+        //click on Edit button to edit measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.get(TestCasesPage.QDMDob).should('be.disabled')
+        cy.get(TestCasesPage.QDMLivingStatus).should('not.be.enabled')
+        cy.get(TestCasesPage.QDMRace).should('not.be.enabled')
+        cy.get(TestCasesPage.QDMGender).should('not.be.enabled')
+        cy.get(TestCasesPage.QDMEthnicity).should('not.be.enabled')
+
+        //Navigate to Details tab
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.testCaseTitle).should('not.be.enabled')
+        cy.get(TestCasesPage.testCaseDescriptionTextBox).should('not.be.enabled')
+        cy.get(TestCasesPage.testCaseSeriesTextBox).should('not.be.enabled')
+
+        //Navigate to Expected/Actual tab
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.enabled')
+
+    })
+})
 
 //Skipping until QDM Test Case feature flag is removed
 describe.skip('Create Test Case Validations', () => {
@@ -227,7 +295,6 @@ describe.skip('Edit Test Case Validations', () => {
 
     //dirty check validation
     it('Validate dirty check when user attempts to navigate away from the QDM Test Case edit page', () => {
-        //Click on Edit Measure
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
 

@@ -8,6 +8,8 @@ export class TestCasesPage {
 
     //QDM Test Case Demographics elements
     public static readonly QDMDob = '[id="birth-date"]'
+    public static readonly QDMLivingStatus = '[id="demographics-living-status-select-id"]'
+    public static readonly QDMLivingStatusOPtion = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiPaper-root MuiMenu-paper MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-177ic5c"]'
     public static readonly QDMRace = '[id="demographics-race-select-id"]'
     public static readonly QDMRaceOption = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
     public static readonly QDMGender = '[id="demographics-gender-select-id"]'
@@ -468,6 +470,7 @@ export class TestCasesPage {
                     expect(response.status).to.eql(201)
                     expect(response.body.id).to.be.exist
                     expect(response.body.series).to.eql(series)
+                    expect(response.body.json).to.eql(jsonValue)
                     expect(response.body.title).to.eql(title)
                     expect(response.body.description).to.eql(description)
                     cy.writeFile(testCasePath, response.body.id)

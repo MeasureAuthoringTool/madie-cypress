@@ -6,7 +6,6 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -14,9 +13,6 @@ let altMeasureName = ''
 let altCqlLibraryName = ''
 let measureCQL = MeasureCQL.SBTEST_CQL
 let measureScoring = 'Cohort'
-let TCSeries = 'SBTestSeries'
-let TCTitle = 'test case title'
-let TCDescription = 'DENOMFail1651609688032'
 
 
 describe('Measure Ownership Validations for QDM Measures', () => {
@@ -30,8 +26,6 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         //Create QDM Measure, PC and Test Case with ALT user
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, true, measureCQL, false, true)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp')
-        //Skipping until QDM Test Case feature flag is removed
-        //TestCasesPage.CreateQDMTestCaseAPI(TCTitle, TCSeries, TCDescription, '', false, true)
         OktaLogin.Login()
 
     })
@@ -80,43 +74,6 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
         cy.get(MeasureGroupPage.rateAggregation).should('not.be.enabled')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('not.be.enabled')
-
-    })
-
-    //Skipping until QDM Test Case feature flag is removed
-    it.skip('Fields on Test Case page are not editable by Non Measure Owner', () => {
-
-        //navigate to the all measures tab
-        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.visible')
-        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.enabled')
-        cy.get(LandingPage.allMeasuresTab).click()
-
-        //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        cy.get(TestCasesPage.QDMDob).should('be.disabled')
-        cy.get(TestCasesPage.QDMRace).should('not.be.enabled')
-        cy.get(TestCasesPage.QDMGender).should('not.be.enabled')
-        cy.get(TestCasesPage.QDMEthnicity).should('not.be.enabled')
-
-        //Navigate to Details tab
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseTitle).should('not.be.enabled')
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).should('not.be.enabled')
-        cy.get(TestCasesPage.testCaseSeriesTextBox).should('not.be.enabled')
-
-        //Navigate to Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.enabled')
 
     })
 })

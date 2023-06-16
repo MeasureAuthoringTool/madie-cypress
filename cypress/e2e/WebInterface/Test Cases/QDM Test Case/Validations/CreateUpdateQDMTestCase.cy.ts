@@ -125,6 +125,8 @@ describe.skip('Create and Update QDM Test Case', () => {
 
         //enter a value of the dob, Race and gender
         cy.get(TestCasesPage.QDMDob).type('01/01/2020').click()
+        cy.get(TestCasesPage.QDMLivingStatus).click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
         cy.get(TestCasesPage.QDMRace).click()
         cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
         cy.get(TestCasesPage.QDMGender).click()
@@ -148,7 +150,8 @@ describe.skip('Create and Update QDM Test Case', () => {
 
         //Navigate back to Edit test case page and assert fields
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.get('#birth-date').should('contain.value', '01/01/2020')
+        cy.get(TestCasesPage.QDMDob/*'#birth-date'*/).should('contain.value', '01/01/2020')
+        cy.get(TestCasesPage.QDMLivingStatus).should('contain.text', 'Expired')
         cy.get(TestCasesPage.QDMRace).should('contain.text', 'White')
         cy.get(TestCasesPage.QDMGender).should('contain.text', 'Male')
         cy.get(TestCasesPage.QDMEthnicity).should('contain.text', 'Not Hispanic or Latino')
