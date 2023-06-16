@@ -1,7 +1,7 @@
 import { Header } from "./Header"
 import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
-
+import { v4 as uuidv4 } from 'uuid'
 
 export class CQLLibraryPage {
 
@@ -147,6 +147,7 @@ export class CQLLibraryPage {
                     'cqlLibraryName': CqlLibraryName,
                     'model': 'QI-Core v4.1.1',
                     'createdBy': user,
+                    "librarySetId": uuidv4(),
                     "description": "description",
                     "publisher": CQLLibraryPublisher,
                     'cql': "",
@@ -196,6 +197,7 @@ export class CQLLibraryPage {
                         "using QICore version '4.1.1'\n" +
                         "\n" +
                         "valueset \"ONC Administrative Sex\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1'",
+                    "librarySetId": uuidv4(),
                     "description": "description",
                     "publisher": CQLLibraryPublisher,
                     'createdBy': user
@@ -234,6 +236,7 @@ export class CQLLibraryPage {
                     'model': 'QI-Core v4.1.1',
                     'cql': "library TESTMEASURE0000000003 version '0.0.000'\nusing FHIR version '4.0.1'\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\nparameter \"Measurement Period\" Interval<DateTimeTest>\ncontext Patient\ndefine \"SDE Ethnicity\":\nSDE.\"SDE Ethnicity\"\ndefine \"SDE Payer\":\nSDE.\"SDE Payer\"\ndefine \"SDE Race\":\nSDE.\"SDE Race\"\ndefine \"SDE Sex\":\nSDE.\"SDE Sex\"",
                     "description": "description",
+                    "librarySetId": uuidv4(),
                     "publisher": CQLLibraryPublisher,
                     'cqlErrors': true
                 }
