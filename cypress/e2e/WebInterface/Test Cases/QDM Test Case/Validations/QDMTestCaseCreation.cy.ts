@@ -5,11 +5,13 @@ import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let measurePath = 'cypress/fixtures/measureId'
+let mCQLForElementsValidation = MeasureCQL.QDMTestCaseCQLFullElementSection
 
 let measureName = 'ProportionPatient' + Date.now()
 let CqlLibraryName = 'ProportionPatient' + Date.now()
@@ -130,7 +132,7 @@ let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     '\n' +
     'define "October 1 Two Years Prior to the Measurement Period":\n' +
     '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)'
-
+//skipping these tests until the QDM test case flag is removed
 describe.skip('Validating the creation of QDM Test Case', () => {
 
     beforeEach('Create Measure', () => {
@@ -183,5 +185,89 @@ describe.skip('Validating the creation of QDM Test Case', () => {
         cy.readFile(measurePath).should('exist').then((measureId) => {
             cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + measureId + '/edit/test-cases')
         })
+    })
+})
+//skipping these tests until the QDM test case flag is removed
+describe.skip('Validating the Elements section on Test Cases', () => {
+    beforeEach('Create Measure', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, mCQLForElementsValidation, false, false,
+            '2023-01-01', '2024-01-01')
+
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Login()
+    })
+
+    afterEach('Clean up', () => {
+
+        OktaLogin.Logout()
+
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+    it('Verify elements and their subsections / cards', () => {
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //create test case
+        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+
+        //navigate to the test case's edit page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //confirm page and elements tabs / objects have loaded on page
+        Utilities.waitForElementVisible(TestCasesPage.ElementsSubTabHeading, 37000)
+        Utilities.waitForElementVisible(TestCasesPage.EncounterElementTab, 37000)
+
+        //click on Encounter element sub tab
+        cy.get(TestCasesPage.EncounterElementTab).click()
+        //cards under Encounter appear
+        cy.get(TestCasesPage.EncounterOSSCard).should('be.visible')
+        cy.get(TestCasesPage.EncounterEDVCard).should('be.visible')
+        cy.get(TestCasesPage.EncounterEICard)
+            .first()
+            .should('be.visible')
+        cy.get(TestCasesPage.EncounterOSCard).scrollIntoView().should('be.visible')
+        cy.get(TestCasesPage.EncounterEICard)
+            .last()
+            .should('be.visible')
+
+        //click on Laboratory element sub tab
+        cy.get(TestCasesPage.LaboratoryElementTab).click()
+        //cards under Laboratory appear
+        cy.get(TestCasesPage.LaboratoryHLTCard).should('be.visible')
+        cy.get(TestCasesPage.LaboratoryGLTCard).should('be.visible')
+        cy.get(TestCasesPage.LaboratoryBLTCard).should('be.visible')
+        cy.get(TestCasesPage.LaboratoryWHBCCLTCard).should('be.visible')
+        cy.get(TestCasesPage.LaboratorySLTCard).scrollIntoView().should('be.visible')
+        cy.get(TestCasesPage.LaboratoryPLTCard).scrollIntoView().should('be.visible')
+        cy.get(TestCasesPage.LaboratoryCLTCard).scrollIntoView().should('be.visible')
+
+        //click on Characteristic element sub tab
+        cy.get(TestCasesPage.CharacteristicElementTab).click()
+        //cards under Characteristic appear
+        cy.get(TestCasesPage.CharacteristicMAPCard).should('be.visible')
+        cy.get(TestCasesPage.CharacteristicPayerCard).should('be.visible')
+        cy.get(TestCasesPage.CharacteristicMFFSPCard).should('be.visible')
+
+        //click on Characteristic element sub tab
+        cy.get(TestCasesPage.PhysicalExamElementTab).click()
+        //cards under Characteristic appear
+        cy.get(TestCasesPage.PhysicalExamOSbyPOCard).should('be.visible')
+        cy.get(TestCasesPage.PhysicalExameBWCard).should('be.visible')
+        cy.get(TestCasesPage.PhysicalExamSBPCard).should('be.visible')
+        cy.get(TestCasesPage.PhysicalExamRRCard).should('be.visible')
+        cy.get(TestCasesPage.PhysicalExamHRCard).scrollIntoView().should('be.visible')
+        cy.get(TestCasesPage.PhysicalExamBTCard).scrollIntoView().should('be.visible')
     })
 })

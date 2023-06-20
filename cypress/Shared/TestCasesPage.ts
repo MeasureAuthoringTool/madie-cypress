@@ -20,6 +20,41 @@ export class TestCasesPage {
     //QDM Test Case Demographics herlper text elements
     public static readonly QDMDOBHelperTxt = '[id="birth-date-helper-text"]'
 
+    //QDM Test Case Elements elements / objects -- sub tabs sections
+    public static readonly ElementsSubTabHeading = '[class="test-case-tab-heading"]'
+    public static readonly EncounterElementTab = '[data-testid="elements-tab-encounter"]'
+    public static readonly LaboratoryElementTab = '[data-testid="elements-tab-laboratory_test"]'
+    public static readonly CharacteristicElementTab = '[data-testid="elements-tab-patient_characteristic"]'
+    public static readonly PhysicalExamElementTab = '[data-testid="elements-tab-physical_exam"]'
+
+    //QDM Test Case Elements elements / objects -- Encounter
+    public static readonly EncounterOSSCard = '[data-testid="data-type-Encounter, Performed: Outpatient Surgery Service"]'
+    public static readonly EncounterEDVCard = '[data-testid="data-type-Encounter, Performed: Emergency Department Visit"]'
+    public static readonly EncounterEICard = '[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]'
+    public static readonly EncounterOSCard = '[data-testid="data-type-Encounter, Performed: Observation Services"]'
+
+    //QDM Test Case Elements elements / objects -- Laboratory
+    public static readonly LaboratoryHLTCard = '[data-testid="data-type-Laboratory Test, Performed: Hematocrit lab test"]'
+    public static readonly LaboratoryGLTCard = '[data-testid="data-type-Laboratory Test, Performed: Glucose lab test"]'
+    public static readonly LaboratoryBLTCard = '[data-testid="data-type-Laboratory Test, Performed: Bicarbonate lab test"]'
+    public static readonly LaboratoryWHBCCLTCard = '[data-testid="data-type-Laboratory Test, Performed: White blood cells count lab test"]'
+    public static readonly LaboratorySLTCard = '[data-testid="data-type-Laboratory Test, Performed: Sodium lab test"]'
+    public static readonly LaboratoryPLTCard = '[data-testid="data-type-Laboratory Test, Performed: Potassium lab test"]'
+    public static readonly LaboratoryCLTCard = '[data-testid="data-type-Laboratory Test, Performed: Creatinine lab test"]'
+
+    //QDM Test Case Elements elements / objects -- Characteristic
+    public static readonly CharacteristicMAPCard = '[data-testid="data-type-Patient Characteristic Payer: Medicare Advantage payer"]'
+    public static readonly CharacteristicPayerCard = '[data-testid="data-type-Patient Characteristic Payer: Payer"]'
+    public static readonly CharacteristicMFFSPCard = '[data-testid="data-type-Patient Characteristic Payer: Medicare FFS payer"]'
+
+    //QDM Test Case Elements elements / objects -- Physical Exam
+    public static readonly PhysicalExamOSbyPOCard = '[data-testid="data-type-Physical Exam, Performed: Oxygen Saturation by Pulse Oximetry"]'
+    public static readonly PhysicalExameBWCard = '[data-testid="data-type-Physical Exam, Performed: Body weight"]'
+    public static readonly PhysicalExamSBPCard = '[data-testid="data-type-Physical Exam, Performed: Systolic Blood Pressure"]'
+    public static readonly PhysicalExamRRCard = '[data-testid="data-type-Physical Exam, Performed: Respiratory Rate"]'
+    public static readonly PhysicalExamHRCard = '[data-testid="data-type-Physical Exam, Performed: Heart Rate"]'
+    public static readonly PhysicalExamBTCard = '[data-testid="data-type-Physical Exam, Performed: Body temperature"]'
+
     //QDM misc test case page objects
     public static readonly QDMTCSaveBtn = '[data-testid="edit-test-case-save-button"]'
     public static readonly tcSaveSuccessMsg = '[class="toast success"]'
