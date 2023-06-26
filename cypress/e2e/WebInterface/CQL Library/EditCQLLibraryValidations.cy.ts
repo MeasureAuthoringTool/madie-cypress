@@ -6,7 +6,8 @@ import { Header } from "../../../Shared/Header"
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
-
+var CQLLibraryNameAlt = ""
+let CQLLibraryPublisherAlt = 'ICFerALTUser'
 
 describe('Edit CQL Library validations', () => {
 
@@ -223,5 +224,45 @@ describe('Edit CQL Library validations', () => {
                 })
             })
         })
+    })
+})
+describe('CQL Library Search Validations -- User ownership', () => {
+
+    beforeEach('Login', () => {
+        var randValue = (Math.floor((Math.random() * 1000) + 1))
+        CQLLibraryNameAlt = 'TestLibrary' + Date.now() + randValue
+        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryNameAlt, CQLLibraryPublisherAlt, false, true)
+
+
+    })
+    afterEach('Logout', () => {
+
+        OktaLogin.Logout()
+
+    })
+    it('Owner is the same as current user, library will appear in, both, "All Libraries" and "My Libraries" lists', () => {
+        //log in as user that does not own the Library
+        OktaLogin.AltLogin()
+
+        //navigate to the main CQL Library list page
+        cy.get(Header.cqlLibraryTab).should('exist')
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
+        cy.get(Header.cqlLibraryTab).click()
+        cy.wait('@libraries', { timeout: 60000 })
+
+        //ensure we are on the My Libraries tab
+        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
+        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
+        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+
+        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
+
+        cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
+        cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
+        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+
+        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
+
     })
 })
