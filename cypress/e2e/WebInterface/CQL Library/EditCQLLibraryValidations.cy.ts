@@ -226,7 +226,7 @@ describe('Edit CQL Library validations', () => {
         })
     })
 })
-describe('CQL Library Search Validations -- User ownership', () => {
+describe('CQL Library Validations -- User ownership', () => {
 
     beforeEach('Login', () => {
         var randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -240,7 +240,7 @@ describe('CQL Library Search Validations -- User ownership', () => {
         OktaLogin.Logout()
 
     })
-    it('Owner is the same as current user, library will appear in, both, "All Libraries" and "My Libraries" lists', () => {
+    it('Owner is the same as current user, library will appear in, both, "All Libraries" and "My Libraries" default / stand-alone lists', () => {
         //log in as user that does not own the Library
         OktaLogin.AltLogin()
 
