@@ -1,12 +1,12 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {Header} from "../../../../Shared/Header"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { Header } from "../../../../Shared/Header"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -18,7 +18,7 @@ let measureCQL = MeasureCQL.SBTEST_CQL
 
 describe('Measure Review Info Page', () => {
 
-    before('Create Measure and Measure Group',() => {
+    before('Create Measure and Measure Group', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
