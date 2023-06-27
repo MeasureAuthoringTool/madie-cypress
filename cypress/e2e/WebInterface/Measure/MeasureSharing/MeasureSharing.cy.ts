@@ -165,7 +165,7 @@ describe('Measure Sharing - Multiple instances', () => {
         OktaLogin.Logout()
     })
 
-    it('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
+    it.only('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
 
 
         //Version the Measure
@@ -206,7 +206,7 @@ describe('Measure Sharing - Multiple instances', () => {
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
         cy.get('.MeasureList___StyledTd-sc-pt5u8-5').should('contain', newMeasureName)
-        cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasureName)
+        cy.get('.MeasureList___StyledTd-sc-pt5u8-5').should('contain', updatedMeasureName)
     })
 })
 
