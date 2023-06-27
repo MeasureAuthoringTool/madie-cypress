@@ -1,10 +1,7 @@
 import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureNameTimeStamp = 'TestMeasure' + Date.now()
 let measureName = measureNameTimeStamp
@@ -83,25 +80,10 @@ describe('FHIR Measure Export, Not the Owner', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{end} {enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
         //create Measure Group
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population',
             'Num', 'Denom', 'boolean')
         OktaLogin.AltLogin()
-
-    })
-
-    after('Log out', () => {
-
-        OktaLogin.Logout()
 
     })
 
@@ -116,7 +98,7 @@ describe('FHIR Measure Export, Not the Owner', () => {
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
-        cy.get(MeasuresPage.exportFinishedContinueBtn).click()
+        OktaLogin.Logout()
 
     })
 

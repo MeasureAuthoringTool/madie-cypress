@@ -206,7 +206,7 @@ describe('Measure Transfer - Multiple instances', () => {
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
         cy.get('.MeasureList___StyledTd-sc-pt5u8-5').should('contain', newMeasureName)
-        cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasureName)
+        cy.get('.MeasureList___StyledTd-sc-pt5u8-5').should('contain', updatedMeasureName)
     })
 })
 

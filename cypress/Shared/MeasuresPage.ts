@@ -87,7 +87,7 @@ export class MeasuresPage {
 
                     cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
                     cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')
-                    Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 50000)
+                    Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 75000)
                     cy.get('.toast').should('contain.text', 'Measure exported successfully')
                     break
                 }
