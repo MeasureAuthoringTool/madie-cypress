@@ -72,7 +72,7 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     'define "Denom":\n' +
     'true'
 
-describe.skip('FHIR Measure Export, Not the Owner', () => {
+describe('FHIR Measure Export, Not the Owner', () => {
 
     deleteDownloadsFolderBeforeAll()
 
