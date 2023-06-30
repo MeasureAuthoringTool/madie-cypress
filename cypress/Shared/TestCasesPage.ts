@@ -3,6 +3,14 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 
 export class TestCasesPage {
+    //observaion fields
+    public static readonly denom0Observation = '[id="denominatorObservation0-expected-cb"]'
+    public static readonly denom1Observation = '[id="denominatorObservation1-expected-cb"]'
+    public static readonly denom2Observation = '[id="denominatorObservation2-expected-cb"]'
+    public static readonly numer0Observation = '[id="numeratorObservation0-expected-cb"]'
+    public static readonly numer1Observation = '[id="numeratorObservation1-expected-cb"]'
+    public static readonly numer2Observation = '[id="numeratorObservation2-expected-cb"]'
+
     //QDM Bread Crumb
     public static readonly testCasesBCLink = '[data-testid="qdm-test-cases"]'
 
