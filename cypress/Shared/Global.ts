@@ -33,5 +33,11 @@ export class Global {
         cy.get(this.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
         cy.get(this.keepWorkingCancel).click()
     }
+    public static clickDiscardAndKeepWorking(): void {
+
+        cy.get(this.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
+        cy.get(this.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(this.keepWorkingCancel).click()
+    }
 
 }

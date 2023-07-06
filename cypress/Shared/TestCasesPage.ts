@@ -67,6 +67,7 @@ export class TestCasesPage {
     public static readonly QDMTCSaveBtn = '[data-testid="edit-test-case-save-button"]'
     public static readonly tcSaveSuccessMsg = '[class="toast success"]'
     public static readonly editTestCaseDescriptionInlineError = '[data-testid="test-case-description-helper-text"]'
+    public static readonly QDMTcDiscardChangesButton = '[data-testid="ds-btn"]'
 
     //TC error concerning CQL and PC mismatch
     public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
