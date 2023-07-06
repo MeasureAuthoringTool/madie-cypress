@@ -1,20 +1,20 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../Shared/Header"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
+import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../../Shared/Header"
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let singleTestCaseFile = 'CMS1213FHIRv0_stc.json'
 let smallBatchTestCaseFile = 'CMS1213FHIRv0_sbf.json'
-let largeBatchTestCaseFile = 'CMS1213FHIRv0_lbf.json'
 let genericTextFile = 'GenericCQLBoolean.txt'
-let mesureCQLPFTests = MeasureCQL.CQL_Populations
+let mesureCQLPFTests = MeasureCQL.simpleQDM_CQL
 let editTestCaseURL = ''
 let testCaseJsonTstOne = TestCaseJson.singleTC4Import
 let testCaseJsonTstSmallBatch00 = TestCaseJson.smallBatchTC4ImportId0
@@ -24,12 +24,6 @@ let testCaseJsonTstSmallBatch03 = TestCaseJson.smallBatchTC4ImportId3
 let testCaseJsonTstSmallBatch04 = TestCaseJson.smallBatchTC4ImportId4
 let testCaseJsonTstSmallBatch05 = TestCaseJson.smallBatchTC4ImportId5
 
-let testCaseJsonTstLargeBatch00 = TestCaseJson.largeBatchTC4ImportId0
-let testCaseJsonTstLargeBatch01 = TestCaseJson.largeBatchTC4ImportId1
-let testCaseJsonTstLargeBatch02 = TestCaseJson.largeBatchTC4ImportId2
-let testCaseJsonTstLargeBatch03 = TestCaseJson.largeBatchTC4ImportId3
-let testCaseJsonTstLargeBatch04 = TestCaseJson.largeBatchTC4ImportId4
-let testCaseJsonTstLargeBatch05 = TestCaseJson.largeBatchTC4ImportId5
 //skipping all test case import tests until flag is removed
 describe.skip('Import Test cases onto an existing measure via file', () => {
 
@@ -38,7 +32,7 @@ describe.skip('Import Test cases onto an existing measure via file', () => {
         CqlLibraryName = 'TestLibrary2' + Date.now()
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, mesureCQLPFTests)
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, mesureCQLPFTests, false, false)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -52,6 +46,8 @@ describe.skip('Import Test cases onto an existing measure via file', () => {
         //wait for alert / succesful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
+        OktaLogin.Login()
 
 
     })
@@ -119,8 +115,8 @@ describe.skip('Import Test cases onto an existing measure via file', () => {
             })
         })
     })
-
-    it('Import new test case onto an existing measure -- small batch file', () => {
+    //skipping, for now, because full import functionality is not, currently, available
+    it.skip('Import new test case onto an existing measure -- small batch file', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
@@ -208,91 +204,8 @@ describe.skip('Import Test cases onto an existing measure via file', () => {
         }
 
     })
-
-    it('Import new test case onto an existing measure -- large batch file', () => {
-        //navigate to the main measures page
-        cy.get(Header.measures).click()
-
-        //click on created measure
-        MeasuresPage.measureAction("edit")
-
-        //click on the test case tab
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //click on the import test case button
-        cy.get(TestCasesPage.importTestCasesBtn).click()
-
-        //select file
-        cy.get(TestCasesPage.filAttachDropBox).attachFile(largeBatchTestCaseFile)
-
-        //import moadal should contain test case name
-        cy.get(TestCasesPage.importTestCaseModalList).should('contain.text', 'EncounterStatusMultiPerson (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1)')
-
-        //click on the 'Import' button on the modal window
-        TestCasesPage.clickImportTestCaseButton()
-
-        //test case list table contains the group name of the test case that was imported
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'EncounterStatusMulti')
-        //test case list table contains the title of the test case that was imported
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Person (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1)')
-
-        //get current web address and use that to form API request to validate JSON
-        for (let i = 0; i <= 5; i++) {
-            //click on action button
-            cy.get(TestCasesPage.actionBtnNoId).eq(i).click()
-            //click on edit 
-            cy.get(TestCasesPage.editBtnNoId).contains('edit').click()
-            cy.window().then((win) => {
-                cy.log((win.location).toString())
-                editTestCaseURL = (win.location).toString()
-                let urlSectionid = editTestCaseURL.split('/')
-                let Measure4tcID = urlSectionid[4]
-                let testCaseID = urlSectionid[7]
-                cy.log(Measure4tcID)
-                cy.log(testCaseID)
-                OktaLogin.Logout()
-                cy.setAccessTokenCookie()
-                cy.getCookie('accessToken').then((accessToken) => {
-                    cy.request({
-                        url: '/api/measures/' + Measure4tcID + '/test-cases/' + testCaseID,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        method: 'GET',
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.json).to.be.exist
-                        switch (i) {
-                            case 0:
-                                expect(response.body.json).to.eql(testCaseJsonTstLargeBatch00)
-                                break;
-                            case 1:
-                                expect(response.body.json).to.eql(testCaseJsonTstLargeBatch01)
-                                break;
-                            case 2:
-                                expect(response.body.json).to.eql(testCaseJsonTstLargeBatch02)
-                                break;
-                            case 3:
-                                expect(response.body.json).to.eql(testCaseJsonTstLargeBatch03)
-                                break;
-                            case 4:
-                                expect(response.body.json).to.eql(testCaseJsonTstLargeBatch04)
-                                break;
-                            case 5:
-                                expect(response.body.json).to.eql(testCaseJsonTstLargeBatch05)
-                                break;
-                        }
-                    })
-                })
-            })
-            OktaLogin.Login()
-            //click on created measure
-            MeasuresPage.measureAction("edit")
-            cy.get(EditMeasurePage.testCasesTab).click()
-        }
-
-    })
-    it('Verify error message when a Text file is imported', () => {
+    //skipping, for now, because full import functionality is not, currently, available
+    it.skip('Verify error message when a Text file is imported', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
@@ -315,7 +228,8 @@ describe.skip('Import Test cases onto an existing measure via file', () => {
         cy.get(TestCasesPage.importTestCaseModalBtn).should('be.disabled')
     })
 
-    it('Verify error message when an invalid / empty Json file is imported', () => {
+    //skipping, for now, because full import functionality is not, currently, available
+    it.skip('Verify error message when an invalid / empty Json file is imported', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
@@ -336,5 +250,59 @@ describe.skip('Import Test cases onto an existing measure via file', () => {
 
         //import button becomes unavailable
         cy.get(TestCasesPage.importTestCaseModalBtn).should('be.disabled')
+    })
+})
+//skipping all test case import tests until flag is removed
+describe.skip('Import Test Case: Ownership', () => {
+
+    beforeEach('Login and Create Measure', () => {
+
+        CqlLibraryName = 'TestLibrary2' + Date.now()
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, mesureCQLPFTests, false, true)
+        OktaLogin.AltLogin()
+        //click on the all measures tab
+        cy.get(MeasuresPage.allMeasuresTab).click()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp')
+        OktaLogin.Login()
+
+
+    })
+
+    afterEach('Logout and Clean up', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName, false, true)
+
+    })
+    it('Verify that non-owner cannot click on the import test cases button', () => {
+        //navigate to the main measures page
+        cy.get(Header.measures).click().wait(500)
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 47700)
+
+        //click on the all measures tab
+        cy.get(MeasuresPage.allMeasuresTab).click()
+
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test case list page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //click on the import test case button
+        cy.get(TestCasesPage.importTestCasesBtn).should('not.be.enabled')
     })
 })

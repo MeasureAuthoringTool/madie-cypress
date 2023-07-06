@@ -10,7 +10,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import {Header} from "../../../../Shared/Header";
+import {Header} from "../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -25,7 +25,7 @@ let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 
-describe('Measure Sharing', () => {
+describe('Measure Transfer', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     let newMeasureName = measureName + randValue
@@ -40,17 +40,17 @@ describe('Measure Sharing', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, false, true)
         OktaLogin.Logout()
     })
 
-    it('Verify shared Measure is viewable under My Measures tab', () => {
+    it('Verify transferred Measure is viewable under My Measures tab', () => {
 
         //Share Measure with ALT User
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    url: '/api/measures/' + id + '/ownership?userid=' + harpUserALT,
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': measureSharingAPIKey
@@ -59,7 +59,7 @@ describe('Measure Sharing', () => {
 
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Measure successfully.')
                 })
             })
         })
@@ -71,13 +71,13 @@ describe('Measure Sharing', () => {
 
     })
 
-    it('Verify Measure can be edited by the shared user', () => {
+    it('Verify Measure can be edited by the transferred user', () => {
 
         //Share Measure with ALT User
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    url: '/api/measures/' + id + '/ownership?userid=' + harpUserALT,
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': measureSharingAPIKey
@@ -86,7 +86,7 @@ describe('Measure Sharing', () => {
 
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Measure successfully.')
                 })
             })
         })
@@ -138,7 +138,7 @@ describe('Measure Sharing', () => {
     })
 })
 
-describe('Measure Sharing - Multiple instances', () => {
+describe('Measure Transfer - Multiple instances', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     let newMeasureName = measureName + randValue
@@ -165,7 +165,7 @@ describe('Measure Sharing - Multiple instances', () => {
         OktaLogin.Logout()
     })
 
-    it.only('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
+    it('Verify all instances in the Measure set (Version and Draft) are Transferred to the user', () => {
 
 
         //Version the Measure
@@ -188,7 +188,7 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    url: '/api/measures/' + id + '/ownership?userid=' + harpUserALT,
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': measureSharingAPIKey
@@ -197,7 +197,7 @@ describe('Measure Sharing - Multiple instances', () => {
 
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Measure successfully.')
                 })
             })
         })
@@ -210,7 +210,7 @@ describe('Measure Sharing - Multiple instances', () => {
     })
 })
 
-describe('Delete Test Case with Shared user', () => {
+describe('Delete Test Case with Transferred user', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     let newMeasureName = measureName + randValue
@@ -226,17 +226,17 @@ describe('Delete Test Case with Shared user', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure(measureName, cqlLibraryName, false, true)
         OktaLogin.Logout()
     })
 
-    it('Verify Test Case can be deleted by the shared user', () => {
+    it('Verify Test Case can be deleted by the Transferred user', () => {
 
         //Share Measure with ALT User
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    url: '/api/measures/' + id + '/ownership?userid=' + harpUserALT,
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': measureSharingAPIKey
@@ -245,7 +245,7 @@ describe('Delete Test Case with Shared user', () => {
 
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Measure successfully.')
                 })
             })
         })

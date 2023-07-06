@@ -6,7 +6,6 @@ import { Utilities } from "./Utilities"
 import { v4 as uuidv4 } from 'uuid'
 
 export class MeasureGroupPage {
-
     public static readonly pcErrorAlertToast = '[data-testid="population-criteria-error"]'
 
     //QDM population criteria
@@ -21,6 +20,16 @@ export class MeasureGroupPage {
     public static readonly QDMAddPopCriteriaBtn = '[data-testid="add-measure-group-button"]'
     public static readonly QDMPopCriteriaSaveSuccessMsg = '[data-testid="population-criteria-success"]'
     public static readonly QDMIPPCHelperText = '[data-testid="population-select-initial-population-select-helper-text"]'
+
+    //QDM Supplemental Data Elements and Risk Adjustment variables
+    public static readonly QDMSupplementalDataElementsTab = '[id="sideNavMeasurePopulationsSupplementalData"]'
+    public static readonly QDMSupplementalDataDescriptionTextBox = '[data-testid=supplementalDataDescription]'
+    public static readonly QDMSupplementalDataDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
+    public static readonly QDMSupplementalDataElementsListBox = '[id="supplemental-data-listbox"]'
+    public static readonly QDMSaveSupplementalDataElements = '[data-testid="measure-Supplemental Data-save"]'
+    public static readonly QDMSupplementalDataDefinitionTextBox = '[id="supplemental-data"]'
+    public static readonly QDMRiskAdjustmentDescriptionTextBox = '[data-testid=riskAdjustmentDescription]'
+    public static readonly QDMRiskAdjustmentDefinitionTextBox = '[id="risk-adjustment"]'
 
     //mismatch CQL error
     public static readonly CQLPCMismatchError = '[class="madie-alert error"]'
@@ -75,7 +84,7 @@ export class MeasureGroupPage {
     public static readonly rateAggregation = '[data-testid="rateAggregationText"]'
     public static readonly improvementNotationSelect = '[id="improvement-notation-select"]'
     public static readonly measureReportingSaveBtn = '[data-testid="measure-Reporting-save"]'
-    public static readonly successfulSaveMeasureReportingMsg = '[class="toast success"]'
+    public static readonly successfulSaveMsg = '[class="toast success"]'
     //Measure Group Type
     public static readonly measureGroupTypeSelect = '[data-testid="measure-group-type-dropdown"]'
     public static readonly measureGroupTypeCheckbox = '[id="measure-group-type"]'
@@ -210,6 +219,8 @@ export class MeasureGroupPage {
     public static readonly qdmBCCriteriaReqAlertMsg = '[data-testid="error-alerts"]'
 
     //Risk Adjustment variables
+    public static readonly RAPage = '[data-testid="risk-adjustment"]'
+    public static readonly RAPageContainer = '[class="risk-container"]'
     public static readonly riskAdjustmentDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
     public static readonly riskAdjustmentDefinitionDropdown = '[id="risk-adjustment-listbox"]'
     public static readonly riskAdjustmentTextBox = '[class="risk-description"]'
@@ -219,9 +230,11 @@ export class MeasureGroupPage {
     public static readonly riskAdjustmentSaveSuccessMsg = '[class="toast success"]'
 
     //Supplemental data elements
+    public static readonly SDEPageContent = '[class="content"]'
+    public static readonly SDEContainer = '[class="sc-fEOsli hQkopF"]'
     public static readonly supplementalDataDefinitionSelect = '[data-testid=supplementalDataElements]'
     public static readonly supplementalDataDefinitionDropdown = '#supplementalDataElements-listbox'
-    public static readonly supplementalDataDefinitionDescriptionTextBox = '[class="sc-crXcEl cAFOFV"]'
+    public static readonly supplementalDataDefinitionDescriptionTextBox = '[class="text-area-variable"]'
     public static readonly saveSupplementalDataElements = '[data-testid="supplementalDataElement-save"]'
     public static readonly supplementalDataElementsSaveSuccessMsg = '[data-testid="supplementalDataElement-success"]'
     public static readonly removeCloseDefinitionSelection = '[data-testid="CancelIcon"]'

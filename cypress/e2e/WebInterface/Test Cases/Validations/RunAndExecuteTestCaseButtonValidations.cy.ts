@@ -54,7 +54,7 @@ describe('Run / Execute Test Case button validations', () => {
         })
 
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{home}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('adjfajsdsdjf')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('adjfajsdsdjf{}')
 
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
@@ -534,8 +534,18 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         //Click on Run Test button and verify the text on Highlighting tab
         cy.get(TestCasesPage.runTestButton).click()
-        cy.get(TestCasesPage.testCalculationResults).should('include.text', 'Population Criteria 1\ndefine fluent function "isFinishedEncounter"(Enc Encounter):\n(Enc E where E.status = \'finished\') is not null')
-        cy.get(TestCasesPage.testCalculationResults).should('include.text', 'Population Criteria 2')
+        cy.get(TestCasesPage.testCalculationResults)
+            .find('[data-statement-name="Initial Population"]')
+            .should('contain.text', 'define "Initial Population"')
+            .should('contain.text', 'exists')
+            .should('contain.text', '"Qualifying Encounters"')
+        cy.get(TestCasesPage.testCalculationResults)
+            .find('[data-statement-name="Qualifying Encounters"]')
+            .should('contain.text', '\ndefine "Qualifying Encounters":\n(\n[Encounter: "Office Visit"]\nunion [Encounter: ' +
+                '"Annual Wellness Visit"]\nunion [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\nunion ' +
+                '[Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\nunion [Encounter: "Home Healthcare Services"]\n) ' +
+                'ValidEncounter\nwhere ValidEncounter.period during "Measurement Period"\nand ValidEncounter.isFinishedEncounter()\n')
+        cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Population Criteria 2')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('exist')
@@ -551,7 +561,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
         //Check Test Execution for second Population criteria
-        cy.get('[class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1vvwef1"]').click()
+        cy.get('[class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-151p887"]').click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Fail')
     })
 })
@@ -1137,16 +1147,18 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm warning message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'' +
-            'Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'' +
+            'Warning: Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)' +
+            'Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
         //attempt to click on 'Run Test Case' to run the test case via the edit page
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click()
 
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'' +
-            'Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'' +
+            'Warning: Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)' +
+            'Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
 
     })
 
@@ -1266,7 +1278,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm error message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'All resources must have an IdAll resources must have an IdNo code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdError: All resources must have an IdWarning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0')
 
         //the 'Run Test Case' button, to run the test case, is unavailable
         cy.get(TestCasesPage.runTestButton).should('exist')
@@ -1386,7 +1398,9 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm error message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'All resources must have an IdAll resources must have an IdCodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdError: All resources must have an IdWarning: CodeSystem is unknown and can\'t be validated: ' +
+            'http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'Warning: Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' ' +
+            '(http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0')
 
         //the 'Run Test Case' button, to run the test case, is unavailable
         cy.get(TestCasesPage.runTestButton).should('exist')

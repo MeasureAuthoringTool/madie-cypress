@@ -8,11 +8,30 @@ export class Global {
     public static readonly discardChangesConfirmationText = '[class="dialog-warning-body"]'
     public static readonly keepWorkingCancel = '[data-testid="discard-dialog-cancel-button"]'
 
-    public static clickOnDiscardChanges () : void {
+    public static clickOnDiscardChanges(): void {
 
         cy.get(this.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
         cy.get(this.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
         cy.get(this.discardChangesContinue).click()
+    }
+    public static clickOnCancelChanges(): void {
+
+        cy.get(this.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
+        cy.get(this.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(this.keepWorkingCancel).click()
+    }
+
+    public static clickOnDirtyCheckDiscardChanges(): void {
+
+        cy.get(this.dirtCheckModal).should('contain.text', 'Discard Changes?')
+        cy.get(this.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(this.discardChangesContinue).click()
+    }
+    public static clickOnDirtyCheckCancelChanges(): void {
+
+        cy.get(this.dirtCheckModal).should('contain.text', 'Discard Changes?')
+        cy.get(this.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(this.keepWorkingCancel).click()
     }
 
 }

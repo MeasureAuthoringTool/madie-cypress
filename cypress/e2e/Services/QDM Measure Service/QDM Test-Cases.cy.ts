@@ -11,8 +11,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { Environment } from "../../../Shared/Environment"
 
-
-let harpUser = Environment.credentials().harpUserALT
+let harpUser = Environment.credentials().harpUser
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
@@ -28,6 +27,11 @@ let TCSeries = 'SBTestSeries'
 let TCTitle = 'test case title'
 let TCDescription = 'DENOMFail1651609688032'
 let TCJson = TestCaseJson.QDMTestCaseJson
+let TCJsonNoDOB = TestCaseJson.QDMTestCaseJsonNoDOB
+let TCJsonNullDOB = TestCaseJson.QDMTestCaseJsonNullDOB
+let TCJsonDOBWrongFormat = TestCaseJson.QDMTestCaseJsonWrongFormat
+let TCJsonDOBInvalidDNE = TestCaseJson.QDMTestCaseJsonInvalidDNE
+let TCJsonDOBInvalidNLE = TestCaseJson.QDMTestCaseJsonInvalidNLE
 //Skipping until feature flag for QDM Test case is removed
 describe.skip('Test Case population values based on Measure Group population definitions', () => {
     beforeEach('Create Measure and measure group', () => {
@@ -94,10 +98,6 @@ describe.skip('Test Case population values based on Measure Group population def
                         "name": TCName,
                         "title": TCTitle,
                         "series": TCSeries,
-                        "createdAt": "2023-05-22T18:14:37.791Z",
-                        "createdBy": "SBXDV.bwelch",
-                        "lastModifiedAt": "2023-05-22T18:14:37.791Z",
-                        "lastModifiedBy": "SBXDV.bwelch",
                         "description": TCDescription,
                         "json": TCJson,
                     }
@@ -198,7 +198,7 @@ describe.skip('Test Case population values based on Measure Group population def
         Utilities.deleteMeasure(measureName, cqlLibraryName)
 
     })
-    it('Test Case population value check boxes match that of the measure group definitons -- all are defined', () => {
+    it.skip('Test Case population value check boxes match that of the measure group definitons -- all are defined', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
@@ -213,6 +213,7 @@ describe.skip('Test Case population values based on Measure Group population def
                         expect(response.body.id).to.eql(testCaseId)
                         expect(response.body.series).to.eql(TCSeries)
                         expect(response.body.json).to.be.exist
+                        expect(response.body.json).to.eql(TCJson)
                         expect(response.body.title).to.eql(TCTitle)
                         expect(response.body.groupPopulations[0].populationValues[0].name).to.eq('initialPopulation')
                         expect(response.body['groupPopulations'][0].populationValues[1].name).to.eq('denominator')
@@ -278,6 +279,7 @@ describe.skip('Measure Service: Test Case Endpoints: Create and Edit', () => {
                     expect(response.body.title).to.eql(title)
                     expect(response.body.description).to.eql(description)
                     expect(response.body.json).to.be.exist
+                    expect(response.body.json).to.eql(TCJson)
                     cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
                 })
             })
@@ -308,6 +310,7 @@ describe.skip('Measure Service: Test Case Endpoints: Create and Edit', () => {
                         expect(response.status).to.eql(200)
                         expect(response.body.id).to.eql(testcaseid)
                         expect(response.body.json).to.be.exist
+                        expect(response.body.json).to.eql(newTCJson)
                         expect(response.body.series).to.eql("WhenBP<120")
                         expect(response.body.title).to.eql(TCTitle)
                         expect(response.body.json).to.be.exist
@@ -529,5 +532,443 @@ describe.skip('Measure Service: Test Case Endpoints: Attempt to edit when user i
             })
         })
     })
+})
+describe.skip('Measure Service: Test Case Endpoint: User validation with test case import', () => {
+    beforeEach('Create Measure and measure group', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+
+        cy.setAccessTokenCookie()
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL, false, true)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'Initial Population')
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "scoring": measureScoring,
+                        "populationBasis": "true",
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": "Initial Population",
+                                "associationType": null,
+                                "description": ""
+                            }
+                        ],
+                        "measureObservations": null,
+                        "groupDescription": "",
+                        "improvementNotation": "",
+                        "rateAggregation": "",
+                        "measureGroupTypes": null,
+                        "scoringUnit": "",
+                        "stratifications": [],
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    cy.writeFile('cypress/fixtures/groupId', response.body.id)
+                })
+            })
+        })
+
+
+    })
+    afterEach('Clean up measures', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName, false, true)
+
+    })
+    it('Non-owner or non-shared user cannot hit the end point to add test cases to a measure', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + id + '/test-cases/list',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: [{
+                        "name": TCName + '1',
+                        "title": TCTitle + '1',
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJson,
+
+                    },
+                    {
+                        "name": TCName + '2',
+                        "title": TCTitle + '2',
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJson,
+
+                    },
+                    {
+                        "name": TCName + '3',
+                        "title": TCTitle + '3',
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJson,
+
+                    },]
+                }).then((response) => {
+                    expect(response.status).to.eql(403)
+                })
+            })
+        })
+    })
 
 })
+//currently tests are failing -- more work is necessary for MAT-5642
+describe.skip('QDM Test Case: Create: Date of Birth field: Validations', () => {
+    beforeEach('Create Measure and measure group', () => {
+
+        cy.setAccessTokenCookie()
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL, false, false)
+
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        cy.setAccessTokenCookie()
+    })
+    afterEach('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+
+    })
+    it('QDM Test Case: Create: Date of Birth field: No date of birth included on test case', () => {
+        //create test case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/test-cases',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: {
+                        "name": TCName,
+                        "title": TCTitle,
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJsonNoDOB,
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(403)
+                    expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ')
+                    cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                })
+            })
+        })
+    })
+    it('QDM Test Case: Create: Date of Birth field: DOB is null', () => {
+        //create test case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/test-cases',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: {
+                        "name": TCName,
+                        "title": TCTitle,
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJsonNullDOB,
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(403)
+                    expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ')
+                    cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                })
+            })
+        })
+    })
+    it('QDM Test Case: Create: Date of Birth field: DOB formatted incorrectly', () => {
+        //create test case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/test-cases',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: {
+                        "name": TCName,
+                        "title": TCTitle,
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJsonDOBWrongFormat,
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(403)
+                    expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ')
+                    cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                })
+            })
+        })
+    })
+    it('QDM Test Case: Create: Date of Birth field: Not a valid date', () => {
+        //create test case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/test-cases',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: {
+                        "name": TCName,
+                        "title": TCTitle,
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJsonDOBInvalidDNE,
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(403)
+                    expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ')
+                    cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                })
+            })
+        })
+    })
+    it('QDM Test Case: Create: Date of Birth field: Not an actual leap year dob value', () => {
+        //create test case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/test-cases',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: {
+                        "name": TCName,
+                        "title": TCTitle,
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJsonDOBInvalidNLE,
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(403)
+                    expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ')
+                    cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                })
+            })
+        })
+    })
+})
+//currently tests are failing -- more work is necessary for MAT-5642
+describe.skip('QDM Test Case: Update / Edit: Date of Birth field: Validations', () => {
+    beforeEach('Create Measure and measure group', () => {
+
+        cy.setAccessTokenCookie()
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL, false, false)
+
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        cy.setAccessTokenCookie()
+
+        //create test case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/test-cases',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: {
+                        "name": TCName,
+                        "title": TCTitle,
+                        "series": TCSeries,
+                        "description": TCDescription,
+                        "json": TCJson,
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.series).to.eql(TCSeries)
+                    expect(response.body.title).to.eql(TCTitle)
+                    expect(response.body.description).to.eql(TCDescription)
+                    expect(response.body.json).to.be.exist
+                    cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                })
+            })
+        })
+        cy.setAccessTokenCookie()
+    })
+    afterEach('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+
+    })
+    it('QDM Test Case: update / edit: Date of Birth field: No date of birth included on test case', () => {
+        //edit test case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseIdFc) => {
+                    cy.request({
+                        url: '/api/measures/' + id + '/test-cases' + + testCaseIdFc,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': testCaseIdFc,
+                            "name": TCName,
+                            "title": TCTitle,
+                            "series": TCSeries,
+                            "description": TCDescription,
+                            "json": TCJsonNoDOB,
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(403)
+                        expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ')
+                        cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                    })
+                })
+            })
+        })
+    })
+    it('QDM Test Case: update / edit: Date of Birth field: DOB is null', () => {
+        //edit test case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseIdFc) => {
+                    cy.request({
+                        url: '/api/measures/' + id + '/test-cases' + + testCaseIdFc,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': testCaseIdFc,
+                            "name": TCName,
+                            "title": TCTitle,
+                            "series": TCSeries,
+                            "description": TCDescription,
+                            "json": TCJsonNullDOB,
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(403)
+                        expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ')
+                        cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                    })
+                })
+            })
+        })
+    })
+    it('QDM Test Case: Update / Edit: Date of Birth field: DOB formatted incorrectly', () => {
+        //edit test case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseIdFc) => {
+                    cy.request({
+                        url: '/api/measures/' + id + '/test-cases' + + testCaseIdFc,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': testCaseIdFc,
+                            "name": TCName,
+                            "title": TCTitle,
+                            "series": TCSeries,
+                            "description": TCDescription,
+                            "json": TCJsonDOBWrongFormat,
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(403)
+                        expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ')
+                        cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                    })
+                })
+            })
+        })
+    })
+    it('QDM Test Case: Update / Edit: Date of Birth field: Not a valid date', () => {
+        //edit test case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseIdFc) => {
+                    cy.request({
+                        url: '/api/measures/' + id + '/test-cases' + + testCaseIdFc,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': testCaseIdFc,
+                            "name": TCName,
+                            "title": TCTitle,
+                            "series": TCSeries,
+                            "description": TCDescription,
+                            "json": TCJsonDOBInvalidDNE,
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(403)
+                        expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ')
+                        cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                    })
+                })
+            })
+        })
+    })
+    it('QDM Test Case: Update / Edit: Date of Birth field: Not an actual leap year dob value', () => {
+        //edit test case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseIdFc) => {
+                    cy.request({
+                        url: '/api/measures/' + id + '/test-cases' + + testCaseIdFc,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': testCaseIdFc,
+                            "name": TCName,
+                            "title": TCTitle,
+                            "series": TCSeries,
+                            "description": TCDescription,
+                            "json": TCJsonDOBInvalidNLE,
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(403)
+                        expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ')
+                        cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                    })
+                })
+            })
+        })
+    })
+})
+

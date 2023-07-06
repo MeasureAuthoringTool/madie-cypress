@@ -1,5 +1,6 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Environment } from "../../../Shared/Environment"
+import { v4 as uuidv4 } from 'uuid'
 
 let CqlLibraryOne = ''
 let CqlLibraryTwo = ''
@@ -191,7 +192,8 @@ describe('Draft and Version Validations', () => {
                         "id": cqlLibraryId,
                         "cqlLibraryName": updatedCqlLibraryName,
                         "model": model,
-                        "draft": false
+                        "draft": false,
+                        "librarySetId": uuidv4()
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(409)

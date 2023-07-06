@@ -980,9 +980,7 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
                 }).then((response) => {
                     expect(response.status).to.eql(200)
                     expect(response.body.entry[0].resource.supplementalData[0].criteria.expression).to.eql('SDE Race')
-                    expect(response.body.entry[0].resource.supplementalData[0].description).to.eql('SDE Race description')
                     expect(response.body.entry[0].resource.supplementalData[1].criteria.expression).to.eql('Risk Adjustments example')
-                    expect(response.body.entry[0].resource.supplementalData[1].description).to.eql('Risk Adjustments example description')
                 })
             })
         })

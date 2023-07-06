@@ -218,11 +218,6 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
 
     })
 
-    after('Log out', () => {
-
-        OktaLogin.Logout()
-    })
-
     it('Validate the zip file Export is downloaded and can be unzipped', () => {
 
         MeasuresPage.measureAction('version')
@@ -243,7 +238,8 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
-        cy.get(MeasuresPage.exportFinishedContinueBtn).click()
+        //cy.get(MeasuresPage.exportFinishedContinueBtn).click()
+        OktaLogin.Logout()
 
     })
 

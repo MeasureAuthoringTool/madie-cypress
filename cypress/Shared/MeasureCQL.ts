@@ -56,6 +56,116 @@ export class MeasureCQL {
         '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
         '		where NoCervixHysterectomy.status = \'completed\''
 
+    public static readonly QDMRatioCQL_with_MOs = 'library NewQDM version \'0.0.000\'\n' +
+        'using QDM version \'5.6\'\n' +
+        'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
+        'codesystem \"LOINC\": \'urn:oid:2.16.840.1.113883.6.1\'\n' +
+        'valueset \"Acute care hospital Inpatient Encounter\": \'urn:oid:2.16.840.1.113883.3.666.5.2289\'\n' +
+        'valueset \"Bicarbonate lab test\": \'urn:oid:2.16.840.1.113762.1.4.1045.139\'\n' +
+        'valueset \"Body temperature\": \'urn:oid:2.16.840.1.113762.1.4.1045.152\'\n' +
+        'valueset \"Body weight\": \'urn:oid:2.16.840.1.113762.1.4.1045.159\'\n' +
+        'valueset \"Creatinine lab test\": \'urn:oid:2.16.840.1.113883.3.666.5.2363\'\n' +
+        'valueset \"Emergency Department Visit\": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\'\n' +
+        'valueset \"Encounter Inpatient\": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
+        'valueset \"Ethnicity\": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+        'valueset \"Glucose lab test\": \'urn:oid:2.16.840.1.113762.1.4.1045.134\'\n' +
+        'valueset \"Heart Rate\": \'urn:oid:2.16.840.1.113762.1.4.1045.149\'\n' +
+        'valueset \"Hematocrit lab test\": \'urn:oid:2.16.840.1.113762.1.4.1045.114\'\n' +
+        'valueset \"Medicare Advantage payer\": \'urn:oid:2.16.840.1.113762.1.4.1104.12\'\n' +
+        'valueset \"Medicare FFS payer\": \'urn:oid:2.16.840.1.113762.1.4.1104.10\'\n' +
+        'valueset \"Observation Services\": \'urn:oid:2.16.840.1.113762.1.4.1111.143\'\n' +
+        'valueset \"ONC Administrative Sex\": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+        'valueset \"Oxygen Saturation by Pulse Oximetry\": \'urn:oid:2.16.840.1.113762.1.4.1045.151\'\n' +
+        'valueset \"Payer\": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset \"Potassium lab test\": \'urn:oid:2.16.840.1.113762.1.4.1045.117\'\n' +
+        'valueset \"Race\": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+        'valueset \"Respiratory Rate\": \'urn:oid:2.16.840.1.113762.1.4.1045.130\'\n' +
+        'valueset \"Sodium lab test\": \'urn:oid:2.16.840.1.113762.1.4.1045.119\'\n' +
+        'valueset \"Systolic Blood Pressure\": \'urn:oid:2.16.840.1.113762.1.4.1045.163\'\n' +
+        'valueset \"White blood cells count lab test\": \'urn:oid:2.16.840.1.113762.1.4.1045.129\'\n' +
+        'code \"Birth date\": \'21112-8\' from \"LOINC\" display \'Birth date\'\n' +
+        'parameter \"Measurement Period\" Interval<DateTime>\n' +
+        'context Patient\n' +
+        'define \"Denominator\":\n' +
+        '  \"Initial Population\"\n' +
+        'define \"Initial Population\":\n' +
+        '  \"Inpatient Encounters\"\n' +
+        'define \"Numerator\":\n' +
+        '  \"Initial Population\"\n' +
+        'define \"SDE Ethnicity\":\n' +
+        '  [\"Patient Characteristic Ethnicity\": \"Ethnicity\"]\n' +
+        'define \"SDE Payer\":\n' +
+        '  [\"Patient Characteristic Payer\": \"Payer\"]\n' +
+        'define \"SDE Race\":\n' +
+        '  [\"Patient Characteristic Race\": \"Race\"]\n' +
+        'define \"SDE Sex\":\n' +
+        '  [\"Patient Characteristic Sex": "ONC Administrative Sex\"]\n' +
+        'define \"SDE Results\":\n' +
+        '  {\n' +
+        '// First physical exams\n' +
+        '    FirstHeartRate: \"FirstPhysicalExamWithEncounterId\"([\"Physical Exam, Performed\": \"Heart Rate\"]),\n' +
+        '    FirstSystolicBloodPressure: \"FirstPhysicalExamWithEncounterId\"([\"Physical Exam, Performed\": \"Systolic Blood Pressure\"]),\n' +
+        '    FirstRespiratoryRate: \"FirstPhysicalExamWithEncounterId\"([\"Physical Exam, Performed\": \"Respiratory Rate\"]),\n' +
+        '  FirstBodyTemperature: \"FirstPhysicalExamWithEncounterId\"([\"Physical Exam, Performed\": \"Body temperature\"]),\n' +
+        '  FirstOxygenSaturation: \"FirstPhysicalExamWithEncounterId\"([\"Physical Exam, Performed\": \"Oxygen Saturation by Pulse Oximetry\"]),\n' +
+        '// Weight uses lab test timing\n' +
+        '  FirstBodyWeight: \"FirstPhysicalExamWithEncounterIdUsingLabTiming\"([\"Physical Exam, Performed\": \"Body weight\"]),\n' +
+        ' \n' +
+        '// First lab tests\n' +
+        '  FirstHematocritLab: \"FirstLabTestWithEncounterId\"([\"Laboratory Test, Performed\": \"Hematocrit lab test\"]),\n' +
+        '  FirstWhiteBloodCellCount: \"FirstLabTestWithEncounterId\"([\"Laboratory Test, Performed\": \"White blood cells count lab test\"]),\n' +
+        '  FirstPotassiumLab: \"FirstLabTestWithEncounterId\"([\"Laboratory Test, Performed\": \"Potassium lab test\"]),\n' +
+        '  FirstSodiumLab: \"FirstLabTestWithEncounterId\"([\"Laboratory Test, Performed\": \"Sodium lab test\"]),\n' +
+        '  FirstBicarbonateLab: \"FirstLabTestWithEncounterId\"([\"Laboratory Test, Performed\": \"Bicarbonate lab test\"]),\n' +
+        '  FirstCreatinineLab: \"FirstLabTestWithEncounterId\"([\"Laboratory Test, Performed\": \"Creatinine lab test\"]),\n' +
+        '  FirstGlucoseLab: \"FirstLabTestWithEncounterId\"([\"Laboratory Test, Performed\": \"Glucose lab test\"])\n' +
+        '}\n' +
+        'define \"Inpatient Encounters\":\n' +
+        '  [\"Encounter, Performed\": \"Encounter Inpatient\"] InpatientEncounter\n' +
+        '    with ( [\"Patient Characteristic Payer\": \"Medicare FFS payer\"]\n' +
+        '      union [\"Patient Characteristic Payer\": \"Medicare Advantage payer\"] ) Payer\n' +
+        '      such that Global.\"HospitalizationWithObservationLengthofStay\" ( InpatientEncounter ) < 365\n' +
+        '        and InpatientEncounter.relevantPeriod ends during day of \"Measurement Period\"\n' +
+        '        and AgeInYearsAt(date from start of InpatientEncounter.relevantPeriod)>= 65\n' +
+        'define function \"LengthOfStay\"(Stay Interval<DateTime> ):\n' +
+        '  difference in days between start of Stay and\n' +
+        '  end of Stay\n' +
+        'define function \"FirstPhysicalExamWithEncounterId\"(ExamList List<QDM.PositivePhysicalExamPerformed> ):\n' +
+        '  \"Inpatient Encounters\" Encounter\n' +
+        '    let FirstExam: First(ExamList Exam\n' +
+        '        where Global.\"EarliestOf\"(Exam.relevantDatetime, Exam.relevantPeriod)during Interval[start of Encounter.relevantPeriod - 1440 minutes, start of Encounter.relevantPeriod + 120 minutes]\n' +
+        '        sort by Global.\"EarliestOf\"(relevantDatetime, relevantPeriod)\n' +
+        '    )\n' +
+        '    return {\n' +
+        '      EncounterId: Encounter.id,\n' +
+        '      FirstResult: FirstExam.result as Quantity,\n' +
+        '      Timing: Global.\"EarliestOf\" ( FirstExam.relevantDatetime, FirstExam.relevantPeriod )\n' +
+        '    }\n' +
+        'define function \"FirstPhysicalExamWithEncounterIdUsingLabTiming\"(ExamList List<QDM.PositivePhysicalExamPerformed> ):\n' +
+        '  \"Inpatient Encounters\" Encounter\n' +
+        '    let FirstExamWithLabTiming: First(ExamList Exam\n' +
+        '        where Global.\"EarliestOf\"(Exam.relevantDatetime, Exam.relevantPeriod)during Interval[start of Encounter.relevantPeriod - 1440 minutes, start of Encounter.relevantPeriod + 1440 minutes]\n' +
+        '        sort by Global.\"EarliestOf\"(relevantDatetime, relevantPeriod)\n' +
+        '    )\n' +
+        '    return {\n' +
+        '      EncounterId: Encounter.id,\n' +
+        '      FirstResult: FirstExamWithLabTiming.result as Quantity,\n' +
+        '      Timing: Global.\"EarliestOf\" ( FirstExamWithLabTiming.relevantDatetime, FirstExamWithLabTiming.relevantPeriod )\n' +
+        '    }\n' +
+        'define function \"FirstLabTestWithEncounterId\"(LabList List<QDM.PositiveLaboratoryTestPerformed> ):\n' +
+        '  \"Inpatient Encounters\" Encounter\n' +
+        '    let FirstLab: First(LabList Lab\n' +
+        '        where Lab.resultDatetime during Interval[start of Encounter.relevantPeriod - 1440 minutes, start of Encounter.relevantPeriod + 1440 minutes]\n' +
+        '        sort by resultDatetime\n' +
+        '    )\n' +
+        '    return {\n' +
+        '      EncounterId: Encounter.id,\n' +
+        '      FirstResult: FirstLab.result as Quantity,\n' +
+        '      Timing: FirstLab.resultDatetime\n' +
+        '    }\n' +
+        'define function \"Test\"(LabList String):\n' +
+        '  \"Inpatient Encounters\"'
+
 
     public static readonly simpleQDM_CQL_with_incorrect_using = 'library Library1234556 version \'0.0.000\'\n' +
         'using QDM version \'5.6000\'\n' +
@@ -107,14 +217,142 @@ export class MeasureCQL {
         'define "n":\n' +
         '\ttrue'
 
+    public static readonly QDMTestCaseCQLFullElementSection = 'library CohortListQDMPositiveEncounterPerformedWithStratification1686773356032 version \'0.0.000\'\n' +
+
+        'using QDM version \'5.6\'\n' +
+        '\n' +
+        'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
+        '\n' +
+        'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\' \n' +
+        '\n' +
+        'valueset "Acute care hospital Inpatient Encounter": \'urn:oid:2.16.840.1.113883.3.666.5.2289\' \n' +
+        'valueset "Bicarbonate lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.139\' \n' +
+        'valueset "Body temperature": \'urn:oid:2.16.840.1.113762.1.4.1045.152\' \n' +
+        'valueset "Body weight": \'urn:oid:2.16.840.1.113762.1.4.1045.159\' \n' +
+        'valueset "Creatinine lab test": \'urn:oid:2.16.840.1.113883.3.666.5.2363\' \n' +
+        'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\' \n' +
+        'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\' \n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\' \n' +
+        'valueset "Glucose lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.134\' \n' +
+        'valueset "Heart Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.149\' \n' +
+        'valueset "Hematocrit lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.114\' \n' +
+        'valueset "Medicare Advantage payer": \'urn:oid:2.16.840.1.113762.1.4.1104.12\' \n' +
+        'valueset "Medicare FFS payer": \'urn:oid:2.16.840.1.113762.1.4.1104.10\' \n' +
+        'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\' \n' +
+        'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\' \n' +
+        'valueset "Oxygen Saturation by Pulse Oximetry": \'urn:oid:2.16.840.1.113762.1.4.1045.151\' \n' +
+        'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
+        '\n' +
+        'valueset "Potassium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.117\' \n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+        'valueset "Respiratory Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.130\' \n' +
+        'valueset "Sodium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.119\' \n' +
+        'valueset "Systolic Blood Pressure": \'urn:oid:2.16.840.1.113762.1.4.1045.163\' \n' +
+        'valueset "White blood cells count lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.129\' \n' +
+        '\n' +
+        'code "Birth date": \'21112-8\' from "LOINC" display \'Birth date\'\n' +
+        '\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+        '\n' +
+        'context Patient\n' +
+        '\n' +
+        'define "Denominator":\n' +
+        '\t  "Initial Population"\n' +
+        '\n' +
+        'define "Initial Population":\n' +
+        '\t  "Inpatient Encounters"\n' +
+        '\n' +
+        'define "Numerator":\n' +
+        '\t  "Initial Population"\n' +
+        '\n' +
+        'define "SDE Ethnicity":\n' +
+        '\t  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+        '\n' +
+        'define "SDE Payer":\n' +
+        '\t  ["Patient Characteristic Payer": "Payer"]\n' +
+        '\n' +
+        'define "SDE Race":\n' +
+        '\t  ["Patient Characteristic Race": "Race"]\n' +
+        '\n' +
+        'define "SDE Sex":\n' +
+        '\t  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+        '\n' +
+        'define "SDE Results":\n' +
+        '  {\n' +
+        '  // First physical exams\n' +
+        '    FirstHeartRate: "FirstPhysicalExamWithEncounterId"(["Physical Exam, Performed": "Heart Rate"]),\n' +
+        '    FirstSystolicBloodPressure: "FirstPhysicalExamWithEncounterId"(["Physical Exam, Performed": "Systolic Blood Pressure"]),\n' +
+        '    FirstRespiratoryRate: "FirstPhysicalExamWithEncounterId"(["Physical Exam, Performed": "Respiratory Rate"]),\n' +
+        '    FirstBodyTemperature: "FirstPhysicalExamWithEncounterId"(["Physical Exam, Performed": "Body temperature"]),\n' +
+        '    FirstOxygenSaturation: "FirstPhysicalExamWithEncounterId"(["Physical Exam, Performed": "Oxygen Saturation by Pulse Oximetry"]),\n' +
+        '  // Weight uses lab test timing\n' +
+        '    FirstBodyWeight: "FirstPhysicalExamWithEncounterIdUsingLabTiming"(["Physical Exam, Performed": "Body weight"]),\n' +
+        '\n' +
+        '  // First lab tests\n' +
+        '    FirstHematocritLab: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "Hematocrit lab test"]),\n' +
+        '    FirstWhiteBloodCellCount: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "White blood cells count lab test"]),\n' +
+        '    FirstPotassiumLab: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "Potassium lab test"]),\n' +
+        '    FirstSodiumLab: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "Sodium lab test"]),\n' +
+        '    FirstBicarbonateLab: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "Bicarbonate lab test"]),\n' +
+        '    FirstCreatinineLab: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "Creatinine lab test"]),\n' +
+        '    FirstGlucoseLab: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "Glucose lab test"])\n' +
+        '  }\n' +
+        '\n' +
+        'define "Inpatient Encounters":\n' +
+        '  ["Encounter, Performed": "Encounter Inpatient"] InpatientEncounter\n' +
+        '    with ( ["Patient Characteristic Payer": "Medicare FFS payer"]\n' +
+        '      union ["Patient Characteristic Payer": "Medicare Advantage payer"] ) Payer\n' +
+        '      such that Global."HospitalizationWithObservationLengthofStay" ( InpatientEncounter ) < 365\n' +
+        '        and InpatientEncounter.relevantPeriod ends during day of "Measurement Period"\n' +
+        '        and AgeInYearsAt(date from start of InpatientEncounter.relevantPeriod)>= 65\n' +
+        '\n' +
+        'define function "LengthOfStay"(Stay Interval<DateTime> ):\n' +
+        '  difference in days between start of Stay and \n' +
+        '  end of Stay\n' +
+        '\n' +
+        'define function "FirstPhysicalExamWithEncounterId"(ExamList List<QDM.PositivePhysicalExamPerformed> ):\n' +
+        '  "Inpatient Encounters" Encounter\n' +
+        '    let FirstExam: First(ExamList Exam\n' +
+        '        where Global."EarliestOf"(Exam.relevantDatetime, Exam.relevantPeriod)during Interval[start of Encounter.relevantPeriod - 1440 minutes, start of Encounter.relevantPeriod + 120 minutes]\n' +
+        '        sort by Global."EarliestOf"(relevantDatetime, relevantPeriod)\n' +
+        '    )\n' +
+        '    return {\n' +
+        '      EncounterId: Encounter.id,\n' +
+        '      FirstResult: FirstExam.result as Quantity,\n' +
+        '      Timing: Global."EarliestOf" ( FirstExam.relevantDatetime, FirstExam.relevantPeriod )\n' +
+        '    }\n' +
+        '\n' +
+        'define function "FirstPhysicalExamWithEncounterIdUsingLabTiming"(ExamList List<QDM.PositivePhysicalExamPerformed> ):\n' +
+        '  "Inpatient Encounters" Encounter\n' +
+        '    let FirstExamWithLabTiming: First(ExamList Exam\n' +
+        '        where Global."EarliestOf"(Exam.relevantDatetime, Exam.relevantPeriod)during Interval[start of Encounter.relevantPeriod - 1440 minutes, start of Encounter.relevantPeriod + 1440 minutes]\n' +
+        '        sort by Global."EarliestOf"(relevantDatetime, relevantPeriod)\n' +
+        '    )\n' +
+        '    return {\n' +
+        '      EncounterId: Encounter.id,\n' +
+        '      FirstResult: FirstExamWithLabTiming.result as Quantity,\n' +
+        '      Timing: Global."EarliestOf" ( FirstExamWithLabTiming.relevantDatetime, FirstExamWithLabTiming.relevantPeriod )\n' +
+        '    }\n' +
+        '\n' +
+        'define function "FirstLabTestWithEncounterId"(LabList List<QDM.PositiveLaboratoryTestPerformed> ):\n' +
+        '  "Inpatient Encounters" Encounter\n' +
+        '    let FirstLab: First(LabList Lab\n' +
+        '        where Lab.resultDatetime during Interval[start of Encounter.relevantPeriod - 1440 minutes, start of Encounter.relevantPeriod + 1440 minutes]\n' +
+        '        sort by resultDatetime\n' +
+        '    )\n' +
+        '    return {\n' +
+        '      EncounterId: Encounter.id,\n' +
+        '      FirstResult: FirstLab.result as Quantity,\n' +
+        '      Timing: FirstLab.resultDatetime\n' +
+        '    }'
 
     public static readonly simpleQDM_CQL = 'library Library1234556 version \'0.0.000\'\n' +
         'using QDM version \'5.6\'\n' +
         '\n' +
-        'valueset "Ethnicity": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837\'\n' +
-        'valueset "ONC Administrative Sex": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1\'\n' +
-        'valueset "Payer": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.3591\'\n' +
-        'valueset "Race": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836\'\n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+        'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
         '\n' +
         'parameter "Measurement Period" Interval<DateTime>\n' +
         'context Patient\n' +
@@ -308,7 +546,7 @@ export class MeasureCQL {
         '      and Global."NormalizeInterval" ( CataractSurgery.relevantDatetime, CataractSurgery.relevantPeriod ) starts 92 days or more before \n' +
         '      end of "Measurement Period"\n' +
         'define "IPPBoolean":\n' +
-           'true'
+        'true'
 
     public static readonly returnBooleanPatientBasedQDM_CQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
         '\n' +
@@ -711,7 +949,7 @@ export class MeasureCQL {
 
         'define \"ipp\":\n' +
 
-        'exists [\"Encounter\": \"Office Visit\"] E where E.period.start during \"Measurement Period\"\n' +
+        'exists [\"Encounter\": \"Office Visit\"] E where E.period.low during \"Measurement Period\"\n' +
 
 
 

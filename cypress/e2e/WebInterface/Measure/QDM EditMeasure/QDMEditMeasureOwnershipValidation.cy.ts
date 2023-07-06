@@ -6,7 +6,6 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -14,9 +13,6 @@ let altMeasureName = ''
 let altCqlLibraryName = ''
 let measureCQL = MeasureCQL.SBTEST_CQL
 let measureScoring = 'Cohort'
-let TCSeries = 'SBTestSeries'
-let TCTitle = 'test case title'
-let TCDescription = 'DENOMFail1651609688032'
 
 
 describe('Measure Ownership Validations for QDM Measures', () => {
@@ -28,10 +24,8 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         altCqlLibraryName = CqlLibraryName + altRandValue
 
         //Create QDM Measure, PC and Test Case with ALT user
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, true,measureCQL, false, true)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, true, measureCQL, false, true)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp')
-        //Skipping until QDM Test Case feature flag is removed
-        //TestCasesPage.CreateQDMTestCaseAPI(TCTitle, TCSeries, TCDescription, '', false, true)
         OktaLogin.Login()
 
     })
@@ -60,8 +54,21 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
+        //navigate to the criteria section of the PC
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).should('not.be.enabled')
         cy.get(MeasureGroupPage.initialPopulationSelect).should('not.be.enabled')
+
+        //Navigate to Supplemental data elements tab
+        cy.get(MeasureGroupPage.QDMSupplementalDataElementsTab).click()
+        cy.get(MeasureGroupPage.QDMSupplementalDataDefinitionTextBox).should('not.be.enabled')
+        cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox).should('not.be.enabled')
+
+        //Navigate to Risk Adjustment Variables tab
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
+        cy.get(MeasureGroupPage.QDMRiskAdjustmentDefinitionTextBox).should('not.be.enabled')
+        cy.get(MeasureGroupPage.QDMRiskAdjustmentDescriptionTextBox).should('not.be.enabled')
 
         //Navigate to Reporting tab
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
@@ -69,35 +76,4 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         cy.get(MeasureGroupPage.improvementNotationSelect).should('not.be.enabled')
 
     })
-
-    //Skipping until QDM Test Case feature flag is removed
-    it.skip('Fields on Test Case page are not editable by Non Measure Owner', () => {
-
-        //navigate to the all measures tab
-        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.visible')
-        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.enabled')
-        cy.get(LandingPage.allMeasuresTab).click()
-
-        //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        cy.get(TestCasesPage.QDMRace).should('not.be.enabled')
-        cy.get(TestCasesPage.QDMGender).should('not.be.enabled')
-
-        //Navigate to Details tab
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseTitle).should('not.be.enabled')
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).should('not.be.enabled')
-        cy.get(TestCasesPage.testCaseSeriesTextBox).should('not.be.enabled')
-
-     })
 })

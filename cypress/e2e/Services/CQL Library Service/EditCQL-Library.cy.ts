@@ -1,5 +1,6 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Environment } from "../../../Shared/Environment"
+import { v4 as uuidv4 } from 'uuid'
 
 let CQLLibraryName = ''
 let updatedCQLLibraryName = ''
@@ -47,6 +48,7 @@ describe('Edit CQL Library', () => {
                         "id": cqlLibraryId,
                         "cqlLibraryName": updatedCQLLibraryName,
                         "model": model,
+                        "librarySetId": uuidv4(),
                         "cql": "",
                         "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
                     }
@@ -78,6 +80,7 @@ describe('Edit CQL Library', () => {
                     },
                     body: {
                         "cqlLibraryName": updatedCQLLibraryName,
+                        "librarySetId": uuidv4(),
                         "model": model
                     }
                 }).then((response) => {
@@ -103,6 +106,7 @@ describe('Edit CQL Library', () => {
                     },
                     body: {
                         "cqlLibraryName": updatedCQLLibraryName,
+                        "librarySetId": uuidv4(),
                         "model": model
                     }
                 }).then((response) => {
@@ -128,6 +132,7 @@ describe('Edit CQL Library', () => {
                     },
                     body: {
                         "cqlLibraryName": updatedCQLLibraryName,
+                        "librarySetId": uuidv4(),
                         "model": model
                     }
                 }).then((response) => {
@@ -153,6 +158,7 @@ describe('Edit CQL Library', () => {
                     },
                     body: {
                         "cqlLibraryName": updatedCQLLibraryName,
+                        "librarySetId": uuidv4(),
                         "model": model
                     }
                 }).then((response) => {
@@ -178,6 +184,7 @@ describe('Edit CQL Library', () => {
                     },
                     body: {
                         "cqlLibraryName": updatedCQLLibraryName,
+                        "librarySetId": uuidv4(),
                         "model": model
                     }
                 }).then((response) => {
@@ -203,6 +210,7 @@ describe('Edit CQL Library', () => {
                     },
                     body: {
                         "cqlLibraryName": updatedCQLLibraryName,
+                        "librarySetId": uuidv4(),
                         "model": model
                     }
                 }).then((response) => {
@@ -229,6 +237,7 @@ describe('Edit CQL Library', () => {
                     body: {
                         "id": cqlLibraryId2,
                         "cqlLibraryName": updatedCQLLibraryName,
+                        "librarySetId": uuidv4(),
                         "model": model
                     }
                 }).then((response) => {

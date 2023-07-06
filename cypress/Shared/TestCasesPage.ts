@@ -3,20 +3,70 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 
 export class TestCasesPage {
+    //observaion fields
+    public static readonly denom0Observation = '[id="denominatorObservation0-expected-cb"]'
+    public static readonly denom1Observation = '[id="denominatorObservation1-expected-cb"]'
+    public static readonly denom2Observation = '[id="denominatorObservation2-expected-cb"]'
+    public static readonly numer0Observation = '[id="numeratorObservation0-expected-cb"]'
+    public static readonly numer1Observation = '[id="numeratorObservation1-expected-cb"]'
+    public static readonly numer2Observation = '[id="numeratorObservation2-expected-cb"]'
+
     //QDM Bread Crumb
     public static readonly testCasesBCLink = '[data-testid="qdm-test-cases"]'
 
     //QDM Test Case Demographics elements
     public static readonly QDMDob = '[id="birth-date"]'
+    public static readonly QDMLivingStatus = '[id="demographics-living-status-select-id"]'
+    public static readonly QDMLivingStatusOPtion = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiPaper-root MuiMenu-paper MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-177ic5c"]'
     public static readonly QDMRace = '[id="demographics-race-select-id"]'
     public static readonly QDMRaceOption = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
     public static readonly QDMGender = '[id="demographics-gender-select-id"]'
     public static readonly QDMGenderOption = '.MuiList-root'
+    public static readonly QDMEthnicity = '[id="demographics-ethnicity-select-id"]'
+    public static readonly QEMEthnicityOptions = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiPaper-root MuiMenu-paper MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-177ic5c"]'
+
+    //QDM Test Case Demographics herlper text elements
+    public static readonly QDMDOBHelperTxt = '[id="birth-date-helper-text"]'
+
+    //QDM Test Case Elements elements / objects -- sub tabs sections
+    public static readonly ElementsSubTabHeading = '[class="test-case-tab-heading"]'
+    public static readonly EncounterElementTab = '[data-testid="elements-tab-encounter"]'
+    public static readonly LaboratoryElementTab = '[data-testid="elements-tab-laboratory_test"]'
+    public static readonly CharacteristicElementTab = '[data-testid="elements-tab-patient_characteristic"]'
+    public static readonly PhysicalExamElementTab = '[data-testid="elements-tab-physical_exam"]'
+
+    //QDM Test Case Elements elements / objects -- Encounter
+    public static readonly EncounterOSSCard = '[data-testid="data-type-Encounter, Performed: Outpatient Surgery Service"]'
+    public static readonly EncounterEDVCard = '[data-testid="data-type-Encounter, Performed: Emergency Department Visit"]'
+    public static readonly EncounterEICard = '[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]'
+    public static readonly EncounterOSCard = '[data-testid="data-type-Encounter, Performed: Observation Services"]'
+
+    //QDM Test Case Elements elements / objects -- Laboratory
+    public static readonly LaboratoryHLTCard = '[data-testid="data-type-Laboratory Test, Performed: Hematocrit lab test"]'
+    public static readonly LaboratoryGLTCard = '[data-testid="data-type-Laboratory Test, Performed: Glucose lab test"]'
+    public static readonly LaboratoryBLTCard = '[data-testid="data-type-Laboratory Test, Performed: Bicarbonate lab test"]'
+    public static readonly LaboratoryWHBCCLTCard = '[data-testid="data-type-Laboratory Test, Performed: White blood cells count lab test"]'
+    public static readonly LaboratorySLTCard = '[data-testid="data-type-Laboratory Test, Performed: Sodium lab test"]'
+    public static readonly LaboratoryPLTCard = '[data-testid="data-type-Laboratory Test, Performed: Potassium lab test"]'
+    public static readonly LaboratoryCLTCard = '[data-testid="data-type-Laboratory Test, Performed: Creatinine lab test"]'
+
+    //QDM Test Case Elements elements / objects -- Characteristic
+    public static readonly CharacteristicMAPCard = '[data-testid="data-type-Patient Characteristic Payer: Medicare Advantage payer"]'
+    public static readonly CharacteristicPayerCard = '[data-testid="data-type-Patient Characteristic Payer: Payer"]'
+    public static readonly CharacteristicMFFSPCard = '[data-testid="data-type-Patient Characteristic Payer: Medicare FFS payer"]'
+
+    //QDM Test Case Elements elements / objects -- Physical Exam
+    public static readonly PhysicalExamOSbyPOCard = '[data-testid="data-type-Physical Exam, Performed: Oxygen Saturation by Pulse Oximetry"]'
+    public static readonly PhysicalExameBWCard = '[data-testid="data-type-Physical Exam, Performed: Body weight"]'
+    public static readonly PhysicalExamSBPCard = '[data-testid="data-type-Physical Exam, Performed: Systolic Blood Pressure"]'
+    public static readonly PhysicalExamRRCard = '[data-testid="data-type-Physical Exam, Performed: Respiratory Rate"]'
+    public static readonly PhysicalExamHRCard = '[data-testid="data-type-Physical Exam, Performed: Heart Rate"]'
+    public static readonly PhysicalExamBTCard = '[data-testid="data-type-Physical Exam, Performed: Body temperature"]'
 
     //QDM misc test case page objects
-    public static readonly QDMTCSaveBtn = '[data-testid="qdm-test-case-save-button"]'
+    public static readonly QDMTCSaveBtn = '[data-testid="edit-test-case-save-button"]'
     public static readonly tcSaveSuccessMsg = '[class="toast success"]'
-    public static readonly editTestCaseDescriptionInlineError= '[data-testid="test-case-description-helper-text"]'
+    public static readonly editTestCaseDescriptionInlineError = '[data-testid="test-case-description-helper-text"]'
 
     //TC error concerning CQL and PC mismatch
     public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
@@ -132,7 +182,7 @@ export class TestCasesPage {
     //New Test Case Modal
     public static readonly createTestCaseDialog = '[data-testid="dialog-form"]'
     public static readonly createTestCaseTitleInput = '[data-testid="create-test-case-title-input"]'
-    public static readonly createTestCaseDescriptionInput = '[data-testid="create-test-case-description-input"]'
+    public static readonly createTestCaseDescriptionInput = '[data-testid="create-test-case-description"]'
     public static readonly createTestCaseGroupInput = '[id="test-case-series"]'
     public static readonly createTestCaseSaveButton = '[data-testid="create-test-case-save-button"]'
 
@@ -159,6 +209,9 @@ export class TestCasesPage {
     public static readonly testCaseFileImport = '[data-testid=import-file-input]'
     public static readonly importTestCaseSuccessMsg = '[data-testid=success-toast]'
     public static readonly importTestCaseErrorMsg = '[data-testid=error-toast]'
+
+    //QDM Test Case Elements Tab
+    public static readonly QDMElementsTab = '[data-testid=qdm-Elements-sub-heading]'
 
     public static clickCreateTestCaseButton(): void {
 
@@ -460,6 +513,7 @@ export class TestCasesPage {
                     expect(response.status).to.eql(201)
                     expect(response.body.id).to.be.exist
                     expect(response.body.series).to.eql(series)
+                    expect(response.body.json).to.eql(jsonValue)
                     expect(response.body.title).to.eql(title)
                     expect(response.body.description).to.eql(description)
                     cy.writeFile(testCasePath, response.body.id)

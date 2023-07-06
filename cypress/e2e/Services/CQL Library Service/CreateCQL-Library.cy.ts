@@ -1,5 +1,6 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Environment } from "../../../Shared/Environment"
+import { v4 as uuidv4 } from 'uuid'
 
 let CQLLibraryName = ''
 let model = 'QI-Core v4.1.1'
@@ -34,6 +35,7 @@ describe('CQL Library Service: Create CQL Library', () => {
                     "cqlLibraryName": CQLLibraryName,
                     "model": model,
                     "cql": "",
+                    "librarySetId": uuidv4(),
                     "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
                 }
             }).then((response) => {
@@ -64,6 +66,7 @@ describe('CQL Library Service: Create CQL Library', () => {
                     "cqlLibraryName": CQLLibraryName,
                     "model": 'QDM v5.6',
                     "cql": "",
+                    "librarySetId": uuidv4(),
                     "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
                 }
             }).then((response) => {
@@ -170,6 +173,7 @@ describe('CQL Library Name validations', () => {
                 body: {
                     "cqlLibraryName": CQLLibraryName,
                     "model": model,
+                    "librarySetId": uuidv4(),
                     "cql": ""
                 }
             }).then((response) => {
@@ -193,6 +197,7 @@ describe('CQL Library Name validations', () => {
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
+                    "librarySetId": uuidv4(),
                     "model": model
                 }
             }).then((response) => {
@@ -216,6 +221,7 @@ describe('CQL Library Name validations', () => {
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
+                    "librarySetId": uuidv4(),
                     "model": model
                 }
             }).then((response) => {
@@ -239,6 +245,7 @@ describe('CQL Library Name validations', () => {
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
+                    "librarySetId": uuidv4(),
                     "model": model
                 }
             }).then((response) => {
@@ -262,6 +269,7 @@ describe('CQL Library Name validations', () => {
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
+                    "librarySetId": uuidv4(),
                     "model": model
                 }
             }).then((response) => {
@@ -285,6 +293,7 @@ describe('CQL Library Name validations', () => {
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
+                    "librarySetId": uuidv4(),
                     "model": model
                 }
             }).then((response) => {
@@ -308,6 +317,7 @@ describe('CQL Library Name validations', () => {
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
+                    "librarySetId": uuidv4(),
                     "model": model
                 }
             }).then((response) => {
@@ -339,6 +349,7 @@ describe('CQL Library Model Validations', () => {
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
+                    "librarySetId": uuidv4(),
                     "model": ""
                 }
             }).then((response) => {
@@ -362,6 +373,7 @@ describe('CQL Library Model Validations', () => {
                 },
                 body: {
                     "cqlLibraryName": CQLLibraryName,
+                    "librarySetId": uuidv4(),
                     "model": 'QI-CoreINVALID'
                 }
             }).then((response) => {

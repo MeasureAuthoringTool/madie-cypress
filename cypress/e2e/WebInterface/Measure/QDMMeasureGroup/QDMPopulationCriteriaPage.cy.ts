@@ -101,6 +101,9 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
+        //navigate to the criteria section of the PC
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+
         //Add UCUM scoring unit
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
         cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
@@ -133,6 +136,9 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         //navigate back to the measure group page
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //navigate to the criteria section of the PC
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         //verify All data persists on Criteria page
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'ipp')
@@ -168,8 +174,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.enabled')
         cy.get(MeasureGroupPage.measureReportingSaveBtn).click()
         //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureReportingMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureReportingMsg).should('contain.text', 'Measure Reporting Updated Successfully')
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Measure Reporting Updated Successfully')
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -184,6 +190,37 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
         cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Aggregation')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
+    })
+
+    it('Add Risk Adjustment Variables and Supplemental Data Elements to Population Criteria', () => {
+
+        //click on Edit button to edit measure
+        MeasuresPage.measureAction("edit")
+
+        //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //click on the Risk Adjustment button / link on the left page to populate fields on the right
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('ipp').click()
+        cy.get(MeasureGroupPage.QDMRiskAdjustmentDescriptionTextBox).type('Initial Population Description')
+
+        //save the Risk Adjustment data
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
+        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+
+        //click on the Supplemental Data button / link on the left page to populate fields on the right
+        cy.get(MeasureGroupPage.QDMSupplementalDataElementsTab).click()
+        cy.get(MeasureGroupPage.QDMSupplementalDataDefinitionSelect).click()
+        cy.get(MeasureGroupPage.QDMSupplementalDataElementsListBox).contains('ipp').click()
+        cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox).type('Initial Population Description')
+
+        //save Supplemental data Elements
+        cy.get(MeasureGroupPage.QDMSaveSupplementalDataElements).click()
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
     })
 })
 
