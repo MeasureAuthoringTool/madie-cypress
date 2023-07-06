@@ -228,9 +228,103 @@ describe.skip('Validating the Elements section on Test Cases', () => {
         //confirm page and elements tabs / objects have loaded on page
         Utilities.waitForElementVisible(TestCasesPage.ElementsSubTabHeading, 37000)
         Utilities.waitForElementVisible(TestCasesPage.EncounterElementTab, 37000)
+        Utilities.waitForElementVisible(TestCasesPage.EncounterOSSCard, 37000)
 
         //click on Encounter element sub tab
         cy.get(TestCasesPage.EncounterElementTab).click()
+        //cards under Encounter appear
+        cy.get(TestCasesPage.EncounterOSSCard).should('be.visible')
+        cy.get(TestCasesPage.EncounterEDVCard).should('be.visible')
+        cy.get(TestCasesPage.EncounterEICard)
+            .first()
+            .should('be.visible')
+        cy.get(TestCasesPage.EncounterOSCard).scrollIntoView().should('be.visible')
+        cy.get(TestCasesPage.EncounterEICard)
+            .last()
+            .should('be.visible')
+
+        //click on Laboratory element sub tab
+        cy.get(TestCasesPage.LaboratoryElementTab).click()
+        //cards under Laboratory appear
+        cy.get(TestCasesPage.LaboratoryHLTCard).should('be.visible')
+        cy.get(TestCasesPage.LaboratoryGLTCard).should('be.visible')
+        cy.get(TestCasesPage.LaboratoryBLTCard).should('be.visible')
+        cy.get(TestCasesPage.LaboratoryWHBCCLTCard).should('be.visible')
+        cy.get(TestCasesPage.LaboratorySLTCard).scrollIntoView().should('be.visible')
+        cy.get(TestCasesPage.LaboratoryPLTCard).scrollIntoView().should('be.visible')
+        cy.get(TestCasesPage.LaboratoryCLTCard).scrollIntoView().should('be.visible')
+
+        //click on Characteristic element sub tab
+        cy.get(TestCasesPage.CharacteristicElementTab).click()
+        //cards under Characteristic appear
+        cy.get(TestCasesPage.CharacteristicMAPCard).should('be.visible')
+        cy.get(TestCasesPage.CharacteristicPayerCard).should('be.visible')
+        cy.get(TestCasesPage.CharacteristicMFFSPCard).should('be.visible')
+
+        //click on Characteristic element sub tab
+        cy.get(TestCasesPage.PhysicalExamElementTab).click()
+        //cards under Characteristic appear
+        cy.get(TestCasesPage.PhysicalExamOSbyPOCard).should('be.visible')
+        cy.get(TestCasesPage.PhysicalExameBWCard).should('be.visible')
+        cy.get(TestCasesPage.PhysicalExamSBPCard).should('be.visible')
+        cy.get(TestCasesPage.PhysicalExamRRCard).should('be.visible')
+        cy.get(TestCasesPage.PhysicalExamHRCard).scrollIntoView().should('be.visible')
+        cy.get(TestCasesPage.PhysicalExamBTCard).scrollIntoView().should('be.visible')
+    })
+
+    it("Verify elements' subsections' edit cards", () => {
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //create test case
+        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+
+        //navigate to the test case's edit page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //confirm page and elements tabs / objects have loaded on page
+        Utilities.waitForElementVisible(TestCasesPage.ElementsSubTabHeading, 37000)
+        Utilities.waitForElementVisible(TestCasesPage.EncounterElementTab, 37000)
+        Utilities.waitForElementVisible(TestCasesPage.EncounterOSSCard, 37000)
+
+        //click on Encounter element sub tab
+        cy.get(TestCasesPage.EncounterElementTab).click()
+
+        //subsection -- Outpatient Surgery Service card appears and click on the plus button to open edit card
+        cy.get(TestCasesPage.EncounterOSSCard).should('be.visible')
+        cy.get(TestCasesPage.EncounterOSSCardExpandBtn).should('be.visible')
+        cy.get(TestCasesPage.EncounterOSSCardExpandBtn)
+            .first()
+            .click()
+
+        //verify elements on edit card
+        cy.get(TestCasesPage.ExpandedOSSDetailCard).should('exist')
+        cy.get(TestCasesPage.ExpandedOSSDetailCard).find(TestCasesPage.ExpandedOSSDetailCardClose).should('exist')
+        cy.get(TestCasesPage.ExpandedOSSDetailCard)
+            .find(TestCasesPage.ExpandedOSSDetailCardTitle)
+            .should('exist')
+            .should('contain.text', 'Performed')
+        cy.get(TestCasesPage.ExpandedOSSDetailCard)
+            .find(TestCasesPage.ExpandedOSSDetailCardTitleSubDetail)
+            .should('exist')
+            .should('contain.text', 'Outpatient Surgery Service')
+        cy.get(TestCasesPage.ExpandedOSSDetailCard).find(TestCasesPage.ExpandedOSSDetailCardTiming)
+            .should('exist')
+            .should('contain.text', 'Timing')
+        cy.get(TestCasesPage.ExpandedOSSDetailCard).find(TestCasesPage.ExpandedOSSDetailCardTabCodes).should('exist')
+        cy.get(TestCasesPage.ExpandedOSSDetailCard).find(TestCasesPage.ExpandedOSSDetailCardTabAttributes).should('exist')
+        cy.get(TestCasesPage.ExpandedOSSDetailCard).find(TestCasesPage.ExpandedOSSDetailCardTabNegationRationale).should('exist')
+
+        //close the detail card
+        //<span class="MuiTouchRipple-root css-w0pj6f"></span>
+        cy.get(TestCasesPage.ExpandedOSSDetailCard).find(TestCasesPage.ExpandedOSSDetailCardClose)
+            .scrollIntoView()
+            .wait(500)
+            .click()
         //cards under Encounter appear
         cy.get(TestCasesPage.EncounterOSSCard).should('be.visible')
         cy.get(TestCasesPage.EncounterEDVCard).should('be.visible')
