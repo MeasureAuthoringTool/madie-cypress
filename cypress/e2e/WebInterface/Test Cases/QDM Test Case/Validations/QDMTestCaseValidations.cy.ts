@@ -343,6 +343,84 @@ describe.skip('Edit Test Case Validations', () => {
         })
 
     })
+})
+//Skipping until QDM Test Case feature flag is removed
+describe.skip('Edit Test Case Validations', () => {
+
+    before('Create QDM Measure and Test Case ', () => {
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
+    })
+
+    afterEach('Logout', () => {
+        OktaLogin.Logout()
+
+    })
+
+    after('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+    //Discard changes button
+    it('Validate dirty check on the test case title, in the test case details tab', () => {
+
+        //create test case and login
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
+        OktaLogin.Login()
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Click on Edit for Test Case
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //navigate to the details page
+        cy.get(TestCasesPage.elementsTab).should('exist')
+        cy.get(TestCasesPage.elementsTab).should('be.enabled')
+        cy.get(TestCasesPage.elementsTab).click()
+
+        //enter a value of the dob
+        cy.get(TestCasesPage.QDMDob).clear()
+        cy.get(TestCasesPage.QDMDob).type('01/01/2000')
+
+        //take focus off of the date field
+        cy.get(TestCasesPage.elementsTab).click()
+
+        cy.get(TestCasesPage.QDMTcDiscardChangesButton).should('exist')
+        cy.get(TestCasesPage.QDMTcDiscardChangesButton).should('be.enabled')
+        cy.get(TestCasesPage.QDMTcDiscardChangesButton).click()
+
+        //verify that the discard modal appears and click on discard
+        Global.clickOnDiscardChanges()
+
+        //verify that the dob value changes back to it's previous value
+        cy.get(TestCasesPage.QDMDob).should('contain.value', '01/01/2020')
+
+        //change a value for the dob, again
+        cy.get(TestCasesPage.QDMDob).clear()
+        cy.get(TestCasesPage.QDMDob).type('01/01/2000')
+
+        //take focus off of the date field
+        cy.get(TestCasesPage.elementsTab).click()
+
+        cy.get(TestCasesPage.QDMTcDiscardChangesButton).should('exist')
+        cy.get(TestCasesPage.QDMTcDiscardChangesButton).should('be.enabled')
+        cy.get(TestCasesPage.QDMTcDiscardChangesButton).click()
+
+        //verify discard modal and click on keep working
+        Global.clickDiscardAndKeepWorking()
+
+        //verify that the dob valu is left unchanged from it's last change
+        cy.get(TestCasesPage.QDMDob).should('contain.value', '01/01/2000')
+
+
+    })
 
 })
 
