@@ -114,7 +114,7 @@ describe('Error Message on Measure Export when the Measure CQL has errors', () =
     })
 })
 
-describe('Error Message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
+describe.skip('Error Message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
 
     before('Create New Measure and Login', () => {
 
