@@ -83,6 +83,7 @@ export class MeasureGroupPage {
     //Reporting tab fields
     public static readonly rateAggregation = '[data-testid="rateAggregationText"]'
     public static readonly improvementNotationSelect = '[id="improvement-notation-select"]'
+    public static readonly improvementNotationValues = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
     public static readonly measureReportingSaveBtn = '[data-testid="measure-Reporting-save"]'
     public static readonly successfulSaveMsg = '[class="toast success"]'
     //Measure Group Type

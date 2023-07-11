@@ -783,6 +783,95 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Select Improvement Notation')
 
+
+    })
+    it('Changing and saving Improvement Notation values are allowed and retained properly', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Click on Reporting tab
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        //assert the two fields that should appear in the Reporting tab
+        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).should('be.empty')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Select Improvement Notation')
+
+        //change and save a new value to the Improvement Notation field
+        cy.get(MeasureGroupPage.improvementNotationSelect).click()
+        cy.get(MeasureGroupPage.improvementNotationValues)
+            //Increased score indicates improvement
+            .should('contain.text', 'Increased score indicates improvement')
+            .click()
+        //save selected IN value
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        //confirm message
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+        //Click on Reporting tab
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        // IN should contain previously saved selected value
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
+
+        //change and save a new value to the Improvement Notation field
+        cy.get(MeasureGroupPage.improvementNotationSelect).click()
+        cy.get(MeasureGroupPage.improvementNotationValues)
+            .wait(500)
+            .type('{downArrow}{enter}')
+
+        //save selected IN value
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        //confirm message
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+        //Click on Reporting tab
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        // IN should contain previously saved selected value
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Decreased score indicates improvement')
+
+        //change and save a new value to the Improvement Notation field
+        cy.get(MeasureGroupPage.improvementNotationSelect).click()
+        cy.get(MeasureGroupPage.improvementNotationValues)
+            .wait(500)
+            .type('{upArrow}{upArrow}{enter}')
+
+        //save selected IN value
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        //confirm message
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+        //Click on Reporting tab
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        // IN should contain previously saved selected value
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Select Improvement Notation')
     })
 
     it('Can successfully update / change Reporting tab values and save on Reporting tab', () => {
