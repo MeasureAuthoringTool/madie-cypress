@@ -12,6 +12,7 @@ let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let measurePath = 'cypress/fixtures/measureId'
 let mCQLForElementsValidation = MeasureCQL.QDMTestCaseCQLFullElementSection
+let CQLSimple_for_QDM = MeasureCQL.QDMSimpleCQL
 
 let measureName = 'ProportionPatient' + Date.now()
 let CqlLibraryName = 'ProportionPatient' + Date.now()
@@ -363,5 +364,68 @@ describe.skip('Validating the Elements section on Test Cases', () => {
         cy.get(TestCasesPage.PhysicalExamRRCard).should('be.visible')
         cy.get(TestCasesPage.PhysicalExamHRCard).scrollIntoView().should('be.visible')
         cy.get(TestCasesPage.PhysicalExamBTCard).scrollIntoView().should('be.visible')
+    })
+})
+describe.skip('Run QDM Test Case ', () => {
+    beforeEach('Create Measure', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, CQLSimple_for_QDM, false, false,
+            '2023-01-01', '2024-01-01')
+
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Login()
+    })
+
+    afterEach('Clean up', () => {
+
+        OktaLogin.Logout()
+
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+    it('Verify elements and their subsections / cards', () => {
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //create test case
+        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+
+        //navigate to the test case's edit page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //enter a value of the dob, Race and gender
+        cy.get(TestCasesPage.QDMDob).click().wait(500)
+        cy.get(TestCasesPage.QDMDob).clear().type('1981-05-27')
+        cy.get(TestCasesPage.QDMLivingStatus).click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
+        cy.get(TestCasesPage.QDMGender).click()
+        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+
+        //save the Test Case
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+
+        //run test case from the Test Case List page
+        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('be.enabled')
+        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('be.visible')
+        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).click()
+
+        //verify message that appears confirming the button works
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Calculation was successful, output is printed in the console')
     })
 })
