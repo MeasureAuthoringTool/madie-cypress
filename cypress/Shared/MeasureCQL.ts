@@ -56,6 +56,18 @@ export class MeasureCQL {
         '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
         '		where NoCervixHysterectomy.status = \'completed\''
 
+    public static readonly QDMSimpleCQL = 'library ProportionPatient1689182327602 version \'0.0.000\'\n' +
+        'using QDM version \'5.6\'\n' +
+
+        'valueset \"Encounter Inpatient\": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
+
+        'parameter \"Measurement Period\" Interval<DateTime>\n' +
+        'context Patient\n' +
+
+        'define \"Patient16To23\":\n' +
+        '  AgeInYearsAt(start of \"Measurement Period\") >= 16\n' +
+        '    and AgeInYearsAt(start of \"Measurement Period\") < 24'
+
     public static readonly QDMRatioCQL_with_MOs = 'library NewQDM version \'0.0.000\'\n' +
         'using QDM version \'5.6\'\n' +
         'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
