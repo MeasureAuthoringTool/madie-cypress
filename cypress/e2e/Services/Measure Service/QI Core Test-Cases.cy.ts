@@ -480,8 +480,10 @@ describe('Measure Service: Test Case Endpoints', () => {
                         'json': "{ \n  Encounter: \"Office Visit union\" \n  Id: \"Identifier\" \n  value: \"Visit out of hours (procedure)\" \n}"
                     }
                 }).then((response) => {
+                    console.log(response)
                     expect(response.status).to.eql(201)
                     expect(response.body.id).to.be.exist
+                    expect(response.body.patientId).to.be.exist
                     expect(response.body.series).to.eql(series)
                     expect(response.body.title).to.eql(title)
                     expect(response.body.description).to.eql(description)
