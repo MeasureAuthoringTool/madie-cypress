@@ -96,10 +96,6 @@ describe('Test Case population values based on Measure Group population definiti
                             "name": TCName,
                             "title": TCTitle,
                             "series": TCSeries,
-                            "createdAt": "2022-05-05T18:14:37.791Z",
-                            "createdBy": "SBXDV.bwelch",
-                            "lastModifiedAt": "2022-05-05T18:14:37.791Z",
-                            "lastModifiedBy": "SBXDV.bwelch",
                             "description": TCDescription,
                             "json": TCJson,
                             "hapiOperationOutcome": {
@@ -345,10 +341,6 @@ describe('Test Case population values based on Measure Group population definiti
                                 "name": TCName,
                                 "title": TCTitle,
                                 "series": TCSeries,
-                                "createdAt": "2022-05-05T18:14:37.791Z",
-                                "createdBy": "SBXDV.bwelch",
-                                "lastModifiedAt": "2022-05-05T18:14:37.791Z",
-                                "lastModifiedBy": "SBXDV.bwelch",
                                 "description": TCDescription,
                                 "json": TCJson,
                                 "hapiOperationOutcome": {
@@ -1093,10 +1085,6 @@ describe('Test Case export', () => {
                             "name": TCName,
                             "title": TCTitle,
                             "series": TCSeries,
-                            "createdAt": "2022-05-05T18:14:37.791Z",
-                            "createdBy": "SBXDV.bwelch",
-                            "lastModifiedAt": "2022-05-05T18:14:37.791Z",
-                            "lastModifiedBy": "SBXDV.bwelch",
                             "description": TCDescription,
                             "json": TCJson,
                             "hapiOperationOutcome": {
