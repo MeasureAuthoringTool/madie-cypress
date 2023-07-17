@@ -270,6 +270,59 @@ export class TestCasesPage {
 
         })
     }
+    public static testCaseAction(action: string, secondMeasure?: boolean): void {
+        let filePath = 'cypress/fixtures/testCaseId'
+
+        if (secondMeasure === true) {
+            filePath = 'cypress/fixtures/testCaseId2'
+        }
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid=select-action-' + fileContents + ']', 50000)
+            cy.get('[data-testid=select-action-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=select-action-' + fileContents + ']', 50000)
+            cy.get('[data-testid=select-action-' + fileContents + ']').should('be.enabled').wait(1000)
+            switch ((action.valueOf()).toString().toLowerCase()) {
+                case "edit": {
+                    cy.scrollTo('top')
+                    cy.get('[data-testid=select-action-' + fileContents + ']').click()
+                    Utilities.waitForElementVisible('[data-testid=view-edit-test-case-' + fileContents + ']', 55000)
+                    cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.visible')
+                    Utilities.waitForElementEnabled('[data-testid=view-edit-test-case-' + fileContents + ']', 55000)
+                    cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.enabled')
+                    cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').click()
+
+                    break
+                }
+                case 'export': {
+                    cy.scrollTo('top')
+                    cy.get('[data-testid=select-action-' + fileContents + ']').click()
+                    cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
+                    Utilities.waitForElementVisible('[data-testid=export-test-case-' + fileContents + ']', 55000)
+                    cy.get('[data-testid=export-test-case-' + fileContents + ']').should('be.visible')
+                    Utilities.waitForElementEnabled('[data-testid=export-test-case-' + fileContents + ']', 55000)
+                    cy.get('[data-testid=export-test-case-' + fileContents + ']').should('be.enabled')
+                    cy.get('[data-testid=export-test-case-' + fileContents + ']').click()
+
+                    /*                     cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
+                                        cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')
+                                        Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 75000) */
+                    cy.get(this.tcSaveSuccessMsg).should('contain.text', 'Test case exported successfully')
+                    break
+                }
+                case 'delete': {
+                    cy.scrollTo('top')
+                    cy.get('[data-testid=select-action-' + fileContents + ']').click()
+                    Utilities.waitForElementVisible('[data-testid=delete-test-case-btn-' + fileContents + ']', 55000)
+                    cy.get('[data-testid=delete-test-case-btn-' + fileContents + ']').should('be.visible')
+                    Utilities.waitForElementEnabled('[data-testid=delete-test-case-btn-' + fileContents + ']', 55000)
+                    cy.get('[data-testid=delete-test-case-btn-' + fileContents + ']').should('be.enabled')
+                    cy.get('[data-testid=delete-test-case-btn-' + fileContents + ']').click()
+                    break
+                }
+                default: { }
+            }
+        })
+    }
     public static createQDMTestCase(testCaseTitle: string, testCaseDescription: string, testCaseSeries: string): void {
 
         //Navigate to Test Cases page and add Test Case details

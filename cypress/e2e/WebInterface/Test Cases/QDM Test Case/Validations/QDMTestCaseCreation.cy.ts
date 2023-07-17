@@ -389,7 +389,7 @@ describe.skip('Run QDM Test Case ', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    it('Verify elements and their subsections / cards', () => {
+    it('Run a simple QDM test case and verify message that indicates that test case was ran', () => {
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
 
