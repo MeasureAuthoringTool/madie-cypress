@@ -1017,3 +1017,169 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
     })
 
 })
+
+describe('Test Case export', () => {
+    before('Sets Access Token, creates measure, group and', () => {
+
+        cy.setAccessTokenCookie()
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "scoring": measureScoring,
+                        "populationBasis": 'Boolean',
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominator",
+                                "definition": PopDenom
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorExclusion",
+                                "definition": PopDenex
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorException",
+                                "definition": PopDenexcep
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numerator",
+                                "definition": PopNum
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numeratorExclusion",
+                                "definition": PopNumex
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ]
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    cy.writeFile('cypress/fixtures/groupId', response.body.id)
+                })
+            })
+        })
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/groupId').should('exist').then((groupIdFc) => {
+                    cy.request({
+                        url: '/api/measures/' + id + '/test-cases',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'POST',
+                        body: {
+                            "name": TCName,
+                            "title": TCTitle,
+                            "series": TCSeries,
+                            "createdAt": "2022-05-05T18:14:37.791Z",
+                            "createdBy": "SBXDV.bwelch",
+                            "lastModifiedAt": "2022-05-05T18:14:37.791Z",
+                            "lastModifiedBy": "SBXDV.bwelch",
+                            "description": TCDescription,
+                            "json": TCJson,
+                            "hapiOperationOutcome": {
+                                "code": 201,
+                                "message": null,
+                                "outcomeResponse": null
+                            },
+                            "groupPopulations": [{
+                                "groupId": groupIdFc,
+                                "scoring": measureScoring,
+                                "populationValues": [
+                                    {
+                                        "name": "initialPopulation",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "name": "denominator",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "name": "denominatorExclusion",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "name": "denominatorException",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "name": "numerator",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "name": "numeratorExclusion",
+                                        "expected": false,
+                                        "actual": false
+                                    }
+
+                                ]
+                            }]
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(201)
+                        expect(response.body.id).to.be.exist
+                        expect(response.body.series).to.eql(TCSeries)
+                        expect(response.body.title).to.eql(TCTitle)
+                        expect(response.body.description).to.eql(TCDescription)
+                        expect(response.body.json).to.be.exist
+                        cy.writeFile('cypress/fixtures/testcaseId', response.body.id)
+                    })
+                })
+            })
+        })
+    })
+    beforeEach('Set Access Token', () => {
+
+        cy.setAccessTokenCookie()
+
+    })
+    afterEach('Clean up', () => {
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+    })
+    it('Test Case export end point generates export in byte', () => {
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
+                    cy.request({
+                        url: '/api/measures/' + id + '/test-cases/' + testCaseId + '/exports',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'GET',
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body).is.not.empty
+                    })
+                })
+            })
+        })
+    })
+
+})
