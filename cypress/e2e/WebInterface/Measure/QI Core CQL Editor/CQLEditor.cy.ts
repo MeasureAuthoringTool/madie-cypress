@@ -533,7 +533,6 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureQICoreCQL_without_using)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.pause()
 
         cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'CQL updated successfully but was missing a Using statement.  Please add in a valid model and version.')
 
