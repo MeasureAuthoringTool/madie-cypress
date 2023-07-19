@@ -1,5 +1,44 @@
 
 export class MeasureCQL {
+    public static readonly ICF_FHIR_with_invalid_using = 'library SimpleFhirLibrary version \'0.0.004\'\n' +
+
+
+
+        'using FHIR version \'4.0.10\'\n' +
+
+
+
+        'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+
+
+
+        'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+
+
+
+        'parameter \"Measurement Period\" Interval<DateTime>\n' +
+
+
+
+        'context Patient\n' +
+
+
+
+        'define \"ipp\":\n' +
+
+        'true\n' +
+
+
+
+        'define \"denom\":\n' +
+
+        '\"ipp\"\n' +
+
+
+
+        'define \"num\":\n' +
+
+        'exists [\"Encounter\": \"Office Visit\"] E where E.status ~ \'finished\'\n'
     public static readonly ICFCleanTestQICore_CQL_without_using = 'library SimpleFhirLibrary version \'0.0.004\'\n' +
 
 
@@ -961,7 +1000,7 @@ export class MeasureCQL {
 
         'define \"ipp\":\n' +
 
-        'exists [\"Encounter\": \"Office Visit\"] E where E.period.low during \"Measurement Period\"\n' +
+        'true\n' +
 
 
 
