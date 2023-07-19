@@ -601,7 +601,7 @@ export class TestCasesPage {
     public static ValidateValueAddedToTestCaseJson(ValueToBeAdded: string | string[]): void {
 
         cy.get(this.aceEditor).should('exist')
-        cy.get(this.aceEditor).should('be.visible')
+        cy.get(this.aceEditor).should('be.visible').wait(1000)
         //cy.get(this.aceEditorJsonInput).should('exist')
         cy.get(this.aceEditor).invoke('text').then(
             (text) => {
