@@ -46,6 +46,7 @@ export class EditMeasurePage {
     //Measure CQL Page
     //warnings / earrors in CQL that appear at the top of page
     public static readonly libWarningTopMsg = '[data-testid="library-warning"]'
+    public static readonly CQLMessageSuccess = '[data-testid="generic-success-text-header"]'
 
     //cql editor box on page
     public static readonly cqlEditorTextBox = '.ace_content'

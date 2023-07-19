@@ -16,6 +16,7 @@ let newCqlLibraryName = ''
 let CqlLibraryName = 'TestLibrary' + Date.now() + 1
 let newCQLTestMeasureName = measureName + randValue
 let newCQLTestCqlLibraryName = CqlLibraryName + randValue
+let measureFHIR_with_invalid_using = MeasureCQL.ICF_FHIR_with_invalid_using
 let measureQICoreCQL_without_using = MeasureCQL.ICFCleanTestQICore_CQL_without_using
 let measureQICoreCQL_with_incorrect_using = MeasureCQL.ICFCleanTestQICore_CQL_with_incorrect_using
 let measureQICoreCQL_with_different_Lib_name = 'library ' + newCQLTestCqlLibraryName + 'b' + ' version \'0.0.004\'\n' +
@@ -504,13 +505,12 @@ describe('CQL errors with included libraries', () => {
 
     })
 })
-//a later follow-up story to MAT-5538 will be implemented and these tests will be used to verify the change for QI Core
-describe.skip('Measure: CQL Editor: using line', () => {
+describe('Measure: CQL Editor: using line : QI Core', () => {
 
     beforeEach('Create measure and login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(newCQLTestMeasureName, newCQLTestCqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newCQLTestMeasureName, newCQLTestCqlLibraryName)
         OktaLogin.Login()
 
     })
@@ -533,6 +533,7 @@ describe.skip('Measure: CQL Editor: using line', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureQICoreCQL_without_using)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.pause()
 
         cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'CQL updated successfully but was missing a Using statement.  Please add in a valid model and version.')
 
@@ -549,7 +550,6 @@ describe.skip('Measure: CQL Editor: using line', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureQICoreCQL_with_incorrect_using)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.pause()
         cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
     })
@@ -567,6 +567,38 @@ describe.skip('Measure: CQL Editor: using line', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+
+    })
+})
+describe('Measure: CQL Editor: using line : FHIR', () => {
+
+    beforeEach('Create measure and login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(newCQLTestMeasureName, newCQLTestCqlLibraryName)
+        OktaLogin.Login()
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(newCQLTestMeasureName, newCQLTestCqlLibraryName)
+
+    })
+    it('Verify error message when there is an using statement in the CQL, but it is invalid', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureFHIR_with_invalid_using)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(EditMeasurePage.CQLMessageSuccess).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
     })
 })
