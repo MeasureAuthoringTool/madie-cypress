@@ -12,13 +12,9 @@ export class MeasureGroupPage {
     public static readonly QDMPopulationCriteria1 = '[data-testid="leftPanelMeasureInformation-MeasureGroup1"]'
     public static readonly QDMPopulationCriteria2 = '[data-testid="leftPanelMeasureInformation-MeasureGroup2"]'
     public static readonly QDMPopCriteria1Desc = '[data-testid="groupDescriptionInput"]'
-    public static readonly QDMPopCriteria1IP = '[data-testid="population-select-initial-population"]'
     public static readonly QDMPopCriteria2IP = '[id="population-select-initial-population-select"]'
-    public static readonly QDMPopCriteriaIPOptions = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
     public static readonly QDMPopCriteria1IPDesc = '[data-testid="populations[0].description-description"]'
-    public static readonly QDMPopCriteria1SaveBtn = '[data-testid="group-form-submit-btn"]'
     public static readonly QDMAddPopCriteriaBtn = '[data-testid="add-measure-group-button"]'
-    public static readonly QDMPopCriteriaSaveSuccessMsg = '[data-testid="population-criteria-success"]'
     public static readonly QDMIPPCHelperText = '[data-testid="population-select-initial-population-select-helper-text"]'
 
     //QDM Supplemental Data Elements and Risk Adjustment variables
@@ -114,7 +110,6 @@ export class MeasureGroupPage {
     public static readonly measurePopulationExclusionSelect = '[id="population-select-measure-population-exclusion-select"]'
     public static readonly measureObservationPopSelect = '[id="measure-observation-cv-obs"]'
     public static readonly measurePopulationOption = '[data-testid="select-option-measure-group-population"]'
-    public static readonly measureObsAggregSelect = '[id="measure-observation-aggregate-cv-obs"]'
     public static readonly populationMismatchErrorMsg = '[data-testid="Stratification-select-1-helper-text"]'
     public static readonly initialPopulationMismatchErrorMsg = '[data-testid="population-select-initial-population-select-helper-text"]'
     public static readonly measurePopulationMismatchErrorMsg = '[data-testid="population-select-measure-population-select-helper-text"]'

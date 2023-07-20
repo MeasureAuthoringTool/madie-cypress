@@ -4,9 +4,10 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage";
 
-let measureName = 'CohortListQDMPositiveEncounterPerformedWithStratification' + Date.now()
-let CqlLibraryName = 'CohortListQDMPositiveEncounterPerformedWithStratification' + Date.now()
+let measureName = 'CohortListQDMPositiveEncounterPerformed' + Date.now()
+let CqlLibraryName = 'CohortListQDMPositiveEncounterPerformed' + Date.now()
 let measureCQL = 'library HybridHospitalWideReadmission version \'4.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
@@ -135,7 +136,7 @@ let measureCQL = 'library HybridHospitalWideReadmission version \'4.0.000\'\n' +
     '      Timing: FirstLab.resultDatetime\n' +
     '    }'
 
-describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed With Stratification', () => {
+describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
     before('Create Measure', () => {
 
@@ -154,16 +155,58 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed With Strati
 
     })
 
-    it('End to End Cohort ListQDMPositiveEncounterPerformed With Stratification', () => {
+    it('End to End Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
 
+        //save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
             'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+
+        //Group Creation
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //click on / navigate to the Base Configuration sub-tab
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
+
+        //Select Type
+        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
+        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
+
+        //select 'Cohort' scoring on measure
+        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
+        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
+
+        //Update the Patient Basis to 'No'
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
+
+        //click on the save button and confirm save success message Base Config
+        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
+            'Updated Successfully')
+
+        //add pop criteria
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
+            'this group saved successfully.')
+
     })
 })
