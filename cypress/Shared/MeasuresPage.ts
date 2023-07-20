@@ -44,8 +44,9 @@ export class MeasuresPage {
 
     public static validateVersionNumber(expectedValue: string, versionNumber: string): void {
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-
+            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 100000)
             let element = cy.get('[data-testid=measure-action-' + fileContents + ']').parent()
+            cy.wait(1000)
             element.parent().should('contain', expectedValue).children().eq(1).should('contain', versionNumber)
         })
     }

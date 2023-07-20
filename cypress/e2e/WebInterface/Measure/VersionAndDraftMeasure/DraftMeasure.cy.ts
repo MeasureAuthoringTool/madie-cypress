@@ -19,6 +19,8 @@ let testCaseTitle = 'testCaseTitle'
 let testCaseDescription = 'testDescription' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_CohortEpisodeWithStrat_PASS
+let filePath = 'cypress/fixtures/measureId'
+let tcFilePath = 'cypress/fixtures/testCaseId'
 
 describe('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
 
@@ -137,7 +139,9 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        Utilities.waitForElementVisible(MeasuresPage.VersionDraftMsgs, 100000)
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
 
@@ -162,19 +166,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.log('Search Measure with measure name')
         cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).wait(1000).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
-        //MeasuresPage.measureAction('edit')
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
-            Utilities.waitForElementVisible('[data-testid=view-measure-' + fileContents + ']', 35000)
-            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=view-measure-' + fileContents + ']', 35000)
-            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=view-measure-' + fileContents + ']').click()
-        })
+        MeasuresPage.measureAction('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -188,8 +180,9 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
         //Verify Test case info after draft
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get('.TestCaseList___StyledDiv4-sc-miorgt-4').should('contain.text', testCaseTitle)
-        cy.get('[class="action-button"]').click()
+        cy.get(TestCasesPage.testCaseListTable).should('exist')
+        cy.get(TestCasesPage.testCaseListTable).click()
+        cy.get('[class="TestCase___StyledButton-sc-1t2ereo-0 keWkSF action-button"]').click()
         cy.get('[class="btn-container"]').contains('edit').click()
         cy.get(TestCasesPage.aceEditor).should('not.be.empty')
         cy.get(TestCasesPage.aceEditor).should('contain.text', 'Bundle')
