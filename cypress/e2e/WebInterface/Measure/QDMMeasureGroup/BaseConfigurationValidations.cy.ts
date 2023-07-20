@@ -426,13 +426,13 @@ describe('Updates on Base Configuration page', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('d').click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).contains('d').click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
-        cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //navigate to the main measures page
         cy.get(Header.measures).click()
@@ -495,8 +495,8 @@ describe('Updates on Base Configuration page', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('contain.text', 'Select Initial Population')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Select Initial Population')
 
         //navigate to the main measures page
         cy.get(Header.measures).click()
@@ -533,13 +533,13 @@ describe('Updates on Base Configuration page', () => {
         //Add Criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('ipp').click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).contains('ipp').click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
-        cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
@@ -569,7 +569,7 @@ describe('Updates on Base Configuration page', () => {
         //Navigate to Criteria page and verify the populations are cleared
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('not.contain', 'ipp')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('not.contain', 'ipp')
 
     })
 })

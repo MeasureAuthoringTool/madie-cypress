@@ -15,7 +15,6 @@ let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureScoring = 'Cohort'
 let booleanPatientBasisQDM_CQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
-let nonbooleanListOfSameTypeQDM_CQL = MeasureCQL.returnNonBooleanListOfSameTypeQDM_CQL
 let simpleQDMMeasureCQL = MeasureCQL.simpleQDM_CQL
 
 describe('Validate QDM Population Criteria section -- scoring and populations', () => {
@@ -48,16 +47,16 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('contain.text', 'd')
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('contain.text', 'ipp')
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('contain.text', 'n')
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('contain.text', 'SDE Ethnicity')
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('contain.text', 'SDE Payer')
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('contain.text', 'SDE Race')
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('contain.text', 'SDE Sex')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'd')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'ipp')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'n')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'SDE Ethnicity')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'SDE Payer')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'SDE Race')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'SDE Sex')
 
         cy.get(MeasureGroupPage.QDMPopCriteria1IPDesc).should('be.visible')
 
@@ -75,13 +74,13 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('ipp').click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).contains('ipp').click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
-        cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         cy.get(MeasureGroupPage.QDMAddPopCriteriaBtn).click()
         Utilities.waitForElementVisible(MeasureGroupPage.QDMPopulationCriteria2, 30000)
@@ -255,10 +254,10 @@ describe('No values in QDM PC fields, when no CQL', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).should('be.empty')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.empty')
 
         cy.get(MeasureGroupPage.QDMPopCriteria1IPDesc).should('be.visible')
     })
@@ -292,13 +291,13 @@ describe('Save Population Criteria on QDM measure', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('SDE Ethnicity').click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).contains('SDE Ethnicity').click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
-        cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         cy.get(MeasureGroupPage.QDMAddPopCriteriaBtn).click()
         Utilities.waitForElementVisible(MeasureGroupPage.QDMPopulationCriteria2, 30000)
@@ -308,10 +307,10 @@ describe('Save Population Criteria on QDM measure', () => {
 
         cy.get(MeasureGroupPage.QDMPopCriteria2IP).click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('SDE Ethnicity').click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).contains('SDE Ethnicity').click()
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
-        cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
 
     })
 })
@@ -353,21 +352,21 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
 
         //select a value that will return the correct boolean type
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('Initial Population').click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).contains('Initial Population').click()
         //no error should appear
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('not.exist')
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.QDMPopCriteriaSaveSuccessMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 30000)
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('Bilateral Mastectomy Diagnosis').click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).contains('Bilateral Mastectomy Diagnosis').click()
 
         //helper text / error message should appear
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
@@ -414,18 +413,18 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).should('be.visible')
-        cy.get(MeasureGroupPage.QDMPopCriteria1IP).click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
 
         //select a value that will return the correct boolean type
-        cy.get(MeasureGroupPage.QDMPopCriteriaIPOptions).contains('Initial Population').click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).contains('Initial Population').click()
 
         //helper text / error message should appear
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('contain.text', 'For Episode-based Measures, selected definitions must return a list of the same type (Non-Boolean)')
 
         //select a value that will return the correct boolean type
-        cy.get(MeasureGroupPage.QDMPopCriteria1SaveBtn).should('be.disabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
 
     })
 })

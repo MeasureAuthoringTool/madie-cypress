@@ -4,6 +4,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage";
 
 let measureName = 'CVListQDMPositiveEncounterPerformedWithMOAndStratification' + Date.now()
 let CqlLibraryName = 'CVListQDMPositiveEncounterPerformedWithMOAndStratification' + Date.now()
@@ -151,11 +152,66 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
 
+        //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
             'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+
+        //Group Creation
+
+        //commenting group creation out and putting construction of stratifications on hold as well until the following defects are fixed
+        //MAT-5977
+        //MAT-5973
+
+
+        // //Click on Measure Group tab
+        // Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        // cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        // cy.get(EditMeasurePage.measureGroupsTab).click()
+        //
+        // //click on / navigate to the Base Configuration sub-tab
+        // cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
+        // cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
+        //
+        // //Select Type
+        // cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
+        // cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
+        //
+        // //select 'Cohort' scoring on measure
+        // Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCV)
+        // cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Continuous Variable')
+        //
+        // //Update the Patient Basis to 'No'
+        // cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
+        //
+        // //click on the save button and confirm save success message Base Config
+        // cy.get(MeasureGroupPage.qdmBCSaveButton).click()
+        // Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
+        // cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
+        //     'Updated Successfully')
+        //
+        // //add pop criteria
+        // cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+        //
+        // cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+        //
+        // Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        // Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'Measure Population')
+        // Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'Measure Population Exclusions')
+        // Utilities.dropdownSelect(MeasureGroupPage.measureObservationPopSelect, 'MeasureObservation')
+        // Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Median')
+        //
+        // cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+        // cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        // cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        //
+        // //Add Stratifications here
+        //
+        // cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
+        //     'this group saved successfully.')
+
     })
 })
