@@ -11,8 +11,8 @@ parameter "Measurement Period" Interval<DateTime>context Patient
               where PalliativeAssessment.status ~ 'final'
           )
             or exists ( [Encounter: "Palliative Care Encounter"] PalliativeEncounter
-                where PalliativeEncounter.period during "Measurement Period"
-                  and PalliativeEncounter.status ~ 'finished'
+            where PalliativeEncounter.period.start during "Measurement Period"
+                 and PalliativeEncounter.status ~ 'finished'
             )
 
 {home}define "Procedure DRC Example":

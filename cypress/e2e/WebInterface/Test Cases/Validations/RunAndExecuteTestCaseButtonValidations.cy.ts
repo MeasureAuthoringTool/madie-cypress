@@ -20,7 +20,7 @@ let errorTestCaseJSON_no_ResourceID = TestCaseJson.TestCaseJson_missingResourceI
 let err_and_warningTestCaseJson = TestCaseJson.TestCaseJson_with_warning_and_error
 let testCaseSeries = 'SBTestSeries'
 let measureCQL = MeasureCQL.CQL_Multiple_Populations
-let mesureCQLPFTests = MeasureCQL.CQL_Populations
+let measureCQLPFTests = MeasureCQL.CQL_Populations
 
 describe('Run / Execute Test Case button validations', () => {
 
@@ -541,10 +541,9 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
             .should('contain.text', '"Qualifying Encounters"')
         cy.get(TestCasesPage.testCalculationResults)
             .find('[data-statement-name="Qualifying Encounters"]')
-            .should('contain.text', '\ndefine "Qualifying Encounters":\n(\n[Encounter: "Office Visit"]\nunion [Encounter: ' +
-                '"Annual Wellness Visit"]\nunion [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\nunion ' +
-                '[Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\nunion [Encounter: "Home Healthcare Services"]\n) ' +
-                'ValidEncounter\nwhere ValidEncounter.period during "Measurement Period"\nand ValidEncounter.isFinishedEncounter()\n')
+            .should('contain.text', '\ndefine "Qualifying Encounters":\n(\n[Encounter: "Office Visit"]\nunion [Encounter: "Annual Wellness Visit"]' +
+                '\nunion [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\nunion [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]' +
+                '\nunion [Encounter: "Home Healthcare Services"]\n) ValidEncounter\nwhere ValidEncounter.period during "Measurement Period"\n\nand ValidEncounter.isFinishedEncounter()\n')
         cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Population Criteria 2')
 
         //Click on Execute Test Case button on Edit Test Case page
@@ -572,7 +571,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, mesureCQLPFTests)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -1000,7 +999,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, mesureCQLPFTests)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -1278,7 +1277,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm error message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdError: All resources must have an IdWarning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdWarning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
 
         //the 'Run Test Case' button, to run the test case, is unavailable
         cy.get(TestCasesPage.runTestButton).should('exist')
@@ -1398,9 +1397,11 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm error message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdError: All resources must have an IdWarning: CodeSystem is unknown and can\'t be validated: ' +
-            'http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'Warning: Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' ' +
-            '(http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdWarning: ' +
+            'CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP' +
+            '\'Warning: Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), ' +
+            'and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)Warning: No code provided, ' +
+            'and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
 
         //the 'Run Test Case' button, to run the test case, is unavailable
         cy.get(TestCasesPage.runTestButton).should('exist')
@@ -1415,7 +1416,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, mesureCQLPFTests)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
