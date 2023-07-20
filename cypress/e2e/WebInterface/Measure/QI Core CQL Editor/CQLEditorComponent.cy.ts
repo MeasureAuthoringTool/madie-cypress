@@ -27,7 +27,7 @@ let measureCQL_valid = 'library ' + newCqlLibraryName + ' version \'0.0.000\'\n'
     'context Patient\n' +
     '\n' +
     'define "ipp":\n' +
-    '  exists ["Encounter": "Office Visit"] E where E.period.low during "Measurement Period" \n' +
+    '  exists ["Encounter": "Office Visit"] E where E.period during "Measurement Period" \n' +
     '  \n' +
     'define "denom":\n' +
     '    "ipp"\n' +
@@ -114,7 +114,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
 
     })
 

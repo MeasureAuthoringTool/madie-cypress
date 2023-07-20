@@ -62,24 +62,24 @@ describe('Test Case Execution with codes', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
 
         //Navigate to Test Cases page and add Expected values
-        // cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        // cy.get(EditMeasurePage.testCasesTab).click()
-        //
-        // TestCasesPage.clickEditforCreatedTestCase()
-        //
-        // cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        // cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
-        // cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        // cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        // cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        // cy.get(TestCasesPage.testCaseIPPExpected).click()
-        // cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
-        //
-        // cy.get(TestCasesPage.detailsTab).should('exist')
-        // cy.get(TestCasesPage.detailsTab).should('be.visible')
-        // cy.get(TestCasesPage.detailsTab).click()
-        // cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        // cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).click()
+        cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
+
+        cy.get(TestCasesPage.detailsTab).should('exist')
+        cy.get(TestCasesPage.detailsTab).should('be.visible')
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
