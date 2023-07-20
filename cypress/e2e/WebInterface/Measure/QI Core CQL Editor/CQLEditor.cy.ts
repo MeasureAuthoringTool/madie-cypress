@@ -534,7 +534,7 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'CQL updated successfully but was missing a Using statement.  Please add in a valid model and version.')
+        cy.get(EditMeasurePage.CQLMessageSuccess).should('contain.text', 'CQL updated successfully but was missing a Using statement.  Please add in a valid model and version.')
 
     })
     it('Verify error message when there is an using statement in the CQL, but it is not accurate', () => {
@@ -549,7 +549,7 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureQICoreCQL_with_incorrect_using)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(EditMeasurePage.CQLMessageSuccess).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
     })
     it('Verify error message when there is an using statement in the CQL, but it is not accurate, and the library name used is not correct', () => {
@@ -565,7 +565,7 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(EditMeasurePage.CQLMessageSuccess).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
     })
 })

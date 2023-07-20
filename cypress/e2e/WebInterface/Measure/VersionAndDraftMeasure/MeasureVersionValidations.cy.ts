@@ -10,7 +10,7 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 
-
+let MeasuresPageOne = ''
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 let mesureCQLPFTests = MeasureCQL.CQL_Populations
@@ -48,7 +48,7 @@ describe('Measure Versioning validations', () => {
     afterEach('Logout and Clean up', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        //Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
     it('User can not version Measure if there is no CQL', () => {
@@ -94,7 +94,8 @@ describe('Measure Versioning validations', () => {
 
     })
 
-    it('User can not Version if the test case Json has errors', () => {
+    it('User recieves "Version Measures with Invalid Test Cases?" prompt / modal, if measure has test case with errors', () => {
+        let versionNumber = '1.0.000'
 
         MeasuresPage.measureAction('edit')
 
@@ -119,8 +120,34 @@ describe('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(MeasuresPage.measureVersioningErrorMsg).should('contain.text', 'Requested measure cannot be versioned')
-        cy.get(MeasuresPage.measureVersionHelperText).should('contain.text', 'Please include valid test cases to version before versioning this measure.')
+
+        Utilities.waitForElementVisible(TestCasesPage.versionMeasureWithTCErrors, 20000)
+        cy.get(TestCasesPage.versionMeasureWithTCErrors).should('exist')
+
+        cy.get(TestCasesPage.versionMeasurewithTCErrorsModalBody).should('contain.text', 'You have test cases that are invalid.')
+
+        cy.get(TestCasesPage.versionMeasurewithTCErrorsCancel).click()
+
+        Utilities.waitForElementToNotExist(TestCasesPage.versionMeasureWithTCErrors, 20000)
+
+        MeasuresPage.measureAction('version')
+
+        cy.get(MeasuresPage.measureVersionMajor).should('exist')
+        cy.get(MeasuresPage.measureVersionMajor).click()
+
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+
+        Utilities.waitForElementVisible(TestCasesPage.versionMeasureWithTCErrors, 20000)
+        cy.get(TestCasesPage.versionMeasureWithTCErrors).should('exist')
+
+        cy.get(TestCasesPage.versionMeasurewithTCErrorsContinue).click()
+        Utilities.waitForElementToNotExist(TestCasesPage.versionMeasureWithTCErrors, 20000)
+
+        MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
+        cy.log('Version Created Successfully')
+
 
     })
 })
@@ -137,7 +164,7 @@ describe('Non Measure owner unable to create Version', () => {
     after('Logout and Clean up', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        //Utilities.deleteMeasure(measureName, cqlLibraryName)
 
     })
 
