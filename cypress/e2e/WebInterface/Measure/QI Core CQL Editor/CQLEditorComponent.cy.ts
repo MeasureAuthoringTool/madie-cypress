@@ -27,7 +27,7 @@ let measureCQL_valid = 'library ' + newCqlLibraryName + ' version \'0.0.000\'\n'
     'context Patient\n' +
     '\n' +
     'define "ipp":\n' +
-    '  exists ["Encounter": "Office Visit"] E where E.period during "Measurement Period" \n' +
+    '  exists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period" \n' +
     '  \n' +
     'define "denom":\n' +
     '    "ipp"\n' +
