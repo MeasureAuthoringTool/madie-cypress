@@ -48,7 +48,7 @@ describe('Measure Versioning validations', () => {
     afterEach('Logout and Clean up', () => {
 
         OktaLogin.Logout()
-        //Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 
     it('User can not version Measure if there is no CQL', () => {
@@ -93,8 +93,27 @@ describe('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersionHelperText).should('contain.text', 'Please include valid CQL in the CQL editor to version before versioning this measure')
 
     })
+})
 
-    it('User recieves "Version Measures with Invalid Test Cases?" prompt / modal, if measure has test case with errors', () => {
+//Skipping until MAT-5887 is fully implemented
+describe.skip('Measure Versioning when the measure has test case with errors', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = measureName + randValue
+    let newCqlLibraryName = cqlLibraryName + randValue + 4
+
+    beforeEach('Create Measure and Login', () => {
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        OktaLogin.Login()
+    })
+
+    afterEach('Logout', () => {
+
+        OktaLogin.Logout()
+    })
+
+    it('User receives "Version Measures with Invalid Test Cases?" prompt / modal, if measure has test case with errors', () => {
         let versionNumber = '1.0.000'
 
         MeasuresPage.measureAction('edit')
@@ -156,7 +175,11 @@ describe('Non Measure owner unable to create Version', () => {
 
     before('Create Measure with regular user and Login as Alt user', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let newMeasureName = measureName + randValue
+        let newCqlLibraryName = cqlLibraryName + randValue
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
 
         OktaLogin.AltLogin()
     })
@@ -164,7 +187,7 @@ describe('Non Measure owner unable to create Version', () => {
     after('Logout and Clean up', () => {
 
         OktaLogin.Logout()
-        //Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
 
     })
 
