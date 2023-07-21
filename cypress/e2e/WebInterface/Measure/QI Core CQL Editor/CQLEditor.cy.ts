@@ -7,6 +7,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { Global } from "../../../../Shared/Global"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage";
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let measureName = 'TestMeasure' + Date.now() + 1
@@ -534,7 +535,7 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.get(EditMeasurePage.CQLMessageSuccess).should('contain.text', 'CQL updated successfully but was missing a Using statement.  Please add in a valid model and version.')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'CQL updated successfully but was missing a Using statement.  Please add in a valid model and version.')
 
     })
     it('Verify error message when there is an using statement in the CQL, but it is not accurate', () => {
