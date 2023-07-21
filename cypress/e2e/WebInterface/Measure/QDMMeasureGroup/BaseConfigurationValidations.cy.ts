@@ -429,7 +429,7 @@ describe('Updates on Base Configuration page', () => {
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
         cy.get(MeasureGroupPage.initialPopulationSelect).click()
 
-        cy.get(MeasureGroupPage.initialPopulationSelect).contains('d').click()
+        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'd')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
@@ -536,7 +536,7 @@ describe('Updates on Base Configuration page', () => {
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
         cy.get(MeasureGroupPage.initialPopulationSelect).click()
 
-        cy.get(MeasureGroupPage.initialPopulationSelect).contains('ipp').click()
+        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'ipp')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')

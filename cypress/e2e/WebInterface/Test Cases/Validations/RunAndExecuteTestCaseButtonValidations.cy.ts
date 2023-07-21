@@ -541,9 +541,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
             .should('contain.text', '"Qualifying Encounters"')
         cy.get(TestCasesPage.testCalculationResults)
             .find('[data-statement-name="Qualifying Encounters"]')
-            .should('contain.text', '\ndefine "Qualifying Encounters":\n(\n[Encounter: "Office Visit"]\nunion [Encounter: "Annual Wellness Visit"]' +
-                '\nunion [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\nunion [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]' +
-                '\nunion [Encounter: "Home Healthcare Services"]\n) ValidEncounter\nwhere ValidEncounter.period during "Measurement Period"\n\nand ValidEncounter.isFinishedEncounter()\n')
+            .should('contain.text', '\ndefine "Qualifying Encounters":\n(\n[Encounter: "Office Visit"]\nunion [Encounter: "Annual Wellness Visit"]\nunion [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\nunion [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\nunion [Encounter: "Home Healthcare Services"]\n) ValidEncounter\nwhere ValidEncounter.period during "Measurement Period"\nand ValidEncounter.isFinishedEncounter()\n')
         cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Population Criteria 2')
 
         //Click on Execute Test Case button on Edit Test Case page
