@@ -179,7 +179,7 @@ describe('Measure Transfer - Multiple instances', () => {
         //Draft the Versioned Measure
         MeasuresPage.measureAction('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasureName)
-        cy.get(MeasuresPage.createDraftContinueBtn).click()
+        cy.get(MeasuresPage.createDraftContinueBtn).click().wait(1000)
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
