@@ -94,7 +94,6 @@ export class TestCasesPage {
 
     //QDM Test Case
     public static readonly qdmCQLFailureErrorList = '[data-testid="generic-fail-text-list"]'
-    public static readonly qdmExecutionContextLoadErrors = '[]'
 
     //CQL area on Test Case page
     public static readonly tcCQLArea = '[data-testid="test-case-cql-editor"]'
