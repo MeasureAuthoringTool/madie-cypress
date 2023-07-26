@@ -16,6 +16,8 @@ let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let updatedCqlLibraryName = cqlLibraryName + 'someUpdate'
 let updatedMeasureName = measureName + 'someUpdate'
+let randValue = (Math.floor((Math.random() * 1000) + 1))
+let randomMeasureName = 'TransferTestMeasure' + randValue + 5
 let versionNumber = '1.0.000'
 let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
@@ -173,13 +175,14 @@ describe('Measure Transfer - Multiple instances', () => {
         cy.get(MeasuresPage.versionMeasuresRadioButton).eq(0).click()
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
-        //MeasuresPage.validateVersionNumber(newMeasureName, versionNumber)
+        MeasuresPage.validateVersionNumber(newMeasureName, versionNumber)
         cy.log('Version Created Successfully')
 
         //Draft the Versioned Measure
         MeasuresPage.measureAction('draft')
-        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasureName)
-        cy.get(MeasuresPage.createDraftContinueBtn).click().wait(1000)
+
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(randomMeasureName)
+        cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
@@ -206,7 +209,7 @@ describe('Measure Transfer - Multiple instances', () => {
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
         cy.get('.MeasureList___StyledTd-sc-pt5u8-5').should('contain', newMeasureName)
-        cy.get('.MeasureList___StyledTd-sc-pt5u8-5').should('contain', updatedMeasureName)
+        cy.get('.MeasureList___StyledTd-sc-pt5u8-5').should('contain', randomMeasureName)
     })
 })
 
