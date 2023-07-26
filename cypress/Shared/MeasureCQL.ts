@@ -422,6 +422,29 @@ export class MeasureCQL {
         'define "n":\n' +
         '\ttrue'
 
+    public static readonly simpleQDM_CQL_invalid_valueset = 'library Library1234556 version \'0.0.000\'\n' +
+        'using QDM version \'5.6\'\n' +
+        '\n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837b\'\n' +
+
+        '\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+        'context Patient\n' +
+        'define "SDE Ethnicity":\n' +
+        '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+        'define "SDE Payer":\n' +
+        '  ["Patient Characteristic Payer": "Payer"]\n' +
+        'define "SDE Race":\n' +
+        '  ["Patient Characteristic Race": "Race"]\n' +
+        'define "SDE Sex":\n' +
+        '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+        'define "ipp":\n' +
+        '\ttrue\n' +
+        'define "d":\n' +
+        '\t true\n' +
+        'define "n":\n' +
+        '\ttrue'
+
     public static readonly returnNonBooleanListOfSameTypeQDM_CQL = 'library Cataracts2040BCVAwithin90Days version \'12.0.000\'\n' +
         '\n' +
         'using QDM version \'5.6\'\n' +

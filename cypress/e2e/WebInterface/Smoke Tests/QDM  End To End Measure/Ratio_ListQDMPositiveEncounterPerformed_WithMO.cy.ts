@@ -269,62 +269,62 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
         //commenting group creation out until defect MAT-5973 is fixed
 
-        // //Group Creation
-        //
-        // //Click on Measure Group tab
-        // Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        // cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        // cy.get(EditMeasurePage.measureGroupsTab).click()
-        //
-        // //click on / navigate to the Base Configuration sub-tab
-        // cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-        // cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
-        //
-        // //Select Type
-        // cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
-        // cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
-        //
-        // //select 'Cohort' scoring on measure
-        // Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringRatio)
-        // cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Ratio')
-        //
-        // //Update the Patient Basis to 'No'
-        // cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
-        //
-        // //click on the save button and confirm save success message Base Config
-        // cy.get(MeasureGroupPage.qdmBCSaveButton).click()
-        // Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        // cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-        //     'Updated Successfully')
-        //
-        // //add pop criteria
-        // cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-        //
-        // Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        // Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        //
-        // cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
-        //
-        // cy.get(MeasureGroupPage.denominatorObservation).should('exist')
-        // cy.get(MeasureGroupPage.denominatorObservation).should('be.visible')
-        // Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Denominator Observations')
-        // Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Sum')
-        //
-        // Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
-        // Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
-        //
-        // cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
-        //
-        // cy.get(MeasureGroupPage.numeratorObservation).should('exist')
-        // cy.get(MeasureGroupPage.numeratorObservation).should('be.visible')
-        // Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'Numerator Observations')
-        // Utilities.dropdownSelect(MeasureGroupPage.numeratorAggregateFunction, 'Sum')
-        //
-        // cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        // cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        // cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        //
-        // cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
-        //     'this group saved successfully.')
+        //Group Creation
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //click on / navigate to the Base Configuration sub-tab
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
+
+        //Select Type
+        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
+        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
+
+        //select 'Cohort' scoring on measure
+        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringRatio)
+        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Ratio')
+
+        //Update the Patient Basis to 'No'
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
+
+        //click on the save button and confirm save success message Base Config
+        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
+            'Updated Successfully')
+
+        //add pop criteria
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+
+        cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
+
+        cy.get(MeasureGroupPage.denominatorObservation).should('exist')
+        cy.get(MeasureGroupPage.denominatorObservation).should('be.visible')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Denominator Observations')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Sum')
+
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+
+        cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
+
+        cy.get(MeasureGroupPage.numeratorObservation).should('exist')
+        cy.get(MeasureGroupPage.numeratorObservation).should('be.visible')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'Numerator Observations')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorAggregateFunction, 'Sum')
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
+            'this group saved successfully.')
     })
 })
