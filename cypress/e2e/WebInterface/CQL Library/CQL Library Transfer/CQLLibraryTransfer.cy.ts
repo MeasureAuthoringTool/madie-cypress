@@ -8,6 +8,7 @@ let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let updatedCQLLibraryName = CQLLibraryName + randValue + 'SomeUpdate' + 9
+let randomCQLLibraryName = 'TransferTestCQLLibrary' + randValue + 5
 let CQLLibraryPublisher = 'SemanticBits'
 let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
@@ -130,7 +131,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('exist')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.visible')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
-        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).clear().type(updatedCQLLibraryName).wait(1000)
+        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).clear().type(randomCQLLibraryName).wait(1000)
 
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('exist')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
@@ -167,7 +168,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
         cy.get(CQLLibraryPage.myLibrariesBtn).click()
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
-        cy.get('[data-testid="table-body"]').should('contain', updatedCQLLibraryName)
+        cy.get('[data-testid="table-body"]').should('contain', randomCQLLibraryName)
     })
 })
 
