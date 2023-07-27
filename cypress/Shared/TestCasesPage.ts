@@ -230,6 +230,9 @@ export class TestCasesPage {
     public static readonly importTestCaseSuccessMsg = '[data-testid=success-toast]'
     public static readonly importTestCaseErrorMsg = '[data-testid=error-toast]'
 
+    //Export Test Cases
+    public static readonly exportTestCasesBtn = '[data-testid="export-test-cases-button"]'
+
     //QDM Test Case Elements Tab
     public static readonly QDMElementsTab = '[data-testid=qdm-Elements-sub-heading]'
 
@@ -279,10 +282,10 @@ export class TestCasesPage {
 
         })
     }
-    public static testCaseAction(action: string, secondMeasure?: boolean): void {
+    public static testCaseAction(action: string, secondTestCase?: boolean): void {
         let filePath = 'cypress/fixtures/testCaseId'
 
-        if (secondMeasure === true) {
+        if (secondTestCase === true) {
             filePath = 'cypress/fixtures/testCaseId2'
         }
         cy.readFile(filePath).should('exist').then((fileContents) => {
@@ -503,6 +506,7 @@ export class TestCasesPage {
         let user = ''
         let measurePath = 'cypress/fixtures/measureId'
         let testCasePath = ''
+        let testCasePIdPath = ''
         if (altUser) {
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
@@ -513,9 +517,11 @@ export class TestCasesPage {
         }
         if (twoTestCases === true) {
             testCasePath = 'cypress/fixtures/testCaseId2'
+            testCasePIdPath = 'cypress/fixtures/testCasePId2'
         }
         else {
             testCasePath = 'cypress/fixtures/testCaseId'
+            testCasePIdPath = 'cypress/fixtures/testCasePId'
         }
 
         //Add Test Case to the Measure
@@ -541,6 +547,7 @@ export class TestCasesPage {
                     expect(response.body.title).to.eql(title)
                     expect(response.body.description).to.eql(description)
                     cy.writeFile(testCasePath, response.body.id)
+                    cy.writeFile(testCasePIdPath, response.body.patientId)
                 })
             })
         })
