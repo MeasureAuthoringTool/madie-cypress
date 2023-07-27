@@ -60,7 +60,7 @@ describe('QI-Core Single Test Case Export', () => {
 
     })
 
-    it.only('Export single QI-Core Test case', () => {
+    it('Export single QI-Core Test case', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
@@ -152,7 +152,7 @@ describe('QI-Core Multiple Test Case Export', () => {
 
     })
 
-    it.only('Export All QI-Core Test cases', () => {
+    it('Export All QI-Core Test cases', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
