@@ -8,12 +8,8 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 
 let MeasuresPageOne = ''
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
-let mesureCQLPFTests = MeasureCQL.CQL_Populations
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let measureCQL = MeasureCQL.SBTEST_CQL
@@ -96,7 +92,7 @@ describe('Measure Versioning validations', () => {
 })
 
 //Skipping until MAT-5887 is fully implemented
-describe.skip('Measure Versioning when the measure has test case with errors', () => {
+describe('Measure Versioning when the measure has test case with errors', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     let newMeasureName = measureName + randValue
