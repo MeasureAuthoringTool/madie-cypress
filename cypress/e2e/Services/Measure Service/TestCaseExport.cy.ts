@@ -46,9 +46,6 @@ describe('QI-Core Single Test Case Export', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         OktaLogin.Logout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -61,6 +58,35 @@ describe('QI-Core Single Test Case Export', () => {
     })
 
     it('Export single QI-Core Test case', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
+                    cy.request({
+                        url: '/api/measures/' + id + '/test-cases/exports',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: [
+                            testCaseId
+                        ]
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body).is.not.empty
+                    })
+                })
+            })
+        })
+
+    })
+
+    it('Non-owner of Measure: Export single QI-Core Test case', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookieALT()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
@@ -138,9 +164,7 @@ describe('QI-Core Multiple Test Case Export', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         OktaLogin.Logout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -153,6 +177,36 @@ describe('QI-Core Multiple Test Case Export', () => {
     })
 
     it('Export All QI-Core Test cases', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
+                    cy.readFile('cypress/fixtures/testcaseId2').should('exist').then((testCaseId2) => {
+                        cy.request({
+                            url: '/api/measures/' + id + '/test-cases/exports',
+                            headers: {
+                                authorization: 'Bearer ' + accessToken.value
+                            },
+                            method: 'PUT',
+                            body: [
+                                testCaseId, testCaseId2
+                            ]
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                            expect(response.body).is.not.empty
+                        })
+                    })
+                })
+            })
+        })
+    })
+
+    it('Non-owner of Measure: Export All QI-Core Test cases', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookieALT()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
