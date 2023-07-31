@@ -4,7 +4,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage";
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage";
 
 let measureName = 'CVListQDMPositiveEncounterPerformedWithMOAndStratification' + Date.now()
 let CqlLibraryName = 'CVListQDMPositiveEncounterPerformedWithMOAndStratification' + Date.now()
@@ -193,10 +193,11 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
 
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
 
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'Measure Population')
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'Measure Population Exclusions')
-        Utilities.dropdownSelect(MeasureGroupPage.measureObservationPopSelect, 'MeasureObservation')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ED Encounter with Decision to Admit')
+
+        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'ED Encounter with Decision to Admit')
+        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'ED Encounter with Decision to Admit')
+        Utilities.dropdownSelect(MeasureGroupPage.measureObservationPopSelect, 'EDEncounter')
         Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Median')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
