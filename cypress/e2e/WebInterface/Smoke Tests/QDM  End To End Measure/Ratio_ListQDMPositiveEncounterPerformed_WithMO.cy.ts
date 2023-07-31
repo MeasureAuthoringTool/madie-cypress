@@ -4,7 +4,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage";
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage";
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -300,24 +300,25 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Days with Hyperglycemic Events')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Days with Hyperglycemic Events')
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 
         cy.get(MeasureGroupPage.denominatorObservation).should('exist')
         cy.get(MeasureGroupPage.denominatorObservation).should('be.visible')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Denominator Observations')
+
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Days In Period')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Sum')
 
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Days with Hyperglycemic Events')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Days with Hyperglycemic Events')
 
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
 
         cy.get(MeasureGroupPage.numeratorObservation).should('exist')
         cy.get(MeasureGroupPage.numeratorObservation).should('be.visible')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'Numerator Observations')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'Days In Period')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorAggregateFunction, 'Sum')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
