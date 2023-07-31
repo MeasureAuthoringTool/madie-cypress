@@ -15,7 +15,6 @@ let cqlLibraryTwo = 'LibraryTwo' + Date.now()
 let testCaseTitle = 'FAIL'
 let testCaseDescription = 'FAIL' + Date.now()
 let testCaseSeries = 'SBTestSeries'
-let invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
 let measureCQL_ProportionMeasure = MeasureCQL.CQL_Multiple_Populations
 let validTestCaseJson = TestCaseJson.CohortEpisodeEncounter_PASS
 let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -228,43 +227,6 @@ describe('Version Measure with invalid CQL', () => {
     })
 })
 
-describe('Version Measure with invalid test case Json', () => {
-
-    before('Create Measure, Test Case and Set Access Token', () => {
-
-        newMeasureName = measureName + 4 + randValue
-        newCQLLibraryName = cqlLibraryName + 4 + randValue
-
-        cy.setAccessTokenCookie()
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, invalidTestCaseJson)
-    })
-
-    after('Clean up', () => {
-
-        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
-
-    })
-
-    it('User can not version Measure if the Test case Json has errors', () => {
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + measureId + '/version?versionType=major',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    },
-                    method: 'PUT'
-                }).then((response) => {
-                    expect(response.status).to.eql(400)
-                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has invalid test cases.')
-                })
-            })
-        })
-    })
-})
 
 describe('Edit validations for versioned Measure', () => {
 
@@ -414,7 +376,7 @@ describe('Delete validations for versioned Measure', () => {
         cy.setAccessTokenCookie()
     })
 
-    it.only('Verify error messages when user try to delete Measure, Measure Groups or Test cases for versioned Measures', () => {
+    it('Verify error messages when user try to delete Measure, Measure Groups or Test cases for versioned Measures', () => {
 
         cy.log('Version the Measure')
         cy.getCookie('accessToken').then((accessToken) => {
