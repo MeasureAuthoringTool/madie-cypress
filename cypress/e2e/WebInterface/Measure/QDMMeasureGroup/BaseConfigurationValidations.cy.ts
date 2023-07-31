@@ -386,7 +386,7 @@ describe('Updates on Base Configuration page', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Login()
+        OktaLogin.Logout()
     })
 
     afterEach('Clean up and Logout', () => {
