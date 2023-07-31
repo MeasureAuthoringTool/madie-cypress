@@ -89,6 +89,66 @@ describe('QI-Core Single Test Case Export', () => {
         })
 
     })
+
+    it('Non-owner of Measure: Export single QI-Core Test case', () => {
+        let testCasePIdPath = 'cypress/fixtures/testCasePId'
+
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.testCaseAction('edit')
+        //navigate to the details page
+        cy.get(TestCasesPage.detailsTab).scrollIntoView()
+        cy.get(TestCasesPage.detailsTab).should('exist')
+        cy.get(TestCasesPage.detailsTab).should('be.enabled')
+        cy.get(TestCasesPage.detailsTab).click()
+
+        //Update Test Case Description
+        cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
+
+        //save changes to description
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
+        //verify message appears indicating that test case was saved
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+
+        cy.get(EditMeasurePage.measureDetailsTab).click()
+        Utilities.waitForElementVisible(EditMeasurePage.measureNameTextBox, 35000)
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        OktaLogin.Logout()
+        OktaLogin.AltLogin()
+
+        cy.get(MeasuresPage.allMeasuresTab).click()
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.testCaseAction('export')
+
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.log('Successfully verified zip file export')
+
+        // unzipping the Test Case Export
+        cy.task('unzipFile', { zipFile: 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip', path: downloadsFolder })
+            .then(results => {
+                cy.log('unzipFile Task finished')
+            })
+        cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
+            //Verify all files exist in exported zip file
+            cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('contain', 'eCQMTitle-v0.0.000-SBTestSeries-Title for Auto Test.json' &&
+                patientId, 'README.txt')
+        })
+
+    })
+
+
 })
 
 describe('QI-Core Test Case Export for all test cases', () => {
@@ -165,6 +225,93 @@ describe('QI-Core Test Case Export for all test cases', () => {
 
         cy.get(EditMeasurePage.measureDetailsTab).click()
         Utilities.waitForElementVisible(EditMeasurePage.measureNameTextBox, 35000)
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        cy.get(TestCasesPage.exportTestCasesBtn).click()
+
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.log('Successfully verified zip file export')
+
+        // unzipping the Test Case Export
+        cy.task('unzipFile', { zipFile: 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip', path: downloadsFolder })
+            .then(results => {
+                cy.log('unzipFile Task finished')
+            })
+        cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
+            //Verify all files exist in exported zip file
+            cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('contain', 'eCQMTitle-v0.0.000-SBTestSeries-Title for Auto Test.json' &&
+                patientId, 'README.txt')
+        })
+        cy.readFile(testCasePIdPathSecnD).should('exist').then((patientId2) => {
+            //Verify all files exist in exported zip file
+            cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('contain', 'eCQMTitle-v0.0.000-SBTestSeries2-Title for Auto Test2.json' &&
+                patientId2)
+        })
+
+    })
+
+    it('Non-owner of Measure: Export All QI-Core Test cases', () => {
+        let testCasePIdPath = 'cypress/fixtures/testCasePId'
+        let testCasePIdPathSecnD = 'cypress/fixtures/testCasePId2'
+
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.testCaseAction('edit')
+        //navigate to the details page
+        cy.get(TestCasesPage.detailsTab).scrollIntoView()
+        cy.get(TestCasesPage.detailsTab).should('exist')
+        cy.get(TestCasesPage.detailsTab).should('be.enabled')
+        cy.get(TestCasesPage.detailsTab).click()
+
+        //Update Test Case Description
+        cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
+
+        //save changes to description
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
+        //verify message appears indicating that test case was saved
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+
+        cy.get(EditMeasurePage.measureDetailsTab).click()
+        Utilities.waitForElementVisible(EditMeasurePage.measureNameTextBox, 35000)
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.testCaseAction('edit', true)
+        //navigate to the details page
+        cy.get(TestCasesPage.detailsTab).scrollIntoView()
+        cy.get(TestCasesPage.detailsTab).should('exist')
+        cy.get(TestCasesPage.detailsTab).should('be.enabled')
+        cy.get(TestCasesPage.detailsTab).click()
+
+        //Update Test Case Description
+        cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
+
+        //save changes to description
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
+        //verify message appears indicating that test case was saved
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+
+        cy.get(EditMeasurePage.measureDetailsTab).click()
+        Utilities.waitForElementVisible(EditMeasurePage.measureNameTextBox, 35000)
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        OktaLogin.Logout()
+        OktaLogin.AltLogin()
+
+        cy.get(MeasuresPage.allMeasuresTab).click()
+        MeasuresPage.measureAction("edit")
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
