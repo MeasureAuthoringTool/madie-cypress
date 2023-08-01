@@ -10,9 +10,6 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 
 let MeasuresPageOne = ''
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
-let mesureCQLPFTests = MeasureCQL.CQL_Populations
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let measureCQL = MeasureCQL.SBTEST_CQL

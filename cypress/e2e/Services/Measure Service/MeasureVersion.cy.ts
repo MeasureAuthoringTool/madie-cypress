@@ -15,7 +15,6 @@ let cqlLibraryTwo = 'LibraryTwo' + Date.now()
 let testCaseTitle = 'FAIL'
 let testCaseDescription = 'FAIL' + Date.now()
 let testCaseSeries = 'SBTestSeries'
-let invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
 let measureCQL_ProportionMeasure = MeasureCQL.CQL_Multiple_Populations
 let validTestCaseJson = TestCaseJson.CohortEpisodeEncounter_PASS
 let randValue = (Math.floor((Math.random() * 1000) + 1))
