@@ -240,13 +240,7 @@ describe('Version Measure with invalid test case Json', () => {
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, invalidTestCaseJson)
     })
 
-    after('Clean up', () => {
-
-        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
-
-    })
-
-    it('User can not version Measure if the Test case Json has errors', () => {
+    it('User can version Measure if the Test case Json has errors', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
@@ -258,8 +252,8 @@ describe('Version Measure with invalid test case Json', () => {
                     },
                     method: 'PUT'
                 }).then((response) => {
-                    expect(response.status).to.eql(400)
-                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has invalid test cases.')
+                    expect(response.status).to.eql(200)
+                    expect(response.body.version).to.eql('1.0.000')
                 })
             })
         })
@@ -414,7 +408,7 @@ describe('Delete validations for versioned Measure', () => {
         cy.setAccessTokenCookie()
     })
 
-    it.only('Verify error messages when user try to delete Measure, Measure Groups or Test cases for versioned Measures', () => {
+    it('Verify error messages when user try to delete Measure, Measure Groups or Test cases for versioned Measures', () => {
 
         cy.log('Version the Measure')
         cy.getCookie('accessToken').then((accessToken) => {
