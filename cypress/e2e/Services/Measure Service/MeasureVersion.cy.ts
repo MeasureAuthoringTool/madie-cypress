@@ -227,6 +227,37 @@ describe('Version Measure with invalid CQL', () => {
     })
 })
 
+describe('Version Measure with invalid test case Json', () => {
+
+    before('Create Measure, Test Case and Set Access Token', () => {
+
+        newMeasureName = measureName + 4 + randValue
+        newCQLLibraryName = cqlLibraryName + 4 + randValue
+
+        cy.setAccessTokenCookie()
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, invalidTestCaseJson)
+    })
+
+    it('User can version Measure if the Test case Json has errors', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + measureId + '/version?versionType=major',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'PUT'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.version).to.eql('1.0.000')
+                })
+            })
+        })
+    })
+})
 
 describe('Edit validations for versioned Measure', () => {
 

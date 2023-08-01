@@ -91,7 +91,6 @@ describe('Measure Versioning validations', () => {
     })
 })
 
-//Skipping until MAT-5887 is fully implemented
 describe('Measure Versioning when the measure has test case with errors', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -162,8 +161,6 @@ describe('Measure Versioning when the measure has test case with errors', () => 
 
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
-
-
     })
 })
 
