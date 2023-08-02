@@ -295,7 +295,6 @@ export class TestCasesPage {
             cy.get('[data-testid=select-action-' + fileContents + ']').should('be.enabled').wait(1000)
             switch ((action.valueOf()).toString().toLowerCase()) {
                 case "edit": {
-                    cy.scrollTo('top')
                     cy.get('[data-testid=select-action-' + fileContents + ']').click()
                     Utilities.waitForElementVisible('[data-testid=view-edit-test-case-' + fileContents + ']', 55000)
                     cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.visible')
