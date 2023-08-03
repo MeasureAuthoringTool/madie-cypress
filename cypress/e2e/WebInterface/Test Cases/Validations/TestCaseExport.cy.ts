@@ -5,6 +5,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { Header } from "../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -27,7 +28,7 @@ describe('QI-Core Single Test Case Export', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
-        OktaLogin.Login()
+
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -44,33 +45,22 @@ describe('QI-Core Single Test Case Export', () => {
     it('Export single QI-Core Test case', () => {
         let testCasePIdPath = 'cypress/fixtures/testCasePId'
 
+        OktaLogin.Login()
+
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
         MeasuresPage.measureAction("edit")
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('edit')
-        //navigate to the details page
-        cy.get(TestCasesPage.detailsTab).scrollIntoView()
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.enabled')
-        cy.get(TestCasesPage.detailsTab).click()
-
-        //Update Test Case Description
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
-
-        //save changes to description
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-
-        //verify message appears indicating that test case was saved
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
-
-        cy.get(EditMeasurePage.measureDetailsTab).click()
-        Utilities.waitForElementVisible(EditMeasurePage.measureNameTextBox, 35000)
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.testCaseAction('export')
 
         TestCasesPage.testCaseAction('export')
 
@@ -92,39 +82,24 @@ describe('QI-Core Single Test Case Export', () => {
 
     it('Non-owner of Measure: Export single QI-Core Test case', () => {
         let testCasePIdPath = 'cypress/fixtures/testCasePId'
-
-        MeasuresPage.measureAction("edit")
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        TestCasesPage.testCaseAction('edit')
-        //navigate to the details page
-        cy.get(TestCasesPage.detailsTab).scrollIntoView()
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.enabled')
-        cy.get(TestCasesPage.detailsTab).click()
-
-        //Update Test Case Description
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
-
-        //save changes to description
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-
-        //verify message appears indicating that test case was saved
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
-
-        cy.get(EditMeasurePage.measureDetailsTab).click()
-        Utilities.waitForElementVisible(EditMeasurePage.measureNameTextBox, 35000)
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        OktaLogin.Logout()
         OktaLogin.AltLogin()
 
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').wait(3000)
+        cy.get(MeasuresPage.allMeasuresTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
+
         MeasuresPage.measureAction("edit")
 
         //Navigate to Test Case page
@@ -160,7 +135,7 @@ describe('QI-Core Test Case Export for all test cases', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + '2', testCaseSeries + '2', testCaseDescription + '2', testCaseJson, true)
-        OktaLogin.Login()
+
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -178,53 +153,17 @@ describe('QI-Core Test Case Export for all test cases', () => {
         let testCasePIdPath = 'cypress/fixtures/testCasePId'
         let testCasePIdPathSecnD = 'cypress/fixtures/testCasePId2'
 
+        OktaLogin.Login()
+
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
         MeasuresPage.measureAction("edit")
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        TestCasesPage.testCaseAction('edit')
-        //navigate to the details page
-        cy.get(TestCasesPage.detailsTab).scrollIntoView()
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.enabled')
-        cy.get(TestCasesPage.detailsTab).click()
-
-        //Update Test Case Description
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
-
-        //save changes to description
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-
-        //verify message appears indicating that test case was saved
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
-
-        cy.get(EditMeasurePage.measureDetailsTab).click()
-        Utilities.waitForElementVisible(EditMeasurePage.measureNameTextBox, 35000)
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        TestCasesPage.testCaseAction('edit', true)
-        //navigate to the details page
-        cy.get(TestCasesPage.detailsTab).scrollIntoView()
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.enabled')
-        cy.get(TestCasesPage.detailsTab).click()
-
-        //Update Test Case Description
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
-
-        //save changes to description
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-
-        //verify message appears indicating that test case was saved
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
-
-        cy.get(EditMeasurePage.measureDetailsTab).click()
-        Utilities.waitForElementVisible(EditMeasurePage.measureNameTextBox, 35000)
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -255,62 +194,24 @@ describe('QI-Core Test Case Export for all test cases', () => {
     it('Non-owner of Measure: Export All QI-Core Test cases', () => {
         let testCasePIdPath = 'cypress/fixtures/testCasePId'
         let testCasePIdPathSecnD = 'cypress/fixtures/testCasePId2'
-
-        MeasuresPage.measureAction("edit")
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        TestCasesPage.testCaseAction('edit')
-        //navigate to the details page
-        cy.get(TestCasesPage.detailsTab).scrollIntoView()
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.enabled')
-        cy.get(TestCasesPage.detailsTab).click()
-
-        //Update Test Case Description
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
-
-        //save changes to description
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-
-        //verify message appears indicating that test case was saved
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
-
-        cy.get(EditMeasurePage.measureDetailsTab).click()
-        Utilities.waitForElementVisible(EditMeasurePage.measureNameTextBox, 35000)
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        TestCasesPage.testCaseAction('edit', true)
-        //navigate to the details page
-        cy.get(TestCasesPage.detailsTab).scrollIntoView()
-        cy.get(TestCasesPage.detailsTab).should('exist')
-        cy.get(TestCasesPage.detailsTab).should('be.enabled')
-        cy.get(TestCasesPage.detailsTab).click()
-
-        //Update Test Case Description
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
-
-        //save changes to description
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-
-        //verify message appears indicating that test case was saved
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
-
-        cy.get(EditMeasurePage.measureDetailsTab).click()
-        Utilities.waitForElementVisible(EditMeasurePage.measureNameTextBox, 35000)
-
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        OktaLogin.Logout()
         OktaLogin.AltLogin()
 
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').wait(3000)
+        cy.get(MeasuresPage.allMeasuresTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
+
         MeasuresPage.measureAction("edit")
 
         //Navigate to Test Case page

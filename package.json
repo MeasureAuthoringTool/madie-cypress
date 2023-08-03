@@ -45,6 +45,7 @@
 		"dev:ui:smoketests:report": "npm run delete:reports; npm run delete:mochawesome; npm run dev:ui:smoketests; npm run combine:reports; npm run generateOne:report",
 		"dev:all:services:tests:report": "npm run delete:reports; npm run delete:mochawesome; npm run dev:all:services:tests; npm run combine:reports; npm run generateOne:report",
 		"dev:all:measure:service:tests:report": "npm run delete:reports; npm run delete:mochawesome; npm run dev:all:measure:service:tests; npm run combine:reports; npm run generateOne:report",
+		"dev:ui:testCases:report": "npm run delete:reports; npm run delete:mochawesome; npm run dev:ui:testCases; npm run combine:reports; npm run generateOne:report",
 		"dev:all:tests:report": "npm run delete:reports; npm run delete:mochawesome; npm run dev:all:tests; npm run combine:reports; npm run generateOne:report",
 		"test:all:tests:report": "npm run delete:reports; npm run delete:mochawesome; npm run test:all:tests; npm run combine:reports; npm run generateOne:report",
 		"test:all:ui:tests:report": "npm run delete:reports; npm run delete:mochawesome; npm run test:all:ui:tests; npm run combine:reports; npm run generateOne:report",
