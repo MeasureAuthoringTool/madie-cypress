@@ -203,7 +203,12 @@ describe('MO datatype Error', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'For Episode Measure, selected definitions must ' +
-            'return a list of the same type and Measure Observation input parameter must also be equal to that same type.')
+        cy.get(MeasureGroupPage.pcErrorAlertToast).should('be.visible')
+        cy.get(MeasureGroupPage.pcErrorAlertToast).then(($ele) => {
+            let text = $ele.text().toString()
+            cy.then(() => expect(text).to.be.equal('For Episode-based Measures, selected definitions must return a ' +
+                'list of the same type and Measure Observations input parameter must also be equal to that same type.'))
+        })
+
     })
 })
