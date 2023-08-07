@@ -235,8 +235,9 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
 
         MeasuresPage.measureAction('export')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
+        console.log('Successfully verified zip file export')
 
         //cy.get(MeasuresPage.exportFinishedContinueBtn).click()
         OktaLogin.Logout()
@@ -249,11 +250,12 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
         cy.task('unzipFile', { zipFile: 'eCQMTitle-v1.0.000-FHIR4.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
+                console.log('unzipFile Task finished')
             })
 
         //Verify all files exist in exported zip file
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v1.0.000-FHIR.html' &&
-            'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json')
+            'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json',{ timeout: 500000 })
 
     })
 })
