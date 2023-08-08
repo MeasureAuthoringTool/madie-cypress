@@ -225,13 +225,24 @@ export class TestCasesPage {
     public static readonly deleteTestCaseContinueBtn = '[data-testid="delete-dialog-continue-button"]'
 
     //Import Test cases
+    public static readonly importTestCaseBtnOnModal = '[data-testid="test-case-import-import-btn"]'
+    public static readonly importTestCaseCancelBtnOnModal = '[data-testid="test-case-import-cancel-btn"]'
+    public static readonly importTestCaseSuccessMessage = '[data-testid="population-criteria-success"]'
+    public static readonly importTestCaseAlertMessage = '[class="madie-alert warning"]'
     public static readonly importTestCaseBtn = '[data-testid=import-test-case-btn]'
     public static readonly testCaseFileImport = '[data-testid=import-file-input]'
+    public static readonly testCasesNonBonnieFileImportModal = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthMd MuiDialog-paperFullWidth css-cwpu7v"]'
+    public static readonly testCasesNonBonnieFileImport = '[data-testid="file-drop-input"]'
+    public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile = '[class="TestCaseImportDialog___StyledSmall-sc-v92oci-5 fZbLiJ"]'
+    public static readonly testCasesNonBonnieFileImportFileUploadStatusDetails = '[class="TestCaseImportDialog___StyledSmall2-sc-v92oci-6 gpyrWs"]'
     public static readonly importTestCaseSuccessMsg = '[data-testid=success-toast]'
     public static readonly importTestCaseErrorMsg = '[data-testid=error-toast]'
 
     //Export Test Cases
     public static readonly exportTestCasesBtn = '[data-testid="export-test-cases-button"]'
+
+    //Import Test Cases
+    public static readonly importNonBonnieTestCasesBtn = '[data-testid="import-test-cases-button"]'
 
     //QDM Test Case Elements Tab
     public static readonly QDMElementsTab = '[data-testid=qdm-Elements-sub-heading]'
@@ -501,7 +512,7 @@ export class TestCasesPage {
         })
 
     }
-    public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, twoTestCases?: boolean, altUser?: boolean): string {
+    public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, secondMeasure?: boolean, twoTestCases?: boolean, altUser?: boolean): string {
         let user = ''
         let measurePath = 'cypress/fixtures/measureId'
         let testCasePath = ''
@@ -513,6 +524,14 @@ export class TestCasesPage {
         else {
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
+        }
+        if (secondMeasure === true) {
+            measurePath = 'cypress/fixtures/measureId2'
+            testCasePIdPath = 'cypress/fixtures/measureId2'
+        }
+        else {
+            measurePath = 'cypress/fixtures/measureId'
+            testCasePIdPath = 'cypress/fixtures/measureId'
         }
         if (twoTestCases === true) {
             testCasePath = 'cypress/fixtures/testCaseId2'
