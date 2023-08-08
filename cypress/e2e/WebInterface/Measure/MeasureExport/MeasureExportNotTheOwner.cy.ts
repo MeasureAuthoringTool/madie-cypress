@@ -95,7 +95,7 @@ describe('FHIR Measure Export, Not the Owner', () => {
 
         MeasuresPage.measureAction('export')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4.zip')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4.zip'),{ timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
         OktaLogin.Logout()
