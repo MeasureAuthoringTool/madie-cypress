@@ -42,7 +42,7 @@ describe('Code Coverage Highlighting', () => {
             'Initial Population', 'Initial Population', 'Initial Population', 'Boolean')
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson, true)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson, false, true)
 
         OktaLogin.Login()
     })
