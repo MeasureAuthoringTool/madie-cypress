@@ -64,6 +64,8 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
 
     it('Verify that the Base Configuration fields are present, contain values when necessary, and, if required, ' +
         'the save button is not available until all required fields have a value', () => {
+            //navigate to the main measures page
+            cy.get(Header.measures).click()
 
             MeasuresPage.measureAction("edit")
 
@@ -328,6 +330,10 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
     })
     //non-owner of measure cannot edit Base Configuration fields
     it('Non-owner of measure cannot edit any of the the Base Configuration fields', () => {
+        //navigate to the main measures page
+        cy.get(Header.measures).click()
+
+        //click on the "All Measures" tab
         cy.get(MeasuresPage.allMeasuresTab).click()
         MeasuresPage.measureAction("edit", true)
 
@@ -400,6 +406,7 @@ describe('Updates on Base Configuration page', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
+        //click edit on measure action
         MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
@@ -421,7 +428,7 @@ describe('Updates on Base Configuration page', () => {
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully').wait(3000)
 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
@@ -432,7 +439,7 @@ describe('Updates on Base Configuration page', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'd')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.').wait(3000)
 
         //navigate to the main measures page
         cy.get(Header.measures).click()
@@ -521,6 +528,8 @@ describe('Updates on Base Configuration page', () => {
     })
 
     it('Verify confirmation dialogue when patient basis value changed', () => {
+        //navigate to the main measures page
+        cy.get(Header.measures).click()
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -539,7 +548,7 @@ describe('Updates on Base Configuration page', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'ipp')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.').wait(3000)
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
@@ -551,8 +560,8 @@ describe('Updates on Base Configuration page', () => {
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
 
         //Assert the confirmation message
-        cy.get('[id="mui-3"]').should('contain.text', 'Change Patient Basis?')
-        cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Patient Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.')
+        cy.get('[id="mui-5"]').should('contain.text', 'Change Patient Basis?')
+        cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Patient Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.').wait(3000)
 
         //Click on 'No, Keep Working' button
         cy.get(MeasureGroupPage.updatePatientBasisCancelBtn).click()
