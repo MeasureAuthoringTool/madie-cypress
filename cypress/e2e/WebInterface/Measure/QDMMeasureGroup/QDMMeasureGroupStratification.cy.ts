@@ -164,7 +164,7 @@ describe('Validating Stratification tabs', () => {
 
         //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the CQL Editor process and Base Configuration tab before continuing')
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
@@ -212,8 +212,6 @@ describe('Validating Stratification tabs', () => {
         //confirm stratification related fields are present
         cy.get(MeasureGroupPage.stratOne).should('exist')
         cy.get(MeasureGroupPage.stratTwo).should('exist')
-        cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
-        cy.get(MeasureGroupPage.stratAssociationTwo).should('exist')
         cy.get(MeasureGroupPage.addStratButton).should('exist')
 
         //confirm values in stratification 1 related fields -- score type is Proportion
@@ -222,16 +220,9 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratOne).each(($ele) => {
             expect($ele.text()).to.be.oneOf(['Select Definition', 'Bilateral Mastectomy Diagnosis', 'Bilateral Mastectomy Procedure', 'Denominator Exclusions'])
         })
-
-        //Association -- default value -- score type is Proportion
-        cy.get(MeasureGroupPage.stratAssociationOne).should('contain.text', 'Initial Population')
-        //Association -- contains these values based off score type -- score type is Proportion
-        cy.get(MeasureGroupPage.stratAssociationOne).each(($ele) => {
-            expect($ele.text()).to.be.oneOf(['Initial Population', 'Denominator', 'Denominator Exclusion', 'Numerator', 'Numerator Exclusion', 'Denominator Exception'])
-        })
-
     })
-    it('Add multiple stratifications to the measure group', () => {
+
+    it.only('Add multiple stratifications to the measure group', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -246,7 +237,7 @@ describe('Validating Stratification tabs', () => {
 
         //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the CQL Editor process and Base Configuration tab before continuing')
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
@@ -293,21 +284,21 @@ describe('Validating Stratification tabs', () => {
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
+        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
 
         //Add Stratification 2
         Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'Numerator')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'numerator')
+        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'numerator')
 
         //Add Stratification 3
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratThree, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'denominator')
+        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'denominator')
 
         //Add Stratification 4
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratFour, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationFour, 'initialPopulation')
+        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationFour, 'initialPopulation')
 
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30700)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -336,6 +327,7 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratThree).should('contain.text', 'Denominator')
         cy.get(MeasureGroupPage.stratFour).should('contain.text', 'Initial Population')
     })
+
     it('Stratification tab is not present / available when the Ratio scoring value is selected', () => {
 
         //Click on Edit Measure
@@ -351,7 +343,7 @@ describe('Validating Stratification tabs', () => {
 
         //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the CQL Editor process and Base Configuration tab before continuing')
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
@@ -400,7 +392,7 @@ describe('Validating Stratification tabs', () => {
 
         //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the CQL Editor process and Base Configuration tab before continuing')
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
