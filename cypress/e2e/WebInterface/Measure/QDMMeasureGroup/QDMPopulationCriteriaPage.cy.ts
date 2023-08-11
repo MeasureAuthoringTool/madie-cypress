@@ -418,7 +418,7 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         cy.get(MeasureGroupPage.initialPopulationSelect).click()
 
         //select a value that will return the correct boolean type
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'Numerator')
 
         //helper text / error message should appear
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
