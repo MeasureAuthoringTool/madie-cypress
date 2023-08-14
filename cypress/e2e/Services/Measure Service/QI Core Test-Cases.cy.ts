@@ -2,6 +2,7 @@ import { Utilities } from "../../../Shared/Utilities"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { v4 as uuidv4 } from 'uuid'
+import {TestCasesPage} from "../../../Shared/TestCasesPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestLibrary' + Date.now()
@@ -1133,4 +1134,81 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
         })
     })
 
+})
+
+describe('Duplicate Test Case Title and Group validations', () => {
+
+    beforeEach('Create Measure, Test case', () => {
+
+        cy.setAccessTokenCookie()
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        TestCasesPage.CreateTestCaseAPI(TCTitle, TCSeries, TCDescription)
+
+    })
+    afterEach('Cleanup', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+
+    })
+
+    it('Create Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + id + '/test-cases',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: {
+                        'name': TCName,
+                        'series': TCSeries,
+                        'title': TCTitle,
+                        'description': TCDescription,
+                        'json': "{ \n  Encounter: \"Office Visit union\" \n  Id: \"Identifier\" \n  value: \"Visit out of hours (procedure)\" \n}"
+                    }
+                }).then((response) => {
+                    console.log(response)
+                    expect(response.status).to.eql(400)
+                    expect(response.body.message).to.eql('The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
+                })
+            })
+        })
+    })
+
+    it('Edit Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
+
+        //Create second Test case
+        TestCasesPage.CreateTestCaseAPI('SecondTCTitle', 'SecondTCSeries', 'SecondTCDescription', null, false, true)
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/testCasePId2').should('exist').then((tcId) => {
+                    cy.request({
+                        failOnStatusCode: false,
+                        url: '/api/measures/' + id + '/test-cases',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'POST',
+                        body: {
+                            'id': tcId,
+                            'name': TCName,
+                            'series': TCSeries,
+                            'title': TCTitle,
+                            'description': TCDescription,
+                            'json': "{ \n  Encounter: \"Office Visit union\" \n  Id: \"Identifier\" \n  value: \"Visit out of hours (procedure)\" \n}"
+                        }
+                    }).then((response) => {
+                        console.log(response)
+                        expect(response.status).to.eql(400)
+                        expect(response.body.message).to.eql('The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
+                    })
+                })
+            })
+        })
+    })
 })

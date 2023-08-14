@@ -125,6 +125,7 @@ describe('Test Case Validations', () => {
             'than 250 characters.')
     })
 })
+
 describe('Attempting to create a test case without a title', () => {
 
     beforeEach('Create measure and login', () => {
@@ -305,5 +306,101 @@ describe('Attempting to create a test case without a title', () => {
 
         //verify that the discard modal appears
         Global.clickOnDiscardChanges()
+    })
+})
+
+describe('Duplicate Test Case Title and Group validations', () => {
+
+    beforeEach('Create Measure, Test case and Login', () => {
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
+        OktaLogin.Login()
+
+    })
+    afterEach('Cleanup and Logout', () => {
+
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        OktaLogin.Logout()
+
+    })
+
+    it('Create Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Create first Test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Create second test case with same Test case and group name
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click()
+
+        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
+
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+
+        cy.get(TestCasesPage.createTestCaseSaveButton).click()
+
+        cy.get(TestCasesPage.duplicateTCNameValidation).should('contain.text', 'An error occurred while creating the test case: The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
+    })
+
+    it('Edit Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Create second test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click()
+
+        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
+
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type('SecondTestCase'.toString())
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('SecondTestCaseGroup').type('{enter}')
+
+        cy.get(TestCasesPage.createTestCaseSaveButton).click()
+
+        //Edit First Test case
+        TestCasesPage.clickEditforCreatedTestCase()
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.testCaseTitle).clear().type('SecondTestCase'.toString())
+        cy.get(TestCasesPage.testCaseSeriesTextBox).should('exist')
+        cy.get(TestCasesPage.testCaseSeriesTextBox).should('be.visible')
+        cy.get(TestCasesPage.testCaseSeriesTextBox).clear().type('SecondTestCaseGroup').type('{enter}')
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.editDuplicateTCNameValidation).should('contain.text', 'The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
+
     })
 })
