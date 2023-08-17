@@ -235,6 +235,7 @@ export class TestCasesPage {
     public static readonly testCasesNonBonnieFileImport = '[data-testid="file-drop-input"]'
     public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile = '[class="TestCaseImportDialog___StyledSmall-sc-v92oci-5 fZbLiJ"]'
     public static readonly testCasesNonBonnieFileImportFileUploadStatusDetails = '[class="TestCaseImportDialog___StyledSmall2-sc-v92oci-6 gpyrWs"]'
+    public static readonly testCasesNonBonnieFileImportErrorOnImport = '[data-testid="test-case-import-error-div"]'
     public static readonly importTestCaseSuccessMsg = '[data-testid=success-toast]'
     public static readonly importTestCaseErrorMsg = '[data-testid=error-toast]'
 

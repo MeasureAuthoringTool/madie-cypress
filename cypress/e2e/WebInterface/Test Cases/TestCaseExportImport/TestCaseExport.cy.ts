@@ -62,8 +62,6 @@ describe('QI-Core Single Test Case Export', () => {
 
         TestCasesPage.testCaseAction('export')
 
-        TestCasesPage.testCaseAction('export')
-
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 

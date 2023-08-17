@@ -26,12 +26,14 @@ let testCaseDescription = 'DENOMPass' + Date.now()
 let secondTestCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeriesP'
 let secondTestCaseSeries = 'SBTestSeriesF'
-let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
+let validTestCaseJsonLizzy = TestCaseJson.TestCaseJson_Valid
+let validTestCaseJsonBobby = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let validFileToUpload = downloadsFolder.toString()
+let invalidFileToUpload = 'cypress/fixtures'
 
 
-describe.only('Test Case Import: functionality tests', () => {
+describe('Test Case Import: functionality tests', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -39,7 +41,7 @@ describe.only('Test Case Import: functionality tests', () => {
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -50,9 +52,52 @@ describe.only('Test Case Import: functionality tests', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
-        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJson, false, true)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
+        OktaLogin.Login()
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
+            .click()
+            .type('Some description')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 35000)
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit")
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.testCaseAction('edit')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit")
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.testCaseAction('edit', true)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
+        OktaLogin.Logout()
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
@@ -468,7 +513,7 @@ describe.only('Test Case Import: functionality tests', () => {
         Utilities.waitForElementDisabled(TestCasesPage.importNonBonnieTestCasesBtn, 35000)
 
     })
-    it('Data in the JSON, for both test cases, do not align with contents of selected .zip', () => {
+    it('Adding test cases to a measure whom already has test cases and the PC does not match', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
@@ -484,10 +529,25 @@ describe.only('Test Case Import: functionality tests', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(true, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJson, true)
-        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJson, true, true)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(true, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonLizzy, true)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
         OktaLogin.Login()
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit", true)
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
+            .click()
+            .type('Some description')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 35000)
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
         cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
         cy.get(Header.cqlLibraryTab).click().wait(3000)
@@ -538,14 +598,686 @@ describe.only('Test Case Import: functionality tests', () => {
 
         //verifies alert message at tope of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(0) test case(s) were imported. The following (2) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Reason : Patient Id is not found')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(2) test case(s) were imported. The following (0) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Following test case(s) were imported succesfully, but The measure populations do not match the populations in the import file. No expected values have been set.')
 
     })
 
 
 
 })
+describe('Test Case Import: File structure Not Accurate validation tests', () => {
+
+    deleteDownloadsFolderBeforeAll()
+
+    beforeEach('Create measure, login and update CQL, create group, and login', () => {
+
+        CqlLibraryName = 'TestLibrary5' + Date.now()
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.testCaseAction('edit')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit")
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.testCaseAction('edit', true)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
+        OktaLogin.Logout()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+        OktaLogin.Logout()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        //Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+    it('Importing: not a .zip file', () => {
+        OktaLogin.Login()
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //click on the Import Test Cases button
+        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+
+        //wait until select / drag and drop modal window appears
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
+
+        //Upload valid Json file via drag and drop
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(invalidFileToUpload, 'CQLCsNoVersionVSACExists.txt'), { action: 'drag-drop', force: true })
+
+        //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportErrorOnImport, 35000)
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportErrorOnImport).find('[class="TestCaseImportDialog___StyledSmall3-sc-v92oci-17 fxXRko"]').should('contain.text', 'The import file must be a zip file. No Test Cases can be imported.')
+
+    })
+    it('Importing: .zip\'s test case folder does not contain a json file', () => {
+        OktaLogin.Login()
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //click on the Import Test Cases button
+        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+
+        //wait until select / drag and drop modal window appears
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
+
+        //Upload valid Json file via drag and drop
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(invalidFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases (4).zip'), { action: 'drag-drop', force: true })
+
+        //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases (4).zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
+
+        //import the tests cases from selected / dragged and dropped .zip file
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
+
+        //verifies alert message at tope of page informing user that no test case was imported
+        Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(0) test case(s) were imported. The following (2) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Reason : Test Case file is missing.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Reason : The measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been set.')
+
+    })
+    it('Importing: .zip\'s test case folder contains multiple json files', () => {
+        OktaLogin.Login()
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //click on the Import Test Cases button
+        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+
+        //wait until select / drag and drop modal window appears
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
+
+        //Upload valid Json file via drag and drop
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(invalidFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases (3).zip'), { action: 'drag-drop', force: true })
+
+        //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases (3).zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
+
+        //import the tests cases from selected / dragged and dropped .zip file
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
+
+        //verifies alert message at tope of page informing user that no test case was imported
+        Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(0) test case(s) were imported. The following (2) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Reason : The measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been set.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Reason : Multiple test case files are not supported. Please make sure only one JSON file is in the folder.')
+
+    })
+    it('Importing: .zip\'s test case folder contains malformed json file', () => {
+        OktaLogin.Login()
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //click on the Import Test Cases button
+        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+
+        //wait until select / drag and drop modal window appears
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
+
+        //adjust following code for scenario
+
+        //Upload valid Json file via drag and drop
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(invalidFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases (5).zip'), { action: 'drag-drop', force: true })
+
+        //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases (5).zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
+
+
+        //import the tests cases from selected / dragged and dropped .zip file
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
+
+        //verifies alert message at tope of page informing user that no test case was imported
+        Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(1) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Reason : Error while processing Test Case JSON. Please make sure Test Case JSON is valid.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Following test case(s) were imported succesfully, but The measure populations do not match the populations in the import file. No expected values have been set.')
+
+    })
+})
+describe('Test Case Import: New Test cases on measure validations', () => {
+
+    deleteDownloadsFolderBeforeAll()
+
+    beforeEach('Create measure, login and update CQL, create group, and login', () => {
+
+        CqlLibraryName = 'TestLibrary5' + Date.now()
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'a', CqlLibraryName, measureCQLPFTests, false)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        /*         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+                TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
+                TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true) */
+        OktaLogin.Login()
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
+            .click()
+            .type('Some description')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 35000)
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
+        OktaLogin.Logout()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+        OktaLogin.Logout()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        //Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+    it('Importing two new test cases with unique family name and given name: verify expected match that of original test case; verify family name is Test Case group; verify that given name is Test Case title; verify that test case is editable', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        CqlLibraryName = 'TestLibrary6' + Date.now()
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, true)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit", true)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(true, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonLizzy, true)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
+        OktaLogin.Login()
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit", true)
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
+            .click()
+            .type('Some description')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 35000)
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit", true)
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.testCaseAction('edit')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit", true)
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.testCaseAction('edit', true)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
+
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit", true)
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //export test case
+        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+
+        //verify that the export occurred 
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.log('Successfully verified zip file export')
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //click on the Import Test Cases button
+        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+
+        //wait until select / drag and drop modal window appears
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
+
+        //Upload valid Json file via drag and drop
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+
+        //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
+
+        //import the tests cases from selected / dragged and dropped .zip file
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
+
+        //verify confirmation message
+        Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessMessage, 35000)
+        cy.get(TestCasesPage.importTestCaseSuccessMessage).should('contain.text', '(2) Test cases imported successfully')
+
+    })
+    it('Importing two new test cases with the same family name and given name: verify uniqueness error', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        CqlLibraryName = 'TestLibrary6' + Date.now()
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, true)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit", true)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(true, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonBobby, true)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
+        OktaLogin.Login()
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit", true)
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
+            .click()
+            .type('Some description')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 35000)
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit", true)
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.testCaseAction('edit')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit", true)
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.testCaseAction('edit', true)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
+
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit", true)
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //export test case
+        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+
+        //verify that the export occurred 
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.log('Successfully verified zip file export')
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //click on the Import Test Cases button
+        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+
+        //wait until select / drag and drop modal window appears
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
+
+        //Upload valid Json file via drag and drop
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+
+        //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
+
+        //import the tests cases from selected / dragged and dropped .zip file
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
+
+        //verifies alert message at tope of page informing user that no test case was imported
+        Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(1) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Reason : The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
+    })
+
+
+})
+describe('Test Case Import: New Test cases on measure validations: PC does not match between measures', () => {
+
+    deleteDownloadsFolderBeforeAll()
+
+    beforeEach('Create measure, login and update CQL, create group, and login', () => {
+
+        CqlLibraryName = 'TestLibrary5' + Date.now()
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'a', CqlLibraryName, measureCQLPFTests, false)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        /*         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+                TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
+                TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true) */
+        OktaLogin.Login()
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
+            .click()
+            .type('Some description')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 35000)
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
+        OktaLogin.Logout()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+        OktaLogin.Logout()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        //Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+    it('Importing two new test cases with the pc not matching on the measure in which the test cases is being imported into', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        CqlLibraryName = 'TestLibrary6' + Date.now()
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, true)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit", true)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(true, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonLizzy, true, false)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
+        OktaLogin.Login()
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit", true)
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
+            .click()
+            .type('Some description')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 35000)
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit", true)
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.testCaseAction('edit')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit", true)
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.testCaseAction('edit', true)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
+
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit", true)
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //export test case
+        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+
+        //verify that the export occurred 
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.log('Successfully verified zip file export')
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //click on the Import Test Cases button
+        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+
+        //wait until select / drag and drop modal window appears
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
+
+        //Upload valid Json file via drag and drop
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+
+        //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
+
+        //import the tests cases from selected / dragged and dropped .zip file
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
+
+        //verifies alert message at tope of page informing user that no test case was imported
+        Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(2) test case(s) were imported. The following (0) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Following test case(s) were imported succesfully, but The measure populations do not match the populations in the import file. No expected values have been set.')
+    })
+})
+
 //currently working with Ben, Brendan and Riddhi to get things setup to test / verify Virus Scan for TC Import
 describe.skip('Test Case Import: Virus Scan tests', () => {
 
@@ -566,9 +1298,39 @@ describe.skip('Test Case Import: Virus Scan tests', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
         OktaLogin.Login()
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
+            .click()
+            .type('Some description')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 35000)
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        MeasuresPage.measureAction("edit")
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.testCaseAction('edit')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+            'with warnings in JSON')
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -580,8 +1342,7 @@ describe.skip('Test Case Import: Virus Scan tests', () => {
 
         Utilities.deleteMeasure(measureName, newCqlLibraryName)
     })
-    it('Verify message when import fails virus scan', () => {
-        OktaLogin.Login()
+    it.skip('Verify message when import fails virus scan', () => {
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
         cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
         cy.get(Header.cqlLibraryTab).click().wait(3000)
@@ -609,7 +1370,26 @@ describe.skip('Test Case Import: Virus Scan tests', () => {
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
+        // cypress\fixtures\VIRUS_TC_Import.zip
+
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(/* fixture path *//*,*/ /* some zip file that will be flagged as a vruse */), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(invalidFileToUpload, 'VIRUS_TC_Import.zip'), { action: 'drag-drop', force: true })
+
+        cy.pause()
+
+        //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
+
+        //import the tests cases from selected / dragged and dropped .zip file
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
+
+        cy.pause()
+
+        //verifies alert message at tope of page informing user that no test case was imported
+        Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(2) test case(s) were imported. The following (0) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Following test case(s) were imported succesfully, but The measure populations do not match the populations in the import file. No expected values have been set.')
     })
 })
