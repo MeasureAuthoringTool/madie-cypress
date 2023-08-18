@@ -8,6 +8,8 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { Global } from "../../../../Shared/Global"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let newMeasureName = ''
@@ -313,7 +315,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
 
     beforeEach('Create Measure, Test case and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
 
@@ -357,7 +359,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
 
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.duplicateTCNameValidation).should('contain.text', 'An error occurred while creating the test case: The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
+        cy.get(TestCasesPage.tcSaveAlertDangerMsg).should('contain.text', 'An error occurred while creating the test case: The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
     })
 
     it('Edit Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
@@ -379,7 +381,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type('SecondTestCase'.toString())
+        cy.get(TestCasesPage.createTestCaseTitleInput).wait(2000).type('SecondTestCase'.toString())
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
@@ -387,20 +389,20 @@ describe('Duplicate Test Case Title and Group validations', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type('SecondTestCaseGroup').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).wait(1000).type('SecondTestCaseGroup').type('{enter}')
 
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
         //Edit First Test case
         TestCasesPage.clickEditforCreatedTestCase()
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseTitle).clear().type('SecondTestCase'.toString())
+        cy.get(TestCasesPage.testCaseTitle).clear().wait(2000).type('{selectall}{backspace}{selectall}{backspace}').type('SecondTestCase'.toString())
         cy.get(TestCasesPage.testCaseSeriesTextBox).should('exist')
         cy.get(TestCasesPage.testCaseSeriesTextBox).should('be.visible')
-        cy.get(TestCasesPage.testCaseSeriesTextBox).clear().type('SecondTestCaseGroup').type('{enter}')
+        cy.get(TestCasesPage.testCaseSeriesTextBox).clear().wait(1000).type('SecondTestCaseGroup').type('{enter}')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.editDuplicateTCNameValidation).should('contain.text', 'The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
+        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
 
     })
 })
