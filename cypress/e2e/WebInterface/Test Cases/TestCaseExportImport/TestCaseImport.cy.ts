@@ -10,7 +10,6 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Header } from "../../../../Shared/Header"
 import { Environment } from "../../../../Shared/Environment"
-import { LandingPage } from "../../../../Shared/LandingPage"
 
 let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
