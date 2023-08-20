@@ -60,7 +60,7 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.testCaseAction('edit')
-        cy.pause()
+
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
