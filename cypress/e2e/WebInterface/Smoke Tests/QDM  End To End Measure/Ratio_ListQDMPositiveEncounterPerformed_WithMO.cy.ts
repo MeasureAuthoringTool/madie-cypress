@@ -4,7 +4,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage";
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage";
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
