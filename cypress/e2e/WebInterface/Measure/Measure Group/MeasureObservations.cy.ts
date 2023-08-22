@@ -386,6 +386,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasuresPage.allMeasuresTab).should('exist')
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.reload()
 
         //enter edit page
         MeasuresPage.measureAction("edit")
@@ -497,6 +498,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasuresPage.allMeasuresTab).should('exist')
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.reload()
 
         //enter edit page
         MeasuresPage.measureAction("edit")
