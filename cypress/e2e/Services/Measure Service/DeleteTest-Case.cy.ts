@@ -256,7 +256,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
 
                         }).then((response) => {
                             expect(response.status).to.eql(403)
-                            expect(response.body.message).contains('User ReUser6408 is not authorized for Measure with ID ')
+                            expect(response.body.message).contains('User ' + harpUser + ' is not authorized for Measure with ID ')
                         })
                     })
                 })

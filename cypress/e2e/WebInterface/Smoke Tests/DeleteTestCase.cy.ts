@@ -82,8 +82,8 @@ describe('Delete Test Case', () => {
 
         //Login as Alt User
         OktaLogin.AltLogin()
-
-        cy.get(MeasuresPage.allMeasuresTab).click()
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 20700)
+        cy.get(MeasuresPage.allMeasuresTab).wait(3000).click({ force: true })
 
         MeasuresPage.measureAction("edit")
 

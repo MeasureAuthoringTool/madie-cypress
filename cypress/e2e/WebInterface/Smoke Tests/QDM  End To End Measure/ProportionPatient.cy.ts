@@ -12,6 +12,7 @@ let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
     '\n' +
+    'include MATGlobalCommonFunctionsQDM version \'7.2.000\' called Global\n' +
     'include AdultOutpatientEncountersQDM version \'1.0.000\' called AdultOutpatientEncounters\n' +
     'include HospiceQDM version \'1.0.000\' called Hospice\n' +
     'include PalliativeCareExclusionECQMQDM version \'1.1.000\' called PalliativeCare\n' +
@@ -59,8 +60,28 @@ let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     '    where BilateralMastectomyHistory.prevalencePeriod starts on or before \n' +
     '    end of "Measurement Period"\n' +
     '\n' +
+    'define "Bilateral Mastectomy Procedure":\n' +
+    '  ["Procedure, Performed": "Bilateral Mastectomy"] BilateralMastectomyPerformed\n' +
+    '    where Global."NormalizeInterval" ( BilateralMastectomyPerformed.relevantDatetime, BilateralMastectomyPerformed.relevantPeriod ) ends on or before \n' +
+    '    end of "Measurement Period"\n' +
+    '\n' +
     'define "Denominator":\n' +
     '  "Initial Population"\n' +
+    '\n' +
+    'define "Denominator Exclusions":\n' +
+    '  Hospice."Has Hospice Services"\n' +
+    '    or ( ( exists ( "Right Mastectomy Diagnosis" )\n' +
+    '          or exists ( "Right Mastectomy Procedure" )\n' +
+    '      )\n' +
+    '        and ( exists ( "Left Mastectomy Diagnosis" )\n' +
+    '            or exists ( "Left Mastectomy Procedure" )\n' +
+    '        )\n' +
+    '    )\n' +
+    '    or exists "Bilateral Mastectomy Diagnosis"\n' +
+    '    or exists "Bilateral Mastectomy Procedure"\n' +
+    '    or AIFrailLTCF."Is Age 66 or Older with Advanced Illness and Frailty"\n' +
+    '    or AIFrailLTCF."Is Age 66 or Older Living Long Term in a Nursing Home"\n' +
+    '    or PalliativeCare."Has Palliative Care in the Measurement Period"\n' +
     '\n' +
     'define "Left Mastectomy Diagnosis":\n' +
     '  ( ["Diagnosis": "Status Post Left Mastectomy"]\n' +
@@ -68,6 +89,11 @@ let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     '        where UnilateralMastectomyDiagnosis.anatomicalLocationSite ~ "Left (qualifier value)"\n' +
     '    ) ) LeftMastectomy\n' +
     '    where LeftMastectomy.prevalencePeriod starts on or before \n' +
+    '    end of "Measurement Period"\n' +
+    '\n' +
+    'define "Left Mastectomy Procedure":\n' +
+    '  ["Procedure, Performed": "Unilateral Mastectomy Left"] UnilateralMastectomyLeftPerformed\n' +
+    '    where Global."NormalizeInterval" ( UnilateralMastectomyLeftPerformed.relevantDatetime, UnilateralMastectomyLeftPerformed.relevantPeriod ) ends on or before \n' +
     '    end of "Measurement Period"\n' +
     '\n' +
     'define "Right Mastectomy Diagnosis":\n' +
@@ -78,12 +104,24 @@ let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     '    where RightMastectomy.prevalencePeriod starts on or before \n' +
     '    end of "Measurement Period"\n' +
     '\n' +
+    'define "Right Mastectomy Procedure":\n' +
+    '  ["Procedure, Performed": "Unilateral Mastectomy Right"] UnilateralMastectomyRightPerformed\n' +
+    '    where Global."NormalizeInterval" ( UnilateralMastectomyRightPerformed.relevantDatetime, UnilateralMastectomyRightPerformed.relevantPeriod ) ends on or before \n' +
+    '    end of "Measurement Period"\n' +
+    '\n' +
     'define "Initial Population":\n' +
     '  exists ( ["Patient Characteristic Sex": "Female"] )\n' +
     '    and AgeInYearsAt(date from \n' +
     '      end of "Measurement Period"\n' +
     '    )in Interval[52, 74]\n' +
     '    and exists AdultOutpatientEncounters."Qualifying Encounters"\n' +
+    '\n' +
+    'define "Numerator":\n' +
+    '  exists ( ["Diagnostic Study, Performed": "Mammography"] Mammogram\n' +
+    '      where ( Global."NormalizeInterval" ( Mammogram.relevantDatetime, Mammogram.relevantPeriod ) ends during day of Interval["October 1 Two Years Prior to the Measurement Period", \n' +
+    '        end of "Measurement Period"]\n' +
+    '      )\n' +
+    '  )\n' +
     '\n' +
     'define "October 1 Two Years Prior to the Measurement Period":\n' +
     '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)'

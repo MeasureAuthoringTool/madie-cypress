@@ -2,7 +2,7 @@ import { Utilities } from "../../../Shared/Utilities"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { v4 as uuidv4 } from 'uuid'
-import {TestCasesPage} from "../../../Shared/TestCasesPage"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestLibrary' + Date.now()

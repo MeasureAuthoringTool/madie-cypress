@@ -44,7 +44,7 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         cy.get(LandingPage.allMeasuresTab).should('be.visible')
         Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.enabled')
-        cy.get(LandingPage.allMeasuresTab).click()
+        cy.get(LandingPage.allMeasuresTab).wait(5000).click()
 
         //click on Edit button to edit measure
         MeasuresPage.measureAction("edit")
