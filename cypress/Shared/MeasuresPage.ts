@@ -2,7 +2,7 @@ import { Utilities } from "./Utilities"
 
 export class MeasuresPage {
 
-    public static readonly measureListTitles = '[data-testid=table-body] > :nth-child(1)'
+    public static readonly measureListTitles = '[data-testid=table-body]'
     public static readonly allMeasuresTab = '[data-testid=all-measures-tab]'
     public static readonly searchInputBox = '[data-testid="searchMeasure-input"]'
 
