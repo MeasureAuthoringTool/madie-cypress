@@ -56,6 +56,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
+        cy.reload()
 
         //edit the measure that was not created by logged in user
         MeasuresPage.measureAction("edit")
@@ -102,6 +103,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
+        cy.reload()
 
         //edit the measure that was not created by current owner
         MeasuresPage.measureAction("edit")
@@ -123,6 +125,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
+        cy.reload()
 
         //edit the measure that was not created by logged in owner
         MeasuresPage.measureAction("edit")
@@ -163,6 +166,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
+        cy.reload()
 
         //edit the measure group that was not created by logged in owner
         MeasuresPage.measureAction("edit")

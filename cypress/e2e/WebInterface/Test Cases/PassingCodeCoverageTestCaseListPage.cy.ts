@@ -13,6 +13,7 @@ let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let testCaseTitle = 'Title for Auto Test'
+let secondTestCaseTitle = 'Second Test case'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let validTestCaseJson = TestCaseJson.TestCaseJson_Valid_w_All_Encounter
@@ -42,7 +43,7 @@ describe('Code Coverage Highlighting', () => {
             'Initial Population', 'Initial Population', 'Initial Population', 'Boolean')
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson, false, true)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson, false, true)
 
         OktaLogin.Login()
     })

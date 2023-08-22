@@ -6,8 +6,6 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 
 let measureName = 'TestMeasure' + Date.now()
@@ -158,6 +156,7 @@ describe('Non Measure owner unable to create Version', () => {
 
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.reload()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
