@@ -7,9 +7,9 @@ let model = 'QI-Core v4.1.1'
 let CQLLibraryPublisher = 'SemanticBits'
 let harpUser = Environment.credentials().harpUser
 
-//skipping these tests until we have time to debug whey they are failing when running in sequence
 
-describe.skip('CQL Library Service: Create CQL Library', () => {
+
+describe('CQL Library Service: Create CQL Library', () => {
 
     beforeEach('Set Access Token', () => {
 
@@ -125,6 +125,9 @@ describe.skip('CQL Library Service: Create CQL Library', () => {
     })
 
     it('Get All CQL Libraries created by logged in User', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
@@ -139,7 +142,7 @@ describe.skip('CQL Library Service: Create CQL Library', () => {
                 expect(response.body).to.be.a('array')
                 cy.get(response.body.length)
                 expect(response.body[0].id).to.be.exist
-                expect(response.body[0].createdBy).to.eql(harpUser)
+                expect(response.body[0].librarySet.owner).to.eql(harpUser)
             })
         })
     })
