@@ -334,7 +334,11 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(Header.measures).click()
 
         //click on the "All Measures" tab
-        cy.get(MeasuresPage.allMeasuresTab).click()
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 30000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        Utilities.waitForElementEnabled(MeasuresPage.allMeasuresTab, 30000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.enabled')
+        cy.get(MeasuresPage.allMeasuresTab).wait(5000).click()
         MeasuresPage.measureAction("edit", true)
 
         //Click on Measure Group tab

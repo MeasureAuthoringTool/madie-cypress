@@ -1,11 +1,11 @@
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {TestCasesPage} from "../../../Shared/TestCasesPage"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
-import {TestCaseJson} from "../../../Shared/TestCaseJson"
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
+import { TestCaseJson } from "../../../Shared/TestCaseJson"
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { Utilities } from "../../../Shared/Utilities"
 import { v4 as uuidv4 } from 'uuid'
-import {Environment} from "../../../Shared/Environment"
+import { Environment } from "../../../Shared/Environment"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestLibrary' + Date.now()
@@ -93,7 +93,7 @@ describe('Test Case Import', () => {
         })
     })
 
-    it('Unable to Import when patient ID does not match', () => {
+    it('Measure\'s populations do not match the population in the file that is being imported', () => {
 
         cy.clearCookies()
         cy.clearLocalStorage()
@@ -113,8 +113,8 @@ describe('Test Case Import', () => {
                     }]
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body[0].message).to.eql('Patient Id is not found')
-                    expect(response.body[0].successful).to.eql(false)
+                    expect(response.body[0].message).to.eql('The measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been set.')
+                    expect(response.body[0].successful).to.eql(true)
                 })
             })
         })
@@ -142,7 +142,7 @@ describe('Test Case Import', () => {
                         }]
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        expect(response.body[0].message).to.eql('Error while processing Test Case Json. Please make sure Test Case JSON is valid and Measure Report is not modified')
+                        expect(response.body[0].message).to.eql('Error while processing Test Case JSON.  Please make sure Test Case JSON is valid.')
                         expect(response.body[0].successful).to.eql(false)
                     })
                 })
@@ -266,7 +266,7 @@ describe('Multiple Test Case Import', () => {
         Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
     })
 
-    it('Success Scenario: Import multiple test cases and over ride existing test cases', () => {
+    it('Multiple test case files are not supported', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
@@ -282,9 +282,9 @@ describe('Multiple Test Case Import', () => {
                         method: 'PUT',
                         body: [
                             {
-                            "patientId": patientId,
-                            "json": ImportTCJon
-                        },
+                                "patientId": patientId,
+                                "json": ImportTCJon
+                            },
                             {
                                 "patientId": patientId,
                                 "json": ImportTCJon
@@ -292,8 +292,8 @@ describe('Multiple Test Case Import', () => {
                         ]
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        expect(response.body[0].successful).to.eql(true)
-                        expect(response.body[1].successful).to.eql(true)
+                        expect(response.body[0].message).to.eql('Multiple test case files are not supported. Please make sure only one JSON file is in the folder.')
+                        expect(response.body[0].successful).to.eql(false)
                     })
                 })
             })
