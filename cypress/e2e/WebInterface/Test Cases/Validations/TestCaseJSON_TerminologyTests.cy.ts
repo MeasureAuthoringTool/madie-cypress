@@ -304,7 +304,7 @@ describe('JSON Resource ID tests', () => {
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditor).type(emptyResourceIDTCJson, { parseSpecialCharSequences: false })
+        cy.get(TestCasesPage.aceEditor).wait(3000).type(emptyResourceIDTCJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -321,7 +321,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'HAPI-1821: [element="id"] Invalid attribute value "": Attribute value must not be empty ("")')
     })
 
-    it('JSON missing Resource IDs but the fullUrl value has an exentension that will be used as id', () => {
+    it('JSON missing Resource IDs; the fullUrl value will automatically update with an ending slash and should result with an update but with errors', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -398,7 +398,7 @@ describe('JSON Resource ID tests', () => {
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditor).type(missingResourceIDTCJsonButHasFullUrlExt, { parseSpecialCharSequences: false })
+        cy.get(TestCasesPage.aceEditor).wait(3000).type(missingResourceIDTCJsonButHasFullUrlExt, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -408,11 +408,11 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.confirmationMsg).should('exist')
         cy.get(TestCasesPage.confirmationMsg).should('be.visible')
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
 
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: HAPI-1821: [element="id"] Invalid attribute value "": Attribute value must not be empty ("")')
     })
 
     it('JSON missing Resource IDs', () => {
@@ -492,7 +492,7 @@ describe('JSON Resource ID tests', () => {
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditor).type(missingResourceIDTCJson, { parseSpecialCharSequences: false })
+        cy.get(TestCasesPage.aceEditor).wait(3000).type(missingResourceIDTCJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -506,7 +506,13 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdError: All resources must have an IdWarning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdError: ' +
+            'All resources must have an IdError: Bundle entry missing fullUrlError: Relative Reference appears inside Bundle whose entry ' +
+            'is missing a fullUrlError: Relative Reference appears inside Bundle whose entry is missing a fullUrlWarning: No code ' +
+            'provided, and a code should be provided from the value set \'US Core Encounter Type\' ' +
+            '(http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)Error: Except for transactions and batches, each entry ' +
+            'in a Bundle must have a fullUrl which is the identity of the resource in the entryError: Except for transactions and ' +
+            'batches, each entry in a Bundle must have a fullUrl which is the identity of the resource in the entry')
     })
     it('JSON has Resource IDs duplicated for different resources', () => {
 
@@ -585,7 +591,7 @@ describe('JSON Resource ID tests', () => {
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditor).type(dupResourceIDTCJson)
+        cy.get(TestCasesPage.aceEditor).wait(3000).type(dupResourceIDTCJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -757,7 +763,7 @@ describe('JSON Resource ID tests - Proportion Score Type', () => {
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
+        cy.get(TestCasesPage.aceEditor).wait(3000).type(validTestCaseJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
