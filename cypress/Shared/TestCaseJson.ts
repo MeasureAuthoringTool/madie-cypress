@@ -64,27 +64,31 @@ export class TestCaseJson {
 
     public static readonly QDMTestCaseJson_for_update = '{\"qdmVersion\":\"5.6\",\"dataElements\":[{\"dataElementCodes\":[{\"code\":\"2186-5\",\"system\":\"2.16.840.1.113883.6.238\",\"version\":\"1.2\",\"display\":\"Hispanic or Latino\"}],\"_id\":\"648c85f4220ca7000054646c\",\"qdmTitle\":\"Patient Characteristic Ethnicity\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.56\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"ethnicity\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicEthnicity\",\"id\":\"648c85f4220ca7000054646c\"},{\"dataElementCodes\":[],\"_id\":\"648c7dcd220ca70000546465\",\"qdmTitle\":\"Patient Characteristic Birthdate\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.54\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"birthdate\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicBirthdate\",\"id\":\"648c7dcd220ca70000546465\",\"birthDatetime\":\"2020-01-01T16:35:39.000+00:00\"},{\"dataElementCodes\":[{\"code\":\"M\",\"system\":\"2.16.840.1.113883.5.1\",\"version\":\"2022-11\",\"display\":\"Female\"}],\"_id\":\"648c7d60220ca70000546449\",\"qdmTitle\":\"Patient Characteristic Sex\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.55\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"gender\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicSex\",\"id\":\"648c7d60220ca70000546449\"},{\"dataElementCodes\":[{\"code\":\"2131-1\",\"system\":\"2.16.840.1.113883.6.238\",\"version\":\"1.2\",\"display\":\"Other Race\"}],\"_id\":\"648c7d24220ca70000546442\",\"qdmTitle\":\"Patient Characteristic Race\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.59\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"race\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicRace\",\"id\":\"648c7d24220ca70000546442\"},{\"dataElementCodes\":[],\"_id\":\"648c509863dbeb000033b3e0\",\"qdmTitle\":\"Patient Characteristic Expired\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.57\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"expired\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicExpired\",\"id\":\"648c509863dbeb000033b3e0\"}],\"_id\":\"648c4dad63dbeb000033b36b\",\"birthDatetime\":\"2020-01-01T16:35:39.539+00:00\"}'
 
-    public static readonly TestCaseJson_with_warning_and_error = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", ' +
-        ' "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter",' +
-        ' "resource": { "resourceType": "Encounter","meta": { "profile": [ "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter" ],"versionId": "1","lastUpdated": "2021-10-13T03:34:10.160+00:00","source":"#nEcAkGd8PRwPP5fA"}, ' +
-        ' "text": { "status": "generated","div":"<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Sep 9th 2021 for Asthma<a name=\\"mm\\"/></div>\"}, ' +
-        ' "status": "finished","class": { "system": "http://clinfhir.com/fhir/NamingSystem/identifier","code": "IMP","display":"inpatient encounter"}, ' +
-        ' "type": [ { "text": "OutPatient"} ],"subject": { "reference": "Patient/1"},"participant": [ { "individual": { "reference": "Practitioner/30164", ' +
-        ' "display": "Dr John Doe"}} ],"period": { "start": "2021-01-01T03:34:10.054Z"}}}, { "fullUrl": "http://local/Patient","resource": { "resourceType":' +
-        ' "Patient","text": { "status": "generated","div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Lizzy Health</div>\"}, "meta": { "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"}, "identifier":' +
-        ' [ { "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode","value": "20181011LizzyHealth"} ],"name": [ { "use": "official", ' +
-        ' "text": "Lizzy Health","family": "Health","given": [ "Lizzy" ]} ],"gender": "female","birthDate": "2000-10-11"}} ]}'
+    public static readonly TestCaseJson_with_warning_and_error = '{ "resourceType": "Bundle", "id": "1366", "meta": { "versionId": "1", ' +
+        '"lastUpdated": "2022-03-30T19:02:32.620+00:00" }, "type": "collection", "entry": [ {  ' +
+        '"resource": {  "resourceType": "Encounter", "meta": { "profile": [ "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter" ],"versionId": "1", "lastUpdated": "2021-10-13T03:34:10.160+00:00", ' +
+        '"source": "#nEcAkGd8PRwPP5fA" }, "text": { "status": "generated", "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Sep ' +
+        '9th 2021 for Asthma<a name=\\"mm\\"/></div>" }, "status": "in-progress", "class": { "system": "http://terminologys.hl7.org/' +
+        'CodeSystem/v3-ActCodes", "code": "IMP", "display": "inpatient encounter" }, "type": [ { "text": "OutPatient" } ], "subject": ' +
+        '{ "reference": "Patient/1" }, "participant": [ { "individual": { "reference": "Practitioner/30164", "display": "Dr John Doe" ' +
+        '} } ], "period": { "start": "2022-05-13T03:34:10.054Z" } } }, { "fullUrl": "http://local/Patient", "resource": { "id": "2", ' +
+        '"resourceType": "Patient", "text": { "status": "generated", "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Lizzy Health' +
+        '</div>" }, "meta": { "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient" }, "identifier": [ { ' +
+        '"system": "http://clinfhir.com/fhir/NamingSystem/identifier", "value": "20181011LizzyHealth" } ], "name": [ { "use": "official", ' +
+        '"text": "Lizzy Health", "family": "Health", "given": [ "Lizzy" ] } ], "gender": "female", "birthDate": "2000-10-11" } } ] }'
 
-    public static readonly TestCaseJson_missingResourceIDs = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1",' +
-        ' "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter",' +
-        ' "resource": { "resourceType": "Encounter","meta": { "profile": [ "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter" ],"versionId": "1","lastUpdated": "2021-10-13T03:34:10.160+00:00",' +
-        ' "source":"#nEcAkGd8PRwPP5fA"}, "text": { "status": "generated","div":"<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Sep 9th 2021 for Asthma<a name=\\"mm\\"/></div>\"},' +
-        ' "status": "finished","class": { "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode","code": "IMP","display":"inpatient encounter"},' +
-        ' "type": [ { "text": "OutPatient"} ],"subject": { "reference": "Patient/1"},"participant": [ { "individual": { "reference": "Practitioner/30164",' +
-        ' "display": "Dr John Doe"}} ],"period": { "start": "2021-01-01T03:34:10.054Z"}}}, { "fullUrl": "http://local/Patient","resource": { "resourceType":' +
-        ' "Patient","text": { "status": "generated","div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Lizzy Health</div>\"}, "meta": { "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"}, "identifier":' +
-        ' [ { "system": "http://clinfhir.com/fhir/NamingSystem/identifier","value": "20181011LizzyHealth"} ],"name": [ { "use": "official",' +
-        ' "text": "Lizzy Health","family": "Health","given": [ "Lizzy" ]} ],"gender": "female","birthDate": "2000-10-11"}} ]}'
+    public static readonly TestCaseJson_missingResourceIDs = '{ "resourceType": "Bundle", "id": "1366", "meta": { "versionId": "1", ' +
+        '"lastUpdated": "2022-03-30T19:02:32.620+00:00" }, "type": "collection", "entry": [ {  ' +
+        '"resource": {  "resourceType": "Encounter", "meta": { "profile": [ "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter" ],"versionId": "1", "lastUpdated": "2021-10-13T03:34:10.160+00:00", ' +
+        '"source": "#nEcAkGd8PRwPP5fA" }, "text": { "status": "generated", "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Sep ' +
+        '9th 2021 for Asthma<a name=\\"mm\\"/></div>" }, "status": "in-progress", "class": { "system": "http://terminology.hl7.org/' +
+        'CodeSystem/v3-ActCode", "code": "IMP", "display": "inpatient encounter" }, "type": [ { "text": "OutPatient" } ], "subject": ' +
+        '{ "reference": "Patient/1" }, "participant": [ { "individual": { "reference": "Practitioner/30164", "display": "Dr John Doe" ' +
+        '} } ], "period": { "start": "2022-05-13T03:34:10.054Z" } } }, {  "resource": {  ' +
+        '"resourceType": "Patient", "text": { "status": "generated", "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Lizzy Health' +
+        '</div>" }, "meta": { "profile": "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient" }, "identifier": [ { ' +
+        '"system": "http://clinfhir.com/fhir/NamingSystem/identifier", "value": "20181011LizzyHealth" } ], "name": [ { "use": "official", ' +
+        '"text": "Lizzy Health", "family": "Health", "given": [ "Lizzy" ] } ], "gender": "female", "birthDate": "2000-10-11" } } ] }'
 
     public static readonly TestCaseJson_emptyResourceIDs = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1",' +
         ' "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter",' +

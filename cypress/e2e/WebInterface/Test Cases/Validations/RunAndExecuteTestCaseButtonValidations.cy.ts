@@ -491,15 +491,15 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+        cy.get(TestCasesPage.createTestCaseTitleInput).type((testCaseTitle.toString()) + '2')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription + ' 2')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries + '2').type('{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -1159,7 +1159,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
     })
 
-    it('Cannot "Run Test Case" or "Execute Test Case" when a test case has only an error', () => {
+    it('Cannot "Run Test Case" or "Execute Test Case" when a test case has multiple errors and a warning', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -1275,7 +1275,12 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm error message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdWarning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdError:' +
+            ' Bundle entry missing fullUrlError: Relative Reference appears inside Bundle whose entry is missing a fullUrlError: Relative ' +
+            'Reference appears inside Bundle whose entry is missing a fullUrlWarning: No code provided, and a code should be provided ' +
+            'from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)Error: ' +
+            'Except for transactions and batches, each entry in a Bundle must have a fullUrl which is the identity of the resource in ' +
+            'the entry')
 
         //the 'Run Test Case' button, to run the test case, is unavailable
         cy.get(TestCasesPage.runTestButton).should('exist')
@@ -1395,11 +1400,16 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm error message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdWarning: ' +
-            'CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP' +
-            '\'Warning: Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), ' +
-            'and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)Warning: No code provided, ' +
-            'and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an ' +
+            'IdWarning: CodeSystem is unknown and can\'t be validated: http://terminologys.hl7.org/CodeSystem/v3-ActCodes for ' +
+            '\'http://terminologys.hl7.org/CodeSystem/v3-ActCodes#IMP\'Warning: Could not confirm that the codes provided are in ' +
+            'the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), ' +
+            'and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)' +
+            'Error: Bundle entry missing fullUrlError: Relative Reference appears inside Bundle whose entry is missing a fullUrlError: ' +
+            'Relative Reference appears inside Bundle whose entry is missing a fullUrlWarning: No code provided, and a code should be ' +
+            'provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)' +
+            'Error: Except for transactions and batches, each entry in a Bundle must have a fullUrl which is the identity of the ' +
+            'resource in the entry')
 
         //the 'Run Test Case' button, to run the test case, is unavailable
         cy.get(TestCasesPage.runTestButton).should('exist')

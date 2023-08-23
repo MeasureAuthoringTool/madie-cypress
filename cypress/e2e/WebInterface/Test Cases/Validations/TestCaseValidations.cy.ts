@@ -27,21 +27,13 @@ let updatedTestCaseSeries = 'CMSTestSeries'
 
 describe('Test Case Validations', () => {
 
-    before('Create Measure', () => {
+    beforeEach('Login', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
-    })
-
-    beforeEach('Login', () => {
         OktaLogin.Login()
     })
     afterEach('Logout', () => {
         OktaLogin.Logout()
-
-    })
-
-    after('Clean up', () => {
-
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
