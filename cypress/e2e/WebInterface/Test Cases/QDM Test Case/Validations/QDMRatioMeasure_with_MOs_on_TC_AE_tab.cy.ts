@@ -242,8 +242,8 @@ let measureCQL = 'library HospitalHarmHyperglycemiainHospitalizedPatients versio
     '      )\n' +
     '  )\n' +
     '\n'
-
-describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', () => {
+//skipping tests until feature flag is removed
+describe.skip('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -270,8 +270,8 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-
-    it('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropirate fields and sections', () => {
+    //skipping becasue QDM Test Cases is not in production, yet -- waiting until featrue flag is removed
+    it.skip('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropirate fields and sections', () => {
 
         //navigate to the main measures page and edit the measure
         cy.get(Header.measures).click()
@@ -367,7 +367,8 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(TestCasesPage.numer1Observation).should('be.visible')
         cy.get(TestCasesPage.numer2Observation).should('not.exist')
     })
-    it('Non-owner of measure cannot edit observation fields', () => {
+    //skipping becasue QDM Test Cases is not in production, yet -- waiting until featrue flag is removed
+    it.skip('Non-owner of measure cannot edit observation fields', () => {
 
         //navigate to the main measures page and edit the measure
         cy.get(Header.measures).click()
