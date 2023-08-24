@@ -20,12 +20,6 @@
           ]
         },
         "recordedDate": "2022-02-16T08:00:00.000+00:00",
-        "recorder": {
-          "reference": "RelatedPerson/allergy-confirmed-63c4"
-        },
-        "subject": {
-          "reference": "Patient/63ee50f52497328f6e6563c1"
-        },
         "category": [
           {
             "coding": [
