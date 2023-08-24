@@ -61,7 +61,6 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         //create test case
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
-        OktaLogin.Login()
 
     })
 
@@ -74,6 +73,8 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
     })
 
     it('End to End Cohort Patient w/ Stratification, Pass Result', () => {
+
+        OktaLogin.Login()
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")

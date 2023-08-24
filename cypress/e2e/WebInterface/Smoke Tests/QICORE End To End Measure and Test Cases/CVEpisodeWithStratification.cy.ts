@@ -66,14 +66,11 @@ describe('Measure Creation and Testing: CV Episode Measure With Stratification',
 
     before('Create Measure, Test Case and Login', () => {
 
-        OktaLogin.Login()
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2021-01-01', '2022-12-31')
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-
-        OktaLogin.Login()
 
     })
 
@@ -86,6 +83,8 @@ describe('Measure Creation and Testing: CV Episode Measure With Stratification',
     })
 
     it('End to End CV Episode Measure with Stratification, Pass Result', () => {
+
+        OktaLogin.Login()
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
