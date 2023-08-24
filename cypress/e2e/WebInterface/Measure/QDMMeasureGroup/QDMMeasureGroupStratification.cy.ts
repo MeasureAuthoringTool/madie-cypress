@@ -164,7 +164,7 @@ describe('Validating Stratification tabs', () => {
 
         //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the CQL Editor process and Base Configuration tab before continuing')
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
@@ -222,7 +222,7 @@ describe('Validating Stratification tabs', () => {
         })
     })
 
-    it.only('Add multiple stratifications to the measure group', () => {
+    it('Add multiple stratifications to the measure group', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -237,7 +237,7 @@ describe('Validating Stratification tabs', () => {
 
         //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the CQL Editor process and Base Configuration tab before continuing')
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
@@ -343,7 +343,7 @@ describe('Validating Stratification tabs', () => {
 
         //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the CQL Editor process and Base Configuration tab before continuing')
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
@@ -392,7 +392,7 @@ describe('Validating Stratification tabs', () => {
 
         //confirm Base Config alert message appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCCriteriaReqAlertMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the CQL Editor process and Base Configuration tab before continuing')
+        cy.get(MeasureGroupPage.qdmBCCriteriaReqAlertMsg).should('contain.text', 'Please complete the Base Configuration tab before continuing')
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
