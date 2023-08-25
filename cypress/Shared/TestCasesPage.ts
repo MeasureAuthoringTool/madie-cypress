@@ -285,12 +285,18 @@ export class TestCasesPage {
     }
 
     public static grabValidateTestCaseTitleAndSeries(testCaseTitle: string, testCaseSeries: string): void {
+
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=test-case-row-' + fileContents + ']').should('be.visible')
-            cy.get('[data-testid=test-case-row-' + fileContents + ']').invoke('text').then(
-                (text) => {
-                    expect(text).to.include(testCaseTitle)
-                    expect(text).to.include(testCaseSeries)
+            cy.get('[data-testid=test-case-series-' + fileContents + ']').should('be.visible')
+            cy.get('[data-testid=test-case-series-' + fileContents + ']').invoke('text').then(
+                (seriesText) => {
+                    expect(seriesText).to.include(testCaseSeries)
+                })
+
+            cy.get('[data-testid=test-case-title-' + fileContents + ']').should('be.visible')
+            cy.get('[data-testid=test-case-title-' + fileContents + ']').invoke('text').then(
+                (titleText) => {
+                    expect(titleText).to.include(testCaseTitle)
                 })
 
         })
