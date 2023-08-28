@@ -224,6 +224,7 @@ export class TestCasesPage {
     //Delete Test Case
     public static readonly deleteTestCaseConfirmationText = '[class="dialog-warning-body"]'
     public static readonly deleteTestCaseContinueBtn = '[data-testid="delete-dialog-continue-button"]'
+    public static readonly deleteAllTestCasesBtn = '[data-testid=delete-all-test-cases-button]'
 
     //Import Test cases
     public static readonly importTestCaseBtnOnModal = '[data-testid="test-case-import-import-btn"]'
