@@ -250,6 +250,15 @@ export class TestCasesPage {
     //QDM Test Case Elements Tab
     public static readonly QDMElementsTab = '[data-testid=qdm-Elements-sub-heading]'
 
+    //QDM Test Case Attributes
+    public static readonly laboratoryElement = '[data-testid=elements-tab-laboratory_test]'
+    public static readonly plusIcon = '[data-testid=AddCircleOutlineIcon]'
+    public static readonly attributesTab = '[data-testid=sub-navigation-tab-attributes]'
+    public static readonly selectAttributeDropdown = '[id="attribute-select"]'
+    public static readonly referenceRangeAttribute = '[data-testid="option-Reference Range"]'
+    public static readonly attributeType = '[id="type-select"]'
+    public static readonly attributeChip = '[class="chip-body"]'
+
     public static clickCreateTestCaseButton(): void {
 
         //setup for grabbing the measure create call
