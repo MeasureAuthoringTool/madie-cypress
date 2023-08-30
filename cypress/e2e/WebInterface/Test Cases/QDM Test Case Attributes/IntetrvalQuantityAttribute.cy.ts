@@ -158,6 +158,5 @@ describe.skip('Quantity Attribute', () => {
         cy.get('#quantity-unit-dropdown-high-option-0').click() //Select unit as m meter
         cy.get(TestCasesPage.plusIcon).click()
         cy.get(TestCasesPage.attributeChip).should('contain.text', 'Reference Range: 2 \'m\' - 4 \'m\'')
-
     })
 })
