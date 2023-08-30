@@ -94,7 +94,7 @@ let measureCQL = 'library Library5749 version \'0.0.000\'\n' +
     '      union ["Assessment, Performed": "Falls Screening"] //Assessment '
 
 //Skipping until QDM Test Case feature flag is removed
-describe.skip('Quantity Attribute', () => {
+describe.skip('Date Time Attribute', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -118,7 +118,7 @@ describe.skip('Quantity Attribute', () => {
 
     })
 
-    it('Add Quantity attribute to the Test case', () => {
+    it('Add Date Time attribute to the Test case', () => {
 
         cy.get(Header.measures).click()
         MeasuresPage.measureAction("edit")
@@ -148,16 +148,12 @@ describe.skip('Quantity Attribute', () => {
         cy.get(TestCasesPage.plusIcon).eq(1).click()
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get(TestCasesPage.referenceRangeAttribute).click()
-        cy.get(TestCasesPage.attributeType).should('contain.text', 'Interval<Quantity>')
-        cy.get('[data-testid=quantity-value-input-low]').type('2')
-        cy.get('[id="quantity-unit-dropdown-low"]').click()
-        cy.get('#quantity-unit-dropdown-low-option-0').click() //Select unit as m meter
-        cy.get('[data-testid=quantity-value-input-high]').type('4')
-        cy.get('[id="quantity-unit-dropdown-high"]').click()
-        cy.get('#quantity-unit-dropdown-high-option-0').click() //Select unit as m meter
+        cy.get('[data-testid=option-Result]').click()
+        cy.get(TestCasesPage.attributeType).click()
+        cy.get('[data-testid=option-DateTime]').click() //Select DateTime from dropdown
+        cy.get('[id="dateTime"]').eq(5).type('12/12/200011:30AM')
         cy.get(TestCasesPage.plusIcon).click()
-        cy.get(TestCasesPage.attributeChip).should('contain.text', 'Reference Range: 2 \'m\' - 4 \'m\'')
+        cy.get(TestCasesPage.attributeChip).should('contain.text', 'Result: 12/12/2000 11:30 AM')
 
     })
 })
