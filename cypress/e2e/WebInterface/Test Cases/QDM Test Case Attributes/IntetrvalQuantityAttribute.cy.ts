@@ -96,7 +96,7 @@ let measureCQL = 'library Library5749 version \'0.0.000\'\n' +
 //Skipping until QDM Test Case feature flag is removed
 describe.skip('Quantity Attribute', () => {
 
-    beforeEach('Create measure and login', () => {
+        beforeEach('Create measure and login', () => {
 
         //Create QDM Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, false, measureCQL)

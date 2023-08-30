@@ -20,10 +20,6 @@ export class EditMeasurePage {
     public static readonly versionId = '[data-testid="version-id-input"]'
     public static readonly successfulMeasureSaveMsg = '[data-testid="edit-measure-information-success-text"]'
 
-    //Program Use Context
-    public static readonly programUseContextTextBox = '[id="programUseContext"]'
-    public static readonly programUseContextOption = '#programUseContext-listbox'
-
     //Endorser fields
     public static readonly endorsementNumber = '[data-testid="endorsement-number-input"]'
     public static readonly endorsingOrganizationTextBox = '[id="endorser"]'
