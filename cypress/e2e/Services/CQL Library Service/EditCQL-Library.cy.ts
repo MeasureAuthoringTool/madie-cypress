@@ -32,7 +32,7 @@ describe('Edit CQL Library', () => {
 
     })
 
-    it.only('Edit CQL Library : Successful Update', () => {
+    it('Edit CQL Library : Successful Update', () => {
 
         updatedCQLLibraryName = 'UpdatedCQLLibrary' + Date.now()
 
@@ -191,7 +191,7 @@ describe('Edit CQL Library', () => {
         })
     })
 
-    it.only('Validation Error: Edit CQL Library Name has more than 64 characters', () => {
+    it('Validation Error: Edit CQL Library Name has more than 64 characters', () => {
 
         updatedCQLLibraryName = 'Abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvw'
 
