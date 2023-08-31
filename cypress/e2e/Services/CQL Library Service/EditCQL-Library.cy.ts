@@ -49,16 +49,12 @@ describe('Edit CQL Library', () => {
                         "cqlLibraryName": updatedCQLLibraryName,
                         "model": model,
                         "librarySetId": uuidv4(),
-                        "cql": "",
-                        "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
+                        "cql": ""
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
                     expect(response.body.id).to.be.exist
                     expect(response.body.cqlLibraryName).to.eql(updatedCQLLibraryName)
-                    expect(response.body.programUseContext.code).to.eql('a')
-                    expect(response.body.programUseContext.display).to.eql('b')
-                    expect(response.body.programUseContext.codeSystem).to.eql('c')
                 })
             })
         })
@@ -195,7 +191,7 @@ describe('Edit CQL Library', () => {
         })
     })
 
-    it('Validation Error: Edit CQL Library Name has more than 255 characters', () => {
+    it('Validation Error: Edit CQL Library Name has more than 64 characters', () => {
 
         updatedCQLLibraryName = 'Abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvw'
 
@@ -215,7 +211,7 @@ describe('Edit CQL Library', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(400)
-                    expect(response.body.validationErrors.cqlLibraryName).to.eql('Library name cannot be more than 255 characters.')
+                    expect(response.body.validationErrors.cqlLibraryName).to.eql('Library name cannot be more than 64 characters.')
                 })
             })
         })

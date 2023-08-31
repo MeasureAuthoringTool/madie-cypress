@@ -205,9 +205,6 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                     expect(response.body.entry[0].resource.identifier[2].value).is.not.empty
                     expect(response.body.entry[0].resource.publisher).to.eql('SemanticBits')
                     expect(response.body.entry[0].resource.contact[0].telecom[0].value).to.eql('https://semanticbits.com/')
-                    expect(response.body.entry[0].resource.useContext[0].valueCodeableConcept.coding[0].code).to.eql('mips')
-                    expect(response.body.entry[0].resource.useContext[0].valueCodeableConcept.coding[0].display).to.eql('MIPS')
-                    expect(response.body.entry[0].resource.useContext[0].valueCodeableConcept.coding[0].system).to.eql('http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs')
                     expect(response.body.entry[0].resource.group[0].population[0].code.coding[0].code).to.eql('initial-population')
                     expect(response.body.entry[0].resource.group[0].population[0].criteria.expression).to.eql(PopIniPop)
                     expect(response.body.entry[0].resource.group[0].population[1].code.coding[0].code).to.eql('denominator')
@@ -238,9 +235,6 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                     expect(response.body.entry[1].resource.dataRequirement[0].codeFilter[0].path).to.eql('code')
                     expect(response.body.entry[1].resource.dataRequirement[0].codeFilter[0].valueSet).to.eql('http://cts.nlm.nih.' +
                         'gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001')
-                    expect(response.body.entry[1].resource.useContext[0].valueCodeableConcept.coding[0].code).to.eql('mips')
-                    expect(response.body.entry[1].resource.useContext[0].valueCodeableConcept.coding[0].display).to.eql('MIPS')
-                    expect(response.body.entry[1].resource.useContext[0].valueCodeableConcept.coding[0].system).to.eql('http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs')
                 })
             })
         })

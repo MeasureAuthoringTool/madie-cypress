@@ -20,6 +20,7 @@ let TCName = 'TCName' + Date.now()
 let TCSeries = 'SBTestSeries'
 let TCTitle = 'test case title'
 let TCDescription = 'DENOMFail1651609688032'
+let randValue = (Math.floor((Math.random() * 1000) + 1))
 let TCJson = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter", "resource": { "id":"1", "resourceType": "Encounter","meta": { "versionId": "1","lastUpdated": "2021-10-13T03:34:10.160+00:00","source":"#nEcAkGd8PRwPP5fA"}, "text": { "status": "generated","div":"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">Sep 9th 2021 for Asthma<a name=\\\"mm\\\"/></div>"}, "status": "finished","class": { "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode","code": "IMP","display":"inpatient encounter"}, "type": [ { "text": "OutPatient"} ],"subject": { "reference": "Patient/1"},"participant": [ { "individual": { "reference": "Practitioner/30164", "display": "Dr John Doe"}} ],"period": { "start": "2023-09-10T03:34:10.054Z"}}}, { "fullUrl": "http://local/Patient","resource": { "id":"2", "resourceType": "Patient","text": { "status": "generated","div": "<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">Lizzy Health</div>"},"identifier": [ { "system": "http://clinfhir.com/fhir/NamingSystem/identifier","value": "20181011LizzyHealth"} ],"name": [ { "use": "official", "text": "Lizzy Health","family": "Health","given": [ "Lizzy" ]} ],"gender": "female","birthDate": "2000-10-11"}} ]}'
 
 describe('Test Case population values based on Measure Group population definitions', () => {
@@ -895,10 +896,10 @@ describe('Test Case Json Validations', () => {
                     },
                     method: 'POST',
                     body: {
-                        'name': "DENOM_Fail",
-                        'series': "Test_Series",
-                        'title': "Test_Title",
-                        'description': "Test_Description",
+                        'name': "DENOM_Fail" + randValue,
+                        'series': "Test_Series" + randValue,
+                        'title': "Test_Title" + randValue,
+                        'description': "Test_Description" + randValue,
                         'json': TestCaseJson.API_TestCaseJson_InValid
                     }
                 }).then((response) => {
@@ -923,10 +924,10 @@ describe('Test Case Json Validations', () => {
                     },
                     method: 'POST',
                     body: {
-                        'name': "DENOM_Fail",
-                        'series': "Test_Series",
-                        'title': "Test_Title",
-                        'description': "Test_Description",
+                        'name': "DENOM_Pass001" + randValue,
+                        'series': "Test_Series001" + randValue,
+                        'title': "Test_Title001" + randValue,
+                        'description': "Test_Description001" + randValue,
                         'json': TestCaseJson.TestCase_XML
                     }
                 }).then((response) => {
@@ -951,10 +952,10 @@ describe('Test Case Json Validations', () => {
                     },
                     method: 'POST',
                     body: {
-                        'name': "DENOM_Fail",
-                        'series': "Test_Series",
-                        'title': "Test_Title",
-                        'description': "Test_Description",
+                        'name': "DENOM_Fail002" + randValue,
+                        'series': "Test_Series002" + randValue,
+                        'title': "Test_Title002" + randValue,
+                        'description': "Test_Description002" + randValue,
                         'json': TestCaseJson.API_TestCaseJson_InValid
                     }
                 }).then((response) => {
