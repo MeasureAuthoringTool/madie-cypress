@@ -535,6 +535,8 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
+        Utilities.waitForElementVisible(CQLLibraryPage.libraryWarning, 25000)
+
         cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'CQL updated successfully but was missing a Using statement.  Please add in a valid model and version.')
 
     })
