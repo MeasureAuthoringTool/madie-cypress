@@ -932,7 +932,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
     })
 })
 
-describe('Test Case Import: Virus Scan tests', () => {
+describe.skip('Test Case Import: Virus Scan tests', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -995,7 +995,9 @@ describe('Test Case Import: Virus Scan tests', () => {
 
         Utilities.deleteMeasure(measureName, newCqlLibraryName)
     })
-    it('Verify message when import fails virus scan', () => {
+    //skipping -- this test works in DEV but to get it to work in TEST and other environments, Brendan will need to do some additonal work
+    //so, this is being skipped until that work is completed
+    it.skip('Verify message when import fails virus scan', () => {
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
         cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
         cy.get(Header.cqlLibraryTab).click().wait(3000)
