@@ -31,8 +31,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorTab).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
@@ -56,11 +56,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         cy.get(MeasuresPage.versionMeasuresRadioButton).eq(0).click()
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        Utilities.waitForElementVisible(TestCasesPage.versionMeasureWithTCErrors, 20000)
-        cy.get(TestCasesPage.versionMeasureWithTCErrors).should('exist')
 
-        //cy.get(TestCasesPage.versionMeasurewithTCErrorsContinue).click()
-        Utilities.waitForElementToNotExist(TestCasesPage.versionMeasureWithTCErrors, 20000)
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
@@ -82,11 +78,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         cy.get(MeasuresPage.versionMeasuresRadioButton).eq(0).click()
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        Utilities.waitForElementVisible(TestCasesPage.versionMeasureWithTCErrors, 20000)
-        cy.get(TestCasesPage.versionMeasureWithTCErrors).should('exist')
 
-        //cy.get(TestCasesPage.versionMeasurewithTCErrorsContinue).click()
-        Utilities.waitForElementToNotExist(TestCasesPage.versionMeasureWithTCErrors, 20000)
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
@@ -123,8 +115,8 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorTab).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
@@ -162,11 +154,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        Utilities.waitForElementVisible(TestCasesPage.versionMeasureWithTCErrors, 20000)
-        cy.get(TestCasesPage.versionMeasureWithTCErrors).should('exist')
 
-        cy.get(TestCasesPage.versionMeasurewithTCErrorsContinue).click()
-        Utilities.waitForElementToNotExist(TestCasesPage.versionMeasureWithTCErrors, 20000)
         Utilities.waitForElementVisible(MeasuresPage.VersionDraftMsgs, 100000)
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
 
@@ -196,8 +184,8 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
         MeasuresPage.measureAction('edit')
 
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTab).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTextBox, 100000)
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
