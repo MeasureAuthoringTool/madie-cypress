@@ -70,7 +70,6 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         //create Measure Group
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population',
             'Num', 'Initial Population', 'boolean')
-        OktaLogin.Login()
 
     })
 
@@ -79,7 +78,10 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
+
     it('Removing definition related to the SD alerts user.', () => {
+
+        OktaLogin.Login()
         cy.get(Header.measures).click()
         MeasuresPage.measureAction("edit")
         //navigate to the PC page / tab
@@ -120,11 +122,12 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //navigate to the test case list page and make sure alert concerning SA appears
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get('[data-testid="test-case-list-error"]').should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
     })
 
     it('Fixing SD to point to something that is, now, in CQL, resolves alert.', () => {
 
+        OktaLogin.Login()
         cy.get(Header.measures).click()
         MeasuresPage.measureAction("edit")
         //navigate to the PC page / tab
@@ -166,7 +169,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //navigate to the test case list page and make sure alert concerning SA appears
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get('[data-testid="test-case-list-error"]').should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
 
         //navigate back to the group page
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -200,7 +203,10 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
 
     })
+
     it('Placing definition back into CQL and saving resolves the alert.', () => {
+
+        OktaLogin.Login()
         cy.get(Header.measures).click()
         MeasuresPage.measureAction("edit")
         //navigate to the PC page / tab
@@ -241,7 +247,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //navigate to the test case list page and make sure alert concerning SA appears
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(MeasureGroupPage.pcErrorAlertToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get('[data-testid="test-case-list-error"]').should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
 
         //navigate to the CQL tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
