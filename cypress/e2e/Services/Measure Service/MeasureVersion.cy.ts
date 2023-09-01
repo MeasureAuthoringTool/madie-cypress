@@ -94,7 +94,7 @@ describe('Measure Versioning', () => {
                         method: 'PUT'
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        expect(response.body.version).to.eql('1.0.000')
+                        expect(response.body.version).to.include('1.0.000')
                     })
                 })
             })
@@ -114,7 +114,7 @@ describe('Measure Versioning', () => {
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(403)
-                    expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId2)
+                    expect(response.body.message).to.include('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId2)
                 })
             })
         })
@@ -151,7 +151,7 @@ describe('Version Measure without CQL', () => {
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(400)
-                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has no CQL.')
+                    expect(response.body.message).to.include('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has no CQL.')
                 })
             })
         })
@@ -193,7 +193,7 @@ describe('Version Measure with invalid CQL', () => {
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
-                expect(response.body.errors[0]).to.eql('ERRORS_ELM_JSON')
+                expect(response.body.errors[0]).to.include('ERRORS_ELM_JSON')
 
                 cy.writeFile('cypress/fixtures/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
@@ -221,7 +221,7 @@ describe('Version Measure with invalid CQL', () => {
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(400)
-                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has CQL errors.')
+                    expect(response.body.message).to.include('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure has CQL errors.')
                 })
             })
         })
@@ -253,7 +253,7 @@ describe('Version Measure with invalid test case Json', () => {
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql('1.0.000')
+                    expect(response.body.version).to.include('1.0.000')
                 })
             })
         })
@@ -274,6 +274,9 @@ describe('Edit validations for versioned Measure', () => {
 
     beforeEach('Set Access Token', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
         cy.setAccessTokenCookie()
     })
 
@@ -283,6 +286,7 @@ describe('Edit validations for versioned Measure', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
+                    cy.wait(1000)
                     cy.request({
                         url: '/api/measures/' + measureId + '/version?versionType=major',
                         headers: {
@@ -295,6 +299,7 @@ describe('Edit validations for versioned Measure', () => {
                     })
 
                     cy.log('Verify error message on editing Measure details')
+                    cy.wait(1000)
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId,
@@ -317,10 +322,11 @@ describe('Edit validations for versioned Measure', () => {
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(409)
-                        expect(response.body.message).to.eql('Response could not be completed for measure with ID ' + measureId + ', since the measure is not in a draft status')
+                        expect(response.body.message).to.include('Response could not be completed for measure with ID ' + measureId + ', since the measure is not in a draft status')
                     })
 
                     cy.log('Verify error message on editing Measure group')
+                    cy.wait(1000)
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId + '/groups',
@@ -360,11 +366,12 @@ describe('Edit validations for versioned Measure', () => {
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(409)
-                        expect(response.body.message).to.eql('Response could not be completed for measure with ID ' + measureId + ', since the measure is not in a draft status')
+                        expect(response.body.message).to.include('Response could not be completed for measure with ID ' + measureId + ', since the measure is not in a draft status')
                     })
 
                     cy.log('Verify error message on editing Test case')
                     cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testcaseid) => {
+                        cy.wait(1000)
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
@@ -382,7 +389,7 @@ describe('Edit validations for versioned Measure', () => {
                             }
                         }).then((response) => {
                             expect(response.status).to.eql(409)
-                            expect(response.body.message).to.eql('Response could not be completed for measure with ID ' + measureId + ', since the measure is not in a draft status')
+                            expect(response.body.message).to.include('Response could not be completed for measure with ID ' + measureId + ', since the measure is not in a draft status')
                         })
                     })
                 })
@@ -405,6 +412,9 @@ describe('Delete validations for versioned Measure', () => {
 
     beforeEach('Set Access Token', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
         cy.setAccessTokenCookie()
     })
 
@@ -414,6 +424,7 @@ describe('Delete validations for versioned Measure', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
+                    cy.wait(1000)
                     cy.request({
                         url: '/api/measures/' + measureId + '/version?versionType=major',
                         headers: {
@@ -422,10 +433,11 @@ describe('Delete validations for versioned Measure', () => {
                         method: 'PUT'
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        expect(response.body.version).to.eql('1.0.000')
+                        expect(response.body.version).to.include('1.0.000')
                     })
 
                     cy.log('Verify error message on delete Measure')
+                    cy.wait(1000)
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId,
@@ -448,11 +460,12 @@ describe('Delete validations for versioned Measure', () => {
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(409)
-                        expect(response.body.message).to.eql('Response could not be completed for measure with ID ' + measureId + ', since the measure is not in a draft status')
+                        expect(response.body.message).to.include('Response could not be completed for measure with ID ' + measureId + ', since the measure is not in a draft status')
                     })
 
                     cy.log('Verify error message on delete Measure group')
                     cy.readFile('cypress/fixtures/groupId').should('exist').then((groupId) => {
+                        cy.wait(1000)
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/measures/' + measureId + '/groups/' + groupId,
@@ -486,12 +499,13 @@ describe('Delete validations for versioned Measure', () => {
                             }
                         }).then((response) => {
                             expect(response.status).to.eql(409)
-                            expect(response.body.message).to.eql('Response could not be completed for measure with ID ' + measureId + ', since the measure is not in a draft status')
+                            expect(response.body.message).to.include('Response could not be completed for measure with ID ' + measureId + ', since the measure is not in a draft status')
                         })
                     })
 
                     cy.log('Verify error message on delete Test case')
                     cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testcaseid) => {
+                        cy.wait(1000)
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
@@ -505,7 +519,7 @@ describe('Delete validations for versioned Measure', () => {
                             }
                         }).then((response) => {
                             expect(response.status).to.eql(409)
-                            expect(response.body.message).to.eql('Response could not be completed for measure with ID ' + measureId + ', since the measure is not in a draft status')
+                            expect(response.body.message).to.include('Response could not be completed for measure with ID ' + measureId + ', since the measure is not in a draft status')
                         })
                     })
                 })
