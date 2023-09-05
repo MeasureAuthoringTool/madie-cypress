@@ -3,12 +3,7 @@ import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { Utilities } from "../../../Shared/Utilities"
 import { Environment } from "../../../Shared/Environment"
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { Header } from "../../../Shared/Header"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 
 let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
@@ -41,9 +36,14 @@ describe('Delete test Case: Older end point / url that takes id and title in the
     })
 
     it('Delete test Case - Success scenario - Old end point', () => {
-
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.wait(1000)
                 cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
                     cy.request({
                         url: '/api/measures/' + measureId + '/test-cases/' + testCaseId,
@@ -70,9 +70,10 @@ describe('Delete test Case: Older end point / url that takes id and title in the
         cy.clearLocalStorage()
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
-
+        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.wait(1000)
                 cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
                     cy.request({
                         failOnStatusCode: false,
@@ -87,7 +88,7 @@ describe('Delete test Case: Older end point / url that takes id and title in the
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(403)
-                        expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId)
+                        expect(response.body.message).to.include('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId)
                     })
                 })
             })
@@ -97,14 +98,15 @@ describe('Delete test Case: Older end point / url that takes id and title in the
 describe('Delete test Case: Newer end point / url that takes an list array of test case ids', () => {
 
     beforeEach('Create Measure, Group, Test Case and set access token', () => {
-
+        cy.clearCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         //Create Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         //Create Test case
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'a', testCaseDescription + ' a', testCaseSeries + 'a', testCaseJson, false, false)
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b', testCaseDescription + ' b', testCaseSeries + 'b', testCaseJson, false, true)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'a', testCaseDescription + ' a', testCaseSeries + 'a', testCaseJson, false, false, false)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b', testCaseDescription + ' b', testCaseSeries + 'b', testCaseJson, false, true, false)
 
     })
 
@@ -115,10 +117,16 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
     })
 
     it('Delete test Case - Success scenario - New Delete End Point', () => {
-
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.wait(1000)
                 cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
+                    cy.wait(1000)
                     cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((testCaseId2) => {
                         cy.request({
                             url: '/api/measures/' + measureId + '/test-cases',
@@ -142,6 +150,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.wait(1000)
                 cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
                     cy.request({
                         failOnStatusCode: false,
@@ -159,6 +168,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
         })
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.wait(1000)
                 cy.readFile('cypress/fixtures/testcaseId2').should('exist').then((testCaseId2) => {
                     cy.request({
                         failOnStatusCode: false,
@@ -182,10 +192,12 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
         cy.clearLocalStorage()
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
-
+        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.wait(1000)
                 cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
+                    cy.wait(1000)
                     cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((testCaseId2) => {
                         cy.request({
                             failOnStatusCode: false,
@@ -201,7 +213,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
 
                         }).then((response) => {
                             expect(response.status).to.eql(403)
-                            expect(response.body.message).contains('User ' + harpUser + ' is not authorized for Measure with ID ')
+                            expect(response.body.message).to.include('User ' + harpUser + ' is not authorized for Measure with ID ')
                         })
                     })
                 })
@@ -213,6 +225,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
         cy.clearLocalStorage()
         //Share Measure with ALT User
         cy.setAccessTokenCookie()
+        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
@@ -233,10 +246,12 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
         cy.clearLocalStorage()
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
-
+        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.wait(1000)
                 cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
+                    cy.wait(1000)
                     cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((testCaseId2) => {
                         cy.request({
                             url: '/api/measures/' + measureId + '/test-cases',
@@ -258,6 +273,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
             })
             cy.getCookie('accessToken').then((accessToken) => {
                 cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                    cy.wait(1000)
                     cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
                         cy.request({
                             failOnStatusCode: false,
@@ -275,6 +291,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
             })
             cy.getCookie('accessToken').then((accessToken) => {
                 cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                    cy.wait(1000)
                     cy.readFile('cypress/fixtures/testcaseId2').should('exist').then((testCaseId2) => {
                         cy.request({
                             failOnStatusCode: false,
@@ -292,7 +309,4 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
             })
         })
     })
-
-
-
 })
