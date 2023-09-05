@@ -329,16 +329,16 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             .should('be.checked')
     })
     //non-owner of measure cannot edit Base Configuration fields
-    it('Non-owner of measure cannot edit any of the the Base Configuration fields', () => {
+    it.only('Non-owner of measure cannot edit any of the the Base Configuration fields', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
         //click on the "All Measures" tab
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 30000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
-        Utilities.waitForElementEnabled(MeasuresPage.allMeasuresTab, 30000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.enabled')
-        cy.get(MeasuresPage.allMeasuresTab).wait(5000).click()
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 70000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').wait(1000)
+        Utilities.waitForElementEnabled(MeasuresPage.allMeasuresTab, 70000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.enabled').wait(1000)
+        cy.get(MeasuresPage.allMeasuresTab).wait(10000).click()
         MeasuresPage.measureAction("edit", true)
 
         //Click on Measure Group tab

@@ -10,7 +10,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import {Header} from "../../../../Shared/Header"
+import { Header } from "../../../../Shared/Header";
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -147,7 +147,11 @@ describe('Measure Sharing - Multiple instances', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
         cy.setAccessTokenCookie()
+        cy.wait(1000)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
@@ -185,7 +189,11 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.log('Draft Created Successfully')
 
         //Share Measure with ALT User
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
         cy.setAccessTokenCookie()
+        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
@@ -219,7 +227,11 @@ describe('Delete Test Case with Shared user', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
         cy.setAccessTokenCookie()
+        cy.wait(1000)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
@@ -232,6 +244,11 @@ describe('Delete Test Case with Shared user', () => {
     })
 
     it('Verify Test Case can be deleted by the shared user', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
 
         //Share Measure with ALT User
         cy.getCookie('accessToken').then((accessToken) => {
