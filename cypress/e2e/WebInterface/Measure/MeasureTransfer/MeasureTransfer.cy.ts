@@ -69,6 +69,7 @@ describe('Measure Transfer', () => {
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
+        cy.reload()
         cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
 
     })
@@ -97,6 +98,7 @@ describe('Measure Transfer', () => {
         OktaLogin.AltLogin()
 
         //Edit Measure details
+        cy.reload()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
         cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(updatedCqlLibraryName)
