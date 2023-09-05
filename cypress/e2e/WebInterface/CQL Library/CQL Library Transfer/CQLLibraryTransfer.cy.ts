@@ -55,7 +55,7 @@ describe('CQL Library Transfer', () => {
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
         cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get(CQLLibraryPage.myLibrariesBtn).click().wait(1000)
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
 
     })
