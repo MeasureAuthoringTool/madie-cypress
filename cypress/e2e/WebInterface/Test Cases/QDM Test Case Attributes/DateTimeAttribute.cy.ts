@@ -6,6 +6,7 @@ import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 import {Header} from "../../../../Shared/Header"
+import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -109,6 +110,9 @@ describe.skip('Date Time Attribute', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population')
+        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
