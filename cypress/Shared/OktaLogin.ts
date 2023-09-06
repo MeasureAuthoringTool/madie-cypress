@@ -1,7 +1,7 @@
-import {Header} from "./Header"
-import {Environment} from "./Environment"
-import {LandingPage} from "./LandingPage"
-import {umlsLoginForm} from "./umlsLoginForm"
+import { Header } from "./Header"
+import { Environment } from "./Environment"
+import { LandingPage } from "./LandingPage"
+import { umlsLoginForm } from "./umlsLoginForm"
 
 //MADiE OKTA Login Class
 export class OktaLogin {
@@ -18,29 +18,27 @@ export class OktaLogin {
 
         cy.visit('/login', { onBeforeLoad: (win) => { win.sessionStorage.clear() } })
 
-        cy.get(this.usernameInput, { timeout: 100000 }).should('be.enabled')
-        cy.get(this.usernameInput, { timeout: 100000 }).should('be.visible')
-        cy.get(this.passwordInput, { timeout: 100000 }).should('be.enabled')
-        cy.get(this.passwordInput, { timeout: 100000 }).should('be.visible')
-
+        cy.get(this.usernameInput, { timeout: 110000 }).should('be.enabled')
+        cy.get(this.usernameInput, { timeout: 110000 }).should('be.visible')
+        cy.get(this.passwordInput, { timeout: 110000 }).should('be.enabled')
+        cy.get(this.passwordInput, { timeout: 110000 }).should('be.visible')
+        cy.wait(3000)
         cy.get(this.usernameInput).type(Environment.credentials().harpUserALT)
         cy.get(this.passwordInput).type(Environment.credentials().passwordALT)
-        cy.get(this.signInButton, { timeout: 100000 }).should('be.enabled')
-        cy.get(this.signInButton, { timeout: 100000 }).should('be.visible')
+        cy.get(this.signInButton, { timeout: 110000 }).should('be.enabled')
+        cy.get(this.signInButton, { timeout: 110000 }).should('be.visible')
 
         //setup for grabbing the measure create call
         cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
 
         cy.get(this.signInButton).click()
 
-        cy.wait('@umls', { timeout: 60000}).then(({response}) => {
+        cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
 
-            if(response.statusCode === 200)
-            {
+            if (response.statusCode === 200) {
                 //do nothing
             }
-            else
-            {
+            else {
                 umlsLoginForm.UMLSLogin()
             }
 
@@ -58,29 +56,27 @@ export class OktaLogin {
 
         cy.visit('/login', { onBeforeLoad: (win) => { win.sessionStorage.clear() } })
 
-        cy.get(this.usernameInput, { timeout: 100000 }).should('be.enabled')
-        cy.get(this.usernameInput, { timeout: 100000 }).should('be.visible')
-        cy.get(this.passwordInput, { timeout: 100000 }).should('be.enabled')
-        cy.get(this.passwordInput, { timeout: 100000 }).should('be.visible')
-        cy.wait(1000)
+        cy.get(this.usernameInput, { timeout: 110000 }).should('be.enabled')
+        cy.get(this.usernameInput, { timeout: 110000 }).should('be.visible')
+        cy.get(this.passwordInput, { timeout: 110000 }).should('be.enabled')
+        cy.get(this.passwordInput, { timeout: 110000 }).should('be.visible')
+        cy.wait(3000)
         cy.get(this.usernameInput).type(Environment.credentials().harpUser)
         cy.get(this.passwordInput).type(Environment.credentials().password)
-        cy.get(this.signInButton, { timeout: 100000 }).should('be.enabled')
-        cy.get(this.signInButton, { timeout: 100000 }).should('be.visible')
+        cy.get(this.signInButton, { timeout: 110000 }).should('be.enabled')
+        cy.get(this.signInButton, { timeout: 110000 }).should('be.visible')
 
         //setup for grabbing the measure create call
         cy.intercept('GET', '/api/vsac/umls-credentials/status').as('umls')
 
         cy.get(this.signInButton).click()
 
-        cy.wait('@umls', { timeout: 60000}).then(({response}) => {
+        cy.wait('@umls', { timeout: 110000 }).then(({ response }) => {
 
-            if(response.statusCode === 200)
-            {
+            if (response.statusCode === 200) {
                 //do nothing
             }
-            else
-            {
+            else {
                 umlsLoginForm.UMLSLogin()
             }
 

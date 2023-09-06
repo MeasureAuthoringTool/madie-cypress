@@ -40,11 +40,11 @@ describe('Measure Ownership Validations for QDM Measures', () => {
     it('Fields on Population criteria page are not editable by Non Measure Owner', () => {
 
         //navigate to the all measures tab
-        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.visible')
-        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.enabled')
-        cy.get(LandingPage.allMeasuresTab).wait(5000).click()
+        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 70000)
+        cy.get(LandingPage.allMeasuresTab).should('be.visible').wait(1000)
+        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 70000)
+        cy.get(LandingPage.allMeasuresTab).should('be.enabled').wait(1000)
+        cy.get(LandingPage.allMeasuresTab).wait(7000).click()
 
         //click on Edit button to edit measure
         MeasuresPage.measureAction("edit")
