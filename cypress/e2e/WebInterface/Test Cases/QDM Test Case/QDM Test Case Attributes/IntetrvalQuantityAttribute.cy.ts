@@ -1,12 +1,12 @@
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../Shared/Header"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
+import {CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
+import {OktaLogin} from "../../../../../Shared/OktaLogin"
+import {Utilities} from "../../../../../Shared/Utilities"
+import {MeasuresPage} from "../../../../../Shared/MeasuresPage"
+import {EditMeasurePage} from "../../../../../Shared/EditMeasurePage"
+import {TestCasesPage} from "../../../../../Shared/TestCasesPage"
+import {CQLEditorPage} from "../../../../../Shared/CQLEditorPage"
+import {Header} from "../../../../../Shared/Header"
+import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
