@@ -1,8 +1,8 @@
 import { Environment } from "../../../../Shared/Environment"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import {Header} from "../../../../Shared/Header"
-import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage"
-import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
+import { Header } from "../../../../Shared/Header"
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
@@ -22,6 +22,10 @@ describe('CQL Library Transfer', () => {
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
 
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookie()
     })
 
     afterEach('LogOut', () => {
@@ -31,6 +35,11 @@ describe('CQL Library Transfer', () => {
 
 
     it('Verify transferred CQL Library is viewable under My Libraries tab', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
 
         //Share Measure with ALT User
         cy.getCookie('accessToken').then((accessToken) => {
@@ -63,6 +72,11 @@ describe('CQL Library Transfer', () => {
     it('Verify CQL Library can be edited by the transferred user', () => {
 
         //Share Measure with ALT User
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -102,6 +116,10 @@ describe('CQL Library Transfer - Multiple instances', () => {
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 5
 
         CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookie()
         OktaLogin.Login()
     })
 
@@ -143,7 +161,11 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.log('Draft Created Successfully')
 
         //Share Measure with ALT User
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
         cy.setAccessTokenCookie()
+        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
