@@ -99,6 +99,7 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
 
     })
+
     it('Run / Execute one passing and one failing Test Cases', () => {
 
         //Click on Edit Measure

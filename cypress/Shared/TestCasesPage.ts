@@ -3,7 +3,7 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 
 export class TestCasesPage {
-    //observaion fields
+    //observation fields
     public static readonly denom0Observation = '[id="denominatorObservation0-expected-cb"]'
     public static readonly denom1Observation = '[id="denominatorObservation1-expected-cb"]'
     public static readonly denom2Observation = '[id="denominatorObservation2-expected-cb"]'
