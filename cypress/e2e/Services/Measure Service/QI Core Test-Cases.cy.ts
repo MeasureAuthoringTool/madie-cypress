@@ -38,7 +38,7 @@ let randValue = (Math.floor((Math.random() * 1000) + 1))
 let TCJson = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter", "resource": { "id":"1", "resourceType": "Encounter","meta": { "versionId": "1","lastUpdated": "2021-10-13T03:34:10.160+00:00","source":"#nEcAkGd8PRwPP5fA"}, "text": { "status": "generated","div":"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">Sep 9th 2021 for Asthma<a name=\\\"mm\\\"/></div>"}, "status": "finished","class": { "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode","code": "IMP","display":"inpatient encounter"}, "type": [ { "text": "OutPatient"} ],"subject": { "reference": "Patient/1"},"participant": [ { "individual": { "reference": "Practitioner/30164", "display": "Dr John Doe"}} ],"period": { "start": "2023-09-10T03:34:10.054Z"}}}, { "fullUrl": "http://local/Patient","resource": { "id":"2", "resourceType": "Patient","text": { "status": "generated","div": "<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">Lizzy Health</div>"},"identifier": [ { "system": "http://clinfhir.com/fhir/NamingSystem/identifier","value": "20181011LizzyHealth"} ],"name": [ { "use": "official", "text": "Lizzy Health","family": "Health","given": [ "Lizzy" ]} ],"gender": "female","birthDate": "2000-10-11"}} ]}'
 
 // create test case that contains race data in json
-describe('QI Core Race data validations: Create test case with Race data in Json', () => {
+describe('QI Core Gender, Race, and Ethnicity data validations: Create test case with Gender, Race, and Ethnicity data in Json', () => {
 
     before('Create Measure', () => {
 
@@ -77,7 +77,7 @@ describe('QI Core Race data validations: Create test case with Race data in Json
 
     })
 
-    it('Enter Valid Test Case Json that contains race data and confirme those pieces of data appears on the element tab', () => {
+    it('Enter Valid Test Case Json that contains Gender, Race, and Ethnicity data and confirm those pieces of data appears on the element tab', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -123,8 +123,8 @@ describe('QI Core Race data validations: Create test case with Race data in Json
     })
 })
 
-// attempt to edit a test case with whom the measure has been shared
-describe('QI Core Race data validations: Attempt to update Json on a test case whom measure has been shared', () => {
+// edit a test case with whom the measure has been shared
+describe('QI Core Gender, Race, and Ethnicity data validations: Update Json on a test case whom measure has been shared', () => {
 
     before('Create Measure', () => {
 
@@ -163,7 +163,7 @@ describe('QI Core Race data validations: Attempt to update Json on a test case w
 
     })
 
-    it('Enter Valid Test Case Json that contains race data and confirme those pieces of data appears on the element tab', () => {
+    it('Enter Valid Test Case Json that contains Gender, Race, and Ethnicity data and confirme those pieces of data appears on the element tab when the user whom did the edit had the measure shared with them', () => {
 
         //create test case on measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -248,7 +248,7 @@ describe('QI Core Race data validations: Attempt to update Json on a test case w
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
         cy.get(TestCasesPage.elementsTab).click()
 
-        cy.get(TestCasesPage.genderDdOnElementTab).should('contain.text', 'Male')
+        cy.get(TestCasesPage.genderDdOnElementTab).should('contain.text', 'Unknown')
         cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'White')
         cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'Other Race')
         cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'American Indian or Alaska Native')
@@ -263,7 +263,7 @@ describe('QI Core Race data validations: Attempt to update Json on a test case w
 })
 
 // attempt to edit a test case with whom the measure has not been shared and whom is also not the owner
-describe('QI Core Race data validations: Attempt to update Json with a user whom is not the owner nor has the measure been shared', () => {
+describe('QI Core Gender, Race, and Ethnicity data validations: Attempt to update Json with a user whom is not the owner nor has the measure been shared', () => {
 
     before('Create Measure', () => {
 
@@ -302,7 +302,7 @@ describe('QI Core Race data validations: Attempt to update Json with a user whom
 
     })
 
-    it('Enter Valid Test Case Json that contains race data and confirme those pieces of data appears on the element tab', () => {
+    it('Attempt to enter valid Test Case Json that contains Gender, Race, and Ethnicity data, when the measure has not been shared with the user', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {

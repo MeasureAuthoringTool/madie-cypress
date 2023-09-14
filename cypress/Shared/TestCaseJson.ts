@@ -424,7 +424,7 @@ export class TestCaseJson {
         '          "family" : "IPPass",\n' +
         '          "given" : [ "IPPass" ]\n' +
         '        } ],\n' +
-        '        "gender" : "male",\n' +
+        '        "gender" : "unknown",\n' +
         '        "birthDate" : "1954-02-10"\n' +
         '      }\n' +
         '    }, {\n' +

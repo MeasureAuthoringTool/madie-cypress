@@ -219,6 +219,8 @@ export class TestCasesPage {
     public static readonly raceOmbselectBoxElementTab = '[id="raceOMB"]'
     public static readonly raceOmbElementTab = '[data-testid="demographics-race-omb"]'
     public static readonly genderDdOnElementTab = '[id="gender-selector"]'
+    public static readonly genderSelectBoxElementTab = '[id="gender-selector"]'
+    public static readonly genderSelectValuesElementTab = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
 
     //Stratifications
     public static readonly denominatorStratificationOneExpectedValue = '[data-testid="test-population-Strata-1 Denominator-expected"]'
