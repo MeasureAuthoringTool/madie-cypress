@@ -212,6 +212,14 @@ export class TestCasesPage {
     public static readonly expectedOrActualTab = '[data-testid=expectoractual-tab]'
     public static readonly runQDMTestCaseBtn = '[data-testid=qdm-test-case-run-button]'
 
+    //Test Case Page
+    public static readonly ethnicityDetailedElementTab = '[data-testid="demographics-ethnicity-detailed-input"]'
+    public static readonly ethnicityOmbElementTab = '[id="demographics-ethnicity-omb-select-id"]'
+    public static readonly raceDetailedElementTab = '[data-testid="demographics-race-detailed-input"]'
+    public static readonly raceOmbselectBoxElementTab = '[id="raceOMB"]'
+    public static readonly raceOmbElementTab = '[data-testid="demographics-race-omb"]'
+    public static readonly genderDdOnElementTab = '[id="gender-selector"]'
+
     //Stratifications
     public static readonly denominatorStratificationOneExpectedValue = '[data-testid="test-population-Strata-1 Denominator-expected"]'
     public static readonly numeratorStratificationTwoExpectedValue = '[data-testid="test-population-Strata-2 Numerator-expected"]'

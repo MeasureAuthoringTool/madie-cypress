@@ -95,6 +95,34 @@ export class MeasureCQL {
         '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
         '		where NoCervixHysterectomy.status = \'completed\''
 
+    public static readonly ICFCleanTestQICore = 'library SimpleFhirLibrary version \'0.0.004\'\n' +
+
+
+        'using QICore version \'4.1.1\'\n' +
+
+
+
+        'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+
+        'codesystem \"SNOMEDCT:2017-09\": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'\n' +
+
+        'valueset \"Hysterectomy with No Residual Cervix\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
+        'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+
+
+
+        'parameter \"Measurement Period\" Interval<DateTime>\n' +
+
+
+
+        'context Patient\n' +
+
+
+
+        'define \"Surgical Absence of Cervix\":\n' +
+        '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
+        '		where NoCervixHysterectomy.status = \'completed\''
+
     public static readonly QDM4TestCaseElementsAttributes = 'library Library5749 version \'0.0.000\'\n' +
         'using QDM version \'5.6\'\n' +
         'codesystem "Test": \'urn:oid:2.16.840.1.113883.6.1\'\n' +
