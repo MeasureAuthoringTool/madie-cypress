@@ -31,7 +31,7 @@ let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 let cqlLibraryName = 'TestLibrary' + Date.now()
 
 
-describe('QI Core Race data validations: Create test case with Race data in Json', () => {
+describe('QI Core Gender, Race, and Ethnicity data validations: Create test case with Gender, Race, and Ethnicity data in Json', () => {
 
     before('Create Measure', () => {
 
@@ -71,7 +71,7 @@ describe('QI Core Race data validations: Create test case with Race data in Json
 
     })
 
-    it('Enter Valid Test Case Json that contains race data and confirme those pieces of data appears on the element tab', () => {
+    it('Enter Valid Test Case Json that contains Gender, Race, and Ethnicity data and confirm those pieces of data appears on the element tab', () => {
 
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
@@ -150,7 +150,7 @@ describe('QI Core Race data validations: Create test case with Race data in Json
 })
 
 // edit test case by adding more race values
-describe('QI Core Race data validations: Edit Test Case to add another race value', () => {
+describe('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case to add another Race and include existing Gender, Race, and Ethnicity value', () => {
 
     before('Create Measure', () => {
 
@@ -190,7 +190,7 @@ describe('QI Core Race data validations: Edit Test Case to add another race valu
 
     })
 
-    it('Edit current test case to add an additional race', () => {
+    it('Edit current test case to add an additional race but include the same Gender, Race, and Ethnicity data', () => {
 
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
@@ -267,6 +267,8 @@ describe('QI Core Race data validations: Edit Test Case to add another race valu
         cy.get(TestCasesPage.ethnicityDetailedElementTab).should('contain.text', 'Mexican')
 
         // add a new race OMB value
+        cy.get(TestCasesPage.genderSelectBoxElementTab).click()
+        cy.get(TestCasesPage.genderSelectValuesElementTab).should('contain.text', 'Other').click()
         cy.get(TestCasesPage.raceOmbselectBoxElementTab).click()
         cy.get('#raceOMB-option-4').scrollIntoView().click({ force: true })
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -281,7 +283,7 @@ describe('QI Core Race data validations: Edit Test Case to add another race valu
         cy.get(TestCasesPage.elementsTab).click()
 
         // verify current values
-        cy.get(TestCasesPage.genderDdOnElementTab).should('contain.text', 'Male')
+        cy.get(TestCasesPage.genderDdOnElementTab).should('contain.text', 'Other')
         cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'White')
         cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'Other Race')
         cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'American Indian or Alaska Native')
@@ -296,7 +298,7 @@ describe('QI Core Race data validations: Edit Test Case to add another race valu
 })
 
 // edit test case race fields if user is someone whom the measure has been shared
-describe('QI Core Race data validations: Edit Test Case to add another race value', () => {
+describe('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case to add another Race and include existing Gender, Race, and Ethnicity value by a user whom the measure has been shared', () => {
 
     before('Create Measure', () => {
 
@@ -336,7 +338,7 @@ describe('QI Core Race data validations: Edit Test Case to add another race valu
 
     })
 
-    it('Edit current test case to add an additional race', () => {
+    it('Edit current test case to add an additional race, when the user has had the measure shared with them. The edit contains Gender, Race, and Ethnicity data.', () => {
 
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
@@ -447,6 +449,8 @@ describe('QI Core Race data validations: Edit Test Case to add another race valu
         cy.get(TestCasesPage.elementsTab).click()
 
         // add a new race OMB value
+        cy.get(TestCasesPage.genderSelectBoxElementTab).click()
+        cy.get(TestCasesPage.genderSelectValuesElementTab).should('contain.text', 'Other').click()
         cy.get(TestCasesPage.raceOmbselectBoxElementTab).click()
         cy.get('#raceOMB-option-4').scrollIntoView().click({ force: true })
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -461,7 +465,7 @@ describe('QI Core Race data validations: Edit Test Case to add another race valu
         cy.get(TestCasesPage.elementsTab).click()
 
         // verify current values
-        cy.get(TestCasesPage.genderDdOnElementTab).should('contain.text', 'Male')
+        cy.get(TestCasesPage.genderDdOnElementTab).should('contain.text', 'Other')
         cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'White')
         cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'Other Race')
         cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'American Indian or Alaska Native')
@@ -476,7 +480,7 @@ describe('QI Core Race data validations: Edit Test Case to add another race valu
 })
 
 // attempt to edit test case race fields if user is not th owner and whom the measure has not been shared
-describe('QI Core Race data validations: Edit Test Case to add another race value when the user is not the owner nor has the measure been shared', () => {
+describe('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case to add another Race and include existing Gender, Race, and Ethnicity value when the user is not the owner nor has the measure been shared', () => {
 
     before('Create Measure', () => {
 
@@ -516,7 +520,7 @@ describe('QI Core Race data validations: Edit Test Case to add another race valu
 
     })
 
-    it('Edit current test case to add an additional race', () => {
+    it('Attempt to edit current test case to add an additional race, when the user is not the owner nor when the user has had the measure shared with them.', () => {
 
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
