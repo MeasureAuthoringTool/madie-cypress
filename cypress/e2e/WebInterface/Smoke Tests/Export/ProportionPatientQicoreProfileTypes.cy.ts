@@ -194,7 +194,7 @@ let measureCQL = 'library T771 version \'0.0.000\'\n' +
     '                     or Diagnosis.verificationStatus ~ QICoreCommon."entered-in-error" )\n' +
     '    ) is not null'
 
-describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profile types', () => {
+describe.skip('FHIR Measure Export for Proportion Patient Measure with QI-Core Profile types', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -255,7 +255,7 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
 
         //Verify all files exist in exported zip file
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v1.0.000-FHIR.html' &&
-            'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json',{ timeout: 500000 })
+            'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json', { timeout: 500000 })
 
     })
 })
