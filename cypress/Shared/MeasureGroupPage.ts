@@ -448,6 +448,8 @@ export class MeasureGroupPage {
                         },
                         "measureGroupTypes": [
                             "Outcome"
+                        ],
+                        "stratifications": [
                         ]
                     }
                 }).then((response) => {
@@ -529,6 +531,8 @@ export class MeasureGroupPage {
                         ],
                         "measureGroupTypes": [
                             "Outcome"
+                        ],
+                        "stratifications": [
                         ]
                     }
                 }).then((response) => {
@@ -588,6 +592,8 @@ export class MeasureGroupPage {
                         ],
                         "measureGroupTypes": [
                             "Outcome"
+                        ],
+                        "stratifications": [
                         ]
                     }
                 }).then((response) => {
