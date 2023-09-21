@@ -194,7 +194,7 @@ let measureCQL = 'library T771 version \'0.0.000\'\n' +
     '                     or Diagnosis.verificationStatus ~ QICoreCommon."entered-in-error" )\n' +
     '    ) is not null'
 
-describe.skip('FHIR Measure Export for Proportion Patient Measure with QI-Core Profile types', () => {
+describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profile types', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -202,10 +202,11 @@ describe.skip('FHIR Measure Export for Proportion Patient Measure with QI-Core P
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{end} {enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
