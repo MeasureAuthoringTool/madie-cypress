@@ -4,7 +4,11 @@ import { Utilities } from "./Utilities"
 import { v4 as uuidv4 } from 'uuid'
 
 export class CQLLibraryPage {
-
+    public static readonly cqlLibrarySuccessfulDeleteMsgBox = '[data-testid="cql-library-list-snackBar"]'
+    public static readonly cqlLibraryDeleteDialogContinueBtn = '[data-testid="delete-dialog-continue-button"]'
+    public static readonly cqlLibraryDeleteDialogCancelBtn = '[data-testid="delete-dialog-cancel-button"]'
+    public static readonly cqlLibraryDeleteDialog = '[data-testid="delete-dialog"]'
+    public static readonly cqlLibSaveSuccessMessage = '[class="madie-alert success"]'
     public static readonly cqlLibSearchResultsTable = '[data-testid="table-body"]'
     public static readonly cqlLibraryProgramUseContext = '[id="programUseContext"]'
     public static readonly createCQLLibraryBtn = '[data-testid="create-new-cql-library-button"]'
@@ -122,6 +126,51 @@ export class CQLLibraryPage {
             expect(response.statusCode).to.eq(201)
             cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
         })
+    }
+    public static createCQLLibraryAPIOptionalCQL(CqlLibraryName: string, CQLLibraryPublisher: string, cQlValue?: string, twoLibraries?: boolean, altUser?: boolean): string {
+        let user = ''
+
+        if (altUser) {
+            cy.setAccessTokenCookieALT()
+            user = Environment.credentials().harpUserALT
+        }
+        else {
+            cy.setAccessTokenCookie()
+            user = Environment.credentials().harpUser
+        }
+
+        //Create New CQL Library
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/cql-libraries',
+                headers: {
+                    authorization: 'Bearer ' + accessToken.value
+                },
+                method: 'POST',
+                body: {
+                    'cqlLibraryName': CqlLibraryName,
+                    'model': 'QI-Core v4.1.1',
+                    'createdBy': user,
+                    "librarySetId": uuidv4(),
+                    "description": "description",
+                    "publisher": CQLLibraryPublisher,
+                    'cql': cQlValue,
+                    "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(201)
+                expect(response.body.id).to.be.exist
+                expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
+                if (twoLibraries === true) {
+                    cy.writeFile('cypress/fixtures/cqlLibraryId2', response.body.id)
+                }
+                else {
+                    cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
+                }
+
+            })
+        })
+        return user
     }
 
     public static createCQLLibraryAPI(CqlLibraryName: string, CQLLibraryPublisher: string, twoLibraries?: boolean, altUser?: boolean): string {
