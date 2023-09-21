@@ -113,6 +113,7 @@ export class TestCasesPage {
     public static readonly editTestCaseDescriptionInlineError = '[data-testid="test-case-description-helper-text"]'
     public static readonly QDMTcDiscardChangesButton = '[data-testid="ds-btn"]'
     public static readonly QDMRunTestCasefrmTestCaseListPage = '[data-testid="qdm-test-case-run-button"]'
+    public static readonly deleteQDMTCAttribute = '[data-testid=delete-chip-button-0]'
 
     //TC error concerning CQL and PC mismatch
     public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
@@ -126,9 +127,11 @@ export class TestCasesPage {
     public static readonly detailsTab = '[data-testid="details-tab"]'
     public static readonly tctMeasureCQLSubTab = '[data-testid="measurecql-tab"]'
     public static readonly tctExpectedActualSubTab = '[data-testid="expectoractual-tab"]'
+    public static readonly tcJsonTab = '[data-testid=json-tab]'
 
     //QDM Test Case
     public static readonly qdmCQLFailureErrorList = '[data-testid="generic-fail-text-list"]'
+    public static readonly qdmTCJson = '[class="panel-content"]'
 
     //CQL area on Test Case page
     public static readonly tcCQLArea = '[data-testid="test-case-cql-editor"]'
