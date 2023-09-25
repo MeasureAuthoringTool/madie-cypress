@@ -182,7 +182,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.testCaseListTable).should('exist')
         cy.get(TestCasesPage.testCaseListTable).click()
-        cy.get('[class="TestCase___StyledButton-sc-1t2ereo-0 keWkSF action-button"]').click()
+        cy.get('.action').click()
         cy.get('[class="btn-container"]').contains('edit').click()
         cy.get(TestCasesPage.aceEditor).should('not.be.empty')
         cy.get(TestCasesPage.aceEditor).should('contain.text', 'Bundle')
