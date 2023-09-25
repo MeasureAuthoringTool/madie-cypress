@@ -14,9 +14,7 @@
             {
               "system": "http://snomed.info/sct",
               "version": "2022-09",
-              "code": "103696004",
-              "display": "Patient referral to specialist (procedure)",
-              "userSelected": true
+              "code": "103696004"
             }
           ]
         },

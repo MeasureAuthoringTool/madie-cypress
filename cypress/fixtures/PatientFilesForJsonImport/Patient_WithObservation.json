@@ -14,9 +14,7 @@
               "coding": [
                 {
                   "system": "http://loinc.org",
-                  "code": "100-8",
-                  "display": "Cefoperazone [Susceptibility] by Minimum inhibitory concentration (MIC)",
-                  "userSelected": true
+                  "code": "100-8"
                 }
               ]
             }

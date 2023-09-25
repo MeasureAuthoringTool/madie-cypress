@@ -16,11 +16,6 @@
             "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-coverage"
           ]
         },
-        "payor": [
-          {
-            "reference": "Organization/123456"
-          }
-        ],
         "status": null
       }
     },
