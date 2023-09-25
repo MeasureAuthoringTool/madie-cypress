@@ -20,8 +20,6 @@ export class CQLLibrariesPage {
     public static readonly editCQLLibraryAlertMessage = '.madie-alert'
 
 
-
-
     public static clickEditforCreatedLibrary(secondLibrary?: boolean): void {
         let filePath = 'cypress/fixtures/cqlLibraryId'
 

@@ -38,6 +38,7 @@ describe('Version CQL Library with errors', () => {
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 1:3 | Could not resolve identifier SDE in the current library.ELM: 5:13 | Member SDE Sex not found for type null.")
 
         CQLLibrariesPage.clickVersionforCreatedLibrary()
+        cy.get(CQLLibrariesPage.versionLibraryRadioButton).eq(0).click()
         cy.get(CQLLibrariesPage.versionErrorMsg).should('contain.text', 'Versioning cannot be done as the Cql has errors in it')
 
         //Click on cancel version button
@@ -79,6 +80,7 @@ describe('Version CQL Library with errors', () => {
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('not.be.null')
 
         CQLLibrariesPage.clickVersionforCreatedLibrary()
+        cy.get(CQLLibrariesPage.versionLibraryRadioButton).eq(0).click()
         cy.get(CQLLibrariesPage.versionErrorMsg).should('contain.text', 'Versioning cannot be done as the Cql has errors in it')
 
         //Click on cancel version button
