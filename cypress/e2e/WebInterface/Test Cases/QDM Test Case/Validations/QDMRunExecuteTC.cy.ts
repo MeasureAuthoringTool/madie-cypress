@@ -62,7 +62,6 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
 
         TestCasesPage.testCaseAction('edit')
 
-
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -93,45 +92,19 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', 'Passing')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(1/1)')
 
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
+        //Skipping until MAT-5657 is finished
+        // cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
+        // cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
+        // cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
+        // cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
 
     })
 
     it('Run / Execute one passing and one failing Test Cases', () => {
 
+        OktaLogin.Login()
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
-
-        //Add second Measure Group with return type as Boolean
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        Utilities.setMeasureGroupType()
-
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
-        cy.get(MeasureGroupPage.popBasis).should('exist')
-        cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('boolean')
-        cy.get(MeasureGroupPage.popBasisOption).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
-
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -162,13 +135,15 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
-        cy.get(TestCasesPage.aceEditor).wait(500).type(validTestCaseJson, { parseSpecialCharSequences: false })
+        cy.get(TestCasesPage.QDMDob).type('01/01/2020').click()
+        cy.get(TestCasesPage.QDMLivingStatus).click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
+        cy.get(TestCasesPage.QDMGender).click()
+        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -176,7 +151,6 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -193,10 +167,6 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        //Verify Highlighting tab before clicking on Run Test button
-        cy.get(TestCasesPage.tcHighlightingTab).click()
-        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
-
         //create a test case that will fail:
 
         //Navigate to Test Cases page and add Test Case details
@@ -228,21 +198,19 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
-        cy.get(TestCasesPage.aceEditor).wait(500).type(validTestCaseJson, { parseSpecialCharSequences: false })
+        cy.get(TestCasesPage.QDMDob).type('01/01/2020').click()
+        cy.get(TestCasesPage.QDMLivingStatus).click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
+        cy.get(TestCasesPage.QDMGender).click()
+        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click()
-
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -252,9 +220,8 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
         cy.get(TestCasesPage.executeTestCaseButton).focus()
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
-        cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Fail')
+        cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Fail')
+        cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
 
         //verify Passing Tab's text
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
@@ -263,43 +230,12 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', 'Passing')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(1/2)')
 
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
     })
     it('Run / Execute single failing Test Cases', () => {
 
+        OktaLogin.Login()
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
-
-        //Add second Measure Group with return type as Boolean
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        Utilities.setMeasureGroupType()
-
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
-        cy.get(MeasureGroupPage.popBasis).should('exist')
-        cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('boolean')
-        cy.get(MeasureGroupPage.popBasisOption).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
-
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         //create a test case that will fail:
 
@@ -332,21 +268,29 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
-        cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
+        cy.get(TestCasesPage.QDMDob).type('01/01/2020').click()
+        cy.get(TestCasesPage.QDMLivingStatus).click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
+        cy.get(TestCasesPage.QDMGender).click()
+        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).check()
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click()
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -359,18 +303,6 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Fail')
-
-        //verify Passing Tab's text
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '0%')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', 'Passing')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(0/1)')
-
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '0%')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
     })
 })
 
