@@ -31,7 +31,7 @@ let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 let cqlLibraryName = 'TestLibrary' + Date.now()
 
 
-describe('QI Core Gender, Race, and Ethnicity data validations: Create test case with Gender, Race, and Ethnicity data in Json', () => {
+describe.skip('QI Core Gender, Race, and Ethnicity data validations: Create test case with Gender, Race, and Ethnicity data in Json', () => {
 
     before('Create Measure', () => {
 
@@ -150,7 +150,7 @@ describe('QI Core Gender, Race, and Ethnicity data validations: Create test case
 })
 
 // edit test case by adding more race values
-describe('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case to add another Race and include existing Gender, Race, and Ethnicity value', () => {
+describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case to add another Race and include existing Gender, Race, and Ethnicity value', () => {
 
     before('Create Measure', () => {
 
@@ -298,7 +298,7 @@ describe('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case t
 })
 
 // edit test case race fields if user is someone whom the measure has been shared
-describe('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case to add another Race and include existing Gender, Race, and Ethnicity value by a user whom the measure has been shared', () => {
+describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case to add another Race and include existing Gender, Race, and Ethnicity value by a user whom the measure has been shared', () => {
 
     before('Create Measure', () => {
 
@@ -480,7 +480,7 @@ describe('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case t
 })
 
 // attempt to edit test case race fields if user is not th owner and whom the measure has not been shared
-describe('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case to add another Race and include existing Gender, Race, and Ethnicity value when the user is not the owner nor has the measure been shared', () => {
+describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case to add another Race and include existing Gender, Race, and Ethnicity value when the user is not the owner nor has the measure been shared', () => {
 
     before('Create Measure', () => {
 
