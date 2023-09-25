@@ -15,9 +15,7 @@
               {
                 "system": "http://snomed.info/sct",
                 "version": "2022-09",
-                "code": "183452005",
-                "display": "Emergency hospital admission (procedure)",
-                "userSelected": true
+                "code": "183452005"
               }
             ]
           }

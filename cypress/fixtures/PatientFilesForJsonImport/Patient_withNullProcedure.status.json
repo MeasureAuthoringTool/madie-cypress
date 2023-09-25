@@ -14,9 +14,7 @@
             {
               "system": "http://www.ama-assn.org/go/cpt",
               "version": "2023",
-              "code": "77427",
-              "display": "Radiation treatment management, 5 treatments",
-              "userSelected": true
+              "code": "77427"
             }
           ]
         },
