@@ -150,6 +150,311 @@ export class TestCaseJson {
         '"type": [ { "coding": [ {"system": "http://snomed.info/sct","code": "183452005" } ] } ],"subject": { "reference": "Patient/609bde3598086b0a16d79fc6"  },' +
         '"period": { "start": "2012-01-16T08:00:00+00:00","end": "2012-02-15T09:00:00+00:00" }} }]}'
 
+    public static readonly TCJsonRaceOMBRaceDetailed = '{\n' +
+        '    "resourceType" : "Bundle",\n' +
+        '    "id" : "IP-Pass-CVPatient",\n' +
+        '    "meta" : {\n' +
+        '      "versionId" : "1",\n' +
+        '      "lastUpdated" : "2022-09-14T15:14:42.152+00:00"\n' +
+        '    },\n' +
+        '    "type" : "collection",\n' +
+        '    "entry" : [ {\n' +
+        '      "fullUrl" : "nullPatient/18bcc6f0-e702-409f-9fad-1b428d30c56c",\n' +
+        '      "resource" : {\n' +
+        '        "resourceType" : "Patient",\n' +
+        '        "id" : "18bcc6f0-e702-409f-9fad-1b428d30c56c",\n' +
+        '        "meta" : {\n' +
+        '          "profile" : [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient" ]\n' +
+        '        },\n' +
+        '        "text" : {\n' +
+        '          "status" : "generated",\n' +
+        '          "div" : "<div xmlns=\\"http://www.w3.org/1999/xhtml\\"><div class=\\"hapiHeaderText\\">LocationPeriodStartTimeMissing <b>MSRPOPLEXSTRAT2PASS </b></div><table class=\\"hapiPropertyTable\\"><tbody><tr><td>Identifier</td><td>8065dc8d26797064d8766be71f2bf020</td></tr><tr><td>Date of birth</td><td><span>10 February 1954</span></td></tr></tbody></table></div>"\n' +
+        '        },\n' +
+        '        "extension" : [ {\n' +
+        '          "extension" : [ {\n' +
+        '            "url" : "ombCategory",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "2106-3",\n' +
+        '              "display" : "White"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "ombCategory",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "1002-5",\n' +
+        '              "display" : "American Indian or Alaska Native"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "ombCategory",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "2028-9",\n' +
+        '              "display" : "Asian"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "detailed",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "1586-7",\n' +
+        '             "display" : "Shoshone"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "detailed",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "2036-2",\n' +
+        '              "display" : "Filipino"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "text",\n' +
+        '            "valueString" : "Mixed"\n' +
+        '          } ],\n' +
+        '          "url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"\n' +
+        '        }, {\n' +
+        '          "extension" : [ {\n' +
+        '            "url" : "ombCategory",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "2135-2",\n' +
+        '              "display" : "Hispanic or Latino"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "detailed",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "2184-0",\n' +
+        '              "display" : "Dominican"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "detailed",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "2148-5",\n' +
+        '              "display" : "Mexican"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "text",\n' +
+        '            "valueString" : "Hispanic or Latino"\n' +
+        '          } ],\n' +
+        '          "url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"\n' +
+        '        }, {\n' +
+        '          "url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",\n' +
+        '          "valueCode" : "F"\n' +
+        '        }, {\n' +
+        '          "url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity",\n' +
+        '          "valueCodeableConcept" : {\n' +
+        '            "coding" : [ {\n' +
+        '              "system" : "http://terminology.hl7.org/CodeSystem/v3-NullFlavor",\n' +
+        '              "code" : "ASKU",\n' +
+        '              "display" : "asked but unknown"\n' +
+        '            } ],\n' +
+        '            "text" : "asked but unknown"\n' +
+        '          }\n' +
+        '        } ],\n' +
+        '        "identifier" : [ {\n' +
+        '          "type" : {\n' +
+        '            "coding" : [ {\n' +
+        '              "system" : "http://terminology.hl7.org/CodeSystem/v2-0203",\n' +
+        '              "code" : "MR"\n' +
+        '            } ]\n' +
+        '          },\n' +
+        '          "system" : "http://MyGoodHealthare.com/MedicalRecord",\n' +
+        '          "value" : "8065dc8d26797064d8766be71f2bf020"\n' +
+        '        } ],\n' +
+        '        "active" : true,\n' +
+        '        "name" : [ {\n' +
+        '          "use" : "usual",\n' +
+        '          "family" : "IPPass",\n' +
+        '          "given" : [ "IPPass" ]\n' +
+        '        } ],\n' +
+        '        "gender" : "male",\n' +
+        '        "birthDate" : "1954-02-10"\n' +
+        '      }\n' +
+        '    }, {\n' +
+        '      "fullUrl" : "nullEncounter/5c6c61ceb84846536a9a98f9",\n' +
+        '      "resource" : {\n' +
+        '        "resourceType" : "Encounter",\n' +
+        '        "id" : "5c6c61ceb84846536a9a98f9",\n' +
+        '        "status" : "finished",\n' +
+        '        "class" : {\n' +
+        '          "system" : "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '          "code" : "IMP",\n' +
+        '          "display" : "inpatient encounter"\n' +
+        '        },\n' +
+        '        "type" : [ {\n' +
+        '          "coding" : [ {\n' +
+        '            "system" : "http://snomed.info/sct",\n' +
+        '            "code" : "183452005"\n' +
+        '          } ]\n' +
+        '       } ],\n' +
+        '        "subject" : {\n' +
+        '          "reference" : "Patient/18bcc6f0-e702-409f-9fad-1b428d30c56c"\n' +
+        '        },\n' +
+        '        "period" : {\n' +
+        '          "start" : "2012-01-16T08:00:00+00:00",\n' +
+        '          "end" : "2012-02-15T09:00:00+00:00"\n' +
+        '        }\n' +
+        '      }\n' +
+        '    } ]\n' +
+        '  }\n'
+
+    public static readonly TCJsonRaceOMBRaceDetailed_Update = '{\n' +
+        '    "resourceType" : "Bundle",\n' +
+        '    "id" : "IP-Pass-CVPatient",\n' +
+        '    "meta" : {\n' +
+        '      "versionId" : "1",\n' +
+        '      "lastUpdated" : "2022-09-14T15:14:42.152+00:00"\n' +
+        '    },\n' +
+        '    "type" : "collection",\n' +
+        '    "entry" : [ {\n' +
+        '      "fullUrl" : "nullPatient/18bcc6f0-e702-409f-9fad-1b428d30c56c",\n' +
+        '      "resource" : {\n' +
+        '        "resourceType" : "Patient",\n' +
+        '        "id" : "18bcc6f0-e702-409f-9fad-1b428d30c56c",\n' +
+        '        "meta" : {\n' +
+        '          "profile" : [ "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient" ]\n' +
+        '        },\n' +
+        '        "text" : {\n' +
+        '          "status" : "generated",\n' +
+        '          "div" : "<div xmlns=\\"http://www.w3.org/1999/xhtml\\"><div class=\\"hapiHeaderText\\">LocationPeriodStartTimeMissing <b>MSRPOPLEXSTRAT2PASS </b></div><table class=\\"hapiPropertyTable\\"><tbody><tr><td>Identifier</td><td>8065dc8d26797064d8766be71f2bf020</td></tr><tr><td>Date of birth</td><td><span>10 February 1954</span></td></tr></tbody></table></div>"\n' +
+        '        },\n' +
+        '        "extension" : [ {\n' +
+        '          "extension" : [ {\n' +
+        '            "url" : "ombCategory",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "2131-1",\n' +
+        '              "display" : "Other Race"\n' +
+        '            }\n' +
+        '          },{\n' +
+        '            "url" : "ombCategory",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "2106-3",\n' +
+        '              "display" : "White"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "ombCategory",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "1002-5",\n' +
+        '              "display" : "American Indian or Alaska Native"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "ombCategory",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "2028-9",\n' +
+        '              "display" : "Asian"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "detailed",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "1586-7",\n' +
+        '             "display" : "Shoshone"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "detailed",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "2036-2",\n' +
+        '              "display" : "Filipino"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "text",\n' +
+        '            "valueString" : "Mixed"\n' +
+        '          } ],\n' +
+        '          "url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"\n' +
+        '        }, {\n' +
+        '          "extension" : [ {\n' +
+        '            "url" : "ombCategory",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "2135-2",\n' +
+        '              "display" : "Hispanic or Latino"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "detailed",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "2184-0",\n' +
+        '              "display" : "Dominican"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "detailed",\n' +
+        '            "valueCoding" : {\n' +
+        '              "system" : "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '              "code" : "2148-5",\n' +
+        '              "display" : "Mexican"\n' +
+        '            }\n' +
+        '          }, {\n' +
+        '            "url" : "text",\n' +
+        '            "valueString" : "Hispanic or Latino"\n' +
+        '          } ],\n' +
+        '          "url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"\n' +
+        '        }, {\n' +
+        '          "url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",\n' +
+        '          "valueCode" : "F"\n' +
+        '        }, {\n' +
+        '          "url" : "http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity",\n' +
+        '          "valueCodeableConcept" : {\n' +
+        '            "coding" : [ {\n' +
+        '              "system" : "http://terminology.hl7.org/CodeSystem/v3-NullFlavor",\n' +
+        '              "code" : "ASKU",\n' +
+        '              "display" : "asked but unknown"\n' +
+        '            } ],\n' +
+        '            "text" : "asked but unknown"\n' +
+        '          }\n' +
+        '        } ],\n' +
+        '        "identifier" : [ {\n' +
+        '          "type" : {\n' +
+        '            "coding" : [ {\n' +
+        '              "system" : "http://terminology.hl7.org/CodeSystem/v2-0203",\n' +
+        '              "code" : "MR"\n' +
+        '            } ]\n' +
+        '          },\n' +
+        '          "system" : "http://MyGoodHealthare.com/MedicalRecord",\n' +
+        '          "value" : "8065dc8d26797064d8766be71f2bf020"\n' +
+        '        } ],\n' +
+        '        "active" : true,\n' +
+        '        "name" : [ {\n' +
+        '          "use" : "usual",\n' +
+        '          "family" : "IPPass",\n' +
+        '          "given" : [ "IPPass" ]\n' +
+        '        } ],\n' +
+        '        "gender" : "unknown",\n' +
+        '        "birthDate" : "1954-02-10"\n' +
+        '      }\n' +
+        '    }, {\n' +
+        '      "fullUrl" : "nullEncounter/5c6c61ceb84846536a9a98f9",\n' +
+        '      "resource" : {\n' +
+        '        "resourceType" : "Encounter",\n' +
+        '        "id" : "5c6c61ceb84846536a9a98f9",\n' +
+        '        "status" : "finished",\n' +
+        '        "class" : {\n' +
+        '          "system" : "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '          "code" : "IMP",\n' +
+        '          "display" : "inpatient encounter"\n' +
+        '        },\n' +
+        '        "type" : [ {\n' +
+        '          "coding" : [ {\n' +
+        '            "system" : "http://snomed.info/sct",\n' +
+        '            "code" : "183452005"\n' +
+        '          } ]\n' +
+        '       } ],\n' +
+        '        "subject" : {\n' +
+        '          "reference" : "Patient/18bcc6f0-e702-409f-9fad-1b428d30c56c"\n' +
+        '        },\n' +
+        '        "period" : {\n' +
+        '          "start" : "2012-01-16T08:00:00+00:00",\n' +
+        '          "end" : "2012-02-15T09:00:00+00:00"\n' +
+        '        }\n' +
+        '      }\n' +
+        '    } ]\n' +
+        '  }\n'
+
     public static readonly TestCaseJson_Valid_w_All_Encounter = '{\n' +
         '  "resourceType": "Bundle",\n' +
         '  "id": "1366",\n' +

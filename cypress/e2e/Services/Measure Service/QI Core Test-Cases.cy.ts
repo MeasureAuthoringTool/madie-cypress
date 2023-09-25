@@ -3,6 +3,20 @@ import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { v4 as uuidv4 } from 'uuid'
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { Environment } from "../../../Shared/Environment"
+
+let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
+let harpUserALT = Environment.credentials().harpUserALT
+
+let TCJsonRace = TestCaseJson.TCJsonRaceOMBRaceDetailed
+let TCJsonRace_Update = TestCaseJson.TCJsonRaceOMBRaceDetailed_Update
+let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
+let testCasePath = 'cypress/fixtures/testCaseId'
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestLibrary' + Date.now()
@@ -22,6 +36,328 @@ let TCTitle = 'test case title'
 let TCDescription = 'DENOMFail1651609688032'
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let TCJson = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId": "1", "lastUpdated": "2022-03-30T19:02:32.620+00:00"  },  "type": "collection",  "entry": [ {   "fullUrl": "http://local/Encounter", "resource": { "id":"1", "resourceType": "Encounter","meta": { "versionId": "1","lastUpdated": "2021-10-13T03:34:10.160+00:00","source":"#nEcAkGd8PRwPP5fA"}, "text": { "status": "generated","div":"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">Sep 9th 2021 for Asthma<a name=\\\"mm\\\"/></div>"}, "status": "finished","class": { "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode","code": "IMP","display":"inpatient encounter"}, "type": [ { "text": "OutPatient"} ],"subject": { "reference": "Patient/1"},"participant": [ { "individual": { "reference": "Practitioner/30164", "display": "Dr John Doe"}} ],"period": { "start": "2023-09-10T03:34:10.054Z"}}}, { "fullUrl": "http://local/Patient","resource": { "id":"2", "resourceType": "Patient","text": { "status": "generated","div": "<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">Lizzy Health</div>"},"identifier": [ { "system": "http://clinfhir.com/fhir/NamingSystem/identifier","value": "20181011LizzyHealth"} ],"name": [ { "use": "official", "text": "Lizzy Health","family": "Health","given": [ "Lizzy" ]} ],"gender": "female","birthDate": "2000-10-11"}} ]}'
+
+// create test case that contains race data in json
+describe('QI Core Gender, Race, and Ethnicity data validations: Create test case with Gender, Race, and Ethnicity data in Json', () => {
+
+    before('Create Measure', () => {
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        measureName = 'TestMeasure' + Date.now()
+        cqlLibraryName = 'TestCql' + Date.now()
+
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+    })
+
+    beforeEach('Set Access Token', () => {
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+    })
+
+    after('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+
+    })
+
+    it('Enter Valid Test Case Json that contains Gender, Race, and Ethnicity data and confirm those pieces of data appears on the element tab', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + id + '/test-cases',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: {
+                        'name': "DENOMFail",
+                        'series': "Test Series",
+                        'title': "Title",
+                        'description': "description",
+                        'json': TCJsonRace
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    cy.writeFile(testCasePath, response.body.id)
+                })
+            })
+        })
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.testCaseAction('edit')
+
+        Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
+        cy.get(TestCasesPage.elementsTab).click()
+
+        cy.get(TestCasesPage.genderDdOnElementTab).should('contain.text', 'Male')
+        cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'White')
+        cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'American Indian or Alaska Native')
+        cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'Asian')
+        cy.get(TestCasesPage.raceDetailedElementTab).should('contain.text', 'Shoshone')
+        cy.get(TestCasesPage.raceDetailedElementTab).should('contain.text', 'Filipino')
+        cy.get(TestCasesPage.ethnicityOmbElementTab).should('contain.text', 'Hispanic or Latino')
+        cy.get(TestCasesPage.ethnicityDetailedElementTab).should('contain.text', 'Dominican')
+        cy.get(TestCasesPage.ethnicityDetailedElementTab).should('contain.text', 'Mexican')
+
+    })
+})
+
+// edit a test case with whom the measure has been shared
+describe('QI Core Gender, Race, and Ethnicity data validations: Update Json on a test case whom measure has been shared', () => {
+
+    before('Create Measure', () => {
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        measureName = 'TestMeasure' + Date.now()
+        cqlLibraryName = 'TestCql' + Date.now()
+
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+    })
+
+    beforeEach('Set Access Token', () => {
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+    })
+
+    after('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+
+    })
+
+    it('Enter Valid Test Case Json that contains Gender, Race, and Ethnicity data and confirme those pieces of data appears on the element tab when the user whom did the edit had the measure shared with them', () => {
+
+        //create test case on measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/test-cases',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: {
+                        'name': "DENOMFail",
+                        'series': "Test Series",
+                        'title': "Title",
+                        'description': "description",
+                        'json': TCJsonRace
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    cy.writeFile(testCasePath, response.body.id)
+                })
+            })
+        })
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        //share measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        'api-key': measureSharingAPIKey
+                    },
+                    method: 'PUT'
+
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                })
+            })
+        })
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookieALT()
+
+        //Edit created Test Case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testcaseid) => {
+                    cy.request({
+                        url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': testcaseid,
+                            'name': "IPPPass",
+                            'series': "WhenBP<120",
+                            'title': "test case title edited",
+                            'description': "IPP Pass Test BP <120",
+                            'json': TCJsonRace_Update
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        cy.writeFile(testCasePath, response.body.id)
+                    })
+                })
+            })
+        })
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.testCaseAction('edit')
+
+        Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
+        cy.get(TestCasesPage.elementsTab).click()
+
+        cy.get(TestCasesPage.genderDdOnElementTab).should('contain.text', 'Unknown')
+        cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'White')
+        cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'Other Race')
+        cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'American Indian or Alaska Native')
+        cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'Asian')
+        cy.get(TestCasesPage.raceDetailedElementTab).should('contain.text', 'Shoshone')
+        cy.get(TestCasesPage.raceDetailedElementTab).should('contain.text', 'Filipino')
+        cy.get(TestCasesPage.ethnicityOmbElementTab).should('contain.text', 'Hispanic or Latino')
+        cy.get(TestCasesPage.ethnicityDetailedElementTab).should('contain.text', 'Dominican')
+        cy.get(TestCasesPage.ethnicityDetailedElementTab).should('contain.text', 'Mexican')
+
+    })
+})
+
+// attempt to edit a test case with whom the measure has not been shared and whom is also not the owner
+describe('QI Core Gender, Race, and Ethnicity data validations: Attempt to update Json with a user whom is not the owner nor has the measure been shared', () => {
+
+    before('Create Measure', () => {
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        measureName = 'TestMeasure' + Date.now()
+        cqlLibraryName = 'TestCql' + Date.now()
+
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+    })
+
+    beforeEach('Set Access Token', () => {
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+    })
+
+    after('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+
+    })
+
+    it('Attempt to enter valid Test Case Json that contains Gender, Race, and Ethnicity data, when the measure has not been shared with the user', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + id + '/test-cases',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: {
+                        'name': "DENOMFail",
+                        'series': "Test Series",
+                        'title': "Title",
+                        'description': "description",
+                        'json': TCJsonRace
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    cy.writeFile(testCasePath, response.body.id)
+                })
+            })
+        })
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookieALT()
+
+        //Edit created Test Case
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testcaseid) => {
+                    cy.request({
+                        failOnStatusCode: false,
+                        url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': testcaseid,
+                            'name': "IPPPass",
+                            'series': "WhenBP<120",
+                            'title': "test case title edited",
+                            'description': "IPP Pass Test BP <120",
+                            'json': TCJsonRace_Update
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(403)
+                        expect(response.body.message).to.eql('User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId)
+                    })
+                })
+            })
+        })
+    })
+})
 
 describe('Test Case population values based on Measure Group population definitions', () => {
     before('Create Measure and measure group', () => {

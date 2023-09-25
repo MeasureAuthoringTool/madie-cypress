@@ -95,6 +95,114 @@ export class MeasureCQL {
         '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
         '		where NoCervixHysterectomy.status = \'completed\''
 
+    public static readonly ICFCleanTestQICore = 'library SimpleFhirLibrary version \'0.0.004\'\n' +
+
+
+        'using QICore version \'4.1.1\'\n' +
+
+
+
+        'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+
+        'codesystem \"SNOMEDCT:2017-09\": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'\n' +
+
+        'valueset \"Hysterectomy with No Residual Cervix\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
+        'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+
+
+
+        'parameter \"Measurement Period\" Interval<DateTime>\n' +
+
+
+
+        'context Patient\n' +
+
+
+
+        'define \"Surgical Absence of Cervix\":\n' +
+        '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
+        '		where NoCervixHysterectomy.status = \'completed\''
+
+    public static readonly QDM4TestCaseElementsAttributes = 'library Library5749 version \'0.0.000\'\n' +
+        'using QDM version \'5.6\'\n' +
+        'codesystem "Test": \'urn:oid:2.16.840.1.113883.6.1\'\n' +
+        'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\'\n' +
+        'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\'\n' +
+        'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\'\n' +
+        'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+        'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+        'valueset "Active Bleeding or Bleeding Diathesis (Excluding Menses)": \'urn:oid:2.16.840.1.113883.3.3157.4036\'\n' +
+        'valueset "Active Peptic Ulcer": \'urn:oid:2.16.840.1.113883.3.3157.4031\'\n' +
+        'valueset "Adverse reaction to thrombolytics": \'urn:oid:2.16.840.1.113762.1.4.1170.6\'\n' +
+        'valueset "Allergy to thrombolytics": \'urn:oid:2.16.840.1.113762.1.4.1170.5\'\n' +
+        'valueset "Anticoagulant Medications, Oral": \'urn:oid:2.16.840.1.113883.3.3157.4045\'\n' +
+        'valueset "Aortic Dissection and Rupture": \'urn:oid:2.16.840.1.113883.3.3157.4028\'\n' +
+        'valueset "birth date": \'urn:oid:2.16.840.1.113883.3.560.100.4\'\n' +
+        'valueset "Cardiopulmonary Arrest": \'urn:oid:2.16.840.1.113883.3.3157.4048\'\n' +
+        'valueset "Cerebral Vascular Lesion": \'urn:oid:2.16.840.1.113883.3.3157.4025\'\n' +
+        'valueset "Closed Head and Facial Trauma": \'urn:oid:2.16.840.1.113883.3.3157.4026\'\n' +
+        'valueset "Dementia": \'urn:oid:2.16.840.1.113883.3.3157.4043\'\n' +
+        'valueset "Discharge To Acute Care Facility": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.87\'\n' +
+        'valueset "ED": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1085\'\n' +
+        'valueset "Endotracheal Intubation": \'urn:oid:2.16.840.1.113762.1.4.1045.69\'\n' +
+        'valueset "Fibrinolytic Therapy": \'urn:oid:2.16.840.1.113883.3.3157.4020\'\n' +
+        'valueset "Intracranial or Intraspinal surgery": \'urn:oid:2.16.840.1.113762.1.4.1170.2\'\n' +
+        'valueset "Ischemic Stroke": \'urn:oid:2.16.840.1.113883.3.464.1003.104.12.1024\'\n' +
+        'valueset "Major Surgical Procedure": \'urn:oid:2.16.840.1.113883.3.3157.4056\'  \n' +
+        'valueset "Malignant Intracranial Neoplasm Group": \'urn:oid:2.16.840.1.113762.1.4.1170.3\'\n' +
+        'valueset "Mechanical Circulatory Assist Device": \'urn:oid:2.16.840.1.113883.3.3157.4052\'\n' +
+        'valueset "Neurologic impairment": \'urn:oid:2.16.840.1.113883.3.464.1003.114.12.1012\'\n' +
+        'valueset "Patient Expired": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.309\'\n' +
+        'valueset "Percutaneous Coronary Intervention": \'urn:oid:2.16.840.1.113883.3.3157.2000.5\'\n' +
+        'valueset "Pregnancy": \'urn:oid:2.16.840.1.113883.3.3157.4055\'\n' +
+        'valueset "STEMI": \'urn:oid:2.16.840.1.113883.3.3157.4017\'\n' +
+        'valueset "Thrombolytic medications": \'urn:oid:2.16.840.1.113762.1.4.1170.4\'\n' +
+        'valueset "Chlamydia Screening": \'urn:oid:2.16.840.1.113883.3.464.1003.110.12.1052\'\n' +
+        'valueset "Falls Screening": \'urn:oid:2.16.840.1.113883.3.464.1003.118.12.1028\'\n' +
+        'code "Birth date": \'21112-8\' from "LOINC" display \'Birth date\'\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+        'context Patient\n' +
+        'define "SDE Ethnicity":\n' +
+        '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+        'define "SDE Payer":\n' +
+        '  ["Patient Characteristic Payer": "Payer"]\n' +
+        'define "SDE Race":\n' +
+        '  ["Patient Characteristic Race": "Race"]\n' +
+        'define "SDE Sex":\n' +
+        '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+        'define "Initial Population":\n' +
+        '  ["Adverse Event": "Encounter Inpatient"] //Adverse Event\n' +
+        '      union ["Allergy/Intolerance": "Observation Services"] //Allergy\n' +
+        '      union ["Assessment, Order": "Active Bleeding or Bleeding Diathesis (Excluding Menses)"] //Assessment\n' +
+        '      union ["Patient Care Experience": "Active Peptic Ulcer"] //Care Experience\n' +
+        '      union ["Care Goal": "Adverse reaction to thrombolytics"] //Care Goal - missing from current list\n' +
+        '      union ["Patient Characteristic Payer": "Payer"] //Characteristic\n' +
+        '      //threw in a patient demographic - should not show up\n' +
+        '      union ["Patient Characteristic Race": "Race"]\n' +
+        '      union ["Diagnosis": "Allergy to thrombolytics"] //Condition\n' +
+        '      union ["Communication, Performed": "Anticoagulant Medications, Oral"] //Communication\n' +
+        '      //threw a negation element in to see if it maps correctly\n' +
+        '    //   union ["Communication, Not Performed": "Aortic Dissection and Rupture"] //Communication\n' +
+        '      union ["Device, Order": "Cardiopulmonary Arrest"] //Device\n' +
+        '      union ["Diagnostic Study, Order": "Cerebral Vascular Lesion"] //Diagnostic Study\n' +
+        '      union ["Encounter, Performed": "Emergency Department Visit"] //Encounter\n' +
+        '      union ["Family History": "Closed Head and Facial Trauma"] //Family History\n' +
+        '      union ["Immunization, Order": "Dementia"] //Immunization\n' +
+        '      union ["Intervention, Order": "ED"] //Intervention\n' +
+        '      union ["Laboratory Test, Order": "Endotracheal Intubation"] //Laboratory\n' +
+        '      union ["Laboratory Test, Performed": "Chlamydia Screening"]\n' +
+        '      union ["Medication, Active": "Fibrinolytic Therapy"] //Medication\n' +
+        '      union ["Participation": "Intracranial or Intraspinal surgery"] //Participation\n' +
+        '      union ["Physical Exam, Order": "Ischemic Stroke"] //Physical Exam\n' +
+        '      union ["Procedure, Order": "Major Surgical Procedure"] //Procedure\n' +
+        '      union ["Related Person": "Malignant Intracranial Neoplasm Group"] //Related Person - mssing from curent list\n' +
+        '      union ["Substance, Administered": "Mechanical Circulatory Assist Device"] //Substance\n' +
+        '      union ["Symptom": "Neurologic impairment"] //Symptom\n' +
+        '      union ["Assessment, Performed": "Falls Screening"] //Assessment '
+
     public static readonly QDMSimpleCQL = 'library ProportionPatient1689182327602 version \'0.0.000\'\n' +
         'using QDM version \'5.6\'\n' +
 
