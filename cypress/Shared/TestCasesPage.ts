@@ -283,7 +283,7 @@ export class TestCasesPage {
     public static readonly testCaseFileImport = '[data-testid=import-file-input]'
     public static readonly testCasesNonBonnieFileImportModal = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthMd MuiDialog-paperFullWidth css-cwpu7v"]'
     public static readonly testCasesNonBonnieFileImport = '[data-testid="file-drop-input"]'
-    public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile = '[class="TestCaseImportDialog___StyledSmall-sc-v92oci-5 fZbLiJ"]'
+    public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile = '.TestCaseImportDialog___StyledSmall-sc-v92oci-5'
     public static readonly testCasesNonBonnieFileImportFileUploadStatusDetails = '[class="TestCaseImportDialog___StyledSmall2-sc-v92oci-6 gpyrWs"]'
     public static readonly testCasesNonBonnieFileImportErrorOnImport = '[data-testid="test-case-import-error-div"]'
     public static readonly importTestCaseSuccessMsg = '[data-testid=success-toast]'

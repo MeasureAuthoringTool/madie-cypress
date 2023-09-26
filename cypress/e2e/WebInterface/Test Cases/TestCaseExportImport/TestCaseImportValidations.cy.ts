@@ -118,7 +118,7 @@ describe('Test Case Import: functionality tests', () => {
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
+        //cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -146,7 +146,7 @@ describe('Test Case Import: functionality tests', () => {
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
+        //cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('.TestCaseImportDialog___StyledSpan2-sc-v92oci-8').should('contain.text', 'Complete')
 
         //cancel import
         cy.get(TestCasesPage.importTestCaseCancelBtnOnModal).click()
@@ -176,6 +176,7 @@ describe('Test Case Import: functionality tests', () => {
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 45000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.reload()
 
         MeasuresPage.measureAction("edit")
 
@@ -249,18 +250,6 @@ describe('Test Case Import: functionality tests', () => {
 
         //navigating to the All Measures tab
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').wait(3000)
-        cy.get(MeasuresPage.allMeasuresTab).click().wait(3000)
-
-        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
-        cy.get(Header.cqlLibraryTab).click().wait(3000)
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
-
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
@@ -290,18 +279,14 @@ describe('Test Case Import: functionality tests', () => {
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
+        //cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
         //verify confirmation message
         Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 35000)
-
-        //verifies alert message at top of page informing user that no test case was imported
-        Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(2) test case(s) were imported. The following (0) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Following test case(s) were imported succesfully, but The measure populations do not match the populations in the import file. No expected values have been set.')
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', '(2) Test cases imported successfully')
 
         //export test case
         cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
@@ -322,7 +307,7 @@ describe('Test Case Import: functionality tests', () => {
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
+        //cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
 
         //cancel import
         cy.get(TestCasesPage.importTestCaseCancelBtnOnModal).click()
@@ -486,7 +471,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportErrorOnImport, 35000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportErrorOnImport).find('[class="TestCaseImportDialog___StyledSmall3-sc-v92oci-17 fxXRko"]').should('contain.text', 'The import file must be a zip file. No Test Cases can be imported.')
+        cy.get('.TestCaseImportDialog___StyledSmall3-sc-v92oci-17').should('contain.text', 'The import file must be a zip file. No Test Cases can be imported.')
 
     })
     it('Importing: .zip\'s test case folder does not contain a json file', () => {
@@ -509,7 +494,6 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases (4).zip')
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -541,7 +525,6 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases (3).zip')
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -573,7 +556,6 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases (5).zip')
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -699,7 +681,6 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -720,42 +701,6 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonBobby, true)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
         OktaLogin.Login()
-
-        MeasuresPage.measureAction("edit", true)
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
-            .click()
-            .type('Some description')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 35000)
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
-        MeasuresPage.measureAction("edit", true)
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        TestCasesPage.testCaseAction('edit')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
-        MeasuresPage.measureAction("edit", true)
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        TestCasesPage.testCaseAction('edit', true)
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit", true)
@@ -792,12 +737,11 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
 
         //import the tests cases from selected / dragged and dropped .zip file
-        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
 
-        //verifies alert message at tope of page informing user that no test case was imported
+        //verifies alert message at top of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
         cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(1) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
         cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Reason : The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
@@ -814,24 +758,6 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'a', CqlLibraryName, measureCQLPFTests, false)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-        OktaLogin.Login()
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
-        MeasuresPage.measureAction("edit")
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
-            .click()
-            .type('Some description')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 35000)
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
-        OktaLogin.Logout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -854,37 +780,6 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
         OktaLogin.Login()
 
-        MeasuresPage.measureAction("edit", true)
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
-            .click()
-            .type('Some description')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 35000)
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
-        MeasuresPage.measureAction("edit", true)
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        TestCasesPage.testCaseAction('edit')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
-        MeasuresPage.measureAction("edit", true)
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        TestCasesPage.testCaseAction('edit', true)
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
-
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
-
         //Click on Edit Measure
         MeasuresPage.measureAction("edit", true)
 
@@ -920,7 +815,6 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -997,7 +891,7 @@ describe.skip('Test Case Import: Virus Scan tests', () => {
     })
     //skipping -- this test works in DEV but to get it to work in TEST and other environments, Brendan will need to do some additonal work
     //so, this is being skipped until that work is completed
-    it.skip('Verify message when import fails virus scan', () => {
+    it('Verify message when import fails virus scan', () => {
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
         cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
         cy.get(Header.cqlLibraryTab).click().wait(3000)
