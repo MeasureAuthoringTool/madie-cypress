@@ -97,6 +97,7 @@ describe('QI-Core Single Test Case Export', () => {
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.reload()
 
         MeasuresPage.measureAction("edit")
 
@@ -209,6 +210,7 @@ describe('QI-Core Test Case Export for all test cases', () => {
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.reload()
 
         MeasuresPage.measureAction("edit")
 
