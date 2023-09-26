@@ -190,7 +190,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('not.exist')
-        cy.get('[class="GroupPopulations___StyledSpan-sc-1752rtp-0 jriTet"]').should('contain.text', 'No data for current scoring. Please make sure at least one measure group has been created.')
+        cy.get('[data-testid="create-test-case-populations"]').should('contain.text', 'No data for current scoring. Please make sure at least one measure group has been created.')
     })
 
     it('Verify if group populations are added/deleted, test case expected values will be updated', () => {
