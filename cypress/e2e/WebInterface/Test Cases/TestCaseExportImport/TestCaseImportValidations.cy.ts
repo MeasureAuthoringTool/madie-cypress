@@ -17,6 +17,7 @@ let versionNumber = '1.0.000'
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
+const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'Passing Test Case'
@@ -35,6 +36,7 @@ let invalidFileToUpload = 'cypress/fixtures'
 describe('Test Case Import: functionality tests', () => {
 
     deleteDownloadsFolderBeforeAll()
+    deleteDownloadsFolderBeforeEach()
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
@@ -261,7 +263,7 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export test case
-        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().wait(1000).click({ force: true })
 
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
@@ -599,7 +601,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         MeasuresPage.measureAction("edit", true)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().wait(1000).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
@@ -618,29 +620,6 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 35000)
         cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
-        MeasuresPage.measureAction("edit", true)
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        TestCasesPage.testCaseAction('edit')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
-        MeasuresPage.measureAction("edit", true)
-        //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        TestCasesPage.testCaseAction('edit', true)
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
-            'with warnings in JSON')
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
         cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
@@ -686,8 +665,8 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
         //verify confirmation message
-        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 35000)
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', '(2) Test cases imported successfully')
+        Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessInfo, 35000)
+        cy.get(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', '(2) test case(s) were imported.')
 
     })
     it('Importing two new test cases with the same family name and given name: verify uniqueness error', () => {

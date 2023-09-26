@@ -3,6 +3,7 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 
 export class TestCasesPage {
+
     //observation fields
     public static readonly denom0Observation = '[id="denominatorObservation0-expected-cb"]'
     public static readonly denom1Observation = '[id="denominatorObservation1-expected-cb"]'
@@ -281,13 +282,14 @@ export class TestCasesPage {
     public static readonly importTestCaseAlertMessage = '[class="madie-alert warning"]'
     public static readonly importTestCaseBtn = '[data-testid=import-test-case-btn]'
     public static readonly testCaseFileImport = '[data-testid=import-file-input]'
-    public static readonly testCasesNonBonnieFileImportModal = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthMd MuiDialog-paperFullWidth css-cwpu7v"]'
+    public static readonly testCasesNonBonnieFileImportModal = '[data-testid="test-case-import-content-div"]'
     public static readonly testCasesNonBonnieFileImport = '[data-testid="file-drop-input"]'
     public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile = '.TestCaseImportDialog___StyledSmall-sc-v92oci-5'
     public static readonly testCasesNonBonnieFileImportFileUploadStatusDetails = '[class="TestCaseImportDialog___StyledSmall2-sc-v92oci-6 gpyrWs"]'
     public static readonly testCasesNonBonnieFileImportErrorOnImport = '[data-testid="test-case-import-error-div"]'
     public static readonly importTestCaseSuccessMsg = '[data-testid=success-toast]'
     public static readonly importTestCaseErrorMsg = '[data-testid=error-toast]'
+    public static readonly importTestCaseSuccessInfo = '[id="content"]'
 
     //Export Test Cases
     public static readonly exportTestCasesBtn = '[data-testid="export-test-cases-button"]'
