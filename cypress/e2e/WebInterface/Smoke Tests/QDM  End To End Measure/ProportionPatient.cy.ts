@@ -196,7 +196,5 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
-
-        cy.pause()
     })
 })
