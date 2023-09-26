@@ -1,13 +1,13 @@
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {TestCaseJson} from "../../../../Shared/TestCaseJson"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {Environment} from "../../../../Shared/Environment"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { Environment } from "../../../../Shared/Environment"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -94,6 +94,9 @@ describe('Delete All Test Cases', () => {
                 })
             })
         })
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
 
         //Login to UI as ALT User
         OktaLogin.AltLogin()
@@ -115,6 +118,9 @@ describe('Delete All Test Cases', () => {
     })
 
     it('Non owner of the Measure unable to delete Test Cases', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
 
         //Login as ALT User
         OktaLogin.AltLogin()

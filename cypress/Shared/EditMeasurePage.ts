@@ -61,7 +61,7 @@ export class EditMeasurePage {
     //Measure Meta Data
     //Model & Mesasurement Start and End date(s)
     public static readonly mpStart = '[name="measurementPeriodStart"]'
-    public static readonly mpEnd = '[id="measurementPeriodEndDate"]'
+    public static readonly mpEnd = '[id="measurement-period-end"]'
 
     //Measure Steward & Developers Page
     public static readonly measureStewardDrpDwn = '[data-testid="steward"]'

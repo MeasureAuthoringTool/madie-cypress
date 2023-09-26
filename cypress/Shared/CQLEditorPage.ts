@@ -5,7 +5,7 @@ export class CQLEditorPage {
     //button to save CQL
     public static readonly saveCQLButton = '[data-testid="save-cql-btn"]'
     //error toast message when a CQL change has an affect on PC
-    public static readonly measureErrorToast = '[data-testid="measure-errors-toast"]'
+    public static readonly measureErrorToast = '[class="toast danger"]'
 
     //error tooltip container
     public static readonly errorContainer = '#ace-editor-wrapper > div.ace_tooltip'

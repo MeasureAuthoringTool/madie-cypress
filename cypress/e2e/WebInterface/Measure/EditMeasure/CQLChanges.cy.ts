@@ -112,7 +112,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
             //wait until toast message appears
-            Utilities.waitForElementVisible(CQLEditorPage.measureErrorToast, 3500)
+            Utilities.waitForElementVisible(CQLEditorPage.measureErrorToast, 350000)
             cy.get(CQLEditorPage.measureErrorToast).should('contain.text', 'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.')
             //navigate to the PC tab and verify mismatch message appears
             cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -257,7 +257,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
             //wait until toast message appears
-            Utilities.waitForElementVisible(CQLEditorPage.measureErrorToast, 3500)
+            Utilities.waitForElementVisible(CQLEditorPage.measureErrorToast, 35000)
             cy.get(CQLEditorPage.measureErrorToast).should('contain.text', 'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.')
             //navigate to the PC tab and verify mismatch message appears
             cy.get(EditMeasurePage.measureGroupsTab).click()

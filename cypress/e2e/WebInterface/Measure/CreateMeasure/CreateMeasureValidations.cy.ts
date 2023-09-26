@@ -90,7 +90,7 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('exist')
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('be.visible')
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).click()
-        cy.get(EditMeasurePage.measureDeveloperDrpDwn).clear()
+        cy.get(EditMeasurePage.measureDeveloperCancelIcon).click()
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).focused().blur()
 
         //remove focus from Developers drop down field
@@ -116,6 +116,7 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureStewardDrpDwn).should('exist').should('be.visible').click().type('Able Health')
         cy.get(EditMeasurePage.measureStewardDrpDwnOption).click()
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).click()
+        cy.get(EditMeasurePage.measureDeveloperCancelIcon).click()
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).focused().blur()
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('exist')
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
@@ -144,6 +145,7 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureStewardDrpDwn).should('exist').should('be.visible').click().type('Able Health')
         cy.get(EditMeasurePage.measureStewardDrpDwnOption).click()
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).click()
+        cy.get(EditMeasurePage.measureDeveloperCancelIcon).click()
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).focused().blur()
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('exist')
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
@@ -193,6 +195,7 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureStewardDrpDwn).should('exist').should('be.visible').click().type('Able Health')
         cy.get(EditMeasurePage.measureStewardDrpDwnOption).click()
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).click()
+        cy.get(EditMeasurePage.measureDeveloperCancelIcon).click()
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).focused().blur()
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('exist')
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
@@ -227,6 +230,7 @@ describe('Validations on Measure Details page', () => {
         //select a value for Developers
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('exist').should('be.visible').click().type('ACO Health Solutions').click()
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).click()
+        cy.get(EditMeasurePage.measureDeveloperCancelIcon).click()
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).focused().blur()
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('exist')
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
@@ -258,6 +262,7 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureStewardDrpDwn).should('exist').should('be.visible').click().type('Able Health')
         cy.get(EditMeasurePage.measureStewardDrpDwnOption).click()
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).click()
+        cy.get(EditMeasurePage.measureDeveloperCancelIcon).click()
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).focused().blur()
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('exist')
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
