@@ -215,6 +215,7 @@ export class TestCasesPage {
     public static readonly highlightingTab = '[data-testid=highlighting-tab]'
     public static readonly expectedOrActualTab = '[data-testid=expectoractual-tab]'
     public static readonly runQDMTestCaseBtn = '[data-testid=qdm-test-case-run-button]'
+    public static readonly qdmComingSoonMsg = '[data-testid="coming-soon"]'
 
     //Test Case Page
     public static readonly ethnicityDetailedElementTab = '[data-testid="demographics-ethnicity-detailed-input"]'
@@ -225,6 +226,7 @@ export class TestCasesPage {
     public static readonly genderDdOnElementTab = '[id="gender-selector"]'
     public static readonly genderSelectBoxElementTab = '[id="gender-selector"]'
     public static readonly genderSelectValuesElementTab = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
+    public static readonly bonnieImportTestCaseBtn = '[data-testid="import-test-cases-from-bonnie-button"]'
 
     //Stratifications
     public static readonly denominatorStratificationOneExpectedValue = '[data-testid="test-population-Strata-1 Denominator-expected"]'
