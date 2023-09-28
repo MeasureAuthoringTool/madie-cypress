@@ -162,19 +162,23 @@ describe.skip('Remove Test case attribute', () => {
         cy.get('#quantity-unit-dropdown-high-option-0').click() //Select unit as m meter
         cy.get(TestCasesPage.plusIcon).click()
         cy.get(TestCasesPage.attributeChip).should('contain.text', 'Reference Range: 2 \'m\' - 4 \'m\'')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         //Verify added attribute on Elements page
         cy.get('tbody > tr > :nth-child(3)').should('contain.text', 'Reference Range - referenceRange 2 \'m\' - 4 \'m\'')
 
-        //Delete added attribute
+        //Delete attribute chip
         cy.get(TestCasesPage.deleteQDMTCAttribute).click()
         cy.get(TestCasesPage.attributeChip).should('not.exist')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        //Verify that the attribute is deleted on Elements page
+        //Verify that the attribute chip is deleted on Elements page
         cy.get('tbody > tr > :nth-child(3)').should('not.contain.text', 'Reference Range - referenceRange 2 \'m\' - 4 \'m\'')
+
+        //Delete the attribute from Elements table
+        cy.get('[data-testid="elements-section"]').contains('View').click({force:true})
+        cy.get('[data-testid="popover-content"]').contains('Delete').click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
 
         //Navigate to JSON tab and verify the attribute is deleted from tc Json
         cy.get(TestCasesPage.tcJsonTab).click()
         cy.get(TestCasesPage.qdmTCJson).should('not.contain.text', '"referenceRange"')
+        cy.get(TestCasesPage.qdmTCJson).should('not.contain.text', '"description": "Laboratory Test, Performed: Chlamydia Screening"')
     })
 })
