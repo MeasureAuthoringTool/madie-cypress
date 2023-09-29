@@ -282,6 +282,7 @@ export class TestCasesPage {
     public static readonly importTestCaseCancelBtnOnModal = '[data-testid="test-case-import-cancel-btn"]'
     public static readonly importTestCaseSuccessMessage = '[data-testid="population-criteria-success"]'
     public static readonly importTestCaseAlertMessage = '[class="madie-alert warning"]'
+    public static readonly importTestCaseDetailedAlertMessage = '[class="StatusHandler___StyledSpan-sc-1tujbo9-0 dBOLeU"]'
     public static readonly importTestCaseBtn = '[data-testid=import-test-case-btn]'
     public static readonly testCaseFileImport = '[data-testid=import-file-input]'
     public static readonly testCasesNonBonnieFileImportModal = '[data-testid="test-case-import-content-div"]'

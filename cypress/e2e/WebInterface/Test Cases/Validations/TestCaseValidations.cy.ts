@@ -993,6 +993,5 @@ describe('Duplicate Test Case Title and Group validations', () => {
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
-
     })
 })
