@@ -310,6 +310,8 @@ export class TestCasesPage {
     public static readonly referenceRangeAttribute = '[data-testid="option-Reference Range"]'
     public static readonly attributeType = '[id="type-select"]'
     public static readonly attributeChip = '[class="chip-body"]'
+    public static readonly codeSystemSelector = '[id="code-system-selector"]'
+    public static readonly codeSelector = '[id="code-selector"]'
 
     public static clickCreateTestCaseButton(): void {
 
