@@ -592,6 +592,7 @@ describe.skip('Run / Execute Test Case by Non Measure Owner', () => {
         OktaLogin.AltLogin()
 
         cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.reload()
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
