@@ -218,6 +218,7 @@ export class TestCasesPage {
     public static readonly qdmComingSoonMsg = '[data-testid="coming-soon"]'
 
     //Test Case Page
+    public static readonly dobSelectValueElementTab = '[class="MuiFormControl-root MuiTextField-root css-1uwaluo"]'
     public static readonly ethnicityDetailedElementTab = '[data-testid="demographics-ethnicity-detailed-input"]'
     public static readonly ethnicityOmbElementTab = '[id="demographics-ethnicity-omb-select-id"]'
     public static readonly raceDetailedElementTab = '[data-testid="demographics-race-detailed-input"]'
@@ -313,6 +314,7 @@ export class TestCasesPage {
     public static readonly attributeChip = '[class="chip-body"]'
     public static readonly codeSystemSelector = '[id="code-system-selector"]'
     public static readonly codeSelector = '[id="code-selector"]'
+
 
     public static clickCreateTestCaseButton(): void {
 
