@@ -69,14 +69,12 @@ export class CQLLibraryPage {
 
         cy.get(Header.cqlLibraryTab).should('be.visible')
 
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
-
         cy.get(Header.cqlLibraryTab).click()
 
-        cy.wait('@libraries', { timeout: 60000 })
+        Utilities.waitForElementEnabled(CQLLibraryPage.createCQLLibraryBtn, 60000)
 
         cy.get(this.createCQLLibraryBtn).should('be.visible')
-        cy.get(this.createCQLLibraryBtn).should('be.enabled')
+        cy.get(this.createCQLLibraryBtn).should('be.enabled').wait(1500)
         cy.get(this.createCQLLibraryBtn).click()
 
         cy.get(this.newCQLLibName).should('be.visible')
