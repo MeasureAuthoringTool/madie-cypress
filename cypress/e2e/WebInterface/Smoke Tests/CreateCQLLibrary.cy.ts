@@ -1,7 +1,7 @@
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
-import {Header} from "../../../Shared/Header"
-import {Utilities} from "../../../Shared/Utilities"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
+import { Header } from "../../../Shared/Header"
+import { Utilities } from "../../../Shared/Utilities"
 
 describe('Create CQL Library', () => {
 
@@ -31,14 +31,12 @@ describe('Create CQL Library', () => {
 
         cy.get(Header.cqlLibraryTab).should('be.visible')
 
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
-
         cy.get(Header.cqlLibraryTab).click()
 
-        cy.wait('@libraries', { timeout: 60000 })
+        Utilities.waitForElementEnabled(CQLLibraryPage.createCQLLibraryBtn, 60000)
 
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
+        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled').wait(1500)
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
 
         cy.get(CQLLibraryPage.newCQLLibName).should('be.visible')
