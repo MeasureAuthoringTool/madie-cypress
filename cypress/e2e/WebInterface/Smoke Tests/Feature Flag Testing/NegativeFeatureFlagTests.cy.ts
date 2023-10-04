@@ -30,6 +30,105 @@ let measureCQLPFTests = MeasureCQL.CQL_Populations
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
+// "exportQiCoreBundleType": false
+describe('QI Core Test Cases: Ensure / verify that recent highlighting features are not present', () => {
+
+    beforeEach('Create measure and login', () => {
+        CqlLibraryName = 'TestLibrary6' + Date.now()
+
+        //Create QI Core Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        OktaLogin.Login()
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+
+    it('QI Core Test Cases: Verify that Population Criteria sub-tab / selector is not present', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //confirm that the highlighting tab is present
+        Utilities.waitForElementVisible(TestCasesPage.exportTestCasesBtn, 35000)
+        Utilities.waitForElementEnabled(TestCasesPage.exportTestCasesBtn, 35000)
+
+        //confirm that the PC subtab / selector is not present
+        Utilities.waitForElementToNotExist(('[class="export-chevron-container"]'), 35000)
+
+
+
+
+    })
+})
+
+// "highlightingTabs": false
+describe('QI Core Test Cases: Ensure / verify that recent highlighting features are not present', () => {
+
+    beforeEach('Create measure and login', () => {
+        CqlLibraryName = 'TestLibrary6' + Date.now()
+
+        //Create QI Core Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        OktaLogin.Login()
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+
+    it('QI Core Test Cases: Verify that Population Criteria sub-tab / selector is not present', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //navigate to the edit test case page
+        TestCasesPage.testCaseAction('edit')
+
+        //confirm that the highlighting tab is present
+        Utilities.waitForElementVisible(TestCasesPage.tcHighlightingTab, 35000)
+
+        //click on the highlighting tab
+        cy.get(TestCasesPage.tcHighlightingTab).click()
+
+        //confirm that the PC subtab / selector is not present
+        Utilities.waitForElementToNotExist(TestCasesPage.highlightingPCTabSelector, 35000)
+
+
+
+
+    })
+})
+
 // "importTestCases": false
 describe('Test Case Import button - BONNIE: verify that the BONNIE import button is not available', () => {
 
