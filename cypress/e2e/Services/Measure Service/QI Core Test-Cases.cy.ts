@@ -39,7 +39,7 @@ let TCJson = '{ "resourceType": "Bundle", "id": "1366", "meta": {   "versionId":
 
 // skipping the below test until the feature flag controlling the element tab for QI Core Test Cases is removed
 // create test case that contains race data in json
-describe.skip('QI Core Gender, Race, and Ethnicity data validations: Create test case with Gender, Race, and Ethnicity data in Json', () => {
+describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Create test case with Gender, Race, and Ethnicity data in Json', () => {
 
     before('Create Measure', () => {
 
@@ -78,7 +78,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Create test
 
     })
 
-    it('Enter Valid Test Case Json that contains Gender, Race, and Ethnicity data and confirm those pieces of data appears on the element tab', () => {
+    it('Enter Valid Test Case Json that contains DOB, Gender, Race, and Ethnicity data and confirm those pieces of data appears on the element tab', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -111,6 +111,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Create test
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
         cy.get(TestCasesPage.elementsTab).click()
 
+        cy.get(TestCasesPage.dobSelectValueElementTab).find('[id="date"]').should('contain.value', '02/10/1954')
         cy.get(TestCasesPage.genderDdOnElementTab).should('contain.text', 'Male')
         cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'White')
         cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'American Indian or Alaska Native')
@@ -126,7 +127,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Create test
 
 // skipping the below test until the feature flag controlling the element tab for QI Core Test Cases is removed
 // edit a test case with whom the measure has been shared
-describe.skip('QI Core Gender, Race, and Ethnicity data validations: Update Json on a test case whom measure has been shared', () => {
+describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Update Json on a test case whom measure has been shared', () => {
 
     before('Create Measure', () => {
 
@@ -165,7 +166,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Update Json
 
     })
 
-    it('Enter Valid Test Case Json that contains Gender, Race, and Ethnicity data and confirme those pieces of data appears on the element tab when the user whom did the edit had the measure shared with them', () => {
+    it('Enter Valid Test Case Json that contains DOB, Gender, Race, and Ethnicity data and confirme those pieces of data appears on the element tab when the user whom did the edit had the measure shared with them', () => {
 
         //create test case on measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -250,6 +251,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Update Json
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
         cy.get(TestCasesPage.elementsTab).click()
 
+        cy.get(TestCasesPage.dobSelectValueElementTab).find('[id="date"]').should('contain.value', '05/27/1981')
         cy.get(TestCasesPage.genderDdOnElementTab).should('contain.text', 'Unknown')
         cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'White')
         cy.get(TestCasesPage.raceOmbElementTab).should('contain.text', 'Other Race')
@@ -265,7 +267,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Update Json
 })
 
 // attempt to edit a test case with whom the measure has not been shared and whom is also not the owner
-describe('QI Core Gender, Race, and Ethnicity data validations: Attempt to update Json with a user whom is not the owner nor has the measure been shared', () => {
+describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to update Json with a user whom is not the owner nor has the measure been shared', () => {
 
     before('Create Measure', () => {
 
@@ -304,7 +306,7 @@ describe('QI Core Gender, Race, and Ethnicity data validations: Attempt to updat
 
     })
 
-    it('Attempt to enter valid Test Case Json that contains Gender, Race, and Ethnicity data, when the measure has not been shared with the user', () => {
+    it('Attempt to enter valid Test Case Json that contains DOB, Gender, Race, and Ethnicity data, when the measure has not been shared with the user', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -535,7 +537,6 @@ describe('Test Case population values based on Measure Group population definiti
     it('Test Case population value check boxes match that of the measure group definition -- optional population is removed', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureIdFc) => {
-                cy.readFile('cypress/fixtures/groupId').should('exist').then((groupIdFc) => {
                     cy.request({
                         url: '/api/measures/' + measureIdFc + '/groups',
                         method: 'PUT',
@@ -765,7 +766,7 @@ describe('Test Case population values based on Measure Group population definiti
                 })
             })
         })
-    })
+
 })
 
 describe('Measure Service: Test Case Endpoints', () => {
