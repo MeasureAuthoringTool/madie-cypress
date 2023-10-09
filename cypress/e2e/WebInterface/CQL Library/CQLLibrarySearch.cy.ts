@@ -2,6 +2,7 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 import { Header } from "../../../Shared/Header"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
+import { Utilities } from "../../../Shared/Utilities"
 
 var CQLLibraryName = ""
 let CQLLibraryPublisher = 'ICFer'
@@ -26,9 +27,9 @@ describe('CQL Library Search Validations', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait('@libraries', { timeout: 60000 })
+
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         //ensure we are on the My Libraries tab
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
@@ -57,9 +58,9 @@ describe('CQL Library Search Validations', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait('@libraries', { timeout: 60000 })
+
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         //ensure we are on the My Libraries tab
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
@@ -86,9 +87,9 @@ describe('CQL Library Search Validations', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait('@libraries', { timeout: 60000 })
+
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         //ensure we are on the My Libraries tab
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
@@ -135,9 +136,9 @@ describe('CQL Library Search Validations', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait('@libraries', { timeout: 60000 })
+
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         //ensure we are on the My Libraries tab
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
@@ -192,9 +193,9 @@ describe('CQL Library Search Validations -- User ownership', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait('@libraries', { timeout: 60000 })
+
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         //ensure we are on the My Libraries tab
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
@@ -242,9 +243,9 @@ describe('CQL Library Search Validations -- User ownership', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait('@libraries', { timeout: 60000 })
+
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         //ensure we are on the My Libraries tab
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
