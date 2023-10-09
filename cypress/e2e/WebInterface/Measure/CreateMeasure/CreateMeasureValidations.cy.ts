@@ -14,10 +14,6 @@ let newMeasureName = ''
 let newCqlLibraryName = ''
 let ratioMeasureCQL = MeasureCQL.ICFCleanTest_CQL
 
-const now = require('dayjs')
-let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
-let mpEndDate = now().format('YYYY-MM-DD')
-
 let measureName = ''
 let CQLLibraryName = ''
 let model = 'QI-Core v4.1.1'
@@ -411,7 +407,9 @@ describe('Create Measure validations', () => {
     it('Verify error messages when the measure name entered is invalid or empty', () => {
 
         //Click on New Measure Button
-        cy.get(LandingPage.newMeasureButton).click()
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
+        cy.get(LandingPage.newMeasureButton).wait(2000).click()
 
         //Verify error message when the Measure Name field is empty
         cy.get(CreateMeasurePage.measureNameTextbox).click()
@@ -448,8 +446,12 @@ describe('Create Measure validations', () => {
 
         let measureName = 'TestMeasure' + Date.now()
 
+        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 30000)
         //Click on New Measure Button
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
         cy.get(LandingPage.newMeasureButton).click()
+        Utilities.waitForElementVisible(CreateMeasurePage.measureNameTextbox, 30000)
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
         cy.get(CreateMeasurePage.measureModelQICore).click()
@@ -524,8 +526,10 @@ describe('Create Measure validations', () => {
         let measureName = 'MeasureTypeTest' + Date.now()
         let CqlLibraryName = 'MeasureTypeTestLibrary' + Date.now()
 
-
+        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 30000)
         //Click on New Measure Button
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).focus().blur()
@@ -544,7 +548,10 @@ describe('Create Measure validations', () => {
         let measureName = 'TestMeasure' + Date.now()
         let CqlLibraryName = 'TestLibrary' + Date.now()
 
+        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 30000)
         //Click on New Measure Button
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
@@ -585,6 +592,9 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period end date is after the start date', () => {
 
+        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 30000)
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
@@ -600,6 +610,9 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period start and end dates are empty', () => {
 
+        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 30000)
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
@@ -614,6 +627,9 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period start and end dates are not in valid range', () => {
 
+        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 30000)
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
@@ -630,6 +646,9 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period start and end date format is not valid', () => {
 
+        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 30000)
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
@@ -647,6 +666,9 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period start and end dates are same', () => {
 
+        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 30000)
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
