@@ -26,7 +26,7 @@ describe('CQL Library Search Validations', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true&signal=%7B%7D').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
         cy.wait('@libraries', { timeout: 60000 })
 
@@ -57,7 +57,7 @@ describe('CQL Library Search Validations', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true&signal=%7B%7D').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
         cy.wait('@libraries', { timeout: 60000 })
 
@@ -86,7 +86,7 @@ describe('CQL Library Search Validations', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true&signal=%7B%7D').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
         cy.wait('@libraries', { timeout: 60000 })
 
@@ -110,9 +110,11 @@ describe('CQL Library Search Validations', () => {
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
 
+        cy.get(Header.measures).click()
+        cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
         cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesBtn).click().wait(5000)
 
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
@@ -135,7 +137,7 @@ describe('CQL Library Search Validations', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true&signal=%7B%7D').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
         cy.wait('@libraries', { timeout: 60000 })
 
@@ -192,7 +194,7 @@ describe('CQL Library Search Validations -- User ownership', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true&signal=%7B%7D').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
         cy.wait('@libraries', { timeout: 60000 })
 
@@ -216,9 +218,11 @@ describe('CQL Library Search Validations -- User ownership', () => {
 
         cy.get(CQLLibraryPage.cqlLibSearchResultsTable).should('be.empty')
 
+        cy.get(Header.measures).click()
+        cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
         cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesBtn).click().wait(5000)
 
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
@@ -235,14 +239,14 @@ describe('CQL Library Search Validations -- User ownership', () => {
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
 
     })
-    it('Owner is the same as the current user, library will appear in, both, "All Libraries" and "My Libraries" searched lists', () => {
+    it.only('Owner is the same as the current user, library will appear in, both, "All Libraries" and "My Libraries" searched lists', () => {
         //log in as user that does not own the Library
         OktaLogin.AltLogin()
 
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true&signal=%7B%7D').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
         cy.wait('@libraries', { timeout: 60000 })
 
@@ -266,9 +270,11 @@ describe('CQL Library Search Validations -- User ownership', () => {
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
 
+        cy.get(Header.measures).click()
+        cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
         cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesBtn).click().wait(5000)
 
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')

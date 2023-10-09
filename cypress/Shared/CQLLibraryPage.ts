@@ -3,6 +3,7 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 import { v4 as uuidv4 } from 'uuid'
 
+
 export class CQLLibraryPage {
     public static readonly cqlLibrarySuccessfulDeleteMsgBox = '[data-testid="cql-library-list-snackBar"]'
     public static readonly cqlLibraryDeleteDialogContinueBtn = '[data-testid="delete-dialog-continue-button"]'
