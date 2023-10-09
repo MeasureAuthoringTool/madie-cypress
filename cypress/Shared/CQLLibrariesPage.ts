@@ -1,8 +1,7 @@
-
 import { Header } from "./Header"
-import { EditMeasurePage } from "./EditMeasurePage"
-import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
+import { CQLLibraryPage } from "./CQLLibraryPage"
+
 
 export class CQLLibrariesPage {
 
@@ -30,6 +29,7 @@ export class CQLLibrariesPage {
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).wait(1000).click()
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
         cy.readFile(filePath).should('exist').then((fileContents) => {
 
             cy.intercept('GET', '/api/cql-libraries/' + fileContents).as('cqlLibrary')
