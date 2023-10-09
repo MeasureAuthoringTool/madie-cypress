@@ -2,6 +2,7 @@ import { Environment } from "./Environment"
 import { LandingPage } from "./LandingPage"
 import { MeasuresPage } from "./MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
+import { Utilities } from "./Utilities"
 
 export class CreateMeasurePage {
 
@@ -73,8 +74,9 @@ export class CreateMeasurePage {
         if (mpEndDate === undefined) {
             mpEndDate = now().format('MM/DD/YYYY')
         }
-
-        cy.get(LandingPage.newMeasureButton).click()
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
+        cy.get(LandingPage.newMeasureButton).wait(2000).click()
         cy.get(this.measureNameTextbox).type(measureName)
         cy.get(this.measureModelDropdown).click()
         cy.get(this.measureModelQICore).click()
