@@ -2,19 +2,20 @@ import { Environment } from "./Environment"
 import { LandingPage } from "./LandingPage"
 import { MeasuresPage } from "./MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
+import { Utilities } from "./Utilities"
 
 export class CreateMeasurePage {
 
     public static readonly createMeasureButton = 'button[data-testid="continue-button"]'
     public static readonly cancelButton = '[data-testid=create-new-measure-cancel-button]'
-    public static readonly measureNameTextbox = '[data-testid=measure-name-text-field]'
+    public static readonly measureNameTextbox = '[data-testid=measure-name-input]'
     public static readonly measureModelDropdown = '#model-select'
     public static readonly measureModelQICore = '[data-testid="measure-model-option-QI-Core v4.1.1"]'
     public static readonly measureModelQDMv5_6 = '[data-testid="measure-model-option-QDM v5.6"]'
     public static readonly measureModelFieldLevelError = '.MuiFormHelperText-root'
     public static readonly eCQMAbbreviatedTitleTextbox = '[data-testid="ecqm-input"]'
     public static readonly eCQMAbbreviatedTitleFieldLevelError = '[data-testid="ecqmTitle-helper-text"]'
-    public static readonly cqlLibraryNameTextbox = '[data-testid="cql-library-name"]'
+    public static readonly cqlLibraryNameTextbox = '[data-testid="cql-library-name-input"]'
     public static readonly measureNameFieldLevelError = '[data-testid=measureName-helper-text]'
     public static readonly cqlLibraryNameFieldLevelError = '[data-testid="cqlLibraryName-helper-text"]'
     public static readonly serverErrorMsg = '[data-testid="server-error-alerts"]'
@@ -73,8 +74,9 @@ export class CreateMeasurePage {
         if (mpEndDate === undefined) {
             mpEndDate = now().format('MM/DD/YYYY')
         }
-
-        cy.get(LandingPage.newMeasureButton).click()
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
+        cy.get(LandingPage.newMeasureButton).wait(2000).click()
         cy.get(this.measureNameTextbox).type(measureName)
         cy.get(this.measureModelDropdown).click()
         cy.get(this.measureModelQICore).click()

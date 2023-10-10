@@ -38,11 +38,19 @@ describe('Measure Versioning validations', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName)
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
@@ -72,7 +80,7 @@ describe('Measure Versioning validations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithErrors)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Changes saved successfully but the following errors were found')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Changes saved successfully but the following issues were found')
 
         //Navigate to Measures Page
         cy.get(Header.measures).click()
@@ -100,11 +108,19 @@ describe('Measure Versioning when the measure has test case with errors', () => 
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
         OktaLogin.Login()
     })
 
     afterEach('Logout', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
         OktaLogin.Logout()
     })
 
@@ -173,12 +189,19 @@ describe('Non Measure owner unable to create Version', () => {
         let newCqlLibraryName = cqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
         OktaLogin.AltLogin()
     })
 
     after('Logout and Clean up', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
 
