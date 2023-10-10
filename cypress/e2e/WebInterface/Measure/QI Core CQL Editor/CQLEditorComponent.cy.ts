@@ -53,37 +53,32 @@ let measureCQL_WithErrors = 'library ' + newCqlLibraryName + ' version \'0.0.000
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
     'valueset "HPV Test": \'\')'
 
-let measureCQL_WithWarnings = 'library Library6567767 version \'0.0.000\'\n' +
+let measureCQL_WithWarnings = 'library TestLibrary16969620425371870 version \'0.0.000\'\n' +
     '\n' +
-    'using QICore version \'4.1.0\'\n' +
+    'using QICore version \'4.1.1\'\n' +
     '\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    'include CQMCommon version \'1.0.000\' called CQMCommon\n' +
+    'include SupplementalDataElements version \'3.1.000\' called SDE\n' +
+    'include QICoreCommon version \'1.2.000\' called QICoreCommon\n' +
+    'include Hospice version \'6.1.000\' called Hospice\n' +
+    'include Status version \'1.1.000\' called Status\n' +
     '\n' +
-    'valueset "Hospice care ambulatory": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1108.15\'\n' +
-    'valueset "Medical Reason": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1007\' \n' +
-    'valueset "Patient Reason": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1008\' \n' +
+    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\' \n' +
     '\n' +
-    'parameter "Measurement Period" Interval<DateTime> default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
-    '  \n' +
+    'codesystem "CPT": \'http://www.ama-assn.org/go/cpt\' \n' +
+    '\n' +
+    'code "Office or other outpatient visit for the evaluation and management of an established patient, that may not require the presence of a physician or other qualified health care professional. Usually, the presenting problem(s) are minimal.": \'99211\' from "CPT" display \'Office or other outpatient visit for the evaluation and management of an established patient, that may not require the presence of a physician or other qualified health care professional. Usually, the presenting problem(s) are minimal.\'\n' +
+    '\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    '\n' +
     'context Patient\n' +
     '\n' +
-    'define "Initial Population":\n' +
-    '    "Has Hospice"\n' +
-    '    or "Hospice Was Not Ordered"\n' +
-    '\n' +
-    'define "Hospice Was Not Ordered":\n' +
-    '    exists (\n' +
-    '        [ServiceNotRequested: "Hospice care ambulatory"] HospiceNotOrdered\n' +
-    '          where HospiceNotOrdered.reasonRefused in "Medical Reason"\n' +
-    '            or HospiceNotOrdered.reasonRefused in "Patient Reason"\n' +
-    '    )\n' +
-    '    \n' +
-    'define "Has Hospice":\n' +
-    '    exists (\n' +
-    '        [ServiceRequest: "Hospice care ambulatory"] HospiceOrder\n' +
-    '          where HospiceOrder.intent = \'order\'\n' +
-    '            and HospiceOrder.authoredOn in "Measurement Period"\n' +
-    '    ){del}{del}{del}{del}'
+    'define "Qualifying Encounters":\n' +
+    '  ( ["Encounter": "Office Visit"]\n' +
+    '        union ["Encounter": "Office or other outpatient visit for the evaluation and management of an established patient, that may not require the presence of a physician or other qualified health care professional. Usually, the presenting problem(s) are minimal."]\n' +
+    '        ) ValidEncounters\n' +
+    '        where QICoreCommon."ToInterval"(ValidEncounters.period) during day of "Measurement Period"'
 
 describe('Validate errors/warnings/success messages on CQL editor component on save', () => {
 
@@ -140,8 +135,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
     })
 
-    //Skipping until a CQL with warning is added
-    it.skip('Verify warnings appear on CQL Editor component and in the CQL Editor object, on save and on tab / page load', () => {
+    it('Verify warnings appear on CQL Editor component and in the CQL Editor object, on save and on tab / page load', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -152,15 +146,17 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithWarnings)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Changes saved successfully but the following issues were found')
 
-        //Verify warnings in CQL Editor component
-        cy.get('[data-testid="generic-success-text-sub-header"]').should('contain.text', '2 CQL errors found:')
-        cy.get('[data-testid="generic-success-text-list"] > li').should('contain', 'Could not resolve code path type for the type of the retrieve QICore.ServiceNotRequested.')
-        cy.get('[data-testid="generic-success-text-list"] > li').should('contain', 'Could not resolve membership operator for terminology target of the retrieve.')
+        //Verify errors in CQL Editor component
+        cy.get('.madie-alert').should('contain', '(6) Errors:')
+        cy.get('.madie-alert').should('contain', '(1) Warning:')
+        cy.get('.madie-alert').should('contain.text', 'Row: 24, Col:17: ELM: 17:268 | Could not resolve membership operator for terminology ' +
+            'target of the retrieve.')
 
         //Verify the same warning(s) appear in CQL Editor windows
-        Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'Could not resolve code path type for the type of the retrieve QICore.ServiceNotRequested.', 'Could not resolve membership operator for terminology target of the retrieve.')
+        Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 17:268 | Could not ' +
+            'resolve membership operator for terminology target of the retrieve.')
 
     })
 })
@@ -234,8 +230,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
 
     })
 
-    //Skipping until a CQL with warning is added
-    it.skip('Verify warnings appear on CQL Editor component and in the CQL Editor object, on CQL update and on tab / page load', () => {
+    it('Verify warnings appear on CQL Editor component and in the CQL Editor object, on CQL update and on tab / page load', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -249,16 +244,17 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithWarnings)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Changes saved successfully but the following errors were found')
-        cy.get('[data-testid="library-warning"]').should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Changes saved successfully but the following issues were found')
 
-        //Verify warnings in CQL Editor component
-        cy.get('[data-testid="generic-success-text-sub-header"]').should('contain.text', '2 CQL errors found:')
-        cy.get('[data-testid="generic-success-text-list"] > li').should('contain', 'Could not resolve code path type for the type of the retrieve QICore.ServiceNotRequested.')
-        cy.get('[data-testid="generic-success-text-list"] > li').should('contain', 'Could not resolve membership operator for terminology target of the retrieve.')
+        //Verify errors in CQL Editor component
+        cy.get('.madie-alert').should('contain', '(6) Errors:')
+        cy.get('.madie-alert').should('contain', '(1) Warning:')
+        cy.get('.madie-alert').should('contain.text', 'Row: 24, Col:17: ELM: 17:268 | Could not resolve membership operator for terminology ' +
+            'target of the retrieve.')
 
         //Verify the same warning(s) appear in CQL Editor windows
-        Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'Could not resolve code path type for the type of the retrieve QICore.ServiceNotRequested.', 'Could not resolve membership operator for terminology target of the retrieve.')
+        Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 17:268 | Could not ' +
+            'resolve membership operator for terminology target of the retrieve.')
 
     })
 })
