@@ -12,11 +12,11 @@ let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
     '\n' +
-    'include MATGlobalCommonFunctionsQDM version \'7.0.000\' called Global\n' +
+    'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
     'include AdultOutpatientEncountersQDM version \'1.0.000\' called AdultOutpatientEncounters\n' +
-    'include HospiceQDM version \'1.1.000\' called Hospice\n' +
-    'include PalliativeCareExclusionECQMQDM version \'1.2.000\' called PalliativeCare\n' +
-    'include AdvancedIllnessandFrailtyExclusionECQMQDM version \'1.2.000\' called AIFrailLTCF\n' +
+    'include HospiceQDM version \'1.0.000\' called Hospice\n' +
+    'include PalliativeCareExclusionECQMQDM version \'1.0.000\' called PalliativeCare\n' +
+    'include AdvancedIllnessandFrailtyExclusionECQMQDM version \'1.0.000\' called AIFrailLTCF\n' +
     '\n' +
     'codesystem "AdministrativeGender": \'urn:oid:2.16.840.1.113883.5.1\' \n' +
     'codesystem "SNOMEDCT": \'urn:oid:2.16.840.1.113883.6.96\' \n' +
@@ -34,6 +34,7 @@ let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     'valueset "Unilateral Mastectomy Left": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1133\' \n' +
     'valueset "Unilateral Mastectomy Right": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1134\' \n' +
     'valueset "Unilateral Mastectomy, Unspecified Laterality": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1071\' \n' +
+    'valueset "Chemistry Tests": \'urn:oid:2.16.840.1.113762.1.4.1147.82\' \n' +
     '\n' +
     'code "Female": \'F\' from "AdministrativeGender" display \'Female\'\n' +
     'code "Left (qualifier value)": \'7771000\' from "SNOMEDCT" display \'Left (qualifier value)\'\n' +
@@ -172,7 +173,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
         cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
 
-        //select 'Cohort' scoring on measure
+        //select 'Proportion' scoring on measure
         Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringProportion)
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Proportion')
 
