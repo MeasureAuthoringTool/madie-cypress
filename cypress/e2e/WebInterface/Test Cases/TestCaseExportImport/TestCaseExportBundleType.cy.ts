@@ -128,7 +128,7 @@ describe('QI-Core: Export Bundle options: Transaction or Collection', () => {
         })
     })
 })
-describe('QI-Core: Single Test Case on Measure: Export Bundle options: Transaction', () => {
+describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: Transaction', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -216,7 +216,7 @@ describe('QI-Core: Single Test Case on Measure: Export Bundle options: Transacti
 
     })
 })
-describe('QI-Core: Multiple Test Case on Measure: Export Bundle options: Transaction', () => {
+describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options: Transaction', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -322,7 +322,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export Bundle options: Transac
     })
 })
 
-describe('QI-Core: Single Test Case on Measure: Export Bundle options: Collection', () => {
+describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: Collection', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -410,7 +410,7 @@ describe('QI-Core: Single Test Case on Measure: Export Bundle options: Collectio
 
     })
 })
-describe('QI-Core: Multiple Test Case on Measure: Export Bundle options: Collection', () => {
+describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options: Collection', () => {
 
     deleteDownloadsFolderBeforeAll()
 
