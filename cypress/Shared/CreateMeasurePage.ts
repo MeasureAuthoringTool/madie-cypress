@@ -197,12 +197,12 @@ export class CreateMeasurePage {
                 expect(response.body.id).to.be.exist
                 if (twoMeasures === true) {
                     cy.writeFile('cypress/fixtures/measureId2', response.body.id)
-                    //cy.writeFile('cypress/fixtures/versionId2', response.body.versionId)
+                    cy.writeFile('cypress/fixtures/versionId2', response.body.versionId)
                     cy.writeFile('cypress/fixtures/measureSetId2', response.body.measureSetId)
                 }
                 else {
                     cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                    //cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                    cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
                     cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
                 }
 
