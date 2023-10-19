@@ -30,8 +30,8 @@ let measureCQLPFTests = MeasureCQL.CQL_Populations
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
-// "exportQiCoreBundleType": false
-describe('QI Core Test Cases: Ensure / verify that recent highlighting features are not present', () => {
+// "exportQiCoreBundleType": true
+describe('QI Core Test Cases: Ensure / verify that Export QI-Core Bundle type dropdown is present', () => {
 
     beforeEach('Create measure and login', () => {
         CqlLibraryName = 'TestLibrary6' + Date.now()
@@ -56,7 +56,7 @@ describe('QI Core Test Cases: Ensure / verify that recent highlighting features 
 
     })
 
-    it('QI Core Test Cases: Verify that Population Criteria sub-tab / selector is not present', () => {
+    it('QI Core Test Cases: Verify that Export QI-Core Bundle type dropdown is present', () => {
 
         MeasuresPage.measureAction("edit")
 
@@ -68,11 +68,11 @@ describe('QI Core Test Cases: Ensure / verify that recent highlighting features 
         Utilities.waitForElementVisible(TestCasesPage.exportTestCasesBtn, 35000)
         Utilities.waitForElementEnabled(TestCasesPage.exportTestCasesBtn, 35000)
 
-        //confirm that the PC subtab / selector is not present
-        Utilities.waitForElementToNotExist(('[class="export-chevron-container"]'), 35000)
-
-
-
+        //confirm that the PC sub tab / selector is not present
+        Utilities.waitForElementVisible(('[class="export-chevron-container"]'), 35000)
+        cy.get('[class="export-chevron-container"]').click({force: true})
+        cy.get('[data-testid=export-transaction-bundle]').should('be.visible')
+        cy.get('[data-testid="export-collection-bundle"]').should('be.visible')
 
     })
 })
@@ -120,11 +120,8 @@ describe('QI Core Test Cases: Ensure / verify that recent highlighting features 
         //click on the highlighting tab
         cy.get(TestCasesPage.tcHighlightingTab).click()
 
-        //confirm that the PC subtab / selector is not present
+        //confirm that the PC sub tab / selector is not present
         Utilities.waitForElementToNotExist(TestCasesPage.highlightingPCTabSelector, 35000)
-
-
-
 
     })
 })
