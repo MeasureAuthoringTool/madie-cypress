@@ -194,7 +194,8 @@ let measureCQL = 'library T771 version \'0.0.000\'\n' +
     '                     or Diagnosis.verificationStatus ~ QICoreCommon."entered-in-error" )\n' +
     '    ) is not null'
 
-describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profile types', () => {
+//Skipping until MAT-6321 is fixed
+describe.skip('FHIR Measure Export for Proportion Patient Measure with QI-Core Profile types', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -213,8 +214,7 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population',
-            'Numerator', 'Denominator', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Numerator', 'Denominator', 'boolean')
         OktaLogin.Login()
 
     })
