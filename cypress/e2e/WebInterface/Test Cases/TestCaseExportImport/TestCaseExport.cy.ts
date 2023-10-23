@@ -60,7 +60,7 @@ describe('QI-Core Single Test Case Export', () => {
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('export')
+        TestCasesPage.testCaseAction('exportcollection')
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
@@ -104,7 +104,7 @@ describe('QI-Core Single Test Case Export', () => {
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('export')
+        TestCasesPage.testCaseAction('exportcollection')
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
@@ -168,6 +168,8 @@ describe('QI-Core Test Case Export for all test cases', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
+        cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
@@ -218,6 +220,8 @@ describe('QI-Core Test Case Export for all test cases', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
+        cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
