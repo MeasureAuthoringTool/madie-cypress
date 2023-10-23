@@ -271,12 +271,12 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
 
     before('Create Measure', () => {
 
+        measureName = 'TestMeasure' + Date.now()
+        cqlLibraryName = 'TestCql' + Date.now()
+
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-
-        measureName = 'TestMeasure' + Date.now()
-        cqlLibraryName = 'TestCql' + Date.now()
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
@@ -307,6 +307,12 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
     })
 
     it('Attempt to enter valid Test Case Json that contains DOB, Gender, Race, and Ethnicity data, when the measure has not been shared with the user', () => {
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -366,10 +372,15 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
 describe('Test Case population values based on Measure Group population definitions', () => {
     before('Create Measure and measure group', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
                 cy.request({
@@ -425,6 +436,9 @@ describe('Test Case population values based on Measure Group population definiti
             })
         })
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/groupId').should('exist').then((groupIdFc) => {
@@ -508,6 +522,12 @@ describe('Test Case population values based on Measure Group population definiti
 
     })
     it('Test Case population value check boxes match that of the measure group definitons -- all are defined', () => {
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
@@ -537,54 +557,58 @@ describe('Test Case population values based on Measure Group population definiti
     it('Test Case population value check boxes match that of the measure group definition -- optional population is removed', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureIdFc) => {
-                    cy.request({
-                        url: '/api/measures/' + measureIdFc + '/groups',
-                        method: 'PUT',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        body: {
-                            "scoring": measureScoring,
-                            "populationBasis": 'Boolean',
-                            "populations": [
-                                {
-                                    "id": uuidv4(),
-                                    "name": "initialPopulation",
-                                    "definition": PopIniPop
-                                },
-                                {
-                                    "id": uuidv4(),
-                                    "name": "denominator",
-                                    "definition": PopDenom
-                                },
-                                {
-                                    "id": uuidv4(),
-                                    "name": "denominatorExclusion",
-                                    "definition": PopDenex
-                                },
-                                {
-                                    "id": uuidv4(),
-                                    "name": "denominatorException",
-                                    "definition": PopDenexcep
-                                },
-                                {
-                                    "id": uuidv4(),
-                                    "name": "numerator",
-                                    "definition": PopNum
-                                }
-                            ],
-                            "measureGroupTypes": [
-                                "Outcome"
-                            ]
-                        }
+                cy.request({
+                    url: '/api/measures/' + measureIdFc + '/groups',
+                    method: 'PUT',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "scoring": measureScoring,
+                        "populationBasis": 'Boolean',
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": PopIniPop
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominator",
+                                "definition": PopDenom
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorExclusion",
+                                "definition": PopDenex
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorException",
+                                "definition": PopDenexcep
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numerator",
+                                "definition": PopNum
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ]
+                    }
 
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.id).to.be.exist
-                    })
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.id).to.be.exist
                 })
             })
         })
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
@@ -766,7 +790,7 @@ describe('Test Case population values based on Measure Group population definiti
                 })
             })
         })
-
+    })
 })
 
 describe('Measure Service: Test Case Endpoints', () => {
