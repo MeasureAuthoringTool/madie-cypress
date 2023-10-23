@@ -30,9 +30,10 @@ describe('CQL Library Validations', () => {
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
 
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true&signal=%7B%7D').as('libraries')
+        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
         cy.wait('@libraries', { timeout: 60000 })
+
 
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')

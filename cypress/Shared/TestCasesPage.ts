@@ -3,7 +3,6 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 
 export class TestCasesPage {
-
     //QI Core element tab enabled test case detail page elements
     public static readonly QiCoreEleEnabledJSONTab = '[data-testid="json-tab"]'
     //observation fields
@@ -140,6 +139,12 @@ export class TestCasesPage {
     public static readonly tcCQLArea = '[data-testid="test-case-cql-editor"]'
 
     //misc test case page objects
+    public static readonly tcIPHighlightingDetails = '[data-testid="IP-highlighting"]'
+    public static readonly tcDENOMHighlightingDetails = '[data-testid="DENOM-highlighting"]'
+    public static readonly tcNUMERHighlightingDetails = '[data-testid="NUMER-highlighting"]'
+    public static readonly tcDENEXHighlightingDetails = '[data-testid="DENEX-highlighting"]'
+    public static readonly tcDENEXCEPHighlightingDetails = '[data-testid="DENEXCEP-highlighting"]'
+    public static readonly tcNUMEXHighlightingDetails = '[data-testid="NUMEX-highlighting"]'
     public static readonly tcHighlightingTab = '[data-testid="highlighting-tab"]'
     public static readonly ippActualCheckBox = '[data-testid="test-population-initialPopulation-actual"]'
     public static readonly numActualCheckBox = '[data-testid="test-population-numerator-actual"]'
@@ -381,13 +386,14 @@ export class TestCasesPage {
             filePath = 'cypress/fixtures/testCaseId2'
         }
         cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.reload()
             Utilities.waitForElementVisible('[data-testid="select-action-' + fileContents + '"]', 50000)
             cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="select-action-' + fileContents + '"]', 50000)
             cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.enabled').wait(1000)
             switch ((action.valueOf()).toString().toLowerCase()) {
                 case "edit": {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="view-edit-test-case-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="view-edit-test-case-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="view-edit-test-case-' + fileContents + '"]', 55000)
@@ -397,7 +403,7 @@ export class TestCasesPage {
                 }
                 case 'export': {
                     cy.scrollTo('top')
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
                     Utilities.waitForElementVisible('[data-testid="export-test-case-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="export-test-case-' + fileContents + '"]').should('be.visible')
@@ -408,7 +414,7 @@ export class TestCasesPage {
                     break
                 }
                 case 'exporttransaction': {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
                     Utilities.waitForElementVisible('[data-testid="export-transaction-bundle-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="export-transaction-bundle-' + fileContents + '"]').should('be.visible')
@@ -419,7 +425,7 @@ export class TestCasesPage {
                     break
                 }
                 case 'exportcollection': {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
                     Utilities.waitForElementVisible('[data-testid="export-collection-bundle-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="export-collection-bundle-' + fileContents + '"]').should('be.visible')
@@ -430,7 +436,7 @@ export class TestCasesPage {
                     break
                 }
                 case 'delete': {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="delete-test-case-btn-' + fileContents + '"]', 55000)
                     cy.get('[data-testid=delete-test-case-btn-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="delete-test-case-btn-' + fileContents + '"]', 55000)

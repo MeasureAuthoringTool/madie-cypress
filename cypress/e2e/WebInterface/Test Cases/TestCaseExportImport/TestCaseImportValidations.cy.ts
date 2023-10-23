@@ -103,11 +103,15 @@ describe('Test Case Import: functionality tests', () => {
         //export test case
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
+        cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
+        cy.reload()
+        cy.get(EditMeasurePage.testCasesTab).wait(2000).click()
         //click on the Import Test Cases button
         cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
 
@@ -120,7 +124,6 @@ describe('Test Case Import: functionality tests', () => {
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
-        //cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -131,11 +134,15 @@ describe('Test Case Import: functionality tests', () => {
 
         //export test case
         cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
+        cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
+        cy.reload()
+        cy.get(EditMeasurePage.testCasesTab).wait(2000).click()
         //click on the Import Test Cases button
         cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
 
@@ -148,7 +155,6 @@ describe('Test Case Import: functionality tests', () => {
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
-        //cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('.TestCaseImportDialog___StyledSpan2-sc-v92oci-8').should('contain.text', 'Complete')
 
         //cancel import
         cy.get(TestCasesPage.importTestCaseCancelBtnOnModal).click()
@@ -160,7 +166,6 @@ describe('Test Case Import: functionality tests', () => {
     })
 
     it('Measure is not owned by nor shared with user: import button is not available', () => {
-        OktaLogin.Logout()
         OktaLogin.AltLogin()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 45000)
@@ -178,7 +183,6 @@ describe('Test Case Import: functionality tests', () => {
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 45000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
 
         MeasuresPage.measureAction("edit")
 
@@ -264,11 +268,15 @@ describe('Test Case Import: functionality tests', () => {
 
         //export test case
         cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().wait(1000).click({ force: true })
+        Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
+        cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
+        cy.reload()
+        cy.get(EditMeasurePage.testCasesTab).click()
         //click on the Import Test Cases button
         cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
 
@@ -281,7 +289,6 @@ describe('Test Case Import: functionality tests', () => {
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
-        //cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -292,11 +299,15 @@ describe('Test Case Import: functionality tests', () => {
 
         //export test case
         cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
+        cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
+        cy.reload()
+        cy.get(EditMeasurePage.testCasesTab).click()
         //click on the Import Test Cases button
         cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
 
@@ -309,7 +320,6 @@ describe('Test Case Import: functionality tests', () => {
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
-        //cy.get(TestCasesPage.testCasesNonBonnieFileImportFileUploadStatusDetails).find('[class="TestCaseImportDialog___StyledSpan2-sc-v92oci-8 bucNXE"]').should('contain.text', 'Complete')
 
         //cancel import
         cy.get(TestCasesPage.importTestCaseCancelBtnOnModal).click()
@@ -588,7 +598,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        //Utilities.deleteMeasure(measureName , CqlLibraryName)
+
 
     })
     it('Importing two new test cases with unique family name and given name: verify expected match that of original test case; verify family name is Test Case group; verify that given name is Test Case title; verify that test case is editable', () => {
@@ -633,11 +643,15 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
 
         //export test case
         cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
+        cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
+        cy.reload()
+        cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
         cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
         cy.get(Header.mainMadiePageButton).click().wait(3000)
@@ -689,10 +703,15 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
 
         //export test case
         cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
+        cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
+
+        cy.reload()
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
         cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
@@ -767,10 +786,15 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
 
         //export test case
         cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
+        cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
+
+        cy.reload()
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
         cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
