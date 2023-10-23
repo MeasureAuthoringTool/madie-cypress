@@ -38,19 +38,11 @@ describe('Measure Versioning validations', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName)
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.wait(1000)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up', () => {
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.wait(1000)
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
@@ -108,19 +100,11 @@ describe('Measure Versioning when the measure has test case with errors', () => 
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.wait(1000)
         OktaLogin.Login()
     })
 
     afterEach('Logout', () => {
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.wait(1000)
         OktaLogin.Logout()
     })
 
@@ -189,19 +173,11 @@ describe('Non Measure owner unable to create Version', () => {
         let newCqlLibraryName = cqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.wait(1000)
         OktaLogin.AltLogin()
     })
 
     after('Logout and Clean up', () => {
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.wait(1000)
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
 
