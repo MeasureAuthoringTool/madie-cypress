@@ -5,6 +5,10 @@ import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { v4 as uuidv4 } from 'uuid'
+import {OktaLogin} from "../../../Shared/OktaLogin"
+import {MeasuresPage} from "../../../Shared/MeasuresPage"
+import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
+import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
 
 let measureName = ''
 let newMeasureName = ''
@@ -23,6 +27,7 @@ let measureCQL = MeasureCQL.SBTEST_CQL
 let eCQMTitle = 'eCQMTitle'
 let versionIdPath = 'cypress/fixtures/versionId'
 let randValue = (Math.floor((Math.random() * 1000) + 1))
+let deleteMeasureAdminAPIKey = Environment.credentials().deleteMeasureAdmin_API_Key
 
 
 describe('Measure Service: QICore Measure', () => {
@@ -878,6 +883,304 @@ describe('Measure Service: Update Delete Flag', () => {
                         expect(response.status).to.eql(404)
                     })
                 })
+            })
+        })
+    })
+})
+
+describe('Delete QI-Core Measure with admin API Key', () => {
+
+    beforeEach('Create Measure', () => {
+
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        newMeasureName = measureNameU + randValue
+        newCQLLibraryName = CqlLibraryNameU + randValue
+        let versionMeasureCQL = 'library ' + newCQLLibraryName + ' version \'0.0.000\'\n' +
+            'using FHIR version \'4.0.1\'\n' +
+            'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+            'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+            'parameter \"Measurement Period\" Interval<DateTime>\n' +
+            'context Patient\n' +
+            'define \"ipp\":\n' +
+            'exists [\"Encounter\": \"Office Visit\"] E where E.period.start during \"Measurement Period\"\n' +
+            'define \"denom\":\n' +
+            '\"ipp\"\n' +
+            'define \"num\":\n' +
+            'exists [\"Encounter\": \"Office Visit\"] E where E.status ~ \'finished\'\n'
+
+        defaultUser = CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, versionMeasureCQL)
+
+    })
+
+    it('Delete versioned QI-Core Measure with admin API key', () => {
+
+        //Version Measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + measureId + '/version?versionType=major',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT'
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body.version).to.include('1.0.000')
+                    })
+                })
+            })
+        })
+
+        //Delete Versioned Measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
+                    cy.readFile(versionIdPath).should('exist').then((vId) => {
+                        cy.request({
+                            url: '/api/admin/measures/' + id,
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: 'Bearer ' + accessToken.value,
+                                'api-key': deleteMeasureAdminAPIKey
+                            },
+                            body: {
+                                "id": id,
+                                "measureName": newMeasureName,
+                                "cqlLibraryName": newCQLLibraryName,
+                                "model": 'QI-Core v4.1.1',
+                                "versionId": vId,
+                                "measureSetId": measureSetId,
+                                "ecqmTitle": eCQMTitle,
+                                "measurementPeriodStart": mpStartDate,
+                                "measurementPeriodEnd": mpEndDate,
+                                "active": true,
+                                "createdBy": defaultUser
+                            }
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                            cy.log("Measure Deleted successfully")
+                        })
+                    })
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + id,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'GET',
+
+                }).then((response) => {
+                    expect(response.status).to.eql(404)
+                })
+
+            })
+        })
+    })
+
+    it('Delete QI-Core Draft Measure with admin API key', () => {
+
+        //Delete Draft Measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
+                    cy.readFile(versionIdPath).should('exist').then((vId) => {
+                        cy.request({
+                            url: '/api/admin/measures/' + id,
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: 'Bearer ' + accessToken.value,
+                                'api-key': deleteMeasureAdminAPIKey
+                            },
+                            body: {
+                                "id": id,
+                                "measureName": newMeasureName,
+                                "cqlLibraryName": newCQLLibraryName,
+                                "model": 'QI-Core v4.1.1',
+                                "versionId": vId,
+                                "measureSetId": measureSetId,
+                                "ecqmTitle": eCQMTitle,
+                                "measurementPeriodStart": mpStartDate,
+                                "measurementPeriodEnd": mpEndDate,
+                                "active": false,
+                                "createdBy": defaultUser
+                            }
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                            cy.log("Measure Deleted successfully")
+                        })
+                    })
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + id,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'GET',
+
+                }).then((response) => {
+                    expect(response.status).to.eql(404)
+                })
+
+            })
+        })
+    })
+})
+
+describe('Delete QDM Measure with admin API Key', () => {
+
+    beforeEach('Create Measure', () => {
+
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        newMeasureName = measureNameU + randValue
+        newCQLLibraryName = CqlLibraryNameU + randValue
+        let QDMMeasureCQL = MeasureCQL.simpleQDM_CQL
+
+        defaultUser = CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCQLLibraryName, QDMMeasureCQL)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+    })
+
+    it('Delete versioned QDM Measure with admin API key', () => {
+
+        //Version Measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + measureId + '/version?versionType=major',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT'
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body.version).to.include('1.0.000')
+                    })
+                })
+            })
+        })
+
+        //Delete Versioned Measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
+                    cy.readFile(versionIdPath).should('exist').then((vId) => {
+                        cy.request({
+                            url: '/api/admin/measures/' + id,
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: 'Bearer ' + accessToken.value,
+                                'api-key': deleteMeasureAdminAPIKey
+                            },
+                            body: {
+                                "id": id,
+                                "measureName": newMeasureName,
+                                "cqlLibraryName": newCQLLibraryName,
+                                "model": 'QI-Core v4.1.1',
+                                "versionId": vId,
+                                "measureSetId": measureSetId,
+                                "ecqmTitle": eCQMTitle,
+                                "measurementPeriodStart": mpStartDate,
+                                "measurementPeriodEnd": mpEndDate,
+                                "active": true,
+                                "createdBy": defaultUser
+                            }
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                            cy.log("Measure Deleted successfully")
+                        })
+                    })
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + id,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'GET',
+
+                }).then((response) => {
+                    expect(response.status).to.eql(404)
+                })
+
+            })
+        })
+    })
+
+    it('Delete QDM Draft Measure with admin API key', () => {
+
+        //Delete Draft Measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
+                    cy.readFile(versionIdPath).should('exist').then((vId) => {
+                        cy.request({
+                            url: '/api/admin/measures/' + id,
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: 'Bearer ' + accessToken.value,
+                                'api-key': deleteMeasureAdminAPIKey
+                            },
+                            body: {
+                                "id": id,
+                                "measureName": newMeasureName,
+                                "cqlLibraryName": newCQLLibraryName,
+                                "model": 'QI-Core v4.1.1',
+                                "versionId": vId,
+                                "measureSetId": measureSetId,
+                                "ecqmTitle": eCQMTitle,
+                                "measurementPeriodStart": mpStartDate,
+                                "measurementPeriodEnd": mpEndDate,
+                                "active": false,
+                                "createdBy": defaultUser
+                            }
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                            cy.log("Measure Deleted successfully")
+                        })
+                    })
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + id,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'GET',
+
+                }).then((response) => {
+                    expect(response.status).to.eql(404)
+                })
+
             })
         })
     })

@@ -265,9 +265,6 @@ describe('QDM Measure Export: Export option is not available', () => {
 
         OktaLogin.Logout()
     })
-
-
-
 })
 
 // "qiCoreElementsTab": false

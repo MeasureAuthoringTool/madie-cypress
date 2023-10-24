@@ -194,8 +194,7 @@ let measureCQL = 'library T771 version \'0.0.000\'\n' +
     '                     or Diagnosis.verificationStatus ~ QICoreCommon."entered-in-error" )\n' +
     '    ) is not null'
 
-//Skipping until MAT-6321 is fixed
-describe.skip('FHIR Measure Export for Proportion Patient Measure with QI-Core Profile types', () => {
+describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profile types', () => {
 
     deleteDownloadsFolderBeforeAll()
 
