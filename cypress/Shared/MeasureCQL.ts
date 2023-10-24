@@ -1284,6 +1284,115 @@ export class MeasureCQL {
         'define \"Initial PopulationOne\":\n' +
         'true\n'
 
+    public static readonly CQLDFN_value = 'library NewBugTest version \'0.0.000\'\n' +
+
+        'using QICore version \'4.1.1\'\n' +
+
+        '/*Note ws 1. 8/09.2023: Negation issue as outlined in BonnieMat-1455 and ticket https://github.com/cqframework/cql-execution/issues/296 */\n' +
+
+        'include FHIRHelpers version \'4.2.000\' called FHIRHelpers\n' +
+        'include SupplementalDataElements  version \'3.2.000\' called SDE\n' +
+        'include QICoreCommon version \'1.3.000\' called QICoreCommon\n' +
+
+        'codesystem "ActCode": \'http://terminology.hl7.org/CodeSystem/v3-ActCode\'  \n' +
+        'valueset "Behavioral/Neuropsych Assessment": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1023\' \n' +
+        'valueset "Care Services in Long Term Residential Facility": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1014\' \n' +
+        'valueset "Cognitive Assessment": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1332\' \n' +
+        'valueset "Dementia & Mental Degenerations": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1005\' \n' +
+        'valueset "Face-to-Face Interaction": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1048\' \n' +
+        'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'  \n' +
+        'valueset "Nursing Facility Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1012\' \n' +
+        'valueset "Occupational Therapy Evaluation": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1011\' \n' +
+        'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\' \n' +
+        'valueset "Outpatient Consultation": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1008\' \n' +
+        'valueset "Patient Provider Interaction": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1012\' \n' +
+        'valueset "Patient Reason": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1008\' \n' +
+        'valueset "Psych Visit Diagnostic Evaluation": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1492\' \n' +
+        'valueset "Psych Visit Psychotherapy": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1496\' \n' +
+        'valueset "Standardized Tools Score for Assessment of Cognition": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1006\' \n' +
+
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+
+        'context Patient\n' +
+
+        '/***Population Criteria***/\n' +
+
+        'define "Initial Population":\n' +
+        'exists "Dementia Encounter During Measurement Period"\n' +
+        '    and ( Count("Qualifying Encounter During Measurement Period")>= 2 )\n' +
+
+        'define "Denominator":\n' +
+        '"Initial Population"\n' +
+
+        'define "Numerator":\n' +
+        'exists "Assessment of Cognition Using Standardized Tools or Alternate Methods"\n' +
+
+        'define "Denominator Exceptions":\n' +
+        'exists "Patient Reason for Not Performing Assessment of Cognition Using Standardized Tools or Alternate Methods"\n' +
+
+        '/***Definitions***/\n' +
+
+        'define "Assessment of Cognition Using Standardized Tools or Alternate Methods":\n' +
+        '( ["Observation": "Standardized Tools Score for Assessment of Cognition"]\n' +
+        '    union ["Observation": "Cognitive Assessment"] ) CognitiveAssessment\n' +
+        '    with "Dementia Encounter During Measurement Period" EncounterDementia\n' +
+        'such that CognitiveAssessment.effective.toInterval() starts 12 months or less on or before day of \n' +
+        '    end of EncounterDementia.period\n' +
+        '    where CognitiveAssessment.value is not null\n' +
+        '    and CognitiveAssessment.status in { \'final\', \'amended\', \'corrected\', \'preliminary\' }\n' +
+
+        'define "Dementia Encounter During Measurement Period":\n' +
+        '"Encounter to Assess Cognition" EncounterAssessCognition\n' +
+        '    with [Condition: "Dementia & Mental Degenerations"] Dementia\n' +
+        '   such that EncounterAssessCognition.period during "Measurement Period"\n' +
+        '           and Dementia.prevalenceInterval() overlaps day of EncounterAssessCognition.period \n' +
+        '        and Dementia.isActive() \n' +
+        '        and not ( Dementia.verificationStatus ~ QICoreCommon."unconfirmed"\n' +
+        '                     or Dementia.verificationStatus ~ QICoreCommon."refuted"\n' +
+        '                     or Dementia.verificationStatus ~ QICoreCommon."entered-in-error" )\n' +
+
+        'define "Encounter to Assess Cognition":\n' +
+        '["Encounter": "Psych Visit Diagnostic Evaluation"]\n' +
+        '    union ["Encounter": "Nursing Facility Visit"]\n' +
+        '    union ["Encounter": "Care Services in Long Term Residential Facility"]\n' +
+        '    union ["Encounter": "Home Healthcare Services"]\n' +
+        '    union ["Encounter": "Psych Visit Psychotherapy"]\n' +
+        '    union ["Encounter": "Behavioral/Neuropsych Assessment"]\n' +
+        '    union ["Encounter": "Occupational Therapy Evaluation"]\n' +
+        '    union ["Encounter": "Office Visit"]\n' +
+        '    union ["Encounter": "Outpatient Consultation"]\n' +
+
+        'define "Patient Reason for Not Performing Assessment of Cognition Using Standardized Tools or Alternate Methods":\n' +
+        '([ObservationNotDone: code in "Standardized Tools Score for Assessment of Cognition"] \n' +
+        '    union [ObservationNotDone: code in "Cognitive Assessment"] )NoCognitiveAssessment\n' +
+        '    with "Dementia Encounter During Measurement Period" EncounterDementia\n' +
+        '      such that NoCognitiveAssessment.issued during EncounterDementia.period\n' +
+        '    where NoCognitiveAssessment.notDoneReason in "Patient Reason"\n' +
+
+        'define "Qualifying Encounter During Measurement Period":\n' +
+        '("Encounter to Assess Cognition" union ["Encounter": "Patient Provider Interaction"] ) ValidEncounter\n' +
+        '    where ValidEncounter.period during "Measurement Period"\n' +
+        '    and ValidEncounter.status = \'finished\'\n' +
+
+        'define "SDE Ethnicity":\n' +
+        'SDE."SDE Ethnicity"\n' +
+
+        'define "SDE Race":\n' +
+        'SDE."SDE Race"\n' +
+
+        'define "SDE Sex":\n' +
+        'SDE."SDE Sex"\n' +
+
+        'define "SDE Payer":\n' +
+        'SDE."SDE Payer"\n' +
+
+        'define function test():\n' +
+        ' true\n' +
+
+        'define "track1":\n' +
+        ' true\n'
+
+
     public static readonly ICFTest_CQL = 'library EXM124v7QICore4 version \'7.0.000\'\n' +
 
         '/*\n' +

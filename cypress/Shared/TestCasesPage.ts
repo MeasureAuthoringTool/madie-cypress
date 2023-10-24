@@ -139,12 +139,16 @@ export class TestCasesPage {
     public static readonly tcCQLArea = '[data-testid="test-case-cql-editor"]'
 
     //misc test case page objects
+    public static readonly tcGroupCoverageHighlighting = '[data-testid="group-coverage-nav-"]'
     public static readonly tcIPHighlightingDetails = '[data-testid="IP-highlighting"]'
     public static readonly tcDENOMHighlightingDetails = '[data-testid="DENOM-highlighting"]'
     public static readonly tcNUMERHighlightingDetails = '[data-testid="NUMER-highlighting"]'
     public static readonly tcDENEXHighlightingDetails = '[data-testid="DENEX-highlighting"]'
     public static readonly tcDENEXCEPHighlightingDetails = '[data-testid="DENEXCEP-highlighting"]'
     public static readonly tcNUMEXHighlightingDetails = '[data-testid="NUMEX-highlighting"]'
+    public static readonly tcDEFINITIONSHighlightingDetails = '[data-testid="definitions-highlighting"]'
+    public static readonly tcFUNCTIONSHighlightingDetails = '[data-testid="functions-highlighting"]'
+    public static readonly tcUNUSEDHightlightingDetails = '[data-testid="unused-highlighting"]'
     public static readonly tcHighlightingTab = '[data-testid="highlighting-tab"]'
     public static readonly ippActualCheckBox = '[data-testid="test-population-initialPopulation-actual"]'
     public static readonly numActualCheckBox = '[data-testid="test-population-numerator-actual"]'

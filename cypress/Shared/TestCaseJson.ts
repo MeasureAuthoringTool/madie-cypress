@@ -13,6 +13,218 @@ export class TestCaseJson {
         '"system": "http://clinfhir.com/fhir/NamingSystem/identifier", "value": "20181011LizzyHealth" } ], "name": [ { "use": "official", ' +
         '"text": "Lizzy Health", "family": "Health", "given": [ "Lizzy" ] } ], "gender": "female", "birthDate": "2000-10-11" } } ] }'
 
+    public static readonly tcJson_value = '{        "resourceType": "Bundle",        "id": "IP-Pass-CVPatient",        "meta": {' +
+        '      "versionId": "1",\n' +
+        '      "lastUpdated": "2022-09-14T15:14:42.152+00:00"\n' +
+        '    },\n' +
+        '    "type": "collection",\n' +
+        '    "entry": [\n' +
+        '      {\n' +
+        '        "fullUrl": "https://madie.cms.gov/Patient/9d8e4246-78eb-4371-8aaf-120739a5bb9d",\n' +
+        '        "resource": {\n' +
+        '          "resourceType": "Patient",\n' +
+        '          "id": "9d8e4246-78eb-4371-8aaf-120739a5bb9d",\n' +
+        '          "meta": {\n' +
+        '            "profile": [\n' +
+        '              "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"\n' +
+        '            ]\n' +
+        '          },\n' +
+        '          "text": {\n' +
+        '            "status": "generated",\n' +
+        '            "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\"><div class=\\"hapiHeaderText\\">LocationPeriodStartTimeMissing <b>MSRPOPLEXSTRAT2PASS </b></div><table class=\\"hapiPropertyTable\\"><tbody><tr><td>Identifier</td><td>8065dc8d26797064d8766be71f2bf020</td></tr><tr><td>Date of birth</td><td><span>10 February 1954</span></td></tr></tbody></table></div>"\n' +
+        '          },\n' +
+        '          "extension": [\n' +
+        '            {\n' +
+        '              "extension": [\n' +
+        '                {\n' +
+        '                  "url": "ombCategory",\n' +
+        '                  "valueCoding": {\n' +
+        '                    "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                    "code": "2106-3",\n' +
+        '                    "display": "White"\n' +
+        '                  }\n' +
+        '                },\n' +
+        '                {\n' +
+        '                  "url": "ombCategory",\n' +
+        '                  "valueCoding": {\n' +
+        '                    "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                    "code": "1002-5",\n' +
+        '                    "display": "American Indian or Alaska Native"\n' +
+        '                  }\n' +
+        '                },\n' +
+        '                {\n' +
+        '                  "url": "ombCategory",\n' +
+        '                  "valueCoding": {\n' +
+        '                    "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                    "code": "2028-9",\n' +
+        '                    "display": "Asian"\n' +
+        '                  }\n' +
+        '                },\n' +
+        '                {\n' +
+        '                  "url": "detailed",\n' +
+        '                  "valueCoding": {\n' +
+        '                    "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                    "code": "1586-7",\n' +
+        '                    "display": "Shoshone"\n' +
+        '                  }\n' +
+        '                },\n' +
+        '                {\n' +
+        '                  "url": "detailed",\n' +
+        '                  "valueCoding": {\n' +
+        '                    "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                    "code": "2036-2",\n' +
+        '                    "display": "Filipino"\n' +
+        '                  }\n' +
+        '                },\n' +
+        '                {\n' +
+        '                  "url": "text",\n' +
+        '                  "valueString": "Mixed"\n' +
+        '                }\n' +
+        '              ],\n' +
+        '              "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"\n' +
+        '            },\n' +
+        '            {\n' +
+        '              "extension": [\n' +
+        '                {\n' +
+        '                  "url": "ombCategory",\n' +
+        '                  "valueCoding": {\n' +
+        '                    "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                    "code": "2135-2",\n' +
+        '                    "display": "Hispanic or Latino"\n' +
+        '                  }\n' +
+        '                },\n' +
+        '                {\n' +
+        '                  "url": "detailed",\n' +
+        '                  "valueCoding": {\n' +
+        '                    "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                    "code": "2184-0",\n' +
+        '                    "display": "Dominican"\n' +
+        '                  }\n' +
+        '                },\n' +
+        '                {\n' +
+        '                  "url": "detailed",\n' +
+        '                  "valueCoding": {\n' +
+        '                    "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                    "code": "2148-5",\n' +
+        '                    "display": "Mexican"\n' +
+        '                  }\n' +
+        '                },\n' +
+        '                {\n' +
+        '                  "url": "text",\n' +
+        '                  "valueString": "Hispanic or Latino"\n' +
+        '                }\n' +
+        '              ],\n' +
+        '              "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"\n' +
+        '            },\n' +
+        '            {\n' +
+        '              "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",\n' +
+        '              "valueCode": "F"\n' +
+        '            },\n' +
+        '            {\n' +
+        '              "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity",\n' +
+        '              "valueCodeableConcept": {\n' +
+        '                "coding": [\n' +
+        '                  {\n' +
+        '                    "system": "http://terminology.hl7.org/CodeSystem/v3-NullFlavor",\n' +
+        '                    "code": "ASKU",\n' +
+        '                    "display": "asked but unknown"\n' +
+        '                  }\n' +
+        '                ],\n' +
+        '                "text": "asked but unknown"\n' +
+        '              }\n' +
+        '            }\n' +
+        '          ],\n' +
+        '          "identifier": [\n' +
+        '            {\n' +
+        '              "type": {\n' +
+        '                "coding": [\n' +
+        '                  {\n' +
+        '                    "system": "http://terminology.hl7.org/CodeSystem/v2-0203",\n' +
+        '                    "code": "MR"\n' +
+        '                  }\n' +
+        '                ]\n' +
+        '              },\n' +
+        '              "system": "http://MyGoodHealthare.com/MedicalRecord",\n' +
+        '              "value": "8065dc8d26797064d8766be71f2bf020"\n' +
+        '            }\n' +
+        '          ],\n' +
+        '          "active": true,\n' +
+        '          "name": [\n' +
+        '            {\n' +
+        '              "use": "usual",\n' +
+        '              "family": "IPPass",\n' +
+        '              "given": [\n' +
+        '                "IPPass"\n' +
+        '              ]\n' +
+        '            }\n' +
+        '          ],\n' +
+        '          "gender": "male",\n' +
+        '          "birthDate": "1954-02-10"\n' +
+        '        }\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "fullUrl": "https://madie.cms.gov/Encounter/5c6c61ceb84846536a9a98f9",\n' +
+        '        "resource": {\n' +
+        '          "resourceType": "Encounter",\n' +
+        '          "id": "5c6c61ceb84846536a9a98f9",\n' +
+        '          "status": "finished",\n' +
+        '          "class": {\n' +
+        '            "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '            "code": "IMP",\n' +
+        '            "display": "inpatient encounter"\n' +
+        '          },\n' +
+        '          "type": [\n' +
+        '            {\n' +
+        '              "coding": [\n' +
+        '                {\n' +
+        '                  "system": "http://snomed.info/sct",\n' +
+        '                  "code": "183452005"\n' +
+        '                }\n' +
+        '              ]\n' +
+        '            }\n' +
+        '          ],\n' +
+        '          "subject": {\n' +
+        '            "reference": "Patient/9d8e4246-78eb-4371-8aaf-120739a5bb9d"\n' +
+        '          },\n' +
+        '          "period": {\n' +
+        '            "start": "2012-01-16T08:00:00+00:00",\n' +
+        '            "end": "2012-02-15T09:00:00+00:00"\n' +
+        '          }\n' +
+        '        }\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "fullUrl": "https://madie.cms.gov/Encounter/5c6c61ceb84846536a9a98f0",\n' +
+        '        "resource": {\n' +
+        '          "resourceType": "Encounter",\n' +
+        '          "id": "5c6c61ceb84846536a9a98f0",\n' +
+        '          "status": "finished",\n' +
+        '          "class": {\n' +
+        '            "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '            "code": "IMP",\n' +
+        '            "display": "inpatient encounter"\n' +
+        '          },\n' +
+        '          "type": [\n' +
+        '            {\n' +
+        '              "coding": [\n' +
+        '                {\n' +
+        '                  "system": "http://snomed.info/sct",\n' +
+        '                  "code": "183452005"\n' +
+        '                }\n' +
+        '              ]\n' +
+        '            }\n' +
+        '          ],\n' +
+        '          "subject": {\n' +
+        '            "reference": "Patient/9d8e4246-78eb-4371-8aaf-120739a5bb9d"\n' +
+        '          },\n' +
+        '          "period": {\n' +
+        '            "start": "2012-01-16T08:00:00+00:00",\n' +
+        '            "end": "2012-02-15T09:00:00+00:00"\n' +
+        '          }\n' +
+        '        }\n' +
+        '      }\n' +
+        '    ]\n' +
+        '  }\n'
+
     public static readonly TestCaseJson_Valid_not_Lizzy_Health = '{ "resourceType": "Bundle", "id": "1366", "meta": { "versionId": "1", ' +
         '"lastUpdated": "2022-03-30T19:02:32.620+00:00" }, "type": "collection", "entry": [ { "fullUrl": "http://local/Encounter", ' +
         '"resource": { "id": "1", "resourceType": "Encounter", "meta": { "profile": [ "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter" ],"versionId": "1", "lastUpdated": "2021-10-13T03:34:10.160+00:00", ' +
