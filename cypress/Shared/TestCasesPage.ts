@@ -5,6 +5,7 @@ import { Utilities } from "./Utilities"
 export class TestCasesPage {
     //QI Core element tab enabled test case detail page elements
     public static readonly QiCoreEleEnabledJSONTab = '[data-testid="json-tab"]'
+
     //observation fields
     public static readonly denom0Observation = '[id="denominatorObservation0-expected-cb"]'
     public static readonly denom1Observation = '[id="denominatorObservation1-expected-cb"]'
@@ -55,8 +56,8 @@ export class TestCasesPage {
     public static readonly SubstanceElementTab = '[data-testid="elements-tab-substance"]'
     public static readonly SymptomElementTab = '[data-testid="elements-tab-symptom"]'
     public static readonly TimingCellContainer = '[class="timing-cell-container"]'
-    public static readonly relPStart = '[class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1bn53lx"]'
-    public static readonly relPEnd = '[class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1bn53lx"]'
+    public static readonly qdmTCElementTable = '[class="data-elements-table"]'
+    public static readonly relPStartEnd = '[class="MuiFormControl-root MuiTextField-root css-13t88rf"]'
     public static readonly reldT = '[class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1bn53lx"]'
     public static readonly authdT = '[class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1bn53lx"]'
     public static readonly resdT = '[class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1bn53lx"]'
@@ -322,12 +323,19 @@ export class TestCasesPage {
     //QDM Test Case Attributes
     public static readonly laboratoryElement = '[data-testid=elements-tab-laboratory_test]'
     public static readonly plusIcon = '[data-testid=AddCircleOutlineIcon]'
+    public static readonly addAttribute = '[data-testid="add-attribute-button"]'
     public static readonly attributesTab = '[data-testid=sub-navigation-tab-attributes]'
     public static readonly selectAttributeDropdown = '[id="attribute-select"]'
     public static readonly referenceRangeAttribute = '[data-testid="option-Reference Range"]'
+    public static readonly interpretationAttribute = '[data-testid="option-Interpretation"]'
+    public static readonly valueSetSelector = '[data-testid="value-set-selector"]'
+    public static readonly ABEMBDiathesisValue = '[data-testid="option-2.16.840.1.113883.3.3157.4036"]'
     public static readonly attributeType = '[id="type-select"]'
     public static readonly attributeChip = '[class="chip-body"]'
     public static readonly codeSystemSelector = '[id="code-system-selector"]'
+    public static readonly codeSNOMEDCTValue = '[data-testid="option-SNOMEDCT"]'
+    public static readonly codeSystemValueSelector = '[data-testid="code-selector"]'
+    public static readonly codeSystemOptionValue = '[data-testid="option-112648003"]'
     public static readonly codeSelector = '[id="code-selector"]'
 
 

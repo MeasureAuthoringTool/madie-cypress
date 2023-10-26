@@ -16,11 +16,8 @@ let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let measureCQL = MeasureCQL.QDM4TestCaseElementsAttributes
 
-// Bugs needs to be fixed (MAT-6185)
-//  -- not all elements have expected date related fields
-//  -- date related fields entries are being recorded in the wrong time
-// the above bugs will need to be fixed and, then, this automation will need to be re-visited / completed.
-describe.skip('Quantity Attribute', () => {
+
+describe('Quantity Attribute -- Adding multiple attributes', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -43,7 +40,6 @@ describe.skip('Quantity Attribute', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-
     it('Add Quantity attribute to the Test case', () => {
 
         cy.get(Header.measures).click()
@@ -70,67 +66,54 @@ describe.skip('Quantity Attribute', () => {
         cy.get(TestCasesPage.QDMEthnicity).click()
         cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
 
-        // “Assessment, Performed” :
-        // -- relevantPeriod - relP
-        // -- relevant dateTime - reldT
-        // -- author dateTime - authdT
-
-        // “Allergy/Intolerance” :
-        // -- prevalencePeriod - prevP
-
-        // “Communication, Performed” :**
-        // -- sent dateTime - sentdT
-        // -- received dateTime - recdT
-
-        // “Laboratory Test, Performed” :
-        // -- result dateTime - resdT
-
-        // “Immunization, Order” :**
-        // -- active dateTime - actdT
-
-        // “Participation” :**
-        // -- participationPeriod - partP
-
-        // “Encounter, Performed” :**
-        // -- locationPeriod - locP
-
-        // “Care Goal” :**
-        // -- statusDate - statD
-
-        //Laboratory
+        //Selecting Laboratory element and performed
         cy.get(TestCasesPage.laboratoryElement).click()
         cy.get(TestCasesPage.plusIcon).eq(1).click()
+
+        //navigating to the attribute sub-tab
         cy.get(TestCasesPage.attributesTab).click()
+
+        //selecting attribute
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get(TestCasesPage.referenceRangeAttribute).click()
         cy.get(TestCasesPage.attributeType).should('contain.text', 'Interval<Quantity>')
-        cy.get(TestCasesPage.relPStart).first().type('09/12/2023 12:00 AM')
-        cy.get(TestCasesPage.relPEnd).first().type('09/13/2023 12:00 AM')
 
-        // <label class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-1e662l4" data-shrink="false" data-testid="relevant-datetime" style="margin-bottom: 0px; height: 16px;">Relevant Datetime</label>
-        cy.contains('label', 'Relevant Datetime')
-            .nextAll() // select the next element
-            .find(TestCasesPage.reldT)
-            .next()
-            .get('[id=dateTime]')
-            .type('09/14/2023 12:00 AM')
+        //adding a date value tot he attribute
+        cy.get(TestCasesPage.relPStartEnd).first().type('09/12/2023 12:00 AM')
 
-        //cy.get(TestCasesPage.reldT).next().type('09/14/2023 12:00 AM')
-        cy.pause()
-        cy.get(TestCasesPage.authdT).first().type('09/11/2023 12:00 AM')
-        cy.get(TestCasesPage.resdT).first().type('09/15/2023 12:00 AM')
-        cy.pause()
-        cy.get('[data-testid=quantity-value-input-low]').type('2')
+
+        //adding values to the attribute
+        cy.get('[data-testid="quantity-value-input-low"]').type('2')
         cy.get('[id="quantity-unit-dropdown-low"]').click()
         cy.get('#quantity-unit-dropdown-low-option-0').click() //Select unit as m meter
-        cy.get('[data-testid=quantity-value-input-high]').type('4')
+        cy.get('[data-testid="quantity-value-input-high"]').type('4')
         cy.get('[id="quantity-unit-dropdown-high"]').click()
         cy.get('#quantity-unit-dropdown-high-option-0').click() //Select unit as m meter
-        cy.get(TestCasesPage.plusIcon).click()
+        cy.get(TestCasesPage.addAttribute).click() //click the "Add" button
 
-        cy.get(TestCasesPage.TimingCellContainer).contains('text', 'relP:          09/12/2023 5:00 AM - 09/13/2023        reldT:          09/14/2023        authdT:          09/11/2023 ')
+        //asserting value that appears in the element table
+        cy.get(TestCasesPage.qdmTCElementTable).should('contain.text', 'Datatype, Value Set & CodeTimingAttribute 1ActionsLaboratory_test, PerformedChlamydia Screening relP:  09/12/2023 6:00 AM - N/AReference Range - referenceRange 2 \'m\' - 4 \'m\'View')
 
-        //cy.get(TestCasesPage.attributeChip).should('contain.text', 'Reference Range: 2 \'m\' - 4 \'m\'')
+        //select new attribute to add
+        cy.get(TestCasesPage.selectAttributeDropdown).click()
+        cy.get(TestCasesPage.interpretationAttribute).click()
+
+        //select value set value for this attribute
+        cy.get(TestCasesPage.valueSetSelector).click()
+        cy.get(TestCasesPage.ABEMBDiathesisValue).click()
+
+        //select the SNOMED code system
+        cy.get(TestCasesPage.codeSystemSelector).click()
+        cy.get(TestCasesPage.codeSNOMEDCTValue).click()
+
+        //select a value for the code
+        cy.get(TestCasesPage.codeSystemValueSelector).click()
+        cy.get(TestCasesPage.codeSystemOptionValue).click()
+
+        cy.get(TestCasesPage.addAttribute).click() //click the "Add" button
+
+        //asserting value that appears in the element table
+        cy.get(TestCasesPage.qdmTCElementTable).should('contain.text', 'Datatype, Value Set & CodeTimingAttribute 1Attribute 2ActionsLaboratory_test, PerformedChlamydia Screening relP:  09/12/2023 6:00 AM - N/AReference Range - referenceRange 2 \'m\' - 4 \'m\'Interpretation - interpretation SNOMEDCT : 112648003View')
 
     })
 })
