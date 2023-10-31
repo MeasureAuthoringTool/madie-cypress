@@ -4,10 +4,15 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage";
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 
 let measureName = 'ProportionPatient' + Date.now()
 let CqlLibraryName = 'ProportionPatient' + Date.now()
+let firstTestCaseTitle = 'DENEXStrat1Fail 2RUnilateralMxProc'
+let testCaseDescription = 'DENOMFail' + Date.now()
+let testCaseSeries = 'SBTestSeries'
+let secondTestCaseTitle = 'DENEXStrat2Pass RLMxDxOnsetsEndOfMP'
 let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
@@ -133,7 +138,9 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-            '2023-01-01', '2024-01-01')
+            '2012-01-01', '2012-12-31')
+        TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
+        TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, null, true)
 
         OktaLogin.Login()
     })
@@ -141,7 +148,6 @@ describe('Measure Creation: Proportion Patient Based', () => {
     after('Clean up', () => {
 
         OktaLogin.Logout()
-
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
@@ -197,5 +203,140 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
+
+        //Add Elements to the Test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //enter a value of the dob, Race and gender
+        cy.get(TestCasesPage.QDMDob).type('12/31/1966').click()
+        cy.get(TestCasesPage.QDMLivingStatus).click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains('American Indian or Alaska Native').click()
+        cy.get(TestCasesPage.QDMGender).click()
+        cy.get(TestCasesPage.QDMGenderOption).contains('Female').click()
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+
+        //Element - Encounter:Performed: Annual Wellness Visit
+        cy.get('[data-testid=elements-tab-encounter]').click()
+        cy.get(TestCasesPage.plusIcon).eq(19).click()
+        cy.get('[id="dateTime"]').eq(0).type('01/26/2012 08:00 AM')
+        cy.get('[id="dateTime"]').eq(1).type('01/26/2012 08:15 AM')
+        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.selectAttributeDropdown).click()
+        cy.get('[data-testid="option-Length Of Stay"]').click()
+        cy.get('[data-testid="quantity-value-input-quantity"]').type('0')
+        cy.get('[id="quantity-unit-dropdown-quantity"]').type('d day')
+        cy.get('#quantity-unit-dropdown-quantity-option-0').click()
+        cy.get('[data-testid="add-attribute-button"]').click()
+        cy.get('[data-testid=sub-navigation-tab-codes]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid=code-system-option-HCPCS]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid=code-option-G0438]').click()
+        cy.get('[data-testid=add-code-concept-button]').click()
+
+        //Element - Procedure:Performed: Unilateral Mastectomy Right
+        cy.get('[data-testid=elements-tab-procedure]').click()
+        cy.get(TestCasesPage.plusIcon).eq(0).click()
+        cy.get('[id="dateTime"]').eq(0).type('10/26/2012 08:00 AM')
+        cy.get('[id="dateTime"]').eq(1).type('10/26/2012 08:15 AM')
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid=code-system-option-ICD10PCS]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid=code-option-0HTT0ZZ]').click()
+        cy.get('[data-testid=add-code-concept-button]').click()
+        //Close the Element
+        cy.get('[data-testid=CloseIcon]').click()
+
+        //Element - Procedure:Performed: Unilateral Mastectomy Right
+        cy.get('[data-testid=elements-tab-procedure]').click()
+        cy.get(TestCasesPage.plusIcon).eq(0).click()
+        cy.get('[id="dateTime"]').eq(0).type('10/26/2012 08:00 AM')
+        cy.get('[id="dateTime"]').eq(1).type('10/26/2012 08:15 AM')
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid=code-system-option-ICD10PCS]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid=code-option-0HTT0ZZ]').click()
+        cy.get('[data-testid=add-code-concept-button]').click()
+
+        //Save Test case
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+
+        //Add Elements to the second Test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.clickEditforCreatedTestCase(true)
+
+        //enter a value of the dob, Race and gender
+        cy.get(TestCasesPage.QDMDob).type('12/31/1946').click()
+        cy.get(TestCasesPage.QDMLivingStatus).click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains('American Indian or Alaska Native').click()
+        cy.get(TestCasesPage.QDMGender).click()
+        cy.get(TestCasesPage.QDMGenderOption).contains('Female').click()
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+
+        //Element - Encounter:Performed: Preventive Care Services - Established Office Visit, 18 and Up
+        cy.get('[data-testid=elements-tab-encounter]').click()
+        cy.get(TestCasesPage.plusIcon).eq(4).click()
+        cy.get('[id="dateTime"]').eq(0).type('01/26/2012 01:00 PM')
+        cy.get('[id="dateTime"]').eq(1).type('01/26/2012 01:15 PM')
+        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.selectAttributeDropdown).click()
+        cy.get('[data-testid="option-Length Of Stay"]').click()
+        cy.get('[data-testid="quantity-value-input-quantity"]').type('0')
+        cy.get('[id="quantity-unit-dropdown-quantity"]').type('d day')
+        cy.get('#quantity-unit-dropdown-quantity-option-0').click()
+        cy.get('[data-testid="add-attribute-button"]').click()
+        cy.get('[data-testid=sub-navigation-tab-codes]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid=code-system-option-CPT]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-99395"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+
+        //Element - Condition:Diagnosis: Status Post Right Mastectomy
+        cy.get('[data-testid=elements-tab-condition]').click()
+        cy.get(TestCasesPage.plusIcon).eq(3).click()
+        cy.get('[id="dateTime"]').eq(0).type('12/31/2012 11:59 PM')
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-137681000119108"]').click()
+        cy.get('[data-testid=add-code-concept-button]').click()
+        //Close the Element
+        cy.get('[data-testid=CloseIcon]').click()
+
+        //Element - Condition:Diagnosis: Status Post Left Mastectomy
+        cy.get('[data-testid=elements-tab-condition]').click()
+        cy.get(TestCasesPage.plusIcon).eq(0).click()
+        cy.get('[id="dateTime"]').eq(0).type('12/31/2012 11:59 PM')
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-137671000119105"]').click()
+        cy.get('[data-testid=add-code-concept-button]').click()
+
+        //Save Test case
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+
+        //Execute Test case on Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.executeTestCaseButton).focus()
+        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
+        cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
     })
 })

@@ -610,12 +610,19 @@ export class TestCasesPage {
 
         cy.log('Test Case updated successfully')
     }
-    public static clickEditforCreatedTestCase(): void {
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=select-action-' + fileContents + ']').click()
-            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.visible')
-            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').click()
+    public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
+        let testCasePIdPath = ''
+        if (secondTestCase === true) {
+            testCasePIdPath = 'cypress/fixtures/testcaseId2'
+        }
+        else {
+            testCasePIdPath = 'cypress/fixtures/testcaseId'
+        }
+        cy.readFile(testCasePIdPath).should('exist').then((tcId) => {
+            cy.get('[data-testid=select-action-' + tcId + ']').click()
+            cy.get('[data-testid=view-edit-test-case-' + tcId + ']').should('be.visible')
+            cy.get('[data-testid=view-edit-test-case-' + tcId + ']').should('be.enabled')
+            cy.get('[data-testid=view-edit-test-case-' + tcId + ']').click()
         })
 
     }
