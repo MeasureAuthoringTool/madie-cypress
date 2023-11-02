@@ -142,6 +142,9 @@ export class TestCasesPage {
     //misc test case page objects
     public static readonly tcGroupCoverageHighlighting = '[data-testid="group-coverage-nav-"]'
     public static readonly tcIPHighlightingDetails = '[data-testid="IP-highlighting"]'
+    public static readonly tcHLCollapseResultBtn = '[data-testid="ExpandLessIcon"]'
+    public static readonly tcHLExpandResultBtn = '[data-testid="ExpandMoreIcon"]'
+    public static readonly tcHLResultsSection = '[data-testid="results-section"]'
     public static readonly tcDENOMHighlightingDetails = '[data-testid="DENOM-highlighting"]'
     public static readonly tcNUMERHighlightingDetails = '[data-testid="NUMER-highlighting"]'
     public static readonly tcDENEXHighlightingDetails = '[data-testid="DENEX-highlighting"]'
@@ -149,6 +152,7 @@ export class TestCasesPage {
     public static readonly tcNUMEXHighlightingDetails = '[data-testid="NUMEX-highlighting"]'
     public static readonly tcDEFINITIONSHighlightingDetails = '[data-testid="definitions-highlighting"]'
     public static readonly tcFUNCTIONSHighlightingDetails = '[data-testid="functions-highlighting"]'
+    public static readonly definitionsFristResultSection = '[class="GroupCoverageResultsSection___StyledDiv-sc-x9ujt7-0 gKcqGP"]'
     public static readonly tcUNUSEDHightlightingDetails = '[data-testid="unused-highlighting"]'
     public static readonly tcHighlightingTab = '[data-testid="highlighting-tab"]'
     public static readonly ippActualCheckBox = '[data-testid="test-population-initialPopulation-actual"]'

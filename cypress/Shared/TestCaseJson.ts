@@ -225,6 +225,179 @@ export class TestCaseJson {
         '    ]\n' +
         '  }\n'
 
+    public static readonly tcResultsJson = '{\n' +
+        '    "id": "652965fb306e456c01838959",\n' +
+        '    "resourceType": "Bundle",\n' +
+        '    "type": "collection",\n' +
+        '    "entry": [\n' +
+        '      {\n' +
+        '        "fullUrl": "https://madie.cms.gov/Patient/df2f3da0-fd11-4d40-b312-ab6b0d1a46d8",\n' +
+        '        "resource": {\n' +
+        '          "id": "df2f3da0-fd11-4d40-b312-ab6b0d1a46d8",\n' +
+        '          "meta": {\n' +
+        '            "profile": [\n' +
+        '              "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"\n' +
+        '            ]\n' +
+        '          },\n' +
+        '          "resourceType": "Patient",\n' +
+        '          "extension": [\n' +
+        '            {\n' +
+        '              "extension": [\n' +
+        '                {\n' +
+        '                  "url": "ombCategory",\n' +
+        '                  "valueCoding": {\n' +
+        '                    "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                    "code": "1002-5",\n' +
+        '                    "display": "American Indian or Alaska Native",\n' +
+        '                    "userSelected": true\n' +
+        '                  }\n' +
+        '                },\n' +
+        '                {\n' +
+        '                  "url": "text",\n' +
+        '                  "valueString": "American Indian or Alaska Native"\n' +
+        '                }\n' +
+        '              ],\n' +
+        '              "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"\n' +
+        '            },\n' +
+        '            {\n' +
+        '              "extension": [\n' +
+        '                {\n' +
+        '                  "url": "ombCategory",\n' +
+        '                  "valueCoding": {\n' +
+        '                    "system": "urn:oid:2.16.840.1.113883.6.238",\n' +
+        '                    "code": "2135-2",\n' +
+        '                    "display": "Hispanic or Latino",\n' +
+        '                    "userSelected": true\n' +
+        '                  }\n' +
+        '                },\n' +
+        '                {\n' +
+        '                  "url": "text",\n' +
+        '                  "valueString": "Hispanic or Latino"\n' +
+        '                }\n' +
+        '              ],\n' +
+        '              "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"\n' +
+        '            }\n' +
+        '          ],\n' +
+        '          "identifier": [\n' +
+        '            {\n' +
+        '              "type": {\n' +
+        '                "coding": [\n' +
+        '                  {\n' +
+        '                    "system": "http://terminology.hl7.org/CodeSystem/v2-0203",\n' +
+        '                    "code": "MR"\n' +
+        '                  }\n' +
+        '                ]\n' +
+        '              },\n' +
+        '              "system": "https://bonnie-fhir.healthit.gov/",\n' +
+        '              "value": "652965fb306e456c01838959"\n' +
+        '            }\n' +
+        '          ],\n' +
+        '          "name": [\n' +
+        '            {\n' +
+        '              "family": "Keerthi",\n' +
+        '              "given": [\n' +
+        '                "Prateek"\n' +
+        '              ]\n' +
+        '            }\n' +
+        '          ],\n' +
+        '          "gender": "male",\n' +
+        '          "birthDate": "2023-07-04"\n' +
+        '        }\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "fullUrl": "https://madie.cms.gov/Encounter/psych-visit-diagnostic-evaluation-895a",\n' +
+        '        "resource": {\n' +
+        '          "id": "psych-visit-diagnostic-evaluation-895a",\n' +
+        '          "resourceType": "Encounter",\n' +
+        '          "status": "arrived",\n' +
+        '          "class": {\n' +
+        '            "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '            "code": "ACUTE",\n' +
+        '            "display": "inpatient acute",\n' +
+        '            "userSelected": true\n' +
+        '          },\n' +
+        '          "type": [\n' +
+        '            {\n' +
+        '              "coding": [\n' +
+        '                {\n' +
+        '                  "system": "http://snomed.info/sct",\n' +
+        '                  "version": "2023-09",\n' +
+        '                  "code": "10197000",\n' +
+        '                  "display": "Psychiatric interview and evaluation (procedure)",\n' +
+        '                  "userSelected": true\n' +
+        '                }\n' +
+        '              ]\n' +
+        '            }\n' +
+        '          ],\n' +
+        '          "period": {\n' +
+        '            "start": "2023-10-01T08:00:00.000+00:00",\n' +
+        '            "end": "2023-10-15T08:15:00.000+00:00"\n' +
+        '          }\n' +
+        '        }\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "fullUrl": "https://madie.cms.gov/Condition/dementia-mental-degenerations-895b",\n' +
+        '        "resource": {\n' +
+        '          "id": "dementia-mental-degenerations-895b",\n' +
+        '          "resourceType": "Condition",\n' +
+        '          "code": {\n' +
+        '            "coding": [\n' +
+        '              {\n' +
+        '                "system": "http://snomed.info/sct",\n' +
+        '                "version": "2022-09",\n' +
+        '                "code": "10349009",\n' +
+        '                "display": "Multi-infarct dementia with delirium (disorder)",\n' +
+        '                "userSelected": true\n' +
+        '              }\n' +
+        '            ]\n' +
+        '          },\n' +
+        '          "subject": {\n' +
+        '            "reference": "Patient/df2f3da0-fd11-4d40-b312-ab6b0d1a46d8"\n' +
+        '          },\n' +
+        '          "onsetPeriod": {\n' +
+        '            "start": "2023-10-13T08:00:00.000+00:00",\n' +
+        '            "end": "2023-10-13T08:15:00.000+00:00"\n' +
+        '          },\n' +
+        '          "recordedDate": "2023-10-13T08:00:00.000+00:00"\n' +
+        '        }\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "fullUrl": "https://madie.cms.gov/Encounter/psych-visit-diagnostic-evaluation-895c",\n' +
+        '        "resource": {\n' +
+        '          "id": "psych-visit-diagnostic-evaluation-895c",\n' +
+        '          "resourceType": "Encounter",\n' +
+        '          "status": "arrived",\n' +
+        '          "class": {\n' +
+        '            "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '            "code": "ACUTE",\n' +
+        '            "display": "inpatient acute",\n' +
+        '            "userSelected": true\n' +
+        '          },\n' +
+        '          "type": [\n' +
+        '            {\n' +
+        '              "coding": [\n' +
+        '                {\n' +
+        '                  "system": "http://snomed.info/sct",\n' +
+        '                  "version": "2023-09",\n' +
+        '                  "code": "10197000",\n' +
+        '                  "display": "Psychiatric interview and evaluation (procedure)",\n' +
+        '                  "userSelected": true\n' +
+        '                }\n' +
+        '              ]\n' +
+        '            }\n' +
+        '          ],\n' +
+        '          "subject": {\n' +
+        '            "reference": "Patient/df2f3da0-fd11-4d40-b312-ab6b0d1a46d8"\n' +
+        '          },\n' +
+        '          "period": {\n' +
+        '            "start": "2023-10-01T08:00:00.000+00:00",\n' +
+        '            "end": "2023-10-15T08:15:00.000+00:00"\n' +
+        '          }\n' +
+        '        }\n' +
+        '      }\n' +
+        '    ]\n' +
+        '  }'
+
     public static readonly TestCaseJson_Valid_not_Lizzy_Health = '{ "resourceType": "Bundle", "id": "1366", "meta": { "versionId": "1", ' +
         '"lastUpdated": "2022-03-30T19:02:32.620+00:00" }, "type": "collection", "entry": [ { "fullUrl": "http://local/Encounter", ' +
         '"resource": { "id": "1", "resourceType": "Encounter", "meta": { "profile": [ "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter" ],"versionId": "1", "lastUpdated": "2021-10-13T03:34:10.160+00:00", ' +
