@@ -236,7 +236,7 @@ describe('Non Boolean Test case Expected Values', () => {
     })
 })
 
-//Skipping until QDM Test Case feature flag is removed
+
 describe('QDM element tabs', () => {
 
     beforeEach('Create measure and login', () => {
@@ -255,7 +255,7 @@ describe('QDM element tabs', () => {
 
     })
 
-    it.only('Verify QDM Element tabs relevant to the Measure CQL', () => {
+    it('Verify QDM Element tabs relevant to the Measure CQL', () => {
 
         MeasuresPage.measureAction("edit")
 
