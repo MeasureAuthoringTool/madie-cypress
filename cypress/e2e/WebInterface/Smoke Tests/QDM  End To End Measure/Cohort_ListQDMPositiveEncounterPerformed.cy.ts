@@ -232,7 +232,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Element - Encounter:Performed: Encounter Inpatient
         cy.get('[data-testid=elements-tab-encounter]').click()
-        cy.get(TestCasesPage.plusIcon).eq(2).click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').eq(0).click()
         cy.get(':nth-child(1) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').eq(0).type('06/21/2012 12:02 PM')
         cy.get(':nth-child(2) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').type('07/18/2012 12:15 PM')
         cy.get(TestCasesPage.attributesTab).click()
@@ -251,7 +251,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Element - Laboratory Test:Performed: Sodium lab test
         cy.get('[data-testid=elements-tab-laboratory_test]').click()
-        cy.get(TestCasesPage.plusIcon).eq(4).click()
+        cy.get('[data-testid="data-type-Laboratory Test, Performed: Sodium lab test"]').click()
         cy.get('[id="dateTime"]').eq(0).type('06/20/2012 12:01 PM')
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
@@ -273,7 +273,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Element - Laboratory Test:Performed: Sodium lab test
         cy.get('[data-testid=elements-tab-laboratory_test]').click()
-        cy.get(TestCasesPage.plusIcon).eq(4).click()
+        cy.get('[data-testid="data-type-Laboratory Test, Performed: Sodium lab test"]').click()
         cy.get('[id="dateTime"]').eq(0).type('06/21/2012 12:03 PM')
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
@@ -293,7 +293,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Element - Encounter:Performed: Encounter Inpatient
         cy.get('[data-testid=elements-tab-encounter]').click()
-        cy.get(TestCasesPage.plusIcon).eq(2).click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').eq(0).click()
         cy.get(':nth-child(1) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').eq(0).type('06/20/2012 12:00 PM')
         cy.get(':nth-child(2) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').type('06/20/2012 12:15 PM')
         cy.get(TestCasesPage.attributesTab).click()
@@ -314,7 +314,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Element - Encounter:Performed: Encounter Inpatient
         cy.get('[data-testid=elements-tab-encounter]').click()
-        cy.get(TestCasesPage.plusIcon).eq(2).click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').eq(0).click()
         cy.get(':nth-child(1) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').eq(0).type('06/19/2012 12:00 PM')
         cy.get(':nth-child(2) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').type('06/19/2012 12:15 PM')
         cy.get(TestCasesPage.attributesTab).click()
@@ -333,7 +333,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Element - Laboratory Test:Performed: Sodium lab test
         cy.get('[data-testid=elements-tab-laboratory_test]').click()
-        cy.get(TestCasesPage.plusIcon).eq(4).click()
+        cy.get('[data-testid="data-type-Laboratory Test, Performed: Sodium lab test"]').click()
         cy.get('[id="dateTime"]').eq(0).type('06/19/2012 12:01 PM')
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
@@ -353,7 +353,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Element - Patient Characteristic:Patient Characteristic Payer: Medicare FFS payer
         cy.get('[data-testid=elements-tab-patient_characteristic]').click()
-        cy.get(TestCasesPage.plusIcon).eq(2).click()
+        cy.get('[data-testid="data-type-Patient Characteristic Payer: Medicare FFS payer"]').click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid=code-system-option-SOP]').click()
         cy.get('[id="code-selector"]').click()
@@ -365,7 +365,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
+        cy.get(TestCasesPage.testCaseIPPExpected).type('3')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -389,7 +389,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Element - Physical Exam:Performed: Systolic blood pressure
         cy.get('[data-testid=elements-tab-physical_exam]').click()
-        cy.get(TestCasesPage.plusIcon).eq(2).click()
+        cy.get('[data-testid="data-type-Physical Exam, Performed: Systolic Blood Pressure"]').click()
         cy.get('[id="dateTime"]').eq(0).type('06/20/2012 12:01 PM')
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
@@ -411,7 +411,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Element - Physical Exam:Performed: Systolic blood pressure
         cy.get('[data-testid=elements-tab-physical_exam]').click()
-        cy.get(TestCasesPage.plusIcon).eq(2).click()
+        cy.get('[data-testid="data-type-Physical Exam, Performed: Systolic Blood Pressure"]').click()
         cy.get('[id="dateTime"]').eq(0).type('06/20/2012 2:01 PM')
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
@@ -431,7 +431,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Element - Encounter:Performed: Encounter Inpatient
         cy.get('[data-testid=elements-tab-encounter]').click()
-        cy.get(TestCasesPage.plusIcon).eq(2).click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').eq(0).click()
         cy.get(':nth-child(1) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').eq(0).type('06/21/2012 12:00 PM')
         cy.get(':nth-child(2) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').type('06/22/2012 12:15 PM')
         cy.get(TestCasesPage.attributesTab).click()
@@ -450,7 +450,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Element -  Patient Characteristic:Patient Characteristic Payer: Medicare payer
         cy.get('[data-testid=elements-tab-patient_characteristic]').click()
-        cy.get(TestCasesPage.plusIcon).eq(1).click()
+        cy.get('[data-testid="data-type-Patient Characteristic Payer: Payer"]').click()
         cy.get('[id="dateTime"]').eq(0).type('06/20/2012 2:01 PM')
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid=code-system-option-SOP]').click()
