@@ -619,10 +619,10 @@ export class TestCasesPage {
     public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
         let testCasePIdPath = ''
         if (secondTestCase === true) {
-            testCasePIdPath = 'cypress/fixtures/testcaseId2'
+            testCasePIdPath = 'cypress/fixtures/testCaseId2'
         }
         else {
-            testCasePIdPath = 'cypress/fixtures/testcaseId'
+            testCasePIdPath = 'cypress/fixtures/testCaseId'
         }
         cy.readFile(testCasePIdPath).should('exist').then((tcId) => {
             cy.get('[data-testid=select-action-' + tcId + ']').click()
