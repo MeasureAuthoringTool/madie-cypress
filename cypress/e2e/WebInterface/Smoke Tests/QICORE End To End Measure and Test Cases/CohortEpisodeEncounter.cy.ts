@@ -15,12 +15,14 @@ let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.CohortEpisodeEncounter_PASS
 
-let measureCQL = 'library CohortEpisodeEncounter version \'0.0.000\'\n' +
+let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\'\n' +
     '\n' +
     'using QICore version \'4.1.1\'\n' +
     '\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'include CQMCommon version \'1.0.000\' called Global\n' +
+    '\n' +
+    'context Patient\n' +
     '\n' +
     'define "Initial Population":\n' +
     '   Global."Inpatient Encounter"'
