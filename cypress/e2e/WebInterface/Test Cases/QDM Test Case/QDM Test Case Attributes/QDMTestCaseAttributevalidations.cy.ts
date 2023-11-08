@@ -1,12 +1,12 @@
-import {CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../../Shared/EditMeasurePage"
-import {TestCasesPage} from "../../../../../Shared/TestCasesPage"
-import {CQLEditorPage} from "../../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../../Shared/Header"
-import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../../Shared/Header"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -94,8 +94,8 @@ let measureCQL = 'library Library5749 version \'0.0.000\'\n' +
     '      union ["Symptom": "Neurologic impairment"] //Symptom\n' +
     '      union ["Assessment, Performed": "Falls Screening"] //Assessment '
 
-//Skipping until QDM Test Case feature flag is removed
-describe.skip('Remove Test case attribute', () => {
+
+describe('Remove Test case attribute', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -160,7 +160,7 @@ describe.skip('Remove Test case attribute', () => {
         cy.get('[data-testid=quantity-value-input-high]').type('4')
         cy.get('[id="quantity-unit-dropdown-high"]').click()
         cy.get('#quantity-unit-dropdown-high-option-0').click() //Select unit as m meter
-        cy.get(TestCasesPage.plusIcon).click()
+        cy.get(TestCasesPage.addAttribute).click()
         cy.get(TestCasesPage.attributeChip).should('contain.text', 'Reference Range: 2 \'m\' - 4 \'m\'')
         //Verify added attribute on Elements page
         cy.get('tbody > tr > :nth-child(3)').should('contain.text', 'Reference Range - referenceRange 2 \'m\' - 4 \'m\'')
@@ -172,7 +172,7 @@ describe.skip('Remove Test case attribute', () => {
         cy.get('tbody > tr > :nth-child(3)').should('not.contain.text', 'Reference Range - referenceRange 2 \'m\' - 4 \'m\'')
 
         //Delete the attribute from Elements table
-        cy.get('[data-testid="elements-section"]').contains('View').click({force:true})
+        cy.get('[data-testid="elements-section"]').contains('View').click({ force: true })
         cy.get('[data-testid="popover-content"]').contains('Delete').click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
 

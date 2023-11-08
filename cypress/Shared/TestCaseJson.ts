@@ -437,6 +437,215 @@ export class TestCaseJson {
 
     public static readonly QDMTestCaseJson = '{\"qdmVersion\":\"5.6\",\"dataElements\":[{\"dataElementCodes\":[{\"code\":\"2186-5\",\"system\":\"2.16.840.1.113883.6.238\",\"version\":\"1.2\",\"display\":\"Not Hispanic or Latino\"}],\"_id\":\"648c85f4220ca7000054646c\",\"qdmTitle\":\"Patient Characteristic Ethnicity\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.56\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"ethnicity\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicEthnicity\",\"id\":\"648c85f4220ca7000054646c\"},{\"dataElementCodes\":[],\"_id\":\"648c7dcd220ca70000546465\",\"qdmTitle\":\"Patient Characteristic Birthdate\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.54\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"birthdate\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicBirthdate\",\"id\":\"648c7dcd220ca70000546465\",\"birthDatetime\":\"2020-01-01T16:35:39.000+00:00\"},{\"dataElementCodes\":[{\"code\":\"M\",\"system\":\"2.16.840.1.113883.5.1\",\"version\":\"2022-11\",\"display\":\"Male\"}],\"_id\":\"648c7d60220ca70000546449\",\"qdmTitle\":\"Patient Characteristic Sex\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.55\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"gender\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicSex\",\"id\":\"648c7d60220ca70000546449\"},{\"dataElementCodes\":[{\"code\":\"2131-1\",\"system\":\"2.16.840.1.113883.6.238\",\"version\":\"1.2\",\"display\":\"Other Race\"}],\"_id\":\"648c7d24220ca70000546442\",\"qdmTitle\":\"Patient Characteristic Race\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.59\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"race\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicRace\",\"id\":\"648c7d24220ca70000546442\"},{\"dataElementCodes\":[],\"_id\":\"648c509863dbeb000033b3e0\",\"qdmTitle\":\"Patient Characteristic Expired\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.57\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"living\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicExpired\",\"id\":\"648c509863dbeb000033b3e0\"}],\"_id\":\"648c4dad63dbeb000033b36b\",\"birthDatetime\":\"1998-07-01T16:35:39.539+00:00\"}'
 
+    public static readonly QDMTCJsonwMOElements = '{\n' +
+        '    "qdmVersion": "5.6",\n' +
+        '    "dataElements": [\n' +
+        '      {\n' +
+        '        "dataElementCodes": [],\n' +
+        '        "_id": "6526a779c268b0000084a48f",\n' +
+        '        "qdmTitle": "Patient Characteristic Birthdate",\n' +
+        '        "hqmfOid": "2.16.840.1.113883.10.20.28.4.54",\n' +
+        '        "qdmCategory": "patient_characteristic",\n' +
+        '        "qdmStatus": "birthdate",\n' +
+        '        "qdmVersion": "5.6",\n' +
+        '        "_type": "QDM::PatientCharacteristicBirthdate",\n' +
+        '        "id": "6526a779c268b0000084a48f",\n' +
+        '        "birthDatetime": "2003-07-31T12:00:37.000+00:00"\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "dataElementCodes": [\n' +
+        '          {\n' +
+        '            "code": "2131-1",\n' +
+        '            "system": "2.16.840.1.113883.6.238",\n' +
+        '           "version": "1.2",\n' +
+        '            "display": "Other Race"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "_id": "6526a785c268b0000084a496",\n' +
+        '        "qdmTitle": "Patient Characteristic Race",\n' +
+        '        "hqmfOid": "2.16.840.1.113883.10.20.28.4.59",\n' +
+        '        "qdmCategory": "patient_characteristic",\n' +
+        '        "qdmStatus": "race",\n' +
+        '        "qdmVersion": "5.6",\n' +
+        '        "_type": "QDM::PatientCharacteristicRace",\n' +
+        '        "id": "6526a785c268b0000084a496"\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "dataElementCodes": [\n' +
+        '          {\n' +
+        '            "code": "M",\n' +
+        '            "system": "2.16.840.1.113883.5.1",\n' +
+        '            "version": "2022-11",\n' +
+        '            "display": "Male"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "_id": "6526a787c268b0000084a498",\n' +
+        '        "qdmTitle": "Patient Characteristic Sex",\n' +
+        '        "hqmfOid": "2.16.840.1.113883.10.20.28.4.55",\n' +
+        '        "qdmCategory": "patient_characteristic",\n' +
+        '        "qdmStatus": "gender",\n' +
+        '        "qdmVersion": "5.6",\n' +
+        '        "_type": "QDM::PatientCharacteristicSex",\n' +
+        '        "id": "6526a787c268b0000084a498"\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "dataElementCodes": [\n' +
+        '          {\n' +
+        '            "code": "2186-5",\n' +
+        '            "system": "2.16.840.1.113883.6.238",\n' +
+        '            "version": "1.2",\n' +
+        '            "display": "Not Hispanic or Latino"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "_id": "6526a789c268b0000084a49a",\n' +
+        '        "qdmTitle": "Patient Characteristic Ethnicity",\n' +
+        '        "hqmfOid": "2.16.840.1.113883.10.20.28.4.56",\n' +
+        '        "qdmCategory": "patient_characteristic",\n' +
+        '        "qdmStatus": "ethnicity",\n' +
+        '        "qdmVersion": "5.6",\n' +
+        '        "_type": "QDM::PatientCharacteristicEthnicity",\n' +
+        '        "id": "6526a789c268b0000084a49a"\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "dataElementCodes": [\n' +
+        '          {\n' +
+        '            "code": "46635009",\n' +
+        '            "system": "2.16.840.1.113883.6.96",\n' +
+        '            "version": null,\n' +
+        '            "display": "Diabetes mellitus type 1 (disorder)"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "_id": "6526a772c268b0000084a48b",\n' +
+        '        "recorder": [],\n' +
+        '        "qdmTitle": "Diagnosis",\n' +
+        '        "hqmfOid": "2.16.840.1.113883.10.20.28.4.110",\n' +
+        '        "qrdaOid": "2.16.840.1.113883.10.20.24.3.135",\n' +
+        '        "qdmCategory": "condition",\n' +
+        '        "qdmVersion": "5.6",\n' +
+        '        "_type": "QDM::Diagnosis",\n' +
+        '        "description": "Diagnosis: Diabetes",\n' +
+        '        "codeListId": "2.16.840.1.113883.3.464.1003.103.12.1001",\n' +
+        '        "id": "6526a7f2c268b0000084a49c",\n' +
+        '        "prevalencePeriod": {\n' +
+        '          "low": "2023-07-09T12:00:00.000+00:00",\n' +
+        '          "lowClosed": true,\n' +
+        '          "highClosed": true\n' +
+        '        }\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "dataElementCodes": [],\n' +
+        '        "_id": "6526ad93c268b0000084af2e",\n' +
+        '        "participant": [],\n' +
+        '        "relatedTo": [],\n' +
+        '        "qdmTitle": "Encounter, Performed",\n' +
+        '        "hqmfOid": "2.16.840.1.113883.10.20.28.4.5",\n' +
+        '        "qdmCategory": "encounter",\n' +
+        '        "qdmStatus": "performed",\n' +
+        '        "qdmVersion": "5.6",\n' +
+        '        "_type": "QDM::EncounterPerformed",\n' +
+        '        "description": "Encounter, Performed: Encounter Inpatient",\n' +
+        '        "codeListId": "2.16.840.1.113883.3.666.5.307",\n' +
+        '        "id": "6526ada0c268b0000084b308",\n' +
+        '        "relevantPeriod": {\n' +
+        '          "low": "2023-07-11T12:00:00.000+00:00",\n' +
+        '          "high": "2023-07-15T13:00:00.000+00:00",\n' +
+        '          "lowClosed": true,\n' +
+        '          "highClosed": true\n' +
+        '        },\n' +
+        '        "facilityLocations": [],\n' +
+        '        "diagnoses": []\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "dataElementCodes": [\n' +
+        '          {\n' +
+        '            "code": "1556-0",\n' +
+        '            "system": "2.16.840.1.113883.6.1",\n' +
+        '            "version": null,\n' +
+        '            "display": "Fasting glucose [Mass/volume] in Capillary blood"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "_id": "6526ad93c268b0000084af38",\n' +
+        '        "performer": [],\n' +
+        '        "relatedTo": [],\n' +
+        '        "qdmTitle": "Laboratory Test, Performed",\n' +
+        '        "hqmfOid": "2.16.840.1.113883.10.20.28.4.42",\n' +
+        '        "qdmCategory": "laboratory_test",\n' +
+        '        "qdmStatus": "performed",\n' +
+        '        "qdmVersion": "5.6",\n' +
+        '        "_type": "QDM::LaboratoryTestPerformed",\n' +
+        '        "description": "Laboratory Test, Performed: Glucose Lab Test Mass Per Volume",\n' +
+        '        "codeListId": "2.16.840.1.113762.1.4.1248.34",\n' +
+        '        "id": "6526afd6c268b0000084b35f",\n' +
+        '        "relevantDatetime": "2023-07-11T14:00:00.000+00:00",\n' +
+        '        "result": {\n' +
+        '          "value": "1000",\n' +
+        '          "unit": "mg/dL"\n' +
+        '        },\n' +
+        '        "components": []\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "dataElementCodes": [\n' +
+        '          {\n' +
+        '            "code": "183452005",\n' +
+        '            "system": "2.16.840.1.113883.6.96",\n' +
+        '            "version": null,\n' +
+        '            "display": "Emergency hospital admission (procedure)"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "_id": "6526ad93c268b0000084af2e",\n' +
+        '        "participant": [],\n' +
+        '        "relatedTo": [],\n' +
+        '        "qdmTitle": "Encounter, Performed",\n' +
+        '        "hqmfOid": "2.16.840.1.113883.10.20.28.4.5",\n' +
+        '        "qdmCategory": "encounter",\n' +
+        '        "qdmStatus": "performed",\n' +
+        '        "qdmVersion": "5.6",\n' +
+        '        "_type": "QDM::EncounterPerformed",\n' +
+        '        "description": "Encounter, Performed: Encounter Inpatient",\n' +
+        '        "codeListId": "2.16.840.1.113883.3.666.5.307",\n' +
+        '        "id": "6526b107c268b0000084b3c2",\n' +
+        '        "relevantPeriod": {\n' +
+        '          "low": "2023-10-11T12:00:00.000+00:00",\n' +
+        '          "high": "2023-10-18T12:15:00.000+00:00",\n' +
+        '          "lowClosed": true,\n' +
+        '          "highClosed": true\n' +
+        '        },\n' +
+        '        "facilityLocations": [],\n' +
+        '        "diagnoses": []\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "dataElementCodes": [\n' +
+        '          {\n' +
+        '            "code": "1556-0",\n' +
+        '            "system": "2.16.840.1.113883.6.1",\n' +
+        '            "version": null,\n' +
+        '            "display": "Fasting glucose [Mass/volume] in Capillary blood"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "_id": "6526ad93c268b0000084af38",\n' +
+        '        "performer": [],\n' +
+        '        "relatedTo": [],\n' +
+        '        "qdmTitle": "Laboratory Test, Performed",\n' +
+        '        "hqmfOid": "2.16.840.1.113883.10.20.28.4.42",\n' +
+        '        "qdmCategory": "laboratory_test",\n' +
+        '        "qdmStatus": "performed",\n' +
+        '        "qdmVersion": "5.6",\n' +
+        '        "_type": "QDM::LaboratoryTestPerformed",\n' +
+        '        "description": "Laboratory Test, Performed: Glucose Lab Test Mass Per Volume",\n' +
+        '        "codeListId": "2.16.840.1.113762.1.4.1248.34",\n' +
+        '        "id": "6526b15dc268b0000084b45e",\n' +
+        '        "relevantDatetime": "2023-10-13T12:00:00.000+00:00",\n' +
+        '        "result": {\n' +
+        '          "value": "1100",\n' +
+        '          "unit": "mg/dL"\n' +
+        '        },\n' +
+        '        "components": []\n' +
+        '      }\n' +
+        '    ],\n' +
+        '    "_id": "6526a771c268b0000084a474",\n' +
+        '    "birthDatetime": "2003-07-31T12:00:37.561+00:00"\n' +
+        '  }'
+
     public static readonly QDMTestCaseJsonNoDOB = '{\"qdmVersion\":\"5.6\",\"dataElements\":[{\"dataElementCodes\":[{\"code\":\"2186-5\",\"system\":\"2.16.840.1.113883.6.238\",\"version\":\"1.2\",\"display\":\"Not Hispanic or Latino\"}],\"_id\":\"648c85f4220ca7000054646c\",\"qdmTitle\":\"Patient Characteristic Ethnicity\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.56\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"ethnicity\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicEthnicity\",\"id\":\"648c85f4220ca7000054646c\"},{\"dataElementCodes\":[],\"_id\":\"648c7dcd220ca70000546465\",\"qdmTitle\":\"Patient Characteristic Birthdate\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.54\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"birthdate\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicBirthdate\",\"id\":\"648c7dcd220ca70000546465\",\"birthDatetime\":\"2020-01-01T16:35:39.000+00:00\"},{\"dataElementCodes\":[{\"code\":\"M\",\"system\":\"2.16.840.1.113883.5.1\",\"version\":\"2022-11\",\"display\":\"Male\"}],\"_id\":\"648c7d60220ca70000546449\",\"qdmTitle\":\"Patient Characteristic Sex\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.55\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"gender\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicSex\",\"id\":\"648c7d60220ca70000546449\"},{\"dataElementCodes\":[{\"code\":\"2131-1\",\"system\":\"2.16.840.1.113883.6.238\",\"version\":\"1.2\",\"display\":\"Other Race\"}],\"_id\":\"648c7d24220ca70000546442\",\"qdmTitle\":\"Patient Characteristic Race\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.59\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"race\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicRace\",\"id\":\"648c7d24220ca70000546442\"},{\"dataElementCodes\":[],\"_id\":\"648c509863dbeb000033b3e0\",\"qdmTitle\":\"Patient Characteristic Expired\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.57\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"expired\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicExpired\",\"id\":\"648c509863dbeb000033b3e0\"}],\"_id\":\"648c4dad63dbeb000033b36b\"}'
 
     public static readonly QDMTestCaseJsonNullDOB = '{\"qdmVersion\":\"5.6\",\"dataElements\":[{\"dataElementCodes\":[{\"code\":\"2186-5\",\"system\":\"2.16.840.1.113883.6.238\",\"version\":\"1.2\",\"display\":\"Not Hispanic or Latino\"}],\"_id\":\"648c85f4220ca7000054646c\",\"qdmTitle\":\"Patient Characteristic Ethnicity\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.56\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"ethnicity\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicEthnicity\",\"id\":\"648c85f4220ca7000054646c\"},{\"dataElementCodes\":[],\"_id\":\"648c7dcd220ca70000546465\",\"qdmTitle\":\"Patient Characteristic Birthdate\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.54\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"birthdate\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicBirthdate\",\"id\":\"648c7dcd220ca70000546465\",\"birthDatetime\":\"2020-01-01T16:35:39.000+00:00\"},{\"dataElementCodes\":[{\"code\":\"M\",\"system\":\"2.16.840.1.113883.5.1\",\"version\":\"2022-11\",\"display\":\"Male\"}],\"_id\":\"648c7d60220ca70000546449\",\"qdmTitle\":\"Patient Characteristic Sex\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.55\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"gender\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicSex\",\"id\":\"648c7d60220ca70000546449\"},{\"dataElementCodes\":[{\"code\":\"2131-1\",\"system\":\"2.16.840.1.113883.6.238\",\"version\":\"1.2\",\"display\":\"Other Race\"}],\"_id\":\"648c7d24220ca70000546442\",\"qdmTitle\":\"Patient Characteristic Race\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.59\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"race\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicRace\",\"id\":\"648c7d24220ca70000546442\"},{\"dataElementCodes\":[],\"_id\":\"648c509863dbeb000033b3e0\",\"qdmTitle\":\"Patient Characteristic Expired\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.57\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"expired\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicExpired\",\"id\":\"648c509863dbeb000033b3e0\"}],\"_id\":\"648c4dad63dbeb000033b36b\",\"birthDatetime\":\"\"}'

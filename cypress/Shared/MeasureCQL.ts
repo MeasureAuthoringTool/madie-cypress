@@ -559,6 +559,134 @@ export class MeasureCQL {
         '      FirstResult: FirstLab.result as Quantity,\n' +
         '      Timing: FirstLab.resultDatetime\n' +
         '    }'
+    public static readonly QDMTestCaseCQLNonVsacValueset = 'library CohortListQDMPositiveEncounterPerformedWithStratification1686773356032 version \'0.0.000\'\n' +
+
+        'using QDM version \'5.6\'\n' +
+        '\n' +
+        'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
+        '\n' +
+        'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\' \n' +
+        '\n' +
+        'valueset "Acute care hospital Inpatient Encounter": \'urn:oid:2.16.840.1.113883.3.666.5.2283\' \n' +
+        'valueset "Bicarbonate lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.139\' \n' +
+        'valueset "Body temperature": \'urn:oid:2.16.840.1.113762.1.4.1045.152\' \n' +
+        'valueset "Body weight": \'urn:oid:2.16.840.1.113762.1.4.1045.159\' \n' +
+        'valueset "Creatinine lab test": \'urn:oid:2.16.840.1.113883.3.666.5.2363\' \n' +
+        'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\' \n' +
+        'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\' \n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\' \n' +
+        'valueset "Glucose lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.134\' \n' +
+        'valueset "Heart Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.149\' \n' +
+        'valueset "Hematocrit lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.114\' \n' +
+        'valueset "Medicare Advantage payer": \'urn:oid:2.16.840.1.113762.1.4.1104.12\' \n' +
+        'valueset "Medicare FFS payer": \'urn:oid:2.16.840.1.113762.1.4.1104.10\' \n' +
+        'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\' \n' +
+        'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\' \n' +
+        'valueset "Oxygen Saturation by Pulse Oximetry": \'urn:oid:2.16.840.1.113762.1.4.1045.151\' \n' +
+        'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
+        '\n' +
+        'valueset "Potassium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.117\' \n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+        'valueset "Respiratory Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.130\' \n' +
+        'valueset "Sodium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.119\' \n' +
+        'valueset "Systolic Blood Pressure": \'urn:oid:2.16.840.1.113762.1.4.1045.163\' \n' +
+        'valueset "White blood cells count lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.129\' \n' +
+        '\n' +
+        'code "Birth date": \'21112-8\' from "LOINC" display \'Birth date\'\n' +
+        '\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+        '\n' +
+        'context Patient\n' +
+        '\n' +
+        'define "Denominator":\n' +
+        '\t  "Initial Population"\n' +
+        '\n' +
+        'define "Initial Population":\n' +
+        '\t  "Inpatient Encounters"\n' +
+        '\n' +
+        'define "Numerator":\n' +
+        '\t  "Initial Population"\n' +
+        '\n' +
+        'define "SDE Ethnicity":\n' +
+        '\t  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+        '\n' +
+        'define "SDE Payer":\n' +
+        '\t  ["Patient Characteristic Payer": "Payer"]\n' +
+        '\n' +
+        'define "SDE Race":\n' +
+        '\t  ["Patient Characteristic Race": "Race"]\n' +
+        '\n' +
+        'define "SDE Sex":\n' +
+        '\t  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+        '\n' +
+        'define "SDE Results":\n' +
+        '  {\n' +
+        '  // First physical exams\n' +
+        '    FirstHeartRate: "FirstPhysicalExamWithEncounterId"(["Physical Exam, Performed": "Heart Rate"]),\n' +
+        '    FirstSystolicBloodPressure: "FirstPhysicalExamWithEncounterId"(["Physical Exam, Performed": "Systolic Blood Pressure"]),\n' +
+        '    FirstRespiratoryRate: "FirstPhysicalExamWithEncounterId"(["Physical Exam, Performed": "Respiratory Rate"]),\n' +
+        '    FirstBodyTemperature: "FirstPhysicalExamWithEncounterId"(["Physical Exam, Performed": "Body temperature"]),\n' +
+        '    FirstOxygenSaturation: "FirstPhysicalExamWithEncounterId"(["Physical Exam, Performed": "Oxygen Saturation by Pulse Oximetry"]),\n' +
+        '  // Weight uses lab test timing\n' +
+        '    FirstBodyWeight: "FirstPhysicalExamWithEncounterIdUsingLabTiming"(["Physical Exam, Performed": "Body weight"]),\n' +
+        '\n' +
+        '  // First lab tests\n' +
+        '    FirstHematocritLab: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "Hematocrit lab test"]),\n' +
+        '    FirstWhiteBloodCellCount: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "White blood cells count lab test"]),\n' +
+        '    FirstPotassiumLab: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "Potassium lab test"]),\n' +
+        '    FirstSodiumLab: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "Sodium lab test"]),\n' +
+        '    FirstBicarbonateLab: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "Bicarbonate lab test"]),\n' +
+        '    FirstCreatinineLab: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "Creatinine lab test"]),\n' +
+        '    FirstGlucoseLab: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "Glucose lab test"])\n' +
+        '  }\n' +
+        '\n' +
+        'define "Inpatient Encounters":\n' +
+        '  ["Encounter, Performed": "Encounter Inpatient"] InpatientEncounter\n' +
+        '    with ( ["Patient Characteristic Payer": "Medicare FFS payer"]\n' +
+        '      union ["Patient Characteristic Payer": "Medicare Advantage payer"] ) Payer\n' +
+        '      such that Global."HospitalizationWithObservationLengthofStay" ( InpatientEncounter ) < 365\n' +
+        '        and InpatientEncounter.relevantPeriod ends during day of "Measurement Period"\n' +
+        '        and AgeInYearsAt(date from start of InpatientEncounter.relevantPeriod)>= 65\n' +
+        '\n' +
+        'define function "LengthOfStay"(Stay Interval<DateTime> ):\n' +
+        '  difference in days between start of Stay and \n' +
+        '  end of Stay\n' +
+        '\n' +
+        'define function "FirstPhysicalExamWithEncounterId"(ExamList List<QDM.PositivePhysicalExamPerformed> ):\n' +
+        '  "Inpatient Encounters" Encounter\n' +
+        '    let FirstExam: First(ExamList Exam\n' +
+        '        where Global."EarliestOf"(Exam.relevantDatetime, Exam.relevantPeriod)during Interval[start of Encounter.relevantPeriod - 1440 minutes, start of Encounter.relevantPeriod + 120 minutes]\n' +
+        '        sort by Global."EarliestOf"(relevantDatetime, relevantPeriod)\n' +
+        '    )\n' +
+        '    return {\n' +
+        '      EncounterId: Encounter.id,\n' +
+        '      FirstResult: FirstExam.result as Quantity,\n' +
+        '      Timing: Global."EarliestOf" ( FirstExam.relevantDatetime, FirstExam.relevantPeriod )\n' +
+        '    }\n' +
+        '\n' +
+        'define function "FirstPhysicalExamWithEncounterIdUsingLabTiming"(ExamList List<QDM.PositivePhysicalExamPerformed> ):\n' +
+        '  "Inpatient Encounters" Encounter\n' +
+        '    let FirstExamWithLabTiming: First(ExamList Exam\n' +
+        '        where Global."EarliestOf"(Exam.relevantDatetime, Exam.relevantPeriod)during Interval[start of Encounter.relevantPeriod - 1440 minutes, start of Encounter.relevantPeriod + 1440 minutes]\n' +
+        '        sort by Global."EarliestOf"(relevantDatetime, relevantPeriod)\n' +
+        '    )\n' +
+        '    return {\n' +
+        '      EncounterId: Encounter.id,\n' +
+        '      FirstResult: FirstExamWithLabTiming.result as Quantity,\n' +
+        '      Timing: Global."EarliestOf" ( FirstExamWithLabTiming.relevantDatetime, FirstExamWithLabTiming.relevantPeriod )\n' +
+        '    }\n' +
+        '\n' +
+        'define function "FirstLabTestWithEncounterId"(LabList List<QDM.PositiveLaboratoryTestPerformed> ):\n' +
+        '  "Inpatient Encounters" Encounter\n' +
+        '    let FirstLab: First(LabList Lab\n' +
+        '        where Lab.resultDatetime during Interval[start of Encounter.relevantPeriod - 1440 minutes, start of Encounter.relevantPeriod + 1440 minutes]\n' +
+        '        sort by resultDatetime\n' +
+        '    )\n' +
+        '    return {\n' +
+        '      EncounterId: Encounter.id,\n' +
+        '      FirstResult: FirstLab.result as Quantity,\n' +
+        '      Timing: FirstLab.resultDatetime\n' +
+        '    }'
 
     public static readonly QDMCQL4MAT5645 = 'library TestingQDM version \'0.0.000\'\n' +
         'using QDM version \'5.6\'\n' +
@@ -1391,6 +1519,234 @@ export class MeasureCQL {
 
         'define "track1":\n' +
         ' true\n'
+
+    public static readonly CQLQDMObservationRun = 'library RatioListQDMPositiveEncounterPerformedWithMO1697030589521 version \'0.0.000\'\n' +
+
+        'using QDM version \'5.6\'\n' +
+
+        'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
+        'valueset "birth date": \'urn:oid:2.16.840.1.113883.3.560.100.4\' \n' +
+
+        'valueset "Diabetes": \'urn:oid:2.16.840.1.113883.3.464.1003.103.12.1001\' \n' +
+        'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\' \n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\' \n' +
+        'valueset "Glucose Lab Test Mass Per Volume": \'urn:oid:2.16.840.1.113762.1.4.1248.34\' \n' +
+        'valueset "Hypoglycemics Treatment Medications": \'urn:oid:2.16.840.1.113762.1.4.1196.394\' \n' +
+        'valueset "Ketoacidosis": \'urn:oid:2.16.840.1.113762.1.4.1222.520\' \n' +
+        'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\' \n' +
+        'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\' \n' +
+
+
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+        'context Patient\n' +
+
+        'define "Days in Hospitalization":\n' +
+
+        '  "Measurement Population" EligibleInpatientHospitalization\n' +
+        '    let period: Global."HospitalizationWithObservation" ( EligibleInpatientHospitalization ),\n' +
+        '    relevantPeriod: "Hospital Days Max 10"(period)\n' +
+        '    return Tuple {\n' +
+        '      encounter: EligibleInpatientHospitalization,\n' +
+        '      hospitalizationPeriod: period,\n' +
+        '      relevantPeriod: relevantPeriod,\n' +
+        '      relevantDays: "Days In Period"(relevantPeriod)\n' +
+        '    }\n' +
+
+        'define "Days with Glucose Results":\n' +
+        '  "Days in Hospitalization" InpatientHospitalDays\n' +
+        '    return Tuple {\n' +
+        '      encounter: InpatientHospitalDays.encounter,\n' +
+        '      relevantPeriod: InpatientHospitalDays.relevantPeriod,\n' +
+        '      relevantDays: ( InpatientHospitalDays.relevantDays EncounterDay\n' +
+        '          return Tuple {\n' +
+        '            dayNumber: EncounterDay.dayNumber,\n' +
+        '            dayPeriod: EncounterDay.dayPeriod,\n' +
+        '            hasSevereResult: exists ( ["Laboratory Test, Performed": "Glucose Lab Test Mass Per Volume"] GlucoseTest\n' +
+        '                where GlucoseTest.result > 300 \'mg/dL\'\n' +
+        '                  and Global."EarliestOf" ( GlucoseTest.relevantDatetime, GlucoseTest.relevantPeriod ) during EncounterDay.dayPeriod\n' +
+        '            ),\n' +
+        '            hasElevatedResult: exists ( ["Laboratory Test, Performed": "Glucose Lab Test Mass Per Volume"] GlucoseTest\n' +
+        '                where GlucoseTest.result >= 200 \'mg/dL\'\n' +
+        '                  and Global."EarliestOf" ( GlucoseTest.relevantDatetime, GlucoseTest.relevantPeriod ) during EncounterDay.dayPeriod\n' +
+        '            ),\n' +
+        '            hasNoGlucoseTest: not exists ( ["Laboratory Test, Performed": "Glucose Lab Test Mass Per Volume"] GlucoseTest\n' +
+        '                where Global."EarliestOf" ( GlucoseTest.relevantDatetime, GlucoseTest.relevantPeriod ) during EncounterDay.dayPeriod\n' +
+        '            )\n' +
+        '          }\n' +
+        '      )\n' +
+        '    }\n' +
+
+        'define "Days with Hyperglycemic Events":\n' +
+        '  "Days with Glucose Results" EncounterWithResultDays\n' +
+        '    let eligibleEventDays: EncounterWithResultDays.relevantDays EncounterDay\n' +
+        '      where EncounterDay.dayNumber > 1\n' +
+        '      return Tuple {\n' +
+        '        dayNumber: EncounterDay.dayNumber,\n' +
+        '        dayPeriod: EncounterDay.dayPeriod,\n' +
+        '        hasHyperglycemicEvent: ( EncounterDay.hasSevereResult\n' +
+        '            or ( EncounterDay.hasNoGlucoseTest\n' +
+        '                and EncounterWithResultDays.relevantDays[EncounterDay.dayNumber - 2].hasElevatedResult\n' +
+        '                and EncounterWithResultDays.relevantDays[EncounterDay.dayNumber - 3].hasElevatedResult\n' +
+        '            )\n' +
+        '        )\n' +
+        '      }\n' +
+        '    return Tuple {\n' +
+        '      encounter: EncounterWithResultDays.encounter,\n' +
+        '      relevantPeriod: EncounterWithResultDays.relevantPeriod,\n' +
+        '      eligibleEventDays: eligibleEventDays\n' +
+        '    }\n' +
+
+        'define "Denominator":\n' +
+        '  "Initial Population"\n' +
+
+        'define "Denominator Exclusions":\n' +
+        '  "Encounter with First Glucose Greater Than or Equal to 1000"\n' +
+
+        'define "Encounter with Elevated Glucose Greater Than or Equal to 200":\n' +
+        '  "Encounter with Hospitalization Period" Hospitalization\n' +
+        '    with ["Laboratory Test, Performed": "Glucose Lab Test Mass Per Volume"] GlucoseTest\n' +
+        '      such that Global."EarliestOf" ( GlucoseTest.relevantDatetime, GlucoseTest.relevantPeriod ) during Hospitalization.hospitalizationPeriod\n' +
+        '        and GlucoseTest.result >= 200 \'mg/dL\'\n' +
+        '    return Hospitalization.encounter\n' +
+
+        'define "Encounter with Existing Diabetes Diagnosis":\n' +
+        '  "Encounter with Hospitalization Period" Hospitalization\n' +
+        '    with ["Diagnosis": "Diabetes"] DiabetesCondition\n' +
+        '      such that DiabetesCondition.prevalencePeriod starts before \n' +
+        '      end of Hospitalization.hospitalizationPeriod\n' +
+        '    return Hospitalization.encounter\n' +
+
+        'define "Encounter with Hospitalization Period":\n' +
+        '  "Qualifying Encounter" QualifyingHospitalization\n' +
+        '    return Tuple {\n' +
+        '      encounter: QualifyingHospitalization,\n' +
+        '      hospitalizationPeriod: Global."HospitalizationWithObservation" ( QualifyingHospitalization )\n' +
+        '    }\n' +
+
+        'define "Encounter with Hyperglycemic Events":\n' +
+        '  "Days with Hyperglycemic Events" HyperglycemicEventDays\n' +
+        '    where exists ( HyperglycemicEventDays.eligibleEventDays EligibleEventDay\n' +
+        '        where EligibleEventDay.hasHyperglycemicEvent\n' +
+        '    )\n' +
+        '    return HyperglycemicEventDays.encounter\n' +
+
+        'define "Encounter with Hypoglycemic Medication":\n' +
+        '  "Encounter with Hospitalization Period" Hospitalization\n' +
+        '    with ["Medication, Administered": "Hypoglycemics Treatment Medications"] HypoglycemicMedication\n' +
+        '      such that Global."NormalizeInterval" ( HypoglycemicMedication.relevantDatetime, HypoglycemicMedication.relevantPeriod ) starts during Hospitalization.hospitalizationPeriod\n' +
+        '    return Hospitalization.encounter\n' +
+
+        'define "Initial Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start":\n' +
+        '  "Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start" GlucoseResult1000\n' +
+        '    where not ( GlucoseResult1000.id in "Glucose Tests Earlier Than Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start".id )\n' +
+
+        'define "Initial Population":\n' +
+        '  "Encounter with Existing Diabetes Diagnosis"\n' +
+        '    union "Encounter with Hypoglycemic Medication"\n' +
+        '    union "Encounter with Elevated Glucose Greater Than or Equal to 200"\n' +
+
+        'define "Measurement Population":\n' +
+        '  "Denominator"\n' +
+
+        'define "Numerator":\n' +
+        '  "Encounter with Hyperglycemic Events"\n' +
+
+        'define "Qualifying Encounter":\n' +
+        '  ["Encounter, Performed": "Encounter Inpatient"] InpatientEncounter\n' +
+        '    where InpatientEncounter.relevantPeriod ends during day of "Measurement Period"\n' +
+        '      and AgeInYearsAt(date from start of InpatientEncounter.relevantPeriod)>= 18\n' +
+
+        'define "SDE Ethnicity":\n' +
+        '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+
+        'define "SDE Payer":\n' +
+        '  ["Patient Characteristic Payer": "Payer"]\n' +
+
+        'define "SDE Race":\n' +
+        '  ["Patient Characteristic Race": "Race"]\n' +
+
+        'define "SDE Sex":\n' +
+        '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+
+        'define "Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start":\n' +
+        '  from\n' +
+        '    "Initial Population" InpatientHospitalization,\n' +
+        '    ["Laboratory Test, Performed": "Glucose Lab Test Mass Per Volume"] GlucoseTest\n' +
+        '    let HospitalizationInterval: Global."HospitalizationWithObservation" ( InpatientHospitalization ),\n' +
+        '    GlucoseTestTime: Global."EarliestOf" ( GlucoseTest.relevantDatetime, GlucoseTest.relevantPeriod )\n' +
+        '    where GlucoseTest.result >= 1000 \'mg/dL\'\n' +
+        '      and GlucoseTest.result is not null\n' +
+        '      and GlucoseTestTime during Interval[( start of HospitalizationInterval - 1 hour ), ( start of HospitalizationInterval + 6 hours )]\n' +
+        '    return GlucoseTest\n' +
+
+        'define "Encounter with First Glucose Greater Than or Equal to 1000":\n' +
+        '  "Initial Population" InpatientHospitalization\n' +
+        '    with "Initial Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start" FirstGlucoseResult\n' +
+        '      such that FirstGlucoseResult.result is not null\n' +
+        '        and FirstGlucoseResult.result >= 1000 \'mg/dL\'\n' +
+        '        and Global."EarliestOf" ( FirstGlucoseResult.relevantDatetime, FirstGlucoseResult.relevantPeriod ) during Interval[( start of Global."HospitalizationWithObservation" ( InpatientHospitalization ) - 1 hour ), ( start of Global."HospitalizationWithObservation" ( InpatientHospitalization ) + 6 hours )]\n' +
+        '    return InpatientHospitalization\n' +
+
+        'define "Glucose Tests Earlier Than Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start":\n' +
+        '  from\n' +
+        '    "Initial Population" InpatientHospitalization,\n' +
+        '    "Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start" GlucoseResult1000,\n' +
+        '    ["Laboratory Test, Performed": "Glucose Lab Test Mass Per Volume"] EarlierGlucoseTest\n' +
+        '    let HospitalizationInterval: Global."HospitalizationWithObservation" ( InpatientHospitalization ),\n' +
+        '    GlucoseTest1000Time: Global."EarliestOf" ( GlucoseResult1000.relevantDatetime, GlucoseResult1000.relevantPeriod ),\n' +
+        '    EarlierGlucoseTestTime: Global."EarliestOf" ( EarlierGlucoseTest.relevantDatetime, EarlierGlucoseTest.relevantPeriod )\n' +
+        '    where GlucoseTest1000Time during Interval[( start of HospitalizationInterval - 1 hour ), ( start of HospitalizationInterval + 6 hour )]\n' +
+        '      and EarlierGlucoseTestTime during Interval[( start of HospitalizationInterval - 1 hour ), GlucoseTest1000Time )\n' +
+        '      and EarlierGlucoseTest is not null\n' +
+        '      and EarlierGlucoseTest.id !~ GlucoseResult1000.id\n' +
+        '    return GlucoseResult1000\n' +
+
+        'define function "Interval To Day Numbers"(Period Interval<DateTime> ):\n' +
+        '  ( expand { Interval[1, days between start of Period and \n' +
+        '  end of Period]} ) DayExpand\n' +
+        '    return \n' +
+        '    end of DayExpand\n' +
+
+        'define function "Hospital Days Max 10"(Period Interval<DateTime> ):\n' +
+        '  Interval[start of Period, Min({ \n' +
+        '    end of Period, start of Period + 10 days }\n' +
+        '  )]\n' +
+
+        'define function "Days In Period"(Period Interval<DateTime> ):\n' +
+        '  ( "Interval To Day Numbers"(Period)) DayNumber\n' +
+        '    let startPeriod: start of Period + ( 24 hours * ( DayNumber - 1 ) ),\n' +
+        '    endPeriod: if ( hours between startPeriod and \n' +
+        '      end of Period < 24\n' +
+        '    ) then startPeriod \n' +
+        '      else start of Period + ( 24 hours * DayNumber )\n' +
+        '    return Tuple {\n' +
+        '      dayNumber: DayNumber,\n' +
+        '      dayPeriod: Interval[startPeriod, endPeriod )\n' +
+        '    }\n' +
+
+        'define function "Denominator Observations"(QualifyingEncounter "Encounter, Performed" ):\n' +
+        '  if QualifyingEncounter.id in "Denominator Exclusions".id then singleton from ( "Days with Hyperglycemic Events" EncounterWithEventDays\n' +
+        '      where EncounterWithEventDays.encounter = QualifyingEncounter\n' +
+        '      return 0\n' +
+        '  ) \n' +
+        '    else singleton from ( "Days with Hyperglycemic Events" EncounterWithEventDays\n' +
+        '      where EncounterWithEventDays.encounter = QualifyingEncounter\n' +
+        '      return Count(EncounterWithEventDays.eligibleEventDays)\n' +
+        '  )\n' +
+
+        'define function "Numerator Observations"(QualifyingEncounter "Encounter, Performed" ):\n' +
+        '  if QualifyingEncounter.id in "Denominator Exclusions".id then singleton from ( "Days with Hyperglycemic Events" EncounterWithEventDays\n' +
+        '      where EncounterWithEventDays.encounter = QualifyingEncounter\n' +
+        '      return 0\n' +
+        '  ) \n' +
+        '    else singleton from ( "Days with Hyperglycemic Events" EncounterWithEventDays\n' +
+        '      where EncounterWithEventDays.encounter = QualifyingEncounter\n' +
+        '      return Count(EncounterWithEventDays.eligibleEventDays EligibleEventDay\n' +
+        '          where EligibleEventDay.hasHyperglycemicEvent\n' +
+        '      )\n' +
+        '  )'
+
     public static readonly CQLHLResults_value = 'library BugQICoreMeasure version \'0.0.000\'\n' +
 
         'using QICore version \'4.1.1\'\n' +

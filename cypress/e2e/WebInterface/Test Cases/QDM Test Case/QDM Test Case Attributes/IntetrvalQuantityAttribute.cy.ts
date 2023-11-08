@@ -1,12 +1,12 @@
-import {CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../../Shared/EditMeasurePage"
-import {TestCasesPage} from "../../../../../Shared/TestCasesPage"
-import {CQLEditorPage} from "../../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../../Shared/Header"
-import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../../Shared/Header"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -94,26 +94,26 @@ let measureCQL = 'library Library5749 version \'0.0.000\'\n' +
     '      union ["Symptom": "Neurologic impairment"] //Symptom\n' +
     '      union ["Assessment, Performed": "Falls Screening"] //Assessment '
 
-//Skipping until QDM Test Case feature flag is removed
-describe.skip('Quantity Attribute', () => {
 
-        beforeEach('Create measure and login', () => {
+describe('Quantity Attribute', () => {
 
-            //Create QDM Measure
-            CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, false, measureCQL)
-            OktaLogin.Login()
-            MeasuresPage.measureAction("edit")
-            cy.get(EditMeasurePage.cqlEditorTab).click()
-            cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-            cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-            cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-            //wait for alert / successful save message to appear
-            Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-            cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-            OktaLogin.Logout()
-            MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population')
-            OktaLogin.Login()
-        })
+    beforeEach('Create measure and login', () => {
+
+        //Create QDM Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, false, measureCQL)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population')
+        OktaLogin.Login()
+    })
 
     afterEach('Logout and Clean up Measures', () => {
 
@@ -160,7 +160,7 @@ describe.skip('Quantity Attribute', () => {
         cy.get('[data-testid=quantity-value-input-high]').type('4')
         cy.get('[id="quantity-unit-dropdown-high"]').click()
         cy.get('#quantity-unit-dropdown-high-option-0').click() //Select unit as m meter
-        cy.get(TestCasesPage.plusIcon).click()
+        cy.get(TestCasesPage.addAttribute).click()
         cy.get(TestCasesPage.attributeChip).should('contain.text', 'Reference Range: 2 \'m\' - 4 \'m\'')
 
     })

@@ -24,7 +24,7 @@ let testCaseJsonTstSmallBatch03 = TestCaseJson.smallBatchTC4ImportId3
 let testCaseJsonTstSmallBatch04 = TestCaseJson.smallBatchTC4ImportId4
 let testCaseJsonTstSmallBatch05 = TestCaseJson.smallBatchTC4ImportId5
 
-//skipping all test case import tests until flag is removed
+
 describe.skip('Import Test cases onto an existing measure via file', () => {
 
     beforeEach('Login and Create Measure', () => {
