@@ -222,7 +222,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         //Element - Encounter:Performed: Annual Wellness Visit
         cy.get('[data-testid=elements-tab-encounter]').click()
-        cy.get(TestCasesPage.plusIcon).eq(19).click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Annual Wellness Visit"]').click()
         cy.get('[id="dateTime"]').eq(0).type('01/26/2012 08:00 AM')
         cy.get('[id="dateTime"]').eq(1).type('01/26/2012 08:15 AM')
         cy.get(TestCasesPage.attributesTab).click()
@@ -241,7 +241,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         //Element - Procedure:Performed: Unilateral Mastectomy Right
         cy.get('[data-testid=elements-tab-procedure]').click()
-        cy.get(TestCasesPage.plusIcon).eq(0).click()
+        cy.get('[data-testid="data-type-Procedure, Performed: Unilateral Mastectomy Right"]').click()
         cy.get('[id="dateTime"]').eq(0).type('10/26/2012 08:00 AM')
         cy.get('[id="dateTime"]').eq(1).type('10/26/2012 08:15 AM')
         cy.get('[id="code-system-selector"]').click()
@@ -254,7 +254,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         //Element - Procedure:Performed: Unilateral Mastectomy Right
         cy.get('[data-testid=elements-tab-procedure]').click()
-        cy.get(TestCasesPage.plusIcon).eq(0).click()
+        cy.get('[data-testid="data-type-Procedure, Performed: Unilateral Mastectomy Right"]').click()
         cy.get('[id="dateTime"]').eq(0).type('10/26/2012 08:00 AM')
         cy.get('[id="dateTime"]').eq(1).type('10/26/2012 08:15 AM')
         cy.get('[id="code-system-selector"]').click()
@@ -285,7 +285,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         //Element - Encounter:Performed: Preventive Care Services - Established Office Visit, 18 and Up
         cy.get('[data-testid=elements-tab-encounter]').click()
-        cy.get(TestCasesPage.plusIcon).eq(4).click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Preventive Care Services Established Office Visit, 18 and Up"]').click()
         cy.get('[id="dateTime"]').eq(0).type('01/26/2012 01:00 PM')
         cy.get('[id="dateTime"]').eq(1).type('01/26/2012 01:15 PM')
         cy.get(TestCasesPage.attributesTab).click()
@@ -304,7 +304,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         //Element - Condition:Diagnosis: Status Post Right Mastectomy
         cy.get('[data-testid=elements-tab-condition]').click()
-        cy.get(TestCasesPage.plusIcon).eq(3).click()
+        cy.get('[data-testid="data-type-Diagnosis: Status Post Right Mastectomy"]').click()
         cy.get('[id="dateTime"]').eq(0).type('12/31/2012 11:59 PM')
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
@@ -316,7 +316,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         //Element - Condition:Diagnosis: Status Post Left Mastectomy
         cy.get('[data-testid=elements-tab-condition]').click()
-        cy.get(TestCasesPage.plusIcon).eq(0).click()
+        cy.get('[data-testid="data-type-Diagnosis: Status Post Left Mastectomy"]').click()
         cy.get('[id="dateTime"]').eq(0).type('12/31/2012 11:59 PM')
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
