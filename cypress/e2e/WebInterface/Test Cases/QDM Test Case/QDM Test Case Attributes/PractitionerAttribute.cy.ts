@@ -1,12 +1,12 @@
-import {CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../../Shared/EditMeasurePage"
-import {TestCasesPage} from "../../../../../Shared/TestCasesPage"
-import {CQLEditorPage} from "../../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../../Shared/Header"
-import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../../Shared/Header"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -94,8 +94,8 @@ let measureCQL = 'library Library5749 version \'0.0.000\'\n' +
     '      union ["Symptom": "Neurologic impairment"] //Symptom\n' +
     '      union ["Assessment, Performed": "Falls Screening"] //Assessment '
 
-//Skipping until QDM Test Case feature flag is removed
-describe.skip('Practitioner Attribute', () => {
+
+describe('Practitioner Attribute', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -179,8 +179,8 @@ describe.skip('Practitioner Attribute', () => {
         cy.get('[data-testid="option-CDCREC"]').click()
         cy.get(TestCasesPage.codeSelector).eq(2).click()
         cy.get('[data-testid=option-2135-2]').click()//Select Hispanic or Latino
-        cy.get(TestCasesPage.plusIcon).click()
-        cy.get(TestCasesPage.attributeChip).should('contain.text', 'Performer: [Practitioner] Identifier: { Naming System: TestIdentifier, Value: TestValue }, Id: 3, Role: SNOMEDCT : 4525004, Specialty: SNOMEDCT : 183452005, Qualification: CDCREC : 2135-2')
+        cy.get(TestCasesPage.addAttribute).click()
+        cy.get(TestCasesPage.attributeChip).should('contain.text', 'Performer - Practitioner: Identifier: { Naming System: TestIdentifier, Value: TestValue }, Id: 3, Role: SNOMEDCT : 4525004, Specialty: SNOMEDCT : 183452005, Qualification: CDCREC : 2135-2')
 
     })
 })

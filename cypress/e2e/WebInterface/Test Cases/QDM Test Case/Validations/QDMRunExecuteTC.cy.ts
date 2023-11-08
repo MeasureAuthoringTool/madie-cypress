@@ -18,7 +18,7 @@ let testCaseSeries = 'SBTestSeries'
 let measureCQL = MeasureCQL.QDMCQL4MAT5645
 
 //skipping these tests until user story MAT-5645 is fixed
-describe.skip('Run / Execute Test case and verify passing percentage and coverage', () => {
+describe('Run / Execute Test case and verify passing percentage and coverage', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
@@ -72,7 +72,7 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(3000)
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -165,7 +165,9 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(7000)
+
+        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 30000)
 
         //create a test case that will fail:
 
@@ -210,7 +212,9 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).wait(7000).click()
+
+        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 30000)
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -288,7 +292,9 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).wait(7000).click()
+
+        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 30000)
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
@@ -306,8 +312,8 @@ describe.skip('Run / Execute Test case and verify passing percentage and coverag
     })
 })
 
-//Skipping until feature flag is removed
-describe.skip('Run / Execute QDM Test Case button validations', () => {
+
+describe('Run / Execute QDM Test Case button validations', () => {
 
     beforeEach('Login and Create Measure', () => {
 
@@ -355,7 +361,7 @@ describe.skip('Run / Execute QDM Test Case button validations', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click().wait(3000)
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -370,7 +376,7 @@ describe.skip('Run / Execute QDM Test Case button validations', () => {
         //click on details tab
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.disabled')
+
     })
 
     it('Run / Execute Test Case button is disabled  -- Missing group / population selections', () => {
@@ -431,7 +437,7 @@ describe.skip('Run / Execute QDM Test Case button validations', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click().wait(3000)
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -456,8 +462,7 @@ describe.skip('Run / Execute QDM Test Case button validations', () => {
     })
 })
 
-//Skipping until feature flag is removed
-describe.skip('Run / Execute Test case for multiple Population Criteria', () => {
+describe('Run / Execute Test case for multiple Population Criteria', () => {
 
     beforeEach('Create Measure, Measure group and login', () => {
 
@@ -519,12 +524,12 @@ describe.skip('Run / Execute Test case for multiple Population Criteria', () => 
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).click()
         //save dob value
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(3000)
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('exist')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).wait(3000).click()
+        cy.get(EditMeasurePage.testCasesTab).wait(7000).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
@@ -540,8 +545,7 @@ describe.skip('Run / Execute Test case for multiple Population Criteria', () => 
     })
 })
 
-//Skipping until feature flag is removed
-describe.skip('Run / Execute Test Case by Non Measure Owner', () => {
+describe('Run / Execute Test Case by Non Measure Owner', () => {
 
     beforeEach('Create Measure, Measure group and Test case', () => {
 

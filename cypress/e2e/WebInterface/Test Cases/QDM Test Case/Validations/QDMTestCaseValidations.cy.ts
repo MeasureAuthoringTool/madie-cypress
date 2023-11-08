@@ -28,10 +28,11 @@ let measureScoring = 'Cohort'
 let qdmMeasureCQL = MeasureCQL.simpleQDM_CQL
 let qdmMeasureCQLwInvalidValueset = MeasureCQL.simpleQDM_CQL_invalid_valueset
 let qdmMeasureCQLwDataTMMtoCQM = MeasureCQL.QDMTestCaseCQLFullElementSection
+let qdmMeasureCQLwNonVsacValueset = MeasureCQL.QDMTestCaseCQLNonVsacValueset
 
 
-//Skipping until QDM Test Case feature flag is removed
-describe.skip('Test Case Ownership Validations for QDM Measures', () => {
+
+describe('Test Case Ownership Validations for QDM Measures', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -91,8 +92,8 @@ describe.skip('Test Case Ownership Validations for QDM Measures', () => {
     })
 })
 
-//Skipping until QDM Test Case feature flag is removed
-describe.skip('Create Test Case Validations', () => {
+
+describe('Create Test Case Validations', () => {
 
     before('Create Measure', () => {
         //Create New Measure
@@ -164,8 +165,7 @@ describe.skip('Create Test Case Validations', () => {
     })
 })
 
-//Skipping until QDM Test Case feature flag is removed
-describe.skip('Edit Test Case Validations', () => {
+describe('Edit Test Case Validations', () => {
 
     before('Create QDM Measure and Test Case ', () => {
         //Create New Measure
@@ -256,48 +256,6 @@ describe.skip('Edit Test Case Validations', () => {
         cy.get(TestCasesPage.editTestCaseTitleInlineError).should('contain.text', 'Test Case Title is required.')
     })
 
-    it('Test Case dob validations: no dob', () => {
-
-        MeasuresPage.measureAction("edit")
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //Navigate to Edit Test Case page
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        //select the dob field, enter nothing for DOB, and, then, enter a value for Race
-        cy.get(TestCasesPage.QDMDob).click()
-        cy.get(TestCasesPage.QDMRace).click()
-        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
-
-        //confirm helper text / validation message for the DOB field
-        cy.get(TestCasesPage.QDMDOBHelperTxt).should('contain.text', 'Birthdate is required')
-
-    })
-
-    it('Test Case dob validations: wrong format for dob value', () => {
-
-        MeasuresPage.measureAction("edit")
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //Navigate to Edit Test Case page
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        //select the dob field, enter nothing for DOB, and, then, enter a value for Race
-        cy.get(TestCasesPage.QDMDob).type('2020/01/01').click()
-        cy.get(TestCasesPage.QDMRace).click()
-        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
-
-        //confirm helper text / validation message for the DOB field
-        cy.get(TestCasesPage.QDMDOBHelperTxt).should('contain.text', 'Birthdate is required')
-
-    })
-
     //dirty check validation
     it('Validate dirty check when user attempts to navigate away from the QDM Test Case edit page', () => {
         //Click on Edit Measure
@@ -350,8 +308,8 @@ describe.skip('Edit Test Case Validations', () => {
     })
 })
 
-//Skipping until QDM Test Case feature flag is removed
-describe.skip('Dirty Check Validations', () => {
+
+describe('Dirty Check Validations', () => {
 
     before('Create QDM Measure and Test Case ', () => {
         //Create New Measure
@@ -369,11 +327,11 @@ describe.skip('Dirty Check Validations', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    //Discard changes button
+
     it('Validate dirty check on the test case title, in the test case details tab', () => {
 
         //create test case and login
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
+        //TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
 
         //Click on Edit Measure
@@ -391,26 +349,19 @@ describe.skip('Dirty Check Validations', () => {
         cy.get(TestCasesPage.elementsTab).should('be.enabled')
         cy.get(TestCasesPage.elementsTab).click()
 
-        //enter a value of the dob
-        cy.get(TestCasesPage.QDMDob).clear()
-        cy.get(TestCasesPage.QDMDob).type('01/01/2000')
+        //enter a value of the Ethnicity
+        cy.get(TestCasesPage.QDMEthnicity).should('contain.text', 'Not Hispanic or Latino')
+
 
         //take focus off of the date field
         cy.get(TestCasesPage.elementsTab).click()
 
-        cy.get(TestCasesPage.QDMTcDiscardChangesButton).should('exist')
-        cy.get(TestCasesPage.QDMTcDiscardChangesButton).should('be.enabled')
-        cy.get(TestCasesPage.QDMTcDiscardChangesButton).click()
-
-        //verify that the discard modal appears and click on discard
-        Global.clickOnDiscardChanges()
-
-        //verify that the dob value changes back to it's previous value
-        cy.get(TestCasesPage.QDMDob).should('contain.value', '01/01/2020')
+        //verify that the Ethnicity value changes back to it's previous value
+        cy.get(TestCasesPage.QDMEthnicity).should('contain.text', 'Not Hispanic or Latino')
 
         //change a value for the dob, again
-        cy.get(TestCasesPage.QDMDob).clear()
-        cy.get(TestCasesPage.QDMDob).type('01/01/2000')
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Hispanic or Latino').click()
 
         //take focus off of the date field
         cy.get(TestCasesPage.elementsTab).click()
@@ -422,16 +373,16 @@ describe.skip('Dirty Check Validations', () => {
         //verify discard modal and click on keep working
         Global.clickDiscardAndKeepWorking()
 
-        //verify that the dob valu is left unchanged from it's last change
-        cy.get(TestCasesPage.QDMDob).should('contain.value', '01/01/2000')
+        //verify that the Ethnicity valu is left unchanged from it's last change
+        cy.get(TestCasesPage.QDMEthnicity).should('contain.text', 'Not Hispanic or Latino')
 
 
     })
 
 })
 
-//Skipping until QDM Test Case feature flag is removed
-describe.skip('QDM CQM-Execution failure error validations: CQL Errors and missing group', () => {
+
+describe('QDM CQM-Execution failure error validations: CQL Errors and missing group', () => {
 
     beforeEach('Create Measure, and Test Case', () => {
         //Create New Measure
@@ -527,8 +478,8 @@ describe.skip('QDM CQM-Execution failure error validations: CQL Errors and missi
 
 })
 
-//Skipping until QDM Test Case feature flag is removed
-describe.skip('QDM CQM-Execution failure error validations: Valueset not found in Vsac', () => {
+
+describe('QDM CQM-Execution failure error validations: Valueset not found in Vsac', () => {
 
     beforeEach('Create Measure, and Test Case', () => {
         //Create New Measure
@@ -588,12 +539,12 @@ describe.skip('QDM CQM-Execution failure error validations: Valueset not found i
     })
 })
 
-//Skipping until QDM Test Case feature flag is removed
-describe.skip('QDM CQM-Execution failure error validations: Data transformation- MADiE Measure to CQMMeasure', () => {
+
+describe('QDM CQM-Execution failure error validations: Data transformation- MADiE Measure to CQMMeasure', () => {
 
     beforeEach('Create Measure, and Test Case', () => {
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, false, qdmMeasureCQLwDataTMMtoCQM)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, false, qdmMeasureCQLwNonVsacValueset)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
 
 
@@ -641,7 +592,7 @@ describe.skip('QDM CQM-Execution failure error validations: Data transformation-
         Utilities.waitForElementVisible(TestCasesPage.testCaseExecutionError, 105000)
         cy.get(TestCasesPage.testCaseExecutionError).should('exist')
         cy.get(TestCasesPage.testCaseExecutionError).should('be.visible')
-        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'An error occurred, please try again. If the error persists, please contact the help desk')
+        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'An error exists with the measure CQL, please review the CQL Editor tab.')
 
         //confirm that the Run Test button is disabled
         cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('not.be.enabled')

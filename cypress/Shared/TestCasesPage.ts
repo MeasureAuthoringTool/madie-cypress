@@ -133,7 +133,7 @@ export class TestCasesPage {
     public static readonly tcJsonTab = '[data-testid=json-tab]'
 
     //QDM Test Case
-    public static readonly qdmCQLFailureErrorList = '[data-testid="generic-fail-text-list"]'
+    public static readonly qdmCQLFailureErrorList = '[data-testid="execution_context_loading_errors"]'
     public static readonly qdmTCJson = '[class="panel-content"]'
 
     //CQL area on Test Case page
@@ -322,7 +322,9 @@ export class TestCasesPage {
     public static readonly importNonBonnieTestCasesBtn = '[data-testid="import-test-cases-button"]'
 
     //QDM Test Case Elements Tab
-    public static readonly QDMElementsTab = '[data-testid=qdm-Elements-sub-heading]'
+
+
+    public static readonly QDMElementsTab = '[data-testid="elements-section"]'
 
     //QDM Test Case Attributes
     public static readonly laboratoryElement = '[data-testid=elements-tab-laboratory_test]'
@@ -469,7 +471,7 @@ export class TestCasesPage {
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(EditMeasurePage.testCasesTab).click().wait(3500)
         cy.get(this.newTestCaseButton).should('be.visible')
         cy.get(this.newTestCaseButton).should('be.enabled')
         cy.get(this.newTestCaseButton).click()

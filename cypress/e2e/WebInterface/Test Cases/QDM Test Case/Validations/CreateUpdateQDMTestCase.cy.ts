@@ -90,8 +90,8 @@ let measureCQLWithElements = 'library QDMTestLibrary1686087138930 version \'0.0.
     'define "SDE Sex":\n' +
     '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n'
 
-//Skipping until QDM Test Case feature flag is removed
-describe.skip('Create and Update QDM Test Case', () => {
+
+describe('Create and Update QDM Test Case', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -189,8 +189,7 @@ describe.skip('Create and Update QDM Test Case', () => {
     })
 })
 
-//Skipping until QDM Test Case feature flag is removed
-describe.skip('Non Boolean Test case Expected Values', () => {
+describe('Non Boolean Test case Expected Values', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -238,7 +237,7 @@ describe.skip('Non Boolean Test case Expected Values', () => {
 })
 
 //Skipping until QDM Test Case feature flag is removed
-describe.skip('QDM element tabs', () => {
+describe('QDM element tabs', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -256,7 +255,7 @@ describe.skip('QDM element tabs', () => {
 
     })
 
-    it('Verify QDM Element tabs relevant to the Measure CQL', () => {
+    it.only('Verify QDM Element tabs relevant to the Measure CQL', () => {
 
         MeasuresPage.measureAction("edit")
 
@@ -270,6 +269,7 @@ describe.skip('QDM element tabs', () => {
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
 
+        cy.pause()
         cy.get(TestCasesPage.QDMElementsTab).scrollIntoView().should('contain', 'Adverse Event' && 'Allergy' && 'Assessment' && 'Care Experience')
 
         //Navigate to CQL Editor tab and verify the same Elements are present in the Measure CQL

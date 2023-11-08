@@ -1,12 +1,12 @@
-import {CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../../Shared/EditMeasurePage"
-import {TestCasesPage} from "../../../../../Shared/TestCasesPage"
-import {CQLEditorPage} from "../../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../../Shared/Header"
-import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../../Shared/Header"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -94,8 +94,8 @@ let measureCQL = 'library Library5749 version \'0.0.000\'\n' +
     '      union ["Symptom": "Neurologic impairment"] //Symptom\n' +
     '      union ["Assessment, Performed": "Falls Screening"] //Assessment '
 
-//Skipping until QDM Test Case feature flag is removed
-describe.skip('Date Time Attribute', () => {
+
+describe('Date Time Attribute', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -156,7 +156,7 @@ describe.skip('Date Time Attribute', () => {
         cy.get(TestCasesPage.attributeType).click()
         cy.get('[data-testid=option-DateTime]').click() //Select DateTime from dropdown
         cy.get('[id="dateTime"]').eq(5).type('12/12/200011:30AM')
-        cy.get(TestCasesPage.plusIcon).click()
+        cy.get(TestCasesPage.addAttribute).click()
         cy.get(TestCasesPage.attributeChip).should('contain.text', 'Result: 12/12/2000 11:30 AM')
 
     })

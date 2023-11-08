@@ -8,14 +8,17 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { Header } from "../../../../../Shared/Header"
+import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
+let measureCQL2RunObservations = MeasureCQL.CQLQDMObservationRun
 let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let scoringValue = 'Ratio'
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.QDMTestCaseJson
+let QDMTCJsonwMOElements = TestCaseJson.QDMTCJsonwMOElements
 let measureCQL = 'library HospitalHarmHyperglycemiainHospitalizedPatients version \'3.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
@@ -242,8 +245,8 @@ let measureCQL = 'library HospitalHarmHyperglycemiainHospitalizedPatients versio
     '      )\n' +
     '  )\n' +
     '\n'
-//skipping tests until feature flag is removed
-describe.skip('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', () => {
+
+describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -270,8 +273,7 @@ describe.skip('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    //skipping becasue QDM Test Cases is not in production, yet -- waiting until featrue flag is removed
-    it.skip('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropirate fields and sections', () => {
+    it('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropirate fields and sections', () => {
 
         //navigate to the main measures page and edit the measure
         cy.get(Header.measures).click()
@@ -468,6 +470,109 @@ describe.skip('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO
         cy.get(TestCasesPage.numer0Observation).should('not.be.enabled')
         cy.get(TestCasesPage.numer1Observation).should('not.be.enabled')
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('not.be.enabled')
+
+    })
+})
+describe('QDM Measure: Test Case: with Observations: Expected / Actual results', () => {
+
+    beforeEach('Create Measure', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringValue, false, measureCQL2RunObservations, false, false,
+            '2023-01-01', '2025-01-01')
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJsonwMOElements, false, false)
+        OktaLogin.Login()
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
+            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        OktaLogin.Logout()
+    })
+
+    afterEach('Clean up', () => {
+
+        OktaLogin.Logout()
+
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+    it('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropirate fields and sections', () => {
+
+        //navigate to the main measures page and edit the measure
+        cy.get(Header.measures).click()
+        MeasuresPage.measureAction("edit")
+
+        //fill out group details
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(14).click()
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(4).click()
+        cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
+        cy.get(MeasureGroupPage.denominatorObservation).click()
+        cy.get(MeasureGroupPage.measureObservationSelect).eq(3).click()
+        cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
+        cy.get(MeasureGroupPage.aggregateFunctionDropdownList).eq(0).click()
+        cy.get(MeasureGroupPage.denominatorExclusionSelect).click()
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(3).click()
+        cy.get(MeasureGroupPage.numeratorSelect).click()
+        cy.get(MeasureGroupPage.measurePopulationOption).eq(15).click()
+        cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
+        cy.get(MeasureGroupPage.numeratorObservation).click()
+        cy.get(MeasureGroupPage.measureObservationSelect).eq(4).click()
+        cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
+        cy.get(MeasureGroupPage.aggregateFunctionDropdownList).eq(5).click()
+
+        //save group details
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        //confirm details were saved
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Navigate to Edit Test Case page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //click on the Expected / Actual tab
+        cy.get(TestCasesPage.expectedOrActualTab).click()
+
+        //enter 1 for expected initial population
+        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
+
+        //enter 1 for the expected denominator to generate 1 observation field
+        cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
+        cy.get(TestCasesPage.denom0Observation).should('be.visible')
+
+        //enter 1 for denominator observation field
+        cy.get(TestCasesPage.denom0Observation).clear().type('6')
+
+        //enter 1 for the expected numerator to generate 1 observation field
+        cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
+        cy.get(TestCasesPage.numer0Observation).should('be.visible')
+
+        //enter 6 for the numerator observation field
+        cy.get(TestCasesPage.numer0Observation).clear().type('1')
+
+        //save test case
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+
+        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).click()
+
+        cy.get(TestCasesPage.ippActualCheckBox).should('contain.value', '1')
+        cy.get(TestCasesPage.denomActualCheckBox).should('contain.value', '1')
+        cy.get(TestCasesPage.denominatorMeasureObservationActualValue).should('contain.value', '6')
+        cy.get(TestCasesPage.denomExclusionActualCheckBox).should('contain.value', '0')
+        cy.get(TestCasesPage.numActualCheckBox).should('contain.value', '1')
+        cy.get(TestCasesPage.numeratorMeasureObservationActualValue).should('contain.value', '1')
 
     })
 })
