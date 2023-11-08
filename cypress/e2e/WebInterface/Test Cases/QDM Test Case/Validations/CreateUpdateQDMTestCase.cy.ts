@@ -269,7 +269,6 @@ describe('QDM element tabs', () => {
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.pause()
         cy.get(TestCasesPage.QDMElementsTab).scrollIntoView().should('contain', 'Adverse Event' && 'Allergy' && 'Assessment' && 'Care Experience')
 
         //Navigate to CQL Editor tab and verify the same Elements are present in the Measure CQL

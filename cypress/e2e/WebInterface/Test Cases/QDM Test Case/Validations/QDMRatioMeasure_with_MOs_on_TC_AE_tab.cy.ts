@@ -370,7 +370,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(TestCasesPage.numer2Observation).should('not.exist')
     })
     //skipping becasue QDM Test Cases is not in production, yet -- waiting until featrue flag is removed
-    it.skip('Non-owner of measure cannot edit observation fields', () => {
+    it('Non-owner of measure cannot edit observation fields', () => {
 
         //navigate to the main measures page and edit the measure
         cy.get(Header.measures).click()
