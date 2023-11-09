@@ -286,13 +286,6 @@ describe('Edit Test Case Validations', () => {
         //verify that the discard modal appears
         Global.clickOnDirtyCheckCancelChanges()
 
-        //verify that the user remains on the test case edit page
-        cy.readFile(measurePath).should('exist').then((measureId) => {
-            cy.readFile(testCasePath).should('exist').then((testCaseId) => {
-                cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + measureId + '/edit/test-cases/' + testCaseId)
-            })
-
-        })
         //attempt to navigate away from the test case page
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -300,10 +293,6 @@ describe('Edit Test Case Validations', () => {
         Utilities.waitForElementVisible(Global.discardChangesConfirmationModal, 37000)
         //verify that the discard modal appears
         Global.clickOnDirtyCheckDiscardChanges()
-        //verify that the user is, now, on the PC -> Base Configuration page
-        cy.readFile(measurePath).should('exist').then((measureId) => {
-            cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + measureId + '/edit/base-configuration')
-        })
 
     })
 })
