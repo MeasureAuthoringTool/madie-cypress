@@ -282,7 +282,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
 
         //Element - Condition:Diagnosis: Uveitis
         cy.get('[data-testid=elements-tab-condition]').click()
-        cy.get(TestCasesPage.plusIcon).eq(19).click()
+        cy.get('[data-testid="data-type-Diagnosis: Uveitis"]').click()
         cy.get('[id="dateTime"]').eq(0).type('03/15/2012 07:00 PM')
         cy.get('[id="dateTime"]').eq(1).type('03/15/2012 07:00 PM')
         cy.get('[id="code-system-selector"]').click()
@@ -293,7 +293,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
 
         //Element - Procedure:Performed: Cataract Surgery
         cy.get('[data-testid=elements-tab-procedure]').click()
-        cy.get(TestCasesPage.plusIcon).eq(0).click()
+        cy.get('[data-testid="data-type-Procedure, Performed: Cataract Surgery"]').click()
         cy.get('[id="dateTime"]').eq(0).type('03/15/2012 05:00 PM')
         cy.get('[id="dateTime"]').eq(1).type('03/15/2012 07:00 PM')
         cy.get('[id="code-system-selector"]').click()
@@ -304,7 +304,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
 
         //Element - Condition:Diagnosis: Optic Atrophy
         cy.get('[data-testid=elements-tab-condition]').click()
-        cy.get(TestCasesPage.plusIcon).eq(29).click()
+        cy.get('[data-testid="data-type-Diagnosis: Optic Atrophy"]').click()
         cy.get('[id="dateTime"]').eq(0).type('03/15/2012 07:00 PM')
         cy.get('[id="dateTime"]').eq(1).type('03/15/2012 07:00 PM')
         cy.get('[id="code-system-selector"]').click()
@@ -343,7 +343,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
 
         //Element - Condition:Diagnosis: Disorders of Visual Cortex
         cy.get('[data-testid=elements-tab-condition]').click()
-        cy.get(TestCasesPage.plusIcon).eq(14).click()
+        cy.get('[data-testid="data-type-Diagnosis: Disorders of Visual Cortex"]').click()
         cy.get('[id="dateTime"]').eq(0).type('01/01/2012 01:15 PM')
         cy.get('[id="dateTime"]').eq(1).type('01/02/2012 01:15 PM')
         cy.get('[id="code-system-selector"]').click()
@@ -354,7 +354,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
 
         //Element - Procedure:Performed: Cataract Surgery
         cy.get('[data-testid=elements-tab-procedure]').click()
-        cy.get(TestCasesPage.plusIcon).eq(0).click()
+        cy.get('[data-testid="data-type-Procedure, Performed: Cataract Surgery"]').click()
         cy.get('[id="dateTime"]').eq(0).type('01/02/2012 10:15 PM')
         cy.get('[id="dateTime"]').eq(1).type('01/02/2012 01:15 PM')
         cy.get('[id="code-system-selector"]').click()
@@ -367,7 +367,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
 
         //Element - Procedure:Performed: Cataract Surgery
         cy.get('[data-testid=elements-tab-procedure]').click()
-        cy.get(TestCasesPage.plusIcon).eq(0).click()
+        cy.get('[data-testid="data-type-Procedure, Performed: Cataract Surgery"]').click()
         cy.get('[id="dateTime"]').eq(0).type('02/02/2012 01:15 PM')
         cy.get('[id="dateTime"]').eq(1).type('02/02/2012 04:15 PM')
         cy.get('[id="code-system-selector"]').click()
@@ -376,9 +376,9 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         cy.get('[data-testid="code-option-446548003"]').click()
         cy.get('[data-testid=add-code-concept-button]').click()
 
-        //Element - Physical Exam:Performed: Best Corrected Visual Acuity
+        //Element - Physical Exam:Performed: Best Corrected Visual Acuity Exam Using Snellen Chart
         cy.get('[data-testid=elements-tab-physical_exam]').click()
-        cy.get(TestCasesPage.plusIcon).eq(0).click()
+        cy.get('[data-testid="data-type-Physical Exam, Performed: Best Corrected Visual Acuity Exam Using Snellen Chart"]').click()
         cy.get('[id="dateTime"]').eq(2).type('02/02/2012 01:15 PM')
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
@@ -402,8 +402,8 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
+        cy.get(TestCasesPage.testCaseIPPExpected).type('2')
+        cy.get(TestCasesPage.testCaseDENOMExpected).type('2')
         cy.get(TestCasesPage.testCaseDENEXExpected).type('1')
 
         //Save Test case

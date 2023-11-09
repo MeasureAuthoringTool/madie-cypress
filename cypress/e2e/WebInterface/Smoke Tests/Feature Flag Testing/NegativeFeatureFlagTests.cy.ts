@@ -70,58 +70,9 @@ describe('QI Core Test Cases: Ensure / verify that Export QI-Core Bundle type dr
 
         //confirm that the PC sub tab / selector is not present
         Utilities.waitForElementVisible(('[class="export-chevron-container"]'), 35000)
-        cy.get('[class="export-chevron-container"]').click({force: true})
+        cy.get('[class="export-chevron-container"]').click({ force: true })
         cy.get('[data-testid=export-transaction-bundle]').should('be.visible')
         cy.get('[data-testid="export-collection-bundle"]').should('be.visible')
-
-    })
-})
-
-// "highlightingTabs": false
-describe('QI Core Test Cases: Ensure / verify that recent highlighting features are not present', () => {
-
-    beforeEach('Create measure and login', () => {
-        CqlLibraryName = 'TestLibrary6' + Date.now()
-
-        //Create QI Core Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
-        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
-
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        OktaLogin.Login()
-
-    })
-
-    afterEach('Logout and Clean up Measures', () => {
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
-    })
-
-    it('QI Core Test Cases: Verify that Population Criteria sub-tab / selector is not present', () => {
-
-        MeasuresPage.measureAction("edit")
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //navigate to the edit test case page
-        TestCasesPage.testCaseAction('edit')
-
-        //confirm that the highlighting tab is present
-        Utilities.waitForElementVisible(TestCasesPage.tcHighlightingTab, 35000)
-
-        //click on the highlighting tab
-        cy.get(TestCasesPage.tcHighlightingTab).click()
-
-        //confirm that the PC sub tab / selector is not present
-        Utilities.waitForElementToNotExist(TestCasesPage.highlightingPCTabSelector, 35000)
 
     })
 })
@@ -175,39 +126,7 @@ describe('Test Case Import button - BONNIE: verify that the BONNIE import button
 
 })
 
-// "qdmTestCases": false
-describe('QDM Test Cases: Ensure / verify that QDM Test Case edit page is not present', () => {
 
-    beforeEach('Create measure and login', () => {
-
-        //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, false, QDMmeasureCQL)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'SDE Ethnicity')
-        OktaLogin.Login()
-
-    })
-
-    afterEach('Logout and Clean up Measures', () => {
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
-    })
-
-    it('QDM Test Cases: Verify that a temp message letting user know that QDM Test Cases will be avilable later appears', () => {
-
-        MeasuresPage.measureAction("edit")
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //verify temp place holder text appears
-        cy.get(TestCasesPage.qdmComingSoonMsg).should('include.text', '"QDM Test Cases are Coming Soon!"')
-
-
-    })
-})
 
 // "qdmExport": false
 describe('QDM Measure Export: Export option is not available', () => {
