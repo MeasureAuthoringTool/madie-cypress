@@ -39,8 +39,9 @@ describe('Measure Highlighting', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
 
     })
@@ -57,34 +58,82 @@ describe('Measure Highlighting', () => {
     })
 
     it('Execute single Test Case and verify Measure highlighting', () => {
+        let measureGroupPath = 'cypress/fixtures/groupId'
+        let measurePath = 'cypress/fixtures/measureId'
+        OktaLogin.Login()
 
-        //Add Measure Group
-        MeasureGroupPage.createMeasureGroupforRatioMeasure()
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
 
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        //Create Measure Group
+        cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
+            if ($ele.text() == "Text") {
+                cy.wrap($ele).should('exist')
+                cy.wrap($ele).focus()
+                cy.wrap($ele).click()
+            }
+        })
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Initial PopulationOne')
 
-        TestCasesPage.clickEditforCreatedTestCase()
+        //intercept group id once update to the measure group is saved
+        cy.readFile(measurePath).should('exist').then((fileContents) => {
+            cy.intercept('PUT', '/api/measures/' + fileContents + '/groups').as('group')
+        })
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.updateMeasureGroupConfirmationBtn, 35000)
+        Utilities.waitForElementEnabled(MeasureGroupPage.updateMeasureGroupConfirmationBtn, 35000)
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
+        cy.wait('@group', { timeout: 60000 }).then((request) => {
+            cy.writeFile(measureGroupPath, request.response.body.id)
+        })
 
+        //validation successful update message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).wait(4000).click()
+
+        //Navigate to test case detail / edit page
+        TestCasesPage.testCaseAction('edit')
+
+        //Navigate to the Expected / Actual sub tab
+        Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
+        cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click({ force: true })
+
+        //check checkboxes to get a passing result from running the test case
+        Utilities.waitForElementVisible(TestCasesPage.testCaseIPPExpected, 35000)
+        cy.get(TestCasesPage.testCaseIPPExpected).scrollIntoView().check({ force: true })
+
+        //run test case
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click()
 
+        //navigate to the highlighting sub tab
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
         cy.get(TestCasesPage.tcHighlightingTab).click()
 
-        cy.get(TestCasesPage.testCalculationResults).should('contain', 'Population Criteria 1')
-
-        cy.get(TestCasesPage.testCalculationResults).should('contain', 'define "num":\n' +
-            '  exists ["Encounter"] E where E.status ~ \'finished\'')
+        cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
+            cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
+            Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
+            cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Initial PopulationOne":\ntrue\n')
+            cy.get('[data-ref-id="34"]').should('have.color', '#20744C')
+        })
     })
 })
-//MAT-6074
-describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a single PC measure', () => {
+
+describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a single PC measure', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -109,7 +158,7 @@ describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Highlighti
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
-    //MAT-6074
+
     it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with a single PC', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measurePath = 'cypress/fixtures/measureId'
@@ -196,8 +245,8 @@ describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Highlighti
         })
     })
 })
-//MAT-6268
-describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a multiple PC measure', () => {
+
+describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a multiple PC measure', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -221,8 +270,7 @@ describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Highlighti
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
-    //MAT-6268
-    it.skip('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
+    it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measureSecondGroupPath = 'cypress/fixtures/groupId2'
         let measurePath = 'cypress/fixtures/measureId'
@@ -361,8 +409,8 @@ describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Highlighti
         })
     })
 })
-//MAT-6087
-describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
+
+describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -386,7 +434,7 @@ describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Includes R
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
-    //MAT-6087
+
     it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measurePath = 'cypress/fixtures/measureId'
@@ -468,8 +516,8 @@ describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Includes R
 
     })
 })
-//MAT-5956
-describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
+
+describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -493,7 +541,7 @@ describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Includes R
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
-    //MAT-5956
+
     it('QI Core Measure: New Highlighting Left Navigation panel sections includes auto-expanded Result section with content and Result section can be collapsed', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measurePath = 'cypress/fixtures/measureId'
