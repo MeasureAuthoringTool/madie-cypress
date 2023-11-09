@@ -31,7 +31,8 @@ let validTestCaseJsonBobby = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let validFileToUpload = downloadsFolder.toString()
 let invalidFileToUpload = 'cypress/fixtures'
-
+let firstMeasureName = ''
+let updatedCQLLibraryName = ''
 
 describe('Test Case Import: functionality tests', () => {
 
@@ -586,9 +587,10 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
-        CqlLibraryName = 'TestLibrary5' + Date.now()
+        firstMeasureName = measureName + 'a'
+        updatedCQLLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'a', CqlLibraryName, measureCQLPFTests, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests, false)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
     })
 
@@ -598,8 +600,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-
-
+        Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
     })
     it('Importing two new test cases with unique family name and given name: verify expected match that of original test case; verify family name is Test Case group; verify that given name is Test Case title; verify that test case is editable', () => {
         cy.clearCookies()
@@ -642,9 +643,9 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export test case
-        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({force: true})
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
-        cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({ force: true })
+        cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({force: true})
 
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
@@ -669,7 +670,10 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip'), {
+            action: 'drag-drop',
+            force: true
+        })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -682,6 +686,29 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessInfo, 35000)
         cy.get(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', '(2) test case(s) were imported.')
 
+    })
+})
+
+describe('Test case uniqueness error validation', () => {
+
+    deleteDownloadsFolderBeforeAll()
+
+    beforeEach('Create measure, login and update CQL, create group, and login', () => {
+
+        firstMeasureName = measureName + 'a'
+        updatedCQLLibraryName = 'TestLibrary5' + Date.now()
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests, false)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+        OktaLogin.Logout()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
     })
     it('Importing two new test cases with the same family name and given name: verify uniqueness error', () => {
         cy.clearCookies()
@@ -752,9 +779,10 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
-        CqlLibraryName = 'TestLibrary5' + Date.now()
+        firstMeasureName = measureName + 'a'
+        updatedCQLLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'a', CqlLibraryName, measureCQLPFTests, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests, false)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
     })
 
@@ -764,7 +792,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        //Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
 
     })
     it('Importing two new test cases with the pc not matching on the measure in which the test cases is being imported into', () => {
@@ -772,6 +800,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         CqlLibraryName = 'TestLibrary6' + Date.now()
+
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, true)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(true, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonLizzy, true, false)
