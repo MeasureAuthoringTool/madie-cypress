@@ -96,6 +96,7 @@ describe('CQL Library Transfer', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
+        cy.wait(1000)
 
         //Edit CQL Library details
         CQLLibrariesPage.clickEditforCreatedLibrary()
