@@ -245,6 +245,7 @@ export class TestCasesPage {
     public static readonly genderSelectValuesElementTab = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
     public static readonly bonnieImportTestCaseBtn = '[data-testid="import-test-cases-from-bonnie-button"]'
     public static readonly highlightingPCTabSelector = '[data-testid="population-criterion-selector"]'
+    public static qdmTestCaseViewBtn = '.action'
 
     //Stratifications
     public static readonly denominatorStratificationOneExpectedValue = '[data-testid="test-population-Strata-1 Denominator-expected"]'
@@ -311,19 +312,14 @@ export class TestCasesPage {
     public static readonly importTestCaseSuccessMsg = '[data-testid=success-toast]'
     public static readonly importTestCaseErrorMsg = '[data-testid=error-toast]'
     public static readonly importTestCaseSuccessInfo = '[id="content"]'
+    public static readonly importNonBonnieTestCasesBtn = '[data-testid="import-test-cases-button"]'
 
     //Export Test Cases
     public static readonly exportTestCasesBtn = '[data-testid="export-test-cases-button"]'
     public static readonly exportTransactionTypeOption = '[data-testid="export-transaction-bundle"]'
     public static readonly exportCollectionTypeOption = '[data-testid="export-collection-bundle"]'
 
-
-    //Import Test Cases
-    public static readonly importNonBonnieTestCasesBtn = '[data-testid="import-test-cases-button"]'
-
     //QDM Test Case Elements Tab
-
-
     public static readonly QDMElementsTab = '[data-testid="elements-section"]'
 
     //QDM Test Case Attributes

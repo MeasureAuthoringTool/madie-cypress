@@ -151,7 +151,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.wait(1000)
-                cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
+                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId,
@@ -169,7 +169,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.wait(1000)
-                cy.readFile('cypress/fixtures/testcaseId2').should('exist').then((testCaseId2) => {
+                cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((testCaseId2) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + id + '/test-cases/' + testCaseId2,
@@ -274,7 +274,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
             cy.getCookie('accessToken').then((accessToken) => {
                 cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                     cy.wait(1000)
-                    cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
+                    cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/measures/' + id + '/test-cases/' + testCaseId,
@@ -292,7 +292,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
             cy.getCookie('accessToken').then((accessToken) => {
                 cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                     cy.wait(1000)
-                    cy.readFile('cypress/fixtures/testcaseId2').should('exist').then((testCaseId2) => {
+                    cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((testCaseId2) => {
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/measures/' + id + '/test-cases/' + testCaseId2,

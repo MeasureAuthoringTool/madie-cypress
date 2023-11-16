@@ -450,6 +450,8 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
     })
 
     it('Run and Execute Test case for multiple Population Criteria and validate Population Criteria discernment, on Highlighting page and Test Case list page', () => {
+        let measureGroupPath = 'cypress/fixtures/groupId'
+        let measurePath = 'cypress/fixtures/measureId'
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -534,15 +536,20 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         //Click on Run Test button and verify the text on Highlighting tab
         cy.get(TestCasesPage.runTestButton).click()
-        cy.get(TestCasesPage.testCalculationResults)
-            .find('[data-statement-name="Initial Population"]')
-            .should('contain.text', 'define "Initial Population"')
-            .should('contain.text', 'exists')
-            .should('contain.text', '"Qualifying Encounters"')
-        cy.get(TestCasesPage.testCalculationResults)
-            .find('[data-statement-name="Qualifying Encounters"]')
-            .should('contain.text', '\ndefine "Qualifying Encounters":\n(\n[Encounter: "Office Visit"]\nunion [Encounter: "Annual Wellness Visit"]\nunion [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\nunion [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\nunion [Encounter: "Home Healthcare Services"]\n) ValidEncounter\nwhere ValidEncounter.period during "Measurement Period"\nand ValidEncounter.isFinishedEncounter()\n')
-        cy.get(TestCasesPage.testCalculationResults).should('contain.text', 'Population Criteria 2')
+
+        cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
+
+            cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
+            Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
+            cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Initial Population":\nexists "Qualifying Encounters"\nResultsFALSE (false) ')
+            cy.get('[data-ref-id="45"]').should('have.color', '#A63B12')
+
+        })
+
+        cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Definitions').click()
+        Utilities.waitForElementVisible(TestCasesPage.tcDEFINITIONSHighlightingDetails, 35000)
+        cy.get(TestCasesPage.tcDEFINITIONSHighlightingDetails).should('contain.text', '\ndefine "Qualifying Encounters":\n(\n[Encounter: "Office Visit"]\nunion [Encounter: "Annual Wellness Visit"]\nunion [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\nunion [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\nunion [Encounter: "Home Healthcare Services"]\n) ValidEncounter\nwhere ValidEncounter.period during "Measurement Period"\nand ValidEncounter.isFinishedEncounter()\n')
+        cy.get('[data-ref-id="42"]').should('have.color', '#A63B12')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('exist')
