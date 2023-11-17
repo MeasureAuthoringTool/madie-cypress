@@ -91,7 +91,7 @@
 	},
 	"dependencies": {
 		"node": "^16.15.0",
-		"unzipper": "^0.10.11",
+		"unzipper": "^0.10.14",
 		"uuid": "^7.0.3"
 	}
 }
