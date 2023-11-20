@@ -95,7 +95,7 @@ let measureCQL = 'library Library5749 version \'0.0.000\'\n' +
     '      union ["Assessment, Performed": "Falls Screening"] //Assessment '
 
 
-describe('Date Time Attribute', () => {
+describe('Test Case Attributes', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -158,6 +158,57 @@ describe('Date Time Attribute', () => {
         cy.get('[id="dateTime"]').eq(5).type('12/12/200011:30AM')
         cy.get(TestCasesPage.addAttribute).click()
         cy.get(TestCasesPage.attributeChip).should('contain.text', 'Result: 12/12/2000 11:30 AM')
+
+    })
+
+    it('Add Related To attribute to the Test case', () => {
+
+        cy.get(Header.measures).click()
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //create test case
+        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+
+        //Navigate to Edit Test Case page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //enter a value of the dob, Race and gender
+        cy.get(TestCasesPage.QDMDob).type('01/01/2020').click()
+        cy.get(TestCasesPage.QDMLivingStatus).click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
+        cy.get(TestCasesPage.QDMGender).click()
+        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+
+        //Add Date Time Attribute
+        cy.get(TestCasesPage.laboratoryElement).click()
+        cy.get(TestCasesPage.plusIcon).eq(1).click()
+        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.selectAttributeDropdown).click()
+        cy.get('[data-testid=option-Result]').click()
+        cy.get(TestCasesPage.attributeType).click()
+        cy.get('[data-testid=option-DateTime]').click() //Select DateTime from dropdown
+        cy.get('[id="dateTime"]').eq(5).type('12/12/200011:30AM')
+        cy.get(TestCasesPage.addAttribute).click()
+        cy.get(TestCasesPage.attributeChip).should('contain.text', 'Result: 12/12/2000 11:30 AM')
+
+        //Add Related To Attribute
+        cy.get('[data-testid="elements-tab-care_goal"]').click()
+        cy.get(TestCasesPage.plusIcon).eq(0).click()
+        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.selectAttributeDropdown).click()
+        cy.get('[data-testid="option-Related To"]').click()
+        cy.get('[id="data-element-selector"]').click()
+        cy.get('[data-testid="Laboratory Test, Performed: Chlamydia Screening-option"]').click() //Select Laboratory Test, Performed: Chlamydia Screening from dropdown
+        cy.get(TestCasesPage.addAttribute).click()
+        cy.get(TestCasesPage.attributeChip).should('contain', 'Laboratory Test, Performed: Chlamydia Screening')
 
     })
 })
