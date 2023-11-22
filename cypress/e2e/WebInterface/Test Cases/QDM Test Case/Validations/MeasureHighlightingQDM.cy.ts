@@ -183,7 +183,7 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
-    it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
+    it('QDM Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measureSecondGroupPath = 'cypress/fixtures/groupId2'
         let measurePath = 'cypress/fixtures/measureId'
