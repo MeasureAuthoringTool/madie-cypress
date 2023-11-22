@@ -3,6 +3,9 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 
 export class TestCasesPage {
+    //<button data-testid="qdm-test-case-run-button" class="qpp-c-button" type="button">Run Test</button>
+
+
     //QI Core element tab enabled test case detail page elements
     public static readonly QiCoreEleEnabledJSONTab = '[data-testid="json-tab"]'
 

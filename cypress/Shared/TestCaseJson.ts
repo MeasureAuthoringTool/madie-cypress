@@ -13,6 +13,129 @@ export class TestCaseJson {
         '"system": "http://clinfhir.com/fhir/NamingSystem/identifier", "value": "20181011LizzyHealth" } ], "name": [ { "use": "official", ' +
         '"text": "Lizzy Health", "family": "Health", "given": [ "Lizzy" ] } ], "gender": "female", "birthDate": "2000-10-11" } } ] }'
 
+    public static readonly tcJSON_QDM_Value = '{\n' +
+        '    "qdmVersion": "5.6",\n' +
+        '    "dataElements": [\n' +
+        '      {\n' +
+        '        "dataElementCodes": [\n' +
+        '          {\n' +
+        '            "code": "110246003",\n' +
+        '            "system": "2.16.840.1.113883.6.96",\n' +
+        '            "version": null,\n' +
+        '            "display": "Contusion of preauricular region of face (disorder)"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "_id": "655cbf318dafab00007b3b52",\n' +
+        '        "participant": [],\n' +
+        '        "relatedTo": [],\n' +
+        '        "qdmTitle": "Encounter, Performed",\n' +
+        '        "hqmfOid": "2.16.840.1.113883.10.20.28.4.5",\n' +
+        '        "qdmCategory": "encounter",\n' +
+        '        "qdmStatus": "performed",\n' +
+        '        "qdmVersion": "5.6",\n' +
+        '        "_type": "QDM::EncounterPerformed",\n' +
+        '        "description": "Encounter, Performed: Closed Head and Facial Trauma",\n' +
+        '        "codeListId": "2.16.840.1.113883.3.3157.4026",\n' +
+        '        "id": "655cbf318dafab00007b3b51",\n' +
+        '        "relevantPeriod": {\n' +
+        '          "low": "2025-01-09T06:00:00.000+00:00",\n' +
+        '          "high": "2025-01-17T06:00:00.000+00:00",\n' +
+        '          "lowClosed": true,\n' +
+        '          "highClosed": true\n' +
+        '        },\n' +
+        '         "facilityLocations": [],\n' +
+        '        "diagnoses": [\n' +
+        '          {\n' +
+        '            "qdmVersion": "5.6",\n' +
+        '            "_type": "QDM::DiagnosisComponent",\n' +
+        '            "_id": "655cbf9e8dafab00007b3bce",\n' +
+        '            "code": {\n' +
+        '              "code": "183452005",\n' +
+        '              "system": "2.16.840.1.113883.6.96",\n' +
+        '              "version": null,\n' +
+        '              "display": "Emergency hospital admission (procedure)"\n' +
+        '            },\n' +
+        '            "presentOnAdmissionIndicator": {\n' +
+        '              "code": "448951000124107",\n' +
+        '              "system": "2.16.840.1.113883.6.96",\n' +
+        '              "version": null,\n' +
+        '              "display": "Admission to observation unit (procedure)"\n' +
+        '            },\n' +
+        '            "rank": 2\n' +
+        '          }\n' +
+        '        ]\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "dataElementCodes": [\n' +
+        '         {\n' +
+        '            "code": "2186-5",\n' +
+        '            "system": "2.16.840.1.113883.6.238",\n' +
+        '            "version": "1.2",\n' +
+        '            "display": "Not Hispanic or Latino"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "_id": "655bbfc411c2490000a11edf",\n' +
+        '        "qdmTitle": "Patient Characteristic Ethnicity",\n' +
+        '        "hqmfOid": "2.16.840.1.113883.10.20.28.4.56",\n' +
+        '        "qdmCategory": "patient_characteristic",\n' +
+        '        "qdmStatus": "ethnicity",\n' +
+        '        "qdmVersion": "5.6",\n' +
+        '        "_type": "QDM::PatientCharacteristicEthnicity",\n' +
+        '        "id": "655bbfc411c2490000a11edf"\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "dataElementCodes": [\n' +
+        '          {\n' +
+        '            "code": "M",\n' +
+        '            "system": "2.16.840.1.113883.5.1",\n' +
+        '            "version": "2022-11",\n' +
+        '            "display": "Male"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "_id": "655bbfc211c2490000a11edd",\n' +
+        '        "qdmTitle": "Patient Characteristic Sex",\n' +
+        '        "hqmfOid": "2.16.840.1.113883.10.20.28.4.55",\n' +
+        '        "qdmCategory": "patient_characteristic",\n' +
+        '        "qdmStatus": "gender",\n' +
+        '        "qdmVersion": "5.6",\n' +
+        '        "_type": "QDM::PatientCharacteristicSex",\n' +
+        '        "id": "655bbfc211c2490000a11edd"\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "dataElementCodes": [\n' +
+        '          {\n' +
+        '            "code": "2106-3",\n' +
+        '            "system": "2.16.840.1.113883.6.238",\n' +
+        '            "version": "1.2",\n' +
+        '            "display": "White"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "_id": "655bbfc011c2490000a11edb",\n' +
+        '        "qdmTitle": "Patient Characteristic Race",\n' +
+        '        "hqmfOid": "2.16.840.1.113883.10.20.28.4.59",\n' +
+        '        "qdmCategory": "patient_characteristic",\n' +
+        '        "qdmStatus": "race",\n' +
+        '        "qdmVersion": "5.6",\n' +
+        '        "_type": "QDM::PatientCharacteristicRace",\n' +
+        '        "id": "655bbfc011c2490000a11edb"\n' +
+        '      },\n' +
+        '      {\n' +
+        '        "dataElementCodes": [],\n' +
+        '        "_id": "655bbfba11c2490000a11ed9",\n' +
+        '        "qdmTitle": "Patient Characteristic Birthdate",\n' +
+        '        "hqmfOid": "2.16.840.1.113883.10.20.28.4.54",\n' +
+        '        "qdmCategory": "patient_characteristic",\n' +
+        '        "qdmStatus": "birthdate",\n' +
+        '        "qdmVersion": "5.6",\n' +
+        '        "_type": "QDM::PatientCharacteristicBirthdate",\n' +
+        '        "id": "655bbfba11c2490000a11ed9",\n' +
+        '        "birthDatetime": "1981-01-01T20:21:14.000+00:00"\n' +
+        '      }\n' +
+        '   ],\n' +
+        '    "_id": "655bbf7811c2490000a11ecf",\n' +
+        '    "birthDatetime": "1981-01-01T20:21:14.955+00:00"\n' +
+        '  }\n'
+
     public static readonly tcJson_value = '{        "resourceType": "Bundle",        "id": "IP-Pass-CVPatient",        "meta": {' +
         '      "versionId": "1",\n' +
         '      "lastUpdated": "2022-09-14T15:14:42.152+00:00"\n' +

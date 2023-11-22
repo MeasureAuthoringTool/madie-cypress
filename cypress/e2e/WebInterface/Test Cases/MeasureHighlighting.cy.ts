@@ -15,11 +15,9 @@ let measureCQLPFTests = MeasureCQL.CQL_Populations
 let measureCQLDFUTests = MeasureCQL.CQLDFN_value
 let measureCQLResults = MeasureCQL.CQLHLResults_value
 
-let filePath = 'cypress/fixtures/testCaseId'
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-let validFileToUpload = downloadsFolder.toString()
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
