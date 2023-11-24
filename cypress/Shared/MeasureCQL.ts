@@ -1042,6 +1042,75 @@ export class MeasureCQL {
         'define "October 1 Two Years Prior to the Measurement Period":\n' +
         '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)'
 
+    public static readonly QDMHighlightingTab_CQL = 'library HighlightingQDM version \'0.0.000\'\n' +
+
+        'using QDM version \'5.6\'\n' +
+
+        'codesystem "Test": \'urn:oid:2.16.840.1.113883.6.1\'\n' +
+        'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\'\n' +
+
+        'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\'\n' +
+        'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\'\n' +
+        'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+        'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+        'valueset "Active Bleeding or Bleeding Diathesis (Excluding Menses)": \'urn:oid:2.16.840.1.113883.3.3157.4036\'\n' +
+        'valueset "Active Peptic Ulcer": \'urn:oid:2.16.840.1.113883.3.3157.4031\'\n' +
+        'valueset "Adverse reaction to thrombolytics": \'urn:oid:2.16.840.1.113762.1.4.1170.6\'\n' +
+        'valueset "Allergy to thrombolytics": \'urn:oid:2.16.840.1.113762.1.4.1170.5\'\n' +
+        'valueset "Anticoagulant Medications, Oral": \'urn:oid:2.16.840.1.113883.3.3157.4045\'\n' +
+        'valueset "Aortic Dissection and Rupture": \'urn:oid:2.16.840.1.113883.3.3157.4028\'\n' +
+        'valueset "birth date": \'urn:oid:2.16.840.1.113883.3.560.100.4\'\n' +
+        'valueset "Cardiopulmonary Arrest": \'urn:oid:2.16.840.1.113883.3.3157.4048\'\n' +
+        'valueset "Cerebral Vascular Lesion": \'urn:oid:2.16.840.1.113883.3.3157.4025\'\n' +
+        'valueset "Closed Head and Facial Trauma": \'urn:oid:2.16.840.1.113883.3.3157.4026\'\n' +
+        'valueset "Dementia": \'urn:oid:2.16.840.1.113883.3.3157.4043\'\n' +
+        'valueset "Discharge To Acute Care Facility": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.87\'\n' +
+
+        'code "Birth date": \'21112-8\' from "LOINC" display \'Birth date\'\n' +
+
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+
+        'context Patient\n' +
+
+        'define "SDE Ethnicity":\n' +
+        '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+
+        'define "SDE Payer":\n' +
+        '  ["Patient Characteristic Payer": "Payer"]\n' +
+
+        'define "SDE Race":\n' +
+        '  ["Patient Characteristic Race": "Race"]\n' +
+
+        'define "SDE Sex":\n' +
+        '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+
+
+        'define "Initial Population":\n' +
+        '      ["Encounter, Performed": "Emergency Department Visit"]\n' + //Encounter
+        '      union ["Encounter, Performed": "Closed Head and Facial Trauma"]\n' + //Encounter
+        '      union ["Encounter, Performed": "Dementia"]\n' + //Encounter
+
+        'define "Denominator":\n' +
+        '  "Initial Population"\n' +
+
+        'define "Denominator Exclusion":\n' +
+        '  ["Encounter, Performed"] E where (duration in days of E.relevantPeriod) > 10\n' +
+
+        'define "Numerator":\n' +
+        '  ["Encounter, Performed"] E where E.relevantPeriod starts during day of "Measurement Period"\n' +
+
+        'define function denomObs(Encounter "Encounter, Performed"):\n' +
+        '  duration in seconds of Encounter.relevantPeriod\n' +
+
+        'define function numerObs(Encounter "Encounter, Performed"):\n' +
+        '  duration in days of Encounter.relevantPeriod\n' +
+
+        'define "IP2":\n' +
+        '    exists ["Encounter, Performed"] E'
+
     public static readonly SBTESTCMS347_CQL = 'library SBTESTCMS347 version \'0.0.016\'\n' +
         '\n' +
         'using FHIR version \'4.0.1\'\n' +
