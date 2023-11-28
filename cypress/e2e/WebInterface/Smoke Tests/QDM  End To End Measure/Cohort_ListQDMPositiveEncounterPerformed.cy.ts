@@ -5,7 +5,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let measureName = 'CohortListQDMPositiveEncounterPerformed' + Date.now()
 let CqlLibraryName = 'CohortListQDMPositiveEncounterPerformed' + Date.now()
@@ -249,47 +249,8 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         cy.get('[data-testid=code-option-183452005]').click()
         cy.get('[data-testid=add-code-concept-button]').click()
 
-        //Element - Laboratory Test:Performed: Sodium lab test
-        cy.get('[data-testid=elements-tab-laboratory_test]').click()
-        cy.get('[data-testid="data-type-Laboratory Test, Performed: Sodium lab test"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('06/20/2012 12:01 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid="option-Quantity"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('34')
-        cy.get('[id="quantity-unit-dropdown-quantity"]').type('mmol/L')
-        cy.get('#quantity-unit-dropdown-quantity-option-0').click()
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-LOINC]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-2947-0]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
-        //Close the Element
+        //Close the Element*/
         cy.get('[data-testid=CloseIcon]').click()
-
-        //Element - Laboratory Test:Performed: Sodium lab test
-        cy.get('[data-testid=elements-tab-laboratory_test]').click()
-        cy.get('[data-testid="data-type-Laboratory Test, Performed: Sodium lab test"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('06/21/2012 12:03 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid="option-Quantity"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('120')
-        cy.get('[id="quantity-unit-dropdown-quantity"]').type('mmol/L')
-        cy.get('#quantity-unit-dropdown-quantity-option-0').click()
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-LOINC]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-2947-0]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
 
         //Element - Encounter:Performed: Encounter Inpatient
         cy.get('[data-testid=elements-tab-encounter]').click()
@@ -331,26 +292,6 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         cy.get('[data-testid=code-option-8715000]').click()
         cy.get('[data-testid=add-code-concept-button]').click()
 
-        //Element - Laboratory Test:Performed: Sodium lab test
-        cy.get('[data-testid=elements-tab-laboratory_test]').click()
-        cy.get('[data-testid="data-type-Laboratory Test, Performed: Sodium lab test"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('06/19/2012 12:01 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid="option-Quantity"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('50')
-        cy.get('[id="quantity-unit-dropdown-quantity"]').type('mmol/L')
-        cy.get('#quantity-unit-dropdown-quantity-option-0').click()
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-LOINC]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-2947-0]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
-
         //Element - Patient Characteristic:Patient Characteristic Payer: Medicare FFS payer
         cy.get('[data-testid=elements-tab-patient_characteristic]').click()
         cy.get('[data-testid="data-type-Patient Characteristic Payer: Medicare FFS payer"]').click()
@@ -387,48 +328,6 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         cy.get(TestCasesPage.QDMEthnicity).click()
         cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
 
-        //Element - Physical Exam:Performed: Systolic blood pressure
-        cy.get('[data-testid=elements-tab-physical_exam]').click()
-        cy.get('[data-testid="data-type-Physical Exam, Performed: Systolic Blood Pressure"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('06/20/2012 12:01 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid=option-Quantity]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('120')
-        cy.get('[id="quantity-unit-dropdown-quantity"]').type('mm[hg]')
-        cy.get('#quantity-unit-dropdown-quantity-option-0').click()
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-LOINC]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-8480-6]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
-        //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
-
-        //Element - Physical Exam:Performed: Systolic blood pressure
-        cy.get('[data-testid=elements-tab-physical_exam]').click()
-        cy.get('[data-testid="data-type-Physical Exam, Performed: Systolic Blood Pressure"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('06/20/2012 2:01 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid=option-Quantity]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('115')
-        cy.get('[id="quantity-unit-dropdown-quantity"]').type('mm[hg]')
-        cy.get('#quantity-unit-dropdown-quantity-option-0').click()
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-LOINC]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-8480-6]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
-
         //Element - Encounter:Performed: Encounter Inpatient
         cy.get('[data-testid=elements-tab-encounter]').click()
         cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').eq(0).click()
@@ -450,7 +349,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Element -  Patient Characteristic:Patient Characteristic Payer: Medicare payer
         cy.get('[data-testid=elements-tab-patient_characteristic]').click()
-        cy.get('[data-testid="data-type-Patient Characteristic Payer: Payer"]').click()
+        cy.get('[data-testid="data-type-Patient Characteristic Payer: Medicare FFS payer"]').click()
         cy.get('[id="dateTime"]').eq(0).type('06/20/2012 2:01 PM')
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid=code-system-option-SOP]').click()
