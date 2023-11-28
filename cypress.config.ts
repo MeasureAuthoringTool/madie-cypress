@@ -7,7 +7,6 @@ export default defineConfig({
   defaultCommandTimeout: 50000,
   video: false,
   trashAssetsBeforeRuns: true,
-  videoUploadOnPasses: false,
   viewportWidth: 1300,
   viewportHeight: 800,
   watchForFileChanges: false,
