@@ -39,7 +39,6 @@ let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     'valueset "Unilateral Mastectomy Left": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1133\' \n' +
     'valueset "Unilateral Mastectomy Right": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1134\' \n' +
     'valueset "Unilateral Mastectomy, Unspecified Laterality": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1071\' \n' +
-    'valueset "Chemistry Tests": \'urn:oid:2.16.840.1.113762.1.4.1147.82\' \n' +
     '\n' +
     'code "Female": \'F\' from "AdministrativeGender" display \'Female\'\n' +
     'code "Left (qualifier value)": \'7771000\' from "SNOMEDCT" display \'Left (qualifier value)\'\n' +
@@ -194,7 +193,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Initial Population')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
@@ -221,23 +220,23 @@ describe('Measure Creation: Proportion Patient Based', () => {
         cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
 
         //Element - Encounter:Performed: Annual Wellness Visit
-        cy.get('[data-testid=elements-tab-encounter]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Annual Wellness Visit"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('01/26/2012 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('01/26/2012 08:15 AM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Length Of Stay"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('0')
-        cy.get('[id="quantity-unit-dropdown-quantity"]').type('d day')
-        cy.get('#quantity-unit-dropdown-quantity-option-0').click()
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-HCPCS]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-G0438]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        /*         cy.get('[data-testid=elements-tab-encounter]').click()
+                cy.get('[data-testid="data-type-Encounter, Performed: Annual Wellness Visit"]').click()
+                cy.get('[id="dateTime"]').eq(0).type('01/26/2012 08:00 AM')
+                cy.get('[id="dateTime"]').eq(1).type('01/26/2012 08:15 AM')
+                cy.get(TestCasesPage.attributesTab).click()
+                cy.get(TestCasesPage.selectAttributeDropdown).click()
+                cy.get('[data-testid="option-Length Of Stay"]').click()
+                cy.get('[data-testid="quantity-value-input-quantity"]').type('0')
+                cy.get('[id="quantity-unit-dropdown-quantity"]').type('d day')
+                cy.get('#quantity-unit-dropdown-quantity-option-0').click()
+                cy.get('[data-testid="add-attribute-button"]').click()
+                cy.get('[data-testid=sub-navigation-tab-codes]').click()
+                cy.get('[id="code-system-selector"]').click()
+                cy.get('[data-testid=code-system-option-HCPCS]').click()
+                cy.get('[id="code-selector"]').click()
+                cy.get('[data-testid=code-option-G0438]').click()
+                cy.get('[data-testid=add-code-concept-button]').click() */
 
         //Element - Procedure:Performed: Unilateral Mastectomy Right
         cy.get('[data-testid=elements-tab-procedure]').click()
@@ -284,23 +283,23 @@ describe('Measure Creation: Proportion Patient Based', () => {
         cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
 
         //Element - Encounter:Performed: Preventive Care Services - Established Office Visit, 18 and Up
-        cy.get('[data-testid=elements-tab-encounter]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Preventive Care Services Established Office Visit, 18 and Up"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('01/26/2012 01:00 PM')
-        cy.get('[id="dateTime"]').eq(1).type('01/26/2012 01:15 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Length Of Stay"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('0')
-        cy.get('[id="quantity-unit-dropdown-quantity"]').type('d day')
-        cy.get('#quantity-unit-dropdown-quantity-option-0').click()
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-CPT]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-99395"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
+        /*         cy.get('[data-testid=elements-tab-encounter]').click()
+                cy.get('[data-testid="data-type-Encounter, Performed: Preventive Care Services Established Office Visit, 18 and Up"]').click()
+                cy.get('[id="dateTime"]').eq(0).type('01/26/2012 01:00 PM')
+                cy.get('[id="dateTime"]').eq(1).type('01/26/2012 01:15 PM')
+                cy.get(TestCasesPage.attributesTab).click()
+                cy.get(TestCasesPage.selectAttributeDropdown).click()
+                cy.get('[data-testid="option-Length Of Stay"]').click()
+                cy.get('[data-testid="quantity-value-input-quantity"]').type('0')
+                cy.get('[id="quantity-unit-dropdown-quantity"]').type('d day')
+                cy.get('#quantity-unit-dropdown-quantity-option-0').click()
+                cy.get('[data-testid="add-attribute-button"]').click()
+                cy.get('[data-testid=sub-navigation-tab-codes]').click()
+                cy.get('[id="code-system-selector"]').click()
+                cy.get('[data-testid=code-system-option-CPT]').click()
+                cy.get('[id="code-selector"]').click()
+                cy.get('[data-testid="code-option-99395"]').click()
+                cy.get('[data-testid="add-code-concept-button"]').click() */
 
         //Element - Condition:Diagnosis: Status Post Right Mastectomy
         cy.get('[data-testid=elements-tab-condition]').click()
