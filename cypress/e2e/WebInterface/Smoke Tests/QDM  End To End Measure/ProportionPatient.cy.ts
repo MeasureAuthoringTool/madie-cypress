@@ -194,8 +194,8 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
