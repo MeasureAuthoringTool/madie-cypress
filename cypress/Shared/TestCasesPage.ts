@@ -339,6 +339,7 @@ export class TestCasesPage {
     public static readonly attributeChip = '[class="chip-body"]'
     public static readonly codeSystemSelector = '[id="code-system-selector"]'
     public static readonly codeSNOMEDCTValue = '[data-testid="option-SNOMEDCT"]'
+    public static readonly codeLOINCValue = '[data-testid="code-system-option-LOINC"]'
     public static readonly codeSystemValueSelector = '[data-testid="code-selector"]'
     public static readonly codeSystemOptionValue = '[data-testid="option-112648003"]'
     public static readonly codeSelector = '[id="code-selector"]'
