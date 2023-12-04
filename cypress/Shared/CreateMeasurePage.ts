@@ -104,7 +104,8 @@ export class CreateMeasurePage {
         if (mpEndDate === undefined) {
             mpEndDate = now().format('MM/DD/YYYY')
         }
-
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
         cy.get(LandingPage.newMeasureButton).click()
         cy.get(this.measureNameTextbox).type(measureName)
         cy.get(this.measureModelDropdown).click()
@@ -123,7 +124,7 @@ export class CreateMeasurePage {
     }
 
     public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
-        twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
+                                         twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
 
         let user = ''
         const now = require('dayjs')
@@ -212,7 +213,7 @@ export class CreateMeasurePage {
     }
 
     public static CreateQICoreMeasureAPIWithoutELMJson(measureName: string, CqlLibraryName: string, measureCQL?: string,
-        twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
+                                                       twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
 
         let user = ''
         const now = require('dayjs')
@@ -301,7 +302,7 @@ export class CreateMeasurePage {
     }
 
     public static CreateQDMMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
-        twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
+                                      twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
 
         let user = ''
         const now = require('dayjs')

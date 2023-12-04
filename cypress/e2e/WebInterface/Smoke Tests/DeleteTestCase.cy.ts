@@ -52,6 +52,11 @@ describe('Delete Test Case', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newCqlLibraryName = CqlLibraryName + randValue
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({log: true})
+
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
@@ -93,7 +98,12 @@ describe('Delete Test Case', () => {
         cy.get(TestCasesPage.selectTestCaseDropdownBtn).click()
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
             cy.get('[data-testid=delete-test-case-btn-' + fileContents + ']').should('not.exist')
+            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').click()
         })
 
+        //Log out
+        cy.get('[data-testid="user-profile-select"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click()
+        cy.log('Log out successful')
     })
 })
