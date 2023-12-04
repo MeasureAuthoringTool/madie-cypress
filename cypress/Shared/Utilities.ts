@@ -96,7 +96,7 @@ export class Utilities {
                             },
                             body: {
                                 "id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": ecqmTitle,
-                                "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate, "active": false, 'versionId': vId, 'measureSetId': measureSetId
+                                "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate, "active": false, "versionId": vId, "measureSetId": measureSetId
                             }
                         }).then((response) => {
                             console.log(response)

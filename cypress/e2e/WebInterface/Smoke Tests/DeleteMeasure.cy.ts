@@ -11,21 +11,12 @@ let CqlLibraryTwo = ''
 
 describe('Delete Measure', () => {
 
-    before('Create measure', () => {
+    beforeEach('Create measure and Login', () => {
 
         //Create Measure with Regular User
         measureOne = 'TestMeasure1' + Date.now()
         CqlLibraryOne = 'TestLibrary1' + Date.now()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureOne, CqlLibraryOne)
-
-        //Create Measure with Alternate User
-        measureTwo = 'TestMeasure2' + Date.now()
-        CqlLibraryTwo = 'TestLibrary2' + Date.now()
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, CqlLibraryTwo, null, true, true)
-    })
-
-    beforeEach('Login', () => {
-
         OktaLogin.Login()
 
     })
@@ -33,12 +24,6 @@ describe('Delete Measure', () => {
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
-
-    })
-
-    after('Clean up', () => {
-
-        Utilities.deleteMeasure(measureTwo, CqlLibraryTwo, true, true)
 
     })
 
@@ -61,6 +46,25 @@ describe('Delete Measure', () => {
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureOne)
 
     })
+})
+
+describe('Delete Measure ownership validation', () => {
+
+    beforeEach('Create measure and Login as ALT User', () => {
+
+        //Create Measure with Regular User
+        measureTwo = 'TestMeasure2' + Date.now()
+        CqlLibraryTwo = 'TestLibrary2' + Date.now()
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, CqlLibraryTwo)
+        OktaLogin.AltLogin()
+
+    })
+
+    afterEach('Logout and cleanup', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureTwo, CqlLibraryTwo)
+    })
 
     it('Verify Non Measure Owner can not Delete Measure', () => {
 
@@ -70,10 +74,15 @@ describe('Delete Measure', () => {
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        MeasuresPage.measureAction("edit", true)
+        MeasuresPage.measureAction("edit")
 
         //Delete Measure Button should not be visible for non owner of the Measure
         cy.get(EditMeasurePage.deleteMeasureButton).should('not.be.enabled')
+
+        //Log out
+        cy.get('[data-testid="user-profile-select"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click({force: true}).wait(1000)
+        cy.log('Log out successful')
 
     })
 })

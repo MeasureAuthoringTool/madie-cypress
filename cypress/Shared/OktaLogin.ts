@@ -1,4 +1,3 @@
-import { Header } from "./Header"
 import { Environment } from "./Environment"
 import { LandingPage } from "./LandingPage"
 import { umlsLoginForm } from "./umlsLoginForm"
@@ -97,7 +96,7 @@ export class OktaLogin {
         // cy.get(Header.userProfileSelect, { timeout: 1000000 }).should('be.visible')
         // cy.get(Header.userProfileSelect).should('be.visible')
         // cy.get(Header.userProfileSelect).invoke('click')
-        // cy.get(Header.userProfileSelect).click()
+        //cy.get(Header.userProfileSelect).click()
         //
         // cy.get(Header.userProfileSelectSignOutOption).should('exist')
         // cy.get(Header.userProfileSelectSignOutOption, { timeout: 1000000 }).should('be.visible')
