@@ -77,7 +77,7 @@ describe('Delete Test Case', () => {
 
     })
 
-    it.only('Verify Non owner of the Measure unable to delete Test Case', () => {
+    it('Verify Non owner of the Measure unable to delete Test Case', () => {
 
         MeasuresPage.measureAction("edit")
 
