@@ -8,36 +8,43 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage";
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
-let measureCQL = 'library HospitalHarmHyperglycemiainHospitalizedPatients version \'3.0.000\'\n' +
+let measureCQL = 'library RatioListQDMPositiveEncounterPerformedWithMO1701801315767 version \'0.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
     '\n' +
     'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
     '\n' +
     'valueset "birth date": \'urn:oid:2.16.840.1.113883.3.560.100.4\' \n' +
+    'valueset "Comfort Measures": \'urn:oid:1.3.6.1.4.1.33895.1.3.0.45\' \n' +
     'valueset "Diabetes": \'urn:oid:2.16.840.1.113883.3.464.1003.103.12.1001\' \n' +
+    'valueset "Discharged to Health Care Facility for Hospice Care": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.207\' \n' +
+    'valueset "Discharged to Home for Hospice Care": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.209\' \n' +
     'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\' \n' +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\' \n' +
     'valueset "Glucose Lab Test Mass Per Volume": \'urn:oid:2.16.840.1.113762.1.4.1248.34\' \n' +
     'valueset "Hypoglycemics Treatment Medications": \'urn:oid:2.16.840.1.113762.1.4.1196.394\' \n' +
     'valueset "Ketoacidosis": \'urn:oid:2.16.840.1.113762.1.4.1222.520\' \n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\' \n' +
-    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
+    'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
     'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\' \n' +
     '\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
     '\n' +
     'context Patient\n' +
     '\n' +
+    'define "Comfort Measures Care":\n' +
+    '  ["Intervention, Order": "Comfort Measures"]\n' +
+    '    union ["Intervention, Performed": "Comfort Measures"]\n' +
+    '\n' +
     'define "Days in Hospitalization":\n' +
     '  "Measurement Population" EligibleInpatientHospitalization\n' +
     '    let period: Global."HospitalizationWithObservation" ( EligibleInpatientHospitalization ),\n' +
-    '    relevantPeriod: "Hospital Days Max 10"(period)\n' +
+    '    relevantPeriod: "HospitalDaysMax10"(period)\n' +
     '    return Tuple {\n' +
     '      encounter: EligibleInpatientHospitalization,\n' +
     '      hospitalizationPeriod: period,\n' +
     '      relevantPeriod: relevantPeriod,\n' +
-    '      relevantDays: "Days In Period"(relevantPeriod)\n' +
+    '      relevantDays: "DaysInPeriod"(relevantPeriod)\n' +
     '    }\n' +
     '\n' +
     'define "Days with Glucose Results":\n' +
@@ -88,7 +95,22 @@ let measureCQL = 'library HospitalHarmHyperglycemiainHospitalizedPatients versio
     '  "Initial Population"\n' +
     '\n' +
     'define "Denominator Exclusions":\n' +
-    '  "Encounter with First Glucose Greater Than or Equal to 1000"\n' +
+    '  "Encounter with Early Glucose Greater Than or Equal to 1000 or with Comfort or Hospice Care"\n' +
+    '\n' +
+    'define "Encounter with Comfort Measures during Hospitalization":\n' +
+    '  "Initial Population" InpatientHospitalization\n' +
+    '    with "Comfort Measures Care" ComfortCare\n' +
+    '      such that Coalesce(start of Global."NormalizeInterval"(ComfortCare.relevantDatetime, ComfortCare.relevantPeriod), ComfortCare.authorDatetime) during Global."HospitalizationWithObservation" ( InpatientHospitalization )\n' +
+    '\n' +
+    'define "Encounter with Discharge for Hospice Care":\n' +
+    '  "Initial Population" InpatientHospitalization\n' +
+    '    where InpatientHospitalization.dischargeDisposition in "Discharged to Home for Hospice Care"\n' +
+    '      or InpatientHospitalization.dischargeDisposition in "Discharged to Health Care Facility for Hospice Care"\n' +
+    '\n' +
+    'define "Encounter with Early Glucose Greater Than or Equal to 1000 or with Comfort or Hospice Care":\n' +
+    '  "Encounter with Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start"\n' +
+    '    union "Encounter with Comfort Measures during Hospitalization"\n' +
+    '    union "Encounter with Discharge for Hospice Care"\n' +
     '\n' +
     'define "Encounter with Elevated Glucose Greater Than or Equal to 200":\n' +
     '  "Encounter with Hospitalization Period" Hospitalization\n' +
@@ -100,9 +122,20 @@ let measureCQL = 'library HospitalHarmHyperglycemiainHospitalizedPatients versio
     'define "Encounter with Existing Diabetes Diagnosis":\n' +
     '  "Encounter with Hospitalization Period" Hospitalization\n' +
     '    with ["Diagnosis": "Diabetes"] DiabetesCondition\n' +
-    '      such that DiabetesCondition.prevalencePeriod starts before \n' +
-    '      end of Hospitalization.hospitalizationPeriod\n' +
+    '      such that DiabetesCondition.prevalencePeriod starts before end of Hospitalization.hospitalizationPeriod\n' +
     '    return Hospitalization.encounter\n' +
+    '\n' +
+    'define "Encounter with Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start":\n' +
+    '  from\n' +
+    '    "Initial Population" InpatientHospitalization,\n' +
+    '    ["Laboratory Test, Performed": "Glucose Lab Test Mass Per Volume"] GlucoseTest\n' +
+    '    let GlucoseTestTime: Global."EarliestOf" ( GlucoseTest.relevantDatetime, GlucoseTest.relevantPeriod ),\n' +
+    '    HospitalPeriod: Global."HospitalizationWithObservation" ( InpatientHospitalization )\n' +
+    '    where GlucoseTest.result is not null\n' +
+    '      and GlucoseTest.result >= 1000 \'mg/dL\'\n' +
+    '      and GlucoseTestTime during Interval[( start of HospitalPeriod - 1 hour ), ( start of HospitalPeriod + 6 hours )]\n' +
+    '      and GlucoseTestTime before end of InpatientHospitalization.relevantPeriod\n' +
+    '    return InpatientHospitalization\n' +
     '\n' +
     'define "Encounter with Hospitalization Period":\n' +
     '  "Qualifying Encounter" QualifyingHospitalization\n' +
@@ -124,10 +157,6 @@ let measureCQL = 'library HospitalHarmHyperglycemiainHospitalizedPatients versio
     '      such that Global."NormalizeInterval" ( HypoglycemicMedication.relevantDatetime, HypoglycemicMedication.relevantPeriod ) starts during Hospitalization.hospitalizationPeriod\n' +
     '    return Hospitalization.encounter\n' +
     '\n' +
-    'define "Initial Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start":\n' +
-    '  "Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start" GlucoseResult1000\n' +
-    '    where not ( GlucoseResult1000.id in "Glucose Tests Earlier Than Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start".id )\n' +
-    '\n' +
     'define "Initial Population":\n' +
     '  "Encounter with Existing Diabetes Diagnosis"\n' +
     '    union "Encounter with Hypoglycemic Medication"\n' +
@@ -139,16 +168,19 @@ let measureCQL = 'library HospitalHarmHyperglycemiainHospitalizedPatients versio
     'define "Numerator":\n' +
     '  "Encounter with Hyperglycemic Events"\n' +
     '\n' +
+    'define "Numerator Exclusions":\n' +
+    '  "Encounter with Early Glucose Greater Than or Equal to 1000 or with Comfort or Hospice Care"\n' +
+    '\n' +
     'define "Qualifying Encounter":\n' +
     '  ["Encounter, Performed": "Encounter Inpatient"] InpatientEncounter\n' +
     '    where InpatientEncounter.relevantPeriod ends during day of "Measurement Period"\n' +
-    '      and AgeInYearsAt(date from start of InpatientEncounter.relevantPeriod)>= 18\n' +
+    '      and AgeInYearsAt(date from start of InpatientEncounter.relevantPeriod) >= 18\n' +
     '\n' +
     'define "SDE Ethnicity":\n' +
     '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
     '\n' +
     'define "SDE Payer":\n' +
-    '  ["Patient Characteristic Payer": "Payer"]\n' +
+    '  ["Patient Characteristic Payer": "Payer Type"]\n' +
     '\n' +
     'define "SDE Race":\n' +
     '  ["Patient Characteristic Race": "Race"]\n' +
@@ -156,83 +188,38 @@ let measureCQL = 'library HospitalHarmHyperglycemiainHospitalizedPatients versio
     'define "SDE Sex":\n' +
     '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
     '\n' +
-    'define "Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start":\n' +
-    '  from\n' +
-    '    "Initial Population" InpatientHospitalization,\n' +
-    '    ["Laboratory Test, Performed": "Glucose Lab Test Mass Per Volume"] GlucoseTest\n' +
-    '    let HospitalizationInterval: Global."HospitalizationWithObservation" ( InpatientHospitalization ),\n' +
-    '    GlucoseTestTime: Global."EarliestOf" ( GlucoseTest.relevantDatetime, GlucoseTest.relevantPeriod )\n' +
-    '    where GlucoseTest.result >= 1000 \'mg/dL\'\n' +
-    '      and GlucoseTest.result is not null\n' +
-    '      and GlucoseTestTime during Interval[( start of HospitalizationInterval - 1 hour ), ( start of HospitalizationInterval + 6 hours )]\n' +
-    '    return GlucoseTest\n' +
-    '\n' +
-    'define "Encounter with First Glucose Greater Than or Equal to 1000":\n' +
-    '  "Initial Population" InpatientHospitalization\n' +
-    '    with "Initial Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start" FirstGlucoseResult\n' +
-    '      such that FirstGlucoseResult.result is not null\n' +
-    '        and FirstGlucoseResult.result >= 1000 \'mg/dL\'\n' +
-    '        and Global."EarliestOf" ( FirstGlucoseResult.relevantDatetime, FirstGlucoseResult.relevantPeriod ) during Interval[( start of Global."HospitalizationWithObservation" ( InpatientHospitalization ) - 1 hour ), ( start of Global."HospitalizationWithObservation" ( InpatientHospitalization ) + 6 hours )]\n' +
-    '    return InpatientHospitalization\n' +
-    '\n' +
-    'define "Glucose Tests Earlier Than Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start":\n' +
-    '  from\n' +
-    '    "Initial Population" InpatientHospitalization,\n' +
-    '    "Glucose Greater Than or Equal to 1000 within 1 Hour Prior To and 6 Hours After Encounter Start" GlucoseResult1000,\n' +
-    '    ["Laboratory Test, Performed": "Glucose Lab Test Mass Per Volume"] EarlierGlucoseTest\n' +
-    '    let HospitalizationInterval: Global."HospitalizationWithObservation" ( InpatientHospitalization ),\n' +
-    '    GlucoseTest1000Time: Global."EarliestOf" ( GlucoseResult1000.relevantDatetime, GlucoseResult1000.relevantPeriod ),\n' +
-    '    EarlierGlucoseTestTime: Global."EarliestOf" ( EarlierGlucoseTest.relevantDatetime, EarlierGlucoseTest.relevantPeriod )\n' +
-    '    where GlucoseTest1000Time during Interval[( start of HospitalizationInterval - 1 hour ), ( start of HospitalizationInterval + 6 hour )]\n' +
-    '      and EarlierGlucoseTestTime during Interval[( start of HospitalizationInterval - 1 hour ), GlucoseTest1000Time )\n' +
-    '      and EarlierGlucoseTest is not null\n' +
-    '      and EarlierGlucoseTest.id !~ GlucoseResult1000.id\n' +
-    '    return GlucoseResult1000\n' +
-    '\n' +
-    'define function "Interval To Day Numbers"(Period Interval<DateTime> ):\n' +
-    '  ( expand { Interval[1, days between start of Period and \n' +
-    '  end of Period]} ) DayExpand\n' +
-    '    return \n' +
-    '    end of DayExpand\n' +
-    '\n' +
-    'define function "Hospital Days Max 10"(Period Interval<DateTime> ):\n' +
-    '  Interval[start of Period, Min({ \n' +
-    '    end of Period, start of Period + 10 days }\n' +
-    '  )]\n' +
-    '\n' +
-    'define function "Days In Period"(Period Interval<DateTime> ):\n' +
-    '  ( "Interval To Day Numbers"(Period)) DayNumber\n' +
+    'define function "DaysInPeriod"(Period Interval<DateTime> ):\n' +
+    '  ( "IntervalToDayNumbers"(Period) ) DayNumber\n' +
     '    let startPeriod: start of Period + ( 24 hours * ( DayNumber - 1 ) ),\n' +
-    '    endPeriod: if ( hours between startPeriod and \n' +
-    '      end of Period < 24\n' +
-    '    ) then startPeriod \n' +
+    '    endPeriod: if ( hours between startPeriod and end of Period < 24 ) then startPeriod \n' +
     '      else start of Period + ( 24 hours * DayNumber )\n' +
     '    return Tuple {\n' +
     '      dayNumber: DayNumber,\n' +
     '      dayPeriod: Interval[startPeriod, endPeriod )\n' +
     '    }\n' +
     '\n' +
-    'define function "Denominator Observations"(QualifyingEncounter "Encounter, Performed" ):\n' +
-    '  if QualifyingEncounter.id in "Denominator Exclusions".id then singleton from ( "Days with Hyperglycemic Events" EncounterWithEventDays\n' +
-    '      where EncounterWithEventDays.encounter = QualifyingEncounter\n' +
-    '      return 0\n' +
-    '  ) \n' +
-    '    else singleton from ( "Days with Hyperglycemic Events" EncounterWithEventDays\n' +
+    'define function "IntervalToDayNumbers"(Period Interval<DateTime> ):\n' +
+    '  ( expand { Interval[1, days between start of Period and end of Period]} ) DayExpand\n' +
+    '    return end of DayExpand\n' +
+    '\n' +
+    'define function "DenominatorObservations"(QualifyingEncounter "Encounter, Performed" ):\n' +
+    '  singleton from ( "Days with Hyperglycemic Events" EncounterWithEventDays\n' +
     '      where EncounterWithEventDays.encounter = QualifyingEncounter\n' +
     '      return Count(EncounterWithEventDays.eligibleEventDays)\n' +
     '  )\n' +
     '\n' +
-    'define function "Numerator Observations"(QualifyingEncounter "Encounter, Performed" ):\n' +
-    '  if QualifyingEncounter.id in "Denominator Exclusions".id then singleton from ( "Days with Hyperglycemic Events" EncounterWithEventDays\n' +
-    '      where EncounterWithEventDays.encounter = QualifyingEncounter\n' +
-    '      return 0\n' +
-    '  ) \n' +
-    '    else singleton from ( "Days with Hyperglycemic Events" EncounterWithEventDays\n' +
+    'define function "NumeratorObservations"(QualifyingEncounter "Encounter, Performed" ):\n' +
+    '  singleton from ( "Days with Hyperglycemic Events" EncounterWithEventDays\n' +
     '      where EncounterWithEventDays.encounter = QualifyingEncounter\n' +
     '      return Count(EncounterWithEventDays.eligibleEventDays EligibleEventDay\n' +
     '          where EligibleEventDay.hasHyperglycemicEvent\n' +
     '      )\n' +
     '  )\n' +
+    '\n' +
+    'define function "HospitalDaysMax10"(Period Interval<DateTime> ):\n' +
+    '  Interval[start of Period, Min({ \n' +
+    '    end of Period, start of Period + 10 days }\n' +
+    '  )]\n' +
     '\n'
 
 describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', () => {
@@ -266,8 +253,6 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
             'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
-
-        //commenting group creation out until defect MAT-5973 is fixed
 
         //Group Creation
 
@@ -307,7 +292,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
         cy.get(MeasureGroupPage.denominatorObservation).should('exist')
         cy.get(MeasureGroupPage.denominatorObservation).should('be.visible')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Denominator Observations')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'DenominatorObservations')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Sum')
 
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
@@ -317,7 +302,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
         cy.get(MeasureGroupPage.numeratorObservation).should('exist')
         cy.get(MeasureGroupPage.numeratorObservation).should('be.visible')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'Numerator Observations')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'NumeratorObservations')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorAggregateFunction, 'Sum')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
@@ -326,5 +311,6 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
         cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
+
     })
 })
