@@ -22,8 +22,9 @@ let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
+let qdmMeasureCQL = MeasureCQL.QDMSimpleCQL
 
-describe('Delete All Test Cases', () => {
+describe('QI-Core : Delete All Test Cases', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -52,7 +53,128 @@ describe('Delete All Test Cases', () => {
 
     })
 
-    it('Delete all Test cases - Success scenario', () => {
+    it('Delete all QI-Core Test cases - Success scenario', () => {
+
+        OktaLogin.Login()
+
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        cy.get(TestCasesPage.deleteAllTestCasesBtn).click()
+
+        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete All Test Cases?')
+        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+
+        cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCaseTitle)
+        cy.get(TestCasesPage.testCaseListTable).should('not.contain', secondTestCaseTitle)
+
+        //Delete All Testcases button should be disabled when there are no Test cases
+        cy.get(TestCasesPage.deleteAllTestCasesBtn).should('be.disabled')
+
+    })
+
+    it('Shared Measure Owner able to delete all QI-Core Test cases', () => {
+
+        //Transfer Measure to ALT User
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        'api-key': measureSharingAPIKey
+                    },
+                    method: 'PUT'
+
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                })
+            })
+        })
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        //Login to UI as ALT User
+        OktaLogin.AltLogin()
+
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        cy.get(TestCasesPage.deleteAllTestCasesBtn).click()
+
+        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete All Test Cases?')
+        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+
+        cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCaseTitle)
+        cy.get(TestCasesPage.testCaseListTable).should('not.contain', secondTestCaseTitle)
+
+        //Delete All Testcases button should be disabled when there are no Test cases
+        cy.get(TestCasesPage.deleteAllTestCasesBtn).should('be.disabled')
+
+        //Log out
+        cy.get('[data-testid="user-profile-select"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click({force: true}).wait(1000)
+        cy.log('Log out successful')
+    })
+
+    it('Non owner of the Measure unable to delete all QI-Core Test Cases', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        //Login as ALT User
+        OktaLogin.AltLogin()
+
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 20700)
+        cy.get(MeasuresPage.allMeasuresTab).wait(3000).click({ force: true })
+        cy.reload()
+
+        MeasuresPage.measureAction("edit")
+
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        cy.get(TestCasesPage.deleteAllTestCasesBtn).should('be.disabled')
+
+        //Log out
+        cy.get('[data-testid="user-profile-select"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click({force: true}).wait(1000)
+        cy.log('Log out successful')
+
+    })
+})
+
+describe('QDM : Delete All Test Cases', () => {
+
+    beforeEach('Create measure and login', () => {
+
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = CqlLibraryName + randValue
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, qdmMeasureCQL)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCaseDescription, secondTestCaseSeries, testCaseJson, false, true)
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.Logout()
+
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let newCqlLibraryName = CqlLibraryName + randValue
+
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('Delete all QDM Test cases - Success scenario', () => {
 
         OktaLogin.Login()
 
@@ -115,6 +237,11 @@ describe('Delete All Test Cases', () => {
         //Delete All Testcases button should be disabled when there are no Test cases
         cy.get(TestCasesPage.deleteAllTestCasesBtn).should('be.disabled')
 
+        //Log out
+        cy.get('[data-testid="user-profile-select"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click({force: true}).wait(1000)
+        cy.log('Log out successful')
+
     })
 
     it('Non owner of the Measure unable to delete Test Cases', () => {
@@ -135,5 +262,11 @@ describe('Delete All Test Cases', () => {
 
         cy.get(TestCasesPage.deleteAllTestCasesBtn).should('be.disabled')
 
+        //Log out
+        cy.get('[data-testid="user-profile-select"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click({force: true}).wait(1000)
+        cy.log('Log out successful')
+
     })
 })
+
