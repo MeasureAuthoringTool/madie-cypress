@@ -1,9 +1,11 @@
 import { Utilities } from "../../../Shared/Utilities"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { Environment } from "../../../Shared/Environment"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
 
 let measureName = 'TestMeasure' + Date.now()
+let harpUser = Environment.credentials().harpUserALT
 let cqlLibraryName = 'TestCql' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let updatedMeasureName = ''
@@ -53,7 +55,7 @@ describe('Measure Service: Edit Measure', () => {
                             "version": "0.0.000",
                             "measureScoring": "Ratio",
                             "versionId": vId,
-                            "measureMetaData": {"draft": true},
+                            "measureMetaData": { "draft": true },
                             "measureSetId": uuidv4(),
                             "ecqmTitle": "ecqmTitle",
                             "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
@@ -86,7 +88,7 @@ describe('Measure Service: Edit Measure', () => {
                             "model": model,
                             "version": "0.0.000",
                             "measureScoring": "Ratio",
-                            "measureMetaData": {"draft": true},
+                            "measureMetaData": { "draft": true },
                             "versionId": vId,
                             "measureSetId": uuidv4(),
                             "ecqmTitle": "ecqmTitle",
@@ -154,7 +156,7 @@ describe('Measure Service: Edit Measure', () => {
                             'ecqmTitle': "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            "measureMetaData": {"draft": true}
+                            "measureMetaData": { "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -188,10 +190,14 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"steward": {"name": "SemanticBits",
+                            'measureMetaData': {
+                                "steward": {
+                                    "name": "SemanticBits",
                                     "id": "64120f265de35122e68dac40",
                                     "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
-                                    "url": "https://semanticbits.com/"}, "draft": true}
+                                    "url": "https://semanticbits.com/"
+                                }, "draft": true
+                            }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -225,7 +231,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"description": "SemanticBits", "draft": true}
+                            'measureMetaData': { "description": "SemanticBits", "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -259,7 +265,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"copyright": "copyright", "draft": true}
+                            'measureMetaData': { "copyright": "copyright", "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -293,7 +299,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"disclaimer": "disclaimer", "draft": true}
+                            'measureMetaData': { "disclaimer": "disclaimer", "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -327,7 +333,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"rationale": "rationale", "draft": true}
+                            'measureMetaData': { "rationale": "rationale", "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -361,7 +367,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"author": "author", "draft": true}
+                            'measureMetaData': { "author": "author", "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -395,7 +401,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"guidance": "guidance", "draft": true}
+                            'measureMetaData': { "guidance": "guidance", "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -429,7 +435,9 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': {"riskAdjustment": "Risk Adjustment", "draft": true}
+                            'measureMetaData': { "riskAdjustment": "Risk Adjustment", "draft": true },
+                            'riskAdjustmentDescription': "desc",
+                            'riskAdjustments': [{ 'definition': "SDE Payer" }]
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -478,6 +486,65 @@ describe('Measure Service: Edit Measure', () => {
                         expect(response.body.measureMetaData.endorsements[0].endorser).to.eql('NQF')
                         expect(response.body.measureMetaData.endorsements[0].endorserSystemId).to.eql('78888')
                         expect(response.body.measureMetaData.endorsements[0].endorsementId).to.eql('1234')
+                    })
+                })
+            })
+        })
+    })
+})
+describe('Measure Service: Edit Measure', () => {
+
+    updatedMeasureName = measureName + 1 + randValue
+    updatedCQLLibraryName = cqlLibraryName + 1 + randValue
+
+    beforeEach('Create Measure and Set Access Token', () => {
+
+        //CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        //Create second Measure with Alt User
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + '2', cqlLibraryName + '2', measureCQL, true, true)
+
+        cy.setAccessTokenCookie()
+
+    })
+
+    afterEach('Clean up', () => {
+
+        //Utilities.deleteMeasure(updatedMeasureName, updatedCQLLibraryName)
+        Utilities.deleteMeasure(measureName + '2', cqlLibraryName + '2')
+
+    })
+    it.only('Attempt to add Meta Data Risk Adjustment to the measure, when the user is not the owner', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        failOnStatusCode: false,
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': id,
+                            'measureName': updatedMeasureName,
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cqlLibraryName': updatedCQLLibraryName,
+                            'model': model,
+                            "version": "0.0.000",
+                            'measureScoring': 'Ratio',
+                            'versionId': vId,
+                            'measureSetId': uuidv4(),
+                            "ecqmTitle": "eCQMTitle",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
+                            'measureMetaData': { "riskAdjustment": "Risk Adjustment", "draft": true },
+                            'riskAdjustmentDescription': "desc",
+                            'riskAdjustments': [{ 'definition': "SDE Payer" }]
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(403)
+                        expect(response.body.message).to.include('User ' + harpUser + ' is not authorized for Measure with ID ' + id)
                     })
                 })
             })
@@ -687,7 +754,7 @@ describe('Measurement Period Validations', () => {
                             "measurementPeriodStart": mpEndDate,
                             "measurementPeriodEnd": mpStartDate,
                             'measureScoring': 'Ratio',
-                            "measureMetaData": {"draft": true}
+                            "measureMetaData": { "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(400)
@@ -803,7 +870,7 @@ describe('Measurement Period Validations', () => {
 
 describe('Validate CMS ID', () => {
 
-    updatedMeasureName = measureName + 4 +randValue
+    updatedMeasureName = measureName + 4 + randValue
     updatedCQLLibraryName = cqlLibraryName + 4 + randValue
 
     before('Set Access Token and create Measure', () => {
@@ -869,7 +936,7 @@ describe('Validate CMS ID', () => {
                                 "active": false,
                                 'versionId': vId,
                                 'measureSetId': measureSetId,
-                                "measureMetaData": {"draft": true}
+                                "measureMetaData": { "draft": true }
                             }
                         }).then((response) => {
                             expect(response.status).to.eql(200)
@@ -907,7 +974,7 @@ describe('Validate CMS ID', () => {
                             "ecqmTitle": "ecqmTitle",
                             "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
                             "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
-                            "measureMetaData": {"draft": true}
+                            "measureMetaData": { "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(400)
