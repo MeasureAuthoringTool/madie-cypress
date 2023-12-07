@@ -445,6 +445,70 @@ describe('Measure Service: Edit Measure', () => {
                 })
             })
         })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': id,
+                            'measureName': updatedMeasureName,
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cqlLibraryName': updatedCQLLibraryName,
+                            'model': model,
+                            "version": "0.0.000",
+                            'measureScoring': 'Ratio',
+                            'versionId': vId,
+                            'measureSetId': uuidv4(),
+                            "ecqmTitle": "eCQMTitle",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
+                            'measureMetaData': { "riskAdjustment": "Risk Adjustment", "draft": true },
+                            'riskAdjustmentDescription': "desc",
+                            'riskAdjustments': [{ 'definition': "" }]
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                    })
+                })
+            })
+        })
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': id,
+                            'measureName': updatedMeasureName,
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cqlLibraryName': updatedCQLLibraryName,
+                            'model': model,
+                            "version": "0.0.000",
+                            'measureScoring': 'Ratio',
+                            'versionId': vId,
+                            'measureSetId': uuidv4(),
+                            "ecqmTitle": "eCQMTitle",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
+                            'measureMetaData': { "riskAdjustment": "Risk Adjustment", "draft": true },
+                            'riskAdjustmentDescription': "desc",
+                            'riskAdjustments': [{ 'definition': null }]
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                    })
+                })
+            })
+        })
     })
 
     it('Add Meta Data Endorser Fields to the Measure', () => {
@@ -492,14 +556,13 @@ describe('Measure Service: Edit Measure', () => {
         })
     })
 })
-describe('Measure Service: Edit Measure', () => {
+describe('Measure Service: Attempt to add RA when user is not owner of measure', () => {
 
     updatedMeasureName = measureName + 1 + randValue
     updatedCQLLibraryName = cqlLibraryName + 1 + randValue
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        //CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
         //Create second Measure with Alt User
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + '2', cqlLibraryName + '2', measureCQL, true, true)
 
@@ -509,11 +572,10 @@ describe('Measure Service: Edit Measure', () => {
 
     afterEach('Clean up', () => {
 
-        //Utilities.deleteMeasure(updatedMeasureName, updatedCQLLibraryName)
         Utilities.deleteMeasure(measureName + '2', cqlLibraryName + '2')
 
     })
-    it.only('Attempt to add Meta Data Risk Adjustment to the measure, when the user is not the owner', () => {
+    it('Attempt to add Meta Data Risk Adjustment to the measure, when the user is not the owner', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
