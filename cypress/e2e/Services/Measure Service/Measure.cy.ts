@@ -96,36 +96,32 @@ describe('Measure Service: QICore Measure', () => {
                     "measurementPeriodEnd": mpEndDate,
                     "supplementalData": [
                         {
-                            "definition": "supplementalDataDefinition",
-                            "description": "supplementalDataDescription"
+                            "definition": "supplementalDataDefinition"
                         },
                         {
-                            "definition": "supplementalDataDefinition2",
-                            "description": "supplementalDataDescription2"
+                            "definition": "supplementalDataDefinition2"
                         }
                     ],
+                    "supplementalDataDescription": "SupplementalData Description",
                     "riskAdjustments": [
                         {
-                            "definition": "riskAdjustmentDefinition",
-                            "description": "riskAdjustmentDescription"
+                            "definition": "riskAdjustmentDefinition"
                         },
                         {
-                            "definition": "riskAdjustmentDefinition2",
-                            "description": "riskAdjustmentDescription2"
+                            "definition": "riskAdjustmentDefinition2"
                         }
-                    ]
+                    ],
+                    "riskAdjustmentDescription": "RiskAdjustment Description"
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
                 expect(response.body.createdBy).to.eql(harpUser)
                 expect(response.body.supplementalData[0].definition).to.eql('supplementalDataDefinition')
-                expect(response.body.supplementalData[0].description).to.eql('supplementalDataDescription')
                 expect(response.body.supplementalData[1].definition).to.eql('supplementalDataDefinition2')
-                expect(response.body.supplementalData[1].description).to.eql('supplementalDataDescription2')
+                expect(response.body.supplementalDataDescription).to.eql('SupplementalData Description')
                 expect(response.body.riskAdjustments[0].definition).to.eql('riskAdjustmentDefinition')
-                expect(response.body.riskAdjustments[0].description).to.eql('riskAdjustmentDescription')
                 expect(response.body.riskAdjustments[1].definition).to.eql('riskAdjustmentDefinition2')
-                expect(response.body.riskAdjustments[1].description).to.eql('riskAdjustmentDescription2')
+                expect(response.body.riskAdjustmentDescription).to.eql('RiskAdjustment Description')
                 cy.writeFile('cypress/fixtures/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
             })

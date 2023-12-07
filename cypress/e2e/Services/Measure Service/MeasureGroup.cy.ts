@@ -444,7 +444,7 @@ describe('Measure Populations', () => {
         cy.setAccessTokenCookie()
     })
 
-    after('Clean up', () => {
+    afterEach('Clean up', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
@@ -817,7 +817,7 @@ describe('Measure Stratifications', () => {
         cy.setAccessTokenCookie()
     })
 
-    after('Clean up', () => {
+    afterEach('Clean up', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
