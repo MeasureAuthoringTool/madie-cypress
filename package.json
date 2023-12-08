@@ -90,7 +90,7 @@
 		"registry": "https://npm.pkg.github.com/"
 	},
 	"dependencies": {
-		"node": "^16.15.0",
+		"node": "^16.20.2",
 		"unzipper": "^0.10.11",
 		"uuid": "^7.0.3"
 	}
