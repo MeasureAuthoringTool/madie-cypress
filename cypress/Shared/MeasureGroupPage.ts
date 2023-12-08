@@ -6,6 +6,7 @@ import { Utilities } from "./Utilities"
 import { v4 as uuidv4 } from 'uuid'
 
 export class MeasureGroupPage {
+
     public static readonly pcErrorAlertToast = '[data-testid="population-criteria-error"]'
 
     //QDM population criteria
@@ -26,6 +27,7 @@ export class MeasureGroupPage {
     public static readonly QDMSupplementalDataDefinitionTextBox = '[id="supplemental-data"]'
     public static readonly QDMRiskAdjustmentDescriptionTextBox = '[data-testid=riskAdjustmentDescription]'
     public static readonly QDMRiskAdjustmentDefinitionTextBox = '[id="risk-adjustment"]'
+
 
     //mismatch CQL error
     public static readonly CQLPCMismatchError = '[class="madie-alert error"]'
@@ -224,6 +226,7 @@ export class MeasureGroupPage {
     public static readonly riskAdjustmentDescriptionTextBox = '[class=risk-description]'
     public static readonly saveRiskAdjustments = '[data-testid="measure-Risk Adjustment-save"]'
     public static readonly riskAdjustmentSaveSuccessMsg = '[class="toast success"]'
+    public static readonly riskAdjDropDown = '[data-testid="risk-adjustment-dropdown"]'
 
     //Supplemental data elements
     public static readonly SDEPageContent = '[class="content"]'

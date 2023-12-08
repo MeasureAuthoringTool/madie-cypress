@@ -3,9 +3,6 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 
 export class TestCasesPage {
-    //<button data-testid="qdm-test-case-run-button" class="qpp-c-button" type="button">Run Test</button>
-
-
     //QI Core element tab enabled test case detail page elements
     public static readonly QiCoreEleEnabledJSONTab = '[data-testid="json-tab"]'
 
@@ -113,6 +110,7 @@ export class TestCasesPage {
     public static readonly PhysicalExamBTCard = '[data-testid="data-type-Physical Exam, Performed: Body temperature"]'
 
     //QDM misc test case page objects
+    public static readonly QDMDiscardChangesDialog = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-mbdu2s"]'
     public static readonly QDMTCSaveBtn = '[data-testid="edit-test-case-save-button"]'
     public static readonly tcSaveSuccessMsg = '[class="toast success"]'
     public static readonly tcSaveAlertDangerMsg = '[class="toast danger"]'
@@ -248,7 +246,7 @@ export class TestCasesPage {
     public static readonly genderSelectValuesElementTab = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
     public static readonly bonnieImportTestCaseBtn = '[data-testid="import-test-cases-from-bonnie-button"]'
     public static readonly highlightingPCTabSelector = '[data-testid="population-criterion-selector"]'
-    public static qdmTestCaseViewBtn = '.action'
+    public static readonly qdmTestCaseViewBtn = '.action'
 
     //Stratifications
     public static readonly denominatorStratificationOneExpectedValue = '[data-testid="test-population-Strata-1 Denominator-expected"]'

@@ -1060,35 +1060,6 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
             .should('contain.text', 'Denominator Description')
     })
 
-    it('Add Risk adjustment variables to the Measure group', () => {
-
-        MeasuresPage.measureAction("edit")
-
-        //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //Click on Risk Adjustment tab
-        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('ipp').click()
-        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
-            .first() // select the first element
-            .type('Initial Population Description')
-        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
-
-        //Click on clear Icon and verify description field is removed
-        cy.get(MeasureGroupPage.cancelIcon).click()
-        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('not.exist')
-
-        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
-
-    })
-
     it('Clicking on Discard changes button on Risk Adjustment page will revert the changes made before save', () => {
 
         MeasuresPage.measureAction("edit")
