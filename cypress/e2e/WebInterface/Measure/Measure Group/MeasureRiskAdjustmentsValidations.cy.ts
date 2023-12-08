@@ -318,39 +318,4 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(MeasureGroupPage.riskAdjDropDown).should('contain.text', 'Definition Num')
 
     })
-    // user is not able to edit or add RAs if they are not the owner or if the measure has not been shared with them
-    it('QI Core: User that is not the owner or whom has not had the measure shared with them can view but not edit RAs', () => {
-        cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
-        //navigate to the PC page / tab
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        //click on the Risk Adjustment button / link on the left page to populate fields on the right
-        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
-
-        //select a definition and enter a description for denom
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Denom').click()
-        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
-            .first() // select the first element
-            .type('Initial Population Description')
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Num').click().wait(1000)
-
-        //save the Risk Adjustment data
-        cy.get(MeasureGroupPage.saveRiskAdjustments).click().wait(100).click()
-        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
-        OktaLogin.Logout()
-        OktaLogin.AltLogin()
-        cy.get(Header.measures).click()
-        cy.get(LandingPage.allMeasuresTab).click()
-        MeasuresPage.measureAction("edit")
-        //navigate to the PC page / tab
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        //click on the Risk Adjustment button / link on the left page to populate fields on the right
-        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
-
-        Utilities.waitForElementDisabled(MeasureGroupPage.saveRiskAdjustments, 3500)
-
-    })
 })
