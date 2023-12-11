@@ -173,7 +173,7 @@ describe('Remove Test case attribute', () => {
 
         //Delete the attribute from Elements table
         cy.get('[data-testid="elements-section"]').contains('View').click({ force: true })
-        cy.get('[data-testid="popover-content"]').contains('Delete').click()
+        cy.get('[class="btn-container"]').contains('Delete').click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
 
         //Commenting until feature flag for JSON tab is removed
