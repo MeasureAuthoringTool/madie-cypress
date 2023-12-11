@@ -130,7 +130,7 @@ export class MeasureGroupPage {
     public static readonly denominatorObservation = '[id="measure-observation-denominator"]'
     public static readonly denominatorAggregateFunction = '[id="measure-observation-aggregate-denominator"]'
     public static readonly removeDenominatorObservation = '[data-testid="measure-observation-denominator-remove"]'
-    public static readonly measureObservationSelect = '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-1km1ehz"]'
+    public static readonly measureObservationSelect = '.MuiList-root'
     public static readonly aggregateFunctionCount = '[data-value="Count"]'
     public static readonly aggregateFunctionMaximum = '[data-value="Maximum"]'
     public static readonly aggregateFunctionDropdownList = '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-1km1ehz"]'
