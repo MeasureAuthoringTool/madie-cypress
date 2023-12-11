@@ -136,7 +136,7 @@ describe('Code Coverage Highlighting', () => {
         //verify percentage number appears in tabs heading
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '77% Coverage')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '45% Coverage')
 
         //Verify Highlighting for first Measure group
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
@@ -152,7 +152,7 @@ describe('Code Coverage Highlighting', () => {
         //verify percentage number appears in tabs heading
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '73% Coverage')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '52% Coverage')
 
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')

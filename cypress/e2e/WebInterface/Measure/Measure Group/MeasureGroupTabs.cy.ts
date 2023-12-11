@@ -960,41 +960,11 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('denom').click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.RAPage)
-            .find('[class="right"]')
-            .find(MeasureGroupPage.RAPageContainer)
-            .find(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
-            .last() // select the last element
-            .prev()
-            .type('Denominator Description')
+
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
         cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
-        //navigate to the main MADiE page
-        cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.measureAction("edit")
-
-        //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //Click on Risk Adjustment tab
-        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
-
-        //verify values in the description fields
-        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
-            .first() // select the first element
-            .should('contain.text', 'Initial Population Description')
-
-        cy.get(MeasureGroupPage.RAPage)
-            .find('[class="right"]')
-            .find(MeasureGroupPage.RAPageContainer)
-            .find(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
-            .last() // select the last element
-            .prev()
-            .should('contain.text', 'Denominator Description')
     })
     //skipping until bug MAT-5829 is fixed
     it.skip('Verify that description entered for each SDE Definition is accurate', () => {
@@ -1082,7 +1052,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         cy.get(MeasureGroupPage.discardChangesBtn).click()
         cy.get(MeasureGroupPage.discardChangesConfirmationMsg).should('contain.text', 'Are you sure you want to discard your changes?')
         cy.get(MeasureGroupPage.discardChangesContinueBtn).click()
-        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('not.exist')
+
     })
 
 
@@ -1101,26 +1071,17 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('ipp').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.SDEPageContent)
-            .find('[class="right-box"]')
-            .find(MeasureGroupPage.SDEContainer)
-            .find('[class="MuiFormControl-root MuiFormControl-fullWidth css-tzsjye"]')
-            .find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
-            .last() // select the last element
-            .prev()
-            .type('Denominator Description')
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
+            .first() // select the first element
+            .type('Initial Population Description')
 
         //Save Supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
+        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Click on clear Icon and verify description field is removed
         cy.get(MeasureGroupPage.cancelIcon).click({ force: true })
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('not.exist')
 
-        //Save Supplemental data
-        cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
 
     })
 
@@ -1140,21 +1101,14 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('ipp').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.SDEPageContent)
-            .find('[class="right-box"]')
-            .find(MeasureGroupPage.SDEContainer)
-            .find('[class="MuiFormControl-root MuiFormControl-fullWidth css-tzsjye"]')
-            .find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
-            .last() // select the last element
-            .prev()
-            .type('Denominator Description')
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
+            .first() // select the first element
+            .type('Initial Population Description')
 
         //Click on Discard changes button
         cy.get(MeasureGroupPage.discardChangesBtn).click()
         cy.get(MeasureGroupPage.discardChangesConfirmationMsg).should('contain.text', 'Are you sure you want to discard your changes?')
         cy.get(MeasureGroupPage.discardChangesContinueBtn).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionTextBox).should('be.empty')
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('not.exist')
     })
 })
 

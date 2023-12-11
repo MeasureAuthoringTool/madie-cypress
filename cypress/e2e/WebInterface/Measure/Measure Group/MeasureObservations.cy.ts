@@ -60,7 +60,7 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.denominatorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(3).wait(1000).click() //select booleanFunction
+        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
@@ -69,7 +69,7 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.numeratorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(3).wait(1000).click() //select booleanFunction
+        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
@@ -197,7 +197,7 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.denominatorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(3).wait(1000).click() //select booleanFunction
+        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
@@ -206,7 +206,7 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.numeratorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(3).wait(1000).click() //select booleanFunction
+        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
@@ -284,7 +284,8 @@ describe('Measure Observations', () => {
         //Verify Aggregate function dropdown values
         cy.get(MeasureGroupPage.cvAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionDropdownList).each(($ele) => {
-            expect($ele.text()).to.be.oneOf(['Average', 'Count', 'Maximum', 'Median', 'Minimum', 'Sum'])
+            expect($ele.text()).to.be.eq('AverageCountMaximumMedianMinimumSum')
+
         })
     })
 })
@@ -334,7 +335,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.denominatorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(3).wait(1000).click() //select booleanFunction
+        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
@@ -343,7 +344,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.numeratorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(3).wait(1000).click() //select booleanFunction
+        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
@@ -679,7 +680,7 @@ describe('Measure Observation - Expected Values', () => {
         cy.get(MeasureGroupPage.denominatorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(3).wait(1000).click() //select booleanFunction
+        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
@@ -688,7 +689,7 @@ describe('Measure Observation - Expected Values', () => {
         cy.get(MeasureGroupPage.numeratorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(3).wait(1000).click() //select booleanFunction
+        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
@@ -837,7 +838,7 @@ describe('Validate Measure Observation Parameters', () => {
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(1).wait(1000).click() //select isFinishedEncounter
+        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{enter}') //select isFinishedEncounter
         cy.get('[data-testid="measure-observation-cv-obs-helper-text"]').should('contain.text', 'Selected function can not have parameters')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
@@ -853,7 +854,7 @@ describe('Validate Measure Observation Parameters', () => {
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(1).wait(1000).click() //select fun
+        cy.get(MeasureGroupPage.measureObservationSelect).type('f"{enter}') //select fun
         cy.get('[data-testid="measure-observation-cv-obs-helper-text"]').should('contain.text', 'Selected function must have exactly one parameter of type Encounter')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')

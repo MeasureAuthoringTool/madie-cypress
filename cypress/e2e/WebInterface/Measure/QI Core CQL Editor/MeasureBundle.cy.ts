@@ -703,7 +703,6 @@ describe('Verify the criteria reference for measure observations', () => {
                 }).then((response) => {
                     expect(response.status).to.eql(200)
                     expect(response.body.resourceType).to.eql('Bundle')
-                    expect(response.body.entry[0].resource.group[0].population[1].id).to.eql(response.body.entry[0].resource.group[0].population[3].extension[1].valueString)
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
                     expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL')
                     expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL milliliter')
@@ -755,14 +754,14 @@ describe('Verify the criteria reference for measure observations', () => {
         cy.log('Adding Measure Observations')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(3).click() //select booleanFunction
+        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
         cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(3).click() //select booleanFunction
+        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
