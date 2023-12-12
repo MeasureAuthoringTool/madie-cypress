@@ -166,7 +166,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.denominatorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(2).click() //select daysObs
+        cy.get('[data-value="daysObs"]').click() //select daysObs
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
@@ -175,7 +175,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.numeratorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(2).click() //select daysObs
+        cy.get('[data-value="daysObs"]').click() //select daysObs
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
@@ -307,7 +307,7 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.denominatorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(0).click() //select boolFunc
+        cy.get('[data-value="boolFunc"]').click() //select boolFunc
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
@@ -316,7 +316,7 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.numeratorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(1).click() //select boolFunc2
+        cy.get('[data-value="boolFunc2"]').click() //select boolFunc2
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 

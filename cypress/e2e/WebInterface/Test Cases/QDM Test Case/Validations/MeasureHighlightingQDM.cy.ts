@@ -8,35 +8,20 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../../Shared/Header"
-import { util } from "chai"
 
 let measureCQLPFTests = MeasureCQL.QDMHighlightingTab_CQL
 let scoringPropValue = 'Proportion'
-let testCaseJson = TestCaseJson.QDMTestCaseJson
 let QDMTCJson = TestCaseJson.tcJSON_QDM_Value
-//let measureCQLDFUTests = MeasureCQL.CQLDFN_value
-//let measureCQLResults = MeasureCQL.CQLHLResults_value
-
-const path = require('path')
-const downloadsFolder = Cypress.config('downloadsFolder')
-const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'test case title'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
-//let tcDFNJson = TestCaseJson.tcJson_value
-//let tcResultJson = TestCaseJson.tcResultsJson
 let newMeasureName = ''
 let newCqlLibraryName = ''
 
-
-
-describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a single PC measure', () => {
-
-    deleteDownloadsFolderBeforeAll()
+//Skipping until feature flag for QDM Highlighting tab is removed
+describe.skip('QDM Measure: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a single PC measure', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -147,9 +132,8 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
     })
 })
 
-describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a multiple PC measure', () => {
-
-    deleteDownloadsFolderBeforeAll()
+//Skipping until feature flag for QDM Highlighting tab is removed
+describe.skip('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a multiple PC measure', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
