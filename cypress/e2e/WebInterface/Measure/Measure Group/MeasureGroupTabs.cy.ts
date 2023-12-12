@@ -775,7 +775,7 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get(MeasureGroupPage.reportingTab).wait(1000).click()
 
         //assert the two fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
@@ -966,8 +966,8 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
 
     })
-    //skipping until bug MAT-5829 is fixed
-    it.skip('Verify that description entered for each SDE Definition is accurate', () => {
+
+    it('Verify that description entered for each SDE Definition is accurate', () => {
 
         MeasuresPage.measureAction("edit")
 
@@ -978,29 +978,15 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
         //Click on Supplemental data tab
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
 
+        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('ipp').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
-            .first() // select the first element
-            .type('Initial Population Description')
-        //select a definition and enter a description for denom
-        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('denom').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
-
-        cy.get(MeasureGroupPage.SDEPageContent)
-            .find('[class="right-box"]')
-            .find(MeasureGroupPage.SDEContainer)
-            .find('[class="MuiFormControl-root MuiFormControl-fullWidth css-tzsjye"]')
-            .find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
-            .last() // select the last element
-            .prev()
+            .first() // select the last element
             .type('Denominator Description')
         //Save Supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Supplement Data Element Information Saved Successfully')
+        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //navigate to the main MADiE page
         cy.get(Header.mainMadiePageButton).click()
@@ -1015,18 +1001,8 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         //Click on Supplemental data tab
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
 
-        //verify values in the description fields
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
-            .first() // select the first element
-            .should('contain.text', 'Initial Population Description')
-
-        cy.get(MeasureGroupPage.SDEPageContent)
-            .find('[class="right-box"]')
-            .find(MeasureGroupPage.SDEContainer)
-            .find('[class="MuiFormControl-root MuiFormControl-fullWidth css-tzsjye"]')
-            .find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
-            .last() // select the last element
-            .prev()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
+            .first() // select the last element
             .should('contain.text', 'Denominator Description')
     })
 

@@ -57,19 +57,13 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('exist')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('be.visible')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).wait(1000).click()
-        cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'booleanFunction') // select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
-        cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'booleanFunction') // select booleanFunction
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
@@ -194,19 +188,13 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('exist')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('be.visible')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).wait(1000).click()
-        cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'booleanFunction') // select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
-        cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'booleanFunction') // select booleanFunction
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
@@ -332,19 +320,13 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('exist')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('be.visible')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).wait(1000).click()
-        cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'booleanFunction') // select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
-        cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'booleanFunction') // select booleanFunction
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
@@ -677,19 +659,13 @@ describe('Measure Observation - Expected Values', () => {
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('exist')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('be.visible')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).wait(1000).click()
-        cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'booleanFunction') // select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
-        cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'booleanFunction') // select booleanFunction
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
@@ -835,10 +811,7 @@ describe('Validate Measure Observation Parameters', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
 
         //Verify error message when the function selected for Measure Observation has parameters for Boolean population basis type
-        cy.get(MeasureGroupPage.cvMeasureObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{enter}') //select isFinishedEncounter
+        Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'isFinishedEncounter') //select isFinishedEncounter
         cy.get('[data-testid="measure-observation-cv-obs-helper-text"]').should('contain.text', 'Selected function can not have parameters')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
@@ -851,10 +824,8 @@ describe('Validate Measure Observation Parameters', () => {
         cy.get(MeasureGroupPage.popBasisOption).click()
 
         //Verify error message when the parameter used in function selected for Measure Observation does not match with population basis type
-        cy.get(MeasureGroupPage.cvMeasureObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).type('f"{enter}') //select fun
+
+        Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'fun') //select fun
         cy.get('[data-testid="measure-observation-cv-obs-helper-text"]').should('contain.text', 'Selected function must have exactly one parameter of type Encounter')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
