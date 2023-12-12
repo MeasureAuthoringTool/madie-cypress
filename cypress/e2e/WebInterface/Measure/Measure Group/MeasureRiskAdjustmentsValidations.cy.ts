@@ -66,9 +66,12 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
 
     beforeEach('Create New Measure and Login', () => {
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let newMeasureName = measureName + randValue
+        let newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         //create Measure Group
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population',
             'Num', 'Initial Population', 'boolean')

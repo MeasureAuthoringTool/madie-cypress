@@ -5,7 +5,7 @@ import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
 
 let measureName = 'TestMeasure' + Date.now()
-let harpUser = Environment.credentials().harpUserALT
+let harpUser = Environment.credentials().harpUser
 let cqlLibraryName = 'TestCql' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let updatedMeasureName = ''
@@ -564,7 +564,9 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
     beforeEach('Create Measure and Set Access Token', () => {
 
         //Create second Measure with Alt User
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + '2', cqlLibraryName + '2', measureCQL, true, true)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + '2', cqlLibraryName + '2', measureCQL, false, true)
+        cy.clearCookies()
+        cy.clearLocalStorage()
 
         cy.setAccessTokenCookie()
 
@@ -572,7 +574,7 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName + '2', cqlLibraryName + '2')
+        Utilities.deleteMeasure(measureName + '2', cqlLibraryName + '2', false, true)
 
     })
     it('Attempt to add Meta Data Risk Adjustment to the measure, when the user is not the owner', () => {

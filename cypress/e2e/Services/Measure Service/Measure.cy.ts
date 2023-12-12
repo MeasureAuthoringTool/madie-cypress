@@ -5,10 +5,10 @@ import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { v4 as uuidv4 } from 'uuid'
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
 let measureName = ''
 let newMeasureName = ''
@@ -38,7 +38,7 @@ describe('Measure Service: QICore Measure', () => {
     })
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, CQLLibraryName)
+        Utilities.deleteMeasure(measureName, CQLLibraryName, false, false)
 
     })
 
