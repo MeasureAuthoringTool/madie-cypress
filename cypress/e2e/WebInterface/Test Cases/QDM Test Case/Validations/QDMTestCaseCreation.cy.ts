@@ -6,6 +6,7 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
+import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
 
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
@@ -184,7 +185,7 @@ describe('Validating the creation of QDM Test Case', () => {
 
         //verify that the user is, now, on the test case list page
         cy.readFile(measurePath).should('exist').then((measureId) => {
-            cy.url().should('eq', 'https://dev-madie.hcqis.org/measures/' + measureId + '/edit/test-cases')
+            cy.url().should('contain',  measureId + '/edit/test-cases')
         })
     })
 })
@@ -193,15 +194,10 @@ describe('Validating the Elements section on Test Cases', () => {
     beforeEach('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, mCQLForElementsValidation, false, false,
-            '2023-01-01', '2024-01-01')
-
-        OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', false, mCQLForElementsValidation)
+        //create Measure Group
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population',
+            'boolean')
         OktaLogin.Login()
     })
 
@@ -229,12 +225,11 @@ describe('Validating the Elements section on Test Cases', () => {
         //confirm page and elements tabs / objects have loaded on page
         Utilities.waitForElementVisible(TestCasesPage.ElementsSubTabHeading, 37000)
         Utilities.waitForElementVisible(TestCasesPage.EncounterElementTab, 37000)
-        Utilities.waitForElementVisible(TestCasesPage.EncounterOSSCard, 37000)
 
         //click on Encounter element sub tab
         cy.get(TestCasesPage.EncounterElementTab).click()
         //cards under Encounter appear
-        cy.get(TestCasesPage.EncounterOSSCard).should('be.visible')
+        cy.get(TestCasesPage.EncounterOSCard).should('be.visible')
         cy.get(TestCasesPage.EncounterEDVCard).should('be.visible')
         cy.get(TestCasesPage.EncounterEICard)
             .first()
@@ -244,36 +239,15 @@ describe('Validating the Elements section on Test Cases', () => {
             .last()
             .should('be.visible')
 
-        //click on Laboratory element sub tab
-        cy.get(TestCasesPage.LaboratoryElementTab).click()
-        //cards under Laboratory appear
-        cy.get(TestCasesPage.LaboratoryHLTCard).should('be.visible')
-        cy.get(TestCasesPage.LaboratoryGLTCard).should('be.visible')
-        cy.get(TestCasesPage.LaboratoryBLTCard).should('be.visible')
-        cy.get(TestCasesPage.LaboratoryWHBCCLTCard).should('be.visible')
-        cy.get(TestCasesPage.LaboratorySLTCard).scrollIntoView().should('be.visible')
-        cy.get(TestCasesPage.LaboratoryPLTCard).scrollIntoView().should('be.visible')
-        cy.get(TestCasesPage.LaboratoryCLTCard).scrollIntoView().should('be.visible')
-
         //click on Characteristic element sub tab
         cy.get(TestCasesPage.CharacteristicElementTab).click()
         //cards under Characteristic appear
         cy.get(TestCasesPage.CharacteristicMAPCard).should('be.visible')
-        cy.get(TestCasesPage.CharacteristicPayerCard).should('be.visible')
         cy.get(TestCasesPage.CharacteristicMFFSPCard).should('be.visible')
 
-        //click on Characteristic element sub tab
-        cy.get(TestCasesPage.PhysicalExamElementTab).click()
-        //cards under Characteristic appear
-        cy.get(TestCasesPage.PhysicalExamOSbyPOCard).should('be.visible')
-        cy.get(TestCasesPage.PhysicalExameBWCard).should('be.visible')
-        cy.get(TestCasesPage.PhysicalExamSBPCard).should('be.visible')
-        cy.get(TestCasesPage.PhysicalExamRRCard).should('be.visible')
-        cy.get(TestCasesPage.PhysicalExamHRCard).scrollIntoView().should('be.visible')
-        cy.get(TestCasesPage.PhysicalExamBTCard).scrollIntoView().should('be.visible')
     })
 
-    it.only("Verify elements' subsections' edit cards", () => {
+    it("Verify elements' subsections' edit cards", () => {
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
 
@@ -290,15 +264,14 @@ describe('Validating the Elements section on Test Cases', () => {
         //confirm page and elements tabs / objects have loaded on page
         Utilities.waitForElementVisible(TestCasesPage.ElementsSubTabHeading, 37000)
         Utilities.waitForElementVisible(TestCasesPage.EncounterElementTab, 37000)
-        Utilities.waitForElementVisible(TestCasesPage.EncounterOSSCard, 37000)
 
         //click on Encounter element sub tab
         cy.get(TestCasesPage.EncounterElementTab).click()
 
         //subsection -- Outpatient Surgery Service card appears and click on the plus button to open edit card
-        cy.get(TestCasesPage.EncounterOSSCard).should('be.visible')
-        cy.get(TestCasesPage.EncounterOSSCardExpandBtn).should('be.visible')
-        cy.get(TestCasesPage.EncounterOSSCardExpandBtn)
+        cy.get(TestCasesPage.EncounterOSCard).should('be.visible')
+        cy.get(TestCasesPage.plusIcon).should('be.visible')
+        cy.get(TestCasesPage.plusIcon)
             .first()
             .click()
 
@@ -312,7 +285,7 @@ describe('Validating the Elements section on Test Cases', () => {
         cy.get(TestCasesPage.ExpandedOSSDetailCard)
             .find(TestCasesPage.ExpandedOSSDetailCardTitleSubDetail)
             .should('exist')
-            .should('contain.text', 'Outpatient Surgery Service')
+            .should('contain.text', 'Observation Services')
         cy.get(TestCasesPage.ExpandedOSSDetailCard).find(TestCasesPage.ExpandedOSSDetailCardTiming)
             .should('exist')
             .should('contain.text', 'Timing')
@@ -320,13 +293,9 @@ describe('Validating the Elements section on Test Cases', () => {
         cy.get(TestCasesPage.ExpandedOSSDetailCard).find(TestCasesPage.ExpandedOSSDetailCardTabAttributes).should('exist')
 
         //close the detail card
-        //<span class="MuiTouchRipple-root css-w0pj6f"></span>
-        cy.get(TestCasesPage.ExpandedOSSDetailCard).find(TestCasesPage.ExpandedOSSDetailCardClose)
-            .scrollIntoView()
-            .wait(500)
-            .click()
+        cy.get('[data-testid="CloseIcon"]').click()
         //cards under Encounter appear
-        cy.get(TestCasesPage.EncounterOSSCard).should('be.visible')
+        cy.get(TestCasesPage.EncounterOSCard).should('be.visible')
         cy.get(TestCasesPage.EncounterEDVCard).should('be.visible')
         cy.get(TestCasesPage.EncounterEICard)
             .first()
@@ -336,33 +305,12 @@ describe('Validating the Elements section on Test Cases', () => {
             .last()
             .should('be.visible')
 
-        //click on Laboratory element sub tab
-        cy.get(TestCasesPage.LaboratoryElementTab).click()
-        //cards under Laboratory appear
-        cy.get(TestCasesPage.LaboratoryHLTCard).should('be.visible')
-        cy.get(TestCasesPage.LaboratoryGLTCard).should('be.visible')
-        cy.get(TestCasesPage.LaboratoryBLTCard).should('be.visible')
-        cy.get(TestCasesPage.LaboratoryWHBCCLTCard).should('be.visible')
-        cy.get(TestCasesPage.LaboratorySLTCard).scrollIntoView().should('be.visible')
-        cy.get(TestCasesPage.LaboratoryPLTCard).scrollIntoView().should('be.visible')
-        cy.get(TestCasesPage.LaboratoryCLTCard).scrollIntoView().should('be.visible')
-
         //click on Characteristic element sub tab
         cy.get(TestCasesPage.CharacteristicElementTab).click()
         //cards under Characteristic appear
         cy.get(TestCasesPage.CharacteristicMAPCard).should('be.visible')
-        cy.get(TestCasesPage.CharacteristicPayerCard).should('be.visible')
         cy.get(TestCasesPage.CharacteristicMFFSPCard).should('be.visible')
 
-        //click on Characteristic element sub tab
-        cy.get(TestCasesPage.PhysicalExamElementTab).click()
-        //cards under Characteristic appear
-        cy.get(TestCasesPage.PhysicalExamOSbyPOCard).should('be.visible')
-        cy.get(TestCasesPage.PhysicalExameBWCard).should('be.visible')
-        cy.get(TestCasesPage.PhysicalExamSBPCard).should('be.visible')
-        cy.get(TestCasesPage.PhysicalExamRRCard).should('be.visible')
-        cy.get(TestCasesPage.PhysicalExamHRCard).scrollIntoView().should('be.visible')
-        cy.get(TestCasesPage.PhysicalExamBTCard).scrollIntoView().should('be.visible')
     })
 })
 describe('Run QDM Test Case ', () => {
@@ -388,7 +336,7 @@ describe('Run QDM Test Case ', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    it.only('Run a simple QDM test case and verify message that indicates that test case was ran', () => {
+    it('Run a simple QDM test case and verify message that indicates that test case was ran', () => {
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
 

@@ -164,22 +164,16 @@ describe('Test Case Import: functionality tests', () => {
         //wait until select / drag and drop modal no longer appears
         Utilities.waitForElementToNotExist(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
+        //Log out
+        cy.get('[data-testid="user-profile-select"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click({force: true}).wait(1000)
+        cy.log('Log out successful')
     })
 
     it('Measure is not owned by nor shared with user: import button is not available', () => {
+
         OktaLogin.AltLogin()
-
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 45000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').wait(4000)
-        cy.get(MeasuresPage.allMeasuresTab).click().wait(4000)
-
-        Utilities.waitForElementVisible(Header.cqlLibraryTab, 45000)
-        cy.get(Header.cqlLibraryTab).should('be.visible').wait(4000)
-        cy.get(Header.cqlLibraryTab).click().wait(4000)
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 45000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(4000)
-        cy.get(Header.mainMadiePageButton).click().wait(4000)
+        cy.reload()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 45000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
@@ -484,7 +478,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportErrorOnImport, 35000)
-        cy.get('.TestCaseImportDialog___StyledSmall3-sc-v92oci-17').should('contain.text', 'The import file must be a zip file. No Test Cases can be imported.')
+        cy.get('[data-testid="test-case-import-error-div"] > small').should('contain.text', 'The import file must be a zip file. No Test Cases can be imported.')
 
     })
     it('Importing: .zip\'s test case folder does not contain a json file', () => {

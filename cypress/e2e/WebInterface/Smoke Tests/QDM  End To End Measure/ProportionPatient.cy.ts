@@ -324,6 +324,19 @@ describe('Measure Creation: Proportion Patient Based', () => {
         cy.get('[data-testid="code-option-137671000119105"]').click()
         cy.get('[data-testid=add-code-concept-button]').click()
 
+        //click on Expected/Actual tab
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+
+        //Add Expected values
+        cy.get(TestCasesPage.testCaseIPPExpected).click()
+        cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
+        cy.get(TestCasesPage.testCaseDENOMExpected).click()
+        cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
+        cy.get(TestCasesPage.testCaseDENEXExpected).click()
+        cy.get(TestCasesPage.testCaseDENEXExpected).check().should('be.checked')
+
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')

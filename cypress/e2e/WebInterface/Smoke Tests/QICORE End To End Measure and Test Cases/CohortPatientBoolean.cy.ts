@@ -7,7 +7,6 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../Shared/Header"
 
 let measureName = 'CohortPatientBoolean' + Date.now()
 let CqlLibraryName = 'CohortPatientBoolean' + Date.now()

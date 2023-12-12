@@ -279,11 +279,9 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get('.MuiList-root > [data-value=""]').click()
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).wait(1000).eq(3).wait(1000).click() //select booleanFunction
+        cy.get('[data-value="booleanFunction"]').click() //select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
-        cy.get(MeasureGroupPage.aggregateFunctionCount).click()
+        cy.get('[data-value="Average"]').click()
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
