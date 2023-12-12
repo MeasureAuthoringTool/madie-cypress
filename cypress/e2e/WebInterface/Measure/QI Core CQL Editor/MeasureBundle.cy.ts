@@ -753,15 +753,13 @@ describe('Verify the criteria reference for measure observations', () => {
         //Add Denominator Observation
         cy.log('Adding Measure Observations')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
-        cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'booleanFunction')
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
-        cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).type('{downArrow}{downArrow}{downArrow}{downArrow}{enter}') //select booleanFunction
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'booleanFunction')
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
