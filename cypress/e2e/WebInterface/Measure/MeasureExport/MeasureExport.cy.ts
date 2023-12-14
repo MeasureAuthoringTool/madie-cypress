@@ -2,13 +2,17 @@ import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import {MeasureCQL} from "../../../../Shared/MeasureCQL"
 
 let measureNameTimeStamp = 'TestMeasure' + Date.now()
 let measureName = measureNameTimeStamp
 let CqlLibraryName = 'TestLibrary' + Date.now()
+let qdmMeasureName = 'QDMTestMeasure' + Date.now()
+let qdmCqlLibraryName = 'QDMLibrary' + Date.now()
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
+let qdmMeasureCQL = MeasureCQL.SBTEST_CQL
 
 let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     '\n' +
@@ -72,7 +76,7 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     'define "Denom":\n' +
     'true'
 
-describe('FHIR Measure Export', () => {
+describe('QI-Core Measure Export', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -87,7 +91,7 @@ describe('FHIR Measure Export', () => {
 
     })
 
-    it('Validate the zip file Export is downloaded', () => {
+    it('Validate the zip file Export is downloaded for QI-Core Measure', () => {
 
         MeasuresPage.measureAction('version')
 
@@ -110,7 +114,7 @@ describe('FHIR Measure Export', () => {
         OktaLogin.Logout()
     })
 
-    it('Unzip the downloaded file and verify file types', () => {
+    it('Unzip the downloaded file and verify file types for QI-Core Measure', () => {
 
         // unzipping the Measure Export
         cy.task('unzipFile', { zipFile: 'eCQMTitle-v1.0.000-FHIR4.zip', path: downloadsFolder })
@@ -132,3 +136,64 @@ describe('FHIR Measure Export', () => {
     })
 
 })
+
+//Skipping until the feature flag for QDM Measure Export is removed
+describe.skip('QDM Measure Export', () => {
+
+    deleteDownloadsFolderBeforeAll()
+
+    before('Create New Measure and Login', () => {
+
+        //Create Measure and Measure group
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Cohort', true, qdmMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
+        OktaLogin.Login()
+
+    })
+
+    it('Validate the zip file Export is downloaded for QDM Measure', () => {
+
+        MeasuresPage.measureAction('version')
+
+        cy.get(MeasuresPage.measureVersionMajor).should('exist')
+        cy.get(MeasuresPage.measureVersionMajor).click()
+
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+
+        MeasuresPage.validateVersionNumber(measureName, '1.0.000')
+        cy.log('Version Created Successfully')
+
+        MeasuresPage.measureAction('qdmexport')
+
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-QDM5.zip'), { timeout: 500000 }).should('exist')
+        cy.log('Successfully verified zip file export')
+
+        OktaLogin.Logout()
+    })
+
+    it('Unzip the downloaded file and verify file types for QDM Measure', () => {
+
+        // unzipping the Measure Export
+        cy.task('unzipFile', { zipFile: 'eCQMTitle-v1.0.000-QDM5.zip', path: downloadsFolder })
+            .then(results => {
+                cy.log('unzipFile Task finished')
+            })
+
+        //Verify all files exist in exported zip file
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-QDM5.zip')).should('contain', 'eCQMTitle-v1.0.000-QDM.html' &&
+            'eCQMTitle-v1.0.000-QDM.xml' && 'eCQMTitle-v1.0.000-QDM.json')
+
+        // cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v1.0.000-FHIR.html' &&
+        //     'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json' && 'FHIRHelpers-4.1.000.cql' && 'CQMCommon-1.0.000.cql' && 'FHIRCommon-4.1.000.cql'
+        //     && 'QICoreCommon-1.2.000.cql' && 'SupplementalDataElements-3.1.000.cql' && measureName+'-1.0.000.cql' && 'CQMCommon-1.0.000.xml'
+        //     && 'CQMCommon-1.0.000.json' && 'FHIRCommon-4.1.000.xml' && 'FHIRCommon-4.1.000.json' && 'FHIRHelpers-4.1.000.xml' && 'FHIRHelpers-4.1.000.json'
+        //     && 'QICoreCommon-1.2.000.xml' && 'QICoreCommon-1.2.000.json' && 'SupplementalDataElements-3.1.000.xml' && 'SupplementalDataElements-3.1.000.json'
+        //     && measureName+'-1.0.000.xml' && measureName+'-1.0.000.json')
+
+    })
+
+})
+

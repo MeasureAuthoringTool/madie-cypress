@@ -90,6 +90,22 @@ export class MeasuresPage {
                     cy.get('.toast').should('contain.text', 'Measure exported successfully')
                     break
                 }
+                case 'qdmexport': {
+
+                    cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
+                    cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
+                    Utilities.waitForElementVisible('[data-testid="export-measure-' + fileContents + '"]', 105000)
+                    cy.get('[data-testid="view-measure-' + fileContents + '"]').should('be.visible')
+                    Utilities.waitForElementEnabled('[data-testid="export-measure-' + fileContents + '"]', 105000)
+                    cy.get('[data-testid="export-measure-' + fileContents + '"]').should('be.enabled')
+                    cy.get('[data-testid="export-measure-' + fileContents + '"]').click()
+
+                    cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
+                    //cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')
+                    Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 125000)
+                    cy.get('.toast').should('contain.text', 'Measure exported successfully')
+                    break
+                }
                 case 'version': {
 
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
