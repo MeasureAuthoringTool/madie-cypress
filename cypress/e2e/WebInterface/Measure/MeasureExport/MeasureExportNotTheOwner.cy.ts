@@ -2,6 +2,7 @@ import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import {MeasureCQL} from "../../../../Shared/MeasureCQL"
 
 let measureNameTimeStamp = 'TestMeasure' + Date.now()
 let measureName = measureNameTimeStamp
@@ -9,6 +10,7 @@ let CqlLibraryName = 'TestLibrary' + Date.now()
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
+let qdmMeasureCQL = MeasureCQL.SBTEST_CQL
 
 let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     '\n' +
@@ -88,7 +90,7 @@ describe.skip('FHIR Measure Export, Not the Owner', () => {
 
     })
 
-    it('Validate the zip file Export is downloaded', () => {
+    it('Validate the zip file Export is downloaded for FHIR Measure', () => {
 
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
@@ -103,7 +105,7 @@ describe.skip('FHIR Measure Export, Not the Owner', () => {
 
     })
 
-    it('Unzip the downloaded file and verify file types', () => {
+    it('Unzip the downloaded file and verify file types for FHIR Measure', () => {
 
         // unzipping the Measure Export
         cy.task('unzipFile', { zipFile: 'eCQMTitle-v0.0.000-FHIR4.zip', path: downloadsFolder })
@@ -124,3 +126,55 @@ describe.skip('FHIR Measure Export, Not the Owner', () => {
 
     })
 })
+
+//Skipping until the feature flag for QDM Measure Export is removed
+describe.skip('QDM Measure Export, Not the Owner', () => {
+
+    deleteDownloadsFolderBeforeAll()
+
+    before('Create New Measure and Login', () => {
+
+        //Create Measure and Measure group
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, qdmMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
+        OktaLogin.AltLogin()
+
+    })
+
+    it('Validate the zip file Export is downloaded for QDM Measure', () => {
+
+        //Navigate to All Measures tab
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        cy.get(MeasuresPage.allMeasuresTab).click()
+
+        MeasuresPage.measureAction('qdmexport')
+
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM5.zip'),{ timeout: 500000 }).should('exist')
+        cy.log('Successfully verified zip file export')
+
+        OktaLogin.Logout()
+
+    })
+
+    it('Unzip the downloaded file and verify file types for QDM Measure', () => {
+
+        // unzipping the Measure Export
+        cy.task('unzipFile', { zipFile: 'eCQMTitle-v0.0.000-QDM5.zip', path: downloadsFolder })
+            .then(results => {
+                cy.log('unzipFile Task finished')
+            })
+
+        //Verify all files exist in exported zip file
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM5.zip')).should('contain', 'eCQMTitle-v0.0.000-QDM.html' &&
+            'eCQMTitle-v0.0.000-QDM.xml' && 'eCQMTitle-v0.0.000-QDM.json')
+
+        // cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v1.0.000-FHIR.html' &&
+        //     'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json' && 'FHIRHelpers-4.1.000.cql' && 'CQMCommon-1.0.000.cql' && 'FHIRCommon-4.1.000.cql'
+        //     && 'QICoreCommon-1.2.000.cql' && 'SupplementalDataElements-3.1.000.cql' && measureName+'-1.0.000.cql' && 'CQMCommon-1.0.000.xml'
+        //     && 'CQMCommon-1.0.000.json' && 'FHIRCommon-4.1.000.xml' && 'FHIRCommon-4.1.000.json' && 'FHIRHelpers-4.1.000.xml' && 'FHIRHelpers-4.1.000.json'
+        //     && 'QICoreCommon-1.2.000.xml' && 'QICoreCommon-1.2.000.json' && 'SupplementalDataElements-3.1.000.xml' && 'SupplementalDataElements-3.1.000.json'
+        //     && measureName+'-1.0.000.xml' && measureName+'-1.0.000.json')
+
+    })
+})
+
