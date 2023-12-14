@@ -201,6 +201,9 @@ export class TestCasesPage {
     public static readonly selectTestCaseDropdownBtn = '.chevron-container > [data-testid="ExpandMoreIcon"]'
     public static readonly testCaseListTable = '[data-testid="test-case-tbl"]'
     public static readonly tcPopulationCriteriaNavLink = '[data-testid="test-case-pop-criteria-nav"]'
+    public static readonly tcCoverageTabList = '[data-testid="coverage-tab-list"]'
+    public static readonly tcCoverageSections = '[class="accordion-section"]'
+    public static readonly tcCoverageContent = '[class="accordion-content"]'
 
     //Test Case Population Values
     public static readonly testCaseIPPExpected = '[data-testid="test-population-initialPopulation-expected"]'
@@ -285,6 +288,7 @@ export class TestCasesPage {
     public static readonly importInProgress = '[class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-1mbw3kc"]'
     public static readonly testCaseImportErrorAtValidating = '[data-testid="test-case-import-error-div"]'
     public static readonly importTestCaseModalList = '[data-testid="test-case-preview-list"]'
+    public static readonly importTestCaseModalHeader = '[data-testid="test-case-preview-header"]'
 
     //Warning Modal
     public static readonly discardChangesConfirmationModal = '[id="mui-4"]'
