@@ -4,8 +4,8 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let measureName = 'ProportionListQDMPositiveProcedurePerformed' + Date.now()
 let CqlLibraryName = 'ProportionListQDMPositiveProcedurePerformed' + Date.now()
