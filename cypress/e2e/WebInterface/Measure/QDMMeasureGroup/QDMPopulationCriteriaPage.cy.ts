@@ -105,16 +105,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //Add UCUM scoring unit
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
-        cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
-        //Select mL milliliters from the dropdown
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL')
 
         //Add Initial Population
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
@@ -141,7 +132,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //verify All data persists on Criteria page
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'ipp')
-        cy.get(MeasureGroupPage.ucumScoringUnitCurrentValue).should('contain.value', 'mL milliliter')
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).should('contain.value', 'mL')
 
         //Navigate to Base Configuration page and verify All data persists on the page
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')

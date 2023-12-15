@@ -144,19 +144,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-
-        //Add UCUM scoring unit
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
-        cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
-        //Select mL milliliters from the dropdown
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL')
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -187,7 +175,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
             .then(($message) => {
                 expect($message.val().toString()).to.equal('MeasureGroup Description value')
             })
-        cy.get(MeasureGroupPage.ucumScoringUnitCurrentValue).should('contain.value', 'mL milliliter')
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).should('contain.value', 'mL')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('contain.text', 'Process')
     })
 
