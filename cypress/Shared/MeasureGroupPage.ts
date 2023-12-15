@@ -117,7 +117,7 @@ export class MeasureGroupPage {
     public static readonly measurePopulationExclusionMismatchErrorMsg = '[data-testid="population-select-measure-population-exclusion-select-helper-text"]'
 
     //UCUM scoring unit
-    public static readonly ucumScoringUnitSelect = '[data-testid="measure-scoring-unit-text-input"]'
+    public static readonly ucumScoringUnitSelect = '[data-testid="scoring-unit-text-input"]'
 
 
     public static readonly ucumScoringUnitfullName = '[aria-activedescendant="scoring-unit-dropdown-option-0"]'
