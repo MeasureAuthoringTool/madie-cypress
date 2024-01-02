@@ -1,6 +1,8 @@
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "../../../Shared/Utilities"
+import {MeasureCQL} from "../../../Shared/MeasureCQL"
+import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
 
 let measureName = 'MeasureExport' + Date.now()
 let CqlLibraryName = 'MeasureExportLibrary' + Date.now()
@@ -10,6 +12,7 @@ let newCqlLibraryName = ''
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
+let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 let measureCQL_WithErrors = 'library APICQLLibrary35455 version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' \n' +
@@ -57,7 +60,7 @@ let PopDenex = 'ipp'
 let PopDenexcep = 'denom'
 let PopNumex = 'numeratorExclusion'
 
-describe('Measure Export', () => {
+describe('QI-Core Measure Export', () => {
 
     beforeEach('Create Measure and set access token', () => {
 
@@ -142,7 +145,7 @@ describe('Measure Export', () => {
 
     })
 
-    it('Confirm the export end point returns a contentType of "application/zip"', () => {
+    it('Confirm the export end point returns a contentType of "application/zip" for QI-Core Measure', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -416,6 +419,47 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
                     console.log(response)
                     expect(response.status).to.eql(409)
                     expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since there is no description in metadata.')
+                })
+            })
+        })
+    })
+})
+
+describe('QDM Measure Export', () => {
+
+    beforeEach('Create Measure and set access token', () => {
+
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = CqlLibraryName + randValue
+
+        cy.setAccessTokenCookie()
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+
+    })
+
+    afterEach('Clean up', () => {
+
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('Successful QDM Measure Export', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/exports',
+                    method: 'GET',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    }
+                }).then((response) => {
+                    console.log(response)
+                    expect(response.status).to.eql(200)
+                    expect(response.body).is.not.null
                 })
             })
         })

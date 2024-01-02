@@ -12,7 +12,7 @@ let qdmCqlLibraryName = 'QDMLibrary' + Date.now()
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-let qdmMeasureCQL = MeasureCQL.SBTEST_CQL
+let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 
 let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     '\n' +
@@ -145,8 +145,8 @@ describe.skip('QDM Measure Export', () => {
     before('Create New Measure and Login', () => {
 
         //Create Measure and Measure group
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Cohort', true, qdmMeasureCQL)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
 
     })
@@ -183,8 +183,8 @@ describe.skip('QDM Measure Export', () => {
             })
 
         //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-QDM5.zip')).should('contain', 'eCQMTitle-v1.0.000-QDM.html' &&
-            'eCQMTitle-v1.0.000-QDM.xml' && 'eCQMTitle-v1.0.000-QDM.json')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-QDM5.zip')).should('contain', 'MATGlobalCommonFunctionsQDM-1.0.000.json' &&
+            'MATGlobalCommonFunctionsQDM-1.0.000.xml' && 'RatioListQDMPositiveEncounterPerformedWithMO1697030589521-0.0.000.json' && 'RatioListQDMPositiveEncounterPerformedWithMO1697030589521-0.0.000.xml')
 
         // cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v1.0.000-FHIR.html' &&
         //     'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json' && 'FHIRHelpers-4.1.000.cql' && 'CQMCommon-1.0.000.cql' && 'FHIRCommon-4.1.000.cql'
