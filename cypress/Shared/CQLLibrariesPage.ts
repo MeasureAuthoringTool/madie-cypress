@@ -28,7 +28,7 @@ export class CQLLibrariesPage {
         //Navigate to CQL Library Page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
+        cy.get(Header.cqlLibraryTab).wait(2000).click()
         cy.wait(2000)
         Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
         cy.readFile(filePath).should('exist').then((fileContents) => {

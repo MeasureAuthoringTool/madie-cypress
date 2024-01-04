@@ -2,6 +2,7 @@ import {OktaLogin} from "../../../Shared/OktaLogin"
 import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
 import {MeasuresPage} from "../../../Shared/MeasuresPage"
 import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
+import {Utilities} from "../../../Shared/Utilities"
 
 let measureName = ''
 let CqlLibraryName = ''
@@ -24,6 +25,7 @@ describe('Create New Measure', () => {
         cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')
 
         //Verify the deleted measure on My Measures page list
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
 
         //Navigate to All Measures tab

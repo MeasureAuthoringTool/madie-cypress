@@ -87,6 +87,7 @@ export class CreateMeasurePage {
         cy.get(CreateMeasurePage.measurementPeriodEndDate).type(mpEndDate)
 
         this.clickCreateMeasureButton()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         cy.get(MeasuresPage.measureListTitles).should('be.visible')
 
@@ -106,7 +107,7 @@ export class CreateMeasurePage {
         }
         Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
         Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
-        cy.get(LandingPage.newMeasureButton).click()
+        cy.get(LandingPage.newMeasureButton).click().wait(1000)
         cy.get(this.measureNameTextbox).type(measureName)
         cy.get(this.measureModelDropdown).click()
         cy.get(this.measureModelQDMv5_6).click()
@@ -117,6 +118,7 @@ export class CreateMeasurePage {
         cy.get(CreateMeasurePage.measurementPeriodEndDate).type(mpEndDate)
 
         this.clickCreateMeasureButton()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         cy.get(MeasuresPage.measureListTitles).should('be.visible')
 

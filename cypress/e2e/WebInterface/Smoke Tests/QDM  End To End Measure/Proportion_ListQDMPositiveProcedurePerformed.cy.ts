@@ -272,7 +272,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //enter a value of the dob, Race and gender
         cy.get(TestCasesPage.QDMDob).type('08/17/1957').click()
         cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
         cy.get(TestCasesPage.QDMRace).click()
         cy.get(TestCasesPage.QDMRaceOption).contains('American Indian or Alaska Native').click()
         cy.get(TestCasesPage.QDMGender).click()
@@ -333,7 +333,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //enter a value of the dob, Race and gender
         cy.get(TestCasesPage.QDMDob).type('07/28/1977').click()
         cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
         cy.get(TestCasesPage.QDMRace).click()
         cy.get(TestCasesPage.QDMRaceOption).contains('American Indian or Alaska Native').click()
         cy.get(TestCasesPage.QDMGender).click()
