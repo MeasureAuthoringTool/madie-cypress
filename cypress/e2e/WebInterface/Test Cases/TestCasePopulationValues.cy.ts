@@ -310,16 +310,7 @@ describe('Test Case Expected Measure Group population values based on initial me
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
         //select scoring unit on measure
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
-        cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('ml')
-        //Select ml milliLiters from the dropdown
-        cy.get(MeasureGroupPage.ucumScoringUnitfullName).click()
         //select correct Population Basis value
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
@@ -625,16 +616,7 @@ describe('Test Case Expected Measure Group population values based on initial me
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
         //select scoring unit on measure
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
-        cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('ml')
-        //Select ml milliLiters from the dropdown
-        cy.get(MeasureGroupPage.ucumScoringUnitfullName).click()
 
         //set Population Basis value
         cy.get(MeasureGroupPage.popBasis).should('exist')

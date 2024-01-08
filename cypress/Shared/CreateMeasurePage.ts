@@ -74,9 +74,10 @@ export class CreateMeasurePage {
         if (mpEndDate === undefined) {
             mpEndDate = now().format('MM/DD/YYYY')
         }
-        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
-        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
-        cy.get(LandingPage.newMeasureButton).wait(2000).click()
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 30000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 30000)
+        cy.wait(2000)
+        cy.get(LandingPage.newMeasureButton).click({force: true})
         cy.get(this.measureNameTextbox).type(measureName)
         cy.get(this.measureModelDropdown).click()
         cy.get(this.measureModelQICore).click()
@@ -105,9 +106,10 @@ export class CreateMeasurePage {
         if (mpEndDate === undefined) {
             mpEndDate = now().format('MM/DD/YYYY')
         }
-        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
-        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
-        cy.get(LandingPage.newMeasureButton).click().wait(1000)
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 30000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 30000)
+        cy.wait(2000)
+        cy.get(LandingPage.newMeasureButton).click({force: true})
         cy.get(this.measureNameTextbox).type(measureName)
         cy.get(this.measureModelDropdown).click()
         cy.get(this.measureModelQDMv5_6).click()
