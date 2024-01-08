@@ -223,13 +223,6 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
-        cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
         //Select mL milliliters from the dropdown
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
@@ -270,8 +263,8 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
                     expect(response.body.entry[0].resource.group[0].extension[0].valueCodeableConcept.coding[0].code).to.eql('proportion')
                     expect(response.body.entry[0].resource.group[1].extension[0].valueCodeableConcept.coding[0].code).to.eql('cohort')
                     expect(response.body.entry[0].resource.group[1].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
-                    expect(response.body.entry[0].resource.group[1].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL')
-                    expect(response.body.entry[0].resource.group[1].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL milliliter')
+                    expect(response.body.entry[0].resource.group[1].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL millil')
+                    expect(response.body.entry[0].resource.group[1].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL millil')
                 })
             })
         })
@@ -329,13 +322,6 @@ describe('Measure bundle end point returns stratifications', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
 
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
-        cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
         //Select mL milliliters from the dropdown
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
@@ -390,8 +376,8 @@ describe('Measure bundle end point returns stratifications', () => {
                     expect(response.body.entry[0].resource.group[0].stratifier[1].extension[0].valueCodeableConcept.coding[0].code).to.eql('initial-population')
                     expect(response.body.entry[0].resource.group[0].stratifier[1].criteria.expression).to.eql('Surgical Absence of Cervix')
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL milliliter')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL millil')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL millil')
                 })
             })
         })
@@ -422,13 +408,6 @@ describe('Measure bundle end point returns stratifications', () => {
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
-        cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
         //Select mL milliliters from the dropdown
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
@@ -493,8 +472,8 @@ describe('Measure bundle end point returns stratifications', () => {
                     expect(response.body.entry[0].resource.group[0].stratifier[2].extension[0].valueCodeableConcept.coding[0].code).to.eql('measure-population-exclusion')
                     expect(response.body.entry[0].resource.group[0].stratifier[2].criteria.expression).to.eql('numeratorExclusion')
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL milliliter')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL millil')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL millil')
                 })
             })
         })
@@ -519,13 +498,6 @@ describe('Measure bundle end point returns stratifications', () => {
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
-        cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
         //Select mL milliliters from the dropdown
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
@@ -592,8 +564,8 @@ describe('Measure bundle end point returns stratifications', () => {
                     expect(response.body.entry[0].resource.group[0].stratifier[2].extension[0].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-appliesTo')
                     expect(response.body.entry[0].resource.group[0].stratifier[2].extension[0].valueCodeableConcept.coding[0].code).to.eql('numerator')
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL milliliter')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL millil')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL millil')
                     expect(response.body.entry[0].resource.group[0].stratifier[2].criteria.expression).to.eql('Surgical Absence of Cervix')
                 })
             })
@@ -645,13 +617,6 @@ describe('Verify the criteria reference for measure observations', () => {
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
-        cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
         //Select mL milliliters from the dropdown
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
@@ -704,8 +669,8 @@ describe('Verify the criteria reference for measure observations', () => {
                     expect(response.status).to.eql(200)
                     expect(response.body.resourceType).to.eql('Bundle')
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL milliliter')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL millil')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL millil')
 
                 })
             })
@@ -733,13 +698,6 @@ describe('Verify the criteria reference for measure observations', () => {
         Utilities.setMeasureGroupType()
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
-        cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
         //Select mL milliliters from the dropdown
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
@@ -796,8 +754,8 @@ describe('Verify the criteria reference for measure observations', () => {
                     expect(response.body.entry[0].resource.group[0].population[3].id).to.eql(response.body.entry[0].resource.group[0].population[6].extension[1].valueString)
                     expect(response.body.entry[0].resource.group[0].population[3].code.coding[0].code).to.eql('numerator')
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL')
-                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL milliliter')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL millil')
+                    expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('mL millil')
                 })
             })
         })

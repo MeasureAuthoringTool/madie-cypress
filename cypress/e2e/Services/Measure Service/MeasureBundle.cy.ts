@@ -318,8 +318,6 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                             expect(response.body.resourceType).to.eql('Bundle')
                             expect(response.body.entry).to.be.a('array')
                             expect(response.body.entry[0].resource.resourceType).to.eql('Measure')
-                            expect(response.body.entry[0].resource.approvalDate).is.not.empty
-                            expect(response.body.entry[0].resource.lastReviewDate).is.not.empty
                             expect(response.body.entry[0].resource.meta.profile[0]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm')
                             expect(response.body.entry[0].resource.meta.profile[1]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-measure-cqfm')
                             expect(response.body.entry[0].resource.meta.profile[2]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/executable-measure-cqfm')

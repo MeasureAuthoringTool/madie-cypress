@@ -35,6 +35,8 @@ describe('Measure Service: QICore Measure', () => {
     beforeEach('Set Access Token', () => {
 
         cy.setAccessTokenCookie()
+        measureName = 'TestMeasure' + Date.now() + randValue
+        CQLLibraryName = 'TestCql' + Date.now() + randValue
     })
     afterEach('Clean up', () => {
 
@@ -43,8 +45,7 @@ describe('Measure Service: QICore Measure', () => {
     })
 
     it('Create QICore Measure, successful creation', () => {
-        measureName = 'TestMeasure' + Date.now() + randValue
-        CQLLibraryName = 'TestCql' + Date.now() + randValue
+
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
