@@ -87,11 +87,11 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         //adding values to the attribute
         cy.get('[data-testid="quantity-value-input-low"]').type('2')
-        cy.get('[id="quantity-unit-dropdown-low"]').click()
-        cy.get('#quantity-unit-dropdown-low-option-0').click() //Select unit as m meter
-        cy.get('[data-testid="quantity-value-input-high"]').type('4')
-        cy.get('[id="quantity-unit-dropdown-high"]').click()
-        cy.get('#quantity-unit-dropdown-high-option-0').click() //Select unit as m meter
+        cy.get('[id="quantity-unit-input-low"]').click()
+        cy.get('[id="quantity-unit-input-low"]').type('m') //Select unit as m meter
+        cy.get('[data-testid=quantity-value-input-high]').type('4')
+        cy.get('[id="quantity-unit-input-high"]').click()
+        cy.get('[id="quantity-unit-input-high"]').type('m') //Select unit as m meter
         cy.get(TestCasesPage.addAttribute).click() //click the "Add" button
 
         //asserting value that appears in the element table
@@ -164,11 +164,11 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         //adding values to the attribute
         cy.get('[data-testid="quantity-value-input-low"]').type('2')
-        cy.get('[id="quantity-unit-dropdown-low"]').click()
-        cy.get('#quantity-unit-dropdown-low-option-0').click() //Select unit as m meter
-        cy.get('[data-testid="quantity-value-input-high"]').type('4')
-        cy.get('[id="quantity-unit-dropdown-high"]').click()
-        cy.get('#quantity-unit-dropdown-high-option-0').click() //Select unit as m meter
+        cy.get('[id="quantity-unit-input-low"]').click()
+        cy.get('[id="quantity-unit-input-low"]').type('m') //Select unit as m meter
+        cy.get('[data-testid=quantity-value-input-high]').type('4')
+        cy.get('[id="quantity-unit-input-high"]').click()
+        cy.get('[id="quantity-unit-input-high"]').type('m') //Select unit as m meter
         cy.get(TestCasesPage.addAttribute).click() //click the "Add" button
 
         //asserting value that appears in the element table

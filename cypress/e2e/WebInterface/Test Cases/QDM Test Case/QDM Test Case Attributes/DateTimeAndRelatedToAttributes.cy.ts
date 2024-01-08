@@ -140,7 +140,7 @@ describe('Test Case Attributes', () => {
         //enter a value of the dob, Race and gender
         cy.get(TestCasesPage.QDMDob).type('01/01/2020').click()
         cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
         cy.get(TestCasesPage.QDMRace).click()
         cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
         cy.get(TestCasesPage.QDMGender).click()
@@ -179,7 +179,7 @@ describe('Test Case Attributes', () => {
         //enter a value of the dob, Race and gender
         cy.get(TestCasesPage.QDMDob).type('01/01/2020').click()
         cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
         cy.get(TestCasesPage.QDMRace).click()
         cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
         cy.get(TestCasesPage.QDMGender).click()
