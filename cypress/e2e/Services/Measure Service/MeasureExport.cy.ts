@@ -1,8 +1,8 @@
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "../../../Shared/Utilities"
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
-import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 
 let measureName = 'MeasureExport' + Date.now()
 let CqlLibraryName = 'MeasureExportLibrary' + Date.now()
@@ -308,7 +308,8 @@ describe('Error Message on Measure Export when the Measure does not have Steward
                     'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
                     'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
                     'measureMetaData': {
-                        "description": "SemanticBits"}
+                        "description": "SemanticBits"
+                    }
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
@@ -424,8 +425,8 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
         })
     })
 })
-
-describe('QDM Measure Export', () => {
+//skipping because feature is not ready to be released to PROD
+describe.skip('QDM Measure Export', () => {
 
     beforeEach('Create Measure and set access token', () => {
 

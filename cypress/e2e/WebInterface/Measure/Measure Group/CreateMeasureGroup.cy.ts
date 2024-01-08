@@ -373,13 +373,6 @@ describe('Validate Population Basis', () => {
 
         //Add UCUM scoring unit
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
-        cy.get(MeasureGroupPage.ucumScoringUnitDropdownList).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
         //Select mL milliliters from the dropdown
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')

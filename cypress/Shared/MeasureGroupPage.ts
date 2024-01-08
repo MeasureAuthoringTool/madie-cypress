@@ -132,7 +132,7 @@ export class MeasureGroupPage {
     public static readonly measureObservationSelect = '.MuiList-root'
     public static readonly aggregateFunctionCount = '[data-value="Count"]'
     public static readonly aggregateFunctionMaximum = '[data-value="Maximum"]'
-    public static readonly aggregateFunctionDropdownList = '[class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-1km1ehz"]'
+    public static readonly aggregateFunctionDropdownList = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
     public static readonly addNumeratorObservationLink = '[data-testid="add-measure-observation-numerator"]'
     public static readonly numeratorObservation = '[id="measure-observation-numerator"]'
     public static readonly numeratorAggregateFunction = '[id="measure-observation-aggregate-numerator"]'
