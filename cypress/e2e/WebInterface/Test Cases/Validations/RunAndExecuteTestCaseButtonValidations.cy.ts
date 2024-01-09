@@ -877,8 +877,8 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
-        cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Fail')
+        cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
+        cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Fail')
 
         //verify Passing Tab's text
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
