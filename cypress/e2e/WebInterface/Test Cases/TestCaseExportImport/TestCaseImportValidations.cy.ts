@@ -166,7 +166,7 @@ describe('Test Case Import: functionality tests', () => {
 
         //Log out
         cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({force: true}).wait(1000)
+        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
         cy.log('Log out successful')
     })
 
@@ -637,9 +637,9 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export test case
-        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({force: true})
+        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
-        cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({force: true})
+        cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
