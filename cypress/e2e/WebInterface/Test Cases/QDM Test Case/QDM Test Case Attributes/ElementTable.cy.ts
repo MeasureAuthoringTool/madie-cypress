@@ -7,7 +7,7 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../../Shared/Header"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
