@@ -1066,6 +1066,168 @@ describe('Measure Stratifications', () => {
             })
         })
     })
+
+    it('Add, Edit and Delete  multiple Stratification Associations for the Measure group', () => {
+
+        let measurePath = ''
+        let measureScoring = 'Proportion'
+        measurePath = 'cypress/fixtures/measureId'
+        let measureGroupPath = 'cypress/fixtures/groupId'
+        let stratificationIdPath = 'cypress/fixtures/stratificationId'
+
+        //Add Measure Group to the Measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(measurePath).should('exist').then((fileContents) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + fileContents + '/groups',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": fileContents,
+                        "scoring": measureScoring,
+                        "populationBasis": "Boolean",
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": 'ipp'
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominator",
+                                "definition": 'denom'
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorExclusion",
+                                "definition": ""
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorException",
+                                "definition": ""
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numerator",
+                                "definition": 'num'
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numeratorExclusion",
+                                "definition": ""
+                            }
+                        ],
+                        "stratifications": [
+                            {
+                                "id": "",
+                                "description": "",
+                                "cqlDefinition": 'ipp',
+                                "association": "initialPopulation"
+                            },
+                            {
+                                "id": "",
+                                "description": "",
+                                "cqlDefinition": 'denom',
+                                "association": "denominator"
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ]
+                    }
+                }).then((response) => {
+                    console.log(response)
+                    expect(response.status).to.eql(201)
+                    expect(response.body.scoring).to.eql(measureScoring)
+                    expect(response.body.stratifications[0].id).to.be.empty
+                    expect(response.body.stratifications[1].id).to.be.empty
+                    cy.writeFile(measureGroupPath, response.body.id)
+                })
+            })
+        })
+        //Add Stratification and Associations to Measure group
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.readFile(measureGroupPath).should('exist').then((measureGroupId) => {
+                    cy.request({
+                        url: 'api/measures/' + fileContents + '/groups/' + measureGroupId + '/stratification',
+                        method: 'POST',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        body: {
+                            "description": "",
+                            "cqlDefinition": "Surgical Absence of Cervix",
+                            "association": "initialPopulation",
+                            "associations": ["initialPopulation", "numerator"]
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(201)
+                        expect(response.body.id).to.be.exist
+                        expect(response.body.cqlDefinition).to.eql('Surgical Absence of Cervix')
+                        expect(response.body.associations[0]).to.eql('initialPopulation')
+                        expect(response.body.associations[1]).to.eql('numerator')
+                        cy.writeFile(stratificationIdPath, response.body.id)
+                        cy.log('Multiple Stratification Associations added successfully')
+                    })
+                })
+            })
+        })
+        //Edit Stratification
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.readFile(measureGroupPath).should('exist').then((measureGroupId) => {
+                    cy.readFile(stratificationIdPath).should('exist').then((stratificationId) => {
+                        cy.request({
+                            url: 'api/measures/' + fileContents + '/groups/' + measureGroupId + '/stratification',
+                            method: 'PUT',
+                            headers: {
+                                authorization: 'Bearer ' + accessToken.value
+                            },
+                            body: {
+                                "id": stratificationId,
+                                "description": "",
+                                "cqlDefinition": "ipp",
+                                "association": "initialPopulation",
+                                "associations": ["initialPopulation", "denominator"]
+                            }
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                            expect(response.body.id).to.be.exist
+                            expect(response.body.cqlDefinition).to.eql('ipp')
+                            expect(response.body.associations[0]).to.eql('initialPopulation')
+                            expect(response.body.associations[1]).to.eql('denominator')
+                            cy.log('Stratifications updated successfully')
+                        })
+                    })
+                })
+            })
+        })
+        //Delete Stratification
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.readFile(measureGroupPath).should('exist').then((measureGroupId) => {
+                    cy.readFile(stratificationIdPath).should('exist').then((stratificationId) => {
+                        cy.request({
+                            url: 'api/measures/' + fileContents + '/groups/' + measureGroupId + '/stratification/' + stratificationId,
+                            method: 'DELETE',
+                            headers: {
+                                authorization: 'Bearer ' + accessToken.value
+                            }
+                        }).then((response) => {
+                            expect(response.status).to.eql(200)
+                            expect(response.body.id).to.be.exist
+                            cy.log('Stratification deleted successfully')
+                        })
+                    })
+                })
+            })
+        })
+    })
 })
 describe('Creating a group / PC with description for various fields', () => {
 
