@@ -211,11 +211,11 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', 'Passing')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(1/1)')
 
-        //Skipping until MAT-5657 is finished
-        // cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
-        // cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        // cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
-        // cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
+        //Verify Coverage percentage
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
 
     })
 
