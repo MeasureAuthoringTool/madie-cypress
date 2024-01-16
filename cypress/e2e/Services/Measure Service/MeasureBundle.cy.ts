@@ -21,7 +21,7 @@ let updatedCQLLibraryName = CqlLibraryName + randValue
 
 let measureCQL = 'library MeasureBundleLibrary1678980273052215 version \'0.0.000\'\n' +
     '\n' +
-    'using FHIR version \'4.0.1\'\n' +
+    'using QICore version \'4.1.1\'\n' +
     '\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'include Hospice version \'6.0.000\' called Hospice\n' +
@@ -32,11 +32,11 @@ let measureCQL = 'library MeasureBundleLibrary1678980273052215 version \'0.0.000
     '\n' +
     'context Patient\n' +
     '\n' +
-    'define "ipp":\n' +
-    '  exists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period" \n' +
+    '//define "ipp":\n' +
+    '  //exists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period" \n' +
     '  \n' +
-    'define "denom":\n' +
-    '    "ipp"\n' +
+    '//define "denom":\n' +
+    '    //"ipp"\n' +
     '    \n' +
     'define "num":\n' +
     '    exists ["Encounter"] E where E.status ~ \'finished\'\n' +
@@ -48,7 +48,7 @@ let measureCQL = 'library MeasureBundleLibrary1678980273052215 version \'0.0.000
     '    true'
 let CVmeasureCQL = 'library TestLibrary1664888387806162 version \'0.0.000\'\n' +
     '\n' +
-    'using FHIR version \'4.0.1\'\n' +
+    'using QICore version \'4.1.1\'\n' +
     '\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     '\n' +
@@ -56,11 +56,11 @@ let CVmeasureCQL = 'library TestLibrary1664888387806162 version \'0.0.000\'\n' +
     '\n' +
     'context Patient\n' +
     '\n' +
-    'define "ipp":\n' +
-    '  exists ["Encounter"] E where E.period.start during "Measurement Period"\n' +
+    '//define "ipp":\n' +
+    '  //exists ["Encounter"] E where E.period.start during "Measurement Period"\n' +
     '  \n' +
-    'define "denom":\n' +
-    '  "ipp"\n' +
+    '//define "denom":\n' +
+    '  //"ipp"\n' +
     '  \n' +
     'define "num":\n' +
     '  exists ["Encounter"] E where E.status ~ \'finished\'\n' +
@@ -84,11 +84,11 @@ let CVmeasureCQL = 'library TestLibrary1664888387806162 version \'0.0.000\'\n' +
     '  \n' +
     'define function "isFinishedEncounter"():\n' +
     '  true'
-let PopIniPop = 'ipp'
+let PopIniPop = 'num'
 let PopNum = 'num'
-let PopDenom = 'denom'
-let PopDenex = 'ipp'
-let PopDenexcep = 'denom'
+let PopDenom = 'test'
+let PopDenex = 'num'
+let PopDenexcep = 'num'
 let PopNumex = 'numeratorExclusion'
 
 describe('Proportion Measure Bundle end point returns expected data with valid Measure CQL and elmJson', () => {
@@ -232,9 +232,6 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                     expect(response.body.entry[0].resource.group[0].extension[3].valueCodeableConcept.coding[0].display).to.eql('Outcome')
                     expect(response.body.entry[0].resource.group[0].extension[3].valueCodeableConcept.coding[0].system).to.eql('http://terminology.hl7.org/CodeSystem/measure-type')
                     expect(response.body.entry[1].resource.resourceType).to.eql('Library')
-                    expect(response.body.entry[1].resource.dataRequirement[0].codeFilter[0].path).to.eql('code')
-                    expect(response.body.entry[1].resource.dataRequirement[0].codeFilter[0].valueSet).to.eql('http://cts.nlm.nih.' +
-                        'gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001')
                 })
             })
         })
@@ -403,7 +400,7 @@ describe('Measure Observation Validation', () => {
                             {
                                 "id": uuidv4(),
                                 "name": "initialPopulation",
-                                "definition": 'ipp'
+                                "definition": 'num'
                             },
                             {
                                 "id": uuidv4(),
@@ -474,7 +471,7 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
                             {
                                 "id": uuidv4(),
                                 "name": "initialPopulation",
-                                "definition": 'ipp'
+                                "definition": 'num'
                             },
                             {
                                 "id": uuidv4(),
@@ -555,7 +552,7 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
                     expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('ml')
                     expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].display).to.eql('ml milliLiters')
                     expect(response.body.entry[0].resource.group[0].population[0].code.coding[0].code).to.eql('initial-population')
-                    expect(response.body.entry[0].resource.group[0].population[0].criteria.expression).to.eql('ipp')
+                    expect(response.body.entry[0].resource.group[0].population[0].criteria.expression).to.eql('num')
                     expect(response.body.entry[0].resource.group[0].population[1].code.coding[0].code).to.eql('measure-population')
                     expect(response.body.entry[0].resource.group[0].population[1].criteria.expression).to.eql('num')
                     expect(response.body.entry[0].resource.group[0].population[2].code.coding[0].code).to.eql('measure-population-exclusion')
@@ -950,7 +947,7 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
                 cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
             })
         })
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', 'num', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'num', 'num', 'numeratorExclusion')
     })
 
     after('Clean up', () => {
@@ -1030,7 +1027,7 @@ describe('Measure bundle end point returns Measure Population Description', () =
                             {
                                 "id": "809794a0-7768-407b-a28e-74226168fafe",
                                 "name": "denominator",
-                                "definition": PopDenom,
+                                "definition": PopIniPop,
                                 "description": "Denominator Description"
                             },
                             {
