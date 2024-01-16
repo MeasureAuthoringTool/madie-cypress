@@ -4,9 +4,9 @@ using FHIR version '4.0.1'
 
 include FHIRHelpers version '4.1.000'
 
-include HospiceQICore4 version '2.0.000' called Hospice
 include AdultOutpatientEncountersQICore4 version '2.0.000' called AdultOutpatientEncounters
 include CQMCommon version '1.0.000' called Global
+include HospiceQICore4 version '2.0.000' called Hospice
 
 valueset "ONC Administrative Sex": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1'
 valueset "Race": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836'

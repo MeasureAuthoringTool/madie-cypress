@@ -5,7 +5,7 @@ export class Header {
     //Main MADiE page
     public static readonly mainMadiePageButton = '#fulllogo'
     public static readonly newMeasureButton = '[data-testid=create-new-measure-button]'
-    public static readonly cqlLibraryTab = '#cql-library-main-nav-bar-tab'
+    public static readonly cqlLibraryTab = '[data-testid="main-nav-bar-cql-library"]'
     public static readonly measures = '[data-testid="main-nav-bar-measures"]'
     public static readonly umlsLoginButton = '[data-testid="UMLS-connect-button"]'
 

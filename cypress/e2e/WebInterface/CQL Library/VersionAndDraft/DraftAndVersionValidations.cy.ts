@@ -92,6 +92,7 @@ describe('Draft and Version Validations', () => {
 
     it('User can not version CQL Library if there is no CQL', () => {
 
+        cy.wait(3000)
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         //Clear the text in CQL Library Editor
