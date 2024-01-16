@@ -548,7 +548,17 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Definitions').click()
         Utilities.waitForElementVisible(TestCasesPage.tcDEFINITIONSHighlightingDetails, 35000)
-        cy.get(TestCasesPage.tcDEFINITIONSHighlightingDetails).should('contain.text', '\ndefine "Qualifying Encounters":\n(\n[Encounter: "Office Visit"]\nunion [Encounter: "Annual Wellness Visit"]\nunion [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\nunion [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\nunion [Encounter: "Home Healthcare Services"]\n) ValidEncounter\nwhere ValidEncounter.period during "Measurement Period"\nand ValidEncounter.isFinishedEncounter()\n')
+        cy.get(TestCasesPage.tcDEFINITIONSHighlightingDetails).should('contain.text', 'define "Qualifying Encounters":\n' +
+            '(\n' +
+            '[Encounter: "Office Visit"]\n' +
+            'union [Encounter: "Annual Wellness Visit"]\n' +
+            'union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
+            'union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
+            'union [Encounter: "Home Healthcare Services"]\n' +
+            ') ValidEncounter\n' +
+            'where ValidEncounter.period during "Measurement Period"\n' +
+            '\n' +
+            'and ValidEncounter.isFinishedEncounter()')
         cy.get('[data-ref-id="42"]').should('have.color', '#A63B12')
 
         //Click on Execute Test Case button on Edit Test Case page
