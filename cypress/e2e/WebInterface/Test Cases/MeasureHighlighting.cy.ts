@@ -7,9 +7,6 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { Header } from "../../../Shared/Header"
-import { util } from "chai"
 
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let measureCQLDFUTests = MeasureCQL.CQLDFN_value
