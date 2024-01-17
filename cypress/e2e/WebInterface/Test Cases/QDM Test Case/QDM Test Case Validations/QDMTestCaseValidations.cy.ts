@@ -24,7 +24,7 @@ let testCaseSeries = 'SBTestSeries'
 let twoFiftyTwoCharacters = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr'
 let altMeasureName = ''
 let altCqlLibraryName = ''
-let measureCQL = MeasureCQL.SBTEST_CQL
+let measureCQL = MeasureCQL.QDMHighlightingTab_CQL
 let measureScoring = 'Cohort'
 let qdmMeasureCQL = MeasureCQL.simpleQDM_CQL
 let qdmMeasureCQLwInvalidValueset = MeasureCQL.simpleQDM_CQL_invalid_valueset
@@ -377,31 +377,33 @@ describe('Edit Test Case Validations', () => {
     })
 })
 
-
 describe('Dirty Check Validations', () => {
 
-    before('Create QDM Measure and Test Case ', () => {
+    beforeEach('Create QDM Measure, Test Case and Login', () => {
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
-    })
-
-    afterEach('Logout', () => {
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Ratio', false, measureQDMCQL)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population')
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
+        OktaLogin.Login()
     })
 
-    after('Clean up', () => {
-
+    afterEach('Logout and cleanup', () => {
+        OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
 
     it('Validate dirty check on the test case title, in the test case details tab', () => {
-
-        //create test case and login
-        //TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
-        OktaLogin.Login()
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -444,12 +446,40 @@ describe('Dirty Check Validations', () => {
 
         //verify that the Ethnicity valu is left unchanged from it's last change
         cy.get(TestCasesPage.QDMEthnicity).should('contain.text', 'Not Hispanic or Latino')
-
-
     })
 
+    it('Validate dirty check on Testcase Expected/Actual tab', () => {
 
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Click on Edit for Test Case
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //Navigate to Expected/Actual tab and enter Expected values
+        cy.get(TestCasesPage.expectedOrActualTab).click()
+        cy.get(TestCasesPage.testCaseIPPExpected).type('2')
+        cy.get(TestCasesPage.testCaseNUMERExpected).type('3')
+        cy.get(TestCasesPage.testCaseDENOMExpected).type('4')
+
+        //Discard the changes
+        cy.get(TestCasesPage.QDMTcDiscardChangesButton).should('exist')
+        cy.get(TestCasesPage.QDMTcDiscardChangesButton).should('be.enabled')
+        cy.get(TestCasesPage.QDMTcDiscardChangesButton).click()
+
+        //verify discard modal and click on keep working
+        Global.clickDiscardAndKeepWorking()
+
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.empty')
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.empty')
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.empty')
+    })
 })
+
 //work in progress for MAT-5974
 describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attribute', () => {
 
