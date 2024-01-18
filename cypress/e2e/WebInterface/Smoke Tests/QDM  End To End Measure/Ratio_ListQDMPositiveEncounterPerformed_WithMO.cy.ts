@@ -4,10 +4,15 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage";
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
+let firstTestCaseTitle = '3Encounters1Exclusion'
+let testCaseDescription = 'DENEXPass' + Date.now()
+let testCaseSeries = 'SBTestSeries'
+let secondTestCaseTitle = '2EncBothGlucose1000inAndoutsideOfTimeframe'
 let measureCQL = 'library RatioListQDMPositiveEncounterPerformedWithMO1701801315767 version \'0.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
@@ -228,14 +233,25 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-            '2023-01-01', '2024-01-01')
+            '2023-01-01', '2023-12-31')
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
+        TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, null, true)
+
         OktaLogin.Login()
     })
 
-    after('Clean up', () => {
+    after('Logout and Clean up', () => {
 
         OktaLogin.Logout()
-
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
@@ -249,12 +265,9 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
-            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
-
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
 
         //Group Creation
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -293,12 +306,11 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(MeasureGroupPage.denominatorObservation).should('be.visible')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'DenominatorObservations')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Sum')
-
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Numerator Exclusions')
 
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
-
         cy.get(MeasureGroupPage.numeratorObservation).should('exist')
         cy.get(MeasureGroupPage.numeratorObservation).should('be.visible')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'NumeratorObservations')
@@ -311,5 +323,292 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
 
+        //Add Supplemental Data Elements
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
+
+        //Save Supplemental data
+        cy.get('[data-testid="measure-Supplemental Data-save"]').click({force:true})
+        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+
+        //Add Elements to first Test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //enter a value of the dob, Race and gender
+        cy.get(TestCasesPage.QDMDob).type('07/31/2003').click()
+        cy.get(TestCasesPage.QDMLivingStatus).click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
+        cy.get(TestCasesPage.QDMGender).click()
+        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+
+        //Element - Condition: Diagnosis: Diabetes
+        cy.get('[data-testid="elements-tab-condition"]').click()
+        cy.get('[data-testid="data-type-Diagnosis: Diabetes"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('07/09/2023 08:00 AM')
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-46635009"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+
+        //Element - Encounter:Performed:Encounter Inpatient
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('07/11/2023 08:00 AM')
+        cy.get('[id="dateTime"]').eq(1).type('07/15/2023 09:00 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-183452005"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+
+        //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
+        cy.get('[data-testid="elements-tab-laboratory_test"]').click()
+        cy.get('[data-testid="data-type-Laboratory Test, Performed: Glucose Lab Test Mass Per Volume"]').click()
+        cy.get('[id="dateTime"]').eq(2).type('07/11/2023 07:00 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-LOINC"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-1556-0"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
+        cy.get('[id="attribute-select"]').click()
+        cy.get('[data-testid="option-Result"]').click()
+        cy.get('[id="type-select"]').click()
+        cy.get('[data-testid="option-Quantity"]').click()
+        cy.get('[data-testid="quantity-value-input-quantity"]').type('1000')
+        cy.get('[id="quantity-unit-input-quantity"]').type('mg/dl')
+        cy.get('[data-testid="add-attribute-button"]').click()
+
+        //Element - Encounter:Performed:Encounter Inpatient
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('10/11/2023 08:00 AM')
+        cy.get('[id="dateTime"]').eq(1).type('10/18/2023 08:15 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-183452005"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+
+        //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
+        cy.get('[data-testid="elements-tab-laboratory_test"]').click()
+        cy.get('[data-testid="data-type-Laboratory Test, Performed: Glucose Lab Test Mass Per Volume"]').click()
+        cy.get('[id="dateTime"]').eq(2).type('10/13/2023 08:00 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-LOINC"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-1556-0"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
+        cy.get('[id="attribute-select"]').click()
+        cy.get('[data-testid="option-Result"]').click()
+        cy.get('[id="type-select"]').click()
+        cy.get('[data-testid="option-Quantity"]').click()
+        cy.get('[data-testid="quantity-value-input-quantity"]').type('1100')
+        cy.get('[id="quantity-unit-input-quantity"]').type('mg/dl')
+        cy.get('[data-testid="add-attribute-button"]').click()
+
+        //Element - Encounter:Performed:Encounter Inpatient
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('11/01/2023 08:00 AM')
+        cy.get('[id="dateTime"]').eq(1).type('11/04/2023 08:15 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-183452005"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+
+        //Add Expected value for Test case
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).type('3')
+        cy.get(TestCasesPage.testCaseDENOMExpected).type('3')
+        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).clear().type('2')
+        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).clear().type('6')
+        cy.get(TestCasesPage.testCaseDENEXExpected).type('1')
+        cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
+        cy.get(TestCasesPage.numeratorObservationRow).type('1')
+
+        //Save Test case
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+
+        //Add Elements to the second Test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.clickEditforCreatedTestCase(true)
+
+        //enter a value of the dob, Race and gender
+        cy.get(TestCasesPage.QDMDob).type('07/31/2003').click()
+        cy.get(TestCasesPage.QDMLivingStatus).click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
+        cy.get(TestCasesPage.QDMGender).click()
+        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+
+        //Element - Condition: Diagnosis: Diabetes
+        cy.get('[data-testid="elements-tab-condition"]').click()
+        cy.get('[data-testid="data-type-Diagnosis: Diabetes"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('07/09/2023 08:00 AM')
+        cy.get('[id="dateTime"]').eq(1).type('07/11/2023 08:00 AM')
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-46635009"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+
+        //Element - Encounter:Performed:Encounter Inpatient
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('07/11/2023 08:00 AM')
+        cy.get('[id="dateTime"]').eq(1).type('07/13/2023 09:00 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-183452005"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
+        cy.get('[id="attribute-select"]').click()
+        cy.get('[data-testid="option-Length Of Stay"]').click()
+        cy.get('[data-testid="quantity-value-input-quantity"]').type('2')
+        cy.get('#quantity-unit-input-quantity').type('d')
+        cy.get('[data-testid="add-attribute-button"]').click()
+
+        //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
+        cy.get('[data-testid="elements-tab-laboratory_test"]').click()
+        cy.get('[data-testid="data-type-Laboratory Test, Performed: Glucose Lab Test Mass Per Volume"]').click()
+        cy.get('[id="dateTime"]').eq(2).type('07/11/2023 08:00 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-LOINC"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-1556-0"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
+        cy.get('[id="attribute-select"]').click()
+        cy.get('[data-testid="option-Result"]').click()
+        cy.get('[id="type-select"]').click()
+        cy.get('[data-testid="option-Quantity"]').click()
+        cy.get('[data-testid="quantity-value-input-quantity"]').type('1000')
+        cy.get('[id="quantity-unit-input-quantity"]').type('mg/dl')
+        cy.get('[data-testid="add-attribute-button"]').click()
+
+        //Element - Encounter:Performed: Observation Services
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Observation Services"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('03/07/2023 08:00 AM')
+        cy.get('[id="dateTime"]').eq(1).type('03/08/2023 08:15 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-448951000124107"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        //Close the Element
+        cy.get('[data-testid=CloseIcon]').click()
+
+        //Element - Encounter:Performed:Encounter Inpatient
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('03/08/2023 08:30 AM')
+        cy.get('[id="dateTime"]').eq(1).type('03/11/2023 08:15 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-183452005"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+
+        //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
+        cy.get('[data-testid="elements-tab-laboratory_test"]').click()
+        cy.get('[data-testid="data-type-Laboratory Test, Performed: Glucose Lab Test Mass Per Volume"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('03/08/2023 08:30 AM')
+        cy.get('[id="dateTime"]').eq(1).type('03/08/2023 08:45 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-LOINC"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-1547-9"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
+        cy.get('[id="attribute-select"]').click()
+        cy.get('[data-testid="option-Result"]').click()
+        cy.get('[id="type-select"]').click()
+        cy.get('[data-testid="option-Quantity"]').click()
+        cy.get('[data-testid="quantity-value-input-quantity"]').type('201')
+        cy.get('[id="quantity-unit-input-quantity"]').type('mg/dl')
+        cy.get('[data-testid="add-attribute-button"]').click()
+        //Close the Element
+        cy.get('[data-testid=CloseIcon]').click()
+
+        //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
+        cy.get('[data-testid="elements-tab-laboratory_test"]').click()
+        cy.get('[data-testid="data-type-Laboratory Test, Performed: Glucose Lab Test Mass Per Volume"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('03/08/2023 09:30 AM')
+        cy.get('[id="dateTime"]').eq(1).type('03/08/2023 10:15 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-LOINC"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-1547-9"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
+        cy.get('[id="attribute-select"]').click()
+        cy.get('[data-testid="option-Result"]').click()
+        cy.get('[id="type-select"]').click()
+        cy.get('[data-testid="option-Quantity"]').click()
+        cy.get('[data-testid="quantity-value-input-quantity"]').type('1000')
+        cy.get('[id="quantity-unit-input-quantity"]').type('mg/dl')
+        cy.get('[data-testid="add-attribute-button"]').click()
+
+        //Add Expected value for Test case
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).type('2')
+        cy.get(TestCasesPage.testCaseDENOMExpected).type('2')
+        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).clear().type('3')
+        cy.get(TestCasesPage.testCaseDENEXExpected).type('1')
+        cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
+        cy.get(TestCasesPage.numeratorObservationRow).type('1')
+
+        //Save Test case
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+
+        //Execute Test case on Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.executeTestCaseButton).focus()
+        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
+        cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
     })
 })
