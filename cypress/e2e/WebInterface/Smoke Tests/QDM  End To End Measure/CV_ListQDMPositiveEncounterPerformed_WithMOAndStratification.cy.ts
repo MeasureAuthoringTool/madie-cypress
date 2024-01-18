@@ -4,10 +4,15 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage";
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import {TestCasesPage} from "../../../../Shared/TestCasesPage"
 
 let measureName = 'CVListQDMPositiveEncounterPerformedWithMOAndStratification' + Date.now()
 let CqlLibraryName = 'CVListQDMPositiveEncounterPerformedWithMOAndStratification' + Date.now()
+let firstTestCaseTitle = 'PDxNotPsych60MinsDepart'
+let testCaseDescription = 'IPPStrat1Pass' + Date.now()
+let testCaseSeries = 'SBTestSeries'
+let secondTestCaseTitle = 'Order50AndPriorityAssessment180'
 let measureCQL = 'library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedPatients version \'11.1.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
@@ -134,7 +139,9 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-            '2023-01-01', '2024-01-01')
+            '2025-01-01', '2025-12-31')
+        TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
+        TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, null, true)
 
         OktaLogin.Login()
     })
@@ -199,14 +206,283 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         Utilities.dropdownSelect(MeasureGroupPage.measureObservationPopSelect, 'MeasureObservation')
         Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Median')
 
+        //Add Stratifications
+        cy.get(MeasureGroupPage.stratificationTab).click()
+        cy.get(MeasureGroupPage.stratOne).click()
+        cy.get('[data-value="Stratification 1"]').click()
+        cy.get(MeasureGroupPage.stratTwo).click()
+        cy.get('[data-value="Stratification 2"]').click()
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        //Add Stratifications here once MAT-5977 is fixed
-
         cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
+
+        //Add Supplemental Data Elements
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Sex').click()
+
+        //Save Supplemental data
+        cy.get('[data-testid="measure-Supplemental Data-save"]').click({force:true})
+        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+
+        //Add Elements to first Test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //enter a value of the dob, Race and gender
+        cy.get(TestCasesPage.QDMDob).type('06/15/1935').click()
+        cy.get(TestCasesPage.QDMLivingStatus).click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
+        cy.get(TestCasesPage.QDMGender).click()
+        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+
+        //Element - Encounter:Performed:Emergency Department Visit
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Emergency Department Visit"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('06/10/2025 05:00 AM')
+        cy.get('[id="dateTime"]').eq(1).type('06/10/2025 07:15 AM')
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-4525004"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
+        cy.get('[id="attribute-select"]').click()
+        cy.get('[data-testid="option-Facility Locations"]').click()
+        cy.get('[id="value-set-selector"]').click()
+        cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.292"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="option-4525004"]').click()
+        cy.get('[id="dateTime"]').eq(3).type('06/10/2025 05:00 AM')
+        cy.get('[id="dateTime"]').eq(4).type('06/10/2025 08:00 AM')
+        cy.get('[data-testid="add-attribute-button"]').click()
+        cy.get('[id="attribute-select"]').click()
+        cy.get('[data-testid="option-Length Of Stay"]').click()
+        cy.get('[data-testid="quantity-value-input-quantity"]').type('0')
+        cy.get('#quantity-unit-input-quantity').type('d')
+        cy.get('[data-testid="add-attribute-button"]').click()
+        //Close the Element
+        cy.get('[data-testid=CloseIcon]').click()
+
+        //Element - Encounter:Performed:Encounter Inpatient
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('06/10/2025 07:15 AM')
+        cy.get('[id="dateTime"]').eq(1).type('06/10/2025 10:00 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-8715000"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
+        cy.get('[id="attribute-select"]').click()
+        cy.get('[data-testid="option-Length Of Stay"]').click()
+        cy.get('[data-testid="quantity-value-input-quantity"]').type('3')
+        cy.get('#quantity-unit-input-quantity').type('d')
+        cy.get('[data-testid="add-attribute-button"]').click()
+        //Close the Element
+        cy.get('[data-testid=CloseIcon]').click()
+
+        //Element - Encounter, Order Decision to Admit to Hospital Inpatient
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Order: Decision to Admit to Hospital Inpatient"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('06/10/2025 07:00 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-10378005"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+
+        //Add Expected value for Test case
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
+        cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('1')
+        cy.get(TestCasesPage.measureObservationRow).clear().type('60')
+        cy.get('[data-testid="test-population-Strata-1 -expected-0"]').type('1')
+        cy.get('[data-testid="strat-test-population-initialPopulation-expected-0"]').eq(0).type('1')
+        cy.get('[data-testid="strat-test-population-measurePopulation-expected-1"]').eq(0).type('1')
+        //Commented until MAT-6608 is fixed
+        //cy.get('[data-testid="strat-test-population-measurePopulationObservation-expected-2"]').eq(0).clear().type('60')
+
+        //Save Test case
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+
+        //Add Elements to the second Test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.clickEditforCreatedTestCase(true)
+
+        //enter a value of the dob, Race and gender
+        cy.get(TestCasesPage.QDMDob).type('11/12/1995').click()
+        cy.get(TestCasesPage.QDMLivingStatus).click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
+        cy.get(TestCasesPage.QDMGender).click()
+        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+
+        //Element - Encounter:Performed:Emergency Department Visit
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Emergency Department Visit"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('01/29/2025 08:30 AM')
+        cy.get('[id="dateTime"]').eq(1).type('01/29/2025 06:00 PM')
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-4525004"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
+        cy.get('[id="attribute-select"]').click()
+        cy.get('[data-testid="option-Facility Locations"]').click()
+        cy.get('[id="value-set-selector"]').click()
+        cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.292"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="option-4525004"]').click()
+        cy.get('[id="dateTime"]').eq(3).type('01/29/2025 08:30 AM')
+        cy.get('[id="dateTime"]').eq(4).type('01/29/2025 06:15 PM')
+        cy.get('[data-testid="add-attribute-button"]').click()
+        //Close the Element
+        cy.get('[data-testid=CloseIcon]').click()
+
+        //Element - Encounter:Performed:Encounter Inpatient
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('01/29/2025 06:55 PM')
+        cy.get('[id="dateTime"]').eq(1).type('01/30/2025 08:15 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-183452005"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        //Close the Element
+        cy.get('[data-testid=CloseIcon]').click()
+
+        //Element - Encounter: Order: Decision to Admit to Hospital Inpatient
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Order: Decision to Admit to Hospital Inpatient"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('01/29/2025 05:30 PM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-10378005"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        //Close the Element
+        cy.get('[data-testid=CloseIcon]').click()
+
+        //Element - Encounter:Performed:Emergency Department Visit
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Emergency Department Visit"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('02/06/2025 08:00 AM')
+        cy.get('[id="dateTime"]').eq(1).type('02/06/2025 08:15 PM')
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-4525004"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
+        cy.get('[id="attribute-select"]').click()
+        cy.get('[data-testid="option-Facility Locations"]').click()
+        cy.get('[id="value-set-selector"]').click()
+        cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.292"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="option-4525004"]').click()
+        cy.get('[id="dateTime"]').eq(3).type('02/06/2025 08:00 AM')
+        cy.get('[id="dateTime"]').eq(4).type('02/06/2025 08:15 PM')
+        cy.get('[data-testid="add-attribute-button"]').click()
+        //Close the Element
+        cy.get('[data-testid=CloseIcon]').click()
+
+        //Element - Encounter:Performed:Encounter Inpatient
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('02/06/2025 08:15 PM')
+        cy.get('[id="dateTime"]').eq(1).type('02/09/2025 08:15 AM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-183452005"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        //Close the Element
+        cy.get('[data-testid=CloseIcon]').click()
+
+        //Element - Assessment: Performed: Emergency Department Evaluation
+        cy.get('[data-testid="elements-tab-assessment"]').click()
+        cy.get('[data-testid="data-type-Assessment, Performed: Emergency Department Evaluation"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('02/06/2025 08:15 PM')
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-LOINC"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-28568-4"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
+        cy.get('[id="attribute-select"]').click()
+        cy.get('[data-testid="option-Result"]').click()
+        cy.get('[id="type-select"]').click()
+        cy.get('[data-testid="option-Code"]').click()
+        cy.get('[id="value-set-selector"]').click()
+        cy.get('[data-testid="option-2.16.840.1.113762.1.4.1111.164"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="option-434081000124108"]').click()
+        cy.get('[data-testid="add-attribute-button"]').click()
+
+        //Add Expected value for Test case
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).type('2')
+        cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('2')
+        cy.get(TestCasesPage.measureObservationRow).eq(0).clear().type('45')
+        cy.get('[data-testid="test-population-Strata-1 -expected-0"]').type('2')
+        cy.get('[data-testid="strat-test-population-initialPopulation-expected-0"]').eq(0).type('2')
+        cy.get('[data-testid="strat-test-population-measurePopulation-expected-1"]').eq(0).type('2')
+        //Commented until MAT-6608 is fixed
+        //cy.get('[data-testid="strat-test-population-measurePopulationObservation-expected-2"]').clear().type('45')
+
+        //Save Test case
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+
+        //Execute Test case on Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.executeTestCaseButton).focus()
+        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
+        cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
 
     })
 })
