@@ -329,6 +329,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({force:true})
