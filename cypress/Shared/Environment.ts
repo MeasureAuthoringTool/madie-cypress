@@ -3,8 +3,8 @@ export class Environment {
      * We set our environment variables here in this class
      */
 
-    public static credentials = () : { harpUser: string, password: string, harpUserALT: string, passwordALT: string, umls_API_KEY: string, measureSharing_API_Key: string, deleteMeasureAdmin_API_Key: string } => {
-        switch(Cypress.env('environment')) {
+    public static credentials = (): { harpUser: string, password: string, harpUserALT: string, passwordALT: string, umls_API_KEY: string, measureSharing_API_Key: string, measureMAT_to_MADiE_save_API_Key: string, deleteMeasureAdmin_API_Key: string } => {
+        switch (Cypress.env('environment')) {
             case 'dev': {
                 return {
                     harpUser: Cypress.env('DEV_USERNAME'),
@@ -13,6 +13,7 @@ export class Environment {
                     passwordALT: Cypress.env('DEV_ALT_PASSWORD'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
                     measureSharing_API_Key: Cypress.env('DEV_MEASURESHARING_API_KEY'),
+                    measureMAT_to_MADiE_save_API_Key: Cypress.env('DEV_MEASUREMAT_to_MADiE_save_API_KEY'),
                     deleteMeasureAdmin_API_Key: Cypress.env('DEV_DELETEMEASUREADMIN_API_KEY')
                 }
             }
@@ -24,6 +25,7 @@ export class Environment {
                     passwordALT: Cypress.env('TEST_ALT_PASSWORD'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
                     measureSharing_API_Key: Cypress.env('TEST_MEASURESHARING_API_KEY'),
+                    measureMAT_to_MADiE_save_API_Key: Cypress.env('TEST_MEASUREMAT_to_MADiE_save_API_KEY'),
                     deleteMeasureAdmin_API_Key: Cypress.env('TEST_DELETEMEASUREADMIN_API_KEY')
                 }
             }
@@ -35,13 +37,14 @@ export class Environment {
                     passwordALT: Cypress.env('IMPL_ALT_PASSWORD'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
                     measureSharing_API_Key: Cypress.env('IMPL_MEASURESHARING_API_KEY'),
+                    measureMAT_to_MADiE_save_API_Key: Cypress.env('IMPL_MEASUREMAT_to_MADiE_save_API_KEY'),
                     deleteMeasureAdmin_API_Key: Cypress.env('IMPL_DELETEMEASUREADMIN_API_KEY')
                 }
             }
         }
     }
 
-    public static authentication = () : { authnUrl: string, authUri: string, redirectUri: string, clientId: string } => {
+    public static authentication = (): { authnUrl: string, authUri: string, redirectUri: string, clientId: string } => {
         switch (Cypress.env('environment')) {
             case 'dev':
 
