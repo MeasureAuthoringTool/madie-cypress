@@ -38,9 +38,20 @@ export class EditMeasurePage {
     public static readonly leftPanelMClinicalGuidanceRecommendation = '[data-testid="leftPanelMeasureClinicalRecommendation"]'
     public static readonly leftPanelModelAndMeasurementPeriod = '[data-testid="leftPanelModelAndMeasurementPeriod"]'
     public static readonly leftPanelRiskAdjustment = '[data-testid="leftPanelMeasureRiskAdjustment"]'
+    public static readonly leftPanelReference = '[data-testid="leftPanelMeasureReferences"]'
+
+    //References page
+    public static readonly addReferenceButton = '[data-testid="create-reference-button"]'
+    public static readonly referenceTypeDropdown = '[id="measure-referenceType"]'
+    public static readonly documentationOption = '[data-testid="Documentation-option"]'
+    public static readonly measureReferenceText = '[data-testid="measure-referenceText"]'
+    public static readonly saveReference = '[data-testid="save-button"]'
+    public static readonly successMessage = '[class="toast success"]'
+    public static readonly measureReferenceTable = '[data-testid="measure-references-table-body"]'
+    public static readonly measureReferenceDiscardChanges = '[data-testid="cancel-button"]'
 
     //Measure CQL Page
-    //warnings / earrors in CQL that appear at the top of page
+    //warnings / errors in CQL that appear at the top of page
     public static readonly libWarningTopMsg = '[data-testid="library-warning"]'
     public static readonly CQLMessageSuccess = '[data-testid="generic-success-text-header"]'
 
