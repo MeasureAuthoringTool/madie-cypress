@@ -20,8 +20,7 @@ let testCaseSeries = 'SBTestSeries'
 let newMeasureName = ''
 let newCqlLibraryName = ''
 
-//Skipping until feature flag for QDM Highlighting tab is removed
-describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
+describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -136,8 +135,7 @@ describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Includes R
     })
 })
 
-//Skipping until feature flag for QDM Highlighting tab is removed
-describe.skip('QDM Measure: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a single PC measure', () => {
+describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a single PC measure', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -172,7 +170,7 @@ describe.skip('QDM Measure: Test Case Highlighting Left navigation panel: Highli
 
     })
 
-    it('QDM Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with a single PC', () => {
+    it('QDM Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with a single PC and will show Test case Results', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measurePath = 'cypress/fixtures/measureId'
         OktaLogin.Login()
@@ -245,11 +243,17 @@ describe.skip('QDM Measure: Test Case Highlighting Left navigation panel: Highli
             Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 35000)
             cy.get(TestCasesPage.tcIPHighlightingDetails).should('contain.text', 'define "Initial Population":\n      ["Encounter, Performed": "Emergency Department Visit"]\n      union ["Encounter, Performed": "Closed Head and Facial Trauma"]\n      union ["Encounter, Performed": "Dementia"]')
         })
+
+        //Verify Test case Execution Results
+        cy.get('[class="GroupCoverageResultsSection___StyledDiv-sc-x9ujt7-0 gKcqGP"]').should('contain.text', 'Results')
+        cy.get('[data-testid="results-section"]').should('contain.text', '[Encounter, Performed: Closed Head and Facial Trauma\n' +
+            'START: 01/09/2025 6:00 AM\n' +
+            'STOP: 01/17/2025 6:00 AM\n' +
+            'CODE: SNOMEDCT 110246003] ')
     })
 })
 
-//Skipping until feature flag for QDM Highlighting tab is removed
-describe.skip('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a multiple PC measure', () => {
+describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a multiple PC measure', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
