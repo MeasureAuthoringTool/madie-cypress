@@ -531,7 +531,6 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
         cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
         cy.get(TestCasesPage.QDMEthnicity).click()
         cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
-        cy.pause()
 
         //select element and begin to add attribute
         cy.get(TestCasesPage.laboratoryElement).click()
@@ -547,7 +546,6 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
         cy.get('[id="quantity-unit-dropdown-high"]').click()
         cy.get('#quantity-unit-dropdown-high-option-0').click() //Select unit as m meter
 
-        cy.pause()
         //attempt to navigate away without clicking onthe add button (for the attribute)
         cy.get(Header.measures).click()
         Utilities.waitForElementVisible(TestCasesPage.QDMDiscardChangesDialog, 35000)
