@@ -276,8 +276,9 @@ describe('QDM Measure Export: Export option is not available', () => {
         OktaLogin.Login()
         MeasuresPage.measureAction('version')
 
-        cy.get(MeasuresPage.measureVersionMajor).should('exist')
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -387,11 +388,15 @@ describe('QI Core: Elements tab is not present', () => {
 //"disableRunTestCaseWithObservStrat" : false
 describe('Run QDM Test cases with Observation and Stratification', () => {
 
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = measureName + randValue
+    let newCQLLibraryName = CqlLibraryName + randValue
+
     before('Create New Measure, Measure group, Test case  and Login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQLWithMOAndStrat, false, false,
-            '2025-01-01', '2025-12-31')
+        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCQLLibraryName, measureCQLWithMOAndStrat, false, false,
+         '2025-01-01', '2025-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
 
         OktaLogin.Login()
@@ -400,9 +405,9 @@ describe('Run QDM Test cases with Observation and Stratification', () => {
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
 
-    })
+   })
 
     it('Able to run QDM Test cases with Observation and Stratification', () => {
 
@@ -512,8 +517,7 @@ describe('QDM Test case Highlighting tab: Should show pass/Fail Highlighting', (
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName, false, true)
-
+       Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
     })
 
     it('QDM Test case Highlighting tab: Should show pass/Fail Highlighting', () => {
@@ -533,8 +537,9 @@ describe('QDM Test case Highlighting tab: Should show pass/Fail Highlighting', (
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Definitions').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcDEFINITIONSHighlightingDetails, 35000)
-        cy.get(TestCasesPage.tcDEFINITIONSHighlightingDetails).should('contain.text', 'define "Inpatient Encounters":\n' +
+
+        Utilities.waitForElementVisible(':nth-child(3) > :nth-child(1) > pre', 35000)
+        cy.get(':nth-child(3) > :nth-child(1) > pre').should('contain.text', 'define "Inpatient Encounters":\n' +
             '  ["Encounter, Performed": "Encounter Inpatient"] InpatientEncounter\n' +
             '    with ( ["Patient Characteristic Payer": "Medicare FFS payer"]\n' +
             '      union ["Patient Characteristic Payer": "Medicare Advantage payer"] ) Payer\n' +
