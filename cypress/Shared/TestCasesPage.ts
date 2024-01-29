@@ -227,6 +227,7 @@ export class TestCasesPage {
     public static readonly denominatorObservationRow = '[data-testid="test-population-denominatorObservation-expected"]'
     public static readonly numeratorObservationRow = '[data-testid="test-population-numeratorObservation-expected"]'
     public static readonly measureGroup1Label = '[data-testid="measure-group-1"]'
+    public static readonly measureGroup2Label = '[data-testid="measure-group-2"]'
     public static readonly denominatorObservationExpectedRow = '[data-testid="test-population-denominatorObservation-expected"]'
 
     //QDM Test Case Page
