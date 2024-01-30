@@ -21,7 +21,8 @@ export class MeasuresPage {
     public static readonly paginationLimitEquals25 = '[data-value="25"]'
 
     //Measure Version
-    public static readonly versionMeasuresRadioButton = '[name="type"]'
+    public static readonly versionMeasuresSelectionButton = '[data-testid="version-type"]'
+    public static readonly versionMeasuresConfirmInput = '[data-testid="confirm-version-input"]'
     public static readonly VersionDraftMsgs = '[data-testid="success-toast"]'
     public static readonly VersionDraftErrMsgs = '[data-testid="error-toast"]'
     public static readonly updateDraftedMeasuresTextBox = '[data-testid="measure-name-input"]'

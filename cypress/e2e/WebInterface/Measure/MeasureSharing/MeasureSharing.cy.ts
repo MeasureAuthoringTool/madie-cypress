@@ -10,7 +10,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import {Header} from "../../../../Shared/Header"
+import { Header } from "../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -175,7 +175,8 @@ describe('Measure Sharing - Multiple instances', () => {
 
         //Version the Measure
         MeasuresPage.measureAction('version')
-        cy.get(MeasuresPage.versionMeasuresRadioButton).eq(0).click()
+        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
+        cy.get(MeasuresPage.versionMeasuresConfirmInput).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(newMeasureName, versionNumber)
