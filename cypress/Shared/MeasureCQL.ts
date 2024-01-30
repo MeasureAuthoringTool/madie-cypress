@@ -123,6 +123,128 @@ export class MeasureCQL {
         '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
         '		where NoCervixHysterectomy.status = \'completed\''
 
+    public static readonly qdmCQLNonPatienBasedTest = 'library NonPatientBasedCVmeasurewithMultiplegroupsStratifications version \'0.0.000\'\n' +
+        '\n' +
+        'using QDM version \'5.6\'\n' +
+        '\n' +
+        'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\'\n' +
+        'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\'\n' +
+        'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+        'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+        '\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+        '\n' +
+        'context Patient\n' +
+        '\n' +
+        'define "SDE Ethnicity":\n' +
+        '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+        '\n' +
+        'define "SDE Payer":\n' +
+        '  ["Patient Characteristic Payer": "Payer Type"]\n' +
+        '\n' +
+        'define "SDE Race":\n' +
+        '  ["Patient Characteristic Race": "Race"]\n' +
+        '\n' +
+        'define "SDE Sex":\n' +
+        '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+        '\n' +
+        'define "Strat 1":\n' +
+        '    ["Encounter, Performed": "Encounter Inpatient"]\n' +
+        '\n' +
+        'define "Strat 2":\n' +
+        '    ["Encounter, Performed": "Emergency Department Visit"]\n' +
+        '\n' +
+        'define "Denominator":\n' +
+        '  "Initial Population"\n' +
+        '\n' +
+        'define "Initial Population":\n' +
+        '  "Qualifying Encounters"\n' +
+        '\n' +
+        'define "Measure Population":\n' +
+        '  "Initial Population"\n' +
+        '\n' +
+        'define "Measure Population Exclusion":\n' +
+        '  ["Encounter, Performed": "Observation Services"] Encounter\n' +
+        '    where Encounter.relevantPeriod ends during "Measurement Period"\n' +
+        '\n' +
+        'define "Qualifying Encounters":\n' +
+        '  ( ["Encounter, Performed": "Encounter Inpatient"]\n' +
+        '    union ["Encounter, Performed": "Emergency Department Visit"]\n' +
+        '    union ["Encounter, Performed": "Observation Services"] ) Encounter\n' +
+        '    where Encounter.relevantPeriod ends during "Measurement Period"\n' +
+        '\n' +
+        'define function "Measure Observation hours"(Encounter "Encounter, Performed"):\n' +
+        '  duration in hours of Encounter.relevantPeriod\n' +
+        '\n' +
+        'define function "Measure Observation minutes"(Encounter "Encounter, Performed"):\n' +
+        '  duration in minutes of Encounter.relevantPeriod'
+
+    public static readonly qdmCQLPatientBasedTest = 'library RatioPatientBasedTestCQLLib version \'0.0.000\'\n' +
+        '\n' +
+        'using QDM version \'5.6\'\n' +
+        '\n' +
+        'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\'\n' +
+        'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\'\n' +
+        'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+        'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+        'valueset "Hypoglycemics Treatment Medications": \'urn:oid:2.16.840.1.113762.1.4.1196.394\'\n' +
+        '\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+        '\n' +
+        'context Patient\n' +
+        '\n' +
+        'define "SDE Ethnicity":\n' +
+        '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+        '\n' +
+        'define "SDE Payer":\n' +
+        '  ["Patient Characteristic Payer": "Payer Type"]\n' +
+        '\n' +
+        'define "SDE Race":\n' +
+        '  ["Patient Characteristic Race": "Race"]\n' +
+        '\n' +
+        'define "SDE Sex":\n' +
+        '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+        '\n' +
+        'define "Strat 1":\n' +
+        '    ["Encounter, Performed": "Encounter Inpatient"]\n' +
+        '\n' +
+        'define "Strat 2":\n' +
+        '    ["Encounter, Performed": "Emergency Department Visit"]\n' +
+        '\n' +
+        'define "Denominator":\n' +
+        '  "Initial Population"\n' +
+        '\n' +
+        'define "Initial Population":\n' +
+        '  "Qualifying Encounters"\n' +
+        '\n' +
+        'define "Measure Population":\n' +
+        '  "Initial Population"\n' +
+        '\n' +
+        'define "Measure Population Exclusion":\n' +
+        '  ["Encounter, Performed": "Observation Services"] Encounter\n' +
+        '    where Encounter.relevantPeriod ends during "Measurement Period"\n' +
+        '\n' +
+        'define "Qualifying Encounters":\n' +
+        '  exists ( ["Encounter, Performed": "Encounter Inpatient"]\n' +
+        '    union ["Encounter, Performed": "Emergency Department Visit"]\n' +
+        '    union ["Encounter, Performed": "Observation Services"] ) Encounter\n' +
+        '    where Encounter.relevantPeriod ends during "Measurement Period"\n' +
+        '\n' +
+        'define function "MeasureObservation"():\n' +
+        'true\n' +
+        '\n' +
+        'define function "Measure Observation hours"():\n' +
+        '    8\n' +
+        '\n' +
+        'define function "Measure Observation minutes"(Encounter "Encounter, Performed"):\n' +
+        '  duration in minutes of Encounter.relevantPeriod'
+
     public static readonly qdmMeasureCQLPRODCataracts2040BCVAwithin90Days = 'library Cataracts2040BCVAwithin90Days version \'0.0.000\'\n' +
 
         'using QDM version \'5.6\'\n' +

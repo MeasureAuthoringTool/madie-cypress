@@ -5,7 +5,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let measureName = 'CVListQDMPositiveEncounterPerformedWithMOAndStratification' + Date.now()
 let CqlLibraryName = 'CVListQDMPositiveEncounterPerformedWithMOAndStratification' + Date.now()
@@ -228,7 +228,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
 
         //Save Supplemental data
-        cy.get('[data-testid="measure-Supplemental Data-save"]').click({force:true})
+        cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
         cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Add Elements to first Test case
@@ -341,6 +341,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
         cy.get(TestCasesPage.QDMEthnicity).click()
         cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+
 
         //Element - Encounter:Performed:Emergency Department Visit
         cy.get('[data-testid="elements-tab-encounter"]').click()

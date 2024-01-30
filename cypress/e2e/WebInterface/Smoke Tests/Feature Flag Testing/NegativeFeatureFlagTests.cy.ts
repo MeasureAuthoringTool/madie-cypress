@@ -396,7 +396,7 @@ describe('Run QDM Test cases with Observation and Stratification', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCQLLibraryName, measureCQLWithMOAndStrat, false, false,
-            '2025-01-01', '2025-12-31')
+         '2025-01-01', '2025-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
 
         OktaLogin.Login()
@@ -407,7 +407,7 @@ describe('Run QDM Test cases with Observation and Stratification', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
 
-    })
+   })
 
     it('Able to run QDM Test cases with Observation and Stratification', () => {
 
@@ -517,8 +517,7 @@ describe('QDM Test case Highlighting tab: Should show pass/Fail Highlighting', (
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
-
+       Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
     })
 
     it('QDM Test case Highlighting tab: Should show pass/Fail Highlighting', () => {
@@ -538,6 +537,7 @@ describe('QDM Test case Highlighting tab: Should show pass/Fail Highlighting', (
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Definitions').click()
+
         Utilities.waitForElementVisible(':nth-child(3) > :nth-child(1) > pre', 35000)
         cy.get(':nth-child(3) > :nth-child(1) > pre').should('contain.text', 'define "Inpatient Encounters":\n' +
             '  ["Encounter, Performed": "Encounter Inpatient"] InpatientEncounter\n' +
