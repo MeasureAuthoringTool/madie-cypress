@@ -122,7 +122,7 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
 
         //Create QDM Measure, PC and Test Case with ALT user
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, true, measureCQL, false, true)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'IP2')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, true)
         OktaLogin.Login()
 
