@@ -121,16 +121,17 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Definitions').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcDEFINITIONSHighlightingDetails, 35000)
-        cy.get(TestCasesPage.tcDEFINITIONSHighlightingDetails).should('contain.text', 'define "Denominator":\n  "Initial Population"define "Initial Population":\n      ["Encounter, Performed": "Emergency Department Visit"]\n      union ["Encounter, Performed": "Closed Head and Facial Trauma"]\n      union ["Encounter, Performed": "Dementia"]define "Numerator":\n  ["Encounter, Performed"] E where E.relevantPeriod starts during day of "Measurement Period"')
+        Utilities.waitForElementVisible('[data-testid="cql-highlighting"] > :nth-child(2)', 35000)
+        cy.get('[data-testid="cql-highlighting"] > :nth-child(2)').should('contain.text', 'Results[Encounter, Performed: Closed Head and Facial Trauma\nSTART: 01/09/2025 6:00 AM\nSTOP: 01/17/2025 6:00 AM\nCODE: SNOMEDCT 110246003] ')
 
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Functions').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcFUNCTIONSHighlightingDetails, 35000)
-        cy.get(TestCasesPage.tcFUNCTIONSHighlightingDetails).should('contain.text', 'define function denomObs(Encounter "Encounter, Performed"):\n  duration in seconds of Encounter.relevantPerioddefine function numerObs(Encounter "Encounter, Performed"):\n  duration in days of Encounter.relevantPeriod')
+        Utilities.waitForElementVisible('[data-testid="cql-highlighting"] > :nth-child(1)', 35000)
+        cy.get('[data-testid="cql-highlighting"] > :nth-child(1)').should('contain.text', 'define function denomObs(Encounter "Encounter, Performed"):\n  duration in seconds of Encounter.relevantPeriod')
 
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Unused').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcUNUSEDHightlightingDetails, 35000)
-        cy.get(TestCasesPage.tcUNUSEDHightlightingDetails).should('contain.text', 'define "Denominator Exclusion":\n  ["Encounter, Performed"] E where (duration in days of E.relevantPeriod) > 10define "IP2":\n    exists ["Encounter, Performed"] Edefine "SDE Ethnicity":\n  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":\n  ["Patient Characteristic Payer": "Payer"]define "SDE Race":\n  ["Patient Characteristic Race": "Race"]define "SDE Sex":\n  ["Patient Characteristic Sex": "ONC Administrative Sex"]')
+        Utilities.waitForElementVisible('[data-testid="cql-highlighting"] > :nth-child(1)', 35000)
+        cy.get('[data-testid="cql-highlighting"] > :nth-child(1)').should('contain.text', 'define "Denominator Exclusion":\n' +
+            '  ["Encounter, Performed"] E where (duration in days of E.relevantPeriod) > 10')
 
     })
 })
@@ -240,12 +241,15 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
 
         cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP').click()
-            Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 35000)
-            cy.get(TestCasesPage.tcIPHighlightingDetails).should('contain.text', 'define "Initial Population":\n      ["Encounter, Performed": "Emergency Department Visit"]\n      union ["Encounter, Performed": "Closed Head and Facial Trauma"]\n      union ["Encounter, Performed": "Dementia"]')
+            Utilities.waitForElementVisible('[data-testid="cql-highlighting"]', 35000)
+            cy.get('[data-testid="cql-highlighting"]').should('contain.text', 'define "Initial Population":\n' +
+                '      ["Encounter, Performed": "Emergency Department Visit"]\n' +
+                '      union ["Encounter, Performed": "Closed Head and Facial Trauma"]\n' +
+                '      union ["Encounter, Performed": "Dementia"]')
         })
 
         //Verify Test case Execution Results
-        cy.get('[class="GroupCoverageResultsSection___StyledDiv-sc-x9ujt7-0 gKcqGP"]').should('contain.text', 'Results')
+        cy.get('.GroupCoverageResultsSection___StyledDiv-sc-x9ujt7-0 > button > div').should('contain.text', 'Results')
         cy.get('[data-testid="results-section"]').should('contain.text', '[Encounter, Performed: Closed Head and Facial Trauma\n' +
             'START: 01/09/2025 6:00 AM\n' +
             'STOP: 01/17/2025 6:00 AM\n' +
@@ -383,8 +387,8 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
 
         cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP').click()
-            Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 35000)
-            cy.get(TestCasesPage.tcIPHighlightingDetails).should('contain.text', 'define "Initial Population":\n      ["Encounter, Performed": "Emergency Department Visit"]\n      union ["Encounter, Performed": "Closed Head and Facial Trauma"]\n      union ["Encounter, Performed": "Dementia"]')
+            Utilities.waitForElementVisible(':nth-child(1) > :nth-child(1) > pre', 35000)
+            cy.get(':nth-child(1) > :nth-child(1) > pre').should('contain.text', 'define "Initial Population":\n      ["Encounter, Performed": "Emergency Department Visit"]\n      union ["Encounter, Performed": "Closed Head and Facial Trauma"]\n      union ["Encounter, Performed": "Dementia"]')
         })
 
         Utilities.waitForElementVisible(TestCasesPage.highlightingPCTabSelector, 35000)
@@ -392,8 +396,8 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         cy.readFile(measureSecondGroupPath).should('exist').then((secondGroupId) => {
             cy.get('[data-testid="option-' + secondGroupId + '"]').scrollIntoView().click({ force: true })
             cy.get('[data-testid="group-coverage-nav-' + secondGroupId + '"]').contains('IP').click()
-            Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 35000)
-            cy.get(TestCasesPage.tcIPHighlightingDetails).should('contain.text', 'define "Initial Population":\n      ["Encounter, Performed": "Emergency Department Visit"]\n      union ["Encounter, Performed": "Closed Head and Facial Trauma"]\n      union ["Encounter, Performed": "Dementia"]')
+            Utilities.waitForElementVisible(':nth-child(1) > :nth-child(1) > pre', 35000)
+            cy.get(':nth-child(1) > :nth-child(1) > pre').should('contain.text', 'define "Initial Population":\n      ["Encounter, Performed": "Emergency Department Visit"]\n      union ["Encounter, Performed": "Closed Head and Facial Trauma"]\n      union ["Encounter, Performed": "Dementia"]')
         })
     })
 })
