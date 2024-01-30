@@ -125,7 +125,7 @@ describe('Edit Measure: Add Meta Data', () => {
         //Endorsing Organization and number on Name, Version & ID page
         cy.get(EditMeasurePage.endorsingOrganizationTextBox).invoke('val').then(endorsingOrg => {
             cy.get(EditMeasurePage.endorsementNumber).invoke('val').then(endorsementNumber => {
-                expect(endorsingOrg).to.eql('NQF')
+                expect(endorsingOrg).to.eql('CMS Consensus Based Entity')
                 expect(endorsementNumber).to.eql('345678')
             })
         })
