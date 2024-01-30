@@ -90,7 +90,7 @@ describe.skip('FHIR Measure Export, Not the Owner', () => {
 
     })
 
-    it('Validate the zip file Export is downloaded for FHIR Measure', () => {
+    it.skip('Validate the zip file Export is downloaded for FHIR Measure', () => {
 
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
@@ -105,7 +105,7 @@ describe.skip('FHIR Measure Export, Not the Owner', () => {
 
     })
 
-    it('Unzip the downloaded file and verify file types for FHIR Measure', () => {
+    it.skip('Unzip the downloaded file and verify file types for FHIR Measure', () => {
 
         // unzipping the Measure Export
         cy.task('unzipFile', { zipFile: 'eCQMTitle-v0.0.000-FHIR4.zip', path: downloadsFolder })
@@ -141,7 +141,7 @@ describe.skip('QDM Measure Export, Not the Owner', () => {
 
     })
 
-    it('Validate the zip file Export is downloaded for QDM Measure', () => {
+    it.skip('Validate the zip file Export is downloaded for QDM Measure', () => {
 
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
@@ -156,7 +156,7 @@ describe.skip('QDM Measure Export, Not the Owner', () => {
 
     })
 
-    it('Unzip the downloaded file and verify file types for QDM Measure', () => {
+    it.skip('Unzip the downloaded file and verify file types for QDM Measure', () => {
 
         // unzipping the Measure Export
         cy.task('unzipFile', { zipFile: 'eCQMTitle-v0.0.000-QDM5.zip', path: downloadsFolder })
