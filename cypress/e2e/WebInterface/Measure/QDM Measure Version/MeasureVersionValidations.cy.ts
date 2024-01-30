@@ -60,22 +60,12 @@ describe('Measure Versioning validations', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, 'Cohort', true)
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.wait(1000)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.wait(1000)
-        OktaLogin.Logout()
-        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up', () => {
@@ -86,10 +76,12 @@ describe('Measure Versioning validations', () => {
 
     it('User can not version Measure if there is no CQL', () => {
 
+        cy.get(Header.measures).click().wait(2000)
         MeasuresPage.measureAction('version')
 
-        cy.get(MeasuresPage.measureVersionMajor).should('exist')
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -102,6 +94,7 @@ describe('Measure Versioning validations', () => {
 
     it('User can not Version if the Measure CQL has errors', () => {
 
+        cy.get(Header.measures).click().wait(2000)
         MeasuresPage.measureAction('edit')
 
         //Add CQL
@@ -117,8 +110,9 @@ describe('Measure Versioning validations', () => {
 
         MeasuresPage.measureAction('version')
 
-        cy.get(MeasuresPage.measureVersionMajor).should('exist')
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -183,7 +177,13 @@ describe('Non Measure owner unable to create Version', () => {
 
             //Verify version button is not visible
             cy.get('[data-testid=create-version-measure-' + fileContents + ']').should('not.exist')
+            cy.get('[data-testid="view-measure-' + fileContents + '"]').click()
         })
+
+        //Log out
+        cy.get('[data-testid="user-profile-select"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click()
+        cy.log('Log out successful')
 
     })
 })

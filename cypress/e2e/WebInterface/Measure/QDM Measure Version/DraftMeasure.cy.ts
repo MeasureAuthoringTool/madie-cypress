@@ -54,7 +54,9 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         MeasuresPage.measureAction('version')
 
-        cy.get(MeasuresPage.versionMeasuresRadioButton).eq(0).click()
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
+        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
@@ -76,7 +78,9 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         MeasuresPage.measureAction('version')
 
-        cy.get(MeasuresPage.versionMeasuresRadioButton).eq(0).click()
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
+        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
@@ -147,9 +151,9 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
         //version and draft measure
         MeasuresPage.measureAction('version')
-        cy.get(MeasuresPage.versionMeasuresRadioButton).should('exist')
-        cy.get(MeasuresPage.versionMeasuresRadioButton).should('be.enabled')
-        cy.get(MeasuresPage.versionMeasuresRadioButton).eq(0).click()
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
+        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
