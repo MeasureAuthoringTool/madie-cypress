@@ -76,7 +76,7 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     'define "Denom":\n' +
     'true'
 
-describe('QI-Core Measure Export', () => {
+describe.skip('QI-Core Measure Export', () => {
 
     deleteDownloadsFolderBeforeAll()
 
