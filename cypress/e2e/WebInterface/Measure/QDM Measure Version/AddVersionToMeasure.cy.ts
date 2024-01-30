@@ -7,7 +7,6 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { Utilities } from "../../../../Shared/Utilities"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -45,8 +44,9 @@ describe('Measure Versioning', () => {
 
         MeasuresPage.measureAction('version')
 
-        cy.get(MeasuresPage.measureVersionMajor).should('exist')
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')

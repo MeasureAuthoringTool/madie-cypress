@@ -51,8 +51,9 @@ describe('Measure Versioning validations', () => {
 
         MeasuresPage.measureAction('version')
 
-        cy.get(MeasuresPage.measureVersionMajor).should('exist')
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -79,8 +80,9 @@ describe('Measure Versioning validations', () => {
 
         MeasuresPage.measureAction('version')
 
-        cy.get(MeasuresPage.measureVersionMajor).should('exist')
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -128,8 +130,9 @@ describe('Measure Versioning when the measure has test case with errors', () => 
 
         MeasuresPage.measureAction('version')
 
-        cy.get(MeasuresPage.measureVersionMajor).should('exist')
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -146,8 +149,9 @@ describe('Measure Versioning when the measure has test case with errors', () => 
 
         MeasuresPage.measureAction('version')
 
-        cy.get(MeasuresPage.measureVersionMajor).should('exist')
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -200,7 +204,13 @@ describe('Non Measure owner unable to create Version', () => {
 
             //Verify version button is not visible
             cy.get('[data-testid=create-version-measure-' + fileContents + ']').should('not.exist')
+            cy.get('[data-testid="view-measure-' + fileContents + '"]').click()
         })
+
+        //Log out
+        cy.get('[data-testid="user-profile-select"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click()
+        cy.log('Log out successful')
 
     })
 })
