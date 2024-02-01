@@ -11,7 +11,7 @@ let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
 //Skipping until feature flag is removed
-describe.skip('QDM Measure Definition(Terms)', () => {
+describe('QDM Measure Definition(Terms)', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
@@ -30,11 +30,11 @@ describe.skip('QDM Measure Definition(Terms)', () => {
 
     })
 
-    it('QDM Measure Definition(Terms) - Successful creation', () => {
+    it.only('Add and Edit QDM Measure Definition(Terms)', () => {
 
         MeasuresPage.measureAction('edit')
 
-        //Navigate to References page
+        //Add Definition
         cy.get(EditMeasurePage.leftPanelDefinition).click()
         cy.get(EditMeasurePage.addDefinitionButton).click()
         cy.get(EditMeasurePage.termInputTextbox).type('Term')
@@ -43,6 +43,16 @@ describe.skip('QDM Measure Definition(Terms)', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Definition Saved Successfully')
         cy.get(EditMeasurePage.measureDefinitionTable).should('contain.text', 'Term')
         cy.get(EditMeasurePage.measureDefinitionTable).should('contain.text', 'Measure Definition')
+
+        //Edit Definition
+        cy.get(EditMeasurePage.editMeasureDefinition).click()
+        cy.get(EditMeasurePage.termInputTextbox).clear().type('New Term')
+        cy.get(EditMeasurePage.definitionInputTextbox).clear().type('New Measure Definition')
+        cy.get(EditMeasurePage.saveButton).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Definition Saved Successfully')
+        cy.get(EditMeasurePage.measureDefinitionTable).should('contain.text', 'New Term')
+        cy.get(EditMeasurePage.measureDefinitionTable).should('contain.text', 'New Measure Definition')
+
     })
 
     it('Discard changes button', () => {
