@@ -30,7 +30,7 @@ describe('QDM Measure Definition(Terms)', () => {
 
     })
 
-    it.only('Add and Edit QDM Measure Definition(Terms)', () => {
+    it('Add and Edit QDM Measure Definition(Terms)', () => {
 
         MeasuresPage.measureAction('edit')
 
