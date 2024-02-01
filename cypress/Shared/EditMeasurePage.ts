@@ -39,16 +39,23 @@ export class EditMeasurePage {
     public static readonly leftPanelModelAndMeasurementPeriod = '[data-testid="leftPanelModelAndMeasurementPeriod"]'
     public static readonly leftPanelRiskAdjustment = '[data-testid="leftPanelMeasureRiskAdjustment"]'
     public static readonly leftPanelReference = '[data-testid="leftPanelMeasureReferences"]'
+    public static readonly leftPanelDefinition = '[data-testid="leftPanelQDMMeasureDefinitions"]'
 
     //References page
     public static readonly addReferenceButton = '[data-testid="create-reference-button"]'
     public static readonly referenceTypeDropdown = '[id="measure-referenceType"]'
     public static readonly documentationOption = '[data-testid="Documentation-option"]'
     public static readonly measureReferenceText = '[data-testid="measure-referenceText"]'
-    public static readonly saveReference = '[data-testid="save-button"]'
+    public static readonly saveButton = '[data-testid="save-button"]'
     public static readonly successMessage = '[class="toast success"]'
     public static readonly measureReferenceTable = '[data-testid="measure-references-table-body"]'
     public static readonly measureReferenceDiscardChanges = '[data-testid="cancel-button"]'
+
+    //Definition(Terms) page
+    public static readonly addDefinitionButton = '[data-testid="create-definition-button"]'
+    public static readonly termInputTextbox = '[data-testid="qdm-measure-term-input"]'
+    public static readonly definitionInputTextbox = '[data-testid="qdm-measure-definition"]'
+    public static readonly measureDefinitionTable = '[id="measure-meta-data-table"]'
 
     //Measure CQL Page
     //warnings / errors in CQL that appear at the top of page
