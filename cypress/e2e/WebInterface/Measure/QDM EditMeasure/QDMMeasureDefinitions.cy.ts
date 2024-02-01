@@ -11,9 +11,9 @@ let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
 //Skipping until feature flag is removed
-describe('QDM Measure Definition(Terms)', () => {
+describe.skip('QDM Measure Definition(Terms)', () => {
 
-    beforeEach('Create Measure, add Cohort group and Login', () => {
+       beforeEach('Create Measure, add Cohort group and Login', () => {
 
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
@@ -107,3 +107,4 @@ describe.skip('QDM Measure Definition ownership validation', () => {
 
     })
 })
+

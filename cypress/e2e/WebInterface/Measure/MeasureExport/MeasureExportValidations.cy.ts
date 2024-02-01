@@ -3,7 +3,7 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
-import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
