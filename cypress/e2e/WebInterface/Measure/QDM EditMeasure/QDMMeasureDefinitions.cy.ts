@@ -11,7 +11,7 @@ let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
 //Skipping until feature flag is removed
-describe.skip('QDM Measure Reference', () => {
+describe.skip('QDM Measure Definition(Terms)', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
@@ -30,20 +30,19 @@ describe.skip('QDM Measure Reference', () => {
 
     })
 
-    it('QDM Measure Reference - Successful creation', () => {
+    it('QDM Measure Definition(Terms) - Successful creation', () => {
 
         MeasuresPage.measureAction('edit')
 
         //Navigate to References page
-        cy.get(EditMeasurePage.leftPanelReference).click()
-        cy.get(EditMeasurePage.addReferenceButton).click()
-        cy.get(EditMeasurePage.referenceTypeDropdown).click()
-        cy.get(EditMeasurePage.documentationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).type('Measure Reference')
+        cy.get(EditMeasurePage.leftPanelDefinition).click()
+        cy.get(EditMeasurePage.addDefinitionButton).click()
+        cy.get(EditMeasurePage.termInputTextbox).type('Term')
+        cy.get(EditMeasurePage.definitionInputTextbox).type('Measure Definition')
         cy.get(EditMeasurePage.saveButton).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
-        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Documentation')
-        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Measure Reference')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Definition Saved Successfully')
+        cy.get(EditMeasurePage.measureDefinitionTable).should('contain.text', 'Term')
+        cy.get(EditMeasurePage.measureDefinitionTable).should('contain.text', 'Measure Definition')
     })
 
     it('Discard changes button', () => {
@@ -51,19 +50,18 @@ describe.skip('QDM Measure Reference', () => {
         MeasuresPage.measureAction('edit')
 
         //Navigate to References page
-        cy.get(EditMeasurePage.leftPanelReference).click()
-        cy.get(EditMeasurePage.addReferenceButton).click()
+        cy.get(EditMeasurePage.leftPanelDefinition).click()
+        cy.get(EditMeasurePage.addDefinitionButton).click()
         cy.get('[data-testid="dialog-form"]').should('exist')
-        cy.get(EditMeasurePage.referenceTypeDropdown).click()
-        cy.get(EditMeasurePage.documentationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).type('Measure Reference')
+        cy.get(EditMeasurePage.termInputTextbox).type('Term')
+        cy.get(EditMeasurePage.definitionInputTextbox).type('Measure Definition')
         cy.get(EditMeasurePage.measureReferenceDiscardChanges).click()
         cy.get('[data-testid="dialog-form"]').should('not.exist')
     })
 })
 
 //Skipping until feature flag is removed
-describe.skip('QDM Measure Reference ownership validation', () => {
+describe.skip('QDM Measure Definition ownership validation', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
@@ -89,8 +87,8 @@ describe.skip('QDM Measure Reference ownership validation', () => {
         MeasuresPage.measureAction('edit')
 
         //Navigate to References page
-        cy.get(EditMeasurePage.leftPanelReference).click()
-        cy.get(EditMeasurePage.addReferenceButton).should('not.be.enabled')
+        cy.get(EditMeasurePage.leftPanelDefinition).click()
+        cy.get(EditMeasurePage.addDefinitionButton).should('not.be.enabled')
 
         //Log out
         cy.get('[data-testid="user-profile-select"]').click()
