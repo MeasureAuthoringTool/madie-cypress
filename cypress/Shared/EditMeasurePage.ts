@@ -56,6 +56,7 @@ export class EditMeasurePage {
     public static readonly termInputTextbox = '[data-testid="qdm-measure-term-input"]'
     public static readonly definitionInputTextbox = '[data-testid="qdm-measure-definition"]'
     public static readonly measureDefinitionTable = '[id="measure-meta-data-table"]'
+    public static readonly editMeasureDefinition = '[class="qpp-c-button qpp-c-button--outline-secondary"]'
 
     //Measure CQL Page
     //warnings / errors in CQL that appear at the top of page
