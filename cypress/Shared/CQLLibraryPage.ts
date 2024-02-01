@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 
 export class CQLLibraryPage {
+    public static readonly measureCQLGenericErrorsList = '[data-testid="generic-errors-text-list"]'
     public static readonly cqlLibrarySuccessfulDeleteMsgBox = '[data-testid="cql-library-list-snackBar"]'
     public static readonly cqlLibraryDeleteDialogContinueBtn = '[data-testid="delete-dialog-continue-button"]'
     public static readonly cqlLibraryDeleteDialogCancelBtn = '[data-testid="delete-dialog-cancel-button"]'
@@ -246,6 +247,67 @@ export class CQLLibraryPage {
                         "using QICore version '4.1.1'\n" +
                         "\n" +
                         "valueset \"ONC Administrative Sex\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1'",
+                    "librarySetId": uuidv4(),
+                    "description": "description",
+                    "publisher": CQLLibraryPublisher,
+                    'createdBy': user
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(201)
+                expect(response.body.id).to.be.exist
+                expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
+                if (twoLibraries === true) {
+                    cy.writeFile('cypress/fixtures/cqlLibraryId2', response.body.id)
+                }
+                else {
+                    cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
+                }
+
+            })
+        })
+        return user
+    }
+
+    public static createAPILibraryWithValidCQL(CqlLibraryName: string, CQLLibraryPublisher: string, ModelType?: string, LibraryCQLVal?: string, twoLibraries?: boolean, altUser?: boolean): string {
+        let user = ''
+        let CQLVal = ''
+        let model = ''
+
+        if (ModelType == undefined || ModelType == null || ModelType == '') {
+            model = 'QI-Core v4.1.1'
+        }
+        else {
+            model = ModelType
+        }
+
+        if (LibraryCQLVal == undefined || LibraryCQLVal == null || LibraryCQLVal == '') {
+            CQLVal = ""
+        }
+        else {
+            CQLVal = LibraryCQLVal
+        }
+
+        if (altUser) {
+            cy.setAccessTokenCookieALT()
+            user = Environment.credentials().harpUserALT
+        }
+        else {
+            cy.setAccessTokenCookie()
+            user = Environment.credentials().harpUser
+        }
+
+        //Create New CQL Library
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/cql-libraries',
+                headers: {
+                    authorization: 'Bearer ' + accessToken.value
+                },
+                method: 'POST',
+                body: {
+                    'cqlLibraryName': CqlLibraryName,
+                    'model': model,
+                    'cql': CQLVal,
                     "librarySetId": uuidv4(),
                     "description": "description",
                     "publisher": CQLLibraryPublisher,
