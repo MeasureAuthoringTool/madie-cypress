@@ -1,11 +1,13 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
+import {OktaLogin} from "../../../Shared/OktaLogin";
 
 let CqlLibraryOne = ''
 let CqlLibraryTwo = ''
 let updatedCqlLibraryName = 'UpdatedTestLibrary' + Date.now()
 let harpUser = Environment.credentials().harpUser
+let harpUserALT = Environment.credentials().harpUserALT
 let model = 'QI-Core v4.1.1'
 let CQLLibraryPublisher = 'SemanticBits'
 
@@ -127,6 +129,11 @@ describe('Version and Draft CQL Library', () => {
 
     it('Verify non Library owner unable to create Version', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.AltLogin()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookieALT()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId2').should('exist').then((cqlLibraryId2) => {
                 cy.request({
@@ -139,7 +146,7 @@ describe('Version and Draft CQL Library', () => {
 
                 }).then((response) => {
                     expect(response.status).to.eql(403)
-                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot modify resource CQL Library with id: ' + cqlLibraryId2)
+                    expect(response.body.message).to.eql('User ' + harpUserALT + ' cannot modify resource CQL Library with id: ' + cqlLibraryId2)
 
                 })
             })

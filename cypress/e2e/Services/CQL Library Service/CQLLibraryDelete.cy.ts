@@ -1,8 +1,7 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Environment } from "../../../Shared/Environment"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
-
-
+import {OktaLogin} from "../../../Shared/OktaLogin"
 
 let CQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -26,6 +25,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
     it('Delete CQL Library - Draft Library - user does not own nor has Library been shared with user', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.AltLogin()
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.wait(1000)
@@ -90,6 +90,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         })
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.AltLogin()
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.wait(1000)
@@ -132,6 +133,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         })
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.AltLogin()
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.wait(1000)
@@ -219,6 +221,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         })
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.AltLogin()
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.wait(1000)

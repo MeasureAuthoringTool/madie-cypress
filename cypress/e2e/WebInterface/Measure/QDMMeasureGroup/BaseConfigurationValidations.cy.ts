@@ -338,7 +338,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             .should('be.checked')
     })
     //non-owner of measure cannot edit Base Configuration fields
-    it.only('Non-owner of measure cannot edit any of the the Base Configuration fields', () => {
+    it('Non-owner of measure cannot edit any of the the Base Configuration fields', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
