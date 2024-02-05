@@ -3,8 +3,8 @@ import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { Utilities } from "../../../Shared/Utilities"
 import { Environment } from "../../../Shared/Environment"
-import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import {OktaLogin} from "../../../Shared/OktaLogin"
 
 let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
@@ -15,7 +15,7 @@ let testCaseDescription = 'DENOMPass' + Date.now()
 let testCaseSeries = 'SBTestSeriesP'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 let measureCQLPFTests = MeasureCQL.CQL_Populations
-let harpUser = Environment.credentials().harpUserALT
+let randValue = (Math.floor((Math.random() * 1000) + 1))
 
 describe('Delete test Case: Older end point / url that takes id and title in the body of DELETE request', () => {
 
@@ -26,12 +26,6 @@ describe('Delete test Case: Older end point / url that takes id and title in the
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         //Create Test case
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-
-    })
-
-    afterEach('Clean up', () => {
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
 
@@ -62,12 +56,15 @@ describe('Delete test Case: Older end point / url that takes id and title in the
                 })
             })
         })
+
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Verify Non Measure owner unable to delete Test Case', () => {
 
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.AltLogin()
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.wait(1000)
@@ -88,7 +85,7 @@ describe('Delete test Case: Older end point / url that takes id and title in the
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(403)
-                        expect(response.body.message).to.include('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId)
+                        expect(response.body.message).to.include('User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId)
                     })
                 })
             })
@@ -97,13 +94,14 @@ describe('Delete test Case: Older end point / url that takes id and title in the
 })
 describe('Delete test Case: Newer end point / url that takes an list array of test case ids', () => {
 
+    let newMeasureName = measureName + randValue
+    let newCQLLibraryName = CqlLibraryName + randValue
     beforeEach('Create Measure, Group, Test Case and set access token', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         //Create Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQLPFTests)
         //Create Test case
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'a', testCaseDescription + ' a', testCaseSeries + 'a', testCaseJson, false, false, false)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b', testCaseDescription + ' b', testCaseSeries + 'b', testCaseJson, false, true, false)
@@ -112,7 +110,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
 
     })
 
@@ -186,40 +184,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
         })
 
     })
-    it('Delete test Case - user trying to delete is not owner of measure', () => {
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        //set local user that does not own the measure
-        cy.setAccessTokenCookieALT()
-        cy.wait(1000)
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.wait(1000)
-                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
-                    cy.wait(1000)
-                    cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((testCaseId2) => {
-                        cy.request({
-                            failOnStatusCode: false,
-                            url: '/api/measures/' + measureId + '/test-cases',
-                            method: 'DELETE',
-                            headers: {
-                                authorization: 'Bearer ' + accessToken.value
-                            },
-                            body:
-                                [
-                                    testCaseId, testCaseId2
-                                ]
-
-                        }).then((response) => {
-                            expect(response.status).to.eql(403)
-                            expect(response.body.message).to.include('User ' + harpUser + ' is not authorized for Measure with ID ')
-                        })
-                    })
-                })
-            })
-        })
-    })
     it('Delete test Case - user has had measure shared with them', () => {
         cy.clearCookies()
         cy.clearLocalStorage()

@@ -1,13 +1,14 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
+import {OktaLogin} from "../../../Shared/OktaLogin"
 
 let CQLLibraryName = ''
 let updatedCQLLibraryName = ''
 let model = 'QI-Core v4.1.1'
 let CQLLibraryPublisher = 'SemanticBits'
 let CqlLibraryTwo = ''
-let harpUser = Environment.credentials().harpUser
+let harpUser = Environment.credentials().harpUserALT
 
 describe('Edit CQL Library', () => {
 
@@ -220,6 +221,11 @@ describe('Edit CQL Library', () => {
     it('Verify non Library owner unable to Edit CQL Library', () => {
 
         updatedCQLLibraryName = 'UpdatedCQLLibrary' + Date.now()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.AltLogin()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookieALT()
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId2').should('exist').then((cqlLibraryId2) => {

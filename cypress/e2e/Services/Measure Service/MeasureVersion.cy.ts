@@ -6,10 +6,12 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
+import {OktaLogin} from "../../../Shared/OktaLogin";
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let harpUser = Environment.credentials().harpUser
+let harpUserALT = Environment.credentials().harpUserALT
 let measureTwo = 'MeasureTwo' + Date.now()
 let cqlLibraryTwo = 'LibraryTwo' + Date.now()
 let testCaseTitle = 'FAIL'
@@ -74,13 +76,6 @@ describe('Measure Versioning', () => {
 
     })
 
-    after('Clean up', () => {
-
-        //Delete second Measure
-        Utilities.deleteMeasure(measureTwo, cqlLibraryTwo, true, true)
-
-    })
-
     it('Successful Measure Versioning', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -103,6 +98,12 @@ describe('Measure Versioning', () => {
 
     it('Non Measure owner unable to version Measure', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.AltLogin()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookieALT()
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId2').should('exist').then((measureId2) => {
                 cy.request({
@@ -114,7 +115,7 @@ describe('Measure Versioning', () => {
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(403)
-                    expect(response.body.message).to.include('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId2)
+                    expect(response.body.message).to.include('User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId2)
                 })
             })
         })

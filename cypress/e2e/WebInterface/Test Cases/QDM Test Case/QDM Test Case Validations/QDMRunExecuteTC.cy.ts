@@ -692,7 +692,7 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
 
     })
 
-    it.only('Non Measure owner should be able to Run/Execute Test case', () => {
+    it('Non Measure owner should be able to Run/Execute Test case', () => {
 
         OktaLogin.Login()
         //Click on Edit Measure

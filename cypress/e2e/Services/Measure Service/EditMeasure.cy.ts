@@ -3,9 +3,10 @@ import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { Environment } from "../../../Shared/Environment"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
+import {OktaLogin} from "../../../Shared/OktaLogin";
 
 let measureName = 'TestMeasure' + Date.now()
-let harpUser = Environment.credentials().harpUser
+let harpUser = Environment.credentials().harpUserALT
 let cqlLibraryName = 'TestCql' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let updatedMeasureName = ''
@@ -563,21 +564,18 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        //Create second Measure with Alt User
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + '2', cqlLibraryName + '2', measureCQL, false, true)
+        //Create Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + '2', cqlLibraryName + '2', measureCQL)
+
+    })
+
+    it('Attempt to add Meta Data Risk Adjustment to the measure, when the user is not the owner', () => {
+
         cy.clearCookies()
         cy.clearLocalStorage()
-
-        cy.setAccessTokenCookie()
-
-    })
-
-    afterEach('Clean up', () => {
-
-        Utilities.deleteMeasure(measureName + '2', cqlLibraryName + '2', false, true)
-
-    })
-    it('Attempt to add Meta Data Risk Adjustment to the measure, when the user is not the owner', () => {
+        OktaLogin.AltLogin()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookieALT()
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {

@@ -2,6 +2,7 @@ import {MeasureCQL} from "../../../Shared/MeasureCQL"
 import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
 import {Utilities} from "../../../Shared/Utilities"
 import {Environment} from "../../../Shared/Environment"
+import {OktaLogin} from "../../../Shared/OktaLogin";
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -19,6 +20,12 @@ describe('Measure Transfer Service', () => {
     })
 
     afterEach('Clean up', () => {
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.AltLogin()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookieALT()
 
         Utilities.deleteMeasure(measureName, cqlLibraryName, false, true)
 
@@ -47,14 +54,17 @@ describe('Measure Transfer Service', () => {
 
 describe('Measure Transfer Validations', () => {
 
-    beforeEach('Create Measure and Set Access Token', () => {
+    beforeEach('Set Access Token Cookie', () => {
 
         cy.setAccessTokenCookie()
+    })
+
+    before('Create Measure', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
     })
 
-    afterEach('Clean up', () => {
+    after('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, cqlLibraryName)
 

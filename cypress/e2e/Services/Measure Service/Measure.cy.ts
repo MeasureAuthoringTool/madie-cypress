@@ -725,6 +725,7 @@ describe('Measure Service: Update Delete Flag', () => {
 
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.AltLogin()
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
 
