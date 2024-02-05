@@ -1342,6 +1342,47 @@ export class MeasureCQL {
         'define "October 1 Two Years Prior to the Measurement Period":\n' +
         '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)'
 
+    public static readonly QDMHightlightingTabDefUsed_CQL = 'library DemoQDMMeasure version \'0.0.000\'\n' +
+        'using QDM version \'5.6\'\n' +
+        '// include TestMATGlobal version \'1.0.000\' called Global\n' +
+        '\n' +
+        'codesystem "SNOMEDCT": \'urn:oid:2.16.840.1.113883.6.96\'\n' +
+        'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
+        'valueset "Admit Inpatient": \'urn:oid:2.16.840.1.113762.1.4.1111.164\'\n' +
+        'code "Dead (finding)": \'419099009\' from "SNOMEDCT" display \'Dead (finding)\'\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+        'context Patient\n' +
+        '\n' +
+        'define "Initial Population":\n' +
+        '  "Qualifying Encounters"\n' +
+        '  \n' +
+        'define "Denominator":\n' +
+        '  "Initial Population" \n' +
+        'define "Numerator":\n' +
+        '  "Qualifying Encounters" Enc\n' +
+        '    where Enc.lengthOfStay > 1 day\n' +
+        '// single line comment\n' +
+        '\n' +
+        'define "Qualifying Encounters":\n' +
+        '  ["Encounter, Performed": "Encounter Inpatient"] Encounter\n' +
+        '    where Encounter.relevantPeriod ends during "Measurement Period"\n' +
+        '    \n' +
+        '/**\n' +
+        ' * Test comment 1\n' +
+        ' * another comment.\n' +
+        ' */\n' +
+        '\n' +
+        'define function "Denominator Observations"(QualifyingEncounter "Encounter, Performed"):\n' +
+        '  duration in days of QualifyingEncounter.relevantPeriod\n' +
+        '  \n' +
+        'define "Unused Encounters":\n' +
+        '  ["Encounter, Performed": "Encounter Inpatient"] Encounter\n' +
+        '    where Encounter.relevantPeriod ends during "Measurement Period"  \n' +
+        '    \n' +
+        'define "Denominator Exclusion":\n' +
+        '   ["Encounter, Performed": "Admit Inpatient"] Encounter\n' +
+        '    where Encounter.relevantPeriod ends during "Measurement Period"'
+
     public static readonly QDMHighlightingTab_CQL = 'library HighlightingQDM version \'0.0.000\'\n' +
 
         'using QDM version \'5.6\'\n' +
