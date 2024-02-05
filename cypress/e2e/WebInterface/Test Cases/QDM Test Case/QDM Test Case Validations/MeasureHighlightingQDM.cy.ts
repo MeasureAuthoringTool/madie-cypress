@@ -56,7 +56,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes valida
 
     })
 
-    it.only('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs -- "Definitions Used" is present', () => {
+    it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs -- "Definitions Used" is present', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measurePath = 'cypress/fixtures/measureId'
         OktaLogin.Login()
