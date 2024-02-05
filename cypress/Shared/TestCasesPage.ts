@@ -142,6 +142,7 @@ export class TestCasesPage {
 
     //misc test case page objects
     public static readonly tcGroupCoverageHighlighting = '[data-testid="group-coverage-nav-"]'
+    public static readonly qdmTCHighlightingDU = '[data-testid="definitions-used-section"]'
     public static readonly tcIPHighlightingDetails = '[data-testid="IP-highlighting"]'
     public static readonly tcHLCollapseResultBtn = '[data-testid="ExpandLessIcon"]'
     public static readonly tcHLExpandResultBtn = '[data-testid="ExpandMoreIcon"]'
