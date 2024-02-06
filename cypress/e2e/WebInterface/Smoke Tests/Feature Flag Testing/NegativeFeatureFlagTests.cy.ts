@@ -608,3 +608,39 @@ describe('QDM: Measure Definition (Terms) Should not exist', () => {
 
     })
 })
+
+//"enableQdmRepeatTransfer" : true
+describe('QDM: Measure Version option Should not exist', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = 'TestMeasure' + Date.now() + randValue
+    let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+
+    beforeEach('Create Measure, add Cohort group and Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
+        OktaLogin.Login()
+
+    })
+
+    afterEach('Logout and cleanup', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('Measure Version option should not exist for QDM Draft Measures', () => {
+
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
+            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid="measure-action-' + fileContents + '"]', 100000)
+            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.enabled').wait(10000)
+            cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
+            cy.get('[data-testid="create-version-measure-' + fileContents + '"]').should('not.exist')
+        })
+
+    })
+})
