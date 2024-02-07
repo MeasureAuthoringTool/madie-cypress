@@ -7,6 +7,7 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import {Utilities} from "../../../../Shared/Utilities"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -33,9 +34,10 @@ describe('Measure Versioning', () => {
         OktaLogin.Login()
     })
 
-    after('Logout', () => {
+    after('Logout and cleanup', () => {
 
         OktaLogin.Logout()
+        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
 
     })
 
