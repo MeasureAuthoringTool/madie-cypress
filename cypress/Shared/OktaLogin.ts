@@ -14,7 +14,7 @@ export class OktaLogin {
         sessionStorage.clear()
         cy.clearCookies()
         cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        cy.setAccessTokenCookieALT()
         cy.wait(1000)
 
         cy.visit('/login', { onBeforeLoad: (win) => { win.sessionStorage.clear() } })
@@ -54,6 +54,7 @@ export class OktaLogin {
         sessionStorage.clear()
         cy.clearCookies()
         cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
 
         cy.visit('/login', { onBeforeLoad: (win) => { win.sessionStorage.clear() } })
 

@@ -3,6 +3,7 @@ import { LandingPage } from "./LandingPage"
 import { MeasuresPage } from "./MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "./Utilities"
+import { OktaLogin } from ".././Shared/OktaLogin"
 
 export class CreateMeasurePage {
 
@@ -322,10 +323,18 @@ export class CreateMeasurePage {
         }
 
         if (altUser) {
+            sessionStorage.clear()
+            cy.clearCookies().wait(3000)
+            cy.clearLocalStorage().wait(3000)
+            OktaLogin.AltLogin()
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
         }
         else {
+            sessionStorage.clear()
+            cy.clearCookies().wait(3000)
+            cy.clearLocalStorage().wait(3000)
+            OktaLogin.Login()
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
         }
@@ -333,7 +342,6 @@ export class CreateMeasurePage {
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
-                failOnStatusCode: false,
                 url: '/api/measure',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value
@@ -391,6 +399,7 @@ export class CreateMeasurePage {
 
             })
         })
+        cy.log(user)
         return user
     }
 
