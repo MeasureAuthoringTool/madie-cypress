@@ -30,42 +30,46 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
 
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        sessionStorage.clear()
+        cy.clearCookies().wait(3000)
+        cy.clearLocalStorage().wait(3000)
+        OktaLogin.Login()
+        cy.setAccessTokenCookie().wait(3000)
+        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, false, false)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        CreateMeasurePage.CreateQDMMeasureAPI(altMeasureName, altCqlLibraryName, measureCQL, true, true)
+        cy.wait(3000)
+        sessionStorage.clear()
+        cy.clearCookies().wait(3000)
+        cy.clearLocalStorage().wait(3000)
         OktaLogin.AltLogin()
-        cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.wait(3000)
+        cy.setAccessTokenCookieALT().wait(3000)
+        OktaLogin.AltLogin()
+        cy.wait(3000)
+        CreateMeasurePage.CreateQDMMeasureAPI(altMeasureName, altCqlLibraryName, measureCQL, true, true)
+        cy.wait(3000)
+        sessionStorage.clear()
+        cy.clearCookies().wait(3000)
+        cy.clearLocalStorage().wait(3000)
+        OktaLogin.AltLogin()
         MeasuresPage.measureAction("edit", true)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(3000)
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.wait(1000)
-        OktaLogin.Logout()
-
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.wait(1000)
+        sessionStorage.clear()
+        cy.clearCookies().wait(3000)
+        cy.clearLocalStorage().wait(3000)
         OktaLogin.Login()
 
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
-        OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
