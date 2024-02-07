@@ -10,8 +10,7 @@ let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
-//Skipping until feature flag is removed
-describe.skip('QDM Measure Definition(Terms)', () => {
+describe('QDM Measure Definition(Terms)', () => {
 
        beforeEach('Create Measure, add Cohort group and Login', () => {
 
@@ -70,8 +69,7 @@ describe.skip('QDM Measure Definition(Terms)', () => {
     })
 })
 
-//Skipping until feature flag is removed
-describe.skip('QDM Measure Definition ownership validation', () => {
+describe('QDM Measure Definition ownership validation', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
@@ -90,7 +88,7 @@ describe.skip('QDM Measure Definition ownership validation', () => {
 
     })
 
-    it('Non Measure owner unable to add Measure References', () => {
+    it('Non Measure owner unable to add Measure Definition', () => {
 
         cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
         cy.reload()
