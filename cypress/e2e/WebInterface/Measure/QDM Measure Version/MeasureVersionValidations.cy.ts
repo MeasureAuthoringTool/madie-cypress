@@ -11,6 +11,7 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
+let versionMeasureCQL = MeasureCQL.simpleQDM_CQL
 
 
 let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
@@ -121,6 +122,29 @@ describe('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersioningErrorMsg).should('contain.text', 'Requested measure cannot be versioned')
         cy.get(MeasuresPage.measureVersionHelperText).should('contain.text', 'Please include valid CQL in the CQL editor to version before versioning this measure')
 
+    })
+
+    it('Error message on popup screen when the confirmed version number does not match new version number', () => {
+
+        cy.get(Header.measures).click().wait(2000)
+        MeasuresPage.measureAction('edit')
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(versionMeasureCQL)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+
+        cy.get(Header.measures).click()
+        MeasuresPage.measureAction('version')
+
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
+        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('3.0.000')
+        cy.get('[id="current-version"]').eq(0).click()
+        cy.get('[data-testid="confirm-version-helper-text"]').should('contain.text', 'Confirmed Version number must match new version number.')
     })
 })
 

@@ -29,6 +29,8 @@ export class MeasuresPage {
     public static readonly createDraftContinueBtn = '[data-testid="create-draft-continue-button"]'
     public static readonly measureVersionTypeDropdown = '[id="version-type"]'
     public static readonly measureVersionMajor = '[data-testid="major-option"]'
+    public static readonly measureVersionMinor = '[data-testid="minor-option"]'
+    public static readonly measureVersionPatch = '[data-testid="patch-option"]'
     public static readonly confirmMeasureVersionNumber = '[data-testid="confirm-version-input"]'
     public static readonly measureVersionContinueBtn = '[data-testid="create-version-continue-button"]'
     public static readonly measureVersionSuccessMsg = '[data-testid="success-toast"]'
