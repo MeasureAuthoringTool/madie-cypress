@@ -579,7 +579,7 @@ describe('QDM: Measure Reference Should not exist', () => {
     })
 })
 
-//"qdmMeasureDefinitions" : false
+//"qdmMeasureDefinitions" : true
 describe('QDM: Measure Definition (Terms) Should not exist', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -604,7 +604,8 @@ describe('QDM: Measure Definition (Terms) Should not exist', () => {
     it('QDM Measure Definition (Terms) button should not exist', () => {
 
         MeasuresPage.measureAction('edit')
-        cy.get('[data-testid="leftPanelQDMMeasureDefinitions"]').should('not.exist')
+        cy.get(EditMeasurePage.leftPanelDefinition).click()
+        cy.get(EditMeasurePage.addDefinitionButton).should('be.enabled')
 
     })
 })
