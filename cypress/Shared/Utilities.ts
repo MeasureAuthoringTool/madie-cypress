@@ -3,6 +3,9 @@ import { Header } from "./Header"
 import { MeasureGroupPage } from "./MeasureGroupPage"
 import { CQLLibraryPage } from "./CQLLibraryPage"
 import { v4 as uuidv4 } from 'uuid'
+import {Environment} from "./Environment"
+
+let deleteMeasureAdminAPIKey = Environment.credentials().deleteMeasureAdmin_API_Key
 
 export class Utilities {
 
@@ -103,6 +106,64 @@ export class Utilities {
 
                             expect(response.status).to.eql(200)
                             cy.log('Measure Deleted Successfully')
+                        })
+                    })
+                })
+            })
+        })
+    }
+
+    public static deleteVersionedMeasure(measureName: string, cqlLibraryName: string, deleteSecondMeasure?: boolean, altUser?: boolean): void {
+
+        let path = 'cypress/fixtures/measureId'
+        let versionIdPath = 'cypress/fixtures/versionId'
+        let measureSetIdPath = 'cypress/fixtures/measureSetId'
+        const now = require('dayjs')
+        let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
+        let mpEndDate = now().format('YYYY-MM-DD')
+        let ecqmTitle = 'eCQMTitle'
+
+        if (altUser) {
+            cy.setAccessTokenCookieALT()
+        }
+        else {
+            cy.setAccessTokenCookie()
+        }
+
+        if (deleteSecondMeasure) {
+            path = 'cypress/fixtures/measureId2'
+            versionIdPath = 'cypress/fixtures/versionId2'
+            measureSetIdPath = 'cypress/fixtures/measureSetId2'
+        }
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(path).should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.readFile(measureSetIdPath).should('exist').then((measureSetId) => {
+                        cy.request({
+                            url: '/api/admin/measures/' + id,
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: 'Bearer ' + accessToken.value,
+                                'api-key': deleteMeasureAdminAPIKey
+                            },
+                            body: {
+                                "id": id,
+                                "measureName": measureName,
+                                "cqlLibraryName": cqlLibraryName,
+                                "model": 'QI-Core v4.1.1',
+                                "versionId": vId,
+                                "measureSetId": measureSetId,
+                                "ecqmTitle": ecqmTitle,
+                                "measurementPeriodStart": mpStartDate,
+                                "measurementPeriodEnd": mpEndDate,
+                                "active": true
+                            }
+                        }).then((response) => {
+                            console.log(response)
+
+                            expect(response.status).to.eql(200)
+                            cy.log('Versioned Measure Deleted Successfully')
                         })
                     })
                 })
