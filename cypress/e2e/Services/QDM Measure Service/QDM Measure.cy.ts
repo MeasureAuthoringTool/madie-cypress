@@ -1,6 +1,7 @@
 import {Utilities} from "../../../Shared/Utilities"
 import {Environment} from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
+import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
 
 let measureName = ''
 let CQLLibraryName = ''
@@ -163,5 +164,57 @@ describe('Measure Service: QDM Measure', () => {
 
         })
 
+    })
+})
+
+describe('QDM Measure: Transmission format', () => {
+
+    measureName = 'QDMMeasure' + Date.now() + randValue
+    CQLLibraryName = 'TestCql' + Date.now() + randValue
+
+    beforeEach('Create Measure and Set Access Token', () => {
+
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CQLLibraryName)
+        cy.setAccessTokenCookie()
+    })
+
+    afterEach('Delete Measure', () => {
+
+        Utilities.deleteMeasure(measureName, CQLLibraryName)
+    })
+
+    it('Add Transmission format to the QDM Measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            "id": id,
+                            "measureName": measureName,
+                            "cqlLibraryName": CQLLibraryName,
+                            "model": QDMModel,
+                            "version": "0.0.000",
+                            "measureScoring": "Ratio",
+                            "versionId": vId,
+                            "measureMetaData": {"draft": true, "transmissionFormat": "Test Transmission format"},
+                            "measureSetId": uuidv4(),
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body.measureMetaData.transmissionFormat).to.eql('Test Transmission format')
+                        cy.log('Transmission Format added successfully')
+                    })
+                })
+            })
+        })
     })
 })
