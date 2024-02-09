@@ -40,6 +40,7 @@ export class EditMeasurePage {
     public static readonly leftPanelRiskAdjustment = '[data-testid="leftPanelMeasureRiskAdjustment"]'
     public static readonly leftPanelReference = '[data-testid="leftPanelMeasureReferences"]'
     public static readonly leftPanelDefinition = '[data-testid="leftPanelQDMMeasureDefinitions"]'
+    public static readonly leftPanelTransmissionFormat = '[data-testid="leftPanelMeasureTransmissionFormat"]'
 
     //References page
     public static readonly addReferenceButton = '[data-testid="create-reference-button"]'
@@ -57,6 +58,9 @@ export class EditMeasurePage {
     public static readonly definitionInputTextbox = '[data-testid="qdm-measure-definition"]'
     public static readonly measureDefinitionTable = '[id="measure-meta-data-table"]'
     public static readonly editMeasureDefinition = '[class="qpp-c-button qpp-c-button--outline-secondary"]'
+
+    //Transmission Format page
+    public static readonly transmissionFormatDescription = '[data-testid="measure-transmission-format"]'
 
     //Measure CQL Page
     //warnings / errors in CQL that appear at the top of page
