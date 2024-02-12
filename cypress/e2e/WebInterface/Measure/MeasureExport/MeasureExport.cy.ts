@@ -76,7 +76,7 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     'define "Denom":\n' +
     'true'
 
-describe.skip('QI-Core Measure Export', () => {
+describe('QI-Core Measure Export', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -95,8 +95,9 @@ describe.skip('QI-Core Measure Export', () => {
 
         MeasuresPage.measureAction('version')
 
-        cy.get(MeasuresPage.measureVersionMajor).should('exist')
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -123,15 +124,30 @@ describe.skip('QI-Core Measure Export', () => {
             })
 
         //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v1.0.000-FHIR.html' &&
-            'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json')
 
-        // cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v1.0.000-FHIR.html' &&
-        //     'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json' && 'FHIRHelpers-4.1.000.cql' && 'CQMCommon-1.0.000.cql' && 'FHIRCommon-4.1.000.cql'
-        //     && 'QICoreCommon-1.2.000.cql' && 'SupplementalDataElements-3.1.000.cql' && measureName+'-1.0.000.cql' && 'CQMCommon-1.0.000.xml'
-        //     && 'CQMCommon-1.0.000.json' && 'FHIRCommon-4.1.000.xml' && 'FHIRCommon-4.1.000.json' && 'FHIRHelpers-4.1.000.xml' && 'FHIRHelpers-4.1.000.json'
-        //     && 'QICoreCommon-1.2.000.xml' && 'QICoreCommon-1.2.000.json' && 'SupplementalDataElements-3.1.000.xml' && 'SupplementalDataElements-3.1.000.json'
-        //     && measureName+'-1.0.000.xml' && measureName+'-1.0.000.json')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR.html')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR.json'), null).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR.xml')).should('exist')
+
+        cy.readFile(path.join(downloadsFolder, 'cql/CQMCommon-1.0.000.cql')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'cql/FHIRCommon-4.1.000.cql')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'cql/FHIRHelpers-4.1.000.cql')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'cql/QICoreCommon-1.2.000.cql')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'cql/SupplementalDataElements-3.1.000.cql')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'cql/'+CqlLibraryName+'-1.0.000.cql')).should('exist')
+
+        cy.readFile(path.join(downloadsFolder, 'resources/CQMCommon-1.0.000.json'), null).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/CQMCommon-1.0.000.xml')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/FHIRCommon-4.1.000.json'), null).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/FHIRCommon-4.1.000.xml')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/FHIRHelpers-4.1.000.json'), null).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/FHIRHelpers-4.1.000.xml')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/QICoreCommon-1.2.000.json'), null).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/QICoreCommon-1.2.000.xml')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/SupplementalDataElements-3.1.000.json'), null).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/SupplementalDataElements-3.1.000.xml')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/'+CqlLibraryName+'-1.0.000.json'), null).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/'+CqlLibraryName+'-1.0.000.xml')).should('exist')
 
     })
 
@@ -155,8 +171,9 @@ describe.skip('QDM Measure Export', () => {
 
         MeasuresPage.measureAction('version')
 
-        cy.get(MeasuresPage.measureVersionMajor).should('exist')
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -168,7 +185,7 @@ describe.skip('QDM Measure Export', () => {
 
         MeasuresPage.measureAction('qdmexport')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-QDM5.zip'), { timeout: 500000 }).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
         OktaLogin.Logout()
@@ -177,21 +194,19 @@ describe.skip('QDM Measure Export', () => {
     it('Unzip the downloaded file and verify file types for QDM Measure', () => {
 
         // unzipping the Measure Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle-v1.0.000-QDM5.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle-v1.0.000-QDM.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
 
-        //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-QDM5.zip')).should('contain', 'MATGlobalCommonFunctionsQDM-1.0.000.json' &&
-            'MATGlobalCommonFunctionsQDM-1.0.000.xml' && 'RatioListQDMPositiveEncounterPerformedWithMO1697030589521-0.0.000.json' && 'RatioListQDMPositiveEncounterPerformedWithMO1697030589521-0.0.000.xml')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-QDM.html')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'cql/MATGlobalCommonFunctionsQDM-1.0.000.cql')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'cql/RatioListQDMPositiveEncounterPerformedWithMO1697030589521-0.0.000.cql')).should('exist')
 
-        // cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v1.0.000-FHIR.html' &&
-        //     'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json' && 'FHIRHelpers-4.1.000.cql' && 'CQMCommon-1.0.000.cql' && 'FHIRCommon-4.1.000.cql'
-        //     && 'QICoreCommon-1.2.000.cql' && 'SupplementalDataElements-3.1.000.cql' && measureName+'-1.0.000.cql' && 'CQMCommon-1.0.000.xml'
-        //     && 'CQMCommon-1.0.000.json' && 'FHIRCommon-4.1.000.xml' && 'FHIRCommon-4.1.000.json' && 'FHIRHelpers-4.1.000.xml' && 'FHIRHelpers-4.1.000.json'
-        //     && 'QICoreCommon-1.2.000.xml' && 'QICoreCommon-1.2.000.json' && 'SupplementalDataElements-3.1.000.xml' && 'SupplementalDataElements-3.1.000.json'
-        //     && measureName+'-1.0.000.xml' && measureName+'-1.0.000.json')
+        cy.readFile(path.join(downloadsFolder, 'resources/MATGlobalCommonFunctionsQDM-1.0.000.json'), null).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/MATGlobalCommonFunctionsQDM-1.0.000.xml')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/RatioListQDMPositiveEncounterPerformedWithMO1697030589521-0.0.000.json'), null).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'resources/RatioListQDMPositiveEncounterPerformedWithMO1697030589521-0.0.000.xml')).should('exist')
 
     })
 
