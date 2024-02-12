@@ -327,7 +327,9 @@ export class CreateMeasurePage {
             cy.clearCookies().wait(3000)
             cy.clearLocalStorage().wait(3000)
             OktaLogin.AltLogin()
+            cy.wait(5000)
             cy.setAccessTokenCookieALT()
+            cy.wait(5000)
             user = Environment.credentials().harpUserALT
         }
         else {
@@ -335,7 +337,9 @@ export class CreateMeasurePage {
             cy.clearCookies().wait(3000)
             cy.clearLocalStorage().wait(3000)
             OktaLogin.Login()
+            cy.wait(5000)
             cy.setAccessTokenCookie()
+            cy.wait(5000)
             user = Environment.credentials().harpUser
         }
 
