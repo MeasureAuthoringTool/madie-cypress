@@ -396,7 +396,7 @@ describe('Run QDM Test cases with Observation and Stratification', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCQLLibraryName, measureCQLWithMOAndStrat, false, false,
-         '2025-01-01', '2025-12-31')
+            '2025-01-01', '2025-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
 
         OktaLogin.Login()
@@ -407,7 +407,7 @@ describe('Run QDM Test cases with Observation and Stratification', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
 
-   })
+    })
 
     it('Able to run QDM Test cases with Observation and Stratification', () => {
 
@@ -517,7 +517,7 @@ describe('QDM Test case Highlighting tab: Should show pass/Fail Highlighting', (
 
     after('Clean up', () => {
 
-       Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
     })
 
     it('QDM Test case Highlighting tab: Should show pass/Fail Highlighting', () => {
