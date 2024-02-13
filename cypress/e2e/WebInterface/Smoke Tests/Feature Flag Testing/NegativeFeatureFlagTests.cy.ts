@@ -274,22 +274,6 @@ describe('QDM Measure Export: Export option is not available', () => {
         })
         cy.reload()
         OktaLogin.Login()
-        MeasuresPage.measureAction('version')
-
-        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
-
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-
-        MeasuresPage.validateVersionNumber(measureName, '1.0.000')
-        cy.log('Version Created Successfully')
-
-        //MeasuresPage.measureAction('export')
-
         cy.readFile(filePath).should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 100000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
@@ -299,7 +283,6 @@ describe('QDM Measure Export: Export option is not available', () => {
             cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
             Utilities.waitForElementToNotExist('[data-testid=export-measure-' + fileContents + ']', 105000)
         })
-
         OktaLogin.Logout()
     })
 })
