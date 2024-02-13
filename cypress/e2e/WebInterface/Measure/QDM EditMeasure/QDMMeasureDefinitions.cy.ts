@@ -10,7 +10,8 @@ let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
-describe('QDM Measure Definition(Terms)', () => {
+//Skipping until feature flag is removed
+describe.skip('QDM Measure Definition(Terms)', () => {
 
        beforeEach('Create Measure, add Cohort group and Login', () => {
 
@@ -69,7 +70,8 @@ describe('QDM Measure Definition(Terms)', () => {
     })
 })
 
-describe('QDM Measure Definition ownership validation', () => {
+//Skipping until feature flag is removed
+describe.skip('QDM Measure Definition ownership validation', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
