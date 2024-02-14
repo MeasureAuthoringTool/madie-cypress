@@ -259,7 +259,7 @@ describe('Validate Measure Group deletion functionality', () => {
     })
 })
 
-describe.only('Ownership test when deleting groups', () => {
+describe('Ownership test when deleting groups', () => {
     beforeEach('Create measure(s), group(s), test case(s), and login', () => {
         randValue = (Math.floor((Math.random() * 1000) + 1))
         newCqlLibraryName = CqlLibraryName1 + randValue
