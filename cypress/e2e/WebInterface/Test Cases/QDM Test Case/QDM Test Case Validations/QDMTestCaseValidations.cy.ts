@@ -130,7 +130,7 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(altMeasureName, altCqlLibraryName, false, true)
 
     })

@@ -85,7 +85,7 @@ describe.skip('QDM Measure Definition ownership validation', () => {
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
@@ -99,11 +99,6 @@ describe.skip('QDM Measure Definition ownership validation', () => {
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelDefinition).click()
         cy.get(EditMeasurePage.addDefinitionButton).should('not.be.enabled')
-
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
-        cy.log('Log out successful')
 
     })
 })

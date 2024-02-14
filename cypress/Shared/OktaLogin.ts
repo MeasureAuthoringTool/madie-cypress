@@ -1,6 +1,7 @@
 import { Environment } from "./Environment"
 import { LandingPage } from "./LandingPage"
 import { umlsLoginForm } from "./umlsLoginForm"
+import {Header} from "./Header";
 
 //MADiE OKTA Login Class
 export class OktaLogin {
@@ -115,4 +116,10 @@ export class OktaLogin {
         // cy.log('Logout Successful')
     }
 
+    public static UILogout(): void {
+
+        cy.get(Header.userProfileSelect).click()
+        cy.get(Header.userProfileSelectSignOutOption).click({ force: true }).wait(1000)
+        cy.log('Log out successful')
+    }
 }

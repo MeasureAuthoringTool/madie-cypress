@@ -44,7 +44,7 @@ describe('QI-Core : Delete All Test Cases', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newCqlLibraryName = CqlLibraryName + randValue
@@ -116,10 +116,6 @@ describe('QI-Core : Delete All Test Cases', () => {
         //Delete All Testcases button should be disabled when there are no Test cases
         cy.get(TestCasesPage.deleteAllTestCasesBtn).should('be.disabled')
 
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({force: true}).wait(1000)
-        cy.log('Log out successful')
     })
 
     it('Non owner of the Measure unable to delete all QI-Core Test Cases', () => {
@@ -139,11 +135,6 @@ describe('QI-Core : Delete All Test Cases', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.deleteAllTestCasesBtn).should('be.disabled')
-
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({force: true}).wait(1000)
-        cy.log('Log out successful')
 
     })
 })
@@ -165,7 +156,7 @@ describe('QDM : Delete All Test Cases', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newCqlLibraryName = CqlLibraryName + randValue
@@ -237,11 +228,6 @@ describe('QDM : Delete All Test Cases', () => {
         //Delete All Testcases button should be disabled when there are no Test cases
         cy.get(TestCasesPage.deleteAllTestCasesBtn).should('be.disabled')
 
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({force: true}).wait(1000)
-        cy.log('Log out successful')
-
     })
 
     it('Non owner of the Measure unable to delete Test Cases', () => {
@@ -261,11 +247,6 @@ describe('QDM : Delete All Test Cases', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.deleteAllTestCasesBtn).should('be.disabled')
-
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({force: true}).wait(1000)
-        cy.log('Log out successful')
 
     })
 })
