@@ -38,10 +38,13 @@ describe('Measure Sharing', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
     })
 
-    afterEach('Clean up', () => {
+    afterEach('Log out and Clean up', () => {
 
+        //Log Out
+        cy.get('[data-testid="user-profile-select"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
+        cy.log('Log out successful')
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-        OktaLogin.Logout()
     })
 
     it('Verify shared Measure is viewable under My Measures tab', () => {
@@ -168,6 +171,7 @@ describe('Measure Sharing - Multiple instances', () => {
     afterEach('LogOut', () => {
 
         OktaLogin.Logout()
+
     })
 
     it('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
@@ -238,10 +242,13 @@ describe('Delete Test Case with Shared user', () => {
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
     })
 
-    afterEach('Clean up', () => {
+    afterEach('Log out and Clean up', () => {
 
+        //Log Out
+        cy.get('[data-testid="user-profile-select"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
+        cy.log('Log out successful')
         Utilities.deleteMeasure(measureName, cqlLibraryName)
-        OktaLogin.Logout()
     })
 
     it('Verify Test Case can be deleted by the shared user', () => {

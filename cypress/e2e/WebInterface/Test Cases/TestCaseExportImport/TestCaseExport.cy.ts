@@ -33,7 +33,10 @@ describe('QI-Core Single Test Case Export', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        //Log Out
+        cy.get('[data-testid="user-profile-select"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
+        cy.log('Log out successful')
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newCqlLibraryName = CqlLibraryName + randValue
@@ -86,7 +89,6 @@ describe('QI-Core Single Test Case Export', () => {
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
 
         MeasuresPage.measureAction("edit")
 
@@ -110,8 +112,6 @@ describe('QI-Core Single Test Case Export', () => {
         })
 
     })
-
-
 })
 
 describe('QI-Core Test Case Export for all test cases', () => {
@@ -178,7 +178,6 @@ describe('QI-Core Test Case Export for all test cases', () => {
             cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('contain', 'eCQMTitle-v0.0.000-SBTestSeries2-Title for Auto Test2.json' &&
                 patientId2)
         })
-
     })
 
     it('Non-owner of Measure: Export All QI-Core Test cases', () => {
@@ -219,6 +218,12 @@ describe('QI-Core Test Case Export for all test cases', () => {
             cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('contain', 'eCQMTitle-v0.0.000-SBTestSeries2-Title for Auto Test2.json' &&
                 patientId2)
         })
+        cy.reload()
+        Utilities.waitForElementVisible('[data-testid="user-profile-select"]', 60000)
 
+        //Log Out
+        cy.get('[data-testid="user-profile-select"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
+        cy.log('Log out successful')
     })
 })

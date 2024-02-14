@@ -259,7 +259,7 @@ describe('Validate Measure Group deletion functionality', () => {
     })
 })
 
-describe('Ownership test when deleting groups', () => {
+describe.only('Ownership test when deleting groups', () => {
     beforeEach('Create measure(s), group(s), test case(s), and login', () => {
         randValue = (Math.floor((Math.random() * 1000) + 1))
         newCqlLibraryName = CqlLibraryName1 + randValue
@@ -272,9 +272,13 @@ describe('Ownership test when deleting groups', () => {
         OktaLogin.Login()
     })
 
-    afterEach('Logout', () => {
+    afterEach('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        //Log out
+        cy.get('[data-testid="user-profile-select"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
+        cy.log('Log out successful')
+
         Utilities.deleteMeasure(measureTwo, newCqlLibraryName + "second", true, true)
 
     })

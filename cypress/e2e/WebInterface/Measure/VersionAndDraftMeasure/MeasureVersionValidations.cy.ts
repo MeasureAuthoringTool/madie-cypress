@@ -209,7 +209,7 @@ describe('Non Measure owner unable to create Version', () => {
 
         //Log out
         cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click()
+        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
         cy.log('Log out successful')
 
     })
