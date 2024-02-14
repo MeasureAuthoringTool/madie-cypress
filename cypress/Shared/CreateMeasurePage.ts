@@ -423,10 +423,18 @@ export class CreateMeasurePage {
         }
 
         if (altUser) {
+            cy.clearCookies()
+            cy.clearLocalStorage()
+            OktaLogin.AltLogin()
+            cy.wait(5000)
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
         }
         else {
+            cy.clearCookies()
+            cy.clearLocalStorage()
+            OktaLogin.Login()
+            cy.wait(5000)
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
         }

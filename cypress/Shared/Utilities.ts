@@ -3,7 +3,8 @@ import { Header } from "./Header"
 import { MeasureGroupPage } from "./MeasureGroupPage"
 import { CQLLibraryPage } from "./CQLLibraryPage"
 import { v4 as uuidv4 } from 'uuid'
-import {Environment} from "./Environment"
+import { Environment } from "./Environment"
+import { OktaLogin } from ".././Shared/OktaLogin"
 
 let deleteMeasureAdminAPIKey = Environment.credentials().deleteMeasureAdmin_API_Key
 
@@ -74,9 +75,17 @@ export class Utilities {
         let ecqmTitle = 'eCQMTitle'
 
         if (altUser) {
+            cy.clearCookies()
+            cy.clearLocalStorage()
+            OktaLogin.AltLogin()
+            cy.wait(5000)
             cy.setAccessTokenCookieALT()
         }
         else {
+            cy.clearCookies()
+            cy.clearLocalStorage()
+            OktaLogin.Login()
+            cy.wait(5000)
             cy.setAccessTokenCookie()
         }
 
