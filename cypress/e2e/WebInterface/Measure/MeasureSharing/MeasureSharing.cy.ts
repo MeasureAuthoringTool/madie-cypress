@@ -40,10 +40,7 @@ describe('Measure Sharing', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        //Log Out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
-        cy.log('Log out successful')
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
@@ -244,10 +241,7 @@ describe('Delete Test Case with Shared user', () => {
 
     afterEach('Log out and Clean up', () => {
 
-        //Log Out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
-        cy.log('Log out successful')
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
 

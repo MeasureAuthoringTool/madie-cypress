@@ -274,10 +274,7 @@ describe('Ownership test when deleting groups', () => {
 
     afterEach('Logout and Clean up', () => {
 
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
-        cy.log('Log out successful')
+        OktaLogin.UILogout()
 
         Utilities.deleteMeasure(measureTwo, newCqlLibraryName + "second", true, true)
 

@@ -57,7 +57,8 @@ describe('Test Case Import: functionality tests', () => {
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        OktaLogin.Logout()
+
+        OktaLogin.UILogout()
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
@@ -163,11 +164,6 @@ describe('Test Case Import: functionality tests', () => {
         //confirm modal window is no longer present
         //wait until select / drag and drop modal no longer appears
         Utilities.waitForElementToNotExist(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
-
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
-        cy.log('Log out successful')
     })
 
     it('Measure is not owned by nor shared with user: import button is not available', () => {

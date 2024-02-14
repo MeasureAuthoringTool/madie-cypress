@@ -33,10 +33,7 @@ describe('QI-Core Single Test Case Export', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        //Log Out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
-        cy.log('Log out successful')
+        OktaLogin.UILogout()
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newCqlLibraryName = CqlLibraryName + randValue
@@ -221,9 +218,6 @@ describe('QI-Core Test Case Export for all test cases', () => {
         cy.reload()
         Utilities.waitForElementVisible('[data-testid="user-profile-select"]', 60000)
 
-        //Log Out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
-        cy.log('Log out successful')
+        OktaLogin.UILogout()
     })
 })
