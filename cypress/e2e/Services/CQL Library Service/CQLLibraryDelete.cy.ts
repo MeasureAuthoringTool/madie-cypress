@@ -1,7 +1,7 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Environment } from "../../../Shared/Environment"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import {OktaLogin} from "../../../Shared/OktaLogin"
+import { OktaLogin } from "../../../Shared/OktaLogin"
 
 let CQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -15,6 +15,10 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
 
         CQLLibraryName = 'TestCqlLibrary' + Date.now()
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         //Create CQL Library with Regular User
@@ -26,6 +30,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.wait(1000)
@@ -49,8 +54,10 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
 
         cy.clearCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the measure
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
+        //set local user that does not own the measure
         cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
@@ -69,6 +76,8 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
     it('Delete test Case - Draft Library - user has had the Library transferred to them', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
@@ -91,6 +100,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.wait(1000)
@@ -111,6 +121,8 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
     it('Delete CQL Library - Versioned Library - user does not own nor has Library been shared with user', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
@@ -134,6 +146,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.wait(1000)
@@ -156,6 +169,8 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
     it('Delete CQL Library - Versioned Library - user is the owner of the Library', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
@@ -178,6 +193,8 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         })
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
@@ -200,6 +217,8 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
     it('Delete test Case - Versioned Library - user has had the Library transferred to them', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
@@ -222,6 +241,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.wait(1000)
@@ -244,6 +264,8 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         })
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.AltLogin()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.wait(1000)

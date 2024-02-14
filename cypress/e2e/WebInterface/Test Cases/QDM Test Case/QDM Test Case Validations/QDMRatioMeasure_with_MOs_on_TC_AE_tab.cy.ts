@@ -250,6 +250,11 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
     beforeEach('Create Measure', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
+        cy.setAccessTokenCookie()
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringValue, false, measureCQL, false, false,
             '2023-01-01', '2024-01-01')
@@ -443,7 +448,10 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         OktaLogin.Logout()
 
         //log into MADiE as a different user
+        cy.clearCookies()
+        cy.clearLocalStorage()
         OktaLogin.AltLogin()
+        cy.wait(5000)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
 

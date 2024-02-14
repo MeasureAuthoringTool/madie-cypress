@@ -276,6 +276,8 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
 
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         //Create New Measure
@@ -304,6 +306,8 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
 
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
@@ -333,6 +337,7 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
+        cy.wait(5000)
         cy.setAccessTokenCookieALT()
 
         //Edit created Test Case
@@ -369,12 +374,16 @@ describe('Test Case population values based on Measure Group population definiti
 
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
 
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
@@ -433,6 +442,8 @@ describe('Test Case population values based on Measure Group population definiti
 
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -520,6 +531,8 @@ describe('Test Case population values based on Measure Group population definiti
 
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
         cy.wait(1000)
 
@@ -602,6 +615,8 @@ describe('Test Case population values based on Measure Group population definiti
 
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -792,6 +807,10 @@ describe('Measure Service: Test Case Endpoints', () => {
     let randValue = (Math.floor((Math.random() * 2000) + 3))
     let cqlLibraryNameDeux = cqlLibraryName + randValue + 2
     beforeEach('Create Measure, group, and test case', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         //Create New Measure
@@ -1052,6 +1071,10 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
 
     before('Create Measure', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         measureName = 'TestMeasure' + Date.now()
@@ -1194,6 +1217,10 @@ describe('Test Case Json Validations', () => {
 
     before('Create Measure', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         measureName = 'TestMeasure' + Date.now()
@@ -1333,6 +1360,10 @@ describe('Measure Service: Test Case Endpoint: Authentication', () => {
 
     before('Create Measure', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         measureName = 'TestMeasure' + Date.now()
@@ -1382,7 +1413,8 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
     beforeEach('Create Measure and measure group', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
-
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
@@ -1495,7 +1527,10 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
 describe('Duplicate Test Case Title and Group validations', () => {
 
     beforeEach('Create Measure, Test case', () => {
-
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
@@ -1537,6 +1572,11 @@ describe('Duplicate Test Case Title and Group validations', () => {
 
     it('Edit Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
+        cy.setAccessTokenCookie()
         //Create second Test case
         TestCasesPage.CreateTestCaseAPI('SecondTCTitle', 'SecondTCSeries', 'SecondTCDescription', null, false, true)
 
