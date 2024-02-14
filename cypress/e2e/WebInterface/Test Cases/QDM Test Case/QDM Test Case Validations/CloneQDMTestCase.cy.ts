@@ -35,7 +35,7 @@ describe('Clone QDM Test Case', () => {
 
     after('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
@@ -79,9 +79,5 @@ describe('Clone QDM Test Case', () => {
             cy.get('[data-testid=view-edit-test-case-' + tcId + ']').click()
         })
 
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({force: true}).wait(1000)
-        cy.log('Log out successful')
     })
 })

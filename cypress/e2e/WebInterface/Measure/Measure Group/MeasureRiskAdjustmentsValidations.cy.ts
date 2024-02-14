@@ -6,7 +6,6 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
-import { LandingPage } from "../../../../Shared/LandingPage"
 
 let measureNameTimeStamp = 'TestMeasure' + Date.now()
 let measureName = measureNameTimeStamp
@@ -64,11 +63,11 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
 
 describe('Validations between Risk Adjustments with the CQL definitions', () => {
 
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = measureName + randValue
+    let newCqlLibraryName = CqlLibraryName + randValue
 
     beforeEach('Create New Measure and Login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newMeasureName = measureName + randValue
-        let newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
@@ -82,6 +81,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
     afterEach('Log out', () => {
 
         OktaLogin.Logout()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
     it('Removing definition related to the RA alerts user.', () => {
         cy.get(Header.measures).click()
@@ -301,7 +301,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
 
         //confirm the values in the RA fields
-        cy.get(MeasureGroupPage.riskAdjDropDown).should('contain.text', 'Definition Denom+1​')
+        cy.get(MeasureGroupPage.riskAdjDropDown).should('contain.text', 'DefinitionDenom+1')
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('contain.text', 'Initial Population Description')
 
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
@@ -318,7 +318,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
 
         //confirm the values in the RA fields
-        cy.get(MeasureGroupPage.riskAdjDropDown).should('contain.text', 'Definition Num')
+        cy.get(MeasureGroupPage.riskAdjDropDown).should('contain.text', 'DefinitionNum')
 
     })
 })

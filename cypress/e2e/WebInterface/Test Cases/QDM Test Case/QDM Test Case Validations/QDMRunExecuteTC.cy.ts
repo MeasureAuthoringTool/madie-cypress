@@ -728,7 +728,7 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
@@ -776,11 +776,6 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled').wait(1000)
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
         //cy.get('[class="toast success"]').should('contain.text', 'Calculation was successful, output is printed in the console')
-
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click()
-        cy.log('Log out successful')
 
     })
 })

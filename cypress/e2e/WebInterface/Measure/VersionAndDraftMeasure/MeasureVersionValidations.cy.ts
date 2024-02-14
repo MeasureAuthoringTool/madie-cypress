@@ -182,7 +182,7 @@ describe('Non Measure owner unable to create Version', () => {
 
     after('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
 
     })
@@ -206,11 +206,6 @@ describe('Non Measure owner unable to create Version', () => {
             cy.get('[data-testid=create-version-measure-' + fileContents + ']').should('not.exist')
             cy.get('[data-testid="view-measure-' + fileContents + '"]').click()
         })
-
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click()
-        cy.log('Log out successful')
 
     })
 })
