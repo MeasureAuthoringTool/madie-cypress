@@ -1,7 +1,7 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
-import {OktaLogin} from "../../../Shared/OktaLogin"
+import { OktaLogin } from "../../../Shared/OktaLogin"
 
 let CQLLibraryName = ''
 let updatedCQLLibraryName = ''
@@ -15,7 +15,8 @@ describe('Edit CQL Library', () => {
     before('Create Measure', () => {
 
         CQLLibraryName = 'TestCqlLibrary' + Date.now()
-
+        cy.clearCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
         //Create CQL Library with Regular User
@@ -28,7 +29,8 @@ describe('Edit CQL Library', () => {
     })
 
     beforeEach('Set Access Token', () => {
-
+        cy.clearCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
     })
@@ -224,6 +226,7 @@ describe('Edit CQL Library', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
 

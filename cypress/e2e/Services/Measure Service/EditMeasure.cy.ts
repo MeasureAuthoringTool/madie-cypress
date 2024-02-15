@@ -3,7 +3,7 @@ import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { Environment } from "../../../Shared/Environment"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
-import {OktaLogin} from "../../../Shared/OktaLogin";
+import { OktaLogin } from "../../../Shared/OktaLogin";
 
 let measureName = 'TestMeasure' + Date.now()
 let harpUser = Environment.credentials().harpUserALT
@@ -576,7 +576,7 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
         OktaLogin.AltLogin()
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
-
+        cy.wait(5000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {

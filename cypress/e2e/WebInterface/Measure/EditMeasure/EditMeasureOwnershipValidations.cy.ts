@@ -36,9 +36,10 @@ describe('Read only for measure, measure group, and test cases that user does no
         OktaLogin.Login()
     })
 
-    afterEach('Logout', () => {
+    afterEach('Logout and clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
+
         Utilities.deleteMeasure(measureName, cqlLibraryName, false, true)
 
     })
@@ -58,7 +59,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(LandingPage.allMeasuresTab).click()
         cy.reload()
 
-        //edit the measure that was not created by logged in user
+        //edit the measure that was not created by logged-in user
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
 

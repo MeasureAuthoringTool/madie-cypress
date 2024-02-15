@@ -62,7 +62,7 @@ describe('Delete Measure ownership validation', () => {
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureTwo, CqlLibraryTwo)
     })
 
@@ -78,11 +78,6 @@ describe('Delete Measure ownership validation', () => {
 
         //Delete Measure Button should not be visible for non owner of the Measure
         cy.get(EditMeasurePage.deleteMeasureButton).should('not.be.enabled')
-
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({force: true}).wait(1000)
-        cy.log('Log out successful')
 
     })
 })

@@ -122,18 +122,19 @@ describe('Test case Coverage tab', () => {
         cy.get(TestCasesPage.testCaseListCoveragePercTab).click()
 
         //validate PC sections
-        cy.get(TestCasesPage.tcCoverageTabList).should('include.text', 'IP')
-        cy.get(TestCasesPage.tcCoverageTabList).should('include.text', 'DENOM')
-        cy.get(TestCasesPage.tcCoverageTabList).should('include.text', 'DENEX')
-        cy.get(TestCasesPage.tcCoverageTabList).should('include.text', 'NUMER')
-        cy.get(TestCasesPage.tcCoverageTabList).should('include.text', 'Used')
-        cy.get(TestCasesPage.tcCoverageTabList).should('include.text', 'Functions')
-        cy.get(TestCasesPage.tcCoverageTabList).should('include.text', 'Unused')
+        Utilities.waitForElementVisible(TestCasesPage.tcCoverageTabIPpop, 3000)
+        Utilities.waitForElementVisible(TestCasesPage.tcCoverageTabDenompop, 3000)
+        Utilities.waitForElementVisible(TestCasesPage.tcCoverageTabDenomExcludepop, 3000)
+        Utilities.waitForElementVisible(TestCasesPage.tcCoverageTabNumpop, 3000)
+        Utilities.waitForElementVisible(TestCasesPage.tcCoverageTabUsedDef, 3000)
+        Utilities.waitForElementVisible(TestCasesPage.tcCoverageTabFunctsDef, 3000)
+        Utilities.waitForElementVisible(TestCasesPage.tcCoverageTabUnusedDef, 3000)
+
 
         //validate that contents are, initially, viewable of a section
         cy.get(TestCasesPage.tcCoverageContent).should('have.attr', 'style', 'max-height: 0px;')
-        cy.get(TestCasesPage.tcCoverageSections).wait(2500).first().wait(2500).find('[class="accordion-title"]').should('include.text', 'IP').wait(2500).click()
-        cy.get(TestCasesPage.tcCoverageContent).should('have.attr', 'style', 'max-height: 113px;')
+        cy.get(TestCasesPage.tcCoverageSections).wait(2500).first().wait(2500).find('[class="accordion-title"]').should('include.text', 'Initial Population').wait(2500).click()
+        cy.get(TestCasesPage.tcCoverageContent).should('have.attr', 'style', 'max-height: 140px;')
     })
 })
 
@@ -142,7 +143,11 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
-
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
+        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQL)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
@@ -154,6 +159,11 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
+        cy.setAccessTokenCookie()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23'/*'Initial Population'*/)
 
     })
@@ -170,6 +180,11 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
     it('Run / Execute single passing Test Case', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
+        cy.setAccessTokenCookie()
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
         OktaLogin.Login()
 
@@ -437,6 +452,11 @@ describe('Run / Execute QDM Test Case button validations', () => {
     beforeEach('Login and Create Measure', () => {
 
         CqlLibraryName = 'QDMTestLibrary2' + Date.now()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
+        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true)
         OktaLogin.Login()
@@ -586,6 +606,11 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
     beforeEach('Create Measure, Measure group and login', () => {
 
         CqlLibraryName = 'QDMTestLibrary5' + Date.now()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
+        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQL)
         OktaLogin.Login()
@@ -598,6 +623,11 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
+        cy.setAccessTokenCookie()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
         OktaLogin.Login()
 
@@ -670,6 +700,12 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
 
         CqlLibraryName = 'QDMTestLibrary2' + Date.now()
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
+        cy.setAccessTokenCookie()
+
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQL)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
@@ -681,13 +717,18 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
+        cy.setAccessTokenCookie()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries)
     })
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
@@ -712,7 +753,11 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         OktaLogin.Logout()
 
         //Login as ALT User
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.wait(5000)
         OktaLogin.AltLogin()
+        cy.wait(5000)
 
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
@@ -731,11 +776,6 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled').wait(1000)
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
         //cy.get('[class="toast success"]').should('contain.text', 'Calculation was successful, output is printed in the console')
-
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click()
-        cy.log('Log out successful')
 
     })
 })

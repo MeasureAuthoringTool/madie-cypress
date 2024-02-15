@@ -1,7 +1,7 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
-import {OktaLogin} from "../../../Shared/OktaLogin";
+import { OktaLogin } from "../../../Shared/OktaLogin";
 
 let CqlLibraryOne = ''
 let CqlLibraryTwo = ''
@@ -14,7 +14,8 @@ let CQLLibraryPublisher = 'SemanticBits'
 describe('Version and Draft CQL Library', () => {
 
     beforeEach('Set Access Token', () => {
-
+        cy.clearCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
     })
 
@@ -132,6 +133,7 @@ describe('Version and Draft CQL Library', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.getCookie('accessToken').then((accessToken) => {

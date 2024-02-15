@@ -4,7 +4,7 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { Utilities } from "../../../Shared/Utilities"
 import { Environment } from "../../../Shared/Environment"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import {OktaLogin} from "../../../Shared/OktaLogin"
+import { OktaLogin } from "../../../Shared/OktaLogin"
 
 let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
@@ -65,6 +65,7 @@ describe('Delete test Case: Older end point / url that takes id and title in the
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.wait(1000)

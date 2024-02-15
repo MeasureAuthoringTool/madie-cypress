@@ -56,7 +56,8 @@ let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\
     'define "Denominator": \'\'\n' +
     '\t  "Initial Population"'
 
-describe('Measure Versioning validations', () => {
+//skipping due to QDM versioning is not yet supposed to be available for production
+describe.skip('Measure Versioning validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -148,7 +149,8 @@ describe('Measure Versioning validations', () => {
     })
 })
 
-describe('Non Measure owner unable to create Version', () => {
+//skipping due to QDM versioning is not yet supposed to be available for production
+describe.skip('Non Measure owner unable to create Version', () => {
 
     before('Create Measure with regular user and Login as Alt user', () => {
 
@@ -178,7 +180,7 @@ describe('Non Measure owner unable to create Version', () => {
 
     after('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
 
     })
@@ -203,11 +205,5 @@ describe('Non Measure owner unable to create Version', () => {
             cy.get('[data-testid=create-version-measure-' + fileContents + ']').should('not.exist')
             cy.get('[data-testid="view-measure-' + fileContents + '"]').click()
         })
-
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click()
-        cy.log('Log out successful')
-
     })
 })

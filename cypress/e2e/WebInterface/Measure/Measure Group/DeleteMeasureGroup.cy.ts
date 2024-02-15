@@ -272,9 +272,10 @@ describe('Ownership test when deleting groups', () => {
         OktaLogin.Login()
     })
 
-    afterEach('Logout', () => {
+    afterEach('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
+
         Utilities.deleteMeasure(measureTwo, newCqlLibraryName + "second", true, true)
 
     })

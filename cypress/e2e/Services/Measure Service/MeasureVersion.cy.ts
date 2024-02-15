@@ -6,7 +6,7 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
-import {OktaLogin} from "../../../Shared/OktaLogin";
+import { OktaLogin } from "../../../Shared/OktaLogin";
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -59,7 +59,10 @@ let measureCQL_WithParsingAndVSACErrors = 'library APICQLLibrary35455 version \'
 describe('Measure Versioning', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
-
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
 
     })
@@ -68,9 +71,18 @@ describe('Measure Versioning', () => {
 
         newMeasureName = measureName + 1 + randValue
         newCQLLibraryName = cqlLibraryName + 1 + randValue
-
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
+        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.AltLogin()
+        cy.wait(5000)
+        cy.setAccessTokenCookieALT()
         //Create second Measure with Alt User
         CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, cqlLibraryTwo, measureCQL, true, true)
 
@@ -130,6 +142,10 @@ describe('Version Measure without CQL', () => {
         newMeasureName = measureName + 2 + randValue
         newCQLLibraryName = cqlLibraryName + 2 + randValue
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName)
     })
@@ -167,6 +183,10 @@ describe('Version Measure with invalid CQL', () => {
         newMeasureName = measureName + 3 + randValue
         newCQLLibraryName = cqlLibraryName + 3 + randValue
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         //Create New Measure
@@ -236,6 +256,10 @@ describe('Version Measure with invalid test case Json', () => {
         newMeasureName = measureName + 4 + randValue
         newCQLLibraryName = cqlLibraryName + 4 + randValue
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, invalidTestCaseJson)
@@ -268,6 +292,11 @@ describe('Edit validations for versioned Measure', () => {
         newMeasureName = measureName + 5 + randValue
         newCQLLibraryName = cqlLibraryName + 5 + randValue
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
+        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL_ProportionMeasure)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Qualifying Encounters', 'Qualifying Encounters', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
@@ -277,6 +306,8 @@ describe('Edit validations for versioned Measure', () => {
 
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
     })
@@ -406,6 +437,11 @@ describe('Delete validations for versioned Measure', () => {
         newMeasureName = measureName + 6 + randValue
         newCQLLibraryName = cqlLibraryName + 6 + randValue
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
+        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL_ProportionMeasure)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Qualifying Encounters', 'Qualifying Encounters', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
@@ -415,6 +451,8 @@ describe('Delete validations for versioned Measure', () => {
 
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
     })

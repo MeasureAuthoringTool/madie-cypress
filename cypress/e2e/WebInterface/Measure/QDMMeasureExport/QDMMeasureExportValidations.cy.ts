@@ -15,8 +15,8 @@ let newCqlLibraryName = ''
 const now = require('dayjs')
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
-
-describe('Error Message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
+// QDM Export is not supposed to be available for PROD -- therefore, skipping these tests
+describe.skip('Error Message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
 
     before('Create New Measure and Login', () => {
 

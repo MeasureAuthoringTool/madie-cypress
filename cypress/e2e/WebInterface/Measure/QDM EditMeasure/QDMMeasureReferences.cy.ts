@@ -77,7 +77,7 @@ describe.skip('QDM Measure Reference ownership validation', () => {
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
@@ -91,11 +91,6 @@ describe.skip('QDM Measure Reference ownership validation', () => {
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelReference).click()
         cy.get(EditMeasurePage.addReferenceButton).should('not.be.enabled')
-
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
-        cy.log('Log out successful')
 
     })
 })

@@ -69,7 +69,7 @@ describe('QDM Measure: Transmission format ownership validation', () => {
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
@@ -83,11 +83,6 @@ describe('QDM Measure: Transmission format ownership validation', () => {
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelTransmissionFormat).click()
         cy.get(EditMeasurePage.transmissionFormatDescription).should('not.be.enabled')
-
-        //Log out
-        cy.get('[data-testid="user-profile-select"]').click()
-        cy.get('[data-testid="user-profile-logout-option"]').click({ force: true }).wait(1000)
-        cy.log('Log out successful')
 
     })
 })

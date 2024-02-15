@@ -297,8 +297,8 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCqlLibraryName = CqlLibraryName + randValue
 
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-        OktaLogin.Logout()
 
     })
 
