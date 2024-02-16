@@ -211,3 +211,43 @@ describe('Verify Measure Id and Version Id', () => {
         cy.get(EditMeasurePage.versionId).should('have.attr', 'readonly', 'readonly')
     })
 })
+
+describe('Generate CMS ID', () => {
+
+    before('Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
+            '2012-01-02', '2013-01-01')
+
+        OktaLogin.Login()
+
+    })
+
+    after('Log out and Clean up', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+    it('Verify that the CMS ID can be generated successfully', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        cy.get(EditMeasurePage.generateCmsIdButton).should('exist')
+        cy.get(EditMeasurePage.generateCmsIdButton).should('be.enabled')
+
+        cy.get(EditMeasurePage.cmsIdInput).should('not.exist')
+
+        cy.get(EditMeasurePage.generateCmsIdButton).click()
+
+        cy.get(EditMeasurePage.cmsIdInput).should('exist')
+        cy.get(EditMeasurePage.cmsIdInput).invoke('val').then(val => {
+            expect(val).to.contain('FHIR')
+        })
+
+        cy.log('CMS ID Generated successfully')
+
+    })
+})
