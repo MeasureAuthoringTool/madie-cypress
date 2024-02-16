@@ -606,11 +606,6 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
     beforeEach('Create Measure, Measure group and login', () => {
 
         CqlLibraryName = 'QDMTestLibrary5' + Date.now()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        OktaLogin.Login()
-        cy.wait(5000)
-        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQL)
         OktaLogin.Login()
@@ -622,12 +617,6 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        OktaLogin.Login()
-        cy.wait(5000)
-        cy.setAccessTokenCookie()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
         OktaLogin.Login()
 
@@ -672,19 +661,15 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.expectedOrActualTab).click()
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).click()
         //save dob value
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(3000)
+        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 60000)
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
 
-        //Click on Execute Test Case button on Edit Test Case page
+        //Click on Execute Test Case button on Test Case list page and verify status for multiple populations
         cy.get(EditMeasurePage.testCasesTab).should('exist')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).wait(7000).click()
-        cy.get(TestCasesPage.executeTestCaseButton).should('exist')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).focus()
-        cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
-        cy.get(TestCasesPage.executeTestCaseButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 60000)
+        cy.get(EditMeasurePage.testCasesTab).click()
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 60000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Fail')
 
