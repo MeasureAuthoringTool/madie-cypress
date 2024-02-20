@@ -10,12 +10,9 @@ let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let harpUser = Environment.credentials().harpUser
 let harpUserALT = Environment.credentials().harpUserALT
-let measureTwo = 'MeasureTwo' + Date.now()
-let cqlLibraryTwo = 'LibraryTwo' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCQLLibraryName = ''
-const now = require('dayjs')
 
 let measureCQL = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
     'using QDM version \'5.6\'\n' +
@@ -86,18 +83,10 @@ let measureCQL_WithParsingAndVSACErrors = 'library APICQLLibrary35455 version \'
 
 describe('Measure Versioning', () => {
 
-    beforeEach('Create Measure and Set Access Token', () => {
-
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
-    })
+    newMeasureName = measureName + 1 + randValue
+    newCQLLibraryName = cqlLibraryName + 1 + randValue
 
     before('Create Measure', () => {
-
-        newMeasureName = measureName + 1 + randValue
-        newCQLLibraryName = cqlLibraryName + 1 + randValue
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true, measureCQL)
         OktaLogin.Login()
@@ -107,21 +96,17 @@ describe('Measure Versioning', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-
-        //Create second Measure with Alt User
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureTwo, cqlLibraryTwo, 'Cohort', true, measureCQL, true, true)
-        OktaLogin.Login()
-        MeasuresPage.measureAction("edit"), true
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
     })
+
+    after('Clean up', () => {
+
+        Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
+    })
+
 
     it('Successful Measure Versioning', () => {
 
@@ -142,6 +127,18 @@ describe('Measure Versioning', () => {
             })
         })
     })
+})
+
+describe('Measure Version : Non Measure owner validation', () => {
+
+    before('Create Measure', () => {
+
+        newMeasureName = measureName + 5 + randValue
+        newCQLLibraryName = cqlLibraryName + 5 + randValue
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true, measureCQL)
+
+    })
 
     it('Non Measure owner unable to version Measure', () => {
 
@@ -152,17 +149,17 @@ describe('Measure Versioning', () => {
         cy.setAccessTokenCookieALT()
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId2').should('exist').then((measureId2) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + measureId2 + '/version?versionType=major',
+                    url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(403)
-                    expect(response.body.message).to.eql('User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId2)
+                    expect(response.body.message).to.eql('User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId)
                 })
             })
         })
