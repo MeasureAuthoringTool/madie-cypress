@@ -158,6 +158,17 @@ describe('Create and Update QDM Test Case', () => {
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.testCaseTitle).should('contain.value', updatedTestCaseTitle)
         cy.get(TestCasesPage.testCaseDescriptionTextBox).should('contain.value', updatedTestCaseDescription)
+
+        //verify the view only CQL tab is present as well as the object that contains the CQL
+        cy.get(TestCasesPage.meassureCQLVOTab).scrollIntoView()
+        Utilities.waitForElementVisible(TestCasesPage.meassureCQLVOTab, 3000)
+        cy.get(TestCasesPage.meassureCQLVOTab).click()
+
+        cy.get(TestCasesPage.voTCCQLobject).scrollIntoView()
+        Utilities.waitForElementVisible(TestCasesPage.voTCCQLobject, 3000)
+        cy.get(TestCasesPage.voTCCQLobject).click()
+
+        cy.get(TestCasesPage.voTCCQLEditor).should('have.attr', 'readonly', 'readonly')
     })
 
     it('Add Test Case Expected values for Boolean Measure', () => {
