@@ -105,7 +105,7 @@ describe('Create and Update QDM Test Case', () => {
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        //Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
 
