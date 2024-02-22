@@ -8,6 +8,7 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import {Header} from "../../../../Shared/Header";
 
 let measureName = 'TestMeasure' + Date.now()
 let filePath = 'cypress/fixtures/measureId'
@@ -170,7 +171,7 @@ describe('QI Core Test Cases: Ensure / verify that Export QI-Core Bundle type dr
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
@@ -193,14 +194,12 @@ describe('QI Core Test Cases: Ensure / verify that Export QI-Core Bundle type dr
         cy.get('[data-testid=export-transaction-bundle]').should('be.visible')
         cy.get('[data-testid="export-collection-bundle"]').should('be.visible')
 
+        cy.reload()
     })
 })
 
 // "importTestCases": false
 describe('Test Case Import button - BONNIE: verify that the BONNIE import button is not available', () => {
-
-    deleteDownloadsFolderBeforeAll()
-    deleteDownloadsFolderBeforeEach()
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
@@ -209,28 +208,19 @@ describe('Test Case Import button - BONNIE: verify that the BONNIE import button
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
-        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
+        //TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
 
-
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
-        OktaLogin.Logout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
 
     it('Test Case Import button - BONNIE: verify that the BONNIE import button is not available', () => {
-        OktaLogin.Login()
 
         MeasuresPage.measureAction("edit")
 
@@ -242,48 +232,40 @@ describe('Test Case Import button - BONNIE: verify that the BONNIE import button
 
 
     })
-
 })
 
 // "qdmExport": false
 describe('QDM Measure Export: Export option is not available', () => {
-
-    deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, false, measureCQL)
         //create Measure Group
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population',
-            'boolean')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'boolean')
         OktaLogin.Login()
 
     })
 
+    after('Logout and cleanup', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+
+
     it('QDM Measure Export: Export option for measure is not available', () => {
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 100000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 100000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled').wait(10000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
-            cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
-            Utilities.waitForElementToNotExist('[data-testid=export-measure-' + fileContents + ']', 105000)
-        })
+            cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
+            cy.get('[data-testid="view-measure-' + fileContents + '"]').should('be.visible')
+            cy.get('[data-testid="export-measure-' + fileContents + '"]').should('not.exist')
+
         cy.reload()
-        OktaLogin.Login()
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 100000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 100000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled').wait(10000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
-            cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
-            Utilities.waitForElementToNotExist('[data-testid=export-measure-' + fileContents + ']', 105000)
+        Utilities.waitForElementVisible(Header.userProfileSelect, 60000)
         })
-        OktaLogin.Logout()
+
     })
 })
 
@@ -310,7 +292,7 @@ describe('QI Core: Elements tab is not present', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
 
     })
 
@@ -322,8 +304,9 @@ describe('QI Core: Elements tab is not present', () => {
 
     })
 
-    after('Clean up', () => {
+    after('Log out and Clean up', () => {
 
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
 
     })
@@ -386,8 +369,9 @@ describe('Run QDM Test cases with Observation and Stratification', () => {
 
     })
 
-    after('Clean up', () => {
+    after('Log out and Clean up', () => {
 
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
 
     })
@@ -490,7 +474,7 @@ describe('QDM Test case Highlighting tab: Should show pass/Fail Highlighting', (
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
             'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         //create Measure Group
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         //create test case
@@ -498,8 +482,9 @@ describe('QDM Test case Highlighting tab: Should show pass/Fail Highlighting', (
         OktaLogin.Login()
     })
 
-    after('Clean up', () => {
+    after('Log out and Clean up', () => {
 
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
     })
 
@@ -532,7 +517,7 @@ describe('QDM Test case Highlighting tab: Should show pass/Fail Highlighting', (
     })
 })
 
-//"qdmMeasureReferences" : false
+//"qdmMeasureReferences" : true
 describe('QDM: Measure Reference Should not exist', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -549,7 +534,7 @@ describe('QDM: Measure Reference Should not exist', () => {
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
@@ -557,12 +542,12 @@ describe('QDM: Measure Reference Should not exist', () => {
     it('QDM Measure Reference button should not exist', () => {
 
         MeasuresPage.measureAction('edit')
-        cy.get(EditMeasurePage.leftPanelReference).should('not.exist')
+        cy.get(EditMeasurePage.leftPanelReference).should('be.visible')
 
     })
 })
 
-//"qdmMeasureDefinitions" : true
+//"qdmMeasureDefinitions" : false
 describe('QDM: Measure Definition (Terms) Should not exist', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -579,7 +564,7 @@ describe('QDM: Measure Definition (Terms) Should not exist', () => {
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
@@ -587,8 +572,7 @@ describe('QDM: Measure Definition (Terms) Should not exist', () => {
     it('QDM Measure Definition (Terms) button should not exist', () => {
 
         MeasuresPage.measureAction('edit')
-        cy.get(EditMeasurePage.leftPanelDefinition).click()
-        cy.get(EditMeasurePage.addDefinitionButton).should('be.enabled')
+        cy.get(EditMeasurePage.leftPanelDefinition).should('not.exist')
 
     })
 })
@@ -610,7 +594,7 @@ describe('QDM: Measure Version option Should not exist', () => {
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
@@ -625,6 +609,38 @@ describe('QDM: Measure Version option Should not exist', () => {
             cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
             cy.get('[data-testid="create-version-measure-' + fileContents + '"]').should('not.exist')
         })
+       cy.reload()
+        Utilities.waitForElementVisible(Header.userProfileSelect, 60000)
+    })
+})
+
+//"generateCMSID": true
+describe('QDM: Generate CMS ID', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = 'TestMeasure' + Date.now() + randValue
+    let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+
+    before('Create Measure and Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
+        OktaLogin.Login()
+
+    })
+
+    after('Logout and cleanup', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('CMS Id generation for QDM Measure', () => {
+
+        MeasuresPage.measureAction('edit')
+        cy.get(EditMeasurePage.generateCmsIdButton).click()
+        cy.get(EditMeasurePage.cmsIdInput).should('exist')
 
     })
 })
