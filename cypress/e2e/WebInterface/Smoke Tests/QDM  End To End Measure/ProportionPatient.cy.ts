@@ -132,8 +132,7 @@ let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     'define "October 1 Two Years Prior to the Measurement Period":\n' +
     '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)'
 
-//Bug ticket created MAT-6798
-describe.skip('Measure Creation: Proportion Patient Based', () => {
+describe('Measure Creation: Proportion Patient Based', () => {
 
     before('Create Measure', () => {
 

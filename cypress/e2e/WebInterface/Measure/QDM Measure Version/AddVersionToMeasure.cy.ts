@@ -18,7 +18,8 @@ let testCaseDescription = 'Description' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.QDMTestCaseJson
 
-describe('Measure Versioning', () => {
+//Skipping until QDM Measure version feature flag is removed
+describe.skip('Measure Versioning', () => {
 
     beforeEach('Create Measure and Login', () => {
 
