@@ -301,6 +301,11 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
         cy.setAccessTokenCookie()
 
     })
+    afterEach('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+
+    })
 
     it('Attempt to enter valid Test Case Json that contains DOB, Gender, Race, and Ethnicity data, when the measure has not been shared with the user', () => {
 
@@ -1409,6 +1414,7 @@ describe('Measure Service: Test Case Endpoint: Authentication', () => {
         })
     })
 })
+
 describe('Measure Service: Test Case Endpoint: User validation with test case import', () => {
     beforeEach('Create Measure and measure group', () => {
         cy.clearCookies()
@@ -1477,6 +1483,11 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
 
     })
 
+    afterEach('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+
+    })
     it('Non-owner or non-shared user cannot hit the end point to add test cases to a measure', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
