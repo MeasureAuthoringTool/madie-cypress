@@ -642,6 +642,7 @@ export class TestCasesPage {
             cy.get('[data-testid=select-action-' + tcId + ']').click()
             cy.get('[data-testid=view-edit-test-case-' + tcId + ']').should('be.visible')
             cy.get('[data-testid=view-edit-test-case-' + tcId + ']').should('be.enabled')
+            cy.get('[data-testid=view-edit-test-case-' + tcId + ']').scrollIntoView()
             cy.get('[data-testid=view-edit-test-case-' + tcId + ']').click()
         })
 
