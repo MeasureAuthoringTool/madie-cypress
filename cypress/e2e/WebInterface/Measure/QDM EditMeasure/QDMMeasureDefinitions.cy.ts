@@ -4,6 +4,7 @@ import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
 import {Utilities} from "../../../../Shared/Utilities"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
+import {Global} from "../../../../Shared/Global"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
@@ -11,7 +12,7 @@ let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
 //Skipping until feature flag is removed
-describe.skip('QDM Measure Definition(Terms)', () => {
+describe.skip('QDM Measure Definition', () => {
 
        beforeEach('Create Measure, add Cohort group and Login', () => {
 
@@ -30,28 +31,14 @@ describe.skip('QDM Measure Definition(Terms)', () => {
 
     })
 
-    it('Add and Edit QDM Measure Definition(Terms)', () => {
+    it('Add QDM Measure Definitions', () => {
 
         MeasuresPage.measureAction('edit')
 
-        //Add Definition
         cy.get(EditMeasurePage.leftPanelDefinition).click()
-        cy.get(EditMeasurePage.addDefinitionButton).click()
-        cy.get(EditMeasurePage.termInputTextbox).type('Term')
         cy.get(EditMeasurePage.definitionInputTextbox).type('Measure Definition')
-        cy.get(EditMeasurePage.saveButton).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Definition Saved Successfully')
-        cy.get(EditMeasurePage.measureDefinitionTable).should('contain.text', 'Term')
-        cy.get(EditMeasurePage.measureDefinitionTable).should('contain.text', 'Measure Definition')
-
-        //Edit Definition
-        cy.get(EditMeasurePage.editMeasureDefinition).click()
-        cy.get(EditMeasurePage.termInputTextbox).clear().type('New Term')
-        cy.get(EditMeasurePage.definitionInputTextbox).clear().type('New Measure Definition')
-        cy.get(EditMeasurePage.saveButton).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Definition Saved Successfully')
-        cy.get(EditMeasurePage.measureDefinitionTable).should('contain.text', 'New Term')
-        cy.get(EditMeasurePage.measureDefinitionTable).should('contain.text', 'New Measure Definition')
+        cy.get(EditMeasurePage.saveMeasureDefinition).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Definition Information Saved Successfully')
 
     })
 
@@ -61,12 +48,10 @@ describe.skip('QDM Measure Definition(Terms)', () => {
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelDefinition).click()
-        cy.get(EditMeasurePage.addDefinitionButton).click()
-        cy.get('[data-testid="dialog-form"]').should('exist')
-        cy.get(EditMeasurePage.termInputTextbox).type('Term')
         cy.get(EditMeasurePage.definitionInputTextbox).type('Measure Definition')
-        cy.get(EditMeasurePage.measureReferenceDiscardChanges).click()
-        cy.get('[data-testid="dialog-form"]').should('not.exist')
+        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
+        Global.clickOnDiscardChanges()
+
     })
 })
 
@@ -98,7 +83,7 @@ describe.skip('QDM Measure Definition ownership validation', () => {
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelDefinition).click()
-        cy.get(EditMeasurePage.addDefinitionButton).should('not.be.enabled')
+        cy.get(EditMeasurePage.definitionInputTextbox).should('have.attr', 'readonly')
 
     })
 })
