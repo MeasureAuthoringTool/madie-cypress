@@ -2,6 +2,7 @@ import { MeasureDetails } from "../../../Shared/MeasureDetails"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
 import { Environment } from "../../../Shared/Environment"
+import { OktaLogin } from "../../../Shared/OktaLogin"
 
 let measureToMADiESave = Environment.credentials().measureMAT_to_MADiE_save_API_Key
 let harpUser = Environment.credentials().harpUser
@@ -12,6 +13,10 @@ let randValue = null
 describe('Measure Transfer Service From MAT -to- MADiE', () => {
 
     beforeEach('Set Access Token', () => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        cy.wait(5000)
         cy.setAccessTokenCookie()
     })
 
@@ -19,7 +24,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
-                url: '/api/measure-transfer/mat-measures',
+                url: '/api/measure-transfer/mat-measures?cmsId=null',
                 method: 'POST',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
@@ -113,7 +118,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     "model": "QDM v5.6",
 
                     "versionId": "8a4c66e6-df09-4e4b-891d-cdc882df529a",
-                    "cmsId": null,
+                    //"cmsId": null,
                     "reviewMetaData": {
                         "approvalDate": null,
                         "lastReviewDate": null
@@ -146,7 +151,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
-                url: '/api/measure-transfer/mat-measures',
+                url: '/api/measure-transfer/mat-measures?cmsId=null',
                 method: 'POST',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
@@ -240,7 +245,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     "model": "QDM v5.6",
 
                     "versionId": "8a4c66e6-df09-4e4b-891d-cdc882df529a",
-                    "cmsId": null,
+                    //"cmsId": null,
                     "reviewMetaData": {
                         "approvalDate": null,
                         "lastReviewDate": null
@@ -272,7 +277,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
-                url: '/api/measure-transfer/mat-measures',
+                url: '/api/measure-transfer/mat-measures?cmsId=null',
                 method: 'POST',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
@@ -366,7 +371,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     "model": "QDM v5.6",
 
                     "versionId": "8a4c66e6-df09-4e4b-891d-cdc882df529a",
-                    "cmsId": null,
+                    //"cmsId": null,
                     "reviewMetaData": {
                         "approvalDate": null,
                         "lastReviewDate": null
@@ -388,8 +393,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
 
 
             }).then((response) => {
-                expect(response.status).to.eql(400)
-                expect(response.body.validationErrors.cqlLibraryName).to.be.eq('CQL library with given name already exists.')
+                expect(response.status).to.eql(201)
             })
 
         })

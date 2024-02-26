@@ -6,7 +6,7 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
-import { OktaLogin } from "../../../Shared/OktaLogin";
+import { OktaLogin } from "../../../Shared/OktaLogin"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -113,21 +113,22 @@ describe('Measure Versioning', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
+        cy.wait(5000)
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId2').should('exist').then((measureId2) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + measureId2 + '/version?versionType=major',
+                    url: '/api/measures/' + measureId + '/version?versionType=major',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
                     method: 'PUT'
                 }).then((response) => {
                     expect(response.status).to.eql(403)
-                    expect(response.body.message).to.include('User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId2)
+                    expect(response.body.message).to.include('User ' + harpUserALT + ' is not authorized for Measure with ID ' + measureId)
                 })
             })
         })
