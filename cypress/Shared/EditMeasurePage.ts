@@ -41,7 +41,7 @@ export class EditMeasurePage {
     public static readonly leftPanelModelAndMeasurementPeriod = '[data-testid="leftPanelModelAndMeasurementPeriod"]'
     public static readonly leftPanelRiskAdjustment = '[data-testid="leftPanelMeasureRiskAdjustment"]'
     public static readonly leftPanelReference = '[data-testid="leftPanelMeasureReferences"]'
-    public static readonly leftPanelDefinition = '[data-testid="leftPanelQDMMeasureDefinitions"]'
+    public static readonly leftPanelDefinition = '[data-testid="leftPanelQDMMeasureDefinition"]'
     public static readonly leftPanelTransmissionFormat = '[data-testid="leftPanelMeasureTransmissionFormat"]'
 
     //References page
@@ -61,11 +61,8 @@ export class EditMeasurePage {
     public static readonly measureReferenceDiscardChanges = '[data-testid="cancel-button"]'
 
     //Definition(Terms) page
-    public static readonly addDefinitionButton = '[data-testid="create-definition-button"]'
-    public static readonly termInputTextbox = '[data-testid="qdm-measure-term-input"]'
-    public static readonly definitionInputTextbox = '[data-testid="qdm-measure-definition"]'
-    public static readonly measureDefinitionTable = '[id="measure-meta-data-table"]'
-    public static readonly editMeasureDefinition = '[class="qpp-c-button qpp-c-button--outline-secondary"]'
+    public static readonly definitionInputTextbox = '[data-testid="measureDefinitionInput"]'
+    public static readonly saveMeasureDefinition = '[data-testid="measureDefinitionSave"]'
 
     //Transmission Format page
     public static readonly transmissionFormatDescription = '[data-testid="measure-transmission-format"]'
