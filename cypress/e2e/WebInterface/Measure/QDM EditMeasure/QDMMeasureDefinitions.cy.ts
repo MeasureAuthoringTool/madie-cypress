@@ -4,7 +4,7 @@ import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {MeasureCQL} from "../../../../Shared/MeasureCQL"
 import {Utilities} from "../../../../Shared/Utilities"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {Global} from "../../../../Shared/Global";
+import {Global} from "../../../../Shared/Global"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
@@ -12,7 +12,7 @@ let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
 //Skipping until feature flag is removed
-describe.skip('QDM Measure Definition(Terms)', () => {
+describe.skip('QDM Measure Definition', () => {
 
        beforeEach('Create Measure, add Cohort group and Login', () => {
 
