@@ -25,8 +25,8 @@ describe('Measure Ownership Validations for QDM Measures', () => {
 
         cy.clearCookies()
         cy.clearLocalStorage()
-        OktaLogin.AltLogin()
-        cy.wait(5000)
+        // OktaLogin.AltLogin()
+        // cy.wait(5000)
         cy.setAccessTokenCookieALT()
         //Create QDM Measure, PC and Test Case with ALT user
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, true, measureCQL, false, true)
@@ -37,7 +37,7 @@ describe('Measure Ownership Validations for QDM Measures', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(altMeasureName, altCqlLibraryName, false, true)
 
     })
@@ -49,7 +49,8 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         cy.get(LandingPage.allMeasuresTab).should('be.visible').wait(1000)
         Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 70000)
         cy.get(LandingPage.allMeasuresTab).should('be.enabled').wait(1000)
-        cy.get(LandingPage.allMeasuresTab).wait(7000).click()
+        cy.get(LandingPage.allMeasuresTab).click()
+        cy.reload()
 
         //click on Edit button to edit measure
         MeasuresPage.measureAction("edit")

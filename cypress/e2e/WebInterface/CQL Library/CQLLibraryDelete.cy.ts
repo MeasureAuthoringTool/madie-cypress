@@ -234,6 +234,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         })
         cy.clearCookies()
         cy.clearLocalStorage()
+        OktaLogin.AltLogin()
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.wait(1000)

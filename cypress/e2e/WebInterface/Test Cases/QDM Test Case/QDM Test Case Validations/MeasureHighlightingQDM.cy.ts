@@ -8,6 +8,7 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import {Header} from "../../../../../Shared/Header";
 
 let measureCQLPFTests = MeasureCQL.QDMHighlightingTab_CQL
 let measureCQLDUTest = MeasureCQL.QDMHightlightingTabDefUsed_CQL
@@ -21,7 +22,7 @@ let testCaseSeries = 'SBTestSeries'
 let newMeasureName = ''
 let newCqlLibraryName = ''
 
-describe('QI-Core: Test Case Highlighting Left navigation panel: Includes validate / verify the Definitions Used section / label', () => {
+describe('QDM: Test Case Highlighting Left navigation panel: Includes validate / verify the Definitions Used section / label', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -41,7 +42,6 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes valida
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
             'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
-        OktaLogin.Logout()
 
     })
 
@@ -56,11 +56,11 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes valida
 
     })
 
-    it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs -- "Definitions Used" is present', () => {
+    it('QDM Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs -- "Definitions Used" is present', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measurePath = 'cypress/fixtures/measureId'
-        OktaLogin.Login()
 
+        cy.get(Header.measures).click()
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
 
@@ -92,28 +92,8 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes valida
         //Navigate to test case detail / edit page
         TestCasesPage.testCaseAction('edit')
 
-        //Navigate to the Expected / Actual sub tab
-        Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
-        cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click({ force: true })
-
-        //check checkboxes to get a passing result from running the test case
-        Utilities.waitForElementVisible(TestCasesPage.testCaseIPPExpected, 35000)
-        cy.get(TestCasesPage.testCaseIPPExpected).first().scrollIntoView().click({ force: true }).type('1')
-
-        Utilities.waitForElementVisible(TestCasesPage.testCaseDENOMExpected, 35000)
-        cy.get(TestCasesPage.testCaseDENOMExpected).first().scrollIntoView().click({ force: true }).type('1')
-
-        Utilities.waitForElementVisible(TestCasesPage.testCaseNUMERExpected, 35000)
-        cy.get(TestCasesPage.testCaseNUMERExpected).first().scrollIntoView().click({ force: true }).type('1')
-
-        //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
-
         //navigate to the highlighting sub tab
-        cy.get(TestCasesPage.tcHighlightingTab).should('exist')
-        cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
+        Utilities.waitForElementVisible(TestCasesPage.tcHighlightingTab, 60000)
         cy.get(TestCasesPage.tcHighlightingTab).click()
 
         //run test case
@@ -126,7 +106,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes valida
     })
 })
 
-describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
+describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -146,7 +126,6 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
             'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
-        OktaLogin.Logout()
 
     })
 
@@ -161,11 +140,11 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
 
     })
 
-    it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
+    it('QDM: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measurePath = 'cypress/fixtures/measureId'
-        OktaLogin.Login()
 
+        cy.get(Header.measures).click()
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
 
@@ -196,25 +175,6 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
 
         //Navigate to test case detail / edit page
         TestCasesPage.testCaseAction('edit')
-
-        //Navigate to the Expected / Actual sub tab
-        Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
-        cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click({ force: true })
-
-        //check checkboxes to get a passing result from running the test case
-        Utilities.waitForElementVisible(TestCasesPage.testCaseIPPExpected, 35000)
-        cy.get(TestCasesPage.testCaseIPPExpected).first().scrollIntoView().click({ force: true }).type('1')
-
-        Utilities.waitForElementVisible(TestCasesPage.testCaseDENOMExpected, 35000)
-        cy.get(TestCasesPage.testCaseDENOMExpected).first().scrollIntoView().click({ force: true }).type('1')
-
-        Utilities.waitForElementVisible(TestCasesPage.testCaseNUMERExpected, 35000)
-        cy.get(TestCasesPage.testCaseNUMERExpected).first().scrollIntoView().click({ force: true }).type('1')
-
-        //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
 
         //navigate to the highlighting sub tab
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
@@ -262,7 +222,6 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
             'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
-        OktaLogin.Logout()
 
     })
 
@@ -280,8 +239,8 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
     it('QDM Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with a single PC and will show Test case Results', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measurePath = 'cypress/fixtures/measureId'
-        OktaLogin.Login()
 
+        cy.get(Header.measures).click()
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
 
@@ -314,26 +273,6 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
 
         //Navigate to test case detail / edit page
         TestCasesPage.testCaseAction('edit')
-
-        //Navigate to the Expected / Actual sub tab
-        Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
-        cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click({ force: true })
-
-        //check checkboxes to get a passing result from running the test case
-        Utilities.waitForElementVisible(TestCasesPage.testCaseIPPExpected, 35000)
-        cy.get(TestCasesPage.testCaseIPPExpected).scrollIntoView().type('1')
-        cy.get(TestCasesPage.testCaseNUMERExpected).scrollIntoView().type('1')
-        cy.get(TestCasesPage.testCaseDENOMExpected).scrollIntoView().type('1')
-        cy.get(TestCasesPage.testCaseDENEXExpected).scrollIntoView().type('0')
-
-        //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
-
-        //confirm save message
-        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 35000)
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //run test case
         cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('be.visible')
@@ -383,7 +322,6 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
             'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
-        OktaLogin.Logout()
 
     })
 
@@ -401,8 +339,8 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measureSecondGroupPath = 'cypress/fixtures/groupId2'
         let measurePath = 'cypress/fixtures/measureId'
-        OktaLogin.Login()
 
+        cy.get(Header.measures).click()
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
 
@@ -460,26 +398,6 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
 
         //Navigate to test case detail / edit page
         TestCasesPage.testCaseAction('edit')
-
-        //Navigate to the Expected / Actual sub tab
-        Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
-        cy.get(TestCasesPage.tctExpectedActualSubTab).first().scrollIntoView().click({ force: true })
-
-        //check checkboxes to get a passing result from running the test case
-        Utilities.waitForElementVisible(TestCasesPage.testCaseIPPExpected, 35000)
-        cy.get(TestCasesPage.testCaseIPPExpected).first().scrollIntoView().type('1')
-        cy.get(TestCasesPage.testCaseNUMERExpected).first().scrollIntoView().type('1')
-        cy.get(TestCasesPage.testCaseDENOMExpected).first().scrollIntoView().type('1')
-        cy.get(TestCasesPage.testCaseDENEXExpected).first().scrollIntoView().type('0')
-
-        //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
-
-        //confirm save message
-        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 35000)
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //run test case
         cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('be.visible')

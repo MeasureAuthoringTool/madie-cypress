@@ -120,6 +120,7 @@ describe('Remove Test case attribute', () => {
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
+
     })
 
     it('Remove test case attributes', () => {

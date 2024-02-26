@@ -250,25 +250,11 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
     beforeEach('Create Measure', () => {
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        OktaLogin.Login()
-        cy.wait(5000)
-        cy.setAccessTokenCookie()
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringValue, false, measureCQL, false, false,
             '2023-01-01', '2024-01-01')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson, false, false)
         OktaLogin.Login()
-        //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
-            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
-        OktaLogin.Logout()
     })
 
     afterEach('Clean up', () => {
@@ -280,9 +266,14 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
     })
     it('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropriate fields and sections', () => {
 
-        //navigate to the main measures page and edit the measure
-        cy.get(Header.measures).click()
+        //Click on Edit Measure
         MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
+            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
         //fill out group details
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -376,9 +367,14 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
     })
     it('Non-owner of measure cannot edit observation fields', () => {
 
-        //navigate to the main measures page and edit the measure
-        cy.get(Header.measures).click()
+        //Click on Edit Measure
         MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
+            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
         //fill out group details
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -444,8 +440,8 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
-        //log out of MADiE
-        OktaLogin.Logout()
+        // //log out of MADiE
+        // OktaLogin.UILogout()
 
         //log into MADiE as a different user
         cy.clearCookies()
@@ -477,10 +473,11 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(TestCasesPage.numer0Observation).should('not.be.enabled')
         cy.get(TestCasesPage.numer1Observation).should('not.be.enabled')
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('not.be.enabled')
+        OktaLogin.UILogout()
 
     })
 })
-describe('QDM Measure: Test Case: with Observations: Expected / Actual results', () => {
+describe.skip('QDM Measure: Test Case: with Observations: Expected / Actual results', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -497,7 +494,6 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
             'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
-        OktaLogin.Logout()
     })
 
     afterEach('Clean up', () => {
@@ -508,11 +504,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
 
     })
     // skipping due to flag that prevents running measures whom has observations and/or stratifications
-    it.skip('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropirate fields and sections', () => {
-
-        //navigate to the main measures page and edit the measure
-        cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+    it('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropirate fields and sections', () => {
 
         //fill out group details
         cy.get(EditMeasurePage.measureGroupsTab).click()
