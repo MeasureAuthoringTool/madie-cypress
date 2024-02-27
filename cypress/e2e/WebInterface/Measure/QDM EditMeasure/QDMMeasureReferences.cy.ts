@@ -4,15 +4,14 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Header } from "../../../../Shared/Header"
+import {Global} from "../../../../Shared/Global"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
-//Skipping until feature flag is removed
-describe.skip('QDM Measure Reference', () => {
+describe('QDM Measure Reference', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
@@ -31,11 +30,10 @@ describe.skip('QDM Measure Reference', () => {
 
     })
 
-    it('QDM Measure Reference - Successful creation', () => {
+    it('Add and Edit QDM Measure reference', () => {
 
+        //Add Measure Reference
         MeasuresPage.measureAction('edit')
-
-        //Navigate to References page
         cy.get(EditMeasurePage.leftPanelReference).click()
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
@@ -45,6 +43,18 @@ describe.skip('QDM Measure Reference', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Documentation')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Measure Reference')
+
+        //Edit Measure reference
+        cy.get(EditMeasurePage.selectMeasureReference).click()
+        cy.get(EditMeasurePage.measureReferenceDropdown).contains('Edit').click()
+        cy.get(EditMeasurePage.referenceTypeDropdown).click()
+        cy.get(EditMeasurePage.justificationOption).click()
+        cy.get(EditMeasurePage.measureReferenceText).clear().type('Updated Measure Reference')
+        cy.get(EditMeasurePage.saveButton).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
+        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Justification')
+        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Updated Measure Reference')
+
     })
 
     it('Discard changes button', () => {
@@ -61,10 +71,32 @@ describe.skip('QDM Measure Reference', () => {
         cy.get(EditMeasurePage.measureReferenceDiscardChanges).click()
         cy.get('[data-testid="dialog-form"]').should('not.exist')
     })
+
+    it('Delete Measure Reference', () => {
+
+        //Add Measure Reference
+        MeasuresPage.measureAction('edit')
+        cy.get(EditMeasurePage.leftPanelReference).click()
+        cy.get(EditMeasurePage.addReferenceButton).click()
+        cy.get(EditMeasurePage.referenceTypeDropdown).click()
+        cy.get(EditMeasurePage.documentationOption).click()
+        cy.get(EditMeasurePage.measureReferenceText).type('Measure Reference')
+        cy.get(EditMeasurePage.saveButton).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
+        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Documentation')
+        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Measure Reference')
+
+        //Delete Measure Reference
+        cy.get(EditMeasurePage.selectMeasureReference).click()
+        cy.get(EditMeasurePage.measureReferenceDropdown).contains('Delete').click()
+        cy.get(Global.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to delete ' + 'Measure Reference' + '?')
+        cy.get('[data-testid="delete-dialog-continue-button"]').click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text','Measure reference deleted successfully')
+
+    })
 })
 
-//Skipping until feature flag is removed
-describe.skip('QDM Measure Reference ownership validation', () => {
+describe('Add Measure Reference - ownership validation', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
@@ -96,8 +128,7 @@ describe.skip('QDM Measure Reference ownership validation', () => {
     })
 })
 
-//Skipping until feature flag is removed
-describe.skip('QDM Measure Reference -- Edit Reference', () => {
+describe('Delete Measure Reference - Ownership validation', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
@@ -105,22 +136,10 @@ describe.skip('QDM Measure Reference -- Edit Reference', () => {
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
+
+        //Login to UI and Add Measure reference
         OktaLogin.Login()
-
-    })
-
-    afterEach('Logout and cleanup', () => {
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
-    })
-
-    it('QDM Measure Reference - Edit button exists; Edit Modal appears; Clicking on X discards changes; original values are retained', () => {
-
         MeasuresPage.measureAction('edit')
-
-        //Navigate to References page
         cy.get(EditMeasurePage.leftPanelReference).click()
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
@@ -130,57 +149,29 @@ describe.skip('QDM Measure Reference -- Edit Reference', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Documentation')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Measure Reference')
-
-        cy.reload()
-
-        // Edit button exists;
-        cy.get(EditMeasurePage.leftPanelReference).click()
-        Utilities.waitForElementVisible(EditMeasurePage.editReferenceButton, 3000)
-        Utilities.waitForElementEnabled(EditMeasurePage.editReferenceButton, 3000)
-        cy.get(EditMeasurePage.editReferenceButton).first().click()
-
-        // Confirm modal window appears with close / X button
-        Utilities.waitForElementVisible(EditMeasurePage.editReferenceModal, 3000)
-        Utilities.waitForElementVisible(EditMeasurePage.editReferenceCloseModalBtn, 3000)
-        Utilities.waitForElementDisabled(EditMeasurePage.saveButton, 3000)
-        cy.get(EditMeasurePage.measureReferenceText).wait(1000).clear()
-        cy.get(EditMeasurePage.measureReferenceText).type('new text entered')
-        Utilities.waitForElementEnabled(EditMeasurePage.saveButton, 3000)
-        cy.get(EditMeasurePage.editReferenceCloseModalBtn).click()
-        Utilities.waitForElementToNotExist(EditMeasurePage.editReferenceModal, 3000)
-
-        cy.reload()
-        // original value that was entered for the Reference is retained / is persisted
-        cy.get(EditMeasurePage.editReferenceButton).first().click()
-        cy.get(EditMeasurePage.referenceTypeDropdown).should('contain.text', 'Documentation')
-        cy.get(EditMeasurePage.measureReferenceText).should('contain.text', 'Measure Reference')
-
-        cy.get(EditMeasurePage.editReferenceCloseModalBtn).click()
-        cy.get(Header.mainMadiePageButton).click()
-        MeasuresPage.measureAction('edit')
-        cy.get(EditMeasurePage.leftPanelReference).click()
-        // Saving a change retains / persists the value(s)
-        cy.get(EditMeasurePage.editReferenceButton).first().click()
-        cy.get(EditMeasurePage.measureReferenceText).wait(1000).clear()
-
-        cy.get(EditMeasurePage.referenceTypeDropdown).click()
-        cy.get(EditMeasurePage.citationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).type('Something different')
-        cy.get(EditMeasurePage.saveButton).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
-        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Citation')
-        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Something different')
-        cy.get(Header.mainMadiePageButton).click()
-        MeasuresPage.measureAction('edit')
-        cy.get(EditMeasurePage.leftPanelReference).click()
-        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Citation')
-        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Something different')
-        cy.get(EditMeasurePage.editReferenceButton).first().click()
-        cy.get(EditMeasurePage.referenceTypeDropdown).should('contain.text', 'Citation')
-        cy.get(EditMeasurePage.measureReferenceText).should('contain.text', 'Something different')
-        cy.get(EditMeasurePage.editReferenceCloseModalBtn).click()
+        OktaLogin.UILogout()
 
     })
 
+    afterEach('Logout and cleanup', () => {
 
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('Non Measure owner unable to delete Measure reference', () => {
+
+        OktaLogin.AltLogin()
+        cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
+        cy.reload()
+        MeasuresPage.measureAction('edit')
+
+        //Navigate to References page
+        cy.get(EditMeasurePage.leftPanelReference).click()
+        cy.get(EditMeasurePage.selectMeasureReference).should('not.exist')
+
+    })
 })
+
+
