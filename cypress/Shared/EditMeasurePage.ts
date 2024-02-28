@@ -46,7 +46,8 @@ export class EditMeasurePage {
 
     //References page
     public static readonly addReferenceButton = '[data-testid="create-reference-button"]'
-    public static readonly editReferenceButton = '[name="Edit"]'
+    public static readonly selectMeasureReference = '.chevron-container > [data-testid="ExpandMoreIcon"]'
+    public static measureReferenceDropdown = '[class="btn-container"]'
     public static readonly referenceTypeDropdown = '[id="measure-referenceType"]'
     public static readonly editReferenceModal = '[data-testid="dialog-form"]'
     public static readonly editReferenceCloseModalBtn = '[data-testid="close-button"]'
