@@ -5,6 +5,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import {Header} from "../../../../Shared/Header";
 
 let measureName = 'ProportionPatient' + Date.now()
 let CqlLibraryName = 'ProportionPatient' + Date.now()
@@ -140,7 +141,7 @@ describe('Validating Stratification tabs', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Login()
+        //OktaLogin.Login()
     })
 
     afterEach('Clean up', () => {
@@ -151,7 +152,9 @@ describe('Validating Stratification tabs', () => {
 
     })
     it('Stratification tab includes new fields and those fields have expected values', () => {
+
         //Click on Edit Measure
+        cy.get(Header.measures).click()
         MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
@@ -222,9 +225,10 @@ describe('Validating Stratification tabs', () => {
         })
     })
 
-    it('Add multiple stratifications to the measure group', () => {
+    it('Add multiple stratifications and stratification description to the measure group', () => {
 
         //Click on Edit Measure
+        cy.get(Header.measures).click()
         MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
@@ -284,21 +288,21 @@ describe('Validating Stratification tabs', () => {
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Initial Population')
-        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
+        cy.get(MeasureGroupPage.stratDescOne).type('Stratification One Description')
 
         //Add Stratification 2
         Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'Numerator')
-        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'numerator')
+        cy.get(MeasureGroupPage.stratDescTwo).type('Stratification Two Description')
 
         //Add Stratification 3
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratThree, 'Denominator')
-        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'denominator')
+        cy.get(MeasureGroupPage.stratDescThree).type('Stratification Three Description')
 
         //Add Stratification 4
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratFour, 'Initial Population')
-        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationFour, 'initialPopulation')
+        cy.get(MeasureGroupPage.stratDescFour).type('Stratification Four Description')
 
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30700)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -323,14 +327,19 @@ describe('Validating Stratification tabs', () => {
             }
         })
         cy.get(MeasureGroupPage.stratOne).should('contain.text', 'Initial Population')
+        cy.get(MeasureGroupPage.stratDescOne).should('contain.text', 'Stratification One Description')
         cy.get(MeasureGroupPage.stratTwo).should('contain.text', 'Numerator')
+        cy.get(MeasureGroupPage.stratDescTwo).should('contain.text', 'Stratification Two Description')
         cy.get(MeasureGroupPage.stratThree).should('contain.text', 'Denominator')
+        cy.get(MeasureGroupPage.stratDescThree).should('contain.text', 'Stratification Three Description')
         cy.get(MeasureGroupPage.stratFour).should('contain.text', 'Initial Population')
+        cy.get(MeasureGroupPage.stratDescFour).should('contain.text', 'Stratification Four Description')
     })
 
     it('Stratification tab is not present / available when the Ratio scoring value is selected', () => {
 
         //Click on Edit Measure
+        cy.get(Header.measures).click()
         MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
@@ -380,6 +389,7 @@ describe('Validating Stratification tabs', () => {
     it('Verify error message when the Stratification return type does not match with population basis', () => {
 
         //Click on Edit Measure
+        cy.get(Header.measures).click()
         MeasuresPage.measureAction("edit")
 
         //Click on Measure Group tab
