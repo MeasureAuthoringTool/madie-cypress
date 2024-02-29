@@ -13,13 +13,9 @@ let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let firstTestCaseTitle = '3Encounters1Exclusion'
 let testCaseDescription = 'DENEXPass' + Date.now()
 let testCaseSeries = 'SBTestSeries'
-let measureQDMPBCQL = MeasureCQL.qdmCQLPatientBasedTest
 let measureQDMNPBCQL = MeasureCQL.qdmCQLNonPatienBasedTest
-let testCaseTitle = 'test case title'
-let measureCQL = MeasureCQL.SBTEST_CQL
-let measureScoring = 'Cohort'
-let newMeasureName = ''
-let newCqlLibraryName = ''
+let elementIdvalue = ''
+let elementIdPath = 'cypress/fixtures/elementId'
 
 
 
@@ -173,14 +169,15 @@ describe('Clone QDM Test Case', () => {
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
         Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 30000)
 
-        //clone existing element and confirm it's content
-        cy.get('[class="data-elements-table"]').find('[class="qpp-c-button view-with-dropdown-button"]').find(TestCasesPage.tcHLExpandResultBtn).first().click({ force: true })
-        cy.get('[data-testid="popover-content"]').find(TestCasesPage.editBtnNoId).contains('Clone').click({ force: true })
+        // grab the element id of the first entry in the element table
+        TestCasesPage.grabElementId(1)
+
+        // clone that element
+        TestCasesPage.qdmTestCaseElementAction('clone')
         cy.get("tr").eq(1).should('contain.text', 'Encounter, PerformedObservation ServicesSNOMEDCT: 448951000124107 relP:  03/07/2023 8:00 AM - 03/08/2023 8:15 AMView')
 
-        //edit the cloned element
-        cy.get('[class="data-elements-table"]').find('tbody').find("tr").eq(1).find('[class="qpp-c-button view-with-dropdown-button"]').find(TestCasesPage.tcHLExpandResultBtn).first().click({ force: true })
-        cy.get('[data-testid="popover-content"]').find(TestCasesPage.editBtnNoId).contains('Edit').click({ force: true })
+        // eidt the element
+        TestCasesPage.qdmTestCaseElementAction('edit')
         cy.get('[id="dateTime"]').eq(0).type('03/09/2023 08:00 AM')
         cy.get('[id="dateTime"]').eq(1).type('03/10/2023 08:15 AM')
 
