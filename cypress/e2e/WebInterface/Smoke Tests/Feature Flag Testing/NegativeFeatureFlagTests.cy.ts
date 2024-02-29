@@ -262,8 +262,8 @@ describe('QDM Measure Export: Export option is not available', () => {
             cy.get('[data-testid="view-measure-' + fileContents + '"]').should('be.visible')
             cy.get('[data-testid="export-measure-' + fileContents + '"]').should('not.exist')
 
-        cy.reload()
-        Utilities.waitForElementVisible(Header.userProfileSelect, 60000)
+            cy.reload()
+            Utilities.waitForElementVisible(Header.userProfileSelect, 60000)
         })
 
     })
@@ -609,7 +609,7 @@ describe('QDM: Measure Version option Should not exist', () => {
             cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
             cy.get('[data-testid="create-version-measure-' + fileContents + '"]').should('not.exist')
         })
-       cy.reload()
+        cy.reload()
         Utilities.waitForElementVisible(Header.userProfileSelect, 60000)
     })
 })
@@ -641,6 +641,38 @@ describe('QDM: Generate CMS ID', () => {
         MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         cy.get(EditMeasurePage.cmsIdInput).should('exist')
+
+    })
+})
+
+//"includeSDEValues": false
+describe('QDM: Configuration sub tab', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = 'TestMeasure' + Date.now() + randValue
+    let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+
+    before('Create Measure and Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
+        OktaLogin.Login()
+
+    })
+
+    after('Logout and cleanup', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('Configuration sub tab should not be displayed on QDM Test Case list page', () => {
+
+        MeasuresPage.measureAction('edit')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        Utilities.waitForElementVisible(TestCasesPage.newTestCaseButton, 60000)
+        cy.get(TestCasesPage.configurationSubTab).should('not.exist')
 
     })
 })

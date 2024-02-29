@@ -140,6 +140,9 @@ export class TestCasesPage {
     //CQL area on Test Case page
     public static readonly tcCQLArea = '[data-testid="test-case-cql-editor"]'
 
+    //QDM Configuration subsection
+    public static readonly configurationSubTab = '[data-testid="qdm-nav-collapser"]'
+
     //misc test case page objects
     public static readonly tcGroupCoverageHighlighting = '[data-testid="group-coverage-nav-"]'
     public static readonly qdmTCHighlightingDU = '[data-testid="definitions-used-section"]'
