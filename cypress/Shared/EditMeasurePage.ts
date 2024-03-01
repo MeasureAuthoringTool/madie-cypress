@@ -43,6 +43,11 @@ export class EditMeasurePage {
     public static readonly leftPanelReference = '[data-testid="leftPanelMeasureReferences"]'
     public static readonly leftPanelDefinition = '[data-testid="leftPanelQDMMeasureDefinition"]'
     public static readonly leftPanelTransmissionFormat = '[data-testid="leftPanelMeasureTransmissionFormat"]'
+    public static readonly leftPanelMeasureSet = '[data-testid="leftPanelMeasureSet"]'
+
+    //Measure Set
+    public static readonly measureSetText = '[data-testid="measureMeasure SetInput"]'
+    public static readonly measureSetSaveBtn = '[data-testid="measureMeasure SetSave"]'
 
     //References page
     public static readonly addReferenceButton = '[data-testid="create-reference-button"]'
