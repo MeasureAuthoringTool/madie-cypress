@@ -1862,10 +1862,8 @@ describe('Verify multiple IPs on the highlighting tab', () => {
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.Login()
-        cy.wait(5000)
         cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         OktaLogin.Login()
@@ -1878,10 +1876,8 @@ describe('Verify multiple IPs on the highlighting tab', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.Login()
-        cy.wait(5000)
         cy.setAccessTokenCookie()
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
         OktaLogin.Login()

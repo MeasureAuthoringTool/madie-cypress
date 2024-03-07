@@ -31,10 +31,8 @@ let TCJson = TestCaseJson.QDMTestCaseJson
 describe('Test Case population values based on Measure Group population definitions', () => {
     beforeEach('Create Measure and measure group', () => {
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.Login()
-        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL, false, false)
@@ -200,10 +198,8 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
     let cqlLibraryNameDeux = cqlLibraryName + randValue + 2
     let newTCJson = TestCaseJson.QDMTestCaseJson_for_update
     before('Create Measure', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.Login()
-        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         //Create New Measure
@@ -296,10 +292,8 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
 
     before('Create Measure', () => {
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.Login()
-        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         measureName = 'QDMTestMeasure' + Date.now()
@@ -455,10 +449,8 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
     let cqlLibraryNameDeux = cqlLibraryName + randValue + 2
     let newTCJson = TestCaseJson.QDMTestCaseJson_for_update
     before('Create Measure', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.Login()
-        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         //Create QDM Measure
@@ -470,10 +462,8 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
 
     it('QDM Test Case Demographic fields are not available / editable for non-owner', () => {
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.AltLogin()
-        cy.wait(5000)
         cy.setAccessTokenCookieALT()
         //Edit created Test Case
         cy.getCookie('accessToken').then((accessToken) => {
@@ -505,10 +495,8 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
 })
 describe('Measure Service: Test Case Endpoint: User validation with test case import', () => {
     beforeEach('Create Measure and measure group', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.Login()
-        cy.wait(5000)
         cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL)
@@ -554,10 +542,8 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
     })
 
     it('Non-owner or non-shared user cannot hit the end point to add test cases to a measure', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.AltLogin()
-        cy.wait(5000)
         cy.setAccessTokenCookieALT()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {

@@ -40,7 +40,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
 
     it('Delete CQL Library - Draft Library - user does not own nor has Library been shared with user', () => {
         OktaLogin.Logout()
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
@@ -105,8 +105,9 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
                 })
             })
         })
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
+        cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesBtn).click()

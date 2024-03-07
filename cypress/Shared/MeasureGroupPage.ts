@@ -196,6 +196,7 @@ export class MeasureGroupPage {
     public static readonly qdmType = '[id="base-configuration-types"]'
     public static readonly patientBasisRadioBtn = '[name="mui-6"]'
     public static readonly qdmPatientBasis = '[class="PrivateSwitchBase-input css-1m9pwf3"]'
+    public static readonly qdmSDERadioButtons = '[data-testid="sde-option-radio-buttons-group"]'
     public static readonly qdmTypeOptionZero = '[id="base-configuration-types-option-0"]'
     public static readonly qdmTypeValuePill = '[class="MuiChip-label MuiChip-labelSmall css-1pjtbja"]'
     public static readonly qdmDiscardButton = '[data-testid="cancel-button"]'

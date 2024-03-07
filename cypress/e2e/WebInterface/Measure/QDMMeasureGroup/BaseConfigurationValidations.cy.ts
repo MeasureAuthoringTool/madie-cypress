@@ -31,10 +31,9 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
 
         //Create New Measure
         sessionStorage.clear()
-        cy.clearCookies().wait(3000)
-        cy.clearLocalStorage().wait(3000)
-        OktaLogin.Login()
-        cy.setAccessTokenCookie().wait(3000)
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, false, false)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")

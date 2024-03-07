@@ -62,11 +62,8 @@ describe('Delete test Case: Older end point / url that takes id and title in the
 
     it('Verify Non Measure owner unable to delete Test Case', () => {
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.AltLogin()
-        cy.wait(5000)
-        //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {

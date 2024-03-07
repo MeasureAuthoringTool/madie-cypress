@@ -1,8 +1,8 @@
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {Utilities} from "../../../Shared/Utilities"
-import {Environment} from "../../../Shared/Environment"
-import {OktaLogin} from "../../../Shared/OktaLogin";
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { Utilities } from "../../../Shared/Utilities"
+import { Environment } from "../../../Shared/Environment"
+import { OktaLogin } from "../../../Shared/OktaLogin";
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -21,10 +21,8 @@ describe('Measure Transfer Service', () => {
 
     afterEach('Clean up', () => {
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.AltLogin()
-        //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
 
         Utilities.deleteMeasure(measureName, cqlLibraryName, false, true)
@@ -95,7 +93,7 @@ describe('Measure Transfer Validations', () => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + id+5 + '/ownership?userid=' + harpUserALT,
+                    url: '/api/measures/' + id + 5 + '/ownership?userid=' + harpUserALT,
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': measureSharingAPIKey

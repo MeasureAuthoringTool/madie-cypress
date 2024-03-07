@@ -130,11 +130,8 @@ describe('Version and Draft CQL Library', () => {
 
     it('Verify non Library owner unable to create Version', () => {
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.AltLogin()
-        cy.wait(5000)
-        //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId2').should('exist').then((cqlLibraryId2) => {

@@ -10,6 +10,17 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { Environment } from "../../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+
+let qdmMeasureNameMOS = 'CVListQDMPositiveEncounterPerformedWithMOAndStratification' + Date.now()
+let CqlLibraryName = 'CVListQDMPositiveEncounterPerformedWithMOAndStratification' + Date.now()
+let firstTestCaseTitle = 'PDxNotPsych60MinsDepart'
+let testCaseDescription = 'IPPStrat1Pass' + Date.now()
+let testCaseSeries = 'SBTestSeries'
+let secondTestCaseTitle = 'Order50AndPriorityAssessment180'
+let measureCQL = MeasureCQL.QDMMeasureWithMOandStrat
 
 
 let newCQLLibraryName = ''
@@ -918,3 +929,213 @@ describe('CQL Library Validations -- Attempting to use a QI Core Library in a QD
         cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('include.text', 'Row: 4, Col:1: ELM: 1:62 | Library model and version does not match the Measure model and version for name: SupplementalDataElements, version: 3.4.000')
     })
 })
+
+
+
+
+describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Stratification', () => {
+
+    before('Create Measure', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(qdmMeasureNameMOS, CqlLibraryName, measureCQL, false, false,
+            '2025-01-01', '2025-12-31')
+        TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
+        TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, null, true)
+
+        OktaLogin.Login()
+    })
+
+    after('Clean up', () => {
+
+        OktaLogin.Logout()
+
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+
+    it('Creating a measure With MO And Stratification: Selecting SDE values / radio buttons', () => {
+
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+
+        //Save CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+
+        //Group Creation
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //click on / navigate to the Base Configuration sub-tab
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
+
+        //Select Type
+        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
+        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
+
+        //select 'Cohort' scoring on measure
+        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCV)
+        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Continuous Variable')
+
+        //Update the Patient Basis to 'No'
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
+
+        //click on the save button and confirm save success message Base Config
+        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
+            'Updated Successfully')
+
+        //add pop criteria
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'Measure Population')
+        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'Measure Population Exclusions')
+        Utilities.dropdownSelect(MeasureGroupPage.measureObservationPopSelect, 'MeasureObservation')
+        Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Median')
+
+        //Add Stratifications
+        cy.get(MeasureGroupPage.stratificationTab).click()
+        cy.get(MeasureGroupPage.stratOne).click()
+        cy.get('[data-value="Stratification 1"]').click()
+        cy.get(MeasureGroupPage.stratTwo).click()
+        cy.get('[data-value="Stratification 2"]').click()
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
+            'this group saved successfully.')
+
+        //Add Supplemental Data Elements
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
+
+        //Save Supplemental data
+        cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
+        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+
+        //Add Elements to first Test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //navigate to the SDE side tab section on the test cases tab
+        Utilities.waitForElementVisible(TestCasesPage.qdmSDESidNavLink, 30000)
+        cy.get(TestCasesPage.qdmSDESidNavLink).click()
+
+        cy.get(MeasureGroupPage.qdmSDERadioButtons)
+            .find('[type="radio"]')
+            .then((radio) => {
+                //confirm that initial value is set to 'No'
+                cy.wrap(radio).eq(1).should('be.checked');
+                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'No');
+
+                //check / select radio button for the value of 'Yes'
+                cy.wrap(radio).eq(0).check({ force: true }).should('be.checked');
+                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Yes');
+
+                cy.get(TestCasesPage.sdeTestCaseSaveButton).click()
+                cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Configuration Updated Successfully')
+
+                // Verify that first radio button is no longer checked
+                cy.wrap(radio).eq(1).should('not.be.checked');
+            });
+
+        //navigate away from the test cases tab
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.leftPanelBaseConfigTab, 30000)
+
+        //navigate back to test cases page / tab
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //navigate to the SDE side tab section on the test cases tab
+        Utilities.waitForElementVisible(TestCasesPage.qdmSDESidNavLink, 30000)
+        cy.get(TestCasesPage.qdmSDESidNavLink).click()
+
+        //verify that 'yes' is checked
+        cy.get(MeasureGroupPage.qdmSDERadioButtons)
+            .find('[type="radio"]')
+            .then((radio) => {
+
+                //check / select radio button for the value of 'Yes'
+                cy.wrap(radio).eq(0).should('be.checked');
+                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Yes');
+
+                // Verify that first radio button is no longer checked
+                cy.wrap(radio).eq(1).should('not.be.checked');
+            });
+
+        //make a change
+        cy.get(MeasureGroupPage.qdmSDERadioButtons)
+            .find('[type="radio"]')
+            .then((radio) => {
+
+                //check / select radio button for the value of 'Yes'
+                cy.wrap(radio).eq(1).check({ force: true }).should('be.checked');
+                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'No');
+
+                // Verify that first radio button is no longer checked
+                cy.wrap(radio).eq(0).should('not.be.checked');
+            });
+
+        //attempt to navigate away from the test cases tab / page
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //confirm dirty check window
+        cy.get(EditMeasurePage.dirtCheckModal).should('exist')
+        cy.get(EditMeasurePage.dirtCheckModal).should('be.visible')
+
+        //select continue working on page
+        cy.get(Global.keepWorkingCancel).should('exist')
+        cy.get(Global.keepWorkingCancel).should('be.visible')
+        cy.get(Global.keepWorkingCancel).should('be.enabled')
+        cy.get(Global.keepWorkingCancel).click()
+
+        //confirm that previous edit is still present
+        cy.get(MeasureGroupPage.qdmSDERadioButtons)
+            .find('[type="radio"]')
+            .then((radio) => {
+
+                //check / select radio button for the value of 'Yes'
+                cy.wrap(radio).eq(1).should('be.checked');
+                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'No');
+
+                // Verify that first radio button is no longer checked
+                cy.wrap(radio).eq(0).should('not.be.checked');
+            });
+
+        //discard changes on the test SDE Test Cases tab / page
+        cy.get(MeasureGroupPage.discardChangesBtn).click()
+        cy.get(Global.discardChangesContinue).click()
+
+        //verify that 'yes' is still checked after discarding changes on the page
+        cy.get(MeasureGroupPage.qdmSDERadioButtons)
+            .find('[type="radio"]')
+            .then((radio) => {
+
+                //check / select radio button for the value of 'Yes'
+                cy.wrap(radio).eq(0).should('be.checked');
+                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Yes');
+
+                // Verify that first radio button is no longer checked
+                cy.wrap(radio).eq(1).should('not.be.checked');
+            });
+
+    })
+})
+
