@@ -324,20 +324,16 @@ export class CreateMeasurePage {
 
         if (altUser) {
             sessionStorage.clear()
-            cy.clearCookies().wait(3000)
-            cy.clearLocalStorage().wait(3000)
-            OktaLogin.AltLogin()
-            cy.wait(5000)
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
             cy.setAccessTokenCookieALT()
             cy.wait(5000)
             user = Environment.credentials().harpUserALT
         }
         else {
             sessionStorage.clear()
-            cy.clearCookies().wait(3000)
-            cy.clearLocalStorage().wait(3000)
-            OktaLogin.Login()
-            cy.wait(5000)
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
             cy.setAccessTokenCookie()
             cy.wait(5000)
             user = Environment.credentials().harpUser
@@ -379,6 +375,10 @@ export class CreateMeasurePage {
                                 "url": "www.eatrightpro.org"
                             }
                         ]
+                    },
+                    "testCaseConfiguration": {
+                        "id": null,
+                        "sdeIncluded": null
                     },
                     'programUseContext': {
                         "code": "mips",
@@ -423,18 +423,14 @@ export class CreateMeasurePage {
         }
 
         if (altUser) {
-            cy.clearCookies()
+            cy.clearAllCookies()
             cy.clearLocalStorage()
-            OktaLogin.AltLogin()
-            cy.wait(5000)
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
         }
         else {
-            cy.clearCookies()
+            cy.clearAllCookies()
             cy.clearLocalStorage()
-            OktaLogin.Login()
-            cy.wait(5000)
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
         }

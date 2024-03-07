@@ -173,6 +173,7 @@ export class TestCasesPage {
     public static readonly testCaseSeriesTextBox = '[data-testid="test-case-series"] > .MuiOutlinedInput-root'
     public static readonly existingTestCaseSeriesDropdown = '#mui-6'
     public static readonly editTestCaseSaveButton = '[data-testid="edit-test-case-save-button"]'
+    public static readonly sdeTestCaseSaveButton = '[data-testid="sde-save"]'
     public static readonly tcDiscardChangesButton = '[data-testid="edit-test-case-discard-button"]'
     public static readonly confirmationMsg = '[data-testid="create-test-case-alert"]'
     public static readonly confirmationMsgWithErrorOrWarning = '#content > div > h3'
@@ -182,6 +183,7 @@ export class TestCasesPage {
     public static readonly testCaseTitle = '[data-testid="test-case-title"]'
     public static readonly executeTestCaseButton = '[data-testid="execute-test-cases-button"]'
     public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
+    public static readonly qdmSDESidNavLink = '[data-testid="nav-link-sde"]'
     public static readonly createTestCaseTitleInlineError = '[data-testid="create-test-case-title-helper-text"]'
     public static readonly editTestCaseTitleInlineError = '[data-testid="test-case-title-helper-text"]'
     public static readonly testCaseJsonValidationErrorBtn = '[data-testid="show-json-validation-errors-button"]'
@@ -361,6 +363,12 @@ export class TestCasesPage {
     public static readonly codeSystemOptionValue = '[data-testid="option-112648003"]'
     public static readonly codeSelector = '[id="code-selector"]'
 
+    //This function grabs the data-testid value off of the view button and extracts the id out of it. 
+    //Then, it puts that id in a file. For added control, the optional "eleTableEntry" parameter can be 
+    //used to specify which entry we are wanting to grab the id off of. For example, if you have two entries 
+    //on the element table and you want to grab the id off of the second entry, then you would pass a simple 2 
+    //digit into the function call. If no value is given for this optional parameter, then it will assume the 
+    //value needs to be 1 -- the first entry in the table.
     public static grabElementId(eleTableEntry?: number): void {
         let attrData = ''
         let elemid = ''
@@ -372,7 +380,6 @@ export class TestCasesPage {
         cy.get('[class="data-elements-table"]').find('tr').eq(eleTableEntry).find('[class="qpp-c-button view-with-dropdown-button"]').then(($element) => {
             attrData = $element.attr('data-testid').toString().valueOf()
             return attrData
-            //console.log(attrData)
         }).then((attrData) => {
             elementId = attrData.split('-', 4)
             console.log('The data-testid value is ' + attrData)
@@ -438,6 +445,10 @@ export class TestCasesPage {
 
         })
     }
+    //Similar to our other action functions for test cases and measures, 
+    //this function gives it's user the ability to pass a required text that 
+    //indicates one of the available actions that can be done on an element(ie: Edit, Clone, Delete)
+    //**NOTE**: Before this function can be called, the grabElementId(eleTableEntry) function must be called, first.
     public static qdmTestCaseElementAction(action: string): void {
         let elementIdPath = 'cypress/fixtures/elementId'
         cy.readFile(elementIdPath).should('exist').then((fileContents) => {

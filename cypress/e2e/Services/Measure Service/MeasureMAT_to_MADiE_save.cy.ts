@@ -13,10 +13,8 @@ let randValue = null
 describe('Measure Transfer Service From MAT -to- MADiE', () => {
 
     beforeEach('Set Access Token', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.Login()
-        cy.wait(5000)
         cy.setAccessTokenCookie()
     })
 

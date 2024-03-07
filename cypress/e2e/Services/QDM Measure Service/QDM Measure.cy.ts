@@ -1,7 +1,7 @@
-import {Utilities} from "../../../Shared/Utilities"
-import {Environment} from "../../../Shared/Environment"
+import { Utilities } from "../../../Shared/Utilities"
+import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 
 let measureName = ''
 let CQLLibraryName = ''
@@ -48,13 +48,18 @@ describe('Measure Service: QDM Measure', () => {
                     "measurementPeriodStart": mpStartDate,
                     "measurementPeriodEnd": mpEndDate,
                     "rateAggregation": "Aggregation",
-                    "improvementNotation": "Increased score indicates improvement"
+                    "improvementNotation": "Increased score indicates improvement",
+                    "testCaseConfiguration": {
+                        "id": null,
+                        "sdeIncluded": true
+                    }
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
                 expect(response.body.createdBy).to.eql(harpUser)
                 cy.writeFile('cypress/fixtures/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
                 expect(response.body.rateAggregation).to.eql('Aggregation')
                 expect(response.body.improvementNotation).to.eql('Increased score indicates improvement')
             })
@@ -89,13 +94,18 @@ describe('Measure Service: QDM Measure', () => {
                     "patientBasis": true,
                     "ecqmTitle": eCQMTitle,
                     "measurementPeriodStart": mpStartDate,
-                    "measurementPeriodEnd": mpEndDate
+                    "measurementPeriodEnd": mpEndDate,
+                    "testCaseConfiguration": {
+                        "id": null,
+                        "sdeIncluded": true
+                    }
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
                 expect(response.body.createdBy).to.eql(harpUser)
                 cy.writeFile('cypress/fixtures/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
                 expect(response.body.baseConfigurationTypes[0]).to.eql('Efficiency')
                 expect(response.body.baseConfigurationTypes[1]).to.eql('Outcome')
                 expect(response.body.baseConfigurationTypes[2]).to.eql('Process')
@@ -126,6 +136,10 @@ describe('Measure Service: QDM Measure', () => {
                     "ecqmTitle": eCQMTitle,
                     "measurementPeriodStart": mpStartDate,
                     "measurementPeriodEnd": mpEndDate,
+                    "testCaseConfiguration": {
+                        "id": null,
+                        "sdeIncluded": true
+                    },
                     "supplementalData": [
                         {
                             "definition": "supplementalDataDefinition",
@@ -160,6 +174,7 @@ describe('Measure Service: QDM Measure', () => {
                 expect(response.body.riskAdjustments[1].description).to.eql('riskAdjustmentDescription2')
                 cy.writeFile('cypress/fixtures/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
             })
 
         })
@@ -202,11 +217,15 @@ describe('QDM Measure: Transmission format', () => {
                             "version": "0.0.000",
                             "measureScoring": "Ratio",
                             "versionId": vId,
-                            "measureMetaData": {"draft": true, "transmissionFormat": "Test Transmission format"},
+                            "measureMetaData": { "draft": true, "transmissionFormat": "Test Transmission format" },
                             "measureSetId": uuidv4(),
                             "ecqmTitle": "ecqmTitle",
                             "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
                             "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                            "testCaseConfiguration": {
+                                "id": null,
+                                "sdeIncluded": true
+                            }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)

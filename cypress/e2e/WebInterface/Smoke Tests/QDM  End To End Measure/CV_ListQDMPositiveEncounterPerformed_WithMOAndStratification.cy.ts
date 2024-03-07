@@ -484,5 +484,6 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
         cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
 
+
     })
 })

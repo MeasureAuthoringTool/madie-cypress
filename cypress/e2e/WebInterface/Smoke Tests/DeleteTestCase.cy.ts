@@ -52,10 +52,10 @@ describe('Delete Test Case', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newCqlLibraryName = CqlLibraryName + randValue
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({log: true})
+        cy.clearAllSessionStorage({ log: true })
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 

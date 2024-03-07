@@ -142,10 +142,8 @@ describe('Measure Version : Non Measure owner validation', () => {
 
     it('Non Measure owner unable to version Measure', () => {
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.AltLogin()
-        //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
 
         cy.getCookie('accessToken').then((accessToken) => {
@@ -174,13 +172,8 @@ describe('Version Measure without CQL', () => {
         newMeasureName = measureName + 2 + randValue
         newCQLLibraryName = cqlLibraryName + 2 + randValue
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        //CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName)
-
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true)
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -219,7 +212,7 @@ describe('Version Measure with invalid CQL', () => {
         newMeasureName = measureName + 3 + randValue
         newCQLLibraryName = cqlLibraryName + 3 + randValue
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -232,7 +225,7 @@ describe('Version Measure with invalid CQL', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
     })

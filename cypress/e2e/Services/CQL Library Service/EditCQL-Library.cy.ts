@@ -15,7 +15,7 @@ describe('Edit CQL Library', () => {
     before('Create Measure', () => {
 
         CQLLibraryName = 'TestCqlLibrary' + Date.now()
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -29,7 +29,7 @@ describe('Edit CQL Library', () => {
     })
 
     beforeEach('Set Access Token', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -223,11 +223,8 @@ describe('Edit CQL Library', () => {
     it('Verify non Library owner unable to Edit CQL Library', () => {
 
         updatedCQLLibraryName = 'UpdatedCQLLibrary' + Date.now()
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
-        OktaLogin.AltLogin()
-        cy.wait(5000)
-        //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
 
         cy.getCookie('accessToken').then((accessToken) => {

@@ -23,7 +23,7 @@ describe.skip('CQL Library Service: Create CQL Library', () => {
     })
 
     it('Create QI-Core CQL Library, successful creation', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -57,7 +57,7 @@ describe.skip('CQL Library Service: Create CQL Library', () => {
     })
 
     it('Create QDM CQL Library, successful creation', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -92,7 +92,7 @@ describe.skip('CQL Library Service: Create CQL Library', () => {
 
     it('Get All CQL Libraries', () => {
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
@@ -112,7 +112,7 @@ describe.skip('CQL Library Service: Create CQL Library', () => {
     })
 
     it('Get specific CQL Library', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -138,7 +138,7 @@ describe.skip('CQL Library Service: Create CQL Library', () => {
     })
 
     it('Get All CQL Libraries created by logged in User', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -178,7 +178,7 @@ describe.skip('CQL Library Name validations', () => {
     })
 
     it('Validation Error: CQL Library Name empty', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -206,7 +206,7 @@ describe.skip('CQL Library Name validations', () => {
     })
 
     it('Validation Error: CQL Library Name has special characters', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -233,7 +233,7 @@ describe.skip('CQL Library Name validations', () => {
     })
 
     it('Validation Error: CQL Library Name does not start with an Upper Case letter', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -260,7 +260,7 @@ describe.skip('CQL Library Name validations', () => {
     })
 
     it('Validation Error: CQL Library Name contains spaces', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -287,7 +287,7 @@ describe.skip('CQL Library Name validations', () => {
     })
 
     it('Validation Error: CQL Library Name has only numbers', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -314,7 +314,7 @@ describe.skip('CQL Library Name validations', () => {
     })
 
     it('Validation Error: CQL Library Name has more than 255 characters', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -341,7 +341,7 @@ describe.skip('CQL Library Name validations', () => {
     })
 
     it('Validation Error: Duplicate CQL Library Name', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -377,7 +377,7 @@ describe.skip('CQL Library Model Validations', () => {
     })
 
     it('Validation Error: CQL Library Model empty', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -404,7 +404,7 @@ describe.skip('CQL Library Model Validations', () => {
     })
 
     it('Validation Error: Invalid CQL Library Model', () => {
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 

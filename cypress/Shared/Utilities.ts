@@ -75,17 +75,13 @@ export class Utilities {
         let ecqmTitle = 'eCQMTitle'
 
         if (altUser) {
-            cy.clearCookies()
+            cy.clearAllCookies()
             cy.clearLocalStorage()
-            OktaLogin.AltLogin()
-            cy.wait(5000)
             cy.setAccessTokenCookieALT()
         }
         else {
-            cy.clearCookies()
+            cy.clearAllCookies()
             cy.clearLocalStorage()
-            OktaLogin.Login()
-            cy.wait(5000)
             cy.setAccessTokenCookie()
         }
 
@@ -100,7 +96,6 @@ export class Utilities {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.readFile(measureSetIdPath).should('exist').then((measureSetId) => {
                         cy.request({
-                            failOnStatusCode: false,
                             url: '/api/measures/' + id,
                             method: 'PUT',
                             headers: {
