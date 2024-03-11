@@ -174,6 +174,11 @@ export class CreateMeasurePage {
                     'measureSetId': uuidv4(),
                     'cql': measureCQL,
                     'elmJson': elmJson,
+                    // commenting out testCaseConfiguration until the includeSDEValues flag is removed
+                    /* "testCaseConfiguration": {
+                        "id": null,
+                        "sdeIncluded": null
+                    }, */
                     'measureMetaData': {
                         "description": "SemanticBits",
                         "steward": {
@@ -376,10 +381,11 @@ export class CreateMeasurePage {
                             }
                         ]
                     },
-                    "testCaseConfiguration": {
+                    // commenting out testCaseConfiguration until the includeSDEValues flag is removed
+                    /* "testCaseConfiguration": {
                         "id": null,
                         "sdeIncluded": null
-                    },
+                    }, */
                     'programUseContext': {
                         "code": "mips",
                         "display": "MIPS",

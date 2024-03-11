@@ -932,8 +932,8 @@ describe('CQL Library Validations -- Attempting to use a QI Core Library in a QD
 
 
 
-
-describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Stratification', () => {
+// skipping until includeSDEValues flag is removed
+describe.skip('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Stratification: SDE values / radio button test', () => {
 
     before('Create Measure', () => {
 
@@ -1135,7 +1135,6 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
                 // Verify that first radio button is no longer checked
                 cy.wrap(radio).eq(1).should('not.be.checked');
             });
-
     })
 })
 
