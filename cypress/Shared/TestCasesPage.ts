@@ -215,7 +215,7 @@ export class TestCasesPage {
     public static readonly tcCoverageTabDenompop = '[data-testid="Denominator-population"]'
     public static readonly tcCoverageTabDenomExcludepop = '[data-testid="Denominator Exclusion-population"]'
     public static readonly tcCoverageTabNumpop = '[data-testid="Numerator-population"]'
-    public static readonly tcCoverageTabUsedDef = '[data-testid="Used-definition"]'
+    public static readonly tcCoverageTabUsedDef = '[data-testid="Definitions-definition"]'
     public static readonly tcCoverageTabFunctsDef = '[data-testid="Functions-definition"]'
     public static readonly tcCoverageTabUnusedDef = '[data-testid="Unused-definition"]'
     public static readonly tcCoverageSections = '[class="accordion-section"]'
