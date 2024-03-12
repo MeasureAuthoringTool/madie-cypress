@@ -247,22 +247,12 @@ describe('Create Test Case Validations', () => {
 
 describe('Edit Test Case Validations', () => {
 
-    before('Create QDM Measure and Test Case ', () => {
-        //Create New Measure
+    beforeEach('Create QDM Measure and Test Case and, then, Login', () => {
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
-    })
-
-    beforeEach('Login', () => {
         OktaLogin.Login()
     })
     afterEach('Logout', () => {
-        OktaLogin.Logout()
-
-    })
-
-    after('Clean up', () => {
-
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
