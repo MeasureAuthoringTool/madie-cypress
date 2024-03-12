@@ -750,11 +750,11 @@ export class TestCasesPage {
         }
         if (secondMeasure === true) {
             measurePath = 'cypress/fixtures/measureId2'
-            testCasePIdPath = 'cypress/fixtures/measureId2'
+            //testCasePIdPath = 'cypress/fixtures/measureId2'
         }
         else {
             measurePath = 'cypress/fixtures/measureId'
-            testCasePIdPath = 'cypress/fixtures/measureId'
+            //testCasePIdPath = 'cypress/fixtures/measureId'
         }
         if (twoTestCases === true) {
             testCasePath = 'cypress/fixtures/testCaseId2'

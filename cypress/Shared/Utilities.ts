@@ -588,13 +588,18 @@ export class Utilities {
             valueDataElement == MeasureGroupPage.qdmScoringRatio
 
         ) {
+            cy.wait(7000)
+            Utilities.waitForElementVisible(valueDataElement, 50000)
             cy.get(dropdownDataElement).click()
             cy.get(valueDataElement).click()
         }
         else {
+            Utilities.waitForElementVisible('ul > li[data-value="' + valueDataElement + '"]', 50000)
+            cy.wait(7000)
             cy.get(dropdownDataElement)
                 .parent()
                 .click()
+                .wait(7000)
                 .get('ul > li[data-value="' + valueDataElement + '"]')
                 .click()
         }
