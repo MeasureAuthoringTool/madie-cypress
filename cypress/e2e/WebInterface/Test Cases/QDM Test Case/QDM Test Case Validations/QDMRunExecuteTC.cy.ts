@@ -729,6 +729,7 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
+        OktaLogin.Login()
 
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()

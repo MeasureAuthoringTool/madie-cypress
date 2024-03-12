@@ -255,9 +255,9 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.disabled')
 
         //navigate away from the details tab
-        cy.get(EditMeasurePage.cqlEditorTab).should('exist')
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //confirm dirty check window
         cy.get(EditMeasurePage.dirtCheckModal).should('exist')
@@ -420,22 +420,25 @@ describe('Create Measure validations', () => {
         OktaLogin.Login()
     })
 
-    afterEach('Logout and cleanup', () => {
+    afterEach('Logout', () => {
         OktaLogin.Logout()
-
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
     //Measure Name Validations
     it('Verify error messages when the measure name entered is invalid or empty', () => {
 
         //Click on New Measure Button
+        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 30000)
+        //Click on New Measure Button
         Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
         Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
-        cy.get(LandingPage.newMeasureButton).wait(2000).click()
+        cy.get(LandingPage.newMeasureButton).click()
+        Utilities.waitForElementVisible(CreateMeasurePage.measureNameTextbox, 30000)
 
         //Verify error message when the Measure Name field is empty
-        cy.get(CreateMeasurePage.measureNameTextbox).click()
-        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).click()
+        cy.get(CreateMeasurePage.measureNameTextbox).focus().blur()
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).focus().blur()
         cy.get(CreateMeasurePage.measureNameFieldLevelError).should('contain.text', 'Measure Name is required.')
         //Verify if create measure button is disabled
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
@@ -932,8 +935,8 @@ describe('CQL Library Validations -- Attempting to use a QI Core Library in a QD
 
 
 
-
-describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Stratification', () => {
+//Skipping until feature flag 'includeSDEValues' is removed
+describe.skip('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Stratification', () => {
 
     before('Create Measure', () => {
 
