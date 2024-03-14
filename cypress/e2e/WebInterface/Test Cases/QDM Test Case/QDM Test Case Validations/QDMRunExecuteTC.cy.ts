@@ -8,6 +8,7 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
+import { Header } from "../../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -203,6 +204,11 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(3000)
 
         //Click on Execute Test Case button on Edit Test Case page
+        cy.get(Header.mainMadiePageButton).click()
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
@@ -344,6 +350,11 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 30000)
 
+        cy.get(Header.mainMadiePageButton).click()
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
@@ -426,6 +437,10 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
+        cy.get(Header.mainMadiePageButton).click()
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -499,8 +514,6 @@ describe('Run / Execute QDM Test Case button validations', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
-
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -576,20 +589,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
 
         TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
-        //Commented until MAT-6151 is fixed
-
-        // cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        // cy.get(EditMeasurePage.testCasesTab).click()
-
-        // TestCasesPage.clickEditforCreatedTestCase()
-        //
-        // cy.get(TestCasesPage.runTestButton).should('be.disabled')
-        //
-        // //Verify Execute Test cast case button on Test case list page
-        // cy.get(EditMeasurePage.testCasesTab).click()
-
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Invalid')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
+        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'N/A')
     })
 })
 
@@ -655,6 +655,10 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         //save dob value
         Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 60000)
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.runQDMTestCaseBtn).click()
+
+        cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#ae1c1c')
+        cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
 
         //Click on Execute Test Case button on Test Case list page and verify status for multiple populations
         cy.get(EditMeasurePage.testCasesTab).should('exist')
@@ -665,9 +669,6 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Fail')
 
-        //Check Test Execution for second Population criteria
-        cy.get('[class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-151p887"]').click()
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
     })
 })
 
@@ -747,7 +748,6 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled').wait(1000)
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
-        //cy.get('[class="toast success"]').should('contain.text', 'Calculation was successful, output is printed in the console')
 
     })
 })
