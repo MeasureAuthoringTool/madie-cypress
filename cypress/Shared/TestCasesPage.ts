@@ -119,6 +119,11 @@ export class TestCasesPage {
     public static readonly QDMRunTestCasefrmTestCaseListPage = '[data-testid="qdm-test-case-run-button"]'
     public static readonly deleteQDMTCAttribute = '[data-testid=delete-chip-button-0]'
 
+    //SDE Sub tab
+    public static readonly qdmSDESubTab = '[data-testid="sde-tab"]'
+    public static readonly includeSDERadioBtn = '[class="PrivateSwitchBase-input css-1m9pwf3"]'
+    public static readonly saveSDEOption = '[data-testid="sde-save"]'
+
     //TC error concerning CQL and PC mismatch
     public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
 
