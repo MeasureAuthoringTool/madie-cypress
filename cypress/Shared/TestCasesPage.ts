@@ -141,6 +141,13 @@ export class TestCasesPage {
     //QDM Test Case
     public static readonly qdmCQLFailureErrorList = '[data-testid="execution_context_loading_errors"]'
     public static readonly qdmTCJson = '[class="panel-content"]'
+    public static readonly qdmExpansionRadioOptionGroup = '[data-testid="manifest-expansion-radio-buttons-group"]'
+    public static readonly qdmExpansionSubTab = '[data-testid="nav-link-expansion"]'
+    public static readonly qdmManifestSelectDropDownBox = '[id="manifest-select"]'
+    public static readonly qdmManifestFirstOption = '[data-value="ecqm-update-4q2017-eh"]'
+    public static readonly qdmManifestSaveBtn = '[data-testid="manifest-expansion-save-button"]'
+    public static readonly qdmManifestDiscardBtn = '[data-testid="manifest-expansion-discard-changes-button"]'
+    public static readonly qdmManifestSuccess = '[data-testid="manifest-expansion-success-text"]'
 
     //CQL area on Test Case page
     public static readonly tcCQLArea = '[data-testid="test-case-cql-editor"]'

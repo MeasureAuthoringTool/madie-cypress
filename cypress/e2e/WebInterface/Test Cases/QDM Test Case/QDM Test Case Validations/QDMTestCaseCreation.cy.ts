@@ -6,7 +6,8 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { Global } from "../../../../../Shared/Global"
 
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
@@ -185,7 +186,7 @@ describe('Validating the creation of QDM Test Case', () => {
 
         //verify that the user is, now, on the test case list page
         cy.readFile(measurePath).should('exist').then((measureId) => {
-            cy.url().should('contain',  measureId + '/edit/test-cases')
+            cy.url().should('contain', measureId + '/edit/test-cases')
         })
     })
 })
@@ -313,6 +314,7 @@ describe('Validating the Elements section on Test Cases', () => {
 
     })
 })
+
 describe('Run QDM Test Case ', () => {
     beforeEach('Create Measure', () => {
 
@@ -367,5 +369,146 @@ describe('Run QDM Test Case ', () => {
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
+    })
+})
+
+// skipping until the manifestExpansion is removed / permanently set to true
+describe.skip('Validating Expansion -> Manifest selections / navigation functionality', () => {
+
+    beforeEach('Create Measure', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
+            '2023-01-01', '2024-01-01')
+
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Login()
+    })
+
+    afterEach('Clean up', () => {
+
+        OktaLogin.Logout()
+
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+    it('Verify Expansion -> Manifest', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //create test case
+        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+
+        //navigate to the test case list Expansion page
+        cy.get(TestCasesPage.qdmExpansionSubTab).click()
+
+        //validating current / initial selected radio button and selecting the manifest radio button
+        cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
+            .find('[type="radio"]')
+            .then((radio) => {
+                //confirm that initial value is set to 'No'
+                cy.wrap(radio).eq(0).should('be.checked');
+                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Latest');
+
+                //check / select radio button for the value of 'Yes'
+                cy.wrap(radio).eq(1).check({ force: true }).should('be.checked');
+                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Manifest');
+
+                cy.get(TestCasesPage.qdmManifestSelectDropDownBox).click()
+                cy.get(TestCasesPage.qdmManifestFirstOption).click()
+                cy.get(TestCasesPage.qdmManifestSaveBtn).click()
+                cy.get(TestCasesPage.qdmManifestSuccess).should('contain.text', 'Expansion details Updated Successfully')
+
+
+                // Verify that first radio button is no longer checked
+                cy.wrap(radio).eq(0).should('not.be.checked');
+            });
+        //confirm that manifest drop down has selected value
+        cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('contain.text', 'ecqm-update-4q2017-eh')
+
+        //navigate away from the test cases tab
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.leftPanelBaseConfigTab, 30000)
+
+        //navigate back to test cases page / tab
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //navigate to the test case list Expansion page
+        cy.get(TestCasesPage.qdmExpansionSubTab).click()
+
+        //confirm that manifest drop down has selected value
+        cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('contain.text', 'ecqm-update-4q2017-eh')
+
+        //validating that manifest is, now, selected and making a change in the selection
+        cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
+            .find('[type="radio"]')
+            .then((radio) => {
+                //confirm that initial value is set to 'Manifest'
+                cy.wrap(radio).eq(1).should('be.checked');
+                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Manifest');
+
+                //check / select radio button for the value of 'Latest'
+                cy.wrap(radio).eq(0).check({ force: true }).should('be.checked');
+                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Latest');
+
+                cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('not.exist')
+
+                // Verify that first radio button is no longer checked
+                cy.wrap(radio).eq(1).should('not.be.checked');
+            });
+
+
+        //attempt to navigate away from the test cases tab / page
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //confirm dirty check window
+        cy.get(EditMeasurePage.dirtCheckModal).should('exist')
+        cy.get(EditMeasurePage.dirtCheckModal).should('be.visible')
+
+        //select continue working on page
+        cy.get(Global.keepWorkingCancel).should('exist')
+        cy.get(Global.keepWorkingCancel).should('be.visible')
+        cy.get(Global.keepWorkingCancel).should('be.enabled')
+        cy.get(Global.keepWorkingCancel).click()
+
+        //confirm the edit is still present
+        cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
+            .find('[type="radio"]')
+            .then((radio) => {
+                //confirm that initial value is set to 'Latest'
+                cy.wrap(radio).eq(0).should('be.checked');
+                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Latest');
+
+                // Verify that first radio button is no longer checked
+                cy.wrap(radio).eq(1).should('not.be.checked');
+            });
+        //discard changes on the test Expansion Test Cases tab / page
+        cy.get(TestCasesPage.qdmManifestDiscardBtn).click()
+        cy.get(Global.discardChangesContinue).click()
+
+        //verify that 'Manifest' is still checked after discarding changes on the page
+        cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
+            .find('[type="radio"]')
+            .then((radio) => {
+
+                //check / select radio button for the value of 'Manifest'
+                cy.wrap(radio).eq(1).should('be.checked');
+                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Manifest');
+
+                // Verify that first radio button is no longer checked
+                cy.wrap(radio).eq(0).should('not.be.checked');
+            });
+        //confirm that manifest drop down has selected value
+        cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('contain.text', 'ecqm-update-4q2017-eh')
     })
 })
