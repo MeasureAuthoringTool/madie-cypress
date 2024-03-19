@@ -8,7 +8,7 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../Shared/Header";
+import { Header } from "../../../../Shared/Header";
 
 let measureName = 'TestMeasure' + Date.now()
 let filePath = 'cypress/fixtures/measureId'
@@ -674,6 +674,35 @@ describe('QDM: Configuration sub tab', () => {
         Utilities.waitForElementVisible(TestCasesPage.newTestCaseButton, 60000)
         cy.get(TestCasesPage.configurationSubTab).should('not.exist')
 
+    })
+})
+
+//"manifestExpansion": false
+describe('QDM: Expansion Manifest sub-tab / section is not available when flag is set to false', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = 'TestMeasure' + Date.now() + randValue
+    let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+
+    before('Create Measure and Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
+        OktaLogin.Login()
+
+    })
+
+    after('Logout and cleanup', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('"Expansion" is not an available side sub-tab option, on the Test Case list page', () => {
+        MeasuresPage.measureAction('edit')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.qdmExpansionSubTab).should('not.exist')
     })
 })
 
