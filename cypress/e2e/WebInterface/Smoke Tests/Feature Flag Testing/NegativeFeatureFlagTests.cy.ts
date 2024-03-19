@@ -679,6 +679,7 @@ describe('QDM: Configuration sub tab', () => {
 
 //"manifestExpansion": false
 describe('QDM: Expansion Manifest sub-tab / section is not available when flag is set to false', () => {
+
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     let newMeasureName = 'TestMeasure' + Date.now() + randValue
     let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
@@ -697,9 +698,40 @@ describe('QDM: Expansion Manifest sub-tab / section is not available when flag i
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
-    it('"Expansion" is not an avaialble side sub-tab option, on the Test Case list page', () => {
+
+    it('"Expansion" is not an available side sub-tab option, on the Test Case list page', () => {
         MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.qdmExpansionSubTab).should('not.exist')
+    })
+})
+
+//"TestCaseExport" : false
+describe('QDM: Test Case QRDA Export', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = 'TestMeasure' + Date.now() + randValue
+    let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+
+    before('Create Measure and Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
+        OktaLogin.Login()
+
+    })
+
+    after('Logout and cleanup', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('QRDA Test case Export button not visible when the feature flag is enabled', () => {
+
+        MeasuresPage.measureAction('edit')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.testcaseQRDAExportBtn).should('not.exist')
     })
 })

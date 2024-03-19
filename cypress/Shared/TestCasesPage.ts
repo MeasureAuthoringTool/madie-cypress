@@ -124,6 +124,10 @@ export class TestCasesPage {
     public static readonly includeSDERadioBtn = '[class="PrivateSwitchBase-input css-1m9pwf3"]'
     public static readonly saveSDEOption = '[data-testid="sde-save"]'
 
+    //Test case QRDA Export
+    public static readonly testcaseQRDAExportBtn = '[data-testid="show-export-test-cases-button"]'
+    public static readonly successMsg = '.toast'
+
     //TC error concerning CQL and PC mismatch
     public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
 
@@ -375,11 +379,11 @@ export class TestCasesPage {
     public static readonly codeSystemOptionValue = '[data-testid="option-112648003"]'
     public static readonly codeSelector = '[id="code-selector"]'
 
-    //This function grabs the data-testid value off of the view button and extracts the id out of it. 
-    //Then, it puts that id in a file. For added control, the optional "eleTableEntry" parameter can be 
-    //used to specify which entry we are wanting to grab the id off of. For example, if you have two entries 
-    //on the element table and you want to grab the id off of the second entry, then you would pass a simple 2 
-    //digit into the function call. If no value is given for this optional parameter, then it will assume the 
+    //This function grabs the data-testid value off of the view button and extracts the id out of it.
+    //Then, it puts that id in a file. For added control, the optional "eleTableEntry" parameter can be
+    //used to specify which entry we are wanting to grab the id off of. For example, if you have two entries
+    //on the element table and you want to grab the id off of the second entry, then you would pass a simple 2
+    //digit into the function call. If no value is given for this optional parameter, then it will assume the
     //value needs to be 1 -- the first entry in the table.
     public static grabElementId(eleTableEntry?: number): void {
         let attrData = ''
@@ -441,21 +445,24 @@ export class TestCasesPage {
     }
 
     public static grabValidateTestCaseTitleAndSeries(testCaseTitle: string, testCaseSeries: string): void {
+
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="test-case-title-0_group"]').should('be.visible')
-            cy.get('[data-testid="test-case-title-0_group"]').invoke('text').then(
+            cy.get('[data-testid=test-case-series-' + fileContents + ']').should('be.visible')
+            cy.get('[data-testid=test-case-series-' + fileContents + ']').invoke('text').then(
                 (seriesText) => {
                     expect(seriesText).to.include(testCaseSeries)
                 })
-            cy.get('[data-testid="test-case-title-0_title"]').invoke('text').then(
+
+            cy.get('[data-testid=test-case-title-' + fileContents + ']').should('be.visible')
+            cy.get('[data-testid=test-case-title-' + fileContents + ']').invoke('text').then(
                 (titleText) => {
                     expect(titleText).to.include(testCaseTitle)
                 })
 
         })
     }
-    //Similar to our other action functions for test cases and measures, 
-    //this function gives it's user the ability to pass a required text that 
+    //Similar to our other action functions for test cases and measures,
+    //this function gives it's user the ability to pass a required text that
     //indicates one of the available actions that can be done on an element(ie: Edit, Clone, Delete)
     //**NOTE**: Before this function can be called, the grabElementId(eleTableEntry) function must be called, first.
     public static qdmTestCaseElementAction(action: string): void {
