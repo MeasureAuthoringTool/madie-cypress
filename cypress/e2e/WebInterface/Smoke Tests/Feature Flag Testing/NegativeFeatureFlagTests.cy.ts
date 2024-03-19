@@ -676,3 +676,33 @@ describe('QDM: Configuration sub tab', () => {
 
     })
 })
+
+//"TestCaseExport" : false
+describe('QDM: Test Case QRDA Export', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = 'TestMeasure' + Date.now() + randValue
+    let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+
+    before('Create Measure and Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
+        OktaLogin.Login()
+
+    })
+
+    after('Logout and cleanup', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('QRDA Test case Export button not visible when the feature flag is enabled', () => {
+
+        MeasuresPage.measureAction('edit')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.testcaseQRDAExportBtn).should('not.exist')
+    })
+})
