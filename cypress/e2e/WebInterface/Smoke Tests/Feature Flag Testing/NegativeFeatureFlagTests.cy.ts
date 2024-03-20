@@ -150,54 +150,6 @@ let measureCQLWithMOAndStrat = 'library MedianAdmitDecisionTimetoEDDepartureTime
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
-// // "exportQiCoreBundleType": true
-// describe('QI Core Test Cases: Ensure / verify that Export QI-Core Bundle type dropdown is present', () => {
-//
-//     beforeEach('Create measure and login', () => {
-//         CqlLibraryName = 'TestLibrary6' + Date.now()
-//
-//         //Create QI Core Measure
-//         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
-//         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-//         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
-//         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
-//
-//         cy.clearCookies()
-//         cy.clearLocalStorage()
-//         cy.setAccessTokenCookie()
-//         OktaLogin.Login()
-//
-//     })
-//
-//     afterEach('Logout and Clean up Measures', () => {
-//
-//         OktaLogin.UILogout()
-//         Utilities.deleteMeasure(measureName, CqlLibraryName)
-//
-//     })
-//
-//     it('QI Core Test Cases: Verify that Export QI-Core Bundle type dropdown is present', () => {
-//
-//         MeasuresPage.measureAction("edit")
-//
-//         //Navigate to Test Cases page and add Test Case details
-//         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-//         cy.get(EditMeasurePage.testCasesTab).click()
-//
-//         //confirm that the highlighting tab is present
-//         Utilities.waitForElementVisible(TestCasesPage.exportTestCasesBtn, 35000)
-//         Utilities.waitForElementEnabled(TestCasesPage.exportTestCasesBtn, 35000)
-//
-//         //confirm that the PC sub tab / selector is not present
-//         Utilities.waitForElementVisible(('[class="export-chevron-container"]'), 35000)
-//         cy.get('[class="export-chevron-container"]').click({ force: true })
-//         cy.get('[data-testid=export-transaction-bundle]').should('be.visible')
-//         cy.get('[data-testid="export-collection-bundle"]').should('be.visible')
-//
-//         cy.reload()
-//     })
-// })
-
 // "qiCoreBonnieTestCases": false
 describe('Test Case Import button - BONNIE: verify that the BONNIE import button is not available', () => {
 

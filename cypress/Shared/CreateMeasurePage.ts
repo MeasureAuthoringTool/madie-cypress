@@ -3,7 +3,6 @@ import { LandingPage } from "./LandingPage"
 import { MeasuresPage } from "./MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "./Utilities"
-import { OktaLogin } from ".././Shared/OktaLogin"
 
 export class CreateMeasurePage {
 
@@ -331,7 +330,6 @@ export class CreateMeasurePage {
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookieALT()
-            //cy.wait(5000)
             user = Environment.credentials().harpUserALT
         }
         else {
@@ -339,7 +337,6 @@ export class CreateMeasurePage {
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookie()
-            //cy.wait(5000)
             user = Environment.credentials().harpUser
         }
 
