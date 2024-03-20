@@ -67,7 +67,7 @@ export class MeasuresPage {
             Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
             cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="measure-action-' + fileContents + '"]', 100000)
-            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.enabled').wait(10000)
+            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.enabled')
             switch ((action.valueOf()).toString().toLowerCase()) {
                 case "edit": {
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').click()

@@ -8,7 +8,7 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../Shared/Header";
+import { Header } from "../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let filePath = 'cypress/fixtures/measureId'
@@ -150,55 +150,55 @@ let measureCQLWithMOAndStrat = 'library MedianAdmitDecisionTimetoEDDepartureTime
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
-// "exportQiCoreBundleType": true
-describe('QI Core Test Cases: Ensure / verify that Export QI-Core Bundle type dropdown is present', () => {
+// // "exportQiCoreBundleType": true
+// describe('QI Core Test Cases: Ensure / verify that Export QI-Core Bundle type dropdown is present', () => {
+//
+//     beforeEach('Create measure and login', () => {
+//         CqlLibraryName = 'TestLibrary6' + Date.now()
+//
+//         //Create QI Core Measure
+//         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+//         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+//         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
+//         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
+//
+//         cy.clearCookies()
+//         cy.clearLocalStorage()
+//         cy.setAccessTokenCookie()
+//         OktaLogin.Login()
+//
+//     })
+//
+//     afterEach('Logout and Clean up Measures', () => {
+//
+//         OktaLogin.UILogout()
+//         Utilities.deleteMeasure(measureName, CqlLibraryName)
+//
+//     })
+//
+//     it('QI Core Test Cases: Verify that Export QI-Core Bundle type dropdown is present', () => {
+//
+//         MeasuresPage.measureAction("edit")
+//
+//         //Navigate to Test Cases page and add Test Case details
+//         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+//         cy.get(EditMeasurePage.testCasesTab).click()
+//
+//         //confirm that the highlighting tab is present
+//         Utilities.waitForElementVisible(TestCasesPage.exportTestCasesBtn, 35000)
+//         Utilities.waitForElementEnabled(TestCasesPage.exportTestCasesBtn, 35000)
+//
+//         //confirm that the PC sub tab / selector is not present
+//         Utilities.waitForElementVisible(('[class="export-chevron-container"]'), 35000)
+//         cy.get('[class="export-chevron-container"]').click({ force: true })
+//         cy.get('[data-testid=export-transaction-bundle]').should('be.visible')
+//         cy.get('[data-testid="export-collection-bundle"]').should('be.visible')
+//
+//         cy.reload()
+//     })
+// })
 
-    beforeEach('Create measure and login', () => {
-        CqlLibraryName = 'TestLibrary6' + Date.now()
-
-        //Create QI Core Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
-        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
-
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        OktaLogin.Login()
-
-    })
-
-    afterEach('Logout and Clean up Measures', () => {
-
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
-    })
-
-    it('QI Core Test Cases: Verify that Export QI-Core Bundle type dropdown is present', () => {
-
-        MeasuresPage.measureAction("edit")
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //confirm that the highlighting tab is present
-        Utilities.waitForElementVisible(TestCasesPage.exportTestCasesBtn, 35000)
-        Utilities.waitForElementEnabled(TestCasesPage.exportTestCasesBtn, 35000)
-
-        //confirm that the PC sub tab / selector is not present
-        Utilities.waitForElementVisible(('[class="export-chevron-container"]'), 35000)
-        cy.get('[class="export-chevron-container"]').click({ force: true })
-        cy.get('[data-testid=export-transaction-bundle]').should('be.visible')
-        cy.get('[data-testid="export-collection-bundle"]').should('be.visible')
-
-        cy.reload()
-    })
-})
-
-// "importTestCases": false
+// "qiCoreBonnieTestCases": false
 describe('Test Case Import button - BONNIE: verify that the BONNIE import button is not available', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
@@ -208,7 +208,6 @@ describe('Test Case Import button - BONNIE: verify that the BONNIE import button
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
-        //TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
 
         OktaLogin.Login()
     })
@@ -234,8 +233,8 @@ describe('Test Case Import button - BONNIE: verify that the BONNIE import button
     })
 })
 
-// "qdmExport": false
-describe('QDM Measure Export: Export option is not available', () => {
+// "qdmExport": true
+describe('QDM Measure Export: Export option is available', () => {
 
     before('Create New Measure and Login', () => {
 
@@ -255,12 +254,12 @@ describe('QDM Measure Export: Export option is not available', () => {
     })
 
 
-    it('QDM Measure Export: Export option for measure is not available', () => {
+    it('QDM Measure Export: Export option for measure is available', () => {
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
             cy.get('[data-testid="view-measure-' + fileContents + '"]').should('be.visible')
-            cy.get('[data-testid="export-measure-' + fileContents + '"]').should('not.exist')
+            cy.get('[data-testid="export-measure-' + fileContents + '"]').should('exist')
 
             cy.reload()
             Utilities.waitForElementVisible(Header.userProfileSelect, 60000)
@@ -274,7 +273,7 @@ describe('QI Core: Elements tab is not present', () => {
 
     before('Create Measure', () => {
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
@@ -283,25 +282,8 @@ describe('QI Core: Elements tab is not present', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-
-    })
-
-    beforeEach('Set Access Token', () => {
-
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
     })
 
     after('Log out and Clean up', () => {
@@ -313,40 +295,13 @@ describe('QI Core: Elements tab is not present', () => {
 
     it('QI Core Test Case edit page: Ensure / verify that the Elements tab does not exist on the QI Core Test Case edit page', () => {
 
-        OktaLogin.Login()
+        cy.get(Header.measures).click()
         MeasuresPage.measureAction("edit")
+
         cy.get(EditMeasurePage.testCasesTab).click()
-
-        //Create test case
-        cy.get(TestCasesPage.newTestCaseButton).scrollIntoView()
-        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.newTestCaseButton).click({ force: true })
-
-        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
-        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
-
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
-        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
-        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
-
-        TestCasesPage.clickCreateTestCaseButton()
-
-        //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
-
         TestCasesPage.testCaseAction('edit')
 
-        //add json value to measure's test case
+        //Elements tab should not be visible
         Utilities.waitForElementToNotExist(TestCasesPage.elementsTab, 20000)
     })
 })
@@ -518,7 +473,7 @@ describe('QDM Test case Highlighting tab: Should show pass/Fail Highlighting', (
 })
 
 //"qdmMeasureReferences" : true
-describe('QDM: Measure Reference Should not exist', () => {
+describe('QDM: Measure Reference Should exist', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     let newMeasureName = 'TestMeasure' + Date.now() + randValue
@@ -539,7 +494,7 @@ describe('QDM: Measure Reference Should not exist', () => {
 
     })
 
-    it('QDM Measure Reference button should not exist', () => {
+    it('QDM Measure Reference button should exist', () => {
 
         MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.leftPanelReference).should('be.visible')
@@ -547,8 +502,8 @@ describe('QDM: Measure Reference Should not exist', () => {
     })
 })
 
-//"qdmMeasureDefinitions" : false
-describe('QDM: Measure Definition (Terms) Should not exist', () => {
+//"qdmMeasureDefinitions" : true
+describe('QDM: Measure Definition (Terms) Should exist', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     let newMeasureName = 'TestMeasure' + Date.now() + randValue
@@ -569,10 +524,10 @@ describe('QDM: Measure Definition (Terms) Should not exist', () => {
 
     })
 
-    it('QDM Measure Definition (Terms) button should not exist', () => {
+    it('QDM Measure Definition (Terms) button should exist', () => {
 
         MeasuresPage.measureAction('edit')
-        cy.get(EditMeasurePage.leftPanelDefinition).should('not.exist')
+        cy.get(EditMeasurePage.leftPanelDefinition).should('be.visible')
 
     })
 })
@@ -605,7 +560,7 @@ describe('QDM: Measure Version option Should not exist', () => {
             Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
             cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="measure-action-' + fileContents + '"]', 100000)
-            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.enabled').wait(10000)
+            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.enabled')
             cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
             cy.get('[data-testid="create-version-measure-' + fileContents + '"]').should('not.exist')
         })
@@ -645,7 +600,7 @@ describe('QDM: Generate CMS ID', () => {
     })
 })
 
-//"includeSDEValues": false
+//"includeSDEValues": true
 describe('QDM: Configuration sub tab', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -667,12 +622,12 @@ describe('QDM: Configuration sub tab', () => {
 
     })
 
-    it('Configuration sub tab should not be displayed on QDM Test Case list page', () => {
+    it('Configuration sub tab should be displayed on QDM Test Case list page', () => {
 
         MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementVisible(TestCasesPage.newTestCaseButton, 60000)
-        cy.get(TestCasesPage.configurationSubTab).should('not.exist')
+        cy.get(TestCasesPage.configurationSubTab).should('be.visible')
 
     })
 })

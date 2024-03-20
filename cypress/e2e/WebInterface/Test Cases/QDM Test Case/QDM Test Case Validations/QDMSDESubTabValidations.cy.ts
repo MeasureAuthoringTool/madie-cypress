@@ -15,8 +15,7 @@ let firstTestCaseTitle = 'PDxNotPsych60MinsDepart'
 let testCaseDescription = 'IPPStrat1Pass' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 
-// skipping until includeSDEValues flag is removed
-describe.skip( 'QDM Test Cases : SDE Sub tab validations', () => {
+describe( 'QDM Test Cases : SDE Sub tab validations', () => {
 
     beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
 
