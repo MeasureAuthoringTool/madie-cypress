@@ -933,9 +933,7 @@ describe('CQL Library Validations -- Attempting to use a QI Core Library in a QD
     })
 })
 
-
-// skipping until includeSDEValues flag is removed
-describe.skip('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Stratification: SDE values / radio button test', () => {
+describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Stratification: SDE values / radio button test', () => {
 
        before('Create Measure', () => {
 
@@ -952,7 +950,7 @@ describe.skip('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO An
 
         OktaLogin.Logout()
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(qdmMeasureNameMOS, CqlLibraryName)
 
     })
 

@@ -3,7 +3,6 @@ import { LandingPage } from "./LandingPage"
 import { MeasuresPage } from "./MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "./Utilities"
-import { OktaLogin } from ".././Shared/OktaLogin"
 
 export class CreateMeasurePage {
 
@@ -174,11 +173,10 @@ export class CreateMeasurePage {
                     'measureSetId': uuidv4(),
                     'cql': measureCQL,
                     'elmJson': elmJson,
-                    // commenting out testCaseConfiguration until the includeSDEValues flag is removed
-                    /* "testCaseConfiguration": {
+                    "testCaseConfiguration": {
                         "id": null,
                         "sdeIncluded": null
-                    }, */
+                    },
                     'measureMetaData': {
                         "description": "SemanticBits",
                         "steward": {
@@ -332,7 +330,6 @@ export class CreateMeasurePage {
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookieALT()
-            cy.wait(5000)
             user = Environment.credentials().harpUserALT
         }
         else {
@@ -340,7 +337,6 @@ export class CreateMeasurePage {
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookie()
-            cy.wait(5000)
             user = Environment.credentials().harpUser
         }
 
@@ -381,11 +377,10 @@ export class CreateMeasurePage {
                             }
                         ]
                     },
-                    // commenting out testCaseConfiguration until the includeSDEValues flag is removed
-                    /* "testCaseConfiguration": {
+                    "testCaseConfiguration": {
                         "id": null,
                         "sdeIncluded": null
-                    }, */
+                    },
                     'programUseContext': {
                         "code": "mips",
                         "display": "MIPS",

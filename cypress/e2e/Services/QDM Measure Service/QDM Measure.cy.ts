@@ -49,11 +49,10 @@ describe('Measure Service: QDM Measure', () => {
                     "measurementPeriodEnd": mpEndDate,
                     "rateAggregation": "Aggregation",
                     "improvementNotation": "Increased score indicates improvement",
-                    // commenting out testCaseConfiguration until the includeSDEValues flag is removed
-                    /* "testCaseConfiguration": {
+                    "testCaseConfiguration": {
                         "id": null,
                         "sdeIncluded": null
-                    }, */
+                    },
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
@@ -96,11 +95,10 @@ describe('Measure Service: QDM Measure', () => {
                     "ecqmTitle": eCQMTitle,
                     "measurementPeriodStart": mpStartDate,
                     "measurementPeriodEnd": mpEndDate,
-                    // commenting out testCaseConfiguration until the includeSDEValues flag is removed
-                    /* "testCaseConfiguration": {
+                    "testCaseConfiguration": {
                         "id": null,
                         "sdeIncluded": null
-                    }, */
+                    },
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
@@ -138,11 +136,10 @@ describe('Measure Service: QDM Measure', () => {
                     "ecqmTitle": eCQMTitle,
                     "measurementPeriodStart": mpStartDate,
                     "measurementPeriodEnd": mpEndDate,
-                    // commenting out testCaseConfiguration until the includeSDEValues flag is removed
-                    /* "testCaseConfiguration": {
+                    "testCaseConfiguration": {
                         "id": null,
                         "sdeIncluded": null
-                    }, */
+                    },
                     "supplementalData": [
                         {
                             "definition": "supplementalDataDefinition",
@@ -225,11 +222,10 @@ describe('QDM Measure: Transmission format', () => {
                             "ecqmTitle": "ecqmTitle",
                             "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
                             "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
-                            // commenting out testCaseConfiguration until the includeSDEValues flag is removed
-                            /* "testCaseConfiguration": {
+                            "testCaseConfiguration": {
                                 "id": null,
                                 "sdeIncluded": null
-                            }, */
+                            },
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
