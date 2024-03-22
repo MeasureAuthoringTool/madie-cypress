@@ -118,7 +118,7 @@ describe('Validate Measure Group deletion functionality', () => {
 
     })
 
-    //This test  case needs review for validity
+    //This test case needs review for validity
     it.skip('Test Cases still loads after a one from multiple groups are deleted', () => {
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -243,14 +243,12 @@ describe('Validate Measure Group deletion functionality', () => {
 
         //confirm test case is still present on measure
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=test-case-row-' + fileContents + ']', { timeout: 80000 }).should('exist')
-            cy.get('[data-testid=select-action-' + fileContents + ']', { timeout: 80000 }).should('be.visible')
-            cy.get('[data-testid=select-action-' + fileContents + ']', { timeout: 80000 }).click()
+            cy.get('[data-testid="test-case-row-0"]', { timeout: 80000 }).should('exist')
+            cy.get('[data-testid="test-case-title-0_action"]', { timeout: 80000 }).should('be.visible')
+            cy.get('[data-testid="test-case-title-0_action"]', { timeout: 80000 }).click()
             cy.get('[data-testid=view-edit-test-case-' + fileContents + ']', { timeout: 80000 }).should('be.visible')
             cy.get('[data-testid=view-edit-test-case-' + fileContents + ']', { timeout: 80000 }).click()
         })
-        //<button data-testid="view-edit-test-case-6376a9e6397dda4088e73cd9">edit</button>
-        //<button class="action-button" css="[object Object]" data-testid="select-action-6376a9e6397dda4088e73cd9"><div class="action">Select</div><div class="chevron-container"><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ExpandMoreIcon"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"></path></svg></div></button>
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((mId) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((tId) => {
                 cy.intercept('GET', 'https://dev-madie.hcqis.org/measures/' + mId + '/edit/test-cases/' + tId, [])
