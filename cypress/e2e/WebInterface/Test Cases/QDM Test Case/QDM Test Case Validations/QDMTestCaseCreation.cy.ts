@@ -176,7 +176,7 @@ describe('Validating the creation of QDM Test Case', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob
-        cy.get(TestCasesPage.QDMDob).type('01/01/2020')
+        cy.get(TestCasesPage.QDMDob).type('01/01/2020').wait(1000)
 
         //save dob value
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
