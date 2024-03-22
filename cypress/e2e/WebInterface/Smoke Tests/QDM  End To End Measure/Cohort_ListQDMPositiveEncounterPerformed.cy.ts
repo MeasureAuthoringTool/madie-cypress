@@ -6,6 +6,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import {TestCasesPage} from "../../../../Shared/TestCasesPage"
+import {QDMElements} from "../../../../Shared/QDMElements"
 
 let measureName = 'CohortListQDMPositiveEncounterPerformed' + Date.now()
 let CqlLibraryName = 'CohortListQDMPositiveEncounterPerformed' + Date.now()
@@ -236,7 +237,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         //enter a value of the dob, Race and gender
         cy.get(TestCasesPage.QDMDob).type('06/15/1935').click()
         cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
         cy.get(TestCasesPage.QDMRace).click()
         cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
         cy.get(TestCasesPage.QDMGender).click()
@@ -244,129 +245,101 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         cy.get(TestCasesPage.QDMEthnicity).click()
         cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
 
+        //Save Test case
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+
+
         //Element - Encounter:Performed: Encounter Inpatient
-        cy.get('[data-testid=elements-tab-encounter]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').eq(0).click()
-        cy.get(':nth-child(1) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').eq(1).type('06/21/2012 12:02 PM')
-        cy.get(':nth-child(2) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').type('07/18/2012 12:15 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Length Of Stay"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('27')
-        cy.get('#quantity-unit-input-quantity').type('d')
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-SNOMEDCT]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-183452005]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Element
+        QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('06/21/2012 12:02 PM', '07/18/2012 12:15 PM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '183452005')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Length Of Stay', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('27', 'd')
+        //add attribute to test case action
+        QDMElements.addAttribute()
 
         //Element - Laboratory Test:Performed: Sodium lab test
-        cy.get('[data-testid=elements-tab-laboratory_test]').click()
-        cy.get('[data-testid="data-type-Laboratory Test, Performed: Sodium lab test"]').click()
+        //add Element
+        QDMElements.addElement('laboratory', 'Performed: Sodium lab test')
         cy.get('[id="dateTime"]').eq(1).type('06/20/2012 12:01 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid="option-Quantity"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('34')
-        cy.get('#quantity-unit-input-quantity').type('mmol/L')
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-LOINC]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-2947-0]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Code
+        QDMElements.addCode('LOINC', '2947-0')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Result', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('34', 'mmol/L')
+        //add attribute to test case action
+        QDMElements.addAttribute()
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        QDMElements.closeElement()
 
         //Element - Laboratory Test:Performed: Sodium lab test
-        cy.get('[data-testid=elements-tab-laboratory_test]').click()
-        cy.get('[data-testid="data-type-Laboratory Test, Performed: Sodium lab test"]').click()
+        //add Element
+        QDMElements.addElement('laboratory', 'Performed: Sodium lab test')
         cy.get('[id="dateTime"]').eq(1).type('06/21/2012 12:03 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid="option-Quantity"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('120')
-        cy.get('#quantity-unit-input-quantity').type('mmol/L')
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-LOINC]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-2947-0]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Code
+        QDMElements.addCode('LOINC', '2947-0')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Result', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('120', 'mmol/L')
+        //add attribute to test case action
+        QDMElements.addAttribute()
 
         //Element - Encounter:Performed: Encounter Inpatient
-        cy.get('[data-testid=elements-tab-encounter]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').eq(0).click()
-        cy.get(':nth-child(1) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').eq(1).type('06/20/2012 12:00 PM')
-        cy.get(':nth-child(2) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').type('06/20/2012 12:15 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Length Of Stay"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('1')
-        cy.get('#quantity-unit-input-quantity').type('d')
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-SNOMEDCT]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-183452005]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Element
+        QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('06/20/2012 12:00 PM', '06/20/2012 12:15 PM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '183452005')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Length Of Stay', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('1', 'd')
+        //add attribute to test case action
+        QDMElements.addAttribute()
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        QDMElements.closeElement()
 
         //Element - Encounter:Performed: Encounter Inpatient
-        cy.get('[data-testid=elements-tab-encounter]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').eq(0).click()
-        cy.get(':nth-child(1) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').eq(1).type('06/19/2012 12:00 PM')
-        cy.get(':nth-child(2) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').type('06/19/2012 12:15 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Length Of Stay"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('1')
-        cy.get('#quantity-unit-input-quantity').type('d')
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-SNOMEDCT]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-8715000]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Element
+        QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('06/19/2012 12:00 PM', '06/19/2012 12:15 PM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '8715000')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Length Of Stay', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('1', 'd')
+        //add attribute to test case action
+        QDMElements.addAttribute()
 
         //Element - Laboratory Test:Performed: Sodium lab test
-        cy.get('[data-testid=elements-tab-laboratory_test]').click()
-        cy.get('[data-testid="data-type-Laboratory Test, Performed: Sodium lab test"]').click()
+        //add Element
+        QDMElements.addElement('laboratory', 'Performed: Sodium lab test')
         cy.get('[id="dateTime"]').eq(1).type('06/19/2012 12:01 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid="option-Quantity"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('50')
-        cy.get('#quantity-unit-input-quantity').type('mmol/L')
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-LOINC]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-2947-0]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Code
+        QDMElements.addCode('LOINC', '2947-0')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Result', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('50', 'mmol/L')
+        //add attribute to test case action
+        QDMElements.addAttribute()
 
         //Element - Patient Characteristic:Patient Characteristic Payer: Medicare FFS payer
-        cy.get('[data-testid=elements-tab-patient_characteristic]').click()
-        cy.get('[data-testid="data-type-Patient Characteristic Payer: Medicare FFS payer"]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-SOP]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-1]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Element
+        QDMElements.addElement('patientcharacteristic', 'Payer: Medicare FFS payer')
+        //add Code
+        QDMElements.addCode('SOP', '1')
 
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -387,7 +360,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         //enter a value of the dob, Race and gender
         cy.get(TestCasesPage.QDMDob).type('06/15/1935').click()
         cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
         cy.get(TestCasesPage.QDMRace).click()
         cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
         cy.get(TestCasesPage.QDMGender).click()
@@ -395,76 +368,60 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         cy.get(TestCasesPage.QDMEthnicity).click()
         cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
 
-        //Element - Physical Exam:Performed: Systolic blood pressure
-        cy.get('[data-testid=elements-tab-physical_exam]').click()
-        cy.get('[data-testid="data-type-Physical Exam, Performed: Systolic Blood Pressure"]').click()
-        cy.get('[id="dateTime"]').eq(1).type('06/20/2012 12:01 PM')
-        cy.get('[id="dateTime"]').eq(2).type('06/20/2012 03:01 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid=option-Quantity]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('120')
-        cy.get('#quantity-unit-input-quantity').type('mm[Hg]')
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-LOINC]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-8480-6]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
-        //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        //Save Test case
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //Element - Physical Exam:Performed: Systolic blood pressure
-        cy.get('[data-testid=elements-tab-physical_exam]').click()
-        cy.get('[data-testid="data-type-Physical Exam, Performed: Systolic Blood Pressure"]').click()
-        cy.get('[id="dateTime"]').eq(1).type('06/20/2012 2:01 PM')
-        cy.get('[id="dateTime"]').eq(2).type('06/20/2012 03:01 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid=option-Quantity]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('115')
-        cy.get('#quantity-unit-input-quantity').type('mm[Hg]')
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-LOINC]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-8480-6]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Element
+        QDMElements.addElement('physicalexam', 'Performed: Systolic Blood Pressure')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('06/20/2012 12:01 PM', '06/20/2012 03:01 PM')
+        //add Code
+        QDMElements.addCode('LOINC', '8480-6')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Result', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('120', 'mm[Hg]')
+        //add attribute to test case action
+        QDMElements.addAttribute()
+        //Close the Element
+        QDMElements.closeElement()
+
+        //Element - Physical Exam:Performed: Systolic blood pressure
+        //add Element
+        QDMElements.addElement('physicalexam', 'Performed: Systolic Blood Pressure')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('06/20/2012 2:01 PM', '06/20/2012 03:01 PM')
+        //add Code
+        QDMElements.addCode('LOINC', '8480-6')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Result', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('115', 'mm[Hg]')
+        //add attribute to test case action
+        QDMElements.addAttribute()
 
         //Element - Encounter:Performed: Encounter Inpatient
-        cy.get('[data-testid=elements-tab-encounter]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').eq(0).click()
-        cy.get(':nth-child(1) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').eq(1).type('06/21/2012 12:00 PM')
-        cy.get(':nth-child(2) > .MuiFormControl-root > .MuiInputBase-root > #dateTime').type('06/22/2012 12:15 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Length Of Stay"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('1')
-        cy.get('#quantity-unit-input-quantity').type('d')
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-SNOMEDCT]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-183452005]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Element
+        QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('06/21/2012 12:00 PM', '06/22/2012 12:15 PM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '183452005')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Length Of Stay', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('1', 'd')
+        //add attribute to test case action
+        QDMElements.addAttribute()
 
         //Element -  Patient Characteristic:Patient Characteristic Payer: Medicare payer
-        cy.get('[data-testid=elements-tab-patient_characteristic]').click()
-        cy.get('[data-testid="data-type-Patient Characteristic Payer: Payer"]').click()
-        cy.get('[id="dateTime"]').eq(1).type('06/20/2012 2:01 PM')
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-SOP]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-1]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
-
+        //add Element
+        QDMElements.addElement('patientcharacteristic', 'Payer: Payer')
+        //add Code
+        QDMElements.addCode('SOP', '1')
+        
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')

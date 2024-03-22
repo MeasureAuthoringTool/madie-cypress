@@ -1,6 +1,3 @@
-import { EditMeasurePage } from "./EditMeasurePage"
-import { Environment } from "./Environment"
-import { Utilities } from "./Utilities"
 
 export class QDMElements {
 
@@ -16,6 +13,27 @@ export class QDMElements {
                 break
             }
 
+            case 'laboratory': {
+
+                cy.get('[data-testid=elements-tab-laboratory_test]').click()
+                cy.get('[data-testid="data-type-Laboratory Test, ' + elementTitle + '"]').click()
+
+                break
+            }
+
+            case 'physicalexam': {
+
+                cy.get('[data-testid=elements-tab-physical_exam]').click()
+                cy.get('[data-testid="data-type-Physical Exam, ' + elementTitle + '"]').click()
+
+                break
+            }
+
+            case  'patientcharacteristic': {
+
+                cy.get('[data-testid=elements-tab-patient_characteristic]').click()
+                cy.get('[data-testid="data-type-Patient Characteristic ' + elementTitle + '"]').click()
+            }
         }
     }
 
