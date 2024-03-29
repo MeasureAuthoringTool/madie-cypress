@@ -19,13 +19,8 @@ let measureCQL = MeasureCQL.QDMTestCaseCQLFullElementSection
 let testCaseSeries = 'SBTestSeries'
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 let cqlLibraryName = 'TestLibrary' + Date.now()
-let QDMmeasureCQL = MeasureCQL.simpleQDM_CQL
 let measureScoring = 'Cohort'
-let secondTestCaseTitle = 'Failing Test Case'
-let secondTestCaseDescription = 'DENOMFail' + Date.now()
-let secondTestCaseSeries = 'SBTestSeriesF'
 let validTestCaseJsonLizzy = TestCaseJson.TestCaseJson_Valid
-let validTestCaseJsonBobby = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let measureCQLWithMOAndStrat = 'library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedPatients version \'11.1.000\'\n' +
     '\n' +
@@ -640,5 +635,35 @@ describe('QDM: Test Case QRDA Export', () => {
         MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.testcaseQRDAExportBtn).should('not.exist')
+    })
+})
+
+//"QDMCodeSearch": false
+describe('QDM: Code search on CQL editor tab', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = 'TestMeasure' + Date.now() + randValue
+    let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+
+    before('Create Measure and Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
+        OktaLogin.Login()
+
+    })
+
+    after('Logout and cleanup', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('QDM Code search page not visible when the feature flag is enabled', () => {
+
+        MeasuresPage.measureAction('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get('[data-testid="codes-tab"]').should('not.exist')
     })
 })
