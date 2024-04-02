@@ -557,7 +557,25 @@ describe('QDM: Configuration sub tab', () => {
     before('Create Measure and Login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', false, measureCQL)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.wait(3000)
+        OktaLogin.UILogout()
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie().wait(3000)
+        //create Measure Group
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie().wait(3000)
         OktaLogin.Login()
 
     })
