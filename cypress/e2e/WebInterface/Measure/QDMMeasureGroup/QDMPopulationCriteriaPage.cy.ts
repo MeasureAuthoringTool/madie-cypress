@@ -156,7 +156,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
         //Add Rate Aggregation
         cy.get(MeasureGroupPage.rateAggregation).type('Aggregation')
-        //Add Improvement Notation
+
+        //Add Improvement Notation --'Increased score indicates improvement'
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
         Utilities.waitForElementEnabled(MeasureGroupPage.improvementNotationDescText, 30000)
 
@@ -181,6 +182,63 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
         cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Aggregation')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
+
+        //Add Improvement Notation --'Decreased score indicates improvement'
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Decreased score indicates improvement')
+        Utilities.waitForElementEnabled(MeasureGroupPage.improvementNotationDescText, 30000)
+
+        //save population definition with scoring unit
+        cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.visible')
+        cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.enabled')
+        cy.get(MeasureGroupPage.measureReportingSaveBtn).click()
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Measure Reporting Updated Successfully')
+
+        //navigate away from measure group page
+        cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+        //navigate back to the measure group page
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Assert Rate Aggregation and Improvement Notation text box
+        cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
+        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Aggregation')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Decreased score indicates improvement')
+
+        //Add Improvement Notation --'Other'
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Other')
+        Utilities.waitForElementEnabled(MeasureGroupPage.improvementNotationDescText, 30000)
+
+        Utilities.waitForElementDisabled(MeasureGroupPage.measureReportingSaveBtn, 30000)
+
+        cy.get(MeasureGroupPage.improvementNotationDescText).type('This is the required text when IN is set to \"Other\"')
+
+        //save population definition with scoring unit
+        cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.visible')
+        cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.enabled')
+        cy.get(MeasureGroupPage.measureReportingSaveBtn).click()
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Measure Reporting Updated Successfully')
+
+        //navigate away from measure group page
+        cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+        //navigate back to the measure group page
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Assert Rate Aggregation and Improvement Notation text box
+        cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
+        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Aggregation')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Other')
+        cy.get(MeasureGroupPage.improvementNotationDescText).should('contain.value', 'This is the required text when IN is set to \"Other\"')
     })
 
     //Reporting tab fields
