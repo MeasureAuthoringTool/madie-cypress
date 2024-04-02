@@ -158,6 +158,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.rateAggregation).type('Aggregation')
         //Add Improvement Notation
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+        Utilities.waitForElementEnabled(MeasureGroupPage.improvementNotationDescText, 30000)
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.visible')
@@ -199,7 +200,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.rateAggregation).type('Aggregation')
         //Add Improvement Notation
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Other')
-        cy.get(MeasureGroupPage.improvementNotationOtherText).type('Improvement Notation Text')
+        cy.get(MeasureGroupPage.improvementNotationDescText).type('Improvement Notation Text')
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.visible')
@@ -222,7 +223,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
         cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Aggregation')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Other')
-        cy.get(MeasureGroupPage.improvementNotationOtherText).should('contain.value', 'Improvement Notation Text')
+        cy.get(MeasureGroupPage.improvementNotationDescText).should('contain.value', 'Improvement Notation Text')
     })
 
     it('Add Risk Adjustment Variables and Supplemental Data Elements to Population Criteria', () => {

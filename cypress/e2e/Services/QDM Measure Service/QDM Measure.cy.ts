@@ -49,6 +49,7 @@ describe('Measure Service: QDM Measure', () => {
                     "measurementPeriodEnd": mpEndDate,
                     "rateAggregation": "Aggregation",
                     "improvementNotation": "Increased score indicates improvement",
+                    "improvementNotationDescription": "This is a description for when the IN is set to \"Increased score indicates improvement\"",
                     "testCaseConfiguration": {
                         "id": null,
                         "sdeIncluded": null
@@ -62,6 +63,7 @@ describe('Measure Service: QDM Measure', () => {
                 cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
                 expect(response.body.rateAggregation).to.eql('Aggregation')
                 expect(response.body.improvementNotation).to.eql('Increased score indicates improvement')
+                expect(response.body.improvementNotationDescription).to.eql('This is a description for when the IN is set to \"Increased score indicates improvement\"')
             })
 
         })

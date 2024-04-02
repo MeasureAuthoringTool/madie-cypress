@@ -5,7 +5,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let measureName = 'MeasureWithNegationRationale' + Date.now()
 let CqlLibraryName = 'MeasureWithNegationRationale' + Date.now()
@@ -246,7 +246,7 @@ describe('Measure with Negation Rationale', () => {
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Sex').click()
 
         //Save Supplemental data
-        cy.get('[data-testid="measure-Supplemental Data-save"]').click({force:true})
+        cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
         cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Add Elements to the Test case
@@ -277,7 +277,7 @@ describe('Measure with Negation Rationale', () => {
 
         //Element - Medication, Administered: BCG Bacillus Calmette Guerin for Urology Care
         cy.get('[data-testid=elements-tab-medication]').click()
-        cy.get('[data-testid="data-type-Medication, Administered: BCG Bacillus Calmette Guerin for Urology Care"]').click()
+        cy.get('[data-testid="data-type-Medication, Not Administered: BCG Bacillus Calmette Guerin for Urology Care"]').click()
         cy.get('[id="dateTime"]').eq(0).type('03/01/2012 08:00 AM')
         cy.get('[id="dateTime"]').eq(1).type('03/01/2012 10:15 AM')
         cy.get(TestCasesPage.codeSystemSelector).click()
