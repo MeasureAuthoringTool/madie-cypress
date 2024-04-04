@@ -20,6 +20,15 @@ export class CQLEditorPage {
     //UMLS Not Logged in Error
     public static readonly umlsMessage = '[data-testid="valueset-success"]'
 
+    //Code Search page
+    public static readonly codesTab = '[data-testid="codes-tab"]'
+    public static readonly codeSubTab = '[data-testid="code-tab"]'
+    public static readonly codeSystemVersionDropdown = '[id="code-system-version-selector"]'
+    public static readonly codeSystemVersionOption = '[data-value="version 1"]'
+    public static readonly codeText = '[data-testid="code-text-input"]'
+    public static readonly codeSystemDropdown = '[id="code-system-selector"]'
+    public static readonly codeSystemOption = '[data-value="Code System 1"]'
+
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
 
