@@ -277,7 +277,7 @@ describe('Measure with Negation Rationale', () => {
 
         //Element - Medication, Administered: BCG Bacillus Calmette Guerin for Urology Care
         cy.get('[data-testid=elements-tab-medication]').click()
-        cy.get('[data-testid="data-type-Medication, Not Administered: BCG Bacillus Calmette Guerin for Urology Care"]').click()
+        cy.get('[data-testid="data-type-Medication, Administered: BCG Bacillus Calmette Guerin for Urology Care"]').click()
         cy.get('[id="dateTime"]').eq(0).type('03/01/2012 08:00 AM')
         cy.get('[id="dateTime"]').eq(1).type('03/01/2012 10:15 AM')
         cy.get(TestCasesPage.codeSystemSelector).click()

@@ -219,5 +219,9 @@ describe('QI-Core Test Case Export for all test cases', () => {
         Utilities.waitForElementVisible('[data-testid="user-profile-select"]', 60000)
 
         OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
     })
 })
