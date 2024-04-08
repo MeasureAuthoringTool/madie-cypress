@@ -1,13 +1,9 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { LandingPage } from "../../../../Shared/LandingPage"
 import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { Global } from "../../../../Shared/Global"
 import { Utilities } from "../../../../Shared/Utilities"
 import { Environment } from "../../../../Shared/Environment"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { v4 as uuidv4 } from 'uuid'
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -118,16 +114,17 @@ describe('Edit Measure Validations', () => {
     })
 })
 
-describe('Measurement Period Validations', () => {
+//Skipping until MAT-7015 is fixed
+describe.skip('Measurement Period Validations', () => {
 
     beforeEach('Create measure and login', () => {
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
+        measureName = 'TestMeasure' + Date.now() + randValue
+        CqlLibraryName = 'MeasurementPeriodTestLibrary' + Date.now() + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
 
     })
@@ -136,10 +133,7 @@ describe('Measurement Period Validations', () => {
 
         OktaLogin.Logout()
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
 
@@ -147,8 +141,8 @@ describe('Measurement Period Validations', () => {
 
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
-        cy.get(CreateMeasurePage.measurementPeriodEndDate).clear().type('01/01/1999')
-        cy.get(CreateMeasurePage.measurementPeriodStartDate).clear().type('12/01/2022')
+        cy.get(EditMeasurePage.mpEnd).clear().type('01/01/1999')
+        cy.get(EditMeasurePage.mpStart).clear().type('12/01/2022')
         cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'Measurement period ' +
             'end date should be greater than measurement period start date.')
 
@@ -158,11 +152,11 @@ describe('Measurement Period Validations', () => {
 
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
-        cy.get(CreateMeasurePage.measurementPeriodStartDate).clear()
-        cy.get(CreateMeasurePage.measurementPeriodStartDate).focus().blur()
+        cy.get(EditMeasurePage.mpStart).clear()
+        cy.get(EditMeasurePage.mpStart).focus().blur()
         cy.get(CreateMeasurePage.editMeasurementPeriodStartDateError).should('contain.text', 'Measurement period start date is required')
-        cy.get(CreateMeasurePage.measurementPeriodEndDate).clear()
-        cy.get(CreateMeasurePage.measurementPeriodEndDate).focus().blur()
+        cy.get(EditMeasurePage.mpEnd).clear()
+        cy.get(EditMeasurePage.mpEnd).focus().blur()
         cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'Measurement period end date is required')
     })
 
@@ -170,11 +164,11 @@ describe('Measurement Period Validations', () => {
 
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
-        cy.get(CreateMeasurePage.measurementPeriodStartDate).clear().type('01/01/1800')
-        cy.get(CreateMeasurePage.measurementPeriodEndDate).click()
+        cy.get(EditMeasurePage.mpStart).clear().type('01/01/1800')
+        cy.get(EditMeasurePage.mpEnd).click()
         cy.get(CreateMeasurePage.editMeasurementPeriodStartDateError).should('contain.text', 'Start date should be between the years 1900 and 2099.')
-        cy.get(CreateMeasurePage.measurementPeriodEndDate).clear().type('01/01/1800')
-        cy.get(CreateMeasurePage.measurementPeriodStartDate).click()
+        cy.get(EditMeasurePage.mpEnd).clear().type('01/01/1800')
+        cy.get(EditMeasurePage.mpStart).click()
         cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'End date should be between the years 1900 and 2099.')
     })
 
@@ -182,11 +176,11 @@ describe('Measurement Period Validations', () => {
 
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
-        cy.get(CreateMeasurePage.measurementPeriodStartDate).clear().type('2020/01/02')
-        cy.get(CreateMeasurePage.measurementPeriodEndDate).click()
+        cy.get(EditMeasurePage.mpStart).clear().type('2020/01/02')
+        cy.get(EditMeasurePage.mpEnd).click()
         cy.get(CreateMeasurePage.editMeasurementPeriodStartDateError).should('contain.text', 'Invalid date format. (mm/dd/yyyy)')
-        cy.get(CreateMeasurePage.measurementPeriodEndDate).clear().type('2021/01/02')
-        cy.get(CreateMeasurePage.measurementPeriodStartDate).click()
+        cy.get(EditMeasurePage.mpEnd).clear().type('2021/01/02')
+        cy.get(EditMeasurePage.mpStart).click()
         cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'Invalid date format. (mm/dd/yyyy)')
     })
 

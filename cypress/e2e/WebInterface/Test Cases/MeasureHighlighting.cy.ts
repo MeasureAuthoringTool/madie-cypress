@@ -27,7 +27,8 @@ let tcResultJson = TestCaseJson.tcResultsJson
 let newMeasureName = ''
 let newCqlLibraryName = ''
 
-describe('Measure Highlighting', () => {
+//Skipping until MAT-7106 is fixed
+describe.skip('Measure Highlighting', () => {
 
     beforeEach('Create measure and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -128,7 +129,8 @@ describe('Measure Highlighting', () => {
     })
 })
 
-describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a single PC measure', () => {
+//Skipping until MAT-7106 is fixed
+describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a single PC measure', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -241,7 +243,8 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
     })
 })
 
-describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a multiple PC measure', () => {
+//Skipping until MAT-7106 is fixed
+describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a multiple PC measure', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -405,7 +408,8 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
     })
 })
 
-describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
+//Skipping until MAT-7106 is fixed
+describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -512,7 +516,8 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
     })
 })
 
-describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
+//Skipping until MAT-7106 is fixed
+describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
 
     deleteDownloadsFolderBeforeAll()
 

@@ -12,12 +12,9 @@ import { Global } from "../../../../../Shared/Global"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
-
 let testCaseDescription = 'DENOMFail' + Date.now()
 let QDMTCJson = TestCaseJson.QDMTestCaseJson
-//let testCasePath = 'cypress/fixtures/testCaseId'
 let measureName = 'QDMTestMeasure' + Date.now()
-//let measurePath = 'cypress/fixtures/measureId'
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'test case title'
 let testCaseSeries = 'SBTestSeries'
@@ -28,7 +25,6 @@ let measureCQL = MeasureCQL.QDMHighlightingTab_CQL
 let measureScoring = 'Cohort'
 let qdmMeasureCQL = MeasureCQL.simpleQDM_CQL
 let qdmMeasureCQLwInvalidValueset = MeasureCQL.simpleQDM_CQL_invalid_valueset
-//let qdmMeasureCQLwDataTMMtoCQM = MeasureCQL.QDMTestCaseCQLFullElementSection
 let qdmMeasureCQLwNonVsacValueset = MeasureCQL.QDMTestCaseCQLNonVsacValueset
 let measureQDMCQL = 'library Library5749 version \'0.0.000\'\n' +
     'using QDM version \'5.6\'\n' +
@@ -172,7 +168,6 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
     })
 })
 
-
 describe('Create Test Case Validations', () => {
 
     before('Create Measure', () => {
@@ -294,6 +289,7 @@ describe('Edit Test Case Validations', () => {
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.testCaseTitle).clear()
+        cy.wait(1000)
 
         //Update Test Case Title with more than 250 characters
         cy.get(TestCasesPage.testCaseTitle).type(twoFiftyTwoCharacters, { delay: 0 })
@@ -434,7 +430,7 @@ describe('Dirty Check Validations', () => {
         //verify discard modal and click on keep working
         Global.clickDiscardAndKeepWorking()
 
-        //verify that the Ethnicity valu is left unchanged from it's last change
+        //verify that the Ethnicity value is left unchanged from it's last change
         cy.get(TestCasesPage.QDMEthnicity).should('contain.text', 'Not Hispanic or Latino')
     })
 
@@ -536,7 +532,7 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
         cy.get('[id="quantity-unit-dropdown-high"]').click()
         cy.get('#quantity-unit-dropdown-high-option-0').click() //Select unit as m meter
 
-        //attempt to navigate away without clicking onthe add button (for the attribute)
+        //attempt to navigate away without clicking on the add button (for the attribute)
         cy.get(Header.measures).click()
         Utilities.waitForElementVisible(TestCasesPage.QDMDiscardChangesDialog, 35000)
         Global.clickOnDirtyCheckCancelChanges()
@@ -552,12 +548,12 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
         cy.get('[data-testid=quantity-value-input-high]').should('include.value', 4)
         cy.get('[id="quantity-unit-dropdown-high"]').should('contain.value', "m meter")
 
-        //another attempt to navigate away from current page after clicingon the add button
+        //another attempt to navigate away from current page after clicking on the add button
         cy.get(Header.measures).click()
         Utilities.waitForElementVisible(TestCasesPage.QDMDiscardChangesDialog, 35000)
         Global.clickOnDirtyCheckDiscardChanges()
 
-        //user is naviagated away from test case page
+        //user is navigated away from test case page
         cy.location('pathname', { timeout: 60000 }).should('include', '/measures')
 
         //when the user navigates back to the test case details page the attribute details are not present**
@@ -650,7 +646,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / succesful save message to appear
+        //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -712,7 +708,7 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        //wait for alert / succesful save message to appear
+        //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -773,7 +769,7 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        //wait for alert / succesful save message to appear
+        //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
