@@ -63,8 +63,8 @@ describe('Read only for measure, measure group, and test cases that user does no
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
 
-        cy.get(CreateMeasurePage.measurementPeriodStartDate).should('be.disabled')
-        cy.get(CreateMeasurePage.measurementPeriodEndDate).should('be.disabled')
+        cy.get(CreateMeasurePage.measurementPeriodStartDate).should('not.be.enabled')
+        cy.get(CreateMeasurePage.measurementPeriodEndDate).should('not.be.enabled')
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')

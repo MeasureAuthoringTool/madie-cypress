@@ -5,8 +5,8 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import {TestCasesPage} from "../../../../Shared/TestCasesPage"
-import {QDMElements} from "../../../../Shared/QDMElements"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { QDMElements } from "../../../../Shared/QDMElements"
 
 let measureName = 'CohortListQDMPositiveEncounterPerformed' + Date.now()
 let CqlLibraryName = 'CohortListQDMPositiveEncounterPerformed' + Date.now()
@@ -226,7 +226,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Results').click()
 
         //Save Supplemental data
-        cy.get('[data-testid="measure-Supplemental Data-save"]').click({force:true})
+        cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
         cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Add Elements to the Test case
@@ -421,7 +421,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         QDMElements.addElement('patientcharacteristic', 'Payer: Payer')
         //add Code
         QDMElements.addCode('SOP', '1')
-        
+
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
