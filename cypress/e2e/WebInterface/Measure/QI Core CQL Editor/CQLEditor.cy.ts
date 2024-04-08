@@ -148,7 +148,7 @@ describe('Measure: CQL Editor', () => {
         CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor window
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "ELM: 1:3 | Could not resolve identifier SDE in the current library.ELM: 5:13 | Member SDE Sex not found for type null.")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "ELM: 1:3 | Could not resolve identifier SDE in the current library.  ELM: 5:13 | Member SDE Sex not found for type null.")
 
         //Navigate away from CQL Editor tab
         cy.get(EditMeasurePage.measureDetailsTab).click()
@@ -157,7 +157,7 @@ describe('Measure: CQL Editor', () => {
         CQLEditorPage.clickCQLEditorTab()
 
         //Validate error(s) in CQL Editor windows
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "ELM: 1:3 | Could not resolve identifier SDE in the current library.ELM: 5:13 | Member SDE Sex not found for type null.")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "ELM: 1:3 | Could not resolve identifier SDE in the current library.  ELM: 5:13 | Member SDE Sex not found for type null.")
 
     })
 

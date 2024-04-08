@@ -92,10 +92,10 @@ export class EditMeasurePage {
     public static readonly deleteMeasureConfirmationButton = '[data-testid=delete-measure-button-2]'
     public static readonly successfulMeasureDeleteMsg = '[data-testid=edit-measure-information-success-text]'
 
-    //Measure Meta Data
-    //Model & Mesasurement Start and End date(s)
-    public static readonly mpStart = '[name="measurementPeriodStart"]'
-    public static readonly mpEnd = '[id="measurement-period-end"]'
+    //Measure MetaData
+    //Model & Measurement Start and End date(s)
+    public static readonly mpStart = '[data-testid="measurement-period-start-input"]'
+    public static readonly mpEnd = '[data-testid="measurement-period-end-input"]'
 
     //Measure Steward & Developers Page
     public static readonly measureStewardDrpDwn = '[data-testid="steward"]'
