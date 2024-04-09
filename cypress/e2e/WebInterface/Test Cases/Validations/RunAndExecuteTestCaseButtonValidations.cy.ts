@@ -448,8 +448,8 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         Utilities.deleteMeasure(measureName, newCqlLibraryName)
     })
-    //skipping until MAT-7016 is fixed
-    it.skip('Run and Execute Test case for multiple Population Criteria and validate Population Criteria discernment, on Highlighting page and Test Case list page', () => {
+
+    it('Run and Execute Test case for multiple Population Criteria and validate Population Criteria discernment, on Highlighting page and Test Case list page', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measurePath = 'cypress/fixtures/measureId'
 
