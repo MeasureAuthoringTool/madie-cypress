@@ -15,6 +15,30 @@ let newMeasureName = ''
 let newCqlLibraryName = ''
 const now = require('dayjs')
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
+let updatedMeasureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
+    'using QDM version \'5.6\'\n' +
+    '\n' +
+    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+    '\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'context Patient\n' +
+    'define "SDE Ethnicity":\n' +
+    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+    'define "SDE Payer":\n' +
+    '  ["Patient Characteristic Payer": "Payer"]\n' +
+    'define "SDE Race":\n' +
+    '  ["Patient Characteristic Race": "Race"]\n' +
+    'define "SDE Sex":\n' +
+    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+    'define "ipp":\n' +
+    '\ttrue\n' +
+    'define "d":\n' +
+    '\t true\n' +
+    'define "n":\n' +
+    '\ttrue'
 
 describe('Error Message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
 
@@ -189,3 +213,57 @@ describe('Error Message on Measure Export when the Measure does not have Populat
         })
     })
 })
+
+describe('Error Message on Measure Export when the Population Criteria does not match', () => {
+
+    before('Create New Measure and Login', () => {
+
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = CqlLibraryName + randValue
+
+        cy.setAccessTokenCookie()
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Numerator')
+
+        OktaLogin.Login()
+    })
+
+    after('Cleanup', () => {
+
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+    })
+
+    it('Verify error message on Measure Export when the Population Criteria does not match with CQL', () => {
+
+        cy.get(Header.measures).click()
+
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(updatedMeasureCQL)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        cy.get(CQLEditorPage.measureErrorToast).should('contain.text', 'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.')
+
+        cy.get(Header.measures).click()
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+
+            Utilities.waitForElementVisible('[data-testid=export-measure-' + fileContents + ']', 30000)
+            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=export-measure-' + fileContents + ']', 30000)
+            cy.get('[data-testid=export-measure-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=export-measure-' + fileContents + ']').click()
+
+            cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
+            cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'MISMATCH_CQL_POPULATION_RETURN_TYPES')
+
+        })
+    })
+})
+
