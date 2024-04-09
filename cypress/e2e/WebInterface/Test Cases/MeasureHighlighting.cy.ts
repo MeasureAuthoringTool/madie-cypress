@@ -27,8 +27,8 @@ let tcResultJson = TestCaseJson.tcResultsJson
 let newMeasureName = ''
 let newCqlLibraryName = ''
 
-//Skipping until MAT-7106 is fixed
-describe.skip('Measure Highlighting', () => {
+
+describe('Measure Highlighting', () => {
 
     beforeEach('Create measure and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -129,8 +129,8 @@ describe.skip('Measure Highlighting', () => {
     })
 })
 
-//Skipping until MAT-7106 is fixed
-describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a single PC measure', () => {
+
+describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a single PC measure', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -243,8 +243,8 @@ describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Highlighti
     })
 })
 
-//Skipping until MAT-7106 is fixed
-describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a multiple PC measure', () => {
+
+describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a multiple PC measure', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -385,6 +385,7 @@ describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Highlighti
             cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Initial PopulationOne":\ntrue\n')
             cy.get('[data-ref-id="34"]').should('have.color', '#20744C')
         })
+        cy.get(TestCasesPage.highlightingPCTabSelector).scrollIntoView()
         Utilities.waitForElementVisible(TestCasesPage.highlightingPCTabSelector, 35000)
         cy.get(TestCasesPage.highlightingPCTabSelector).click()
         cy.readFile(measureSecondGroupPath).should('exist').then((secondGroupId) => {
@@ -408,8 +409,8 @@ describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Highlighti
     })
 })
 
-//Skipping until MAT-7106 is fixed
-describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
+
+describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -516,8 +517,8 @@ describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Includes R
     })
 })
 
-//Skipping until MAT-7106 is fixed
-describe.skip('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
+
+describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
 
     deleteDownloadsFolderBeforeAll()
 
