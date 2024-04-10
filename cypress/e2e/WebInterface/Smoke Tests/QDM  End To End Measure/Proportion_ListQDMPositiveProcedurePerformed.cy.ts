@@ -331,6 +331,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
+        cy.get(TestCasesPage.QDMDob).click().wait(1000)
         cy.get(TestCasesPage.QDMDob).type('07/28/1977').click()
         cy.get(TestCasesPage.QDMLivingStatus).click()
         cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
@@ -347,7 +348,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         cy.get('[id="dateTime"]').eq(0).type('01/01/2012 01:15 PM')
         cy.get('[id="dateTime"]').eq(1).type('01/02/2012 01:15 PM')
         cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-ICD10CM]').click()
+        cy.get('[data-testid=code-system-option-Icd10CM]').click()
         cy.get('[id="code-selector"]').click()
         cy.get('[data-testid="code-option-H47.611"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()

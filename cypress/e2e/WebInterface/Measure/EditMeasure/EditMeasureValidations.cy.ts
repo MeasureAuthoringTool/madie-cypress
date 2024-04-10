@@ -7,9 +7,6 @@ import { Environment } from "../../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
-let newMeasureName = ''
-let newCqlLibraryName = ''
-
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
@@ -114,8 +111,7 @@ describe('Edit Measure Validations', () => {
     })
 })
 
-//Skipping until MAT-7015 is fixed
-describe.skip('Measurement Period Validations', () => {
+describe('Measurement Period Validations', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -152,10 +148,10 @@ describe.skip('Measurement Period Validations', () => {
 
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
-        cy.get(EditMeasurePage.mpStart).clear()
+        cy.get(EditMeasurePage.mpStart).type('{selectall}{backspace}')
         cy.get(EditMeasurePage.mpStart).focus().blur()
         cy.get(CreateMeasurePage.editMeasurementPeriodStartDateError).should('contain.text', 'Measurement period start date is required')
-        cy.get(EditMeasurePage.mpEnd).clear()
+        cy.get(EditMeasurePage.mpEnd).type('{selectall}{backspace}')
         cy.get(EditMeasurePage.mpEnd).focus().blur()
         cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'Measurement period end date is required')
     })

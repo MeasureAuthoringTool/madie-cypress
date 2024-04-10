@@ -261,7 +261,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         QDMElements.addTimingRelevantPeriodDateTime('01/09/2024 12:00 AM', '01/09/2024 02:00 AM')
 
         //add Code
-        QDMElements.addCode('ICD10CM', 'H31.301')
+        QDMElements.addCode('Icd10CM', 'H31.301')
 
         //close element card
         QDMElements.closeElement()
@@ -280,7 +280,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         // Enter attribute and its type
         QDMElements.enterAttribute('Length Of Stay', 'Quantity')
 
-        //enter quanity type
+        //enter quantity type
         QDMElements.enterQuantity('12', 'd')
 
         //add attribute to test case action
