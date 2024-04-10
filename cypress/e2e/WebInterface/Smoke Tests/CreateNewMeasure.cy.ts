@@ -15,7 +15,7 @@ describe('Create New Measure', () => {
 
     afterEach('Cleanup and Logout', () => {
 
-        //Delete Measure
+        //edit Measure
         MeasuresPage.measureAction("edit")
 
         cy.get(EditMeasurePage.deleteMeasureButton).click()
