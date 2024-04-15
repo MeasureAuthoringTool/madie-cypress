@@ -270,15 +270,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        cy.get(TestCasesPage.QDMDob).type('08/17/1957').click()
-        cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
-        cy.get(TestCasesPage.QDMRace).click()
-        cy.get(TestCasesPage.QDMRaceOption).contains('American Indian or Alaska Native').click()
-        cy.get(TestCasesPage.QDMGender).click()
-        cy.get(TestCasesPage.QDMGenderOption).contains('Female').click()
-        cy.get(TestCasesPage.QDMEthnicity).click()
-        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+        TestCasesPage.enterPatientDemographics('08/17/1957', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
 
         //Element - Condition:Diagnosis: Uveitis
         cy.get('[data-testid=elements-tab-condition]').click()
@@ -331,16 +323,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
-        cy.get(TestCasesPage.QDMDob).click().wait(1000)
-        cy.get(TestCasesPage.QDMDob).type('07/28/1977').click()
-        cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
-        cy.get(TestCasesPage.QDMRace).click()
-        cy.get(TestCasesPage.QDMRaceOption).contains('American Indian or Alaska Native').click()
-        cy.get(TestCasesPage.QDMGender).click()
-        cy.get(TestCasesPage.QDMGenderOption).contains('Female').click()
-        cy.get(TestCasesPage.QDMEthnicity).click()
-        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+        TestCasesPage.enterPatientDemographics('07/28/1977', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
 
         //Element - Condition:Diagnosis: Disorders of Visual Cortex
         cy.get('[data-testid=elements-tab-condition]').click()

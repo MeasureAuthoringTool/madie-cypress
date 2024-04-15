@@ -255,15 +255,7 @@ describe('Measure with Negation Rationale', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        cy.get(TestCasesPage.QDMDob).type('04/10/1942').click()
-        cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
-        cy.get(TestCasesPage.QDMRace).click()
-        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
-        cy.get(TestCasesPage.QDMGender).click()
-        cy.get(TestCasesPage.QDMGenderOption).contains('Female').click()
-        cy.get(TestCasesPage.QDMEthnicity).click()
-        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+        TestCasesPage.enterPatientDemographics('04/10/1942', 'Living', 'White', 'Female', 'Not Hispanic or Latino')
 
         //Element - Condition, Diagnosis: Bladder Cancer for Urology Care
         cy.get('[data-testid=elements-tab-condition]').click()

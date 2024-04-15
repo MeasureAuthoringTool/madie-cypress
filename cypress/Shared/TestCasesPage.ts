@@ -1,6 +1,7 @@
 import { EditMeasurePage } from "./EditMeasurePage"
 import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
+import dateTimeISO = CypressCommandLine.dateTimeISO;
 
 export class TestCasesPage {
     //QI Core element tab enabled test case detail page elements
@@ -878,5 +879,19 @@ export class TestCasesPage {
             (text) => {
                 expect(text).to.contain(ValueToBeAdded)
             })
+    }
+
+    public static enterPatientDemographics(dob?: dateTimeISO, livingStatus?: string, race?: string, gender?: string, ethnicity?: string): void {
+
+        cy.get(TestCasesPage.QDMDob).click().wait(1000)
+        cy.get(TestCasesPage.QDMDob).type(dob).click()
+        cy.get(TestCasesPage.QDMLivingStatus).click()
+        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains(livingStatus).click()
+        cy.get(TestCasesPage.QDMRace).click()
+        cy.get(TestCasesPage.QDMRaceOption).contains(race).click()
+        cy.get(TestCasesPage.QDMGender).click()
+        cy.get(TestCasesPage.QDMGenderOption).contains(gender).click()
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        cy.get(TestCasesPage.QEMEthnicityOptions).contains(ethnicity).click()
     }
 }

@@ -83,15 +83,7 @@ describe( 'QDM Test Cases : SDE Sub tab validations', () => {
         TestCasesPage.testCaseAction('edit')
 
         //enter a value of the dob, Race and gender
-        cy.get(TestCasesPage.QDMDob).type('01/01/2020').click()
-        cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
-        cy.get(TestCasesPage.QDMRace).click()
-        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
-        cy.get(TestCasesPage.QDMGender).click()
-        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
-        cy.get(TestCasesPage.QDMEthnicity).click()
-        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+        TestCasesPage.enterPatientDemographics('01/01/2020', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Selecting Laboratory element and performed
         cy.get(TestCasesPage.laboratoryElement).click()
@@ -223,18 +215,10 @@ describe( 'QDM Test Cases : SDE Sub tab validations', () => {
         //Navigate to Edit Test Case page
         TestCasesPage.testCaseAction('edit')
 
-        //enter a value of the dob, Race and gender
-        cy.get(TestCasesPage.QDMDob).type('01/01/2020').click()
-        cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Expired').click()
-        cy.get(TestCasesPage.QDMRace).click()
-        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
-        cy.get(TestCasesPage.QDMGender).click()
-        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
-        cy.get(TestCasesPage.QDMEthnicity).click()
-        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+           //enter a value of the dob, Race and gender
+           TestCasesPage.enterPatientDemographics('01/01/2020', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
-        //Selecting Laboratory element and performed
+           //Selecting Laboratory element and performed
         cy.get(TestCasesPage.laboratoryElement).click()
         cy.get(TestCasesPage.plusIcon).eq(0).click()
 
