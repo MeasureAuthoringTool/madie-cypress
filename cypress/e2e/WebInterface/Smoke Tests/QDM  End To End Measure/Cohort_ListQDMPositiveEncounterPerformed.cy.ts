@@ -235,15 +235,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        cy.get(TestCasesPage.QDMDob).type('06/15/1935').click()
-        cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
-        cy.get(TestCasesPage.QDMRace).click()
-        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
-        cy.get(TestCasesPage.QDMGender).click()
-        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
-        cy.get(TestCasesPage.QDMEthnicity).click()
-        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+        TestCasesPage.enterPatientDemographics('06/15/1935', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -358,15 +350,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
-        cy.get(TestCasesPage.QDMDob).type('06/15/1935').click()
-        cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
-        cy.get(TestCasesPage.QDMRace).click()
-        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
-        cy.get(TestCasesPage.QDMGender).click()
-        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
-        cy.get(TestCasesPage.QDMEthnicity).click()
-        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+        TestCasesPage.enterPatientDemographics('06/15/1935', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

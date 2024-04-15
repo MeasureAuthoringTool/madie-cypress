@@ -132,15 +132,7 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        cy.get(TestCasesPage.QDMDob).type('07/31/2003').click()
-        cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
-        cy.get(TestCasesPage.QDMRace).click()
-        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
-        cy.get(TestCasesPage.QDMGender).click()
-        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
-        cy.get(TestCasesPage.QDMEthnicity).click()
-        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+        TestCasesPage.enterPatientDemographics('07/31/2003', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //add element - code system to TC
         //Element - Encounter:Performed: Observation Services
@@ -315,15 +307,7 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        cy.get(TestCasesPage.QDMDob).type('07/31/2003').click()
-        cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
-        cy.get(TestCasesPage.QDMRace).click()
-        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
-        cy.get(TestCasesPage.QDMGender).click()
-        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
-        cy.get(TestCasesPage.QDMEthnicity).click()
-        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+        TestCasesPage.enterPatientDemographics('07/31/2003', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //add element - code system to TC
         //Element - Encounter:Performed: Observation Services
