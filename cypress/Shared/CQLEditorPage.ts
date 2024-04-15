@@ -28,6 +28,9 @@ export class CQLEditorPage {
     public static readonly codeText = '[data-testid="code-text-input"]'
     public static readonly codeSystemDropdown = '[id="code-system-selector"]'
     public static readonly codeSystemOption = '[data-value="Code System 1"]'
+    public static readonly codeSystemSearchBtn = '[data-testid="codes-search-btn"]'
+    public static readonly codeSystemClearBtn = '[data-testid="clear-codes-btn"]'
+    public static readonly codeSystemSearchResultsTbl = '[data-testid="codes-results-tbl"]'
 
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
