@@ -131,7 +131,7 @@ describe('QI Core: Elements tab is not present', () => {
     })
 })
 
-//"enableQdmRepeatTransfer" : true
+// "enableQdmRepeatTransfer" : true
 describe('QDM: Measure Version option Should not exist', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -168,7 +168,7 @@ describe('QDM: Measure Version option Should not exist', () => {
     })
 })
 
-//"generateCMSID": true
+// "generateCMSID": true
 describe('QDM: Generate CMS ID', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -199,7 +199,7 @@ describe('QDM: Generate CMS ID', () => {
     })
 })
 
-//"includeSDEValues": true
+// "includeSDEValues": true
 describe('QDM: Configuration sub tab', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -249,7 +249,7 @@ describe('QDM: Configuration sub tab', () => {
     })
 })
 
-//"manifestExpansion": false
+// "manifestExpansion": false
 describe('QDM: Expansion Manifest sub-tab / section is not available when flag is set to false', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -278,7 +278,7 @@ describe('QDM: Expansion Manifest sub-tab / section is not available when flag i
     })
 })
 
-//"TestCaseExport" : false
+// "TestCaseExport" : false
 describe('QDM: Test Case QRDA Export', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -308,7 +308,7 @@ describe('QDM: Test Case QRDA Export', () => {
     })
 })
 
-//"QDMCodeSearch": false
+// "QDMCodeSearch": false
 describe('QDM: Code search on CQL editor tab', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -335,5 +335,35 @@ describe('QDM: Code search on CQL editor tab', () => {
         MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get('[data-testid="codes-tab"]').should('not.exist')
+    })
+})
+
+// "QDMValueSetSearch": false
+describe('QDM: Value Set search on CQL editor tab', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = 'TestMeasure' + Date.now() + randValue
+    let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+
+    before('Create Measure and Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
+        OktaLogin.Login()
+
+    })
+
+    after('Logout and cleanup', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('QDM Code search page not visible when the feature flag is enabled', () => {
+
+        MeasuresPage.measureAction('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        Utilities.waitForElementToNotExist(CQLEditorPage.valueSetsTab, 30000)
     })
 })
