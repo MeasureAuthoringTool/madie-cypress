@@ -9,11 +9,16 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
+let randValue = (Math.floor((Math.random() * 1000) + 1))
+let newMeasureName = ''
+let newCQLLibraryName = ''
 let measureCQL = MeasureCQL.simpleQDM_CQL
 let measureScoring = 'Cohort'
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
+let testCaseTitleWithSpecialChar = 'Title for Auto Test!@#$%^&*()_+=-{}|[]'
+let testCaseSeriesWithSpecialChar = 'SBTestSeries!@#$%^&*()_+=-{}|[]'
 let updatedTestCaseTitle = testCaseTitle + ' ' + 'UpdatedTestCaseTitle'
 let updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDescription'
 let updatedTestCaseSeries = 'ICFTestSeries'
@@ -93,10 +98,13 @@ let measureCQLWithElements = 'library QDMTestLibrary1686087138930 version \'0.0.
 
 describe('Create and Update QDM Test Case', () => {
 
+    newMeasureName = measureName + randValue
+    newCQLLibraryName = CqlLibraryName + randValue
+
     beforeEach('Create measure and login', () => {
 
         //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, true, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, measureScoring, true, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
         OktaLogin.Login()
 
@@ -105,7 +113,7 @@ describe('Create and Update QDM Test Case', () => {
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
 
     })
 
@@ -143,7 +151,7 @@ describe('Create and Update QDM Test Case', () => {
         //Navigate back to Edit test case page and assert fields
         TestCasesPage.clickEditforCreatedTestCase()
         cy.get(TestCasesPage.QDMDob/*'#birth-date'*/).should('contain.value', '01/01/2020')
-        cy.get(TestCasesPage.QDMLivingStatus).should('contain.text', 'Expired')
+        cy.get(TestCasesPage.QDMLivingStatus).should('contain.text', 'Living')
         cy.get(TestCasesPage.QDMRace).should('contain.text', 'White')
         cy.get(TestCasesPage.QDMGender).should('contain.text', 'Male')
         cy.get(TestCasesPage.QDMEthnicity).should('contain.text', 'Not Hispanic or Latino')
@@ -194,10 +202,13 @@ describe('Create and Update QDM Test Case', () => {
 
 describe('Non Boolean Test case Expected Values', () => {
 
+    newMeasureName = measureName + randValue + 1
+    newCQLLibraryName = CqlLibraryName + randValue + 1
+
     beforeEach('Create measure and login', () => {
 
         //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, false, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, measureScoring, false, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'SDE Ethnicity')
         OktaLogin.Login()
 
@@ -206,7 +217,7 @@ describe('Non Boolean Test case Expected Values', () => {
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
 
     })
 
@@ -242,10 +253,13 @@ describe('Non Boolean Test case Expected Values', () => {
 
 describe('QDM element tabs', () => {
 
+    newMeasureName = measureName + randValue + 2
+    newCQLLibraryName = CqlLibraryName + randValue + 2
+
     beforeEach('Create measure and login', () => {
 
         //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, false, measureCQLWithElements)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, measureScoring, false, measureCQLWithElements)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
 
@@ -254,7 +268,7 @@ describe('QDM element tabs', () => {
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
 
     })
 
@@ -277,6 +291,149 @@ describe('QDM element tabs', () => {
         //Navigate to CQL Editor tab and verify the same Elements are present in the Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView().should('contain', 'Adverse Event' && 'Allergy' && 'Assessment' && 'Care Experience')
+
+    })
+})
+
+describe('Create and update QDM Test case validations', () => {
+
+    newMeasureName = measureName + randValue + 5
+    newCQLLibraryName = CqlLibraryName + randValue + 5
+
+    beforeEach('Create measure and login', () => {
+
+        //Create QDM Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCQLLibraryName)
+        OktaLogin.Login()
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
+
+    })
+
+    it('Create Test case Validation: Test case Title has special characters', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //create test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click().wait(3500)
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click()
+
+        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
+
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitleWithSpecialChar.toString())
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+
+        cy.get(TestCasesPage.createTestCaseSaveButton).click()
+
+        cy.get('[class="toast danger"]').should('contain.text', 'Test Case Title can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
+
+    })
+
+    it('Create Test case Validation: Test Case Group has special characters', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //create test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click().wait(3500)
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click()
+
+        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
+
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeriesWithSpecialChar).type('{enter}')
+
+        cy.get(TestCasesPage.createTestCaseSaveButton).click()
+
+        cy.get('[class="toast danger"]').should('contain.text', 'Test Case Group can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
+
+    })
+
+    it('Edit Test case Validation: Test case Title has special characters', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //create test case
+        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+
+        //Navigate to Edit Test Case page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //Navigate to Details tab and Edit
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.testCaseTitle).clear().type(testCaseTitleWithSpecialChar)
+
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get('[class="toast danger"]').should('contain.text', 'Test Case Title can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
+
+    })
+
+    it('Edit Test case Validation: Test case Group has special characters', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //create test case
+        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+
+        //Navigate to Edit Test Case page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //Navigate to Details tab and Edit
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.testCaseSeriesTextBox).clear().type(testCaseSeriesWithSpecialChar).type('{enter}')
+
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get('[class="toast danger"]').should('contain.text', 'Test Case Group can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
 
     })
 })
