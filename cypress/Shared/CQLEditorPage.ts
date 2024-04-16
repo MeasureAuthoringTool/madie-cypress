@@ -32,6 +32,10 @@ export class CQLEditorPage {
     public static readonly codeSystemClearBtn = '[data-testid="clear-codes-btn"]'
     public static readonly codeSystemSearchResultsTbl = '[data-testid="codes-results-tbl"]'
 
+    //Value Sets page / tab
+    public static readonly valueSetsTab = '[data-testid="valueSets-tab"]'
+    public static readonly valueSetsCategoryDD = '[data-testid="search-by-category-input"]'
+
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
 
