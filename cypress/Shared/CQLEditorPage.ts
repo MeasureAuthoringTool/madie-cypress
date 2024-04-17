@@ -13,7 +13,7 @@ export class CQLEditorPage {
     //success save message without errors
     public static readonly successfulCQLSaveNoErrors = '[data-testid="generic-success-text-header"]'
 
-    //Error/warning marker inside of the CQL Editor window
+    //Error/warning marker in side of the CQL Editor window
     public static readonly errorInCQLEditorWindow = '#ace-editor-wrapper > div.ace_gutter > div > div.ace_gutter-cell.ace_error'
     public static readonly warningInCQLEditorWindow = '.ace_warning'
 
@@ -31,6 +31,10 @@ export class CQLEditorPage {
     public static readonly codeSystemSearchBtn = '[data-testid="codes-search-btn"]'
     public static readonly codeSystemClearBtn = '[data-testid="clear-codes-btn"]'
     public static readonly codeSystemSearchResultsTbl = '[data-testid="codes-results-tbl"]'
+    public static readonly codeSystemOptionListBox = '[id="code-system-selector-listbox"]'
+    public static readonly toolTip = 'tr > :nth-child(1) > .MuiButtonBase-root'
+    public static readonly toolTipMsg = '.MuiTooltip-tooltip'
+    public static readonly clearCodeBtn = '[data-testid="clear-codes-btn"]'
 
     //Value Sets page / tab
     public static readonly valueSetsTab = '[data-testid="valueSets-tab"]'

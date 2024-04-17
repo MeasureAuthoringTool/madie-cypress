@@ -51,35 +51,49 @@ describe.skip('QDM Code Search fields', () => {
         //Code system version and Code search fields should be disabled before selecting the code system
         cy.get(CQLEditorPage.codeSystemVersionDropdown).should('not.be.enabled')
         cy.get(CQLEditorPage.codeText).should('not.be.enabled')
-        cy.get(CQLEditorPage.codeSystemDropdown).click().wait(500)
 
-        // type in and select option that appears
-        cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
-        cy.get(CQLEditorPage.codeSystemDropdown).type('{downArrow}').wait(500)
-        cy.get(CQLEditorPage.codeSystemDropdown).type('{enter}').wait(500)
-
-        //Type a value in to Code Search text box
-        cy.get(CQLEditorPage.codeText).type('2')
-        Utilities.waitForElementEnabled(CQLEditorPage.codeSystemClearBtn, 30000)
-
-        //click on search button
+        //Assert when the Code is Active in VSAC
+        cy.get(CQLEditorPage.codeSystemDropdown).type('SNOMEDCT')
+        cy.get(CQLEditorPage.codeSystemOptionListBox).contains('SNOMEDCT').click()
+        cy.get(CQLEditorPage.codeText).type('258219007')
         Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
-
-        //confirm search results appear on screen
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
+        cy.get(CQLEditorPage.toolTip).trigger('mouseover')
+        cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version258219007Stage 2 (qualifier value)SNOMEDCThttp://snomed.info/sct/731000124108/version/20230901')
 
-        //click on the clear button
-        cy.get(CQLEditorPage.codeSystemClearBtn).click()
+        //Assert when the Code is not available in VSAC
+        cy.get(CQLEditorPage.codeText).clear().type('123')
+        cy.get(CQLEditorPage.codeSystemSearchBtn).click()
+        cy.get('[class="sc-dhKdcB bOvcnM"]').should('contain.text', 'No Results were found')
 
-        //confirm that all fields return to their state prior to when a code system was selected
-        cy.get(CQLEditorPage.codeSystemVersionDropdown).should('not.contain.text')
-        cy.get(CQLEditorPage.codeSystemVersionDropdown).should('not.be.enabled')
-        cy.get(CQLEditorPage.codeText).should('not.contain.text')
-        cy.get(CQLEditorPage.codeText).should('not.be.enabled')
-        cy.get(CQLEditorPage.codeSystemDropdown).should('not.contain.text')
-        Utilities.waitForElementToNotExist(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
+        //Clear the code search values
+        cy.get(CQLEditorPage.clearCodeBtn).click()
 
+        //Assert when the Code is inactive in VSAC
+        cy.get(CQLEditorPage.codeSystemDropdown).type('SNOMEDCT')
+        cy.get(CQLEditorPage.codeSystemOptionListBox).contains('SNOMEDCT').click()
+        cy.get(CQLEditorPage.codeText).type('16298561000119108')
+        Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
+        cy.get(CQLEditorPage.codeSystemSearchBtn).click()
+        Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
+        cy.get(CQLEditorPage.toolTip).trigger('mouseover')
+        cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is inactive in this code system version')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version16298561000119108Administration of tetanus, diphtheria, and acellular pertussis vaccine (procedure)SNOMEDCThttp://snomed.info/sct/731000124108/version/20230901')
 
+        //Clear the code search values
+        cy.get(CQLEditorPage.clearCodeBtn).click()
+
+        //Assert when the Code is unavailable (not able to determine active/inactive)
+        cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
+        cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
+        cy.get(CQLEditorPage.codeText).type('AMB')
+        Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
+        cy.get(CQLEditorPage.codeSystemSearchBtn).click()
+        Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
+        cy.get(CQLEditorPage.toolTip).trigger('mouseover')
+        cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'Code status unavailable')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode9.0.0')
     })
 })
