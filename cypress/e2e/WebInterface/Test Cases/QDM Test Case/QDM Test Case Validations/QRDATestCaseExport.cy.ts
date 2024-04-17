@@ -7,13 +7,24 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../../Shared/Header"
+import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
+
+let randValue = (Math.floor((Math.random() * 1000) + 1))
+let testCaseTitle = 'Title for Auto Test'
+
 
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMCQLLibrary' + Date.now()
 let firstTestCaseTitle = 'PDxNotPsych60MinsDepart'
+let anotherTestCaseTitle = 'PDxNotPsych60MinsDepart2nd'
 let testCaseDescription = 'IPPStrat1Pass' + Date.now()
 let testCaseSeries = 'SBTestSeries'
+let anotherTestCaseSeries = 'SBTestSeries2nd'
+
+let newMeasureName = measureName + randValue
+let newCqlLibraryName = CqlLibraryName + randValue
 
 let SecondTestCaseTitle = 'PDxNotPsych60MinsDepart(){}[]<>/|"\':;,.~`!@#$%^&*_+='
 let SecondtestCaseDescription = 'IPPStrat1Pass' + Date.now()
@@ -34,6 +45,7 @@ describe.skip('QDM Test Cases : Export Test Case', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', false, qdmMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
+        TestCasesPage.CreateQDMTestCaseAPI(anotherTestCaseTitle, anotherTestCaseSeries, testCaseDescription)
 
         OktaLogin.Login()
     })
@@ -47,6 +59,7 @@ describe.skip('QDM Test Cases : Export Test Case', () => {
     })
 
     it('Successful QRDA Export for QDM Test Cases', () => {
+        let testCasePIdPath = 'cypress/fixtures/testCasePId'
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
@@ -71,6 +84,16 @@ describe.skip('QDM Test Cases : Export Test Case', () => {
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
+
+        // unzipping the Test Case Export
+        cy.task('unzipFile', { zipFile: 'eCQMTitle-v0.0.000-QDM-TestCases.zip', path: downloadsFolder })
+            .then(results => {
+                cy.log('unzipFile Task finished')
+            })
+
+        //Verify all files exist in exported zip file
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.zip')).should('contain', '1_SBTestSeries_PDxNotPsych60MinsDepart.xml', '2_SBTestSeries_PDxNotPsych60MinsDepart2nd')
+
     })
 
     it('Export Test Case button is disabled until Test cases are executed', () => {
@@ -220,3 +243,8 @@ describe.skip('Export Test cases by Non Measure Owner', () => {
 
     })
 })
+
+
+
+
+
