@@ -92,7 +92,8 @@ describe.skip('QDM Test Cases : Export Test Case', () => {
             })
 
         //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.zip')).should('contain', '1_SBTestSeries_PDxNotPsych60MinsDepart.xml', '2_SBTestSeries_PDxNotPsych60MinsDepart2nd')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.zip')).should('contain', '1_SBTestSeries_PDxNotPsych60MinsDepart.xml', '2_SBTestSeries_PDxNotPsych60MinsDepart2nd.xml')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.zip')).should('contain', '1_SBTestSeries_PDxNotPsych60MinsDepart.html', '2_SBTestSeries_PDxNotPsych60MinsDepart2nd.html')
 
     })
 
