@@ -252,7 +252,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         QDMElements.addTimingRelevantPeriodDateTime('01/09/2024 12:00 AM', '01/09/2024 02:00 AM')
 
         //add Code
-        QDMElements.addCode('Icd10CM', 'H31.301')
+        QDMElements.addCode('ICD10CM', 'H31.301')
 
         //close element card
         QDMElements.closeElement()
