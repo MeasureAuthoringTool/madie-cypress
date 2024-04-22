@@ -82,7 +82,6 @@ describe('QI-Core Single Test Case Export', () => {
         let testCasePIdPath = 'cypress/fixtures/testCasePId'
         OktaLogin.AltLogin()
 
-        cy.reload()
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
