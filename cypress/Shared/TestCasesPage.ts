@@ -512,7 +512,7 @@ export class TestCasesPage {
             filePath = 'cypress/fixtures/testCaseId2'
         }
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.reload()
+            //cy.reload()
             Utilities.waitForElementVisible('[data-testid="select-action-' + fileContents + '"]', 50000)
             cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="select-action-' + fileContents + '"]', 50000)

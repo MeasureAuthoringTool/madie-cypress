@@ -506,8 +506,8 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         //verifies alert message at top of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
         cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(1) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again')
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Reason : Test Case file is missing.')
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Following test case(s) were imported succesfully, but The measure populations do not match the populations in the import file. No expected values have been set.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[data-testid="failed-test-cases"]').should('contain.text', 'Reason: Test Case file is missing.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('.StatusHandler___StyledDiv2-sc-1tujbo9-2').should('contain.text', 'Following test case(s) were imported successfully, but the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been set.')
 
     })
     it('Importing: .zip\'s test case folder contains multiple json files', () => {
@@ -537,8 +537,8 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         //verifies alert message at tope of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
         cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(1) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Reason : Multiple test case files are not supported. Please make sure only one JSON file is in the folder.')
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Following test case(s) were imported succesfully, but The measure populations do not match the populations in the import file. No expected values have been set.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('.StatusHandler___StyledSpan-sc-1tujbo9-1').should('contain.text', 'Reason: Multiple test case files are not supported. Please make sure only one JSON file is in the folder.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('.StatusHandler___StyledDiv2-sc-1tujbo9-2').should('contain.text', 'Following test case(s) were imported successfully, but the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been set.')
 
     })
     it('Importing: .zip\'s test case folder contains malformed json file', () => {
@@ -568,9 +568,8 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         //verifies alert message at tope of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
         cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(1) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Reason : Error while processing Test Case JSON. Please make sure Test Case JSON is valid.')
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Following test case(s) were imported succesfully, but The measure populations do not match the populations in the import file. No expected values have been set.')
-
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('.StatusHandler___StyledSpan-sc-1tujbo9-1').should('contain.text', 'Reason: Error while processing Test Case JSON. Please make sure Test Case JSON is valid.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('.StatusHandler___StyledDiv2-sc-1tujbo9-2').should('contain.text', 'Following test case(s) were imported successfully, but the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been set.')
     })
 })
 describe('Test Case Import: New Test cases on measure validations: uniqueness tests related to family name and given name', () => {
@@ -593,6 +592,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.setAccessTokenCookie()
 
         Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
+        Utilities.deleteMeasure(measureName + 'b', CqlLibraryName, true)
     })
     it('Importing two new test cases with unique family name and given name: verify expected match that of original test case; verify family name is Test Case group; verify that given name is Test Case title; verify that test case is editable', () => {
         cy.clearCookies()
@@ -676,7 +676,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
 
         //verify confirmation message
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessInfo, 35000)
-        cy.get(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', '(2) test case(s) were imported.')
+        cy.get('.StatusHandler___StyledDiv2-sc-1tujbo9-2').should('contain.text', '(2) test case(s) were imported.')
 
     })
 })
@@ -761,7 +761,7 @@ describe('Test case uniqueness error validation', () => {
         //verifies alert message at top of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
         cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(1) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
-        cy.get(TestCasesPage.importTestCaseDetailedAlertMessage).should('contain.text', 'Reason : The Family and Given combination on the Patient resource in the Test Case JSON is already used in another test case on this measure.  The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
+        cy.get('.StatusHandler___StyledSpan-sc-1tujbo9-1').should('contain.text', 'Reason: The Family and Given name combination on the Patient resource in the Test Case JSON is already used in another test case on this measure. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
     })
 
 })
