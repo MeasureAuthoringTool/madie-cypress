@@ -33,8 +33,10 @@ let deleteMeasureAdminAPIKey = Environment.credentials().deleteMeasureAdmin_API_
 describe('Measure Service: QICore Measure', () => {
 
     beforeEach('Set Access Token', () => {
-
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
         measureName = 'TestMeasure' + Date.now() + randValue
         CQLLibraryName = 'TestCql' + Date.now() + randValue
     })
@@ -1055,13 +1057,14 @@ describe('Delete QDM Measure with admin API Key', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
 
     })
-
-    it('Delete versioned QDM Measure with admin API key', () => {
+    //skipping until the versioning for QDM measures becomes available, again -- per the enableQdmRepeatTransfer flag
+    it.skip('Delete versioned QDM Measure with admin API key', () => {
 
         //Version Measure
         cy.getCookie('accessToken').then((accessToken) => {

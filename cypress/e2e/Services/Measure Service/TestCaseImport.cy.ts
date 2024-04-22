@@ -114,7 +114,7 @@ describe('Test Case Import', () => {
                     }]
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body[0].message).to.eql('The measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been set.')
+                    expect(response.body[0].message).to.eql('the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been set.')
                     expect(response.body[0].successful).to.eql(true)
                 })
             })

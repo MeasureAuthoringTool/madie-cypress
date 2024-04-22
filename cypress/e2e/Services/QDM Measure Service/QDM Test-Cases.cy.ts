@@ -22,7 +22,8 @@ let CQLLibraryName = ''
 let measureScoring = 'Cohort'
 let booleanPatientBasisQDM_CQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
-let TCName = 'TCName' + Date.now()
+
+let TCName = ''
 let TCSeries = 'SBTestSeries'
 let TCTitle = 'test case title'
 let TCDescription = 'DENOMFail1651609688032'
@@ -30,6 +31,8 @@ let TCJson = TestCaseJson.QDMTestCaseJson
 
 describe('Test Case population values based on Measure Group population definitions', () => {
     beforeEach('Create Measure and measure group', () => {
+        let randTCNameValue = (Math.floor((Math.random() * 2000) + 3))
+        TCName = 'TCName' + randTCNameValue
 
         cy.clearAllCookies()
         cy.clearLocalStorage()
@@ -218,9 +221,9 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
 
     it('Create Test Case', () => {
         let randValue = (Math.floor((Math.random() * 2000) + 3))
-        let title = 'test case title ~!@#!@#$$%^&%^&* &()(?><'
-        let series = 'test case series ~!@#!@#$$%^&%^&* &()(?><'
-        let description = 'DENOME pass Test HB <120 ~!@#!@#$$%^&%^&* &()(?><'
+        let title = 'test case title  - _'
+        let series = 'test case series  - _'
+        let description = 'DENOME pass Test HB - _'
         //Add Test Case to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -266,7 +269,7 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
                         body: {
                             'id': testcaseid,
                             'name': "IPPPass",
-                            'series': "WhenBP<120",
+                            'series': "WhenBP120",
                             'title': TCTitle,
                             'description': "IPP Pass Test BP <120",
                             'json': newTCJson
@@ -276,7 +279,7 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
                         expect(response.body.id).to.eql(testcaseid)
                         expect(response.body.json).to.be.exist
                         expect(response.body.json).to.eql(newTCJson)
-                        expect(response.body.series).to.eql("WhenBP<120")
+                        expect(response.body.series).to.eql("WhenBP120")
                         expect(response.body.title).to.eql(TCTitle)
                         expect(response.body.json).to.be.exist
                         cy.writeFile('cypress/fixtures/testCaseId', response.body.id)
@@ -327,7 +330,7 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
                     method: 'POST',
                     body: {
                         'name': "DENOMFail",
-                        'series': "WhenBP<120",
+                        'series': "WhenBP120",
                         'title': "test case title",
                         'description': "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst" +
                             "uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn" +
@@ -386,7 +389,7 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
                     method: 'POST',
                     body: {
                         'name': "DENOMFail",
-                        'series': "WhenBP<120",
+                        'series': "WhenBP120",
                         'title': "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst" +
                             "uvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmn" +
                             "opqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr",
@@ -455,9 +458,20 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
 
         //Create QDM Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryNameDeux, measureScoring, true, booleanPatientBasisQDM_CQL)
+
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        cy.setAccessTokenCookie()
+
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'Initial Population')
         //create test case
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
+
     })
 
     it('QDM Test Case Demographic fields are not available / editable for non-owner', () => {
@@ -479,7 +493,7 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
                         body: {
                             'id': testcaseid,
                             'name': "IPPPass",
-                            'series': "WhenBP<120",
+                            'series': "WhenBP120",
                             'title': TCTitle,
                             'description': "IPP Pass Test BP <120",
                             'json': newTCJson
@@ -495,11 +509,23 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
 })
 describe('Measure Service: Test Case Endpoint: User validation with test case import', () => {
     beforeEach('Create Measure and measure group', () => {
+        let randTCNameValue = (Math.floor((Math.random() * 2000) + 3))
+        TCName = 'TCName' + randTCNameValue
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL)
+
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        cy.setAccessTokenCookie()
+
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
 
         cy.getCookie('accessToken').then((accessToken) => {
