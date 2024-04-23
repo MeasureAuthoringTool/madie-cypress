@@ -676,9 +676,10 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
 
         //verify confirmation message
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessInfo, 35000)
+
         cy.get(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'Following test case(s) were imported successfully, but the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been')
 
-    })
+     })
 })
 
 describe('Test case uniqueness error validation', () => {
