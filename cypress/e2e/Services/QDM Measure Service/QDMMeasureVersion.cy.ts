@@ -108,7 +108,8 @@ describe('Measure Versioning', () => {
     })
 
 
-    it('Successful Measure Versioning', () => {
+    //skipping until the versioning for QDM measures becomes available, again -- per the enableQdmRepeatTransfer flag
+    it.skip('Successful Measure Versioning', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {

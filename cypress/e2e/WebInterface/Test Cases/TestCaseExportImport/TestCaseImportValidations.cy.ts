@@ -676,9 +676,10 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
 
         //verify confirmation message
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessInfo, 35000)
-        cy.get('.StatusHandler___StyledDiv2-sc-1tujbo9-2').should('contain.text', '(2) test case(s) were imported.')
 
-    })
+        cy.get(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'Following test case(s) were imported successfully, but the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been')
+
+     })
 })
 
 describe('Test case uniqueness error validation', () => {
@@ -845,8 +846,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
 
         //verifies alert message at tope of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(2) test case(s) were imported. The following (0) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Following test case(s) were imported succesfully, but The measure populations do not match the populations in the import file. No expected values have been set.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Following test case(s) were imported successfully, but the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been')
     })
 })
 

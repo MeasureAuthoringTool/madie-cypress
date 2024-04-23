@@ -323,6 +323,7 @@ export class TestCasesPage {
     public static readonly testCaseImportErrorAtValidating = '[data-testid="test-case-import-error-div"]'
     public static readonly importTestCaseModalList = '[data-testid="test-case-preview-list"]'
     public static readonly importTestCaseModalHeader = '[data-testid="test-case-preview-header"]'
+    public static readonly importWarningMessages = '[data-testid="import-warning-messages"]'
 
     //Warning Modal
     public static readonly discardChangesConfirmationModal = '[id="mui-4"]'
@@ -447,18 +448,18 @@ export class TestCasesPage {
 
     public static grabValidateTestCaseTitleAndSeries(testCaseTitle: string, testCaseSeries: string): void {
 
-            cy.get('[data-testid="test-case-title-0_group"]').should('be.visible')
-            cy.get('[data-testid="test-case-title-0_group"]').invoke('text').then(
-                (seriesText) => {
-                    expect(seriesText).to.include(testCaseSeries)
-                })
+        cy.get('[data-testid="test-case-title-0_group"]').should('be.visible')
+        cy.get('[data-testid="test-case-title-0_group"]').invoke('text').then(
+            (seriesText) => {
+                expect(seriesText).to.include(testCaseSeries)
+            })
 
-            cy.get('[data-testid="test-case-title-0_title"]').should('be.visible')
-            cy.get('[data-testid="test-case-title-0_title"]').invoke('text').then(
-                (titleText) => {
-                    expect(titleText).to.include(testCaseTitle)
+        cy.get('[data-testid="test-case-title-0_title"]').should('be.visible')
+        cy.get('[data-testid="test-case-title-0_title"]').invoke('text').then(
+            (titleText) => {
+                expect(titleText).to.include(testCaseTitle)
 
-                })
+            })
     }
     //Similar to our other action functions for test cases and measures,
     //this function gives it's user the ability to pass a required text that
