@@ -7,7 +7,7 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage";
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage";
 
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let measureCQLDFUTests = MeasureCQL.CQLDFN_value
@@ -812,6 +812,16 @@ describe('Measure Highlighting', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
@@ -916,6 +926,16 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
@@ -1030,6 +1050,16 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
     })
@@ -1196,6 +1226,16 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLDFUTests, false)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcDFNJson)
 
     })
@@ -1278,7 +1318,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
 
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Definitions').click()
         Utilities.waitForElementVisible(TestCasesPage.tcDEFINITIONSHighlightingDetails, 35000)
-        cy.get(TestCasesPage.tcDEFINITIONSHighlightingDetails).should('contain.text', '\ndefine "Encounter to Assess Cognition":\n["Encounter": "Psych Visit Diagnostic Evaluation"]\n    union ["Encounter": "Nursing Facility Visit"]\n    union ["Encounter": "Care Services in Long Term Residential Facility"]\n    union ["Encounter": "Home Healthcare Services"]\n    union ["Encounter": "Psych Visit Psychotherapy"]\n    union ["Encounter": "Behavioral/Neuropsych Assessment"]\n    union ["Encounter": "Occupational Therapy Evaluation"]\n    union ["Encounter": "Office Visit"]\n    union ["Encounter": "Outpatient Consultation"]\nResultsFALSE ([]) \ndefine "Dementia Encounter During Measurement Period":\n"Encounter to Assess Cognition" EncounterAssessCognition\n    with [Condition: "Dementia & Mental Degenerations"] Dementia\n   such that EncounterAssessCognition.period during "Measurement Period"\n           and Dementia.prevalenceInterval() overlaps day of EncounterAssessCognition.period \n        and Dementia.isActive() \n        and not ( Dementia.verificationStatus ~ QICoreCommon."unconfirmed"\n                     or Dementia.verificationStatus ~ QICoreCommon."refuted"\n                     or Dementia.verificationStatus ~ QICoreCommon."entered-in-error" )\nResultsFALSE ([]) \ndefine "Qualifying Encounter During Measurement Period":\n("Encounter to Assess Cognition" union ["Encounter": "Patient Provider Interaction"] ) ValidEncounter\n    where ValidEncounter.period during "Measurement Period"\n    and ValidEncounter.status = \'finished\'\nResultsFALSE ([]) \n/***Population Criteria***/\ndefine "Initial Population":\nexists "Dementia Encounter During Measurement Period"\n    and ( Count("Qualifying Encounter During Measurement Period")>= 2 )\nResultsFALSE (false) \ndefine "Denominator":\n"Initial Population"\nResultsUNHIT \n/***Definitions***/\ndefine "Assessment of Cognition Using Standardized Tools or Alternate Methods":\n( ["Observation": "Standardized Tools Score for Assessment of Cognition"]\n    union ["Observation": "Cognitive Assessment"] ) CognitiveAssessment\n    with "Dementia Encounter During Measurement Period" EncounterDementia\nsuch that CognitiveAssessment.effective.toInterval() starts 12 months or less on or before day of \n    end of EncounterDementia.period\n    where CognitiveAssessment.value is not null\n    and CognitiveAssessment.status in { \'final\', \'amended\', \'corrected\', \'preliminary\' }\nResultsUNHIT \ndefine "Numerator":\nexists "Assessment of Cognition Using Standardized Tools or Alternate Methods"\nResultsUNHIT ')
+        cy.get(TestCasesPage.tcDEFINITIONSHighlightingDetails).should('contain.text', '\ndefine "Encounter to Assess Cognition":\n["Encounter": "Psych Visit Diagnostic Evaluation"]\n    union ["Encounter": "Nursing Facility Visit"]\n    union ["Encounter": "Care Services in Long Term Residential Facility"]\n    union ["Encounter": "Home Healthcare Services"]\n    union ["Encounter": "Psych Visit Psychotherapy"]\n    union ["Encounter": "Behavioral/Neuropsych Assessment"]\n    union ["Encounter": "Occupational Therapy Evaluation"]\n    union ["Encounter": "Office Visit"]\n    union ["Encounter": "Outpatient Consultation"]\nResultsFALSE ([]) \ndefine "Dementia Encounter During Measurement Period":\n"Encounter to Assess Cognition" EncounterAssessCognition\n    with [Condition: "Dementia & Mental Degenerations"] Dementia\n   such that EncounterAssessCognition.period during "Measurement Period"\n           and Dementia.prevalenceInterval() overlaps day of EncounterAssessCognition.period \n        and Dementia.isActive() \n        and not ( Dementia.verificationStatus ~ QICoreCommon."unconfirmed"\n                     or Dementia.verificationStatus ~ QICoreCommon."refuted"\n                     or Dementia.verificationStatus ~ QICoreCommon."entered-in-error" )\nResultsFALSE ([]) \ndefine "Qualifying Encounter During Measurement Period":\n("Encounter to Assess Cognition" union ["Encounter": "Patient Provider Interaction"] ) ValidEncounter\n    where ValidEncounter.period during "Measurement Period"\n    and ValidEncounter.status = \'finished\'\nResultsFALSE ([]) \n/***Population Criteria***/\n\ndefine "Initial Population":\nexists "Dementia Encounter During Measurement Period"\n    and ( Count("Qualifying Encounter During Measurement Period")>= 2 )\nResultsFALSE (false) \ndefine "Denominator":\n"Initial Population"\nResultsUNHIT \n/***Definitions***/\ndefine "Assessment of Cognition Using Standardized Tools or Alternate Methods":\n( ["Observation": "Standardized Tools Score for Assessment of Cognition"]\n    union ["Observation": "Cognitive Assessment"] ) CognitiveAssessment\n    with "Dementia Encounter During Measurement Period" EncounterDementia\nsuch that CognitiveAssessment.effective.toInterval() starts 12 months or less on or before day of \n    end of EncounterDementia.period\n    where CognitiveAssessment.value is not null\n    and CognitiveAssessment.status in { \'final\', \'amended\', \'corrected\', \'preliminary\' }\nResultsUNHIT \ndefine "Numerator":\nexists "Assessment of Cognition Using Standardized Tools or Alternate Methods"\nResultsUNHIT ')
         cy.get('[data-ref-id="43"]').should('have.color', '#A63B12')
         cy.get('[data-ref-id="44"]').should('have.color', '#A63B12')
 
@@ -1304,6 +1344,16 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLResults, false)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcResultJson)
 
     })
@@ -1387,7 +1437,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP').click()
             Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 35000)
-            cy.get(TestCasesPage.tcIPHighlightingDetails).should('contain.text', '\n/***Population Criteria***/\ndefine "Initial Population":\nexists "Dementia Encounter During Measurement Period"\n    and ( Count("Qualifying Encounter During Measurement Period")>= 2 )\nResultsFALSE (false) ')
+            cy.get(TestCasesPage.tcIPHighlightingDetails).should('contain.text', '\n/***Population Criteria***/\n\ndefine "Initial Population":\nexists "Dementia Encounter During Measurement Period"\n    and ( Count("Qualifying Encounter During Measurement Period")>= 2 )\nResultsFALSE (false) Definition(s) Used')
 
             Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
             cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
@@ -1424,7 +1474,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
 
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Definitions').click()
         Utilities.waitForElementVisible(TestCasesPage.tcDEFINITIONSHighlightingDetails, 35000)
-        cy.get(TestCasesPage.tcDEFINITIONSHighlightingDetails).should('contain.text', '\ndefine "Encounter to Assess Cognition":\n["Encounter": "Psych Visit Diagnostic Evaluation"]\n    union ["Encounter": "Nursing Facility Visit"]\n    union ["Encounter": "Care Services in Long Term Residential Facility"]\n    union ["Encounter": "Home Healthcare Services"]\n    union ["Encounter": "Psych Visit Psychotherapy"]\n    union ["Encounter": "Behavioral/Neuropsych Assessment"]\n    union ["Encounter": "Occupational Therapy Evaluation"]\n    union ["Encounter": "Office Visit"]\n    union ["Encounter": "Outpatient Consultation"]\nResultsFALSE ([]) \ndefine "Dementia Encounter During Measurement Period":\n"Encounter to Assess Cognition" EncounterAssessCognition\n    with [Condition: "Dementia & Mental Degenerations"] Dementia\n   such that EncounterAssessCognition.period during "Measurement Period"\n           and Dementia.prevalenceInterval() overlaps day of EncounterAssessCognition.period \n        and Dementia.isActive()\n        and not ( Dementia.verificationStatus ~ QICoreCommon."unconfirmed"\n                     or Dementia.verificationStatus ~ QICoreCommon."refuted"\n                     or Dementia.verificationStatus ~ QICoreCommon."entered-in-error" )\nResultsFALSE ([]) \ndefine "Qualifying Encounter During Measurement Period":\n("Encounter to Assess Cognition" union ["Encounter": "Patient Provider Interaction"] ) ValidEncounter\n    where ValidEncounter.period during "Measurement Period"\n    and ValidEncounter.status = \'finished\'\nResultsFALSE ([]) \n/***Population Criteria***/\ndefine "Initial Population":\nexists "Dementia Encounter During Measurement Period"\n    and ( Count("Qualifying Encounter During Measurement Period")>= 2 )\nResultsFALSE (false) \ndefine "Denominator":\n"Initial Population"\nResultsUNHIT \n/***Definitions***/\ndefine "Assessment of Cognition Using Standardized Tools or Alternate Methods":\n( ["Observation": "Standardized Tools Score for Assessment of Cognition"]\n    union ["Observation": "Cognitive Assessment"] ) CognitiveAssessment\n    with "Dementia Encounter During Measurement Period" EncounterDementia\nsuch that CognitiveAssessment.effective.toInterval() starts 12 months or less on or before day of \n    end of EncounterDementia.period\n    where CognitiveAssessment.value is not null\n    and CognitiveAssessment.status in { \'final\', \'amended\', \'corrected\', \'preliminary\' }\nResultsUNHIT \ndefine "Numerator":\nexists "Assessment of Cognition Using Standardized Tools or Alternate Methods"\nResultsUNHIT ')
+        cy.get(TestCasesPage.tcDEFINITIONSHighlightingDetails).should('contain.text', '\ndefine "Encounter to Assess Cognition":\n["Encounter": "Psych Visit Diagnostic Evaluation"]\n    union ["Encounter": "Nursing Facility Visit"]\n    union ["Encounter": "Care Services in Long Term Residential Facility"]\n    union ["Encounter": "Home Healthcare Services"]\n    union ["Encounter": "Psych Visit Psychotherapy"]\n    union ["Encounter": "Behavioral/Neuropsych Assessment"]\n    union ["Encounter": "Occupational Therapy Evaluation"]\n    union ["Encounter": "Office Visit"]\n    union ["Encounter": "Outpatient Consultation"]\nResultsFALSE ([]) \ndefine "Dementia Encounter During Measurement Period":\n"Encounter to Assess Cognition" EncounterAssessCognition\n    with [Condition: "Dementia & Mental Degenerations"] Dementia\n   such that EncounterAssessCognition.period during "Measurement Period"\n           and Dementia.prevalenceInterval() overlaps day of EncounterAssessCognition.period \n        and Dementia.isActive()\n        and not ( Dementia.verificationStatus ~ QICoreCommon."unconfirmed"\n                     or Dementia.verificationStatus ~ QICoreCommon."refuted"\n                     or Dementia.verificationStatus ~ QICoreCommon."entered-in-error" )\nResultsFALSE ([]) \ndefine "Qualifying Encounter During Measurement Period":\n("Encounter to Assess Cognition" union ["Encounter": "Patient Provider Interaction"] ) ValidEncounter\n    where ValidEncounter.period during "Measurement Period"\n    and ValidEncounter.status = \'finished\'\nResultsFALSE ([]) \n/***Population Criteria***/\n\ndefine "Initial Population":\nexists "Dementia Encounter During Measurement Period"\n    and ( Count("Qualifying Encounter During Measurement Period")>= 2 )\nResultsFALSE (false) \ndefine "Denominator":\n"Initial Population"\nResultsUNHIT \n/***Definitions***/\ndefine "Assessment of Cognition Using Standardized Tools or Alternate Methods":\n( ["Observation": "Standardized Tools Score for Assessment of Cognition"]\n    union ["Observation": "Cognitive Assessment"] ) CognitiveAssessment\n    with "Dementia Encounter During Measurement Period" EncounterDementia\nsuch that CognitiveAssessment.effective.toInterval() starts 12 months or less on or before day of \n    end of EncounterDementia.period\n    where CognitiveAssessment.value is not null\n    and CognitiveAssessment.status in { \'final\', \'amended\', \'corrected\', \'preliminary\' }\nResultsUNHIT \ndefine "Numerator":\nexists "Assessment of Cognition Using Standardized Tools or Alternate Methods"\nResultsUNHIT ')
 
         cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
         cy.get(TestCasesPage.definitionsFristResultSection).first().scrollIntoView()
