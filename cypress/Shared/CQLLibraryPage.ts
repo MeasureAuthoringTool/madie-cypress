@@ -96,6 +96,52 @@ export class CQLLibraryPage {
         cy.log('QI-Core CQL Library Created Successfully')
     }
 
+    public static createQDMCQLLibraryAPI(CqlLibraryName: string, CQLLibraryPublisher: string, twoLibraries?: boolean, altUser?: boolean): string {
+        let user = ''
+
+        if (altUser) {
+            cy.setAccessTokenCookieALT()
+            user = Environment.credentials().harpUserALT
+        }
+        else {
+            cy.setAccessTokenCookie()
+            user = Environment.credentials().harpUser
+        }
+
+        //Create New CQL Library
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/cql-libraries',
+                headers: {
+                    authorization: 'Bearer ' + accessToken.value
+                },
+                method: 'POST',
+                body: {
+                    'cqlLibraryName': CqlLibraryName,
+                    'model': 'QDM v5.6',
+                    'createdBy': user,
+                    "librarySetId": uuidv4(),
+                    "description": "description",
+                    "publisher": CQLLibraryPublisher,
+                    'cql': "",
+                    "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(201)
+                expect(response.body.id).to.be.exist
+                expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
+                if (twoLibraries === true) {
+                    cy.writeFile('cypress/fixtures/cqlLibraryId2', response.body.id)
+                }
+                else {
+                    cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
+                }
+
+            })
+        })
+        return user
+    }
+
     public static validateCQlLibraryName(expectedValue: string): void {
         cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
 
@@ -362,8 +408,4 @@ export class CQLLibraryPage {
         })
 
     }
-
-
-
 }
-
