@@ -279,11 +279,14 @@ describe('QDM: Expansion Manifest sub-tab / section is not available when flag i
 })
 
 // "TestCaseExport" : false
-describe('QDM: Test Case QRDA Export', () => {
+describe('QDM: Test Case Export button and it\s sub-action buttons', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     let newMeasureName = 'TestMeasure' + Date.now() + randValue
     let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+    let randValueQICore = (Math.floor((Math.random() * 100) + 1))
+    let qiCoreTestMeasureName = 'QICoreMeasure' + randValueQICore + Date.now()
+    let qiCoreTestCqlLibName = 'QICoreMeasure' + + randValueQICore + Date.now()
 
     before('Create Measure and Login', () => {
 
@@ -293,18 +296,52 @@ describe('QDM: Test Case QRDA Export', () => {
 
     })
 
-    after('Logout and cleanup', () => {
+    it('Test case Export button not visible when the feature flag is set to false', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
-    })
-
-    it('QRDA Test case Export button not visible when the feature flag is enabled', () => {
-
+        // edit QDM measure and confirm that the Export button does not exist, at all, for QDM
         MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.testcaseQRDAExportBtn).should('not.exist')
+
+        // log out of MADiE UI
+        OktaLogin.UILogout()
+
+        // create QI Core Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(qiCoreTestMeasureName, qiCoreTestCqlLibName, measureCQLAlt)
+
+        // log back into MADiE UI
+        OktaLogin.Login()
+
+        //Click on Edit Measure and make insignificant edit to CQL and save
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
+            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+
+        // navigate to MADiE's homepage
+        cy.get(Header.measures).click()
+
+        // edit QI Core measure
+        MeasuresPage.measureAction('edit')
+
+        // navigate to the Test Case list page, for the QI Core Measure
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        // find and click on the export button that appears for the QI Core Measure's test case list page
+        cy.get(TestCasesPage.exportTestCasesBtn)
+            .find('[class="export-action"]')
+            .scrollIntoView()
+            .click({ force: true })
+
+        // confirm that only the actiona buttons that should appear are appearing on page
+        Utilities.waitForElementToNotExist(TestCasesPage.exportExcelBtn, 30000)
+        Utilities.waitForElementVisible(TestCasesPage.exportTransactionBundleBtn, 30000)
+        Utilities.waitForElementVisible(TestCasesPage.exportCollectionBundleBtn, 30000)
+
+
     })
 })
 
