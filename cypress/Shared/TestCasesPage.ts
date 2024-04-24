@@ -356,6 +356,9 @@ export class TestCasesPage {
 
     //Export Test Cases
     public static readonly exportTestCasesBtn = '[data-testid="export-test-cases-button"]'
+    public static readonly exportExcelBtn = '[data-testid="export-excel"]'
+    public static readonly exportTransactionBundleBtn = '[data-testid="export-transaction-bundle"]'
+    public static readonly exportCollectionBundleBtn = '[data-testid="export-collection-bundle"]'
     public static readonly exportTransactionTypeOption = '[data-testid="export-transaction-bundle"]'
     public static readonly exportCollectionTypeOption = '[data-testid="export-collection-bundle"]'
 
