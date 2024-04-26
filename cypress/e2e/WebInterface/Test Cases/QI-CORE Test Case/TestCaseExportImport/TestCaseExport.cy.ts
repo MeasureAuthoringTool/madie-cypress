@@ -1,11 +1,11 @@
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { Header } from "../../../../Shared/Header"
+import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { Header } from "../../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
