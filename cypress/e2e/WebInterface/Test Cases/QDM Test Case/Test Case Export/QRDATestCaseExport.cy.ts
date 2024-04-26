@@ -10,9 +10,6 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../../Shared/Header"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 
-let randValue = (Math.floor((Math.random() * 1000) + 1))
-let testCaseTitle = 'Title for Auto Test'
-
 
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 let measureName = 'QDMTestMeasure' + Date.now()
@@ -23,9 +20,6 @@ let testCaseDescription = 'IPPStrat1Pass' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let anotherTestCaseSeries = 'SBTestSeries2nd'
 
-let newMeasureName = measureName + randValue
-let newCqlLibraryName = CqlLibraryName + randValue
-
 let SecondTestCaseTitle = 'PDxNotPsych60MinsDepart(){}[]<>/|"\':;,.~`!@#$%^&*_+='
 let SecondtestCaseDescription = 'IPPStrat1Pass' + Date.now()
 let SecondtestCaseSeries = 'SBTestSeries(){}[]<>/|"\':;,.~`!@#$%^&*_+='
@@ -35,7 +29,7 @@ const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
 // skipping until 'TestCaseExport' flag is removed
-describe.skip('QDM Test Cases : Export Test Case', () => {
+describe('QDM Test Cases : Export Test Case', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -92,8 +86,12 @@ describe.skip('QDM Test Cases : Export Test Case', () => {
             })
 
         //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.zip')).should('contain', '1_SBTestSeries_PDxNotPsych60MinsDepart.xml', '2_SBTestSeries_PDxNotPsych60MinsDepart2nd.xml')
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.zip')).should('contain', '1_SBTestSeries_PDxNotPsych60MinsDepart.html', '2_SBTestSeries_PDxNotPsych60MinsDepart2nd.html')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle_patients_results.html'), null).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-0.0.000QDM-TestCases/html/1_SBTestSeries_PDxNotPsych60MinsDepart.html')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-0.0.000QDM-TestCases/html/2_SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.html')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-0.0.000QDM-TestCases/qrda/1_SBTestSeries_PDxNotPsych60MinsDepart.xml')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-0.0.000QDM-TestCases/qrda/2_SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.xml')).should('exist')
+
 
     })
 
@@ -126,7 +124,7 @@ describe.skip('QDM Test Cases : Export Test Case', () => {
 
 // skipping until 'TestCaseExport' flag is removed
 // tests ensuring that invalid characters in, either, the group or title of the test case prevents test case export
-describe.skip('QDM Test Cases : Export Test Case: Invalid / Special characters in the series or in title prevents export', () => {
+describe('QDM Test Cases : Export Test Case: Invalid / Special characters in the series or in title prevents export', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -186,7 +184,7 @@ describe.skip('QDM Test Cases : Export Test Case: Invalid / Special characters i
 })
 
 // skipping until 'TestCaseExport' flag is removed
-describe.skip('Export Test cases by Non Measure Owner', () => {
+describe('Export Test cases by Non Measure Owner', () => {
 
 
     deleteDownloadsFolderBeforeAll()
