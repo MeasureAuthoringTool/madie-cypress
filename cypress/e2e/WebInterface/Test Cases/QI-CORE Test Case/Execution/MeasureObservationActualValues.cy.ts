@@ -1,12 +1,12 @@
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()

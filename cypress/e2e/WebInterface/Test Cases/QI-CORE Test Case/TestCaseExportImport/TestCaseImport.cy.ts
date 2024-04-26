@@ -1,9 +1,9 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()

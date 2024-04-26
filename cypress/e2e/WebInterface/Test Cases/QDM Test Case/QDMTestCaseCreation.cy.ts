@@ -1,13 +1,13 @@
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { Global } from "../../../../../Shared/Global"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { Global } from "../../../../Shared/Global"
 
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
