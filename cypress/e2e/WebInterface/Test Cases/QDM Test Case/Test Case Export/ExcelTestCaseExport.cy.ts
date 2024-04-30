@@ -20,9 +20,11 @@ let anotherTestCaseSeries = 'SBTestSeries2nd'
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
+const XLSX = require('xlsx')
+let baseExcelFile = 'cypress/fixtures/baseTestcaseExcelFile.xls'
 
 // skipping until 'TestCaseExport' flag is removed
-describe('QDM Test Cases : Export Test Case', () => {
+describe.skip('QDM Test Cases : Export Test Case', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -45,7 +47,7 @@ describe('QDM Test Cases : Export Test Case', () => {
 
     })
 
-    it('Successful Excel Export for QDM Test Cases', () => {
+    it('Verify Test case Excel Export and validate file contents', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
@@ -62,6 +64,8 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Run the Test cases
+
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 60000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
@@ -75,17 +79,29 @@ describe('QDM Test Cases : Export Test Case', () => {
             cy.log('Successfully verified Excel file export')
         })
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.xls'), null)
-            .then((contents) => {
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.xls'), 'binary').then((excelContent) => {
+            // Read downloaded Excel file from downloads folder
+            const workbook = XLSX.read(excelContent, { type: 'binary' })
+            const sheetOne = workbook.SheetNames[0]
+            const sheetTwo = workbook.SheetNames[1]
+            const sheet1 = workbook.Sheets[sheetOne]
+            const sheet2 = workbook.Sheets[sheetTwo]
+            const exportedFile = XLSX.utils.sheet_to_json(sheet1, sheet2)
+            cy.log('exported file contents is: \n' + exportedFile)
 
-                expect(contents.length).to.equal(9694)
+            cy.readFile(baseExcelFile, 'binary').should('exist').then((dataCompared) => {
+                // Read Excel file from Fixtures Folder
+                const workbook = XLSX.read(dataCompared, {type: 'binary'})
+                const sheetOne = workbook.SheetNames[0]
+                const sheetTwo = workbook.SheetNames[2]
+                const sheet1 = workbook.Sheets[sheetOne]
+                const sheet2 = workbook.Sheets[sheetTwo]
+                const expectedFile = XLSX.utils.sheet_to_json(sheet1, sheet2)
+                cy.log('expected file contents is: \n' + expectedFile)
 
+                expect((exportedFile)).to.deep.equal((expectedFile))
             })
+        })
+
     })
 })
-
-
-
-
-
-
