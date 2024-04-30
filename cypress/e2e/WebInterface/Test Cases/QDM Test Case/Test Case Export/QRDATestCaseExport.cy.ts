@@ -10,11 +10,11 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
 
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
-let measureName = 'QDMTestMeasure' //+ Date.now()
-let CqlLibraryName = 'QDMCQLLibrary' //+ Date.now()
+let measureName = 'QDMTestMeasure' + Date.now()
+let CqlLibraryName = 'QDMCQLLibrary' + Date.now()
 let firstTestCaseTitle = 'PDxNotPsych60MinsDepart'
 let anotherTestCaseTitle = 'PDxNotPsych60MinsDepart2nd'
-let testCaseDescription = 'IPPStrat1Pass' //+ Date.now()
+let testCaseDescription = 'IPPStrat1Pass' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let anotherTestCaseSeries = 'SBTestSeries2nd'
 let baseHTMLFile = 'cypress/fixtures/baseQRDAHTMLfile.txt'
