@@ -175,7 +175,7 @@ describe('Measure Service: GET Requests tests', () => {
                 expect(response.body.content).to.be.a('array')
                 cy.get(response.body.content.length)
                 expect(response.body.content[0].id).to.be.exist
-                expect(response.body.content[0].createdBy).to.eql(harpUser)
+                expect(response.body.content[0].measureSet.owner).to.eql(harpUser)
             })
         })
     })
@@ -399,7 +399,8 @@ describe('Measure Service: CQL Library name validations', () => {
                 }
             }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.validationErrors.cqlLibraryName).to.eql("Measure Library Name is invalid.")
+                console.log('validations errors were:\n' + (response.body.validationErrors.measure).toString())
+                expect(response.body.validationErrors.measure).to.eql("Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.")
             })
         })
     })
@@ -429,7 +430,8 @@ describe('Measure Service: CQL Library name validations', () => {
                 }
             }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.validationErrors.cqlLibraryName).to.eql("Measure Library Name is invalid.")
+                console.log('validations errors were:\n' + (response.body.validationErrors.measure).toString())
+                expect(response.body.validationErrors.measure).to.eql("Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.")
             })
         })
     })
@@ -459,7 +461,8 @@ describe('Measure Service: CQL Library name validations', () => {
                 }
             }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.validationErrors.cqlLibraryName).to.eql("Measure Library Name is invalid.")
+                console.log('validations errors were:\n' + (response.body.validationErrors.measure).toString())
+                expect(response.body.validationErrors.measure).to.eql("Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.")
             })
         })
     })
@@ -515,7 +518,8 @@ describe('Measure Service: CQL Library name validations', () => {
                 }
             }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.validationErrors.cqlLibraryName).to.eql("Measure Library Name is invalid.")
+                console.log('validations errors were:\n' + (response.body.validationErrors.measure).toString())
+                expect(response.body.validationErrors.measure).to.eql("Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.")
             })
         })
     })
@@ -546,7 +550,8 @@ describe('Measure Service: CQL Library name validations', () => {
                 }
             }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.validationErrors.cqlLibraryName).to.eql("Measure Library Name is invalid.")
+                console.log('validations errors were:\n' + (response.body.validationErrors.measure).toString())
+                expect(response.body.validationErrors.measure).to.eql("Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.")
             })
         })
     })
@@ -576,7 +581,8 @@ describe('Measure Service: CQL Library name validations', () => {
                 }
             }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.validationErrors.cqlLibraryName).to.eql("Measure Library Name is invalid.")
+                console.log('validations errors were:\n' + (response.body.validationErrors.measure).toString())
+                expect(response.body.validationErrors.measure).to.eql("Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.")
             })
         })
     })
@@ -1044,8 +1050,8 @@ describe('Delete QDM Measure with admin API Key', () => {
     beforeEach('Create Measure', () => {
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureNameU + randValue
-        newCQLLibraryName = CqlLibraryNameU + randValue
+        newMeasureName = measureNameU + randValue + Date.now()
+        newCQLLibraryName = CqlLibraryNameU + randValue + Date.now()
         let QDMMeasureCQL = MeasureCQL.simpleQDM_CQL
 
         defaultUser = CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCQLLibraryName, QDMMeasureCQL)

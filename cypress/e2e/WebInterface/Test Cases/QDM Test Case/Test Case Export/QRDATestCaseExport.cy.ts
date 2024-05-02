@@ -91,7 +91,6 @@ describe('QDM Test Cases : Export Test Case', () => {
                 expected = dataCompared.toString() //'compareFile'
                 cy.log('expected file contents is: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
-
             })
         })
 
