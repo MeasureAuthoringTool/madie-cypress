@@ -81,6 +81,7 @@ let measureCQL_WithParsingAndVSACErrors = 'library APICQLLibrary35455 version \'
     'define "Denominator": \'\'\n' +
     '\t  "Initial Population"'
 
+
 describe('Measure Versioning', () => {
 
     newMeasureName = measureName + 1 + randValue
@@ -108,8 +109,8 @@ describe('Measure Versioning', () => {
     })
 
 
-    //skipping until the versioning for QDM measures becomes available, again -- per the enableQdmRepeatTransfer flag
-    it.skip('Successful Measure Versioning', () => {
+
+    it('Successful Measure Versioning', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {

@@ -110,7 +110,7 @@ describe('Edit CQL Library', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(400)
-                    expect(response.body.validationErrors.cqlLibraryName).to.eql('Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+                    expect(response.body.validationErrors.cqlLibrary).to.eql('Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.')
                 })
             })
         })
@@ -136,7 +136,7 @@ describe('Edit CQL Library', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(400)
-                    expect(response.body.validationErrors.cqlLibraryName).to.eql('Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+                    expect(response.body.validationErrors.cqlLibrary).to.eql('Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.')
                 })
             })
         })
@@ -162,7 +162,7 @@ describe('Edit CQL Library', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(400)
-                    expect(response.body.validationErrors.cqlLibraryName).to.eql('Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+                    expect(response.body.validationErrors.cqlLibrary).to.eql('Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.')
                 })
             })
         })
@@ -188,7 +188,7 @@ describe('Edit CQL Library', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(400)
-                    expect(response.body.validationErrors.cqlLibraryName).to.eql('Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+                    expect(response.body.validationErrors.cqlLibrary).to.eql('Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM.')
                 })
             })
         })
