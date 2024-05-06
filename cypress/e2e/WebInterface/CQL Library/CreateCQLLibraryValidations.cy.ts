@@ -124,8 +124,8 @@ describe('CQL Library Validations', () => {
 
         cy.get(Global.dirtCheckModal).should('be.visible')
     })
-    // skipping until bug MAT-7174 is fixed
-    it.skip('CQL Library Name Validations', () => {
+
+    it('CQL Library Name Validations', () => {
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
@@ -139,27 +139,27 @@ describe('CQL Library Validations', () => {
         //Verify error message when the CQL Library Name field is empty
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).wait(1000).click()
         cy.get(CQLLibraryPage.cqlLibraryDesc).click()
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM')
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name is required.')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
 
         //Verify error message when the CQL Library Name has special characters
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type('Test_@Measure')
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM')
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
 
         //Verify error message when the CQL Library Name does not start with an Upper Case letter
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear().type('testMeasure')
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM')
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
 
         //Verify error message when the CQL Library Name has spaces
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear().type('Test   Measure')
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM')
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
 
         //Verify error message when the CQL Library Name has numbers
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).clear().type('35657')
-        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters except of underscore for QDM')
+        cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
 
         //Verify error message when the CQL Library Name has more than 255 characters
