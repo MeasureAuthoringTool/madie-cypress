@@ -34,8 +34,8 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
 
     before('Create New Measure and Login', () => {
 
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
+        newMeasureName = measureName + 2 + randValue
+        newCqlLibraryName = CqlLibraryName + 2 + randValue
 
         cy.setAccessTokenCookie()
 
@@ -63,6 +63,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
                 expect(response.status).to.eql(201)
                 cy.writeFile('cypress/fixtures/measureId', response.body.id)
                 cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
+                cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
             })
         })
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', 'num', 'denom')
@@ -101,8 +102,8 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
 
     beforeEach('Create New Measure and Login', () => {
 
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
+        newMeasureName = measureName + 4 + randValue
+        newCqlLibraryName = CqlLibraryName + 4 + randValue
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
