@@ -23,7 +23,7 @@ describe('Add Draft to CQL Library', () => {
 
     })
 
-    it.only('Add Draft to the versioned Library', () => {
+    it('Add Draft to the versioned Library', () => {
 
         let versionNumber = '1.0.000'
         updatedCqlLibraryName = 'UpdatedTestLibrary1' + Date.now()
