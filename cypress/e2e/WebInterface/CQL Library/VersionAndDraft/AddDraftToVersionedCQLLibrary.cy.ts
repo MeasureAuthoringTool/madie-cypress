@@ -1,6 +1,6 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage"
-import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 
 let CqlLibraryOne = ''
 let updatedCqlLibraryName = ''
@@ -27,6 +27,7 @@ describe('Add Draft to CQL Library', () => {
 
         let versionNumber = '1.0.000'
         updatedCqlLibraryName = 'UpdatedTestLibrary1' + Date.now()
+        let filePath = 'cypress/fixtures/cqlLibraryId'
 
         CQLLibrariesPage.clickVersionforCreatedLibrary()
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('exist')
@@ -49,11 +50,29 @@ describe('Add Draft to CQL Library', () => {
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('exist')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
-        cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
 
+        //intercept draft id once measure is drafted
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
+        })
+        cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
+        cy.wait('@draft', { timeout: 60000 }).then((request) => {
+            cy.writeFile(filePath, request.response.body.id)
+        })
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', 'Draft 1.0.000')
         cy.log('Draft Created Successfully')
+
+        //navigate into the Library's detail / edit page
+        CQLLibrariesPage.cqlLibraryAction('edit')
+
+        //confirm that CQL Editory window is not empty
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox)
+            .find('[class="ace_layer ace_text-layer"]')
+            .find('[class="ace_line_group"]')
+            .find('[class=ace_line]')
+            .find('[class="ace_identifier"]')
+            .should('exist')
     })
 
 })
