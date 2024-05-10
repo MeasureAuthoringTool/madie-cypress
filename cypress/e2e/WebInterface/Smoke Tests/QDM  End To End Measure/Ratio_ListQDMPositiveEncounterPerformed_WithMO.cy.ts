@@ -6,6 +6,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { QDMElements } from "../../../../Shared/QDMElements"
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -344,88 +345,61 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.enterPatientDemographics('07/31/2003', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Element - Condition: Diagnosis: Diabetes
-        cy.get('[data-testid="elements-tab-condition"]').click()
-        cy.get('[data-testid="data-type-Diagnosis: Diabetes"]').click()
+        //add Element
+        QDMElements.addElement('condition', 'Diagnosis: Diabetes')
         cy.get('[id="dateTime"]').eq(0).type('07/09/2023 08:00 AM')
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-46635009"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '46635009')
 
         //Element - Encounter:Performed:Encounter Inpatient
-        cy.get('[data-testid="elements-tab-encounter"]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('07/11/2023 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('07/15/2023 09:00 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-183452005"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
+        //add Element
+        QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('07/11/2023 08:00 AM', '07/15/2023 09:00 AM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '183452005')
 
         //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
-        cy.get('[data-testid="elements-tab-laboratory_test"]').click()
-        cy.get('[data-testid="data-type-Laboratory Test, Performed: Glucose Lab Test Mass Per Volume"]').click()
+        //add Element
+        QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
         cy.get('[id="dateTime"]').eq(2).type('07/11/2023 07:00 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-LOINC"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-1556-0"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
-        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
-        cy.get('[id="attribute-select"]').click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid="option-Quantity"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('1000')
-        cy.get('[id="quantity-unit-input-quantity"]').type('mg/dl')
-        cy.get('[data-testid="add-attribute-button"]').click()
+        //add Code
+        QDMElements.addCode('LOINC', '1556-0')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Result', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('1000', 'mg/dl')
+        //add attribute to test case action
+        QDMElements.addAttribute()
 
         //Element - Encounter:Performed:Encounter Inpatient
-        cy.get('[data-testid="elements-tab-encounter"]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('10/11/2023 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('10/18/2023 08:15 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-183452005"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
+        //add Element
+        QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('10/11/2023 08:00 AM', '10/18/2023 08:15 AM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '183452005')
 
         //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
-        cy.get('[data-testid="elements-tab-laboratory_test"]').click()
-        cy.get('[data-testid="data-type-Laboratory Test, Performed: Glucose Lab Test Mass Per Volume"]').click()
+        //add Element
+        QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
         cy.get('[id="dateTime"]').eq(2).type('10/13/2023 08:00 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-LOINC"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-1556-0"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
-        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
-        cy.get('[id="attribute-select"]').click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid="option-Quantity"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('1100')
-        cy.get('[id="quantity-unit-input-quantity"]').type('mg/dl')
-        cy.get('[data-testid="add-attribute-button"]').click()
+        //add Code
+        QDMElements.addCode('LOINC', '1556-0')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Result', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('1100', 'mg/dl')
+        //add attribute to test case action
+        QDMElements.addAttribute()
 
         //Element - Encounter:Performed:Encounter Inpatient
-        cy.get('[data-testid="elements-tab-encounter"]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('11/01/2023 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('11/04/2023 08:15 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-183452005"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
+        //add Element
+        QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('11/01/2023 08:00 AM', '11/04/2023 08:15 AM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '183452005')
 
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -453,120 +427,87 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.enterPatientDemographics('07/31/2003', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Element - Condition: Diagnosis: Diabetes
-        cy.get('[data-testid="elements-tab-condition"]').click()
-        cy.get('[data-testid="data-type-Diagnosis: Diabetes"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('07/09/2023 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('07/11/2023 08:00 AM')
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-46635009"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
+        //add Element
+        QDMElements.addElement('condition', 'Diagnosis: Diabetes')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('07/09/2023 08:00 AM', '07/11/2023 08:00 AM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '46635009')
 
         //Element - Encounter:Performed:Encounter Inpatient
-        cy.get('[data-testid="elements-tab-encounter"]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('07/11/2023 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('07/13/2023 09:00 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-183452005"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
-        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
-        cy.get('[id="attribute-select"]').click()
-        cy.get('[data-testid="option-Length Of Stay"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('2')
-        cy.get('#quantity-unit-input-quantity').type('d')
-        cy.get('[data-testid="add-attribute-button"]').click()
+        //add Element
+        QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('07/11/2023 08:00 AM', '07/13/2023 09:00 AM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '183452005')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Length Of Stay', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('2', 'd')
+        //add attribute to test case action
+        QDMElements.addAttribute()
 
         //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
-        cy.get('[data-testid="elements-tab-laboratory_test"]').click()
-        cy.get('[data-testid="data-type-Laboratory Test, Performed: Glucose Lab Test Mass Per Volume"]').click()
+        //add Element
+        QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
         cy.get('[id="dateTime"]').eq(2).type('07/11/2023 08:00 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-LOINC"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-1556-0"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
-        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
-        cy.get('[id="attribute-select"]').click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid="option-Quantity"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('1000')
-        cy.get('[id="quantity-unit-input-quantity"]').type('mg/dl')
-        cy.get('[data-testid="add-attribute-button"]').click()
+        //add Code
+        QDMElements.addCode('LOINC', '1556-0')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Result', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('1000', 'mg/dl')
+        //add attribute to test case action
+        QDMElements.addAttribute()
 
         //Element - Encounter:Performed: Observation Services
-        cy.get('[data-testid="elements-tab-encounter"]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Observation Services"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('03/07/2023 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('03/08/2023 08:15 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-448951000124107"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
+        //add Element
+        QDMElements.addElement('encounter', 'Performed: Observation Services')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('03/07/2023 08:00 AM', '03/08/2023 08:15 AM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '448951000124107')
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        QDMElements.closeElement()
 
         //Element - Encounter:Performed:Encounter Inpatient
-        cy.get('[data-testid="elements-tab-encounter"]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('03/08/2023 08:30 AM')
-        cy.get('[id="dateTime"]').eq(1).type('03/11/2023 08:15 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-183452005"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
+        //add Element
+        QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('03/08/2023 08:30 AM', '03/11/2023 08:15 AM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '183452005')
 
         //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
-        cy.get('[data-testid="elements-tab-laboratory_test"]').click()
-        cy.get('[data-testid="data-type-Laboratory Test, Performed: Glucose Lab Test Mass Per Volume"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('03/08/2023 08:30 AM')
-        cy.get('[id="dateTime"]').eq(1).type('03/08/2023 08:45 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-LOINC"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-1547-9"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
-        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
-        cy.get('[id="attribute-select"]').click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid="option-Quantity"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('201')
-        cy.get('[id="quantity-unit-input-quantity"]').type('mg/dl')
-        cy.get('[data-testid="add-attribute-button"]').click()
+        //add Element
+        QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('03/08/2023 08:30 AM', '03/08/2023 08:45 AM')
+        //add Code
+        QDMElements.addCode('LOINC', '1547-9')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Result', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('201', 'mg/dl')
+        //add attribute to test case action
+        QDMElements.addAttribute()
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        QDMElements.closeElement()
 
         //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
-        cy.get('[data-testid="elements-tab-laboratory_test"]').click()
-        cy.get('[data-testid="data-type-Laboratory Test, Performed: Glucose Lab Test Mass Per Volume"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('03/08/2023 09:30 AM')
-        cy.get('[id="dateTime"]').eq(1).type('03/08/2023 10:15 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-LOINC"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-1547-9"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
-        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
-        cy.get('[id="attribute-select"]').click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
-        cy.get('[data-testid="option-Quantity"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('1000')
-        cy.get('[id="quantity-unit-input-quantity"]').type('mg/dl')
-        cy.get('[data-testid="add-attribute-button"]').click()
+        //add Element
+        QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('03/08/2023 09:30 AM', '03/08/2023 10:15 AM')
+        //add Code
+        QDMElements.addCode('LOINC', '1547-9')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Result', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('1000', 'mg/dl')
+        //add attribute to test case action
+        QDMElements.addAttribute()
 
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()

@@ -6,6 +6,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { QDMElements } from "../../../../Shared/QDMElements"
 
 let measureName = 'ProportionPatient' + Date.now()
 let CqlLibraryName = 'ProportionPatient' + Date.now()
@@ -213,46 +214,36 @@ describe('Measure Creation: Proportion Patient Based', () => {
         TestCasesPage.enterPatientDemographics('12/31/1966', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
 
         //Element - Encounter:Performed: Annual Wellness Visit
-        cy.get('[data-testid=elements-tab-encounter]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Annual Wellness Visit"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('01/26/2012 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('01/26/2012 08:15 AM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Length Of Stay"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('0')
-        cy.get('[id="quantity-unit-input-quantity"]').type('d')
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-HCPCS]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-G0438]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Element
+        QDMElements.addElement('encounter', 'Performed: Annual Wellness Visit')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('01/26/2012 08:00 AM', '01/26/2012 08:15 AM')
+        //add Code
+        QDMElements.addCode('HCPCS', 'G0438')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Length Of Stay', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('0', 'd')
+        //add attribute to test case action
+        QDMElements.addAttribute()
 
         //Element - Procedure:Performed: Unilateral Mastectomy Right
-        cy.get('[data-testid=elements-tab-procedure]').click()
-        cy.get('[data-testid="data-type-Procedure, Performed: Unilateral Mastectomy Right"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('10/26/2012 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('10/26/2012 08:15 AM')
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-ICD10PCS]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-0HTT0ZZ]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Element
+        QDMElements.addElement('procedure', 'Performed: Unilateral Mastectomy Right')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('10/26/2012 08:00 AM', '10/26/2012 08:15 AM')
+        //add Code
+        QDMElements.addCode('ICD10PCS', '0HTT0ZZ')
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        QDMElements.closeElement()
 
         //Element - Procedure:Performed: Unilateral Mastectomy Right
-        cy.get('[data-testid=elements-tab-procedure]').click()
-        cy.get('[data-testid="data-type-Procedure, Performed: Unilateral Mastectomy Right"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('10/26/2012 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('10/26/2012 08:15 AM')
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-ICD10PCS]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-0HTT0ZZ]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Element
+        QDMElements.addElement('procedure', 'Performed: Unilateral Mastectomy Right')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('10/26/2012 08:00 AM', '10/26/2012 08:15 AM')
+        //add Code
+        QDMElements.addCode('ICD10PCS', '0HTT0ZZ')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -267,44 +258,36 @@ describe('Measure Creation: Proportion Patient Based', () => {
         TestCasesPage.enterPatientDemographics('12/31/1946', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
 
         //Element - Encounter:Performed: Preventive Care Services - Established Office Visit, 18 and Up
-        cy.get('[data-testid=elements-tab-encounter]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Preventive Care Services Established Office Visit, 18 and Up"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('01/26/2012 01:00 PM')
-        cy.get('[id="dateTime"]').eq(1).type('01/26/2012 01:15 PM')
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Length Of Stay"]').click()
-        cy.get('[data-testid="quantity-value-input-quantity"]').type('0')
-        cy.get('[id="quantity-unit-input-quantity"]').type('d')
-        cy.get('[data-testid="add-attribute-button"]').click()
-        cy.get('[data-testid=sub-navigation-tab-codes]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-CPT]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-99395"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
+        //add Element
+        QDMElements.addElement('encounter', 'Performed: Preventive Care Services Established Office Visit, 18 and Up')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('01/26/2012 01:00 PM', '01/26/2012 01:15 PM')
+        //add Code
+        QDMElements.addCode('CPT', '99395')
+        // Enter attribute and its type
+        QDMElements.enterAttribute('Length Of Stay', 'Quantity')
+        //enter quantity type
+        QDMElements.enterQuantity('0', 'd')
+        //add attribute to test case action
+        QDMElements.addAttribute()
 
         //Element - Condition:Diagnosis: Status Post Right Mastectomy
-        cy.get('[data-testid=elements-tab-condition]').click()
-        cy.get('[data-testid="data-type-Diagnosis: Status Post Right Mastectomy"]').click()
+        //add Element
+        QDMElements.addElement('diagnosis', 'Diagnosis: Status Post Right Mastectomy')
+        //add Timing Relevant Period DateTime
         cy.get('[id="dateTime"]').eq(0).type('12/31/2012 11:59 PM')
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-137681000119108"]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '137681000119108')
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        QDMElements.closeElement()
 
         //Element - Condition:Diagnosis: Status Post Left Mastectomy
-        cy.get('[data-testid=elements-tab-condition]').click()
-        cy.get('[data-testid="data-type-Diagnosis: Status Post Left Mastectomy"]').click()
+        //add Element
+        QDMElements.addElement('diagnosis', 'Diagnosis: Status Post Left Mastectomy')
+        //add Timing Relevant Period DateTime
         cy.get('[id="dateTime"]').eq(0).type('12/31/2012 11:59 PM')
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-137671000119105"]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '137671000119105')
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
