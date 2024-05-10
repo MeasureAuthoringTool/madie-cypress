@@ -52,7 +52,7 @@ describe('Successful QDM Measure Export', () => {
         OktaLogin.Logout()
     })
 
-    it.only('Unzip the downloaded file and verify file types for QDM Measure', () => {
+    it('Unzip the downloaded file and verify file types for QDM Measure', () => {
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
