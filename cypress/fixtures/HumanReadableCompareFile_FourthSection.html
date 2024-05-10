@@ -1,0 +1,337 @@
+class="list-header"><strong>Initial Population</strong></label>
+                <ul class="code">
+                    <li class="list-unstyled">
+                        <div class="treeview hover p-l-10">
+                            <ul>
+                                <li style="padding-left: 0px;">
+                                    <div>
+                                        <pre class="cql-definition-body">  &quot;Encounter with Existing Diabetes Diagnosis&quot;
+    union &quot;Encounter with Hypoglycemic Medication&quot;
+    union &quot;Encounter with Elevated Glucose Greater Than or Equal to 200&quot;</pre>
+                                    </div>
+                                </li>
+                            </ul>&nbsp;
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</li>            </ul>
+</div><h3><a name="d1e649" href="#toc">Definitions</a></h3>
+<div>
+    <ul style="list-style:none;padding-left: 10px;">
+        <li class="list-unstyled" style="list-style:none;">
+            <div>
+                <ul class="list-unstyled" style="list-style:none;padding-left:0;">
+    <li class="list-unstyled">
+        <div class="treeview hover p-l-10">
+            <input type="checkbox" id="Encounter with Elevated Glucose Greater Than or Equal to 200" />
+            <label for="Encounter with Elevated Glucose Greater Than or Equal to 200" class="list-header"><strong>Encounter with Elevated Glucose Greater Than or Equal to 200</strong></label>
+            <ul class="code" style="margin-right: 20%; opacity: 1;">
+                <li class="list-unstyled">
+                    <div>
+                        <ul style="padding-left: 0px;">
+                            <li style="padding-left: 0px;" class="list-unstyled">
+                                <div>
+                                    <pre class="cql-definition-body">  &quot;Encounter with Hospitalization Period&quot; Hospitalization
+    with [&quot;Laboratory Test, Performed&quot;: &quot;Glucose Lab Test Mass Per Volume&quot;] GlucoseTest
+      such that Global.&quot;EarliestOf&quot; ( GlucoseTest.relevantDatetime, GlucoseTest.relevantPeriod ) during Hospitalization.hospitalizationPeriod
+        and GlucoseTest.result &gt;= 200 &#39;mg/dL&#39;
+    return Hospitalization.encounter</pre>
+                                </div>
+                            </li>
+                        </ul>&nbsp;
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul><ul class="list-unstyled" style="list-style:none;padding-left:0;">
+    <li class="list-unstyled">
+        <div class="treeview hover p-l-10">
+            <input type="checkbox" id="Encounter with Existing Diabetes Diagnosis" />
+            <label for="Encounter with Existing Diabetes Diagnosis" class="list-header"><strong>Encounter with Existing Diabetes Diagnosis</strong></label>
+            <ul class="code" style="margin-right: 20%; opacity: 1;">
+                <li class="list-unstyled">
+                    <div>
+                        <ul style="padding-left: 0px;">
+                            <li style="padding-left: 0px;" class="list-unstyled">
+                                <div>
+                                    <pre class="cql-definition-body">  &quot;Encounter with Hospitalization Period&quot; Hospitalization
+    with [&quot;Diagnosis&quot;: &quot;Diabetes&quot;] DiabetesCondition
+      such that DiabetesCondition.prevalencePeriod starts before 
+      end of Hospitalization.hospitalizationPeriod
+    return Hospitalization.encounter</pre>
+                                </div>
+                            </li>
+                        </ul>&nbsp;
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul><ul class="list-unstyled" style="list-style:none;padding-left:0;">
+    <li class="list-unstyled">
+        <div class="treeview hover p-l-10">
+            <input type="checkbox" id="Encounter with Hospitalization Period" />
+            <label for="Encounter with Hospitalization Period" class="list-header"><strong>Encounter with Hospitalization Period</strong></label>
+            <ul class="code" style="margin-right: 20%; opacity: 1;">
+                <li class="list-unstyled">
+                    <div>
+                        <ul style="padding-left: 0px;">
+                            <li style="padding-left: 0px;" class="list-unstyled">
+                                <div>
+                                    <pre class="cql-definition-body">  &quot;Qualifying Encounter&quot; QualifyingHospitalization
+    return Tuple {
+      encounter: QualifyingHospitalization,
+      hospitalizationPeriod: Global.&quot;HospitalizationWithObservation&quot; ( QualifyingHospitalization )
+    }</pre>
+                                </div>
+                            </li>
+                        </ul>&nbsp;
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul><ul class="list-unstyled" style="list-style:none;padding-left:0;">
+    <li class="list-unstyled">
+        <div class="treeview hover p-l-10">
+            <input type="checkbox" id="Encounter with Hypoglycemic Medication" />
+            <label for="Encounter with Hypoglycemic Medication" class="list-header"><strong>Encounter with Hypoglycemic Medication</strong></label>
+            <ul class="code" style="margin-right: 20%; opacity: 1;">
+                <li class="list-unstyled">
+                    <div>
+                        <ul style="padding-left: 0px;">
+                            <li style="padding-left: 0px;" class="list-unstyled">
+                                <div>
+                                    <pre class="cql-definition-body">  &quot;Encounter with Hospitalization Period&quot; Hospitalization
+    with [&quot;Medication, Administered&quot;: &quot;Hypoglycemics Treatment Medications&quot;] HypoglycemicMedication
+      such that Global.&quot;NormalizeInterval&quot; ( HypoglycemicMedication.relevantDatetime, HypoglycemicMedication.relevantPeriod ) starts during Hospitalization.hospitalizationPeriod
+    return Hospitalization.encounter</pre>
+                                </div>
+                            </li>
+                        </ul>&nbsp;
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul><ul class="list-unstyled" style="list-style:none;padding-left:0;">
+    <li class="list-unstyled">
+        <div class="treeview hover p-l-10">
+            <input type="checkbox" id="Initial Population" />
+            <label for="Initial Population" class="list-header"><strong>Initial Population</strong></label>
+            <ul class="code" style="margin-right: 20%; opacity: 1;">
+                <li class="list-unstyled">
+                    <div>
+                        <ul style="padding-left: 0px;">
+                            <li style="padding-left: 0px;" class="list-unstyled">
+                                <div>
+                                    <pre class="cql-definition-body">  &quot;Encounter with Existing Diabetes Diagnosis&quot;
+    union &quot;Encounter with Hypoglycemic Medication&quot;
+    union &quot;Encounter with Elevated Glucose Greater Than or Equal to 200&quot;</pre>
+                                </div>
+                            </li>
+                        </ul>&nbsp;
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul><ul class="list-unstyled" style="list-style:none;padding-left:0;">
+    <li class="list-unstyled">
+        <div class="treeview hover p-l-10">
+            <input type="checkbox" id="Qualifying Encounter" />
+            <label for="Qualifying Encounter" class="list-header"><strong>Qualifying Encounter</strong></label>
+            <ul class="code" style="margin-right: 20%; opacity: 1;">
+                <li class="list-unstyled">
+                    <div>
+                        <ul style="padding-left: 0px;">
+                            <li style="padding-left: 0px;" class="list-unstyled">
+                                <div>
+                                    <pre class="cql-definition-body">  [&quot;Encounter, Performed&quot;: &quot;Encounter Inpatient&quot;] InpatientEncounter
+    where InpatientEncounter.relevantPeriod ends during day of &quot;Measurement Period&quot;
+      and AgeInYearsAt(date from start of InpatientEncounter.relevantPeriod)&gt;= 18</pre>
+                                </div>
+                            </li>
+                        </ul>&nbsp;
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul>            </div>
+        </li>
+    </ul>
+</div><h3><a name="d1e650" href="#toc">Functions</a></h3>
+<div>
+    <ul style="list-style:none;padding-left: 10px;">
+        <li class="list-unstyled" style="list-style:none;">
+            <div>
+                <ul class="list-unstyled" style="list-style:none;padding-left:0;">
+    <li class="list-unstyled">
+        <div class="treeview hover p-l-10">
+            <input type="checkbox" id="MATGlobalCommonFunctionsQDM-1.0.000|Global|Earliest" />
+            <label for="MATGlobalCommonFunctionsQDM-1.0.000|Global|Earliest" class="list-header"><strong>Global.Earliest(period Interval&lt;DateTime&gt;)</strong></label>
+            <ul class="code" style="margin-right: 20%; opacity: 1;">
+                <li class="list-unstyled">
+                    <div>
+                        <ul style="padding-left: 0px;">
+                            <li style="padding-left: 0px;" class="list-unstyled">
+                                <div>
+                                    <pre class="cql-definition-body">  if ( HasStart(period)) then start of period 
+    else 
+  end of period</pre>
+                                </div>
+                            </li>
+                        </ul>&nbsp;
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul><ul class="list-unstyled" style="list-style:none;padding-left:0;">
+    <li class="list-unstyled">
+        <div class="treeview hover p-l-10">
+            <input type="checkbox" id="MATGlobalCommonFunctionsQDM-1.0.000|Global|EarliestOf" />
+            <label for="MATGlobalCommonFunctionsQDM-1.0.000|Global|EarliestOf" class="list-header"><strong>Global.EarliestOf(pointInTime DateTime, period Interval&lt;DateTime&gt;)</strong></label>
+            <ul class="code" style="margin-right: 20%; opacity: 1;">
+                <li class="list-unstyled">
+                    <div>
+                        <ul style="padding-left: 0px;">
+                            <li style="padding-left: 0px;" class="list-unstyled">
+                                <div>
+                                    <pre class="cql-definition-body">  Earliest(NormalizeInterval(pointInTime, period))</pre>
+                                </div>
+                            </li>
+                        </ul>&nbsp;
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul><ul class="list-unstyled" style="list-style:none;padding-left:0;">
+    <li class="list-unstyled">
+        <div class="treeview hover p-l-10">
+            <input type="checkbox" id="MATGlobalCommonFunctionsQDM-1.0.000|Global|HasStart" />
+            <label for="MATGlobalCommonFunctionsQDM-1.0.000|Global|HasStart" class="list-header"><strong>Global.HasStart(period Interval&lt;DateTime&gt;)</strong></label>
+            <ul class="code" style="margin-right: 20%; opacity: 1;">
+                <li class="list-unstyled">
+                    <div>
+                        <ul style="padding-left: 0px;">
+                            <li style="padding-left: 0px;" class="list-unstyled">
+                                <div>
+                                    <pre class="cql-definition-body">  not ( start of period is null
+      or start of period = minimum DateTime
+  )</pre>
+                                </div>
+                            </li>
+                        </ul>&nbsp;
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul><ul class="list-unstyled" style="list-style:none;padding-left:0;">
+    <li class="list-unstyled">
+        <div class="treeview hover p-l-10">
+            <input type="checkbox" id="MATGlobalCommonFunctionsQDM-1.0.000|Global|HospitalizationWithObservation" />
+            <label for="MATGlobalCommonFunctionsQDM-1.0.000|Global|HospitalizationWithObservation" class="list-header"><strong>Global.HospitalizationWithObservation(Encounter &quot;Encounter, Performed&quot;)</strong></label>
+            <ul class="code" style="margin-right: 20%; opacity: 1;">
+                <li class="list-unstyled">
+                    <div>
+                        <ul style="padding-left: 0px;">
+                            <li style="padding-left: 0px;" class="list-unstyled">
+                                <div>
+                                    <pre class="cql-definition-body">  Encounter Visit
+  	let ObsVisit: Last([&quot;Encounter, Performed&quot;: &quot;Observation Services&quot;] LastObs
+  			where LastObs.relevantPeriod ends 1 hour or less on or before start of Visit.relevantPeriod
+  			sort by 
+  			end of relevantPeriod
+  	),
+  	VisitStart: Coalesce(start of ObsVisit.relevantPeriod, start of Visit.relevantPeriod),
+  	EDVisit: Last([&quot;Encounter, Performed&quot;: &quot;Emergency Department Visit&quot;] LastED
+  			where LastED.relevantPeriod ends 1 hour or less on or before VisitStart
+  			sort by 
+  			end of relevantPeriod
+  	)
+  	return Interval[Coalesce(start of EDVisit.relevantPeriod, VisitStart), 
+  	end of Visit.relevantPeriod]</pre>
+                                </div>
+                            </li>
+                        </ul>&nbsp;
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul><ul class="list-unstyled" style="list-style:none;padding-left:0;">
+    <li class="list-unstyled">
+        <div class="treeview hover p-l-10">
+            <input type="checkbox" id="MATGlobalCommonFunctionsQDM-1.0.000|Global|NormalizeInterval" />
+            <label for="MATGlobalCommonFunctionsQDM-1.0.000|Global|NormalizeInterval" class="list-header"><strong>Global.NormalizeInterval(pointInTime DateTime, period Interval&lt;DateTime&gt;)</strong></label>
+            <ul class="code" style="margin-right: 20%; opacity: 1;">
+                <li class="list-unstyled">
+                    <div>
+                        <ul style="padding-left: 0px;">
+                            <li style="padding-left: 0px;" class="list-unstyled">
+                                <div>
+                                    <pre class="cql-definition-body">  if pointInTime is not null then Interval[pointInTime, pointInTime]
+    else if period is not null then period 
+    else null as Interval&lt;DateTime&gt;</pre>
+                                </div>
+                            </li>
+                        </ul>&nbsp;
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </li>
+</ul>            </div>
+        </li>
+    </ul>
+</div><h3><a name="d1e555" href="#toc">Terminology</a></h3>
+<div>
+            <ul style="padding-left: 50px;">
+                <li style="width:80%">valueset &quot;Diabetes&quot; (2.16.840.1.113883.3.464.1003.103.12.1001)</li>
+                <li style="width:80%">valueset &quot;Emergency Department Visit&quot; (2.16.840.1.113883.3.117.1.7.1.292)</li>
+                <li style="width:80%">valueset &quot;Encounter Inpatient&quot; (2.16.840.1.113883.3.666.5.307)</li>
+                <li style="width:80%">valueset &quot;Glucose Lab Test Mass Per Volume&quot; (2.16.840.1.113762.1.4.1248.34)</li>
+                <li style="width:80%">valueset &quot;Hypoglycemics Treatment Medications&quot; (2.16.840.1.113762.1.4.1196.394)</li>
+                <li style="width:80%">valueset &quot;Observation Services&quot; (2.16.840.1.113762.1.4.1111.143)</li>
+        </ul>
+</div><h3><a name="d1e647" href="#toc">Data Criteria (QDM Data Elements)</a></h3>
+
+<div>
+            <ul style="padding-left: 50px;">
+                <li style="width:80%">&quot;Diagnosis: Diabetes&quot; using &quot;Diabetes (2.16.840.1.113883.3.464.1003.103.12.1001)&quot;</li>
+                <li style="width:80%">&quot;Encounter, Performed: Emergency Department Visit&quot; using &quot;Emergency Department Visit (2.16.840.1.113883.3.117.1.7.1.292)&quot;</li>
+                <li style="width:80%">&quot;Encounter, Performed: Encounter Inpatient&quot; using &quot;Encounter Inpatient (2.16.840.1.113883.3.666.5.307)&quot;</li>
+                <li style="width:80%">&quot;Encounter, Performed: Observation Services&quot; using &quot;Observation Services (2.16.840.1.113762.1.4.1111.143)&quot;</li>
+                <li style="width:80%">&quot;Laboratory Test, Performed: Glucose Lab Test Mass Per Volume&quot; using &quot;Glucose Lab Test Mass Per Volume (2.16.840.1.113762.1.4.1248.34)&quot;</li>
+                <li style="width:80%">&quot;Medication, Administered: Hypoglycemics Treatment Medications&quot; using &quot;Hypoglycemics Treatment Medications (2.16.840.1.113762.1.4.1196.394)&quot;</li>
+        </ul>
+</div><h3><a name="d1e767" href="#toc">Supplemental Data Elements</a></h3>
+<ul style="list-style:none;padding-left: 25px;">
+			<li>None</li>
+</ul><h3><a name="d1e879" href="#toc">Risk Adjustment Variables</a></h3>
+<ul style="list-style:none;padding-left: 25px;">
+			<li>None</li>
+</ul><div style="float:left; background:teal; height:3px; width:80%"></div>
+<pre><br/></pre><table class="header_table" role="presentation">
+    <tbody>
+        <tr>
+            <th scope="row" class="row-header"><span class="td_label">Measure Set</span></th>
+            <td style="width:80%" colspan="3">
+                <div style="width:660px;">
+                    <pre></pre>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+    </body>
+</html>
