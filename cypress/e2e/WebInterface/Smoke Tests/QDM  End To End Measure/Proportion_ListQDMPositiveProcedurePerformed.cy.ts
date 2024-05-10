@@ -6,6 +6,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { QDMElements } from "../../../../Shared/QDMElements"
 
 let measureName = 'ProportionListQDMPositiveProcedurePerformed' + Date.now()
 let CqlLibraryName = 'ProportionListQDMPositiveProcedurePerformed' + Date.now()
@@ -273,37 +274,28 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         TestCasesPage.enterPatientDemographics('08/17/1957', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
 
         //Element - Condition:Diagnosis: Uveitis
-        cy.get('[data-testid=elements-tab-condition]').click()
-        cy.get('[data-testid="data-type-Diagnosis: Uveitis"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('03/15/2012 07:00 PM')
-        cy.get('[id="dateTime"]').eq(1).type('03/15/2012 07:00 PM')
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-SNOMEDCT]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-4927003]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Element
+        QDMElements.addElement('condition', 'Diagnosis: Uveitis')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('03/15/2012 07:00 PM', '03/15/2012 07:00 PM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '4927003')
 
         //Element - Procedure:Performed: Cataract Surgery
-        cy.get('[data-testid=elements-tab-procedure]').click()
-        cy.get('[data-testid="data-type-Procedure, Performed: Cataract Surgery"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('03/15/2012 05:00 PM')
-        cy.get('[id="dateTime"]').eq(1).type('03/15/2012 07:00 PM')
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-SNOMEDCT]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-9137006]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Element
+        QDMElements.addElement('procedure', 'Performed: Cataract Surgery')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('03/15/2012 05:00 PM', '03/15/2012 07:00 PM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '9137006')
 
         //Element - Condition:Diagnosis: Optic Atrophy
-        cy.get('[data-testid=elements-tab-condition]').click()
-        cy.get('[data-testid="data-type-Diagnosis: Optic Atrophy"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('03/15/2012 07:00 PM')
-        cy.get('[id="dateTime"]').eq(1).type('03/15/2012 07:00 PM')
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-SNOMEDCT]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid=code-option-111527005]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Element
+        QDMElements.addElement('condition', 'Diagnosis: Optic Atrophy')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('03/15/2012 07:00 PM', '03/15/2012 07:00 PM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '111527005')
 
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -326,43 +318,34 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         TestCasesPage.enterPatientDemographics('07/28/1977', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
 
         //Element - Condition:Diagnosis: Disorders of Visual Cortex
-        cy.get('[data-testid=elements-tab-condition]').click()
-        cy.get('[data-testid="data-type-Diagnosis: Disorders of Visual Cortex"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('01/01/2012 01:15 PM')
-        cy.get('[id="dateTime"]').eq(1).type('01/02/2012 01:15 PM')
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-ICD10CM]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-H47.611"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
+        //add Element
+        QDMElements.addElement('condition', 'Diagnosis: Disorders of Visual Cortex')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('01/01/2012 01:15 PM', '01/02/2012 01:15 PM')
+        //add Code
+        QDMElements.addCode('ICD10CM', 'H47.611')
 
         //Element - Procedure:Performed: Cataract Surgery
-        cy.get('[data-testid=elements-tab-procedure]').click()
-        cy.get('[data-testid="data-type-Procedure, Performed: Cataract Surgery"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('01/02/2012 10:15 PM')
-        cy.get('[id="dateTime"]').eq(1).type('01/02/2012 01:15 PM')
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid=code-system-option-SNOMEDCT]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-10178000"]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Element
+        QDMElements.addElement('procedure', 'Performed: Cataract Surgery')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('01/02/2012 10:15 PM', '01/02/2012 01:15 PM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '10178000')
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        QDMElements.closeElement()
 
         //Element - Procedure:Performed: Cataract Surgery
-        cy.get('[data-testid=elements-tab-procedure]').click()
-        cy.get('[data-testid="data-type-Procedure, Performed: Cataract Surgery"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('02/02/2012 01:15 PM')
-        cy.get('[id="dateTime"]').eq(1).type('02/02/2012 04:15 PM')
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-446548003"]').click()
-        cy.get('[data-testid=add-code-concept-button]').click()
+        //add Element
+        QDMElements.addElement('procedure', 'Performed: Cataract Surgery')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('02/02/2012 01:15 PM', '02/02/2012 04:15 PM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '446548003')
 
         //Element - Physical Exam:Performed: Best Corrected Visual Acuity Exam Using Snellen Chart
-        cy.get('[data-testid=elements-tab-physical_exam]').click()
-        cy.get('[data-testid="data-type-Physical Exam, Performed: Best Corrected Visual Acuity Exam Using Snellen Chart"]').click()
+        //add Element
+        QDMElements.addElement('physicalexam', 'Performed: Best Corrected Visual Acuity Exam Using Snellen Chart')
         cy.get('[id="dateTime"]').eq(2).type('02/02/2012 01:15 PM')
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()

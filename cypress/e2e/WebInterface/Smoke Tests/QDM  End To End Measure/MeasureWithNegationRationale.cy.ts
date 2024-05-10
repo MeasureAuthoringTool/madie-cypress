@@ -6,6 +6,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { QDMElements } from "../../../../Shared/QDMElements"
 
 let measureName = 'MeasureWithNegationRationale' + Date.now()
 let CqlLibraryName = 'MeasureWithNegationRationale' + Date.now()
@@ -258,36 +259,29 @@ describe('Measure with Negation Rationale', () => {
         TestCasesPage.enterPatientDemographics('04/10/1942', 'Living', 'White', 'Female', 'Not Hispanic or Latino')
 
         //Element - Condition, Diagnosis: Bladder Cancer for Urology Care
-        cy.get('[data-testid=elements-tab-condition]').click()
-        cy.get('[data-testid="data-type-Diagnosis: Bladder Cancer for Urology Care"]').click()
+        //add Element
+        QDMElements.addElement('condition', 'Diagnosis: Bladder Cancer for Urology Care')
+        //add Timing Relevant Period DateTime
         cy.get('[id="dateTime"]').eq(0).type('09/30/2011 08:00 AM')
-        cy.get(TestCasesPage.codeSystemSelector).click()
-        cy.get('[data-testid="code-system-option-ICD10CM"]').click()
-        cy.get(TestCasesPage.codeSelector).click()
-        cy.get('[data-testid="code-option-C67.3"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
+        //add Code
+        QDMElements.addCode('ICD10CM', 'C67.3')
 
         //Element - Medication, Administered: BCG Bacillus Calmette Guerin for Urology Care
-        cy.get('[data-testid=elements-tab-medication]').click()
-        cy.get('[data-testid="data-type-Medication, Administered: BCG Bacillus Calmette Guerin for Urology Care"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('03/01/2012 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('03/01/2012 10:15 AM')
-        cy.get(TestCasesPage.codeSystemSelector).click()
-        cy.get('[data-testid="code-system-option-RXNORM"]').click()
-        cy.get(TestCasesPage.codeSelector).click()
-        cy.get('[data-testid="code-option-1653579"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
+        //add Element
+        QDMElements.addElement('medication', 'Administered: BCG Bacillus Calmette Guerin for Urology Care')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('03/01/2012 08:00 AM', '03/01/2012 10:15 AM')
+        //add Code
+        QDMElements.addCode('RXNORM', '1653579')
 
         //Element - Procedure, Performed: Tumor staging (tumor staging)
-        cy.get('[data-testid=elements-tab-procedure]').click()
-        cy.get('[data-testid="data-type-Procedure, Performed: Tumor staging (tumor staging)"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('09/30/2011 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('09/30/2011 08:15 AM')
-        cy.get(TestCasesPage.codeSystemSelector).click()
-        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get(TestCasesPage.codeSelector).click()
-        cy.get('[data-testid="code-option-254292007"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
+        //add Element
+        QDMElements.addElement('procedure', 'Performed: Tumor staging (tumor staging)')
+        //add Timing Relevant Period DateTime
+        QDMElements.addTimingRelevantPeriodDateTime('09/30/2011 08:00 AM', '09/30/2011 08:15 AM')
+        //add Code
+        QDMElements.addCode('SNOMEDCT', '254292007')
+        // Enter attribute and its type
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid="option-Result"]').click()

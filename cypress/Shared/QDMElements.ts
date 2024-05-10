@@ -33,6 +33,40 @@ export class QDMElements {
 
                 cy.get('[data-testid=elements-tab-patient_characteristic]').click()
                 cy.get('[data-testid="data-type-Patient Characteristic ' + elementTitle + '"]').click()
+
+                break
+            }
+
+            case  'condition': {
+
+                cy.get('[data-testid="elements-tab-condition"]').click()
+                cy.get('[data-testid="data-type-' + elementTitle + '"]').click()
+
+                break
+            }
+
+            case 'procedure': {
+
+                cy.get('[data-testid=elements-tab-procedure]').click()
+                cy.get('[data-testid="data-type-Procedure, ' + elementTitle + '"]').click()
+
+                break
+            }
+
+            case 'diagnosis': {
+
+                cy.get('[data-testid=elements-tab-condition]').click()
+                cy.get('[data-testid="data-type-'  + elementTitle + '"]').click()
+
+                break
+            }
+
+            case 'medication': {
+
+                cy.get('[data-testid=elements-tab-medication]').click()
+                cy.get('[data-testid="data-type-Medication, ' + elementTitle + '"]').click()
+
+                break
             }
         }
     }
