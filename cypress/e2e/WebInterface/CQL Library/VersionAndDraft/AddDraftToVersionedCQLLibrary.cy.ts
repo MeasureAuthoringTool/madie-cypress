@@ -51,7 +51,7 @@ describe('Add Draft to CQL Library', () => {
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
 
-        //intercept draft id once measure is drafted
+        //intercept draft id once library is drafted
         cy.readFile(filePath).should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
         })
@@ -66,7 +66,8 @@ describe('Add Draft to CQL Library', () => {
         //navigate into the Library's detail / edit page
         CQLLibrariesPage.cqlLibraryAction('edit')
 
-        //confirm that CQL Editory window is not empty
+
+        //confirm that CQL Editor window is not empty
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox)
             .find('[class="ace_layer ace_text-layer"]')
             .find('[class="ace_line_group"]')
