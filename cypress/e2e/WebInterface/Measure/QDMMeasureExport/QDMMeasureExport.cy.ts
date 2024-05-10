@@ -17,8 +17,6 @@ let baseHTMLFileFourthSection = 'cypress/fixtures/HumanReadableCompareFile_Fourt
 let exported = ''
 let expected = ''
 
-//
-
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
@@ -28,7 +26,7 @@ describe('Successful QDM Measure Export', () => {
 
     deleteDownloadsFolderBeforeAll()
 
-    before('Create New Measure and Login', () => {
+    beforeEach('Create New Measure and Login', () => {
 
         //Create Measure and Measure group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
@@ -37,7 +35,7 @@ describe('Successful QDM Measure Export', () => {
 
     })
 
-    after('Clean up', () => {
+    afterEach('Clean up', () => {
 
         Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
     })
@@ -70,7 +68,7 @@ describe('Successful QDM Measure Export', () => {
             })
 
         //read contents of the html file and compare that with the expected file contents (minus specific 
-        //measure name and other data that cna change from one generated HR file -to- the next)
+        //measure name and other data that can change from one generated HR file -to- the next)
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM.html')).should('exist').then((exportedFile) => {
             debugger
             exported = exportedFile.toString(); //'exportedFile'
@@ -128,7 +126,9 @@ describe('QDM Measure Export, Not the Owner', () => {
     })
 
     after('Clean up', () => {
-
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
     })
 
