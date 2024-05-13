@@ -73,7 +73,7 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     'true'
 
 //this is test is failing in jenkins test run, needs to be debugged before we can run it again through jenkins
-describe.skip('FHIR Measure Export, Not the Owner', () => {
+describe('FHIR Measure Export, Not the Owner', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -88,7 +88,7 @@ describe.skip('FHIR Measure Export, Not the Owner', () => {
 
     })
 
-    it.skip('Validate the zip file Export is downloaded for FHIR Measure', () => {
+    it('Validate the zip file Export is downloaded for FHIR Measure', () => {
 
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
@@ -96,14 +96,14 @@ describe.skip('FHIR Measure Export, Not the Owner', () => {
 
         MeasuresPage.measureAction('export')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4.zip'),{ timeout: 500000 }).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
         OktaLogin.Logout()
 
     })
 
-    it.skip('Unzip the downloaded file and verify file types for FHIR Measure', () => {
+    it('Unzip the downloaded file and verify file types for FHIR Measure', () => {
 
         // unzipping the Measure Export
         cy.task('unzipFile', { zipFile: 'eCQMTitle-v0.0.000-FHIR4.zip', path: downloadsFolder })
