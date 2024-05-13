@@ -459,7 +459,7 @@ describe.skip('QDM Measure Export', () => {
                     }
                 }).then((response) => {
                     console.log(response)
-                    expect(response.status).to.eql(200)
+                    expect(response.status).to.eql(201)
                     expect(response.body).is.not.null
                 })
             })
