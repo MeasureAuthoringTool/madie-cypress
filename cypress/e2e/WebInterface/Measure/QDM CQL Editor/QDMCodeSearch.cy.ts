@@ -4,11 +4,33 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
-let measureCQL = MeasureCQL.qdmCQLNonPatienBasedTest
+let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
+    'using QDM version \'5.6\'\n' +
+    '\n' +
+    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+    '\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'context Patient\n' +
+    'define "SDE Ethnicity":\n' +
+    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+    'define "SDE Payer":\n' +
+    '  ["Patient Characteristic Payer": "Payer"]\n' +
+    'define "SDE Race":\n' +
+    '  ["Patient Characteristic Race": "Race"]\n' +
+    'define "SDE Sex":\n' +
+    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+    'define "ipp":\n' +
+    '\ttrue\n' +
+    'define "d":\n' +
+    '\t true\n' +
+    'define "n":\n' +
+    '\ttrue'
 
 //Skipping until QDMCodeSearch feature flag is removed
 describe.skip('QDM Code Search fields', () => {
@@ -55,16 +77,13 @@ describe.skip('QDM Code Search fields', () => {
         //Assert when the Code is Active in VSAC
         cy.get(CQLEditorPage.codeSystemDropdown).type('SNOMEDCT')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('SNOMEDCT').click()
-        cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
-        cy.get('[data-testid="http://snomed.info/sct/731000124108/version/20230301-option"]').click()
         cy.get(CQLEditorPage.codeText).type('258219007')
         Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version258219007Stage 2 (qualifier value)SNOMEDCThttp://snomed.info/sct/731000124108/version/20230301Select')
-
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version258219007Stage 2 (qualifier value)SNOMEDCThttp://snomed.info/sct/731000124108/version/20240301Select')
         //Assert when the Code is not available in VSAC
         cy.get(CQLEditorPage.codeText).clear().type('123')
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
@@ -76,31 +95,29 @@ describe.skip('QDM Code Search fields', () => {
         //Assert when the Code is inactive in VSAC
         cy.get(CQLEditorPage.codeSystemDropdown).type('SNOMEDCT')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('SNOMEDCT').click()
-        cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
-        cy.get('[data-testid="http://snomed.info/sct/731000124108/version/20230301-option"]').click()
         cy.get(CQLEditorPage.codeText).type('16298561000119108')
         Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is inactive in this code system version')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version16298561000119108Administration of tetanus, diphtheria, and acellular pertussis vaccine (procedure)SNOMEDCThttp://snomed.info/sct/731000124108/version/20230301Select')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version16298561000119108Administration of tetanus, diphtheria, and acellular pertussis vaccine (procedure)SNOMEDCThttp://snomed.info/sct/731000124108/version/20240301Select')
         //Clear the code search values
         cy.get(CQLEditorPage.clearCodeBtn).click()
 
         //Assert when the Code is unavailable (not able to determine active/inactive)
-        cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
-        cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
-        cy.get(CQLEditorPage.codeText).type('AMB')
+        cy.get(CQLEditorPage.codeSystemDropdown).type('CPT')
+        cy.get(CQLEditorPage.codeSystemOptionListBox).contains('CPT').click()
+        cy.get(CQLEditorPage.codeText).type('99201')
         Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'Code status unavailable')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode9.0.0Select')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version99201Office or other outpatient visit for the evaluation and management of a new patient, which requires these 3 key components: A problem focused history; A problem focused examination; Straightforward medical decision making. Counseling and/or coordination of care with other physicians, other qualified health care professionals, or agencies are provided consistent with the nature of the problem(s) and the patient\'s and/or family\'s needs. Usually, the presenting problem(s) are self limited or minor. Typically, 10 minutes are spent face-to-face with the patient and/or family.CPT2024Select')
     })
 
-    it('Apply code to the Measure validations', () => {
+    it('Apply code to the CQL and verify under Saved Codes tab', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
@@ -120,33 +137,42 @@ describe.skip('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.codeSubTab).click()
 
         //Search for the Code
-        cy.get(CQLEditorPage.codeSystemDropdown).type('SNOMEDCT')
-        cy.get(CQLEditorPage.codeSystemOptionListBox).contains('SNOMEDCT').click()
-        cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
-        cy.get('[data-testid="http://snomed.info/sct/731000124108/version/20230301-option"]').click()
-        cy.get(CQLEditorPage.codeText).type('258219007')
+        cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
+        cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
+        cy.get(CQLEditorPage.codeText).type('AMB')
         Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version258219007Stage 2 (qualifier value)SNOMEDCThttp://snomed.info/sct/731000124108/version/20230301Select')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode9.0.0Select')
 
         //Apply code to the Measure
         cy.get('[data-testid="select-action-0_apply"]').click()
         cy.get('[class="btn-container"]').contains('Apply').click()
-        cy.get('[class="toast success"]').should('contain.text', 'Code 258219007 has been successfully added to the CQL.')
+        cy.get('[class="toast success"]').should('contain.text', 'Code AMB has been successfully added to the CQL.')
 
         //Save and Discard changes button should be enabled after applying the code
         cy.get(CQLEditorPage.saveCQLButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.enabled')
 
-        //Need to revisit once MAT-7180 is fixed
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
+
+        //Need to revisit once MAT-7180 is fixed
+        //cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
 
         //Assert toast message while trying to apply the same code again
+        cy.get(CQLEditorPage.codeSubTab).click()
+        cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
+        cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
+        cy.get(CQLEditorPage.codeText).type('AMB')
+        Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
+        cy.get(CQLEditorPage.codeSystemSearchBtn).click()
+        Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
+        cy.get(CQLEditorPage.toolTip).trigger('mouseover')
+        cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode9.0.0Select')
         cy.get('[data-testid="select-action-0_apply"]').click()
         cy.get('[class="btn-container"]').contains('Apply').click()
         cy.get('[class="toast success"]').should('contain.text', 'This code is already defined in the CQL.')
@@ -154,5 +180,9 @@ describe.skip('QDM Code Search fields', () => {
         //Save and Discard changes button should be disabled
         cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
         cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.disabled')
+
+        //Navigate to Saved Codes tab
+        cy.get('[data-testid="savedCodes-tab"]').click()
+        cy.get('[data-testid="terminology-section-sub-header-content-Saved Codes"]').should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode9.0.0')
     })
 })
