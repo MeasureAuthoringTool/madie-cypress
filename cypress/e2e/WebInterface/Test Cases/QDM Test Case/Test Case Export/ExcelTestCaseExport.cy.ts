@@ -23,8 +23,7 @@ const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-fol
 const XLSX = require('xlsx')
 let baseExcelFile = 'cypress/fixtures/baseTestcaseExcelFile.xls'
 
-// skipping until 'TestCaseExport' flag is removed
-describe.skip('QDM Test Cases : Export Test Case', () => {
+describe('QDM Test Cases : Export Test Case', () => {
 
     deleteDownloadsFolderBeforeAll()
 
