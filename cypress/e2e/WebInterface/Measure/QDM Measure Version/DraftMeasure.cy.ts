@@ -21,8 +21,7 @@ let testCaseDescription = 'testDescription' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.QDMTestCaseJson
 
-//skipping due to QDM versioning is not yet supposed to be available for production
-describe.skip('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
+describe('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
@@ -110,8 +109,7 @@ describe.skip('Draft and Version Validations -- add and cannot create draft of a
     })
 })
 
-//skipping due to QDM versioning is not yet supposed to be available for production
-describe.skip('Draft and Version Validations -- CQL and Group are correct', () => {
+describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
     beforeEach('Create Measure, Group, Test case and Login', () => {
 

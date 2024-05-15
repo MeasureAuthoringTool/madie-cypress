@@ -131,8 +131,8 @@ describe('QI Core: Elements tab is not present', () => {
     })
 })
 
-// "enableQdmRepeatTransfer" : true
-describe('QDM: Measure Version option Should not exist', () => {
+// "enableQdmRepeatTransfer" : false
+describe('QDM: Measure Version option Should exist', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     let newMeasureName = 'TestMeasure' + Date.now() + randValue
@@ -153,7 +153,7 @@ describe('QDM: Measure Version option Should not exist', () => {
 
     })
 
-    it('Measure Version option should not exist for QDM Draft Measures', () => {
+    it('Measure Version option should exist for QDM Draft Measures', () => {
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
@@ -161,7 +161,7 @@ describe('QDM: Measure Version option Should not exist', () => {
             Utilities.waitForElementEnabled('[data-testid="measure-action-' + fileContents + '"]', 100000)
             cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.enabled')
             cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
-            cy.get('[data-testid="create-version-measure-' + fileContents + '"]').should('not.exist')
+            cy.get('[data-testid="create-version-measure-' + fileContents + '"]').should('exist')
         })
         cy.reload()
         Utilities.waitForElementVisible(Header.userProfileSelect, 60000)
@@ -278,7 +278,7 @@ describe('QDM: Expansion Manifest sub-tab / section is not available when flag i
     })
 })
 
-// "TestCaseExport" : false
+// "TestCaseExport" : true
 describe('QDM: Test Case Export button and it\s sub-action buttons', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -296,12 +296,12 @@ describe('QDM: Test Case Export button and it\s sub-action buttons', () => {
 
     })
 
-    it('Test case Export button not visible when the feature flag is set to false', () => {
+    it('QDM Test case Export button is visible when the feature flag is set to true', () => {
 
         // edit QDM measure and confirm that the Export button does not exist, at all, for QDM
         MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.testcaseQRDAExportBtn).should('not.exist')
+        cy.get(TestCasesPage.testcaseQRDAExportBtn).should('exist')
 
         // log out of MADiE UI
         OktaLogin.UILogout()
@@ -336,7 +336,7 @@ describe('QDM: Test Case Export button and it\s sub-action buttons', () => {
             .scrollIntoView()
             .click({ force: true })
 
-        // confirm that only the actiona buttons that should appear are appearing on page
+        // confirm that only the action buttons that should appear are appearing on page
         Utilities.waitForElementToNotExist(TestCasesPage.exportExcelBtn, 30000)
         Utilities.waitForElementVisible(TestCasesPage.exportTransactionBundleBtn, 30000)
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionBundleBtn, 30000)
