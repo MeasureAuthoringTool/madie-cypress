@@ -1,0 +1,7 @@
+   <!--Encounter Inpatient-->
+   <definition>
+      <valueSet classCode="OBS" moodCode="DEF">
+         <id root="2.16.840.1.113883.3.666.5.307"/>
+         <title value="Encounter Inpatient"/>
+      </valueSet>
+   </definition>

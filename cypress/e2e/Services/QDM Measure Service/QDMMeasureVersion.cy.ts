@@ -88,7 +88,9 @@ describe.skip('Measure Versioning', () => {
     newCQLLibraryName = cqlLibraryName + 1 + randValue
 
     before('Create Measure', () => {
-
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true, measureCQL)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
@@ -96,14 +98,15 @@ describe.skip('Measure Versioning', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        OktaLogin.UILogout
+
 
     })
 
     after('Clean up', () => {
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
 
         Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
     })
@@ -114,17 +117,15 @@ describe.skip('Measure Versioning', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + measureId + '/version?versionType=major',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        method: 'PUT'
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.version).to.eql('1.0.000')
-                    })
+                cy.request({
+                    url: '/api/measures/' + measureId + '/version?versionType=major',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'PUT'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.version).to.eql('1.0.000')
                 })
             })
         })

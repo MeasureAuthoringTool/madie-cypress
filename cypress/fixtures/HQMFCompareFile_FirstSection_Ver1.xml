@@ -1,0 +1,19 @@
+   <versionNumber value="1.0.000"/>
+   <author>
+      <responsibleParty classCode="ASSIGNED">
+         <representedResponsibleOrganization classCode="ORG" determinerCode="INSTANCE">
+            <id>
+               <item root="2.16.840.1.113883.3.6308"/>
+            </id>
+            <name>
+               <item>
+                  <part value="Academy of Nutrition and Dietetics"/>
+               </item>
+            </name>
+         </representedResponsibleOrganization>
+      </responsibleParty>
+   </author>
+   <custodian>
+      <responsibleParty classCode="ASSIGNED">
+         <representedResponsibleOrganization classCode="ORG" determinerCode="INSTANCE">
+            <id>

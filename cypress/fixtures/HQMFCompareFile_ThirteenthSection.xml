@@ -1,0 +1,6 @@
+
+               <code valueSet="2.16.840.1.113883.3.117.1.7.1.292"/>
+               <title value="Encounter, Performed"/>
+               <statusCode code="COMPLETED"/>
+            </encounterCriteria>
+         </entry>

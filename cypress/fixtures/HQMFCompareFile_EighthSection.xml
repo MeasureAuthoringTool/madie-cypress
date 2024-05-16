@@ -1,0 +1,6 @@
+
+            <substanceAdministrationCriteria classCode="SBADM" moodCode="EVN">
+               <templateId>
+                  <item extension="2021-02-01" root="2.16.840.1.113883.10.20.28.4.45"/>
+               </templateId>
+               <id extension="HypoglycemicsTreatmentMedications_MedicationAdministered"
