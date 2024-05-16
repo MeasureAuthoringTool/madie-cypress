@@ -1,0 +1,7 @@
+
+         <code code="57026-7" codeSystem="2.16.840.1.113883.6.1"/>
+         <title value="Population Criteria Section"/>
+         <text/>
+         <component typeCode="COMP">
+            <initialPopulationCriteria classCode="OBS" moodCode="EVN">
+               <id extension="initialPopulation"

@@ -1,0 +1,7 @@
+   <!--Emergency Department Visit-->
+   <definition>
+      <valueSet classCode="OBS" moodCode="DEF">
+         <id root="2.16.840.1.113883.3.117.1.7.1.292"/>
+         <title value="Emergency Department Visit"/>
+      </valueSet>
+   </definition>

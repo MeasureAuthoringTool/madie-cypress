@@ -1,0 +1,7 @@
+   <!--Observation Services-->
+   <definition>
+      <valueSet classCode="OBS" moodCode="DEF">
+         <id root="2.16.840.1.113762.1.4.1111.143"/>
+         <title value="Observation Services"/>
+      </valueSet>
+   </definition>
