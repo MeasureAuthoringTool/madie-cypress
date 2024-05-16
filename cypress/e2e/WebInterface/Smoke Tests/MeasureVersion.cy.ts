@@ -11,6 +11,9 @@ import { Utilities } from "../../../Shared/Utilities"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
+let newMeasureName = ''
+let newCQLLibraryName = ''
+let randValue = (Math.floor((Math.random() * 1000) + 1))
 let QDMMeasureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 let versionNumber = '1.0.000'
 let testCaseTitle = 'TestcaseTitle'
@@ -20,6 +23,9 @@ let QiCoreMeasureCQL = MeasureCQL.SBTEST_CQL
 let QiCoreTestCaseJson = TestCaseJson.CohortEpisodeEncounter_PASS
 
 describe('QDM Measure Versioning', () => {
+
+    newMeasureName = measureName + randValue + 1
+    newCQLLibraryName = cqlLibraryName + randValue + 1
 
     beforeEach('Create Measure and Login', () => {
 
@@ -88,6 +94,9 @@ describe('QDM Measure Versioning', () => {
 })
 
 describe('QI-Core Measure Versioning', () => {
+
+    newMeasureName = measureName + randValue + 2
+    newCQLLibraryName = cqlLibraryName + randValue + 2
 
     before('Create Measure and Login', () => {
 
