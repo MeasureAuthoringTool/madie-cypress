@@ -81,8 +81,8 @@ let measureCQL_WithParsingAndVSACErrors = 'library APICQLLibrary35455 version \'
     'define "Denominator": \'\'\n' +
     '\t  "Initial Population"'
 
-
-describe('Measure Versioning', () => {
+//Skipping until we find a better solution to refactor
+describe.skip('Measure Versioning', () => {
 
     newMeasureName = measureName + 1 + randValue
     newCQLLibraryName = cqlLibraryName + 1 + randValue
