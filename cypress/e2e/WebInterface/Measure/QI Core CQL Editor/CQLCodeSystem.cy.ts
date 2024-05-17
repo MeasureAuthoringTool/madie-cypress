@@ -92,7 +92,7 @@ describe('Validations around code system in Measure CQL', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newCqlLibraryName = CqlLibraryName + randValue
 
-        //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
 
