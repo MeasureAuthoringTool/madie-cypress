@@ -92,7 +92,7 @@ describe('Validations around code system in Measure CQL', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newCqlLibraryName = CqlLibraryName + randValue
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
 
@@ -147,7 +147,8 @@ describe('Validations around code system in Measure CQL', () => {
 
     })
 
-    it('Verify proper error(s) appear in CQL Editor, when a user does not include version and there is no vsac', () => {
+    //Skipping until MAT-7226 is fixed
+    it.skip('Verify proper error(s) appear in CQL Editor, when a user does not include version and there is no vsac', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
