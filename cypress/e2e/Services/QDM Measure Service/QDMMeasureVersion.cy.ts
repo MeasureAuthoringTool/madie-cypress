@@ -5,6 +5,7 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -81,8 +82,7 @@ let measureCQL_WithParsingAndVSACErrors = 'library APICQLLibrary35455 version \'
     'define "Denominator": \'\'\n' +
     '\t  "Initial Population"'
 
-//Skipping until we find a better solution to refactor
-describe.skip('Measure Versioning', () => {
+describe('Measure Versioning', () => {
 
     newMeasureName = measureName + 1 + randValue
     newCQLLibraryName = cqlLibraryName + 1 + randValue
@@ -113,8 +113,36 @@ describe.skip('Measure Versioning', () => {
 
 
 
-    it('Successful Measure Versioning', () => {
+    it('UnSuccessful Measure Versioning when measure does not have population criteria', () => {
 
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/measures/' + measureId + '/version?versionType=major',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'PUT'
+                }).then((response) => {
+                    expect(response.status).to.eql(409)
+                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + measureId + ', since there is no population criteria on the measure.')
+                })
+            })
+        })
+    })
+    it('Successful Measure Versioning', () => {
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'd')
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.request({
