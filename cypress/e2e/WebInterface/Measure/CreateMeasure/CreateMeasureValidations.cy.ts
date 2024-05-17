@@ -487,7 +487,8 @@ describe('Create Measure validations', () => {
         //Verify error message when the CQL Library Name field is empty
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).click()
         cy.get(CreateMeasurePage.measureNameTextbox).click()
-        cy.get(CreateMeasurePage.cqlLibraryNameFieldLevelError).should('contain.text', 'Measure Library name is required.')
+        cy.get(CreateMeasurePage.cqlLibraryNameFieldLevelError).should('contain.text', 'Measure Library name must start with ' +
+            'an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
         //Verify if create measure button is disabled
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
@@ -511,8 +512,8 @@ describe('Create Measure validations', () => {
         //Verify error message when the CQL Library Name contains under score
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('{selectall}{backspace}')
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type('Test_123')
-        cy.get(CreateMeasurePage.cqlLibraryNameFieldLevelError).should('contain.text', 'Measure Library ' +
-            'name must not contain \'_\' (underscores).')
+        cy.get(CreateMeasurePage.cqlLibraryNameFieldLevelError).should('contain.text', 'Measure Library name must start with ' +
+            'an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
         //Verify if create measure button is disabled
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
@@ -936,7 +937,7 @@ describe('CQL Library Validations -- Attempting to use a QI Core Library in a QD
 
 describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Stratification: SDE values / radio button test', () => {
 
-       before('Create Measure', () => {
+    before('Create Measure', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(qdmMeasureNameMOS, CqlLibraryName, measureCQL, false, false,

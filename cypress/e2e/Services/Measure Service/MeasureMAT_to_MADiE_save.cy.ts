@@ -18,11 +18,12 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
         cy.setAccessTokenCookie()
     })
 
+
     it('Successful Measure transfer from MAT -to- MADiE', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
-                url: '/api/measure-transfer/mat-measures?cmsId=null',
+                url: '/api/measure-transfer/mat-measures?cmsId=0',//?cmsId=null
                 method: 'POST',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
@@ -31,9 +32,9 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     'Content-Type': 'application/json'
                 },
                 body: {
-                    "id": "659445a44d794b327b5eb74467",
+                    "id": "659445a44d794b327b5eb7446u",
                     "measureHumanReadableId": null,
-                    "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94f",
+                    "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94u",
                     "version": "0.0.000",
                     "revisionNumber": null,
                     "state": null,
@@ -48,7 +49,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     "elmXml": null,
                     "testCases": [
                         {
-                            "id": "6596f1944d794b327b5eb74b",
+                            "id": "6596f1944d794b327b5eb74u",
                             "name": null,
                             "title": "Test1",
                             "series": "",
@@ -63,12 +64,12 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                             "hapiOperationOutcome": null,
                             "groupPopulations": [
                                 {
-                                    "groupId": "659446084d794b327b5eb746",
+                                    "groupId": "659446084d794b327b5eb74u",
                                     "scoring": "Cohort",
                                     "populationBasis": "false",
                                     "populationValues": [
                                         {
-                                            "id": "0f4d37d5-f188-40c8-9840-24f0eac5279d",
+                                            "id": "0f4d37d5-f188-40c8-9840-24f0eac5279u",
                                             "criteriaReference": null,
                                             "name": "initialPopulation",
                                             "expected": null,
@@ -82,11 +83,11 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     ],
                     "groups": [
                         {
-                            "id": "659446084d794b327b5eb746",
+                            "id": "659446084d794b327b5eb74u",
                             "scoring": "Cohort",
                             "populations": [
                                 {
-                                    "id": "0f4d37d5-f188-40c8-9840-24f0eac5279d",
+                                    "id": "0f4d37d5-f188-40c8-9840-24f0eac5279u",
                                     "name": "initialPopulation",
                                     "definition": "Initial Population",
                                     "associationType": null,
@@ -116,7 +117,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     "model": "QDM v5.6",
 
                     "versionId": "8a4c66e6-df09-4e4b-891d-cdc882df529a",
-                    //"cmsId": null,
+                    //"cmsId": 0,
                     "reviewMetaData": {
                         "approvalDate": null,
                         "lastReviewDate": null
@@ -275,7 +276,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
-                url: '/api/measure-transfer/mat-measures?cmsId=null',
+                url: '/api/measure-transfer/mat-measures?cmsId=0',//?cmsId=null
                 method: 'POST',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
@@ -284,15 +285,15 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     'Content-Type': 'application/json'
                 },
                 body: {
-                    "id": "659445a44d794b327b5eb74467",
+                    "id": "659445a44d794b327b5eb7446w",
                     "measureHumanReadableId": null,
-                    "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94f",
+                    "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94w",
                     "version": "0.0.000",
                     "revisionNumber": null,
                     "state": null,
                     "cqlLibraryName": staticCQLLibraryName,
                     "ecqmTitle": "Bug6504",
-                    "measureName": "Bug65044now7",
+                    "measureName": "Bug65044now25",
                     "active": true,
                     "cqlErrors": false,
                     "errors": [],
@@ -301,7 +302,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     "elmXml": null,
                     "testCases": [
                         {
-                            "id": "6596f1944d794b327b5eb74b",
+                            "id": "6596f1944d794b327b5eb74w",
                             "name": null,
                             "title": "Test1",
                             "series": "",
@@ -316,12 +317,12 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                             "hapiOperationOutcome": null,
                             "groupPopulations": [
                                 {
-                                    "groupId": "659446084d794b327b5eb746",
+                                    "groupId": "659446084d794b327b5eb74w",
                                     "scoring": "Cohort",
                                     "populationBasis": "false",
                                     "populationValues": [
                                         {
-                                            "id": "0f4d37d5-f188-40c8-9840-24f0eac5279d",
+                                            "id": "0f4d37d5-f188-40c8-9840-24f0eac5279w",
                                             "criteriaReference": null,
                                             "name": "initialPopulation",
                                             "expected": null,
@@ -335,11 +336,11 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     ],
                     "groups": [
                         {
-                            "id": "659446084d794b327b5eb746",
+                            "id": "659446084d794b327b5eb74w",
                             "scoring": "Cohort",
                             "populations": [
                                 {
-                                    "id": "0f4d37d5-f188-40c8-9840-24f0eac5279d",
+                                    "id": "0f4d37d5-f188-40c8-9840-24f0eac5279w",
                                     "name": "initialPopulation",
                                     "definition": "Initial Population",
                                     "associationType": null,
@@ -369,7 +370,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     "model": "QDM v5.6",
 
                     "versionId": "8a4c66e6-df09-4e4b-891d-cdc882df529a",
-                    //"cmsId": null,
+                    //"cmsId": 0,
                     "reviewMetaData": {
                         "approvalDate": null,
                         "lastReviewDate": null
@@ -391,7 +392,8 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
 
 
             }).then((response) => {
-                expect(response.status).to.eql(201)
+                expect(response.status).to.eql(400)
+                expect(response.body.message).to.eql('CQL library with given name already exists.')
             })
 
         })
