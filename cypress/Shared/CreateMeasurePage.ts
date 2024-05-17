@@ -500,6 +500,7 @@ export class CreateMeasurePage {
 
             })
         })
+        cy.log(user)
         return user
     }
 

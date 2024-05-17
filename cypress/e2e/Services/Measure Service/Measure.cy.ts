@@ -1054,7 +1054,8 @@ describe('Delete QDM Measure with admin API Key', () => {
         newCQLLibraryName = CqlLibraryNameU + randValue + Date.now()
         let QDMMeasureCQL = MeasureCQL.simpleQDM_CQL
 
-        defaultUser = CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCQLLibraryName, QDMMeasureCQL)
+        defaultUser = CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true, QDMMeasureCQL)
+
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -1062,15 +1063,26 @@ describe('Delete QDM Measure with admin API Key', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'd')
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout
 
+        sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.clearAllSessionStorage({ log: true })
 
     })
-    //skipping until the versioning for QDM measures becomes available, again -- per the enableQdmRepeatTransfer flag
-    it.skip('Delete versioned QDM Measure with admin API key', () => {
+    it('Delete versioned QDM Measure with admin API key', () => {
 
         //Version Measure
         cy.getCookie('accessToken').then((accessToken) => {
