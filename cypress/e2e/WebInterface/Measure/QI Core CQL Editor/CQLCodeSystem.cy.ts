@@ -147,8 +147,7 @@ describe('Validations around code system in Measure CQL', () => {
 
     })
 
-    //Skipping until MAT-7226 is fixed
-    it.skip('Verify proper error(s) appear in CQL Editor, when a user does not include version and there is no vsac', () => {
+    it('Verify proper error(s) appear in CQL Editor, when a user does not include version and there is no vsac', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -168,7 +167,7 @@ describe('Validations around code system in Measure CQL', () => {
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:91 | Unable to find a code system version")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "Code: 0:57 | Code not found.")
 
     })
 
