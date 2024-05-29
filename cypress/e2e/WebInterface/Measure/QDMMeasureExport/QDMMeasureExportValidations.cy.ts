@@ -261,7 +261,7 @@ describe('Error Message on Measure Export when the Population Criteria does not 
             cy.get('[data-testid=export-measure-' + fileContents + ']').click()
 
             cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
-            cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'MISMATCH_CQL_POPULATION_RETURN_TYPES')
+            cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'CQL Populations Return Types are invalid')
 
         })
     })
