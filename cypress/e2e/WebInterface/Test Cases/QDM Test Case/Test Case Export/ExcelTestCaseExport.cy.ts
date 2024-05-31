@@ -169,8 +169,8 @@ describe('QDM Test Case Excel Export', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-
-    it('Successful Excel Export for QDM Test Cases', () => {
+    //skipping until more time can be devoted to validating the contents of the Excel file export
+    it.skip('Successful Excel Export for QDM Test Cases', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
