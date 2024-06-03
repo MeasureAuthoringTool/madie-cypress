@@ -39,6 +39,16 @@ export class CQLEditorPage {
     //Value Sets page / tab
     public static readonly valueSetsTab = '[data-testid="valueSets-tab"]'
     public static readonly valueSetsCategoryDD = '[data-testid="search-by-category-input"]'
+    public static readonly valueSetSearchCategoryDropDOwn = '[data-testid="search-by-category-dropdown"]'
+    public static readonly valueSetSearchCategoryListBox = '[id="search-by-category-listbox"]'
+    public static readonly valueSetSearchOIDURLText = '[data-testid="url-text-input"]'
+    public static readonly valueSetSearchSrchBtn = '[data-testid="valuesets-search-btn"]'
+    public static readonly valueSetSearchResultsTbl = '[data-testid="value-sets-results-tbl"]'
+    public static readonly valueSetSearchFilterSubTab = '[data-testid="terminology-section-Filter-sub-heading"]'
+    public static readonly valueSetSearchFilterDropDown = '[data-testid="filter-by-category-dropdown"]'
+    public static readonly valueSetSearchFilterListBox = '[id="filter-by-category-listbox"]'
+    public static readonly valueSetSearchFilterInput = '[data-testid="status-text-input"]'
+    public static readonly valueSetSearchFilterApplyBtn = '[data-testid="valuesets-filter-btn"]'
 
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'

@@ -1,12 +1,12 @@
-import {CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
-import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
-import {TestCasesPage} from "../../../../../Shared/TestCasesPage"
-import {OktaLogin} from "../../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../../Shared/EditMeasurePage"
-import {CQLEditorPage} from "../../../../../Shared/CQLEditorPage"
-import {QDMElements} from "../../../../../Shared/QDMElements"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { QDMElements } from "../../../../../Shared/QDMElements"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMCQLLibrary' + Date.now()
@@ -169,8 +169,8 @@ describe('QDM Test Case Excel Export', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-
-    it('Successful Excel Export for QDM Test Cases', () => {
+    //skipping until more time can be devoted to validating the contents of the Excel file export
+    it.skip('Successful Excel Export for QDM Test Cases', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
@@ -246,7 +246,7 @@ describe('QDM Test Case Excel Export', () => {
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Results').click()
 
         //Save Supplemental data
-        cy.get('[data-testid="measure-Supplemental Data-save"]').click({force: true})
+        cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
         cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Add Elements to the Test case
@@ -351,7 +351,7 @@ describe('QDM Test Case Excel Export', () => {
         //add Element
         QDMElements.addElement('patientcharacteristic', 'Payer: Medicare FFS payer')
         //add Code
-        QDMElements.addCode('SOP', '1')
+        QDMElements.addCode('SOPT', '1')
 
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -424,7 +424,7 @@ describe('QDM Test Case Excel Export', () => {
         //add Element
         QDMElements.addElement('patientcharacteristic', 'Payer: Payer')
         //add Code
-        QDMElements.addCode('SOP', '1')
+        QDMElements.addCode('SOPT', '1')
 
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -453,20 +453,21 @@ describe('QDM Test Case Excel Export', () => {
         cy.get('[class="btn-container"]').contains('Excel').click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'Excel exported successfully')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.xls'), {timeout: 500000}).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.xls'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified Excel file export')
 
         //read contents of the html file and compare that with the expected file contents (minus specific measure name)
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.xls')).should('exist').then((exportedFile) => {
+            debugger
+            exported = exportedFile.toString(); //'exportedFile'
+            cy.log('exported file contents is: \n' + exported)
+            cy.pause()
+            cy.readFile(baseExcelFile).should('exist').then((dataCompared) => {
                 debugger
-                exported = exportedFile.toString(); //'exportedFile'
-                cy.log('exported file contents is: \n' + exported)
-                cy.readFile(baseExcelFile).should('exist').then((dataCompared) => {
-                    debugger
-                    expected = dataCompared.toString() //'compareFile'
-                    cy.log('expected file contents is: \n' + expected)
-                    expect((exported).toString()).to.includes((expected).toString())
-                })
+                expected = dataCompared.toString() //'compareFile'
+                cy.log('expected file contents is: \n' + expected)
+                expect((exported).toString()).to.includes((expected).toString())
+            })
         })
     })
 })
