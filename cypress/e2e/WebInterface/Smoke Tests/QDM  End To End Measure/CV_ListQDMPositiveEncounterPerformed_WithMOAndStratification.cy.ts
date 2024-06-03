@@ -7,8 +7,8 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
-let measureName = 'CVListQDMPositiveEncounterPerformedWithMOAndStratification' + Date.now()
-let CqlLibraryName = 'CVListQDMPositiveEncounterPerformedWithMOAndStratification' + Date.now()
+let measureName = 'CVWithMOAndStratification' + Date.now()
+let CqlLibraryName = 'CVWithMOAndStratification' + Date.now()
 let firstTestCaseTitle = 'PDxNotPsych60MinsDepart'
 let testCaseDescription = 'IPPStrat1Pass' + Date.now()
 let testCaseSeries = 'SBTestSeries'
