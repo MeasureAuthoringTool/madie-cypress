@@ -3,6 +3,7 @@ import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
 import { Environment } from "../../../Shared/Environment"
 import { OktaLogin } from "../../../Shared/OktaLogin"
+import { v4 as uuidv4 } from 'uuid'
 
 let measureToMADiESave = Environment.credentials().measureMAT_to_MADiE_save_API_Key
 let harpUser = Environment.credentials().harpUser
@@ -20,6 +21,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
 
 
     it('Successful Measure transfer from MAT -to- MADiE', () => {
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
@@ -32,15 +34,15 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     'Content-Type': 'application/json'
                 },
                 body: {
-                    "id": "659445a44d794b327b5eb7446u",
+                    "id": uuidv4(),
                     "measureHumanReadableId": null,
-                    "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94u",
+                    "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94" + randValue,
                     "version": "0.0.000",
                     "revisionNumber": null,
                     "state": null,
                     "cqlLibraryName": staticCQLLibraryName,
                     "ecqmTitle": "Bug6504",
-                    "measureName": "Bug65044now25",
+                    "measureName": "Bug65044now25" + randValue,
                     "active": true,
                     "cqlErrors": false,
                     "errors": [],
@@ -49,7 +51,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     "elmXml": null,
                     "testCases": [
                         {
-                            "id": "6596f1944d794b327b5eb74u",
+                            "id": uuidv4(),
                             "name": null,
                             "title": "Test1",
                             "series": "",
@@ -64,12 +66,12 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                             "hapiOperationOutcome": null,
                             "groupPopulations": [
                                 {
-                                    "groupId": "659446084d794b327b5eb74u",
+                                    "groupId": uuidv4(),
                                     "scoring": "Cohort",
                                     "populationBasis": "false",
                                     "populationValues": [
                                         {
-                                            "id": "0f4d37d5-f188-40c8-9840-24f0eac5279u",
+                                            "id": "0f4d37d5-f188-40c8-9840-24f0eac5279" + randValue,
                                             "criteriaReference": null,
                                             "name": "initialPopulation",
                                             "expected": null,
@@ -83,11 +85,11 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     ],
                     "groups": [
                         {
-                            "id": "659446084d794b327b5eb74u",
+                            "id": uuidv4(),
                             "scoring": "Cohort",
                             "populations": [
                                 {
-                                    "id": "0f4d37d5-f188-40c8-9840-24f0eac5279u",
+                                    "id": "0f4d37d5-f188-40c8-9840-24f0eac5279" + randValue,
                                     "name": "initialPopulation",
                                     "definition": "Initial Population",
                                     "associationType": null,
@@ -116,15 +118,15 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     "riskAdjustmentDescription": null,
                     "model": "QDM v5.6",
 
-                    "versionId": "8a4c66e6-df09-4e4b-891d-cdc882df529a",
+                    "versionId": "8a4c66e6-df09-4e4b-891d-cdc882df529" + randValue,
                     //"cmsId": 0,
                     "reviewMetaData": {
                         "approvalDate": null,
                         "lastReviewDate": null
                     },
                     "measureSet": {
-                        "id": "659445a44d794b327b5eb745",
-                        "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94f",
+                        "id": uuidv4(),
+                        "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94" + randValue,
                         "owner": "prateek.keerthi@semanticbits.com",
                         "acls": null
                     },
@@ -145,6 +147,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
         })
     })
     it('Measure transfer from MAT -to- MADiE -- missing CQL Library name', () => {
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
         randValue = (Math.floor((Math.random() * 1000) + 1))
         dynamicCQLLibraryName = 'Randomize' + Date.now() + randValue
         cy.getCookie('accessToken').then((accessToken) => {
@@ -159,15 +162,15 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     'Content-Type': 'application/json'
                 },
                 body: {
-                    "id": "659445a44d794b327b5eb74467",
+                    "id": uuidv4(),
                     "measureHumanReadableId": null,
-                    "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94f",
+                    "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94" + randValue,
                     "version": "0.0.000",
                     "revisionNumber": null,
                     "state": null,
                     //"cqlLibraryName": dynamicCQLLibraryName,
                     "ecqmTitle": "Bug6504",
-                    "measureName": "Bug65044now6",
+                    "measureName": "Bug65044now6" + randValue,
                     "active": true,
                     "cqlErrors": false,
                     "errors": [],
@@ -176,7 +179,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     "elmXml": null,
                     "testCases": [
                         {
-                            "id": "6596f1944d794b327b5eb74b",
+                            "id": uuidv4(),
                             "name": null,
                             "title": "Test1",
                             "series": "",
@@ -191,12 +194,12 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                             "hapiOperationOutcome": null,
                             "groupPopulations": [
                                 {
-                                    "groupId": "659446084d794b327b5eb746",
+                                    "groupId": uuidv4(),
                                     "scoring": "Cohort",
                                     "populationBasis": "false",
                                     "populationValues": [
                                         {
-                                            "id": "0f4d37d5-f188-40c8-9840-24f0eac5279d",
+                                            "id": "0f4d37d5-f188-40c8-9840-24f0eac5279" + randValue,
                                             "criteriaReference": null,
                                             "name": "initialPopulation",
                                             "expected": null,
@@ -210,11 +213,11 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     ],
                     "groups": [
                         {
-                            "id": "659446084d794b327b5eb746",
+                            "id": uuidv4(),
                             "scoring": "Cohort",
                             "populations": [
                                 {
-                                    "id": "0f4d37d5-f188-40c8-9840-24f0eac5279d",
+                                    "id": "0f4d37d5-f188-40c8-9840-24f0eac5279" + randValue,
                                     "name": "initialPopulation",
                                     "definition": "Initial Population",
                                     "associationType": null,
@@ -243,15 +246,15 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     "riskAdjustmentDescription": null,
                     "model": "QDM v5.6",
 
-                    "versionId": "8a4c66e6-df09-4e4b-891d-cdc882df529a",
+                    "versionId": "8a4c66e6-df09-4e4b-891d-cdc882df529" + randValue,
                     //"cmsId": null,
                     "reviewMetaData": {
                         "approvalDate": null,
                         "lastReviewDate": null
                     },
                     "measureSet": {
-                        "id": "659445a44d794b327b5eb745",
-                        "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94f",
+                        "id": uuidv4(),
+                        "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94" + randValue,
                         "owner": "prateek.keerthi@semanticbits.com",
                         "acls": null
                     },
@@ -273,6 +276,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
         })
     })
     it('Measure transfer from MAT -to- MADiE -- CQL Library name already exists', () => {
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
@@ -285,15 +289,15 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     'Content-Type': 'application/json'
                 },
                 body: {
-                    "id": "659445a44d794b327b5eb7446w",
+                    "id": uuidv4(),
                     "measureHumanReadableId": null,
-                    "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94w",
+                    "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94" + randValue,
                     "version": "0.0.000",
                     "revisionNumber": null,
                     "state": null,
                     "cqlLibraryName": staticCQLLibraryName,
                     "ecqmTitle": "Bug6504",
-                    "measureName": "Bug65044now25",
+                    "measureName": "Bug65044now25" + randValue,
                     "active": true,
                     "cqlErrors": false,
                     "errors": [],
@@ -302,7 +306,7 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     "elmXml": null,
                     "testCases": [
                         {
-                            "id": "6596f1944d794b327b5eb74w",
+                            "id": uuidv4(),
                             "name": null,
                             "title": "Test1",
                             "series": "",
@@ -317,12 +321,12 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                             "hapiOperationOutcome": null,
                             "groupPopulations": [
                                 {
-                                    "groupId": "659446084d794b327b5eb74w",
+                                    "groupId": uuidv4(),
                                     "scoring": "Cohort",
                                     "populationBasis": "false",
                                     "populationValues": [
                                         {
-                                            "id": "0f4d37d5-f188-40c8-9840-24f0eac5279w",
+                                            "id": "0f4d37d5-f188-40c8-9840-24f0eac5279" + randValue,
                                             "criteriaReference": null,
                                             "name": "initialPopulation",
                                             "expected": null,
@@ -336,11 +340,11 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     ],
                     "groups": [
                         {
-                            "id": "659446084d794b327b5eb74w",
+                            "id": uuidv4(),
                             "scoring": "Cohort",
                             "populations": [
                                 {
-                                    "id": "0f4d37d5-f188-40c8-9840-24f0eac5279w",
+                                    "id": "0f4d37d5-f188-40c8-9840-24f0eac5279" + randValue,
                                     "name": "initialPopulation",
                                     "definition": "Initial Population",
                                     "associationType": null,
@@ -369,15 +373,15 @@ describe('Measure Transfer Service From MAT -to- MADiE', () => {
                     "riskAdjustmentDescription": null,
                     "model": "QDM v5.6",
 
-                    "versionId": "8a4c66e6-df09-4e4b-891d-cdc882df529a",
+                    "versionId": "8a4c66e6-df09-4e4b-891d-cdc882df529" + randValue,
                     //"cmsId": 0,
                     "reviewMetaData": {
                         "approvalDate": null,
                         "lastReviewDate": null
                     },
                     "measureSet": {
-                        "id": "659445a44d794b327b5eb745",
-                        "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94f",
+                        "id": uuidv4(),
+                        "measureSetId": "ee4ff6dc-3772-4aae-b207-c38abed0a94" + randValue,
                         "owner": "prateek.keerthi@semanticbits.com",
                         "acls": null
                     },
