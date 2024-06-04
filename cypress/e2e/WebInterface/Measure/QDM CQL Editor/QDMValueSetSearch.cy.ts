@@ -135,7 +135,7 @@ let measureCQL = 'library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedPat
 
 //Skipping until QDMValueSetSearch feature flag is removed
 //this test will need to be revisited and additional steps will need to be added, once MAT-6395 is completed
-describe('QDM Value Set Search fields, filter and apply the filter to CQL', () => {
+describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL', () => {
 
     beforeEach('Create Measure', () => {
 
