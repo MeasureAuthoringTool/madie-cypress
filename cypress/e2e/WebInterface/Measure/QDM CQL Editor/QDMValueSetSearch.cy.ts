@@ -6,7 +6,6 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { Header } from "../../../../Shared/Header"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
@@ -136,13 +135,14 @@ let measureCQL = 'library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedPat
 
 //Skipping until QDMValueSetSearch feature flag is removed
 //this test will need to be revisited and additional steps will need to be added, once MAT-6395 is completed
-describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL', () => {
+describe('QDM Value Set Search fields, filter and apply the filter to CQL', () => {
 
     beforeEach('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Proportion', false, measureCQL, false, false,
             '2025-01-01', '2025-12-31')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Measure Population', 'Measure Population Exclusions')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, null, true)
 
@@ -152,7 +152,6 @@ describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL',
     afterEach('Clean up', () => {
 
         OktaLogin.Logout()
-
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
@@ -162,90 +161,8 @@ describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL',
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
 
-        //Save CQL
+        //Navigate to CQL Editor tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
-
-        //Group Creation
-
-        //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //click on / navigate to the Base Configuration sub-tab
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
-
-        //Select Type
-        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
-        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
-
-        //select 'Cohort' scoring on measure
-        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCV)
-        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Continuous Variable')
-
-        //Update the Patient Basis to 'No'
-        cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
-
-        //click on the save button and confirm save success message Base Config
-        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
-
-        //add pop criteria
-        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'Measure Population')
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'Measure Population Exclusions')
-        Utilities.dropdownSelect(MeasureGroupPage.measureObservationPopSelect, 'MeasureObservation')
-        Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Median')
-
-        //Add Stratifications
-        cy.get(MeasureGroupPage.stratificationTab).click()
-        cy.get(MeasureGroupPage.stratOne).click()
-        cy.get('[data-value="Stratification 1"]').click()
-        cy.get(MeasureGroupPage.stratTwo).click()
-        cy.get('[data-value="Stratification 2"]').click()
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
-
-        //Add Supplemental Data Elements
-        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
-
-        //Save Supplemental data
-        cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
-
-
-        //navigate back to main MADiE page
-        cy.get(Header.mainMadiePageButton).click()
-
-        //Click on Edit Button
-        MeasuresPage.measureAction("edit")
-
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
 
         //Click on Value Set tab
         cy.get(CQLEditorPage.valueSetsTab).click()
@@ -293,6 +210,39 @@ describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL',
                 //Save CQL
                 cy.get(CQLEditorPage.saveCQLButton).click() */
 
+
+    })
+
+    it('Verify that Definition Version is disabled until OID/URL field is selected', () => {
+
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to CQL Editor tab
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        //Verify that the Search Definition Version field is disabled before selecting OID/URL field
+        cy.get(CQLEditorPage.valueSetsTab).click()
+        cy.get(CQLEditorPage.valueSetSearchCategoryDropDOwn).type('Definition Version')
+        cy.get('#search-by-category-option-0').should('not.be.enabled')
+        cy.get('#search-by-category-option-0').trigger('mouseover').invoke('show')
+        cy.contains('OID/URL must be selected first')
+        cy.get(CQLEditorPage.valueSetSearchDefinitionVersion).should('not.exist')
+
+        //Verify that the Search Definition Version field is enabled after selecting OID/URL field
+        cy.get(CQLEditorPage.valueSetSearchCategoryDropDOwn).clear().type('OID/URL')
+        cy.get(CQLEditorPage.valueSetSearchCategoryListBox).contains('OID/URL').click()
+        cy.get(CQLEditorPage.valueSetSearchOIDURLText).type('2.16.840.1.113883.3.464.1003.101.12.1001')
+        cy.get(CQLEditorPage.valueSetSearchCategoryDropDOwn).click()
+        cy.get(CQLEditorPage.valueSetSearchCategoryListBox).contains('Definition Version').click()
+        cy.get(CQLEditorPage.valueSetSearchDefinitionVersion).should('exist')
+
+        //Enter value in to Search Definition Version field
+        cy.get(CQLEditorPage.valueSetSearchDefinitionVersion).type('20180310')
+        Utilities.waitForElementEnabled(CQLEditorPage.valueSetSearchSrchBtn, 30000)
+        cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
+        Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVEApply')
 
     })
 })

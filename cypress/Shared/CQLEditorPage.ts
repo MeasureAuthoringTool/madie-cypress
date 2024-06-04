@@ -42,6 +42,7 @@ export class CQLEditorPage {
     public static readonly valueSetSearchCategoryDropDOwn = '[data-testid="search-by-category-dropdown"]'
     public static readonly valueSetSearchCategoryListBox = '[id="search-by-category-listbox"]'
     public static readonly valueSetSearchOIDURLText = '[data-testid="url-text-input"]'
+    public static readonly valueSetSearchDefinitionVersion = '[data-testid="version-text-input"]'
     public static readonly valueSetSearchSrchBtn = '[data-testid="valuesets-search-btn"]'
     public static readonly valueSetSearchResultsTbl = '[data-testid="value-sets-results-tbl"]'
     public static readonly valueSetSearchFilterSubTab = '[data-testid="terminology-section-Filter-sub-heading"]'
