@@ -165,7 +165,7 @@ describe('Remove Test case attribute', () => {
         cy.get('tbody > tr > :nth-child(3)').should('not.contain.text', 'Reference Range - referenceRange 2 \'m\' - 4 \'m\'')
 
         //Delete the attribute from Elements table
-        cy.get('[data-testid="elements-section"]').contains('View').click({ force: true })
+        cy.get('[class="qpp-c-button view-with-dropdown-button"]').click({ force: true })
         cy.get('[class="btn-container"]').contains('Delete').click({ force: true })
         cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
 
