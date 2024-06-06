@@ -38,8 +38,7 @@ describe.skip('QDM Code Search fields', () => {
     beforeEach('Create Measure and Login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-            '2023-01-01', '2024-01-01')
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
 
         OktaLogin.Login()
     })
@@ -83,7 +82,7 @@ describe.skip('QDM Code Search fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version258219007Stage 2 (qualifier value)SNOMEDCThttp://snomed.info/sct/731000124108/version/20240301Select')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version258219007Stage 2 (qualifier value)SNOMEDCT2024-03Select')
         //Assert when the Code is not available in VSAC
         cy.get(CQLEditorPage.codeText).clear().type('123')
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
@@ -101,7 +100,7 @@ describe.skip('QDM Code Search fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is inactive in this code system version')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version16298561000119108Administration of tetanus, diphtheria, and acellular pertussis vaccine (procedure)SNOMEDCThttp://snomed.info/sct/731000124108/version/20240301Select')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version16298561000119108Administration of tetanus, diphtheria, and acellular pertussis vaccine (procedure)SNOMEDCT2024-03Select')
         //Clear the code search values
         cy.get(CQLEditorPage.clearCodeBtn).click()
 
@@ -114,7 +113,7 @@ describe.skip('QDM Code Search fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.toolTip).trigger('mouseover')
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'Code status unavailable')
-        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version99201Office or other outpatient visit for the evaluation and management of a new patient, which requires these 3 key components: A problem focused history; A problem focused examination; Straightforward medical decision making. Counseling and/or coordination of care with other physicians, other qualified health care professionals, or agencies are provided consistent with the nature of the problem(s) and the patient\'s and/or family\'s needs. Usually, the presenting problem(s) are self limited or minor. Typically, 10 minutes are spent face-to-face with the patient and/or family.CPT2024Select')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', '99201Office or other outpatient visit for the evaluation and management of a new patient, which requires these 3 key components: A problem focused history; A problem focused examination; Straightforward medical decision making. Counseling and/or coordination of care with other physicians, other qualified health care professionals, or agencies are provided consistent with the nature of the problem(s) and the patient\'s and/or family\'s needs. Usually, the presenting problem(s) are self limited or minor. Typically, 10 minutes are spent face-to-face with the patient and/or family.CPT2024Select')
     })
 
     it('Apply code to the CQL and verify under Saved Codes tab', () => {
@@ -159,8 +158,7 @@ describe.skip('QDM Code Search fields', () => {
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
 
-        //Need to revisit once MAT-7180 is fixed
-        //cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
 
         //Assert toast message while trying to apply the same code again
         cy.get(CQLEditorPage.codeSubTab).click()
