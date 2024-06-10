@@ -506,7 +506,6 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
-        cy.pause()
         //logout of MADiE
         OktaLogin.UILogout()
         OktaLogin.Login()
@@ -519,7 +518,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         //Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    it.only('Verify Expansion -> Manifest: When code does not exist on value set, test case will fail. When value set does contain code, and all other expected equals actual then test case passes.', () => {
+    it('Verify Expansion -> Manifest: When code does not exist on value set, test case will fail. When value set does contain code, and all other expected equals actual then test case passes.', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
