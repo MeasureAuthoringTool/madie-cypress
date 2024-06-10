@@ -68,8 +68,9 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population',
-            'Num', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', '',
+            'Num', '', 'Initial Population', 'boolean')
+
 
     })
 

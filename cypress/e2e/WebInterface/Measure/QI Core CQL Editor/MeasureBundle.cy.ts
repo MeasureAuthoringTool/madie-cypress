@@ -35,7 +35,8 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
+
 
         OktaLogin.Login()
     })
@@ -116,7 +117,7 @@ describe('Bundle returns elmXML', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
 
         OktaLogin.Login()
     })
@@ -195,7 +196,7 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
 
         OktaLogin.Login()
     })

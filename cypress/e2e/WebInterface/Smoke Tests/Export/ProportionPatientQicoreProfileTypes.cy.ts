@@ -5,7 +5,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../Shared/Header"
+import { Header } from "../../../../Shared/Header"
 
 let measureNameTimeStamp = 'TestMeasure' + Date.now()
 let measureName = measureNameTimeStamp
@@ -214,7 +214,7 @@ describe.skip('FHIR Measure Export for Proportion Patient Measure with QI-Core P
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Numerator', 'Denominator', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', '', 'Numerator', '', 'Denominator', 'boolean')
         OktaLogin.Login()
 
     })

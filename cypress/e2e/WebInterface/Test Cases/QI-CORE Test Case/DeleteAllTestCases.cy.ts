@@ -35,8 +35,8 @@ describe('QI-Core : Delete All Test Cases', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2012-01-02', '2013-01-01')
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null,
-            null, 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null,
+            null, null, 'Procedure')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCaseDescription, secondTestCaseSeries, testCaseJson, false, true)
 

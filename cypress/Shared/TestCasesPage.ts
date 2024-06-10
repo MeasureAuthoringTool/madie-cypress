@@ -131,6 +131,7 @@ export class TestCasesPage {
 
     //TC error concerning CQL and PC mismatch
     public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
+    public static readonly testCaseResultrow = '[data-testid="test-case-row-0"]'
 
     //edit test case without knowing test case ID
     public static readonly actionBtnNoId = '[class="action-button"]'
@@ -150,6 +151,7 @@ export class TestCasesPage {
     public static readonly qdmExpansionSubTab = '[data-testid="nav-link-expansion"]'
     public static readonly qdmManifestSelectDropDownBox = '[id="manifest-select"]'
     public static readonly qdmManifestFirstOption = '[data-value="ecqm-update-4q2017-eh"]'
+    public static readonly qdmManifestMaySecondOption = '[data-value="ecqm-update-2024-05-02"]'
     public static readonly qdmManifestSaveBtn = '[data-testid="manifest-expansion-save-button"]'
     public static readonly qdmManifestDiscardBtn = '[data-testid="manifest-expansion-discard-changes-button"]'
     public static readonly qdmManifestSuccess = '[data-testid="manifest-expansion-success-text"]'
@@ -244,6 +246,7 @@ export class TestCasesPage {
     public static readonly testCaseNUMEXExpected = '[data-testid="test-population-numeratorExclusion-expected"]'
     public static readonly testCaseDENOMExpected = '[data-testid="test-population-denominator-expected"]'
     public static readonly testCaseDENEXExpected = '[data-testid="test-population-denominatorExclusion-expected"]'
+    public static readonly testCaseDENEXCEPTxpected = '[data-testid="test-population-denominatorException-expected"]'
     public static readonly testCaseMSRPOPLExpected = '[data-testid="test-population-measurePopulation-expected"]'
     public static readonly testCaseMSRPOPLEXExpected = '[data-testid="test-population-measurePopulationExclusion-expected"]'
     public static readonly testCasePopulationHeaderForNoMeasureGroup = '[data-testid="execution_context_loading_errors"]'
@@ -383,6 +386,11 @@ export class TestCasesPage {
     public static readonly codeSystemValueSelector = '[data-testid="code-selector"]'
     public static readonly codeSystemOptionValue = '[data-testid="option-112648003"]'
     public static readonly codeSelector = '[id="code-selector"]'
+
+    //QDM Test Case Negation tab and associated fields
+    public static readonly negationTab = '[data-testid="sub-navigation-tab-negation_rationale"]'
+    public static readonly valueSetDirectRefCode = '[id="value-set-selector"]'
+    public static readonly valueSetOptionValue = '[data-testid="option-2.16.840.1.113883.3.117.1.7.1.93"]'
 
     //This function grabs the data-testid value off of the view button and extracts the id out of it.
     //Then, it puts that id in a file. For added control, the optional "eleTableEntry" parameter can be

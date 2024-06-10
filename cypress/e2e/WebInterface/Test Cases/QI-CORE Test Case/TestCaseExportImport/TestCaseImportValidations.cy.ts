@@ -444,7 +444,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
 
@@ -679,7 +679,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
 
         cy.get(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'Following test case(s) were imported successfully, but the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been')
 
-     })
+    })
 })
 
 describe('Test case uniqueness error validation', () => {
@@ -795,7 +795,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         CqlLibraryName = 'TestLibrary6' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, true)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(true, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(true, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonLizzy, true, false)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
         OktaLogin.Login()

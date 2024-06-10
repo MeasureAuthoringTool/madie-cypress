@@ -282,7 +282,8 @@ describe('Edit validations for versioned Measure', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL_ProportionMeasure)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Qualifying Encounters', 'Qualifying Encounters', 'Encounter')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        ////'','', 'Qualifying Encounters','',
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
     })
 
@@ -422,7 +423,7 @@ describe('Delete validations for versioned Measure', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL_ProportionMeasure)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Qualifying Encounters', 'Qualifying Encounters', 'Encounter')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
     })
 

@@ -377,7 +377,7 @@ describe('Test Case Population dependencies', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.wait(13500)
         OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial PopulationOne', 'Initial PopulationOne', 'Initial PopulationOne', 'Boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial PopulationOne', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne', 'Boolean')
         OktaLogin.Login()
     })
 

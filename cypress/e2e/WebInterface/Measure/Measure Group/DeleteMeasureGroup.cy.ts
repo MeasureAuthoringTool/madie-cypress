@@ -28,7 +28,7 @@ describe('Validate Measure Group deletion functionality', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureOne, newCqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null,
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null, null,
             null, 'Procedure')
         TestCasesPage.CreateTestCaseAPI(title1, series, description, validJsonValue)
         OktaLogin.Login()
@@ -264,8 +264,8 @@ describe('Ownership test when deleting groups', () => {
 
         //create new measure via temp user
         CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, newCqlLibraryName + "second", measureCQL, true, true)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(true, true, null,
-            null, null, 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(true, true, null, null, null,
+            null, null, null, 'Procedure')
 
         OktaLogin.Login()
     })

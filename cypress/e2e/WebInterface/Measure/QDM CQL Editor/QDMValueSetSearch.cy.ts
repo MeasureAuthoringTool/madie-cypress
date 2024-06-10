@@ -142,7 +142,8 @@ describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL',
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Proportion', false, measureCQL, false, false,
             '2025-01-01', '2025-12-31')
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Measure Population', 'Measure Population Exclusions')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', '', 'Measure Population', '', 'Measure Population Exclusions')
+
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, null, true)
 

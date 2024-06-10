@@ -82,8 +82,9 @@ describe('FHIR Measure Export, Not the Owner', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population',
-            'Num', 'Denom', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', '',
+            'Num', '', 'Denom', 'boolean')
+
         OktaLogin.AltLogin()
 
     })

@@ -58,7 +58,8 @@ describe.skip('Measure Human Readable', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         //Create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', 'num', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', '', '', 'num', '', 'denom')
+
     })
 
     afterEach('Clean up Measures', () => {
