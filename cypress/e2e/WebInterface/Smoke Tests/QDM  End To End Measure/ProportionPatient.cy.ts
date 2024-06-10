@@ -14,15 +14,15 @@ let firstTestCaseTitle = 'DENEXStrat1Fail 2RUnilateralMxProc'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let secondTestCaseTitle = 'DENEXStrat2Pass RLMxDxOnsetsEndOfMP'
-let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
+let measureCQL = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
     '\n' +
     'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
     'include AdultOutpatientEncountersQDM version \'1.0.000\' called AdultOutpatientEncounters\n' +
     'include HospiceQDM version \'1.0.000\' called Hospice\n' +
-    'include PalliativeCareExclusionECQMQDM version \'1.0.000\' called PalliativeCare\n' +
-    'include AdvancedIllnessandFrailtyExclusionECQMQDM version \'1.0.000\' called AIFrailLTCF\n' +
+    'include PalliativeCareQDM version \'4.0.000\' called PalliativeCare\n' +
+    'include AdvancedIllnessandFrailtyQDM version \'1.0.000\' called AIFrailLTCF\n' +
     '\n' +
     'codesystem "AdministrativeGender": \'urn:oid:2.16.840.1.113883.5.1\' \n' +
     'codesystem "SNOMEDCT": \'urn:oid:2.16.840.1.113883.6.96\' \n' +
@@ -32,6 +32,7 @@ let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     'valueset "History of bilateral mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1068\' \n' +
     'valueset "Mammography": \'urn:oid:2.16.840.1.113883.3.464.1003.108.12.1018\' \n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\' \n' +
+    '\n' +
     'valueset "Outpatient": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1087\' \n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
     'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\' \n' +
@@ -131,7 +132,8 @@ let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     '  )\n' +
     '\n' +
     'define "October 1 Two Years Prior to the Measurement Period":\n' +
-    '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)'
+    '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)\n' +
+    '  '
 
 describe('Measure Creation: Proportion Patient Based', () => {
 
