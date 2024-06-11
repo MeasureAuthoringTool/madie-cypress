@@ -15,8 +15,10 @@ let testCaseSeries = 'SBTestSeries'
 let measurePath = 'cypress/fixtures/measureId'
 let mCQLForElementsValidation = MeasureCQL.QDMTestCaseCQLFullElementSection
 let CQLSimple_for_QDM = MeasureCQL.QDMSimpleCQL
+let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 
 let measureName = 'ProportionPatient' + Date.now()
+let measureQDMManifestName = 'QDMManifestTest' + Date.now()
 let CqlLibraryName = 'ProportionPatient' + Date.now()
 let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     '\n' +
@@ -373,20 +375,139 @@ describe('Run QDM Test Case ', () => {
 })
 
 // skipping until the manifestExpansion is removed / permanently set to true
-describe.skip('Validating Expansion -> Manifest selections / navigation functionality', () => {
+describe('Validating Expansion -> Manifest selections / navigation functionality', () => {
 
     beforeEach('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-            '2023-01-01', '2024-01-01')
-
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName, CqlLibraryName, 'Proportion', false, qdmManifestTestCQL, false, false,
+            '2025-01-01', '2025-12-31')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        //navigate to the test case list Expansion page
+        cy.get(TestCasesPage.qdmExpansionSubTab).click()
+        //selecting initial manifest value that will allow test case to pass
+        cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
+            .find('[type="radio"]')
+            .then((radio) => {
+                //check / select radio button for manifest
+                cy.wrap(radio).eq(1).check({ force: true }).should('be.checked');
+                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Manifest');
+
+                cy.get(TestCasesPage.qdmManifestSelectDropDownBox).click()
+                cy.get(TestCasesPage.qdmManifestMaySecondOption).click()
+                cy.get(TestCasesPage.qdmManifestSaveBtn).click()
+                cy.get(TestCasesPage.qdmManifestSuccess).should('contain.text', 'Expansion details Updated Successfully')
+
+            })
+        //confirm that manifest drop down has selected value
+        cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('contain.text', 'ecqm-update-2024-05-02')
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.testCaseAction('edit')
+        //enter a value of the dob, Race and gender
+        TestCasesPage.enterPatientDemographics('01/01/2000', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        //add element - code system to TC
+        //Element - Medication:Discharged: Antithrombotic Therapy for Ischemic Stroke
+        cy.get('[data-testid="elements-tab-medication"]').click()
+        cy.get('[data-testid="data-type-Medication, Discharge: Antithrombotic Therapy for Ischemic Stroke"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('06/01/2025 01:00 PM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-RxNORM"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-1536498"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.grabElementId()
+        TestCasesPage.qdmTestCaseElementAction('edit')
+        //add negation
+        cy.get(TestCasesPage.negationTab).click()
+        cy.get(TestCasesPage.valueSetDirectRefCode).click()
+        cy.get(TestCasesPage.valueSetOptionValue).click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="option-105480006"]').click()
+        cy.get('[data-testid="add-negation-rationale"]').click()
+        //Close the Element
+        cy.get('[data-testid="CloseIcon"]').click()
+        //save changes
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        //add element - code system to TC
+        //Element - Encounter:Performed: Nonelective Inpatient Encounter
+        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Nonelective Inpatient Encounter"]').click()
+        cy.get('[id="dateTime"]').eq(0).type('06/01/2025 01:00 PM')
+        cy.get('[id="dateTime"]').eq(1).type('06/02/2025 01:00 PM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-183452005"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        //navigate to the attribute sub tab and enter value
+        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.selectAttributeDropdown).click()
+        cy.get('[data-testid="option-Diagnoses"]').click()
+        cy.get('[data-testid="value-set-selector"]').click()
+        cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.247"]').click() //Select IschemicStroke from dropdown
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-value="111297002"]').click()
+        cy.get('[data-testid="integer-input-field-Rank"]').type('1')
+        cy.get(TestCasesPage.addAttribute).click()
+        //save changes
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        //Add Expected value for Test case
+        //navigate to the Expected / Actual tab
+        cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click()
+        //Initial Population expected box
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
+        //Denominator expected box
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
+        //Numerator expected box
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseNUMERExpected).type('0')
+        //Numerator Exception expected box
+        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('exist')
+        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).type('1')
+        //save changes
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        //logout of MADiE
+        OktaLogin.UILogout()
         OktaLogin.Login()
     })
 
@@ -394,10 +515,10 @@ describe.skip('Validating Expansion -> Manifest selections / navigation function
 
         OktaLogin.Logout()
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        //Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    it('Verify Expansion -> Manifest', () => {
+    it('Verify Expansion -> Manifest: When code does not exist on value set, test case will fail. When value set does contain code, and all other expected equals actual then test case passes.', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -406,50 +527,16 @@ describe.skip('Validating Expansion -> Manifest selections / navigation function
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        //clicking on running the test case
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+
+        //verify the results row
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'PassQDMManifestTCGroupQDMManifestTCQDMManifestTCSelect')
 
         //navigate to the test case list Expansion page
         cy.get(TestCasesPage.qdmExpansionSubTab).click()
 
-        //validating current / initial selected radio button and selecting the manifest radio button
-        cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
-            .find('[type="radio"]')
-            .then((radio) => {
-                //confirm that initial value is set to 'No'
-                cy.wrap(radio).eq(0).should('be.checked');
-                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Latest');
-
-                //check / select radio button for the value of 'Yes'
-                cy.wrap(radio).eq(1).check({ force: true }).should('be.checked');
-                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Manifest');
-
-                cy.get(TestCasesPage.qdmManifestSelectDropDownBox).click()
-                cy.get(TestCasesPage.qdmManifestFirstOption).click()
-                cy.get(TestCasesPage.qdmManifestSaveBtn).click()
-                cy.get(TestCasesPage.qdmManifestSuccess).should('contain.text', 'Expansion details Updated Successfully')
-
-
-                // Verify that first radio button is no longer checked
-                cy.wrap(radio).eq(0).should('not.be.checked');
-            });
-        //confirm that manifest drop down has selected value
-        cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('contain.text', 'ecqm-update-4q2017-eh')
-
-        //navigate away from the test cases tab
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.leftPanelBaseConfigTab, 30000)
-
-        //navigate back to test cases page / tab
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //navigate to the test case list Expansion page
-        cy.get(TestCasesPage.qdmExpansionSubTab).click()
-
-        //confirm that manifest drop down has selected value
-        cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('contain.text', 'ecqm-update-4q2017-eh')
-
-        //validating that manifest is, now, selected and making a change in the selection
+        //validating that manifest is, now, selected and make a change in the selection
         cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
             .find('[type="radio"]')
             .then((radio) => {
@@ -465,50 +552,18 @@ describe.skip('Validating Expansion -> Manifest selections / navigation function
 
                 // Verify that first radio button is no longer checked
                 cy.wrap(radio).eq(1).should('not.be.checked');
-            });
+            })
+        cy.get(TestCasesPage.qdmManifestSaveBtn).click()
+        cy.get(TestCasesPage.qdmManifestSuccess).should('contain.text', 'Expansion details Updated Successfully')
+        cy.reload()
+        //Navigate to Test Cases page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
 
+        //clicking on running the test case
+        cy.get(TestCasesPage.executeTestCaseButton).click()
 
-        //attempt to navigate away from the test cases tab / page
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //confirm dirty check window
-        cy.get(EditMeasurePage.dirtCheckModal).should('exist')
-        cy.get(EditMeasurePage.dirtCheckModal).should('be.visible')
-
-        //select continue working on page
-        cy.get(Global.keepWorkingCancel).should('exist')
-        cy.get(Global.keepWorkingCancel).should('be.visible')
-        cy.get(Global.keepWorkingCancel).should('be.enabled')
-        cy.get(Global.keepWorkingCancel).click()
-
-        //confirm the edit is still present
-        cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
-            .find('[type="radio"]')
-            .then((radio) => {
-                //confirm that initial value is set to 'Latest'
-                cy.wrap(radio).eq(0).should('be.checked');
-                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Latest');
-
-                // Verify that first radio button is no longer checked
-                cy.wrap(radio).eq(1).should('not.be.checked');
-            });
-        //discard changes on the test Expansion Test Cases tab / page
-        cy.get(TestCasesPage.qdmManifestDiscardBtn).click()
-        cy.get(Global.discardChangesContinue).click()
-
-        //verify that 'Manifest' is still checked after discarding changes on the page
-        cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
-            .find('[type="radio"]')
-            .then((radio) => {
-
-                //check / select radio button for the value of 'Manifest'
-                cy.wrap(radio).eq(1).should('be.checked');
-                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Manifest');
-
-                // Verify that first radio button is no longer checked
-                cy.wrap(radio).eq(0).should('not.be.checked');
-            });
-        //confirm that manifest drop down has selected value
-        cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('contain.text', 'ecqm-update-4q2017-eh')
+        //verify the results row
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'FailQDMManifestTCGroupQDMManifestTCQDMManifestTCSelect')
     })
 })

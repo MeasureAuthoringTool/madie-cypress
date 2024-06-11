@@ -370,7 +370,7 @@ export class MeasureGroupPage {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
     }
 
-    public static CreateProportionMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, PopNumP?: string, PopDenomP?: string, popBasis?: string): string {
+    public static CreateProportionMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, DenomExcl?: string, DenomExcep?: string, PopNumP?: string, NumerExcl?: string, PopDenomP?: string, popBasis?: string): string {
         let user = ''
         let measurePath = ''
         let measureGroupPath = ''
@@ -423,12 +423,12 @@ export class MeasureGroupPage {
                             {
                                 "id": uuidv4(),
                                 "name": "denominatorExclusion",
-                                "definition": ""
+                                "definition": DenomExcl
                             },
                             {
                                 "id": uuidv4(),
                                 "name": "denominatorException",
-                                "definition": ""
+                                "definition": DenomExcep
                             },
                             {
                                 "id": uuidv4(),
@@ -438,7 +438,7 @@ export class MeasureGroupPage {
                             {
                                 "id": uuidv4(),
                                 "name": "numeratorExclusion",
-                                "definition": ""
+                                "definition": NumerExcl
                             }
                         ],
                         "scoringUnit": {

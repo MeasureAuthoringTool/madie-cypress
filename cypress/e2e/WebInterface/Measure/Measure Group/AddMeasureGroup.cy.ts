@@ -17,7 +17,7 @@ describe('Validate Measure Group additions', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName1, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null,
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null, null,
             null, 'Procedure')
         OktaLogin.Login()
 
@@ -42,7 +42,7 @@ describe('Validate Measure Group additions', () => {
 
         //verify url contains pc number
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.url().should('contain',  fileContents + '/edit/groups/1')
+            cy.url().should('contain', fileContents + '/edit/groups/1')
         })
 
         cy.get(MeasureGroupPage.addMeasureGroupButton).should('be.visible')

@@ -1536,7 +1536,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_withDuplicateLibraryDefinition, false, false, '2025-01-01', '2025-12-31')
         //save CQL
 
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', 'Numerator', 'Denominator', 'Encounter')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', '', 'Numerator', '', 'Denominator', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcJson)
 
     })

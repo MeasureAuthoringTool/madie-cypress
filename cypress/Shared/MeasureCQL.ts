@@ -147,6 +147,70 @@ export class MeasureCQL {
         '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
         '		where NoCervixHysterectomy.status = \'completed\''
 
+    public static readonly qdmCQLManifestTest = 'library QDMManifestTestCQL version \'0.0.000\'\n' +
+
+        'using QDM version \'5.6\'\n' +
+        '\n' +
+        'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Global\n' +
+        'include TJCOverallQDM version \'8.0.000\' called TJC\n' +
+        '\n' +
+        'valueset \"Antithrombotic Therapy for Ischemic Stroke\": \'urn:oid:2.16.840.1.113762.1.4.1110.62\'\n' +
+        'valueset \"Ethnicity\": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+        'valueset \"Medical Reason For Not Providing Treatment\": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.473\'\n' +
+        'valueset \"ONC Administrative Sex\": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+        'valueset \"Patient Refusal\": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.93\'\n' +
+        'valueset \"Payer Type\": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset \"Pharmacological Contraindications For Antithrombotic Therapy\": \'urn:oid:2.16.840.1.113762.1.4.1110.52\'\n' +
+        'valueset \"Race\": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+        '\n' +
+        'context Patient\n' +
+        '\n' +
+        'define \"SDE Ethnicity\":\n' +
+        '  [\"Patient Characteristic Ethnicity\": \"Ethnicity\"]\n' +
+        '\n' +
+        'define \"SDE Payer\":\n' +
+        '  [\"Patient Characteristic Payer\": \"Payer Type\"]\n' +
+        '\n' +
+        'define \"SDE Race\":\n' +
+        '  [\"Patient Characteristic Race\": \"Race\"]\n' +
+        '\n' +
+        'define \"SDE Sex\":\n' +
+        '  [\"Patient Characteristic Sex\": \"ONC Administrative Sex\"]\n' +
+        '\n' +
+        'define \"Denominator Exclusions\":\n' +
+        '  TJC.\"Ischemic Stroke Encounters with Discharge Disposition\"\n' +
+        '    union TJC.\"Encounter with Comfort Measures during Hospitalization\"\n' +
+        '\n' +
+        'define \"Encounter with Pharmacological Contraindications for Antithrombotic Therapy at Discharge\":\n' +
+        '  TJC.\"Ischemic Stroke Encounter\" IschemicStrokeEncounter\n' +
+        '    with [\"Medication, Discharge\": \"Pharmacological Contraindications For Antithrombotic Therapy\"] Pharmacological\n' +
+        '      such that Pharmacological.authorDatetime during IschemicStrokeEncounter.relevantPeriod\n' +
+        '\n' +
+        'define \"Reason for Not Giving Antithrombotic at Discharge\":\n' +
+        '  [\"Medication, Not Discharged\": \"Antithrombotic Therapy for Ischemic Stroke\"] NoAntithromboticDischarge\n' +
+        '    where NoAntithromboticDischarge.negationRationale in \"Medical Reason For Not Providing Treatment\"\n' +
+        '      or NoAntithromboticDischarge.negationRationale in \"Patient Refusal\"\n' +
+        '\n' +
+        'define \"Encounter with Documented Reason for No Antithrombotic At Discharge\":\n' +
+        '  TJC.\"Ischemic Stroke Encounter\" IschemicStrokeEncounter\n' +
+        '    with \"Reason for Not Giving Antithrombotic at Discharge\" NoDischargeAntithrombotic\n' +
+        '      such that NoDischargeAntithrombotic.authorDatetime during IschemicStrokeEncounter.relevantPeriod\n' +
+        '\n' +
+        'define \"Denominator Exceptions\":\n' +
+        '  \"Encounter with Documented Reason for No Antithrombotic At Discharge\"\n' +
+        '    union \"Encounter with Pharmacological Contraindications for Antithrombotic Therapy at Discharge\"\n' +
+        '\n' +
+        'define \"Numerator\":\n' +
+        '  TJC.\"Ischemic Stroke Encounter\" IschemicStrokeEncounter\n' +
+        '    with [\"Medication, Discharge\": \"Antithrombotic Therapy for Ischemic Stroke\"] DischargeAntithrombotic\n' +
+        '      such that DischargeAntithrombotic.authorDatetime during IschemicStrokeEncounter.relevantPeriod\n' +
+        '\n' +
+        'define \"Initial Population\":\n' +
+        '  TJC.\"Ischemic Stroke Encounter\"\n' +
+        '\n' +
+        'define \"Denominator\":\n' +
+        '  \"Initial Population\"\n'
+
     public static readonly qdmCQLNonPatienBasedTest = 'library NonPatientBasedCVmeasurewithMultiplegroupsStratifications version \'0.0.000\'\n' +
         '\n' +
         'using QDM version \'5.6\'\n' +

@@ -3,11 +3,11 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { v4 as uuidv4 } from 'uuid'
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {Header} from "../../../../Shared/Header"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Header } from "../../../../Shared/Header"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage";
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -66,7 +66,8 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
                 cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
             })
         })
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', 'num', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', '', '', 'num', '', 'denom')
+
         OktaLogin.Login()
     })
 
@@ -107,7 +108,8 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', 'num', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', '', '', 'num', '', 'denom')
+
         OktaLogin.Login()
 
     })
@@ -240,7 +242,8 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', 'num', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', '', '', 'num', '', 'denom')
+
         OktaLogin.Login()
 
     })
