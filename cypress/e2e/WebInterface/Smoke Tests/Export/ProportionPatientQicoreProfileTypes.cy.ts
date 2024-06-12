@@ -195,7 +195,7 @@ let measureCQL = 'library T771 version \'0.0.000\'\n' +
     '                     or Diagnosis.verificationStatus ~ QICoreCommon."entered-in-error" )\n' +
     '    ) is not null'
 
-describe.skip('FHIR Measure Export for Proportion Patient Measure with QI-Core Profile types', () => {
+describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profile types', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -281,9 +281,12 @@ describe.skip('FHIR Measure Export for Proportion Patient Measure with QI-Core P
 
         MeasuresPage.measureAction('version')
 
+        cy.get(MeasuresPage.versionMeasuresSelectionButton).click()
         cy.get(MeasuresPage.measureVersionMajor).should('exist')
         cy.get(MeasuresPage.measureVersionMajor).click()
 
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).should('exist')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
