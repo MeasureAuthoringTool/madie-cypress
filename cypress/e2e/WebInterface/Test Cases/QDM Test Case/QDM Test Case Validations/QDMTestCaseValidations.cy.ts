@@ -22,7 +22,7 @@ let twoFiftyTwoCharacters = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxy
 let altMeasureName = ''
 let altCqlLibraryName = ''
 let measureCQL = MeasureCQL.QDMHighlightingTab_CQL
-let measureScoring = 'Cohort'
+let measureScoringCohort = 'Cohort'
 let qdmMeasureCQL = MeasureCQL.simpleQDM_CQL
 let qdmMeasureCQLwInvalidValueset = MeasureCQL.simpleQDM_CQL_invalid_valueset
 let qdmMeasureCQLwNonVsacValueset = MeasureCQL.QDMTestCaseCQLNonVsacValueset
@@ -117,7 +117,7 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
         altCqlLibraryName = CqlLibraryName + altRandValue
 
         //Create QDM Measure, PC and Test Case with ALT user
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, true, measureCQL, false, true)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoringCohort, true, measureCQL, false, true)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'IP2')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, true)
         OktaLogin.Login()
@@ -312,9 +312,9 @@ describe('Edit Test Case Validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //navigate to the details page
-        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.detailsTab).click().wait(2000)
 
-        cy.get(TestCasesPage.testCaseTitle).focus()
+        cy.get(TestCasesPage.testCaseTitle).click().focus()
         cy.get(TestCasesPage.testCaseTitle).clear()
         cy.get(TestCasesPage.testCaseSeriesTextBox).click()
 
@@ -472,7 +472,7 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
     beforeEach('Create measure, group and login', () => {
 
         //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, false, measureQDMCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringCohort, false, measureQDMCQL)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -577,7 +577,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
 
     beforeEach('Create Measure, and Test Case', () => {
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, true, qdmMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringCohort, true, qdmMeasureCQL)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
 
     })
@@ -674,7 +674,7 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
 
     beforeEach('Create Measure, and Test Case', () => {
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, true, qdmMeasureCQLwInvalidValueset)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringCohort, true, qdmMeasureCQLwInvalidValueset)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
 
 
@@ -735,7 +735,7 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
 
     beforeEach('Create Measure, and Test Case', () => {
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, false, qdmMeasureCQLwNonVsacValueset)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringCohort, false, qdmMeasureCQLwNonVsacValueset)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
 
 
