@@ -235,7 +235,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('10/26/2012 08:00 AM', '10/26/2012 08:15 AM')
         //add Code
-        QDMElements.addCode('ICD10PCS', '0HTT0ZZ')
+        QDMElements.addCode('Icd10PCS', '0HTT0ZZ')
         //Close the Element
         QDMElements.closeElement()
 
@@ -245,7 +245,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('10/26/2012 08:00 AM', '10/26/2012 08:15 AM')
         //add Code
-        QDMElements.addCode('ICD10PCS', '0HTT0ZZ')
+        QDMElements.addCode('Icd10PCS', '0HTT0ZZ')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
