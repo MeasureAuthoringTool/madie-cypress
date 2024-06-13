@@ -110,14 +110,14 @@ describe('Remove Test case attribute', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population')
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
 
