@@ -264,7 +264,7 @@ describe('Measure with Negation Rationale', () => {
         //add Timing Relevant Period DateTime
         cy.get('[id="dateTime"]').eq(0).type('09/30/2011 08:00 AM')
         //add Code
-        QDMElements.addCode('ICD10CM', 'C67.3')
+        QDMElements.addCode('Icd10CM', 'C67.3')
 
         //Element - Medication, Administered: BCG Bacillus Calmette Guerin for Urology Care
         //add Element
@@ -272,7 +272,7 @@ describe('Measure with Negation Rationale', () => {
         //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('03/01/2012 08:00 AM', '03/01/2012 10:15 AM')
         //add Code
-        QDMElements.addCode('RXNORM', '1653579')
+        QDMElements.addCode('RxNORM', '1653579')
 
         //Element - Procedure, Performed: Tumor staging (tumor staging)
         //add Element

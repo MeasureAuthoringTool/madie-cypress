@@ -351,7 +351,7 @@ describe('QDM Test Case Excel Export', () => {
         //add Element
         QDMElements.addElement('patientcharacteristic', 'Payer: Medicare FFS payer')
         //add Code
-        QDMElements.addCode('SOP', '1')
+        QDMElements.addCode('SOPT', '1')
 
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -424,7 +424,7 @@ describe('QDM Test Case Excel Export', () => {
         //add Element
         QDMElements.addElement('patientcharacteristic', 'Payer: Payer')
         //add Code
-        QDMElements.addCode('SOP', '1')
+        QDMElements.addCode('SOPT', '1')
 
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
