@@ -12,7 +12,7 @@ let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let fileToUpload = 'PatientFile.json'
 
-describe('Import Test Case', () => {
+describe('Import Test Case into the Test Case Editor', () => {
 
     beforeEach('Create Measure, Test case and Login', () => {
 
