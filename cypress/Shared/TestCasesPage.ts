@@ -576,7 +576,7 @@ export class TestCasesPage {
                 case 'delete': {
                     cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="delete-test-case-btn-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid=delete-test-case-btn-' + fileContents + '"]').should('be.visible')
+                    cy.get('[data-testid="delete-test-case-btn-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="delete-test-case-btn-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="delete-test-case-btn-' + fileContents + '"]').should('be.enabled')
                     cy.get('[data-testid="delete-test-case-btn-' + fileContents + '"]').scrollIntoView().click({ force: true })
@@ -765,6 +765,7 @@ export class TestCasesPage {
     public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, secondMeasure?: boolean, twoTestCases?: boolean, altUser?: boolean): string {
         let user = ''
         let measurePath = 'cypress/fixtures/measureId'
+        let measureGroupPath = 'cypress/fixtures/groupId'
         let testCasePath = ''
         let testCasePIdPath = ''
         if (altUser) {
@@ -795,27 +796,71 @@ export class TestCasesPage {
         //Add Test Case to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/test-cases',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    },
-                    method: 'POST',
-                    body: {
-                        'name': "TEST",
-                        'series': series,
-                        'title': title,
-                        'description': description,
-                        'json': jsonValue
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    expect(response.body.series).to.eql(series)
-                    expect(response.body.title).to.eql(title)
-                    expect(response.body.description).to.eql(description)
-                    cy.writeFile(testCasePath, response.body.id)
-                    cy.writeFile(testCasePIdPath, response.body.patientId)
+                cy.readFile(measureGroupPath).should('exist').then((groupIdFc) => {
+                    cy.request({
+                        url: '/api/measures/' + id + '/test-cases',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'POST',
+                        body: {
+                            'name': "TEST",
+                            'series': series,
+                            'title': title,
+                            'description': description,
+                            'json': jsonValue,
+                            "hapiOperationOutcome": {
+                                "code": 201,
+                                "message": null,
+                                "outcomeResponse": null
+                            },
+                            "groupPopulations": [{
+                                "groupId": groupIdFc,
+                                "scoring": 'Cohort',
+                                "populationValues": [
+                                    {
+                                        "name": "initialPopulation",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "name": "denominator",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "name": "denominatorExclusion",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "name": "denominatorException",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "name": "numerator",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "name": "numeratorExclusion",
+                                        "expected": false,
+                                        "actual": false
+                                    }
+
+                                ]
+                            }]
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(201)
+                        expect(response.body.id).to.be.exist
+                        expect(response.body.series).to.eql(series)
+                        expect(response.body.title).to.eql(title)
+                        expect(response.body.description).to.eql(description)
+                        cy.writeFile(testCasePath, response.body.id)
+                        cy.writeFile(testCasePIdPath, response.body.patientId)
+                    })
                 })
             })
         })
