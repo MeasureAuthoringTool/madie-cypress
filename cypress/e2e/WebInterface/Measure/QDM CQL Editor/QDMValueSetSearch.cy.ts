@@ -175,14 +175,13 @@ describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL',
         Utilities.waitForElementEnabled(CQLEditorPage.valueSetSearchSrchBtn, 30000)
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'ameStewardOIDStatusOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVEApplyOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDApplyOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDApplyOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDApplyOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDApplyOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDApplyOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDApply')
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVESelect' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect')
 
         //click on the filter tab to access filter field(s)
         cy.get(CQLEditorPage.valueSetSearchFilterSubTab).click()
@@ -195,22 +194,21 @@ describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL',
         cy.get(CQLEditorPage.valueSetSearchFilterApplyBtn).click()
 
         //results grid is updated to only show one entry, now, after filter
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'NameStewardOIDStatusOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVEApply')
-
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVESelect')
 
         //Apply Value Set to the Measure
-        /*         cy.get('[data-testid="select-action-0_apply"]').click()
-                cy.get('[class="btn-container"]').contains('Apply').click()
-                cy.get('[class="toast success"]').should('contain.text', 'Code AMB has been successfully added to the CQL.')
-        
-                //Save and Discard changes button should be enabled after applying the Value Set
-                cy.get(CQLEditorPage.saveCQLButton).should('be.enabled')
-                cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.enabled')
-        
-                //Save CQL
-                cy.get(CQLEditorPage.saveCQLButton).click() */
+        cy.get(CQLEditorPage.selectDropdownBtn).click()
+        cy.get(CQLEditorPage.selectOptionListBox).contains('Apply').click()
+        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Value Set Office Visit has been successfully added to the CQL.')
 
+        //Save and Discard changes button should be enabled after applying the Value Set
+        cy.get(CQLEditorPage.saveCQLButton).should('be.enabled')
+        cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.enabled')
+
+        //Save CQL
+        cy.get(CQLEditorPage.saveCQLButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
     })
 
@@ -243,7 +241,7 @@ describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL',
         Utilities.waitForElementEnabled(CQLEditorPage.valueSetSearchSrchBtn, 30000)
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVEApply')
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVESelect')
 
     })
 })
