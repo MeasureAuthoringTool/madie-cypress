@@ -163,6 +163,9 @@ export class TestCasesPage {
     public static readonly configurationSubTab = '[data-testid="qdm-nav-collapser"]'
 
     //misc test case page objects
+    public static readonly tcColumnAscendingArrow = '[data-testid="KeyboardArrowUpIcon"]'
+    public static readonly tcColumnDescendingArrow = '[data-testid="KeyboardArrowDownIcon"]'
+    public static readonly tcColumnHeading = '[class="cursor-pointer select-none header-button"]'
     public static readonly tcGroupCoverageHighlighting = '[data-testid="group-coverage-nav-"]'
     public static readonly qdmTCHighlightingDU = '[data-testid="definitions-used-section"]'
     public static readonly tcIPHighlightingDetails = '[data-testid="IP-highlighting"]'
@@ -819,31 +822,37 @@ export class TestCasesPage {
                                 "scoring": 'Cohort',
                                 "populationValues": [
                                     {
+                                        "id": null,
                                         "name": "initialPopulation",
                                         "expected": false,
                                         "actual": false
                                     },
                                     {
+                                        "id": null,
                                         "name": "denominator",
                                         "expected": false,
                                         "actual": false
                                     },
                                     {
+                                        "id": null,
                                         "name": "denominatorExclusion",
                                         "expected": false,
                                         "actual": false
                                     },
                                     {
+                                        "id": null,
                                         "name": "denominatorException",
                                         "expected": false,
                                         "actual": false
                                     },
                                     {
+                                        "id": null,
                                         "name": "numerator",
                                         "expected": false,
                                         "actual": false
                                     },
                                     {
+                                        "id": null,
                                         "name": "numeratorExclusion",
                                         "expected": false,
                                         "actual": false
