@@ -374,7 +374,6 @@ describe('Run QDM Test Case ', () => {
     })
 })
 
-// skipping until the manifestExpansion is removed / permanently set to true
 describe('Validating Expansion -> Manifest selections / navigation functionality', () => {
 
     beforeEach('Create Measure', () => {
@@ -438,7 +437,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         TestCasesPage.qdmTestCaseElementAction('edit')
         //add negation
         cy.get(TestCasesPage.negationTab).click()
-        cy.get(TestCasesPage.valueSetDirectRefCode).click()
+        cy.get(TestCasesPage.valueSetDirectRefCode).scrollIntoView().wait(2000).click()
         cy.get(TestCasesPage.valueSetOptionValue).click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="option-SNOMEDCT"]').click()
@@ -453,7 +452,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
         //add element - code system to TC
         //Element - Encounter:Performed: Nonelective Inpatient Encounter
-        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="elements-tab-encounter"]').scrollIntoView().click()
         cy.get('[data-testid="data-type-Encounter, Performed: Nonelective Inpatient Encounter"]').click()
         cy.get('[id="dateTime"]').eq(0).type('06/01/2025 01:00 PM')
         cy.get('[id="dateTime"]').eq(1).type('06/02/2025 01:00 PM')
@@ -467,7 +466,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid="option-Diagnoses"]').click()
-        cy.get('[data-testid="value-set-selector"]').click()
+        cy.get('[data-testid="value-set-selector"]').scrollIntoView().wait(2000).click()
         cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.247"]').click() //Select IschemicStroke from dropdown
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="option-SNOMEDCT"]').click()
@@ -515,7 +514,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
 
         OktaLogin.Logout()
 
-        //Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
     it('Verify Expansion -> Manifest: When code does not exist on value set, test case will fail. When value set does contain code, and all other expected equals actual then test case passes.', () => {
@@ -565,5 +564,24 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
 
         //verify the results row
         cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'FailQDMManifestTCGroupQDMManifestTCQDMManifestTCSelect')
+
     })
+
+    it('Verify Expansion -> Manifest: When code does not exist on value set, test case will fail. When value set does contain code, and all other expected equals actual then test case passes.', () => {
+
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click().wait(2000)
+        //add new valueset and also specify a version
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}valueset \"Adolescent depression screening assessment with version\":  \'urn:oid:2.16.840.1.113762.1.4.1260.162\' version \'urn:hl7:version:20240307\'')
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementVisible(CQLEditorPage.saveAlertMessage, 35000)
+        cy.get(CQLEditorPage.saveAlertMessage).find('[class="madie-alert success"]').find('[id="content"]').find('[data-testid="library-warning"]').should('contain.text', 'MADiE does not currently support use of value set version directly in measures at this time. Your value set versions have been removed. Please use the relevant manifest for value set expansion for testing.')
+
+        //confirm that the CQL does not include the version
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('include.text', ' version \'0.0.000\'using QDM version \'5.6\'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Globalinclude TJCOverallQDM version \'8.0.000\' called TJCvalueset "Antithrombotic Therapy for Ischemic Stroke": \'urn:oid:2.16.840.1.113762.1.4.1110.62\'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "Medical Reason For Not Providing Treatment": \'urn:oid:2.16.840.1.113883.3.117.1.7.1    .473\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Patient Refusal": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.93\'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Pharmacological Contraindications For Antithrombotic Therapy": \'urn:oid:2.16.840.1    .113762.1.4.1110.52\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'valueset "Adolescent depression screening assessment with version": \'urn:oid:2.16.840.1.113762    .1.4.1260.162\'context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer Type"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "Denominator Exclusions":  TJC."Ischemic Stroke Encounters with Discharge Disposition"    union TJC."Encounter with Comfort Measures during Hospitalization"define "Encounter with Pharmacological Contraindications for Antithrombotic Therapy at     Discharge":  TJC."Ischemic Stroke Encounter" IschemicStrokeEncounter    with ["Medication, Discharge": "Pharmacological Contraindications For Antithrombotic         Therapy"] Pharmacological      such that Pharmacological.authorDatetime during IschemicStrokeEncounter.relevantPerioddefine "Reason for Not Giving Antithrombotic at Discharge":  ["Medication, Not Discharged": "Antithrombotic Therapy for Ischemic Stroke"]       NoAntithromboticDischarge    where NoAntithromboticDischarge.negationRationale in "Medical Reason For Not Providing         Treatment"')
+
+    })
+
 })

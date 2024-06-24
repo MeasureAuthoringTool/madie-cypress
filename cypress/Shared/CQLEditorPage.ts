@@ -4,6 +4,10 @@ export class CQLEditorPage {
 
     //button to save CQL
     public static readonly saveCQLButton = '[data-testid="save-cql-btn"]'
+
+    //message that appears for various alerts that occur at successful saving
+    public static readonly saveAlertMessage = '[id="status-handler"]'
+
     //error toast message when a CQL change has an affect on PC
     public static readonly measureErrorToast = '[class="toast danger"]'
 
