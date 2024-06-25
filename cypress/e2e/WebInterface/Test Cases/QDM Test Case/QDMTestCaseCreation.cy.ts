@@ -437,7 +437,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         TestCasesPage.qdmTestCaseElementAction('edit')
         //add negation
         cy.get(TestCasesPage.negationTab).click()
-        cy.get(TestCasesPage.valueSetDirectRefCode).scrollIntoView().wait(2000).click()
+        cy.get(TestCasesPage.valueSetDirectRefCode).scrollIntoView().click()
         cy.get(TestCasesPage.valueSetOptionValue).click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="option-SNOMEDCT"]').click()
@@ -466,7 +466,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid="option-Diagnoses"]').click()
-        cy.get('[data-testid="value-set-selector"]').scrollIntoView().wait(2000).click()
+        cy.get('[data-testid="value-set-selector"]').scrollIntoView().click()
         cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.247"]').click() //Select IschemicStroke from dropdown
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="option-SNOMEDCT"]').click()
