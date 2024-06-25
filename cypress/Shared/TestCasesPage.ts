@@ -496,7 +496,7 @@ export class TestCasesPage {
                     cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="edit-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.enabled')
-                    cy.get('[data-testid="edit-element-' + fileContents + '"]').wait(2000).click()
+                    cy.get('[data-testid="edit-element-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     break
                 }
                 case 'clone': {
@@ -507,7 +507,7 @@ export class TestCasesPage {
                     cy.get('[data-testid="clone-element-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="clone-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="clone-element-' + fileContents + '"]').should('be.enabled')
-                    cy.get('[data-testid="clone-element-' + fileContents + '"]').wait(2000).click()
+                    cy.get('[data-testid="clone-element-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     break
                 }
                 case 'delete': {
@@ -517,7 +517,7 @@ export class TestCasesPage {
                     cy.get('[data-testid="delete-element-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="delete-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="delete-element-' + fileContents + '"]').should('be.enabled')
-                    cy.get('[data-testid="delete-element-' + fileContents + '"]').wait(3000).click()
+                    cy.get('[data-testid="delete-element-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     break
                 }
                 default: { }
