@@ -372,10 +372,10 @@ export class TestCasesPage {
     public static readonly QDMElementsTab = '[data-testid="elements-section"]'
 
     //QDM Test Case Attributes
-    public static readonly laboratoryElement = '[data-testid=elements-tab-laboratory_test]'
+    public static readonly laboratoryElement = '[data-testid="elements-tab-laboratory_test"]'
     public static readonly plusIcon = '[data-testid=AddCircleOutlineIcon]'
     public static readonly addAttribute = '[data-testid="add-attribute-button"]'
-    public static readonly attributesTab = '[data-testid=sub-navigation-tab-attributes]'
+    public static readonly attributesTab = '[data-testid="sub-navigation-tab-attributes"]'
     public static readonly selectAttributeDropdown = '[id="attribute-select"]'
     public static readonly referenceRangeAttribute = '[data-testid="option-Reference Range"]'
     public static readonly interpretationAttribute = '[data-testid="option-Interpretation"]'
@@ -489,8 +489,10 @@ export class TestCasesPage {
             cy.get('[data-testid="view-element-btn-' + fileContents + '"]').should('be.enabled').wait(1000)
             switch ((action.valueOf()).toString().toLowerCase()) {
                 case "edit": {
-                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').wait(3000).click({ force: true })
+                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').scrollIntoView()
+                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="edit-element-' + fileContents + '"]', 55000)
+                    cy.get('[data-testid="edit-element-' + fileContents + '"]').scrollIntoView()
                     cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="edit-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.enabled')
@@ -498,8 +500,10 @@ export class TestCasesPage {
                     break
                 }
                 case 'clone': {
-                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').wait(3000).click({ force: true })
+                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').scrollIntoView()
+                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="clone-element-' + fileContents + '"]', 55000)
+                    cy.get('[data-testid="clone-element-' + fileContents + '"]').scrollIntoView()
                     cy.get('[data-testid="clone-element-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="clone-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="clone-element-' + fileContents + '"]').should('be.enabled')
@@ -507,7 +511,8 @@ export class TestCasesPage {
                     break
                 }
                 case 'delete': {
-                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').wait(3000).click({ force: true })
+                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').scrollIntoView()
+                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="delete-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="delete-element-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="delete-element-' + fileContents + '"]', 55000)
@@ -534,7 +539,7 @@ export class TestCasesPage {
             cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.enabled').wait(1000)
             switch ((action.valueOf()).toString().toLowerCase()) {
                 case "edit": {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="view-edit-test-case-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="view-edit-test-case-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="view-edit-test-case-' + fileContents + '"]', 55000)
@@ -544,7 +549,7 @@ export class TestCasesPage {
                 }
                 case 'export': {
                     cy.scrollTo('top')
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
                     Utilities.waitForElementVisible('[data-testid="export-test-case-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="export-test-case-' + fileContents + '"]').should('be.visible')
@@ -555,7 +560,7 @@ export class TestCasesPage {
                     break
                 }
                 case 'exporttransaction': {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
                     Utilities.waitForElementVisible('[data-testid="export-transaction-bundle-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="export-transaction-bundle-' + fileContents + '"]').should('be.visible')
@@ -566,7 +571,7 @@ export class TestCasesPage {
                     break
                 }
                 case 'exportcollection': {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
                     Utilities.waitForElementVisible('[data-testid="export-collection-bundle-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="export-collection-bundle-' + fileContents + '"]').should('be.visible')
@@ -577,7 +582,7 @@ export class TestCasesPage {
                     break
                 }
                 case 'delete': {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="delete-test-case-btn-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="delete-test-case-btn-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="delete-test-case-btn-' + fileContents + '"]', 55000)
