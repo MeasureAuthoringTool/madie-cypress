@@ -19,8 +19,7 @@ let testCaseTitle = 'testCaseTitle'
 let testCaseDescription = 'testDescription' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_CohortEpisodeWithStrat_PASS
-let filePath = 'cypress/fixtures/measureId'
-let tcFilePath = 'cypress/fixtures/testCaseId'
+
 
 describe('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
 
@@ -45,6 +44,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
+        let filePath = 'cypress/fixtures/measureId'
 
         MeasuresPage.measureAction('version')
 
@@ -56,12 +56,49 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
 
-        MeasuresPage.measureAction('draft')
-        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
-        cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        //navigate back to the main MADiE / measure list page
+        cy.get(Header.mainMadiePageButton).click()
 
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+
+        //verify that the CQL to ELM version is not empty
+        cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
+
+        //navigate back to the main MADiE / measure list page
+        cy.get(Header.mainMadiePageButton).click()
+
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
+            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid="measure-action-' + fileContents + '"]', 100000)
+            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.enabled')
+            cy.get('[data-testid="measure-action-' + fileContents + '"]').click().wait(1000)
+            Utilities.waitForElementVisible('[data-testid="draft-measure-' + fileContents + '"]', 105000)
+            cy.get('[data-testid="draft-measure-' + fileContents + '"]').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid="draft-measure-' + fileContents + '"]', 105000)
+            cy.get('[data-testid="draft-measure-' + fileContents + '"]').should('be.enabled')
+            cy.get('[data-testid="draft-measure-' + fileContents + '"]').click()
+        })
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
+        //intercept draft id once measure is drafted
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')
+        })
+        cy.get(MeasuresPage.createDraftContinueBtn).click()
+        cy.wait('@draft', { timeout: 60000 }).then((request) => {
+            cy.writeFile(filePath, request.response.body.id)
+        })
+        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
+
+        //navigate back to the main MADiE / measure list page
+        cy.get(Header.mainMadiePageButton).scrollIntoView().click()
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+
+        //verify that the CQL to ELM version is not empty
+        cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
     })
 
     it('User cannot create a draft for a measure / version, whom already has been drafted', () => {
@@ -172,6 +209,12 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
         MeasuresPage.measureAction('edit')
 
+        //verify that the CQL to ELM version is not empty
+        cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
+
+        //verify that the CQL to ELM version is not empty
+        cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
+
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -191,5 +234,6 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(TestCasesPage.aceEditor).should('not.be.empty')
         cy.get(TestCasesPage.aceEditor).should('contain.text', 'Bundle')
         cy.log('Test case details verified successfully')
+
     })
 })
