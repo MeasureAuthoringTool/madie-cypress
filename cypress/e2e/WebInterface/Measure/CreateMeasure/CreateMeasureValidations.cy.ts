@@ -961,12 +961,16 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
 
+        //verify that the CQL to ELM version is not empty
+        cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
+
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //Group Creation
 

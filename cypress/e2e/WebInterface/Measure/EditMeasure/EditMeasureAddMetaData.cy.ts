@@ -122,6 +122,9 @@ describe('Edit Measure: Add Meta Data', () => {
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
 
+        //verify that the CQL to ELM version is not empty
+        cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
+
         //Endorsing Organization and number on Name, Version & ID page
         cy.get(EditMeasurePage.endorsingOrganizationTextBox).invoke('val').then(endorsingOrg => {
             cy.get(EditMeasurePage.endorsementNumber).invoke('val').then(endorsementNumber => {
@@ -178,6 +181,7 @@ describe('Edit Measure: Add Meta Data', () => {
             expect(val).to.eql(clinicalRecommendation)
         })
         cy.log('Measure Clinical Recommendation added successfully')
+
 
     })
 })
@@ -274,6 +278,9 @@ describe('Generate CMS ID for QDM Measure', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
+
+        //verify that the CQL to ELM version is not empty
+        cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
 
         cy.get(EditMeasurePage.generateCmsIdButton).should('exist')
         cy.get(EditMeasurePage.generateCmsIdButton).should('be.enabled')
