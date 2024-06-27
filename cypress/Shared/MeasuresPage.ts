@@ -37,6 +37,9 @@ export class MeasuresPage {
     public static readonly measureVersioningErrorMsg = '[data-testid="error-toast"]'
     public static readonly measureVersionHelperText = '[data-testid="version-helper-text"]'
 
+    //CQL to ELM version field
+    public static readonly measureCQLToElmVersionTxtBox = '[data-testid="translator-version-text-field"]'
+
 
     public static validateMeasureName(expectedValue: string): void {
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {

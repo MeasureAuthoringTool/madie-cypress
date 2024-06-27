@@ -163,6 +163,9 @@ export class TestCasesPage {
     public static readonly configurationSubTab = '[data-testid="qdm-nav-collapser"]'
 
     //misc test case page objects
+    public static readonly tcColumnAscendingArrow = '[data-testid="KeyboardArrowUpIcon"]'
+    public static readonly tcColumnDescendingArrow = '[data-testid="KeyboardArrowDownIcon"]'
+    public static readonly tcColumnHeading = '[class="cursor-pointer select-none header-button"]'
     public static readonly tcGroupCoverageHighlighting = '[data-testid="group-coverage-nav-"]'
     public static readonly qdmTCHighlightingDU = '[data-testid="definitions-used-section"]'
     public static readonly tcIPHighlightingDetails = '[data-testid="IP-highlighting"]'
@@ -369,10 +372,10 @@ export class TestCasesPage {
     public static readonly QDMElementsTab = '[data-testid="elements-section"]'
 
     //QDM Test Case Attributes
-    public static readonly laboratoryElement = '[data-testid=elements-tab-laboratory_test]'
+    public static readonly laboratoryElement = '[data-testid="elements-tab-laboratory_test"]'
     public static readonly plusIcon = '[data-testid=AddCircleOutlineIcon]'
     public static readonly addAttribute = '[data-testid="add-attribute-button"]'
-    public static readonly attributesTab = '[data-testid=sub-navigation-tab-attributes]'
+    public static readonly attributesTab = '[data-testid="sub-navigation-tab-attributes"]'
     public static readonly selectAttributeDropdown = '[id="attribute-select"]'
     public static readonly referenceRangeAttribute = '[data-testid="option-Reference Range"]'
     public static readonly interpretationAttribute = '[data-testid="option-Interpretation"]'
@@ -486,8 +489,10 @@ export class TestCasesPage {
             cy.get('[data-testid="view-element-btn-' + fileContents + '"]').should('be.enabled').wait(1000)
             switch ((action.valueOf()).toString().toLowerCase()) {
                 case "edit": {
-                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').wait(3000).click({ force: true })
+                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').scrollIntoView()
+                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="edit-element-' + fileContents + '"]', 55000)
+                    cy.get('[data-testid="edit-element-' + fileContents + '"]').scrollIntoView()
                     cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="edit-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.enabled')
@@ -495,8 +500,10 @@ export class TestCasesPage {
                     break
                 }
                 case 'clone': {
-                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').wait(3000).click({ force: true })
+                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').scrollIntoView()
+                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="clone-element-' + fileContents + '"]', 55000)
+                    cy.get('[data-testid="clone-element-' + fileContents + '"]').scrollIntoView()
                     cy.get('[data-testid="clone-element-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="clone-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="clone-element-' + fileContents + '"]').should('be.enabled')
@@ -504,7 +511,8 @@ export class TestCasesPage {
                     break
                 }
                 case 'delete': {
-                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').wait(3000).click({ force: true })
+                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').scrollIntoView()
+                    cy.get('[data-testid="view-element-btn-' + fileContents + '"]').click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="delete-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="delete-element-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="delete-element-' + fileContents + '"]', 55000)
@@ -531,7 +539,7 @@ export class TestCasesPage {
             cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.enabled').wait(1000)
             switch ((action.valueOf()).toString().toLowerCase()) {
                 case "edit": {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="view-edit-test-case-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="view-edit-test-case-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="view-edit-test-case-' + fileContents + '"]', 55000)
@@ -541,7 +549,7 @@ export class TestCasesPage {
                 }
                 case 'export': {
                     cy.scrollTo('top')
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
                     Utilities.waitForElementVisible('[data-testid="export-test-case-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="export-test-case-' + fileContents + '"]').should('be.visible')
@@ -552,7 +560,7 @@ export class TestCasesPage {
                     break
                 }
                 case 'exporttransaction': {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
                     Utilities.waitForElementVisible('[data-testid="export-transaction-bundle-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="export-transaction-bundle-' + fileContents + '"]').should('be.visible')
@@ -563,7 +571,7 @@ export class TestCasesPage {
                     break
                 }
                 case 'exportcollection': {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
                     Utilities.waitForElementVisible('[data-testid="export-collection-bundle-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="export-collection-bundle-' + fileContents + '"]').should('be.visible')
@@ -574,9 +582,9 @@ export class TestCasesPage {
                     break
                 }
                 case 'delete': {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').wait(3000).scrollIntoView().click({ force: true })
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="delete-test-case-btn-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid=delete-test-case-btn-' + fileContents + '"]').should('be.visible')
+                    cy.get('[data-testid="delete-test-case-btn-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="delete-test-case-btn-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="delete-test-case-btn-' + fileContents + '"]').should('be.enabled')
                     cy.get('[data-testid="delete-test-case-btn-' + fileContents + '"]').scrollIntoView().click({ force: true })
@@ -765,6 +773,7 @@ export class TestCasesPage {
     public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, secondMeasure?: boolean, twoTestCases?: boolean, altUser?: boolean): string {
         let user = ''
         let measurePath = 'cypress/fixtures/measureId'
+        let measureGroupPath = 'cypress/fixtures/groupId'
         let testCasePath = ''
         let testCasePIdPath = ''
         if (altUser) {
@@ -795,27 +804,77 @@ export class TestCasesPage {
         //Add Test Case to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/test-cases',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    },
-                    method: 'POST',
-                    body: {
-                        'name': "TEST",
-                        'series': series,
-                        'title': title,
-                        'description': description,
-                        'json': jsonValue
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    expect(response.body.series).to.eql(series)
-                    expect(response.body.title).to.eql(title)
-                    expect(response.body.description).to.eql(description)
-                    cy.writeFile(testCasePath, response.body.id)
-                    cy.writeFile(testCasePIdPath, response.body.patientId)
+                cy.readFile(measureGroupPath).should('exist').then((groupIdFc) => {
+                    cy.request({
+                        url: '/api/measures/' + id + '/test-cases',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'POST',
+                        body: {
+                            'name': "TEST",
+                            'series': series,
+                            'title': title,
+                            'description': description,
+                            'json': jsonValue,
+                            "hapiOperationOutcome": {
+                                "code": 201,
+                                "message": null,
+                                "outcomeResponse": null
+                            },
+                            "groupPopulations": [{
+                                "groupId": groupIdFc,
+                                "scoring": 'Cohort',
+                                "populationValues": [
+                                    {
+                                        "id": null,
+                                        "name": "initialPopulation",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "id": null,
+                                        "name": "denominator",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "id": null,
+                                        "name": "denominatorExclusion",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "id": null,
+                                        "name": "denominatorException",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "id": null,
+                                        "name": "numerator",
+                                        "expected": false,
+                                        "actual": false
+                                    },
+                                    {
+                                        "id": null,
+                                        "name": "numeratorExclusion",
+                                        "expected": false,
+                                        "actual": false
+                                    }
+
+                                ]
+                            }]
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(201)
+                        expect(response.body.id).to.be.exist
+                        expect(response.body.series).to.eql(series)
+                        expect(response.body.title).to.eql(title)
+                        expect(response.body.description).to.eql(description)
+                        cy.writeFile(testCasePath, response.body.id)
+                        cy.writeFile(testCasePIdPath, response.body.patientId)
+                    })
                 })
             })
         })

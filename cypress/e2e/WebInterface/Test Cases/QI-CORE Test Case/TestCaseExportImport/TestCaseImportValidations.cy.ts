@@ -587,7 +587,7 @@ describe('Test case uniqueness error validation', () => {
 
     deleteDownloadsFolderBeforeAll()
 
-    beforeEach('Create measure, login and update CQL, create group, and login', () => {
+    beforeEach('Create measure, and create group', () => {
 
         firstMeasureName = measureName + 'a'
         updatedCQLLibraryName = 'TestLibrary5' + Date.now()
@@ -604,20 +604,18 @@ describe('Test case uniqueness error validation', () => {
 
         Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
     })
-    it('Importing two new test cases with the same family name and given name: verify uniqueness error', () => {
+    it('Export existing test case, then delete the existing test case, then create new test case with previous series and title and, then, attempt to import previously exported test case: verify uniqueness error', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         CqlLibraryName = 'TestLibrary6' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, true)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(true, false, 'Initial PopulationOne', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonBobby, true)
-        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonBobby, false, false, false)
+
         OktaLogin.Login()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit", true)
+        MeasuresPage.measureAction("edit")
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -630,6 +628,34 @@ describe('Test case uniqueness error validation', () => {
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
+
+        //delete test case
+        TestCasesPage.testCaseAction('delete')
+        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+
+        //Create test case
+        cy.get(TestCasesPage.newTestCaseButton).scrollIntoView()
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click({ force: true })
+
+        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
+
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle + 'b1')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription + 'b1')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries + 'b1').type('{enter}')
+
+        TestCasesPage.clickCreateTestCaseButton()
 
         cy.reload()
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -662,7 +688,7 @@ describe('Test case uniqueness error validation', () => {
 
         //verifies alert message at top of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(1) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(0) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
         cy.get('.StatusHandler___StyledSpan-sc-1tujbo9-1').should('contain.text', 'Reason: The Family and Given name combination on the Patient resource in the Test Case JSON is already used in another test case on this measure. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
     })
 

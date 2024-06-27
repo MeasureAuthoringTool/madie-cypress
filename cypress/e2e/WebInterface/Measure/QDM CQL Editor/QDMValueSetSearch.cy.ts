@@ -6,6 +6,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage";
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
@@ -175,14 +176,13 @@ describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL',
         Utilities.waitForElementEnabled(CQLEditorPage.valueSetSearchSrchBtn, 30000)
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'ameStewardOIDStatusOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVEApplyOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDApplyOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDApplyOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDApplyOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDApplyOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDApplyOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDApply')
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVESelect' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect')
 
         //click on the filter tab to access filter field(s)
         cy.get(CQLEditorPage.valueSetSearchFilterSubTab).click()
@@ -195,23 +195,22 @@ describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL',
         cy.get(CQLEditorPage.valueSetSearchFilterApplyBtn).click()
 
         //results grid is updated to only show one entry, now, after filter
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'NameStewardOIDStatusOffice VisitNCQA ' +
-            'PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVEApply')
-
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVESelect')
 
         //Apply Value Set to the Measure
-        /*         cy.get('[data-testid="select-action-0_apply"]').click()
-                cy.get('[class="btn-container"]').contains('Apply').click()
-                cy.get('[class="toast success"]').should('contain.text', 'Code AMB has been successfully added to the CQL.')
-        
-                //Save and Discard changes button should be enabled after applying the Value Set
-                cy.get(CQLEditorPage.saveCQLButton).should('be.enabled')
-                cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.enabled')
-        
-                //Save CQL
-                cy.get(CQLEditorPage.saveCQLButton).click() */
+        cy.get(CQLEditorPage.selectDropdownBtn).click()
+        cy.get(CQLEditorPage.selectOptionListBox).contains('Apply').click()
+        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Value Set Office Visit has been successfully added to the CQL.')
 
+        //Save and Discard changes button should be enabled after applying the Value Set
+        cy.get(CQLEditorPage.saveCQLButton).should('be.enabled')
+        cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.enabled')
 
+        //Save CQL
+        cy.get(CQLEditorPage.saveCQLButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
     })
 
     it('Verify that Definition Version is disabled until OID/URL field is selected', () => {
@@ -243,7 +242,41 @@ describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL',
         Utilities.waitForElementEnabled(CQLEditorPage.valueSetSearchSrchBtn, 30000)
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVEApply')
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVESelect')
 
+    })
+
+    it('Value set Details screen', () => {
+
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to CQL Editor tab
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        //Click on Value Set tab
+        cy.get(CQLEditorPage.valueSetsTab).click()
+
+        //Search for the Value Set
+        cy.get(CQLEditorPage.valueSetSearchCategoryDropDOwn).type('OID/URL')
+        cy.get(CQLEditorPage.valueSetSearchCategoryListBox).contains('OID/URL').click()
+        cy.get(CQLEditorPage.valueSetSearchOIDURLText).type('2.16.840.1.113883.3.1444.3.217')
+        Utilities.waitForElementEnabled(CQLEditorPage.valueSetSearchSrchBtn, 30000)
+        cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
+        Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatus' +
+            'Cancer Stage IAmerican Society of Clinical Oncology Stewardurn:oid:2.16.840.1.113883.3.1444.3.217ACTIVE' +
+            'Select')
+
+        //click on the filter tab to access filter field(s)
+        cy.get(CQLEditorPage.valueSetSearchFilterSubTab).click()
+
+        //Click on Value Set Details
+        cy.get(CQLEditorPage.selectDropdownBtn).click()
+        cy.get(CQLEditorPage.selectOptionListBox).contains('Details').click()
+        cy.get('.MuiPaper-rounded').should('contain.text', '"id": "2.16.840.1.113883.3.1444.3.217",\n' +
+            '  "url": "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.1444.3.217",\n' +
+            '  "version": "N/A",\n' +
+            '  "name": "Cancer Stage I"')
     })
 })

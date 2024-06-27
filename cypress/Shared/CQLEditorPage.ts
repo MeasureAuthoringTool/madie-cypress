@@ -4,6 +4,10 @@ export class CQLEditorPage {
 
     //button to save CQL
     public static readonly saveCQLButton = '[data-testid="save-cql-btn"]'
+
+    //message that appears for various alerts that occur at successful saving
+    public static readonly saveAlertMessage = '[id="status-handler"]'
+
     //error toast message when a CQL change has an affect on PC
     public static readonly measureErrorToast = '[class="toast danger"]'
 
@@ -23,6 +27,7 @@ export class CQLEditorPage {
     //Code Search page
     public static readonly codesTab = '[data-testid="codes-tab"]'
     public static readonly codeSubTab = '[data-testid="code-tab"]'
+    public static readonly savedCodesTab = '[data-testid="savedCodes-tab"]'
     public static readonly codeSystemVersionDropdown = '[id="code-system-version-selector"]'
     public static readonly codeSystemVersionOption = '[data-value="version 1"]'
     public static readonly codeText = '[data-testid="code-text-input"]'
@@ -35,6 +40,11 @@ export class CQLEditorPage {
     public static readonly toolTip = 'tr > :nth-child(1) > .MuiButtonBase-root'
     public static readonly toolTipMsg = '.MuiTooltip-tooltip'
     public static readonly clearCodeBtn = '[data-testid="clear-codes-btn"]'
+    public static readonly selectDropdownBtn = '[data-testid="select-action-0_apply"]'
+    public static readonly selectOptionListBox = '[class="btn-container"]'
+    public static readonly removeCodeConfirmationMsg = '[class="dialog-warning-body"]'
+    public static readonly removeCodeContinueBtn = '[data-testid="delete-dialog-continue-button"]'
+    public static readonly saveSuccessMsg = '[class="toast success"]'
 
     //Value Sets page / tab
     public static readonly valueSetsTab = '[data-testid="valueSets-tab"]'

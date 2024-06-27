@@ -374,7 +374,6 @@ describe('Run QDM Test Case ', () => {
     })
 })
 
-// skipping until the manifestExpansion is removed / permanently set to true
 describe('Validating Expansion -> Manifest selections / navigation functionality', () => {
 
     beforeEach('Create Measure', () => {
@@ -438,7 +437,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         TestCasesPage.qdmTestCaseElementAction('edit')
         //add negation
         cy.get(TestCasesPage.negationTab).click()
-        cy.get(TestCasesPage.valueSetDirectRefCode).click()
+        cy.get(TestCasesPage.valueSetDirectRefCode).scrollIntoView().click()
         cy.get(TestCasesPage.valueSetOptionValue).click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="option-SNOMEDCT"]').click()
@@ -453,7 +452,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
         //add element - code system to TC
         //Element - Encounter:Performed: Nonelective Inpatient Encounter
-        cy.get('[data-testid="elements-tab-encounter"]').click()
+        cy.get('[data-testid="elements-tab-encounter"]').scrollIntoView().click()
         cy.get('[data-testid="data-type-Encounter, Performed: Nonelective Inpatient Encounter"]').click()
         cy.get('[id="dateTime"]').eq(0).type('06/01/2025 01:00 PM')
         cy.get('[id="dateTime"]').eq(1).type('06/02/2025 01:00 PM')
@@ -467,7 +466,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid="option-Diagnoses"]').click()
-        cy.get('[data-testid="value-set-selector"]').click()
+        cy.get('[data-testid="value-set-selector"]').scrollIntoView().click()
         cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.247"]').click() //Select IschemicStroke from dropdown
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="option-SNOMEDCT"]').click()
@@ -515,7 +514,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
 
         OktaLogin.Logout()
 
-        //Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
     it('Verify Expansion -> Manifest: When code does not exist on value set, test case will fail. When value set does contain code, and all other expected equals actual then test case passes.', () => {
@@ -565,5 +564,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
 
         //verify the results row
         cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'FailQDMManifestTCGroupQDMManifestTCQDMManifestTCSelect')
+
     })
+
 })

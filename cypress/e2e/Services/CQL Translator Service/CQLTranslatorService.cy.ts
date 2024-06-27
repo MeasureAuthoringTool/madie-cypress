@@ -1,10 +1,10 @@
-export {}
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
+export { }
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
 
 
 describe('CQL Translation Service', () => {
 
-    beforeEach('Set Access Token',() => {
+    beforeEach('Set Access Token', () => {
 
         cy.setAccessTokenCookie()
 
@@ -14,7 +14,7 @@ describe('CQL Translation Service', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
-                url: '/api/cql/translator/cql?showWarnings=false&annotations=true&locators=true&disable-list-demotion=true&' +
+                url: '/api/fhir/cql/translator/cql?showWarnings=false&annotations=true&locators=true&disable-list-demotion=true&' +
                     'disable-list-promotion=true&disable-method-invocation=true&validate-units=true',
                 method: 'PUT',
                 headers: {
