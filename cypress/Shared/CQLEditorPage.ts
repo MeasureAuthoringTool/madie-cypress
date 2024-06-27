@@ -60,6 +60,9 @@ export class CQLEditorPage {
     public static readonly valueSetSearchFilterListBox = '[id="filter-by-category-listbox"]'
     public static readonly valueSetSearchFilterInput = '[data-testid="status-text-input"]'
     public static readonly valueSetSearchFilterApplyBtn = '[data-testid="valuesets-filter-btn"]'
+    public static readonly valueSetDetailsScreen = '.MuiPaper-rounded'
+    public static readonly valueSetSuffixInput = '[data-testid="suffix-max-length-input"]'
+    public static readonly applyValueSetSuffix = '[data-testid="apply-suffix-continue-button"]'
 
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'

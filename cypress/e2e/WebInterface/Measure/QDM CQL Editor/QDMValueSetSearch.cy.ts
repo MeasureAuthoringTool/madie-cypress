@@ -135,7 +135,6 @@ let measureCQL = 'library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedPat
     '  )'
 
 //Skipping until QDMValueSetSearch feature flag is removed
-//this test will need to be revisited and additional steps will need to be added, once MAT-6395 is completed
 describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL', () => {
 
     beforeEach('Create Measure', () => {
@@ -274,9 +273,54 @@ describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL',
         //Click on Value Set Details
         cy.get(CQLEditorPage.selectDropdownBtn).click()
         cy.get(CQLEditorPage.selectOptionListBox).contains('Details').click()
-        cy.get('.MuiPaper-rounded').should('contain.text', '"id": "2.16.840.1.113883.3.1444.3.217",\n' +
+        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"id": "2.16.840.1.113883.3.1444.3.217",\n' +
             '  "url": "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.1444.3.217",\n' +
             '  "version": "N/A",\n' +
             '  "name": "Cancer Stage I"')
+    })
+
+    it('Edit Value Set with suffix and apply to CQL', () => {
+
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to CQL Editor tab
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        //Click on Value Set tab
+        cy.get(CQLEditorPage.valueSetsTab).click()
+
+        //Search for the Value Set
+        cy.get(CQLEditorPage.valueSetSearchCategoryDropDOwn).type('OID/URL')
+        cy.get(CQLEditorPage.valueSetSearchCategoryListBox).contains('OID/URL').click()
+        cy.get(CQLEditorPage.valueSetSearchOIDURLText).type('2.16.840.1.113883.3.1444.3.217')
+        Utilities.waitForElementEnabled(CQLEditorPage.valueSetSearchSrchBtn, 30000)
+        cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
+        Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatus' +
+            'Cancer Stage IAmerican Society of Clinical Oncology Stewardurn:oid:2.16.840.1.113883.3.1444.3.217ACTIVE' +
+            'Select')
+
+        //click on the filter tab to access filter field(s)
+        cy.get(CQLEditorPage.valueSetSearchFilterSubTab).click()
+
+        //Click on Edit Value Set
+        cy.get(CQLEditorPage.selectDropdownBtn).click()
+        cy.get(CQLEditorPage.selectOptionListBox).contains('Edit').click()
+
+        //Add suffix
+        cy.get(CQLEditorPage.valueSetSuffixInput).type('1234')
+        cy.get(CQLEditorPage.applyValueSetSuffix).click()
+        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Value Set Cancer Stage I (1234) has been successfully added to the CQL.')
+
+        //Save and Discard changes button should be enabled after applying the Value Set
+        cy.get(CQLEditorPage.saveCQLButton).should('be.enabled')
+        cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.enabled')
+
+        //Save CQL
+        cy.get(CQLEditorPage.saveCQLButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
     })
 })
