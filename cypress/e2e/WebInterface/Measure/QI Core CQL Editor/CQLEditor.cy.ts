@@ -146,6 +146,7 @@ describe('Measure: CQL Editor', () => {
 
         //Validate message on page
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //Validate error(s) in CQL Editor window
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "ELM: 1:3 | Could not resolve identifier SDE in the current library.  ELM: 5:13 | Member SDE Sex not found for type null.")
@@ -179,6 +180,7 @@ describe('Measure: CQL Editor', () => {
 
             //Validate message on page
             CQLEditorPage.validateSuccessfulCQLUpdate()
+            cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
             //Validate error(s) in CQL Editor after saving
             cy.scrollTo('top')
@@ -188,8 +190,8 @@ describe('Measure: CQL Editor', () => {
 
 
         })
-    // skipping due to bug 5077
-    it.skip('Graceful error msg if model is missing in CQL', () => {
+
+    it('Graceful error msg if model is missing in CQL', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -209,6 +211,8 @@ describe('Measure: CQL Editor', () => {
 
         //Validate message on page
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Missing a using statement. Please add in a valid model and version.')
 
         //Validate error(s) in CQL Editor after saving
 
@@ -239,6 +243,7 @@ describe('Measure: CQL Editor', () => {
 
         //Validate message on page
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //Validate the lack of error(s) in CQL Editor
         cy.get(CQLEditorPage.errorInCQLEditorWindow).should('not.exist')
@@ -266,7 +271,7 @@ describe('Measure: CQL Editor', () => {
         CQLEditorPage.clickCQLEditorTab()
 
         cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents).wait(1500)
         })
 
         //save the value in the CQL Editor
@@ -274,6 +279,7 @@ describe('Measure: CQL Editor', () => {
 
         //Validate message on page
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //Validate the lack of error(s) in CQL Editor
         cy.get(CQLEditorPage.errorInCQLEditorWindow).should('not.exist')
@@ -282,7 +288,7 @@ describe('Measure: CQL Editor', () => {
         cy.get(EditMeasurePage.measureDetailsTab).click()
 
         cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear()
-        cy.get(EditMeasurePage.cqlLibraryNameTextBox).type(newCqlLibraryName + 'TEST')
+        cy.get(EditMeasurePage.cqlLibraryNameTextBox).type(newCqlLibraryName + 'TEST').wait(1500)
 
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
         cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
@@ -310,6 +316,8 @@ describe('Measure: CQL Editor', () => {
 
             //Validate message on page
             CQLEditorPage.validateSuccessfulCQLUpdate()
+            cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+
 
             cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}').type('concept Type B Hepatitis')
 
@@ -396,6 +404,7 @@ describe('Measure: CQL Editor: valueSet', () => {
         //Validate message on page
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
     })
 
@@ -414,6 +423,7 @@ describe('Measure: CQL Editor: valueSet', () => {
         //Validate message on page
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         cy.get(CQLEditorPage.umlsMessage).should('not.exist')
 
@@ -441,6 +451,7 @@ describe('Measure: CQL Editor: valueSet', () => {
         //Validate message on page
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         cy.get(CQLEditorPage.umlsMessage).should('not.exist')
 
@@ -496,6 +507,7 @@ describe('CQL errors with included libraries', () => {
         //Validate message on page
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //Validate error(s) in CQL Editor after saving
 
@@ -537,7 +549,9 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
 
         Utilities.waitForElementVisible(CQLLibraryPage.libraryWarning, 25000)
 
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'CQL updated successfully but was missing a Using statement. Please add in a valid model and version.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Missing a using statement. Please add in a valid model and version.')
 
     })
     it('Verify error message when there is an using statement in the CQL, but it is not accurate', () => {
@@ -552,7 +566,9 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureQICoreCQL_with_incorrect_using)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(EditMeasurePage.CQLMessageSuccess).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Using statement was incorrect. MADiE has overwritten it.')
 
     })
     it('Verify error message when there is an using statement in the CQL, but it is not accurate, and the library name used is not correct', () => {
@@ -568,7 +584,9 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.get(EditMeasurePage.CQLMessageSuccess).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Using statement was incorrect. MADiE has overwritten it.')
 
     })
 })
@@ -600,7 +618,9 @@ describe('Measure: CQL Editor: using line : FHIR', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureFHIR_with_invalid_using)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(EditMeasurePage.CQLMessageSuccess).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Using statement was incorrect. MADiE has overwritten it.')
 
     })
 })

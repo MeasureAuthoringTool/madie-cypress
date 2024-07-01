@@ -1,8 +1,8 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage"
-import {Header} from "../../../../Shared/Header"
-import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { Header } from "../../../../Shared/Header"
+import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 
 let CqlLibraryOther = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -34,7 +34,7 @@ describe('Version CQL Library with errors', () => {
 
         //Verify CQL ELM translation errors
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('exist')
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').wait(1000).click({force:true, multiple: true})
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').wait(1000).click({ force: true, multiple: true })
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 1:3 | Could not resolve identifier SDE in the current library.  ELM: 5:13 | Member SDE Sex not found for type null.")
 
         CQLLibrariesPage.clickVersionforCreatedLibrary()
@@ -65,8 +65,7 @@ describe('Version CQL Library with errors', () => {
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
 
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement' +
-            ' were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //Verify CQL parsing errors
         cy.scrollTo('top')
@@ -74,7 +73,7 @@ describe('Version CQL Library with errors', () => {
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('exist')
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
 
-        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').wait(1000).click({force:true, multiple: true})
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').wait(1000).click({ force: true, multiple: true })
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('exist')
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('not.be.empty')
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('not.be.null')

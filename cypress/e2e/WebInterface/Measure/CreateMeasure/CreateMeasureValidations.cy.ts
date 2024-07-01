@@ -830,7 +830,7 @@ describe('CQL Library Validations -- Attempting to use a QDM Library in a QI Cor
 
         //generic error list appears
         cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('be.visible')
-        cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('include.text', 'Row: 4, Col:1: ELM: 1:68 | Library model and version does not match the Measure model and version for name: PalliativeCareExclusionECQMQDM, version: 1.0.000')
+        cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('include.text', 'Row: 4, Col:1: ELM: 1:68 | Library model and version does not match the Measure model and version for name: PalliativeCare, version: 1.0.000')
     })
 })
 

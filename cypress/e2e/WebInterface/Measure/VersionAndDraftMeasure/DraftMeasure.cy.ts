@@ -66,7 +66,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
 
         //navigate back to the main MADiE / measure list page
-        cy.get(Header.mainMadiePageButton).click()
+        cy.get(Header.mainMadiePageButton).click().wait(2000)
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
