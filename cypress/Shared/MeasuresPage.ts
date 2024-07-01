@@ -2,8 +2,8 @@ import { Utilities } from "./Utilities"
 
 export class MeasuresPage {
 
-    public static readonly measureListTitles = '[data-testid=table-body]'
-    public static readonly allMeasuresTab = '[data-testid=all-measures-tab]'
+    public static readonly measureListTitles = '[data-testid="measure-list-tbl"]'
+    public static readonly allMeasuresTab = '[data-testid="all-measures-tab"]'
     public static readonly searchInputBox = '[data-testid="searchMeasure-input"]'
 
     //export

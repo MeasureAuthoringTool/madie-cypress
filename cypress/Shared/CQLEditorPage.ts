@@ -86,8 +86,6 @@ export class CQLEditorPage {
 
     public static validateSuccessfulCQLUpdate(): void {
 
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each(msg => {
-            expect(msg.text()).to.be.oneOf(['CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.', 'Changes saved successfully but the following issues were found'])
-        })
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
     }
 }
