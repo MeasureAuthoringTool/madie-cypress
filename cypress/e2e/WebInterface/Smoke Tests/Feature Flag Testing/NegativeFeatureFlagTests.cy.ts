@@ -9,6 +9,7 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
+import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage";
 
 let measureName = 'TestMeasure' + Date.now()
 let filePath = 'cypress/fixtures/measureId'
@@ -318,8 +319,8 @@ describe('QDM: Test Case Export button and it\s sub-action buttons', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
-            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         // navigate to MADiE's homepage
         cy.get(Header.measures).click()
@@ -402,5 +403,37 @@ describe('QDM: Value Set search on CQL editor tab', () => {
         MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         Utilities.waitForElementToNotExist(CQLEditorPage.valueSetsTab, 30000)
+    })
+})
+
+//“ShiftTestCasesDates”: false
+describe('QI Core: Shift test case dates option on Test case list page', () => {
+
+    beforeEach('Create measure, login and update CQL, create group, and login', () => {
+
+        CqlLibraryName = 'TestLibrary9' + Date.now()
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
+
+        OktaLogin.Login()
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+
+    it('Shift test case dates option not visible on view Test case dropdown', () => {
+
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Case list page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.selectTestCaseDropdownBtn).click()
+        cy.get('[class="btn-container"]').should('not.contain', 'Increment Dates')
+        cy.reload()
     })
 })

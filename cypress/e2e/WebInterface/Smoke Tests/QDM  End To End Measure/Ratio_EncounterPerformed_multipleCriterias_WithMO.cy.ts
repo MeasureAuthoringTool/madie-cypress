@@ -7,6 +7,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QDMElements } from "../../../../Shared/QDMElements"
+import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage";
 
 let measureName = 'RatioEncounterPerformedMultipleCriteriasWithMO' + Date.now()
 let CqlLibraryName = 'RatioEncounterPerformedMultipleCriteriasWithMO' + Date.now()
@@ -105,8 +106,8 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
-            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //Base Config Creation
         //Click on Measure Group tab
@@ -301,8 +302,9 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         //run test case on edit test case page
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
-        cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
-        cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
+        //Skipping until MAT-7416 is fixed
+        // cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
+        // cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

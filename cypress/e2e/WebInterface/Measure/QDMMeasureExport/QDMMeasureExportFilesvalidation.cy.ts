@@ -55,7 +55,7 @@ const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 
-describe('Successful QDM Measure Export', () => {
+describe('Verify QDM Measure Export file contents', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -97,16 +97,6 @@ describe('Successful QDM Measure Export', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
-    })
-
-    it('Validate the zip file Export is downloaded for QDM Measure', () => {
-
-        MeasuresPage.measureAction('qdmexport')
-
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
-        cy.log('Successfully verified zip file export')
-
-        OktaLogin.Logout()
     })
 
     it('Unzip the downloaded file and verify file types and contest of the HR and HQMF files, for QDM Measure', () => {
