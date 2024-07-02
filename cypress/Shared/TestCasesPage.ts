@@ -482,14 +482,17 @@ export class TestCasesPage {
     public static qdmTestCaseElementAction(action: string): void {
         let elementIdPath = 'cypress/fixtures/elementId'
         cy.readFile(elementIdPath).should('exist').then((fileContents) => {
+            Utilities.waitForElementEnabled('[data-testid="view-element-btn-' + fileContents + '"]', 50000)
+            cy.get('[data-testid="view-element-btn-' + fileContents + '"]').should('be.enabled')
+            cy.wait(6000)
             cy.get('[data-testid="view-element-btn-' + fileContents + '"]').scrollIntoView()
+            cy.scrollTo(0, 500)
             Utilities.waitForElementVisible('[data-testid="view-element-btn-' + fileContents + '"]', 50000)
             cy.get('[data-testid="view-element-btn-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="view-element-btn-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view-element-btn-' + fileContents + '"]').should('be.enabled').wait(1000)
             switch ((action.valueOf()).toString().toLowerCase()) {
                 case "edit": {
                     cy.get('[data-testid="view-element-btn-' + fileContents + '"]').scrollIntoView()
+                    cy.scrollTo(0, 500)
                     cy.get('[data-testid="view-element-btn-' + fileContents + '"]').click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="edit-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="edit-element-' + fileContents + '"]').scrollIntoView()
@@ -501,6 +504,7 @@ export class TestCasesPage {
                 }
                 case 'clone': {
                     cy.get('[data-testid="view-element-btn-' + fileContents + '"]').scrollIntoView()
+                    cy.scrollTo(0, 500)
                     cy.get('[data-testid="view-element-btn-' + fileContents + '"]').click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="clone-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="clone-element-' + fileContents + '"]').scrollIntoView()
@@ -512,6 +516,7 @@ export class TestCasesPage {
                 }
                 case 'delete': {
                     cy.get('[data-testid="view-element-btn-' + fileContents + '"]').scrollIntoView()
+                    cy.scrollTo(0, 500)
                     cy.get('[data-testid="view-element-btn-' + fileContents + '"]').click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="delete-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="delete-element-' + fileContents + '"]').should('be.visible')
