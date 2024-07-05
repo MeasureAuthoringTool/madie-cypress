@@ -4,6 +4,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
@@ -39,8 +40,19 @@ describe.skip('QDM Code Search fields', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
-
         OktaLogin.Login()
+
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+
+        //Save CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+
     })
 
     afterEach('Clean up and Logout', () => {
@@ -51,17 +63,6 @@ describe.skip('QDM Code Search fields', () => {
     })
 
     it('Search for the Codes', () => {
-
-        //Click on Edit Button
-        MeasuresPage.measureAction("edit")
-
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
-            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
@@ -126,17 +127,6 @@ describe.skip('QDM Code Search fields', () => {
 
     it('Apply code to the CQL and verify under Saved Codes tab', () => {
 
-        //Click on Edit Button
-        MeasuresPage.measureAction("edit")
-
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
-            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
-
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
 
@@ -168,7 +158,7 @@ describe.skip('QDM Code Search fields', () => {
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
 
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Assert toast message while trying to apply the same code again
         cy.get(CQLEditorPage.codeSubTab).click()
@@ -185,7 +175,7 @@ describe.skip('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02Select')
         cy.get(CQLEditorPage.selectDropdownBtn).click()
         cy.get(CQLEditorPage.selectOptionListBox).contains('Apply').click()
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'This code is already defined in the CQL.')
+        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has already been defined in CQL.')
 
         //Save and Discard changes button should be disabled
         cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
@@ -197,17 +187,6 @@ describe.skip('QDM Code Search fields', () => {
     })
 
     it('Edit Code from Results Grid', () => {
-
-        //Click on Edit Button
-        MeasuresPage.measureAction("edit")
-
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
-            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
@@ -240,17 +219,6 @@ describe.skip('QDM Code Search fields', () => {
     })
 
     it('Edit Code from Saved Codes Grid', () => {
-
-        //Click on Edit Button
-        MeasuresPage.measureAction("edit")
-
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
-            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
 
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
@@ -295,17 +263,6 @@ describe.skip('QDM Code Search fields', () => {
 
     it('Remove Code from Saved Codes Grid', () => {
 
-        //Click on Edit Button
-        MeasuresPage.measureAction("edit")
-
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
-            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
-
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
 
@@ -345,5 +302,61 @@ describe.skip('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.savedCodesTab).click()
         Utilities.waitForElementVisible('.sc-bXCLTC', 30000)
         cy.get('.sc-bXCLTC').should('contain.text', 'No Results were found')
+    })
+
+    it('Code system not removed from CQL when there are multiple codes associated with Code system and one of them removed', () => {
+
+        //Click on Codes tab
+        cy.get(CQLEditorPage.codesTab).click()
+
+        //Navigate to Code sub tab
+        cy.get(CQLEditorPage.codeSubTab).click()
+
+        //Search for the Code
+        cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
+        cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
+        cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
+        cy.get('[data-testid="2023-02-option"]').click()
+        cy.get(CQLEditorPage.codeText).type('AMB')
+        Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
+        cy.get(CQLEditorPage.codeSystemSearchBtn).click()
+        Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
+        cy.get(CQLEditorPage.toolTip).trigger('mouseover')
+        cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02Select')
+
+        //Apply code to the Measure
+        cy.get(CQLEditorPage.selectDropdownBtn).click()
+        cy.get(CQLEditorPage.selectOptionListBox).contains('Apply').click()
+        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been successfully added to the CQL.')
+
+        //Add another code with the same Code system
+        cy.get(CQLEditorPage.codeText).clear().type('ACUTE')
+        Utilities.waitForElementEnabled(CQLEditorPage.codeSystemSearchBtn, 30000)
+        cy.get(CQLEditorPage.codeSystemSearchBtn).click()
+        Utilities.waitForElementVisible(CQLEditorPage.codeSystemSearchResultsTbl, 30000)
+        cy.get(CQLEditorPage.toolTip).trigger('mouseover')
+        cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
+        cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionACUTEinpatient acuteActCode2023-02Select')
+
+        //Apply code to the Measure
+        cy.get(CQLEditorPage.selectDropdownBtn).click()
+        cy.get(CQLEditorPage.selectOptionListBox).contains('Apply').click()
+        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code ACUTE has been successfully added to the CQL.')
+
+        //Save CQL
+        cy.get(CQLEditorPage.saveCQLButton).click()
+
+        //Navigate to Saved Codes page
+        cy.get(CQLEditorPage.savedCodesTab).click()
+
+        //Remove Code
+        cy.get(CQLEditorPage.selectDropdownBtn).click()
+        cy.get(CQLEditorPage.selectOptionListBox).contains('Remove').click()
+        cy.get(CQLEditorPage.removeCodeConfirmationMsg).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
+        cy.get(CQLEditorPage.removeCodeContinueBtn).click()
+
+        //Verify the Code System is still available in the CQL Editor
+        cy.get('[class="ace_content"]').should('contain.text', 'codesystem "ActCode": \'urn:oid:2.16.840.1.113883.5.4\'')
     })
 })

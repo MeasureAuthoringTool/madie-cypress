@@ -7,7 +7,6 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { Global } from "../../../../Shared/Global"
 
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
@@ -178,7 +177,7 @@ describe('Validating the creation of QDM Test Case', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob
-        cy.get(TestCasesPage.QDMDob).type('01/01/2020').wait(1000)
+        cy.get(TestCasesPage.QDMDob).wait(2500).type('01/01/2020').wait(2500)
 
         //save dob value
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
@@ -413,6 +412,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
         TestCasesPage.testCaseAction('edit')
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2000', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
@@ -432,19 +432,31 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
         TestCasesPage.testCaseAction('edit')
         TestCasesPage.grabElementId()
         TestCasesPage.qdmTestCaseElementAction('edit')
         //add negation
+        Utilities.waitForElementVisible(TestCasesPage.negationTab, 35000)
         cy.get(TestCasesPage.negationTab).click()
+        Utilities.waitForElementVisible(TestCasesPage.valueSetDirectRefCode, 35000)
         cy.get(TestCasesPage.valueSetDirectRefCode).scrollIntoView().click()
+        Utilities.waitForElementVisible(TestCasesPage.valueSetOptionValue, 35000)
         cy.get(TestCasesPage.valueSetOptionValue).click()
+        Utilities.waitForElementVisible('[id="code-system-selector"]', 35000)
         cy.get('[id="code-system-selector"]').click()
+        Utilities.waitForElementVisible('[data-testid="option-SNOMEDCT"]', 35000)
         cy.get('[data-testid="option-SNOMEDCT"]').click()
+        Utilities.waitForElementVisible('[id="code-selector"]', 35000)
         cy.get('[id="code-selector"]').click()
+        Utilities.waitForElementVisible('[data-testid="option-105480006"]', 35000)
         cy.get('[data-testid="option-105480006"]').click()
+        Utilities.waitForElementVisible('[data-testid="add-negation-rationale"]', 35000)
         cy.get('[data-testid="add-negation-rationale"]').click()
         //Close the Element
+        cy.get('[data-testid="CloseIcon"]').scrollIntoView()
+        cy.scrollTo(100, 0)
+        Utilities.waitForElementVisible('[data-testid="CloseIcon"]', 35000)
         cy.get('[data-testid="CloseIcon"]').click()
         //save changes
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')

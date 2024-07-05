@@ -95,6 +95,7 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         cy.get(MeasureGroupPage.stratificationTab).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Stratification 1')
+        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
         cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
