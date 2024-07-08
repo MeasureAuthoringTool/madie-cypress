@@ -59,7 +59,8 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully ' +
+            'but the following issues were found')
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -97,10 +98,10 @@ describe('QDM Test Cases : Export Test Case', () => {
 
         //Verify all files exist in exported zip file
         //cy.readFile(path.join(downloadsFolder, 'eCQMTitle_patients_results.html'), null).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'html/1_SBTestSeries_PDxNotPsych60MinsDepart.html')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'html/2_SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.html')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'qrda/1_SBTestSeries_PDxNotPsych60MinsDepart.xml')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'qrda/2_SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.xml')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'html/2_SBTestSeries_PDxNotPsych60MinsDepart.html')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'html/1_SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.html')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'qrda/2_SBTestSeries_PDxNotPsych60MinsDepart.xml')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'qrda/1_SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.xml')).should('exist')
 
     })
 
@@ -114,7 +115,8 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully ' +
+            'but the following issues were found')
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -151,7 +153,8 @@ describe('Export Test cases by Non Measure Owner', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully ' +
+            'but the following issues were found')
         OktaLogin.UILogout()
     })
 
