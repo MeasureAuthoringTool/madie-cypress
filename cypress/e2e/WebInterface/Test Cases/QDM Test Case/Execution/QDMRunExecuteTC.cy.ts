@@ -50,8 +50,8 @@ describe('Test case Coverage tab', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
-            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully ' +
+            'but the following issues were found')
 
         //Group Creation
 
