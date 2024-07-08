@@ -803,7 +803,7 @@ describe('CQL Library Validations -- Attempting to use a QDM Library in a QI Cor
 
 
             'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-            'include PalliativeCareExclusionECQMQDM version \'1.0.000\' called Test\n' +
+            'include PalliativeCareQDM version \'4.0.000\' called Test\n' +
 
             'codesystem \"SNOMEDCT:2017-09\": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'\n' +
 

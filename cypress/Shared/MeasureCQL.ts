@@ -1319,8 +1319,8 @@ export class MeasureCQL {
         'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
         'include AdultOutpatientEncountersQDM version \'1.0.000\' called AdultOutpatientEncounters\n' +
         'include HospiceQDM version \'1.0.000\' called Hospice\n' +
-        'include PalliativeCareExclusionECQMQDM version \'1.0.000\' called PalliativeCare\n' +
-        'include AdvancedIllnessandFrailtyExclusionECQMQDM version \'1.0.000\' called AIFrailLTCF\n' +
+        'include PalliativeCareQDM version \'4.0.000\' called PalliativeCare\n' +
+        'include AdvancedIllnessandFrailtyQDM version \'9.0.000\' called AIFrailLTCF\n' +
         '\n' +
         'codesystem "AdministrativeGender": \'urn:oid:2.16.840.1.113883.5.1\' \n' +
         'codesystem "SNOMEDCT": \'urn:oid:2.16.840.1.113883.6.96\' \n' +
