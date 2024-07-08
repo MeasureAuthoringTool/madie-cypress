@@ -9,6 +9,7 @@ import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { Header } from "../../../../../Shared/Header"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
+import {CQLLibraryPage} from "../../../../../Shared/CQLLibraryPage"
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let measureCQL2RunObservations = MeasureCQL.CQLQDMObservationRun
@@ -272,8 +273,8 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
-            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //fill out group details
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -373,8 +374,8 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
-            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //fill out group details
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -492,8 +493,9 @@ describe.skip('QDM Measure: Test Case: with Observations: Expected / Actual resu
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! ' +
-            'Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+
     })
 
     afterEach('Clean up', () => {

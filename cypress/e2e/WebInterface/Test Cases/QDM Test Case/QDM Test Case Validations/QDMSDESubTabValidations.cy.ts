@@ -1,12 +1,13 @@
-import {MeasureCQL} from "../../../../../Shared/MeasureCQL"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
-import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { CQLLibraryPage } from "../../../../../Shared/CQLLibraryPage"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { Utilities } from "../../../../../Shared/Utilities"
 
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 let measureName = 'QDMTestMeasure' + Date.now()
@@ -45,7 +46,8 @@ describe( 'QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -141,7 +143,8 @@ describe( 'QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -179,7 +182,7 @@ describe( 'QDM Test Cases : SDE Sub tab validations', () => {
 
     })
 
-       it('Test Case Coverage Percentage updated based on the SDE selection', () => {
+    it('Test Case Coverage Percentage updated based on the SDE selection', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
@@ -189,7 +192,8 @@ describe( 'QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -215,10 +219,10 @@ describe( 'QDM Test Cases : SDE Sub tab validations', () => {
         //Navigate to Edit Test Case page
         TestCasesPage.testCaseAction('edit')
 
-           //enter a value of the dob, Race and gender
-           TestCasesPage.enterPatientDemographics('01/01/2020', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        //enter a value of the dob, Race and gender
+        TestCasesPage.enterPatientDemographics('01/01/2020', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
-           //Selecting Laboratory element and performed
+        //Selecting Laboratory element and performed
         cy.get(TestCasesPage.laboratoryElement).click()
         cy.get(TestCasesPage.plusIcon).eq(0).click()
 

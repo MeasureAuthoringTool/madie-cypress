@@ -26,8 +26,8 @@ let validTestCaseJsonBobby = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let validFileToUpload = downloadsFolder.toString()
 
-
-describe('MADIE Zip Test Case Import', () => {
+//Skipping until MAT-7436 is fixed
+describe.skip('MADIE Zip Test Case Import', () => {
 
     deleteDownloadsFolderBeforeAll()
     deleteDownloadsFolderBeforeEach()
@@ -124,7 +124,7 @@ describe('MADIE Zip Test Case Import', () => {
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({ force: true })
 
-        //verify that the export occurred 
+        //verify that the export occurred
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
@@ -165,7 +165,7 @@ describe('MADIE Zip Test Case Import', () => {
                 }
                 else
                 {
-                   check = false
+                    check = false
                 }
 
                 expect(check).to.eql(true)
