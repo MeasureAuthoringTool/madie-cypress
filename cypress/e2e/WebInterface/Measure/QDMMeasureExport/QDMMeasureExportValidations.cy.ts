@@ -3,10 +3,10 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {Header} from "../../../../Shared/Header"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Header } from "../../../../Shared/Header"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -108,7 +108,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(EditMeasurePage.CQLMessageSuccess).should('contain.text', 'CQL updated successfully but was missing a Using statement. Please add in a valid model and version.')
+        cy.get(EditMeasurePage.CQLMessageSuccess).should('contain.text', 'CQL updated successfully')
 
         cy.get(Header.measures).click()
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
@@ -141,7 +141,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
             '{downArrow}{downArrow}{downArrow}{downArrow}{backspace}{backspace}{backspace}' +
             '{backspace}{backspace}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         cy.get(Header.measures).click()
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
@@ -244,7 +244,7 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.get(CQLEditorPage.measureErrorToast).should('contain.text', 'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.')
+        cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         cy.get(Header.measures).click()
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {

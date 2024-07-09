@@ -179,7 +179,7 @@ describe('Measure Transfer - Multiple instances', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(newMeasureName, versionNumber)
-        cy.log('Version Created Successfully')
+        cy.log('Version Created Successfully').wait(2700)
 
         //Draft the Versioned Measure
         MeasuresPage.measureAction('draft')
@@ -211,8 +211,8 @@ describe('Measure Transfer - Multiple instances', () => {
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
-        cy.get('.MeasureList___StyledTd-sc-pt5u8-5').should('contain', newMeasureName)
-        cy.get('.MeasureList___StyledTd-sc-pt5u8-5').should('contain', randomMeasureName)
+        cy.get('[class="table-body"]').should('contain', newMeasureName)
+        cy.get('[class="table-body"]').should('contain', randomMeasureName)
     })
 })
 

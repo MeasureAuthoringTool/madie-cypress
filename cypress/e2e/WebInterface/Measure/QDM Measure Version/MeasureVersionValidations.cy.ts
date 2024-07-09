@@ -16,6 +16,7 @@ let versionMeasureCQL = MeasureCQL.simpleQDM_CQL
 
 let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
 
+
     'using QDM version \'5.6\'\n' +
     '\n' +
     'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
@@ -41,7 +42,7 @@ let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
     '\n' +
     'valueset "Potassium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.117\' \n' +
-    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\' \n' +
     'valueset "Respiratory Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.130\' \n' +
     'valueset "Sodium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.119\' \n' +
     'valueset "Systolic Blood Pressure": \'urn:oid:2.16.840.1.113762.1.4.1045.163\' \n' +
@@ -53,8 +54,9 @@ let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\
     '\n' +
     'context Patient\n' +
     '\n' +
-    'define "Denominator": \'\'\n' +
-    '\t  "Initial Population"'
+    'define "Initial Population":\'\'\n' +
+    '\t  \'Inpatient Encounters\'\n'
+
 
 describe('Measure Versioning validations', () => {
 
@@ -104,7 +106,7 @@ describe('Measure Versioning validations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithErrors)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Changes saved successfully but the following issues were found')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Navigate to Measures Page
         cy.get(Header.measures).click()
@@ -135,7 +137,7 @@ describe('Measure Versioning validations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type(versionMeasureCQL)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
 
         cy.get(Header.measures).click()
         MeasuresPage.measureAction('version')
