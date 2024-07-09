@@ -126,7 +126,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(EditMeasurePage.CQLMessageSuccess).should('contain.text', 'CQL updated successfully but was missing a Using statement. Please add in a valid model and version.')
+        cy.get(EditMeasurePage.CQLMessageSuccess).should('contain.text', 'CQL updated successfully')
 
         cy.get(Header.measures).click()
 
@@ -159,7 +159,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
             '{downArrow}{downArrow}{downArrow}{downArrow}{backspace}{backspace}{backspace}' +
             '{backspace}{backspace}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         cy.get(Header.measures).click()
 
