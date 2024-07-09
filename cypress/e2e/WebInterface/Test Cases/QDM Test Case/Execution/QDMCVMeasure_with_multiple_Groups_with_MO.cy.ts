@@ -53,7 +53,7 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Group Creation
         //Click on Measure Group tab
@@ -176,11 +176,6 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
-        //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
-
         cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
         cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
     })
@@ -223,7 +218,7 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Group Creation
         //Click on Measure Group tab
@@ -347,11 +342,6 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
-
-        //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
 
         cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
         cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
