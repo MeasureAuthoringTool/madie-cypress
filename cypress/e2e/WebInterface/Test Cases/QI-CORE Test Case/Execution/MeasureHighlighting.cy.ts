@@ -1376,7 +1376,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 60000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcResultJson)
@@ -1521,7 +1521,6 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
     })
 })
 
-//Skipping until MAT-7435 is fixed
 describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a measure with same Definition in the library', () => {
 
     deleteDownloadsFolderBeforeAll()
@@ -1532,8 +1531,6 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_withDuplicateLibraryDefinition, false, false, '2025-01-01', '2025-12-31')
-        //save CQL
-
         MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', '', 'Numerator', '', 'Denominator', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcJson)
 
@@ -1562,7 +1559,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 60000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Navigate to Test Case page

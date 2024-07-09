@@ -434,7 +434,7 @@ describe('Measure bundle end point returns stratifications', () => {
         //Add Stratification 3
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratThree, 'numeratorExclusion')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'measurePopulationExclusion')
+        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'initialPopulation')
         cy.get(MeasureGroupPage.stratDescThree).type('StratificationThree')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -470,7 +470,7 @@ describe('Measure bundle end point returns stratifications', () => {
                     expect(response.body.entry[0].resource.group[0].stratifier[1].criteria.expression).to.eql('num')
                     expect(response.body.entry[0].resource.group[0].stratifier[2].id).to.not.be.empty
                     expect(response.body.entry[0].resource.group[0].stratifier[2].extension[0].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-appliesTo')
-                    expect(response.body.entry[0].resource.group[0].stratifier[2].extension[0].valueCodeableConcept.coding[0].code).to.eql('measure-population-exclusion')
+                    expect(response.body.entry[0].resource.group[0].stratifier[2].extension[0].valueCodeableConcept.coding[0].code).to.eql('initial-population')
                     expect(response.body.entry[0].resource.group[0].stratifier[2].criteria.expression).to.eql('numeratorExclusion')
                     expect(response.body.entry[0].resource.group[0].extension[2].url).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit')
                     expect(response.body.entry[0].resource.group[0].extension[2].valueCodeableConcept.coding[0].code).to.eql('mL millil')
@@ -578,7 +578,7 @@ describe('Verify the criteria reference for measure observations', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
-    newCqlLibraryName = CqlLibraryName + randValue
+    newCqlLibraryName = CqlLibraryName + randValue + 2
 
     beforeEach('Create Measure', () => {
 
@@ -643,7 +643,7 @@ describe('Verify the criteria reference for measure observations', () => {
         //Add Stratification 3
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratThree, 'numeratorExclusion')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'measurePopulationExclusion')
+        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'measurePopulation')
         cy.get(MeasureGroupPage.stratDescThree).type('StratificationThree')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
