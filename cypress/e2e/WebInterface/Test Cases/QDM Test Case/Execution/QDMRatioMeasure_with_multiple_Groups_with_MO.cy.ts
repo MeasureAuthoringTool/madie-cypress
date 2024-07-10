@@ -179,9 +179,8 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
-        //Commenting until MAT-7417 is fixed
-        // cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
-        // cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
+        cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
+        cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
 
     })
 })
@@ -353,8 +352,7 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
-        //Commenting until MAT-7417 is fixed
-        // cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
-        // cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
+        cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
+        cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
     })
 })
