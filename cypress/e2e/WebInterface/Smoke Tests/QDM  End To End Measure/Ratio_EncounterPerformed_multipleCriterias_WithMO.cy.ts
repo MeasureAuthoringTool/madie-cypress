@@ -302,9 +302,8 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         //run test case on edit test case page
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
-        //Skipping until MAT-7416 is fixed
-        // cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
-        // cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
+        cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#4d7e23')
+        cy.get(TestCasesPage.measureGroup2Label).should('have.color', '#4d7e23')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
