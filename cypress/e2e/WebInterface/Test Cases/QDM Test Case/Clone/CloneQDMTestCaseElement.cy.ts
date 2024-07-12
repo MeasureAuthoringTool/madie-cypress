@@ -14,11 +14,8 @@ let firstTestCaseTitle = '3Encounters1Exclusion'
 let testCaseDescription = 'DENEXPass' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let measureQDMNPBCQL = MeasureCQL.qdmCQLNonPatienBasedTest
-let elementIdvalue = ''
-let elementIdPath = 'cypress/fixtures/elementId'
-
-
-
+// let elementIdvalue = ''
+// let elementIdPath = 'cypress/fixtures/elementId'
 
 describe('Clone QDM Test Case', () => {
 
@@ -56,7 +53,7 @@ describe('Clone QDM Test Case', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Group Creation
         //Click on Measure Group tab
@@ -196,7 +193,7 @@ describe('Clone QDM Test Case', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Group Creation
         //Click on Measure Group tab

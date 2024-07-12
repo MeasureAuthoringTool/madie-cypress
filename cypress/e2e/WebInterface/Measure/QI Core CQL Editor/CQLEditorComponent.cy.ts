@@ -99,6 +99,8 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
     it('Verify success message on CQL editor component, on save and on tab / page load', () => {
 
+        cy.wait(3700)
+
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
 
@@ -109,7 +111,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL saved successfully')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
     })
 
@@ -124,7 +126,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithErrors)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Changes saved successfully but the following issues were found')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Verify errors in CQL Editor component
         cy.get('.madie-alert').should('contain', '(4) Errors:')
@@ -146,7 +148,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithWarnings)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Changes saved successfully but the following issues were found')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Verify errors in CQL Editor component
         cy.get('.madie-alert').should('contain', '(6) Errors:')
@@ -218,8 +220,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithErrors)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Changes saved successfully but the following issues were found')
-        cy.get('[data-testid="library-warning"]').should('contain.text', 'CQL updated successfully! Library Statement or Using Statement were incorrect. MADiE has overwritten them to ensure proper CQL.')
+        cy.get('[data-testid="library-warning"]').should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //Verify errors in CQL Editor component
         cy.get('.madie-alert').should('contain', '(4) Errors:')
@@ -244,7 +245,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithWarnings)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'Changes saved successfully but the following issues were found')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Verify errors in CQL Editor component
         cy.get('.madie-alert').should('contain', '(6) Errors:')

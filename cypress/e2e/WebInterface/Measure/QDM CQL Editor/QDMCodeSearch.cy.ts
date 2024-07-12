@@ -175,7 +175,7 @@ describe.skip('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02Select')
         cy.get(CQLEditorPage.selectDropdownBtn).click()
         cy.get(CQLEditorPage.selectOptionListBox).contains('Apply').click()
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has already been defined in CQL.')
+        cy.get('.toast').should('contain.text', 'Code AMB has already been defined in CQL.')
 
         //Save and Discard changes button should be disabled
         cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
@@ -186,7 +186,7 @@ describe.skip('QDM Code Search fields', () => {
         cy.get('[data-testid="terminology-section-sub-header-content-Saved Codes"]').should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02')
     })
 
-    it('Edit Code from Results Grid', () => {
+    it('Edit Code with Suffix and Version from Results Grid', () => {
 
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
@@ -216,9 +216,20 @@ describe.skip('QDM Code Search fields', () => {
         cy.get('[data-testid="code-description-info"]').should('contain.text', 'Code Descriptionambulatory')
         cy.get('[data-testid="code-system-info"]').should('contain.text', 'Code SystemActCode')
         cy.get('[data-testid="code-system-version-info"]').should('contain.text', 'Code System Version2023-02')
+
+        //Update Code System with Suffix and Version
+        cy.get('[data-testid="code-suffix-field-input"]').type('1234')
+        cy.get('[id="include-code-system-version-checkbox"]').check()
+        cy.get('[data-testid="apply-button"]').click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'code "ambulatory (1234)": \'AMB\' from "ActCode:2023-02" display \'ambulatory\'')
+        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been successfully added to the CQL.')
+
+        //Save CQL
+        cy.get(CQLEditorPage.saveCQLButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
     })
 
-    it('Edit Code from Saved Codes Grid', () => {
+    it('Edit Code with Suffix and Version from Saved Codes Grid', () => {
 
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
@@ -259,6 +270,17 @@ describe.skip('QDM Code Search fields', () => {
         cy.get('[data-testid="code-description-info"]').should('contain.text', 'Code Descriptionambulatory')
         cy.get('[data-testid="code-system-info"]').should('contain.text', 'Code SystemActCode')
         cy.get('[data-testid="code-system-version-info"]').should('contain.text', 'Code System Version2023-02')
+
+        //Update Code System with Suffix and Version
+        cy.get('[data-testid="code-suffix-field-input"]').type('1234')
+        cy.get('[id="include-code-system-version-checkbox"]').check()
+        cy.get('[data-testid="apply-button"]').click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'code "ambulatory (1234)": \'AMB\' from "ActCode:2023-02" display \'ambulatory\'')
+        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been updated successfully.')
+
+        //Save CQL
+        cy.get(CQLEditorPage.saveCQLButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
     })
 
     it('Remove Code from Saved Codes Grid', () => {

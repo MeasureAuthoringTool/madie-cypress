@@ -382,10 +382,10 @@ describe('Validating Stratification tabs', () => {
             expect($ele.text()).to.be.oneOf(['Select Definition', 'denom', 'ipp', 'num'])
         })
         //Association -- default value -- score type is Proportion
-        cy.get(MeasureGroupPage.stratAssociationOne).should('contain.text', 'Initial Population')
+        cy.get(MeasureGroupPage.stratAssociationOne).should('contain.text', '-')
         //Association -- contains these values based off score type -- score type is Proportion
         cy.get(MeasureGroupPage.stratAssociationOne).each(($ele) => {
-            expect($ele.text()).to.be.oneOf(['Initial Population', 'Denominator', 'Denominator Exclusion', 'Numerator', 'Numerator Exclusion', 'Denominator Exception'])
+            expect($ele.text()).to.be.oneOf(['-', 'Initial Population', 'Denominator', 'Denominator Exclusion', 'Numerator', 'Numerator Exclusion', 'Denominator Exception'])
         })
 
         //change score type to Cohort
@@ -396,7 +396,7 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratificationTab).click()
         //Association -- contains these values based off score type -- score type is Cohort
         cy.get(MeasureGroupPage.stratAssociationOne)
-            .should('contain.text', 'Initial Population')
+            .should('contain.text', '-')
         //change score type to Continuous Variable
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
@@ -405,10 +405,10 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratificationTab).click()
         //Association -- default value -- score type is Continuous Variable
         cy.get(MeasureGroupPage.stratAssociationOne)
-            .should('contain.text', 'Initial Population')
+            .should('contain.text', '-')
         //Association -- contains these values based off score type -- score type is Continuous Variable
         cy.get(MeasureGroupPage.stratAssociationOne).each(($ele) => {
-            expect($ele.text()).to.be.oneOf(['Initial Population', 'Measure Population', 'Measure Population Exclusion'])
+            expect($ele.text()).to.be.oneOf(['-', 'Initial Population', 'Measure Population', 'Measure Population Exclusion'])
         })
 
     })
@@ -469,7 +469,7 @@ describe('Validating Stratification tabs', () => {
             }
         })
         //Association -- default value -- score type is Proportion
-        cy.get(MeasureGroupPage.stratAssociationOne).should('contain.text', 'Initial Population')
+        cy.get(MeasureGroupPage.stratAssociationOne).should('contain.text', '-')
     })
 
     it('Add multiple stratifications to the measure group', () => {

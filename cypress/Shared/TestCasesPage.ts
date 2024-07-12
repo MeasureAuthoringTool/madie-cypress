@@ -826,50 +826,7 @@ export class TestCasesPage {
                                 "code": 201,
                                 "message": null,
                                 "outcomeResponse": null
-                            },
-                            "groupPopulations": [{
-                                "groupId": groupIdFc,
-                                "scoring": 'Cohort',
-                                "populationValues": [
-                                    {
-                                        "id": null,
-                                        "name": "initialPopulation",
-                                        "expected": false,
-                                        "actual": false
-                                    },
-                                    {
-                                        "id": null,
-                                        "name": "denominator",
-                                        "expected": false,
-                                        "actual": false
-                                    },
-                                    {
-                                        "id": null,
-                                        "name": "denominatorExclusion",
-                                        "expected": false,
-                                        "actual": false
-                                    },
-                                    {
-                                        "id": null,
-                                        "name": "denominatorException",
-                                        "expected": false,
-                                        "actual": false
-                                    },
-                                    {
-                                        "id": null,
-                                        "name": "numerator",
-                                        "expected": false,
-                                        "actual": false
-                                    },
-                                    {
-                                        "id": null,
-                                        "name": "numeratorExclusion",
-                                        "expected": false,
-                                        "actual": false
-                                    }
-
-                                ]
-                            }]
+                             }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(201)

@@ -106,7 +106,7 @@ describe('Draft and Version Validations', () => {
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
 
         cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL Library saved successfully')
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully')
 
         CQLLibrariesPage.clickVersionforCreatedLibrary()
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).eq(0).click()

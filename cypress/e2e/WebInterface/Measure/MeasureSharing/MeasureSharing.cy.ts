@@ -16,7 +16,7 @@ let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let updatedCqlLibraryName = cqlLibraryName + 'someUpdate'
 let updatedMeasureName = measureName + 'someUpdate'
-let versionNumber = '1.0.000'
+let updatedMeasuresPageName = ''
 let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
 let measureCQL = MeasureCQL.SBTEST_CQL
@@ -173,6 +173,10 @@ describe('Measure Sharing - Multiple instances', () => {
 
     it('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
 
+        let versionNumber = '1.0.000'
+        updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
+        let filePath = 'cypress/fixtures/measureId'
+
 
         //Version the Measure
         MeasuresPage.measureAction('version')
@@ -181,12 +185,30 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(newMeasureName, versionNumber)
-        cy.log('Version Created Successfully')
+        cy.log('Version Created Successfully').wait(2700)
 
         //Draft the Versioned Measure
-        MeasuresPage.measureAction('draft')
-        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasureName)
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
+            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid="measure-action-' + fileContents + '"]', 100000)
+            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.enabled')
+            cy.get('[data-testid="measure-action-' + fileContents + '"]').click().wait(1000)
+            Utilities.waitForElementVisible('[data-testid="draft-measure-' + fileContents + '"]', 105000)
+            cy.get('[data-testid="draft-measure-' + fileContents + '"]').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid="draft-measure-' + fileContents + '"]', 105000)
+            cy.get('[data-testid="draft-measure-' + fileContents + '"]').should('be.enabled')
+            cy.get('[data-testid="draft-measure-' + fileContents + '"]').click()
+        })
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
+        //intercept draft id once measure is drafted
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.intercept('POST', '/api/measures/' + fileContents + '/draft').as('draft')
+        })
         cy.get(MeasuresPage.createDraftContinueBtn).click()
+        cy.wait('@draft', { timeout: 60000 }).then((request) => {
+            cy.writeFile(filePath, request.response.body.id)
+        })
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
@@ -216,8 +238,9 @@ describe('Measure Sharing - Multiple instances', () => {
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
-        cy.get('.MeasureList___StyledTd-sc-pt5u8-5').should('contain', newMeasureName)
-        cy.get('.MeasureList___StyledTd-sc-pt5u8-5').should('contain', updatedMeasureName)
+        cy.get('[class="table-body"]').should('contain', newMeasureName)
+        cy.get('[class="table-body"]').should('contain', updatedMeasuresPageName)
+
     })
 })
 
