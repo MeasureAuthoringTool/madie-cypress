@@ -161,8 +161,7 @@ describe('QDM Measure Versioning', () => {
     })
 })
 
-//Skipping until MAT-7451 is fixed
-describe.skip('QDM Measure Version for CMS Measure with huge included Library', () => {
+describe('QDM Measure Version for CMS Measure with huge included Library', () => {
 
     newMeasureName = measureName + randValue + 1
     newCQLLibraryName = cqlLibraryName + randValue + 1
