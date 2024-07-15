@@ -60,12 +60,36 @@ export class MeasuresPage {
         })
     }
 
-    public static measureAction(action: string, secondMeasure?: boolean): void {
+    public static measureAction(action: string, secondMeasure?: boolean, QDMMeasure?: boolean, associationMeasure?: boolean, secondMeasureForAssociation?: boolean): void {
         let filePath = 'cypress/fixtures/measureId'
 
         if (secondMeasure === true) {
             filePath = 'cypress/fixtures/measureId2'
         }
+        //association related checks:
+        //is this a QDM measure? if so, use the id for the QDM measure. If not, use the id for the QI Core measure.
+        if (QDMMeasure === false) {
+            if (associationMeasure === true) {
+                filePath = 'cypress/fixtures/QiCoreMeasureId'
+                secondMeasureForAssociation = false
+            }
+            else if (secondMeasureForAssociation === true) {
+                filePath = 'cypress/fixtures/QiCoreMeasureId2'
+                associationMeasure = false
+            }
+        }
+
+        if (QDMMeasure === true) {
+            if (associationMeasure === true) {
+                filePath = 'cypress/fixtures/QDMMeasureId'
+                secondMeasureForAssociation = false
+            }
+            else if (secondMeasureForAssociation === true) {
+                filePath = 'cypress/fixtures/QDMMeasureId2'
+                associationMeasure = false
+            }
+        }
+
         cy.readFile(filePath).should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
             cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.visible')
