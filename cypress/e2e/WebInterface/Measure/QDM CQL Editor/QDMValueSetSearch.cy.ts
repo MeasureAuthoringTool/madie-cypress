@@ -135,7 +135,7 @@ let measureCQL = 'library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedPat
     '  )'
 
 //Skipping until QDMValueSetSearch feature flag is removed
-describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL', () => {
+describe('QDM Value Set Search fields, filter and apply the filter to CQL', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -273,10 +273,12 @@ describe.skip('QDM Value Set Search fields, filter and apply the filter to CQL',
         //Click on Value Set Details
         cy.get(CQLEditorPage.selectDropdownBtn).click()
         cy.get(CQLEditorPage.selectOptionListBox).contains('Details').click()
-        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"id": "2.16.840.1.113883.3.1444.3.217",\n' +
-            '  "url": "http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.1444.3.217",\n' +
-            '  "version": "N/A",\n' +
-            '  "name": "Cancer Stage I"')
+
+        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"url": "http://cts.nlm.nih.gov' +
+            '/fhir/ValueSet/2.16.840.1.113883.3.1444.3.217"')
+        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"name": "CancerStageI"')
+        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"title": "Cancer Stage I"')
+
     })
 
     it('Edit Value Set with suffix and apply to CQL', () => {
