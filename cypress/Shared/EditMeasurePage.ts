@@ -19,6 +19,8 @@ export class EditMeasurePage {
     public static readonly measureId = '[data-testid="measure-id-input"]'
     public static readonly versionId = '[data-testid="version-id-input"]'
     public static readonly generateCmsIdButton = '[data-testid="generate-cms-id-button"]'
+    public static readonly cmsIDDialogCancel = '[data-testid="cms-identifier-dialog-cancel-button"]'
+    public static readonly cmsIDDialogContinue = '[data-testid="cms-identifier-dialog-continue-button"]'
     public static readonly cmsIdInput = '[data-testid="cms-id-input"]'
     public static readonly successfulMeasureSaveMsg = '[data-testid="edit-measure-information-success-text"]'
 
@@ -52,7 +54,7 @@ export class EditMeasurePage {
     //References page
     public static readonly addReferenceButton = '[data-testid="create-reference-button"]'
     public static readonly selectMeasureReference = '.chevron-container > [data-testid="ExpandMoreIcon"]'
-    public static measureReferenceDropdown = '[class="btn-container"]'
+    public static readonly measureReferenceDropdown = '[class="btn-container"]'
     public static readonly referenceTypeDropdown = '[id="measure-referenceType"]'
     public static readonly editReferenceModal = '[data-testid="dialog-form"]'
     public static readonly editReferenceCloseModalBtn = '[data-testid="close-button"]'
