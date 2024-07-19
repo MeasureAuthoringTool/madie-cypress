@@ -64,6 +64,9 @@ export class CQLEditorPage {
     public static readonly valueSetSuffixInput = '[data-testid="suffix-max-length-input"]'
     public static readonly applyValueSetSuffix = '[data-testid="apply-suffix-continue-button"]'
 
+    //Definition
+    public static readonly cqlEditorPageDefinitionSubTab = '[data-testid="definitions-tab"]'
+
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
 
