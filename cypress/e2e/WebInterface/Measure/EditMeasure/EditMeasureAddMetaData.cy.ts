@@ -245,6 +245,14 @@ describe('Generate CMS ID for QI-Core Measure', () => {
         cy.get(EditMeasurePage.cmsIdInput).should('not.exist')
 
         cy.get(EditMeasurePage.generateCmsIdButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
+        cy.get(EditMeasurePage.cmsIDDialogCancel).click()
+        cy.get(EditMeasurePage.cmsIdInput).should('not.exist')
+        cy.get(EditMeasurePage.generateCmsIdButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
+        cy.get(EditMeasurePage.cmsIDDialogContinue).click()
 
         cy.get(EditMeasurePage.cmsIdInput).should('exist')
         cy.get(EditMeasurePage.cmsIdInput).invoke('val').then(val => {
@@ -288,6 +296,14 @@ describe('Generate CMS ID for QDM Measure', () => {
         cy.get(EditMeasurePage.cmsIdInput).should('not.exist')
 
         cy.get(EditMeasurePage.generateCmsIdButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
+        cy.get(EditMeasurePage.cmsIDDialogCancel).click()
+        cy.get(EditMeasurePage.cmsIdInput).should('not.exist')
+        cy.get(EditMeasurePage.generateCmsIdButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
+        cy.get(EditMeasurePage.cmsIDDialogContinue).click()
 
         cy.get(EditMeasurePage.cmsIdInput).should('exist')
         cy.get(EditMeasurePage.cmsIdInput).invoke('val').then(val => {

@@ -33,8 +33,7 @@ let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     'define "n":\n' +
     '\ttrue'
 
-//Skipping until QDMCodeSearch feature flag is removed
-describe.skip('QDM Code Search fields', () => {
+describe('QDM Code Search fields', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -87,11 +86,18 @@ describe.skip('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
         cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version258219007Stage 2 (qualifier value)SNOMEDCT2024-03Select')
 
-        //Need to revisit once MAT-7332 is fixed
         //Assert when the Code is not available in VSAC
-        // cy.get(CQLEditorPage.codeText).clear().type('123')
-        // cy.get(CQLEditorPage.codeSystemSearchBtn).click()
-        // cy.get('.sc-feUZmu').should('contain.text', 'No Results were found')
+        cy.get(CQLEditorPage.codeText).clear().type('123')
+        cy.get(CQLEditorPage.codeSystemSearchBtn).click()
+        cy.get('.sc-feUZmu').should('contain.text', 'No Results were found')
+        //Clear the code search values
+        cy.get(CQLEditorPage.clearCodeBtn).click()
+
+        //Search button disabled when the Code system does not have a version
+        cy.get(CQLEditorPage.codeSystemDropdown).type('ActReason')
+        cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActReason').click()
+        cy.get(CQLEditorPage.codeText).type('16298561000119108')
+        cy.get(CQLEditorPage.codeSystemSearchBtn).should('be.disabled')
 
         //Clear the code search values
         cy.get(CQLEditorPage.clearCodeBtn).click()

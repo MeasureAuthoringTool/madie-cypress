@@ -142,43 +142,6 @@ describe('QI Core: Elements tab is not present', () => {
     })
 })
 
-// "enableQdmRepeatTransfer" : false
-describe('QDM: Measure Version option Should exist', () => {
-
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
-    let newMeasureName = 'TestMeasure' + Date.now() + randValue
-    let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
-
-    beforeEach('Create Measure, add Cohort group and Login', () => {
-
-        //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
-        OktaLogin.Login()
-
-    })
-
-    afterEach('Logout and cleanup', () => {
-
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
-    })
-
-    it('Measure Version option should exist for QDM Draft Measures', () => {
-
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
-            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="measure-action-' + fileContents + '"]', 100000)
-            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.enabled')
-            cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
-            cy.get('[data-testid="create-version-measure-' + fileContents + '"]').should('exist')
-        })
-        cy.reload()
-        Utilities.waitForElementVisible(Header.userProfileSelect, 60000)
-    })
-})
-
 // "generateCMSID": true
 describe('QDM: Generate CMS ID', () => {
 
@@ -205,6 +168,18 @@ describe('QDM: Generate CMS ID', () => {
 
         MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.generateCmsIdButton).click()
+        //
+
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
+        cy.get(EditMeasurePage.cmsIDDialogCancel).click()
+        cy.get(EditMeasurePage.cmsIdInput).should('not.exist')
+        cy.get(EditMeasurePage.generateCmsIdButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
+        cy.get(EditMeasurePage.cmsIDDialogContinue).click()
+
+        //
         cy.get(EditMeasurePage.cmsIdInput).should('exist')
 
     })
@@ -257,35 +232,6 @@ describe('QDM: Configuration sub tab', () => {
         Utilities.waitForElementVisible(TestCasesPage.newTestCaseButton, 60000)
         cy.get(TestCasesPage.configurationSubTab).should('be.visible')
 
-    })
-})
-
-// "manifestExpansion": false
-describe('QDM: Expansion Manifest sub-tab / section is not available when flag is set to false', () => {
-
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
-    let newMeasureName = 'TestMeasure' + Date.now() + randValue
-    let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
-
-    before('Create Measure and Login', () => {
-
-        //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
-        OktaLogin.Login()
-
-    })
-
-    after('Logout and cleanup', () => {
-
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
-    })
-
-    it('"Expansion" is not an available side sub-tab option, on the Test Case list page', () => {
-        MeasuresPage.measureAction('edit')
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.qdmExpansionSubTab).should('not.exist')
     })
 })
 
@@ -353,66 +299,6 @@ describe('QDM: Test Case Export button and it\s sub-action buttons', () => {
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionBundleBtn, 30000)
 
 
-    })
-})
-
-// "QDMCodeSearch": false
-describe('QDM: Code search on CQL editor tab', () => {
-
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
-    let newMeasureName = 'TestMeasure' + Date.now() + randValue
-    let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
-
-    before('Create Measure and Login', () => {
-
-        //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
-        OktaLogin.Login()
-
-    })
-
-    after('Logout and cleanup', () => {
-
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
-    })
-
-    it('QDM Code search page not visible when the feature flag is enabled', () => {
-
-        MeasuresPage.measureAction('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get('[data-testid="codes-tab"]').should('not.exist')
-    })
-})
-
-// "QDMValueSetSearch": false
-describe('QDM: Value Set search on CQL editor tab', () => {
-
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
-    let newMeasureName = 'TestMeasure' + Date.now() + randValue
-    let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
-
-    before('Create Measure and Login', () => {
-
-        //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
-        OktaLogin.Login()
-
-    })
-
-    after('Logout and cleanup', () => {
-
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
-    })
-
-    it('QDM Code search page not visible when the feature flag is enabled', () => {
-
-        MeasuresPage.measureAction('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        Utilities.waitForElementToNotExist(CQLEditorPage.valueSetsTab, 30000)
     })
 })
 
@@ -554,5 +440,93 @@ describe('QDM - to - QI Core measure association: Button to associate a QDM meas
         Utilities.waitForElementToNotExist('[class="MeasureList___StyledDiv3-sc-pt5u8-5 jILQHN"]', 35000)
         Utilities.waitForElementToNotExist('[data-testid="associate_cms_id_tooltip"]', 35000)
 
+    })
+})
+
+//"MeasureListCheckboxes": false
+describe('Measure list page: Check boxes are not present', () => {
+
+    beforeEach('Create Measure', () => {
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
+        QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
+
+        //Create New QDM Measure
+        //0
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName1, QDMCqlLibraryName1, 'Proportion', false, qdmManifestTestCQL, false, false,
+            '2025-01-01', '2025-12-31')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit", false, true, true)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
+    })
+    afterEach('Log Out', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureQDMManifestName1, QDMCqlLibraryName1)
+
+    })
+    it('Confirm that the measure list check boxes feature is turned off', () => {
+        OktaLogin.Login()
+        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 35000)
+        Utilities.waitForElementVisible('[class="cursor-pointer select-none header-button"]', 35000)
+
+        //check boxes are not present
+        Utilities.waitForElementToNotExist('[data-testid="measure-name-0_select"]', 35000)
+    })
+})
+
+//"CQLBuilderDefinitions": false
+describe('CQL Editor Page: Definition sub tab is not present', () => {
+
+    beforeEach('Create Measure', () => {
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
+        QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
+
+        //Create New QDM Measure
+        //0
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName1, QDMCqlLibraryName1, 'Proportion', false, qdmManifestTestCQL, false, false,
+            '2025-01-01', '2025-12-31')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit", false, true, true)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
+    })
+    afterEach('Log Out', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureQDMManifestName1, QDMCqlLibraryName1)
+
+    })
+    it('Confirm that the CQL Editor definition sub tab feature is turned off', () => {
+        OktaLogin.Login()
+
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to the CQL Editor page
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        //check boxes are not present
+        Utilities.waitForElementToNotExist(CQLEditorPage.cqlEditorPageDefinitionSubTab, 3500)
     })
 })
