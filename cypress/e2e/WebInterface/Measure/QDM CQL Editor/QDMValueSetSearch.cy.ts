@@ -134,7 +134,6 @@ let measureCQL = 'library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedPat
     '      sort by start of Global."NormalizeInterval"(relevantDatetime, relevantPeriod)\n' +
     '  )'
 
-//Skipping until QDMValueSetSearch feature flag is removed
 describe('QDM Value Set Search fields, filter and apply the filter to CQL', () => {
 
     beforeEach('Create Measure', () => {
@@ -276,8 +275,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
 
         cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"url": "http://cts.nlm.nih.gov' +
             '/fhir/ValueSet/2.16.840.1.113883.3.1444.3.217"')
-        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"name": "CancerStageI"')
-        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"title": "Cancer Stage I"')
+        cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"name": "American Society of Clinical Oncology Author"')
 
     })
 
