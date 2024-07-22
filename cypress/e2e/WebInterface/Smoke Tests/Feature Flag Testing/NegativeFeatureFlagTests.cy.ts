@@ -168,6 +168,18 @@ describe('QDM: Generate CMS ID', () => {
 
         MeasuresPage.measureAction('edit')
         cy.get(EditMeasurePage.generateCmsIdButton).click()
+        //
+
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
+        cy.get(EditMeasurePage.cmsIDDialogCancel).click()
+        cy.get(EditMeasurePage.cmsIdInput).should('not.exist')
+        cy.get(EditMeasurePage.generateCmsIdButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
+        cy.get(EditMeasurePage.cmsIDDialogContinue).click()
+
+        //
         cy.get(EditMeasurePage.cmsIdInput).should('exist')
 
     })
