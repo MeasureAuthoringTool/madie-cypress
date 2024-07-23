@@ -152,7 +152,7 @@ export class MeasuresPage {
                 }
                 case 'draft': {
 
-                    cy.get('[data-testid="measure-action-' + fileContents + '"]').click().wait(1000)
+                    cy.get('[data-testid="measure-action-' + fileContents + '"]').click().wait(3000)
                     Utilities.waitForElementVisible('[data-testid="draft-measure-' + fileContents + '"]', 105000)
                     cy.get('[data-testid="draft-measure-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="draft-measure-' + fileContents + '"]', 105000)
