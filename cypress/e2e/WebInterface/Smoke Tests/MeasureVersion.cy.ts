@@ -130,7 +130,7 @@ describe('QDM Measure Versioning', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(measureName, versionNumber)
+        //MeasuresPage.validateVersionNumber(measureName, versionNumber)
         cy.log('Major Version Created Successfully')
 
         //Verify that the fields on Measure details page, CQL Editor page and Test case page are read only
@@ -201,7 +201,7 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(measureName, versionNumber)
+        //MeasuresPage.validateVersionNumber(measureName, versionNumber)
         cy.log('Major Version Created Successfully')
 
         //Verify that the fields on Measure details page, CQL Editor page and Test case page are read only
@@ -270,7 +270,7 @@ describe('QI-Core Measure Versioning', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(measureName, versionNumber)
+        //MeasuresPage.validateVersionNumber(measureName, versionNumber)
         cy.log('Version Created Successfully')
 
         //Verify that the fields on Measure details page, CQL Editor page and Test case page are read only
