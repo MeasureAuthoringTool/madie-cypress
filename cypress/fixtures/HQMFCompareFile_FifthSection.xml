@@ -1,4 +1,3 @@
-
          </value>
       </measurePeriod>
    </controlVariable>
@@ -49,8 +48,8 @@
          <code code="MSRTYPE" codeSystem="2.16.840.1.113883.5.4">
             <displayName value="Measure Type"/>
          </code>
-         <value code="PROCESS" codeSystem="2.16.840.1.113883.5.1063" xsi:type="CD">
-            <displayName value="PROCESS"/>
+         <value code="Process" codeSystem="2.16.840.1.113883.5.1063" xsi:type="CD">
+            <displayName value="Process"/>
          </value>
       </measureAttribute>
    </subjectOf>
@@ -59,96 +58,4 @@
          <code code="STRAT" codeSystem="2.16.840.1.113883.5.4">
             <displayName value="Stratification"/>
          </code>
-         <value mediaType="text/plain" value="None" xsi:type="ED"/>
-      </measureAttribute>
-   </subjectOf>
-   <subjectOf>
-      <measureAttribute>
-         <code code="MSRADJ" codeSystem="2.16.840.1.113883.5.4">
-            <displayName value="Risk Adjustment"/>
-         </code>
-         <value mediaType="text/plain" value="" xsi:type="ED"/>
-      </measureAttribute>
-   </subjectOf>
-   <subjectOf>
-      <measureAttribute>
-         <code code="MSRAGG" codeSystem="2.16.840.1.113883.5.4">
-            <displayName value="Rate Aggregation"/>
-         </code>
-         <value mediaType="text/plain" value="" xsi:type="ED"/>
-      </measureAttribute>
-   </subjectOf>
-   <subjectOf>
-      <measureAttribute>
-         <code code="RAT" codeSystem="2.16.840.1.113883.5.4">
-            <displayName value="Rationale"/>
-         </code>
-         <value mediaType="text/plain" value="" xsi:type="ED"/>
-      </measureAttribute>
-   </subjectOf>
-   <subjectOf>
-      <measureAttribute>
-         <code code="CRS" codeSystem="2.16.840.1.113883.5.4">
-            <displayName value="Clinical Recommendation Statement"/>
-         </code>
-         <value mediaType="text/plain" value="" xsi:type="ED"/>
-      </measureAttribute>
-   </subjectOf>
-   <subjectOf>
-      <measureAttribute>
-         <code code="IDUR" codeSystem="2.16.840.1.113883.5.4">
-            <displayName value="Improvement Notation"/>
-         </code>
-         <value mediaType="text/plain" value="" xsi:type="ED"/>
-      </measureAttribute>
-   </subjectOf>
-   <subjectOf>
-      <measureAttribute>
-         <code code="REF" codeSystem="2.16.840.1.113883.5.4">
-            <displayName value="Reference"/>
-         </code>
-         <value mediaType="text/plain" xsi:type="ED"/>
-      </measureAttribute>
-   </subjectOf>
-   <subjectOf>
-      <measureAttribute>
-         <code code="DEF" codeSystem="2.16.840.1.113883.5.4">
-            <displayName value="Definition"/>
-         </code>
-         <value mediaType="text/plain" xsi:type="ED"/>
-      </measureAttribute>
-   </subjectOf>
-   <subjectOf>
-      <measureAttribute>
-         <code code="GUIDE" codeSystem="2.16.840.1.113883.5.4">
-            <displayName value="Guidance"/>
-         </code>
-         <value mediaType="text/plain" value="" xsi:type="ED"/>
-      </measureAttribute>
-   </subjectOf>
-   <subjectOf>
-      <measureAttribute>
-         <code code="TRANF" codeSystem="2.16.840.1.113883.5.4">
-            <displayName value="Transmission Format"/>
-         </code>
-         <value mediaType="text/plain" value="" xsi:type="ED"/>
-      </measureAttribute>
-   </subjectOf>
-   <subjectOf>
-      <measureAttribute>
-         <code code="IPOP" codeSystem="2.16.840.1.113883.5.4">
-            <displayName value="Initial Population"/>
-         </code>
-         <value mediaType="text/plain" value="None" xsi:type="ED"/>
-      </measureAttribute>
-   </subjectOf>
-   <subjectOf>
-      <measureAttribute>
-         <code code="SDE" codeSystem="2.16.840.1.113883.5.4">
-            <displayName value="Supplemental Data Elements"/>
-         </code>
-         <value mediaType="text/plain" value="" xsi:type="ED"/>
-      </measureAttribute>
-   </subjectOf>
-   <componentOf>
-      <qualityMeasureSet classCode="ACT">
+         <value mediaType="text/plain" value="None" xsi
