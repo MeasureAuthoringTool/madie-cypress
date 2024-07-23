@@ -125,7 +125,8 @@ export class MeasuresPage {
                     break
                 }
                 case 'qdmexport': {
-
+                    cy.wait(3750)
+                    cy.get('[data-testid="measure-action-' + fileContents + '"]').scrollIntoView()
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
                     Utilities.waitForElementVisible('[data-testid="export-measure-' + fileContents + '"]', 105000)
