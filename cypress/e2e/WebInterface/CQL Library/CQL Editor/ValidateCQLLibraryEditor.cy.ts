@@ -147,7 +147,7 @@ describe('Validate CQL on CQL Library page', () => {
         cy.scrollTo('top')
         cy.get(EditMeasurePage.cqlEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, '"status\\":404,\\"error\\":\\"Not Found\\",\\"message\\":\\"Could not find resource Library with name: HospiceQICore4\\"}\\"')
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, '\\"message\\":\\"Could not find resource Library with name: HospiceQICore4\\",\\"status\\":404,\\"error\\":\\"Not Found\\"}\\"')
 
     })
 })
