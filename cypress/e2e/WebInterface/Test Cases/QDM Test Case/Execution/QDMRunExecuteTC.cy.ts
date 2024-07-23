@@ -115,6 +115,7 @@ describe('Test case Coverage tab', () => {
 
         //success message that appears after import
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', '(82) Test cases imported successfully')
+        cy.wait(4000)
 
         //run test cases
         cy.get(TestCasesPage.executeTestCaseButton).click().wait(3000)
@@ -190,6 +191,8 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.testCaseAction('edit')
+        //enter a value of the dob, Race and gender
+        TestCasesPage.enterPatientDemographics('07/01/2002', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')

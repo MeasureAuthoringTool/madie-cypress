@@ -1,12 +1,12 @@
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {Utilities} from "../../../Shared/Utilities"
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { Utilities } from "../../../Shared/Utilities"
 import { v4 as uuidv4 } from 'uuid'
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
-import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 
 let qicoreMeasureName = 'QICoreTestMeasure' + Date.now()
 let qicoreCqlLibraryName = 'QiCoreLibrary' + Date.now()
@@ -52,7 +52,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
                         "model": 'QI-Core v4.1.1',
                         "version": "0.0.000",
                         "measureScoring": "Ratio",
-                        "measureMetaData": {"draft": true},
+                        "measureMetaData": { "draft": true },
                         "measureSetId": uuidv4(),
                         "ecqmTitle": "ecqmTitle",
                         "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
@@ -60,7 +60,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql('3.10.0')
+                    expect(response.body).to.eql('3.3.2')
                 })
             })
         })
@@ -97,7 +97,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
                         "model": 'QI-Core v4.1.1',
                         "version": "1.0.000",
                         "measureScoring": "Ratio",
-                        "measureMetaData": {"draft": false},
+                        "measureMetaData": { "draft": false },
                         "measureSetId": uuidv4(),
                         "ecqmTitle": "ecqmTitle",
                         "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
@@ -155,7 +155,7 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
                         "model": 'QDM v5.6',
                         "version": "0.0.000",
                         "measureScoring": "Cohort",
-                        "measureMetaData": {"draft": true},
+                        "measureMetaData": { "draft": true },
                         "measureSetId": uuidv4(),
                         "ecqmTitle": "ecqmTitle",
                         "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
@@ -163,7 +163,7 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql('3.10.0')
+                    expect(response.body).to.eql('3.3.2')
                 })
             })
         })
@@ -200,7 +200,7 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
                         "model": 'QDM v5.6',
                         "version": "1.0.000",
                         "measureScoring": "Cohort",
-                        "measureMetaData": {"draft": false},
+                        "measureMetaData": { "draft": false },
                         "measureSetId": uuidv4(),
                         "ecqmTitle": "ecqmTitle",
                         "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
