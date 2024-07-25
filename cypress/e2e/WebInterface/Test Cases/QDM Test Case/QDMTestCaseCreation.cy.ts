@@ -7,6 +7,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import {QDMElements} from "../../../../Shared/QDMElements";
 
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
@@ -420,7 +421,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         //Element - Medication:Discharged: Antithrombotic Therapy for Ischemic Stroke
         cy.get('[data-testid="elements-tab-medication"]').click()
         cy.get('[data-testid="data-type-Medication, Discharge: Antithrombotic Therapy for Ischemic Stroke"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('06/01/2025 01:00 PM')
+        cy.get(TestCasesPage.authorDateTime).type('06/01/2025 01:00 PM')
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-RxNORM"]').click()
@@ -466,8 +467,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         //Element - Encounter:Performed: Nonelective Inpatient Encounter
         cy.get('[data-testid="elements-tab-encounter"]').scrollIntoView().click()
         cy.get('[data-testid="data-type-Encounter, Performed: Nonelective Inpatient Encounter"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('06/01/2025 01:00 PM')
-        cy.get('[id="dateTime"]').eq(1).type('06/02/2025 01:00 PM')
+        QDMElements.addTimingRelevantPeriodDateTime('06/01/2025 01:00 PM', '06/02/2025 01:00 PM')
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
