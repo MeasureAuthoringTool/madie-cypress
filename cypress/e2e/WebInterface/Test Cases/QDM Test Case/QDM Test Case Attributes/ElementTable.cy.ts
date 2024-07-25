@@ -73,8 +73,8 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         cy.get(TestCasesPage.referenceRangeAttribute).click()
         cy.get(TestCasesPage.attributeType).should('contain.text', 'Interval<Quantity>')
 
-        //adding a date value tot he attribute
-        cy.get('[id="dateTime"]').eq(0).type('09/12/2023 12:00 AM')
+        //adding a date value to the attribute
+        cy.get(TestCasesPage.relevantPeriodStartDate).type('09/12/2023 12:00 AM')
 
         //adding values to the attribute
         cy.get('[data-testid="quantity-value-input-low"]').type('2')
@@ -142,8 +142,8 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         cy.get(TestCasesPage.referenceRangeAttribute).click()
         cy.get(TestCasesPage.attributeType).should('contain.text', 'Interval<Quantity>')
 
-        //adding a date value tot he attribute
-        cy.get('[id="dateTime"]').eq(0).type('09/12/2023 12:00 AM')
+        //adding a date value to the attribute
+        cy.get(TestCasesPage.relevantPeriodStartDate).type('09/12/2023 12:00 AM')
 
         //adding values to the attribute
         cy.get('[data-testid="quantity-value-input-low"]').type('2')

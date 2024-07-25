@@ -96,6 +96,11 @@ export class TestCasesPage {
     public static readonly LaboratorySLTCard = '[data-testid="data-type-Laboratory Test, Performed: Sodium lab test"]'
     public static readonly LaboratoryPLTCard = '[data-testid="data-type-Laboratory Test, Performed: Potassium lab test"]'
     public static readonly LaboratoryCLTCard = '[data-testid="data-type-Laboratory Test, Performed: Creatinine lab test"]'
+    public static readonly relevantPeriodStartDate = '[data-testid="Relevant Period - Start-input"]'
+    public static readonly relevantPeriodEndDate = '[data-testid="Relevant Period - End-input"]'
+    public static readonly authorDateTime = '[data-testid="Author Datetime-input"]'
+    public static readonly prevalencePeriodStartDate = '[data-testid="Prevalence Period - Start-input"]'
+    public static readonly prevalencePeriodEndDate = '[data-testid="Prevalence Period - End-input"]'
 
     //QDM Test Case Elements elements / objects -- Characteristic
     public static readonly CharacteristicMAPCard = '[data-testid="data-type-Patient Characteristic Payer: Medicare Advantage payer"]'
@@ -382,7 +387,7 @@ export class TestCasesPage {
     public static readonly valueSetSelector = '[data-testid="value-set-selector"]'
     public static readonly ABEMBDiathesisValue = '[data-testid="option-2.16.840.1.113883.3.3157.4036"]'
     public static readonly attributeType = '[id="type-select"]'
-    public static readonly attributeChip = '[class="chip-body"]'
+    public static readonly attributeChip = 'tbody > tr > :nth-child(3)'
     public static readonly codeSystemSelector = '[id="code-system-selector"]'
     public static readonly codeSNOMEDCTValue = '[data-testid="option-SNOMEDCT"]'
     public static readonly codeLOINCValue = '[data-testid="code-system-option-LOINC"]'

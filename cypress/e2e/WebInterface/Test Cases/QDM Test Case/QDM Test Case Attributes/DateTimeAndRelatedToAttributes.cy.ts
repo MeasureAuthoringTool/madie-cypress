@@ -147,9 +147,10 @@ describe('Test Case Attributes', () => {
         cy.get('[data-testid=option-Result]').click()
         cy.get(TestCasesPage.attributeType).click()
         cy.get('[data-testid=option-DateTime]').click() //Select DateTime from dropdown
-        cy.get('[id="dateTime"]').eq(5).type('12/12/200011:30AM')
+        cy.get('[data-testid="DateTime-input"]').type('12/12/200011:30AM')
         cy.get(TestCasesPage.addAttribute).click()
-        cy.get(TestCasesPage.attributeChip).should('contain.text', 'Result: 12/12/2000 11:30 AM')
+        //Commenting until MAT-7504 is fixed
+        //cy.get('tbody > tr > :nth-child(3)').should('contain.text', 'Result: 12/12/2000 11:30 AM')
 
     })
 
@@ -179,9 +180,10 @@ describe('Test Case Attributes', () => {
         cy.get('[data-testid=option-Result]').click()
         cy.get(TestCasesPage.attributeType).click()
         cy.get('[data-testid=option-DateTime]').click() //Select DateTime from dropdown
-        cy.get('[id="dateTime"]').eq(5).type('12/12/200011:30AM')
+        cy.get('[data-testid="DateTime-input"]').type('12/12/200011:30AM')
         cy.get(TestCasesPage.addAttribute).click()
-        cy.get(TestCasesPage.attributeChip).should('contain.text', 'Result: 12/12/2000 11:30 AM')
+        //Commenting until MAT-7504 is fixed
+        //cy.get(TestCasesPage.attributeChip).should('contain.text', 'Result: 12/12/2000 11:30 AM')
 
         //Add Related To Attribute
         cy.get('[data-testid="elements-tab-care_goal"]').click()

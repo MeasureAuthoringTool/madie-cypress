@@ -1,3 +1,4 @@
+import {TestCasesPage} from "./TestCasesPage";
 
 export class QDMElements {
 
@@ -73,8 +74,14 @@ export class QDMElements {
 
     public static addTimingRelevantPeriodDateTime(startDateAndTime: string, endDateAndTime: string): void {
 
-        cy.get('[id="dateTime"]').eq(0).type(startDateAndTime)
-        cy.get('[id="dateTime"]').eq(1).type(endDateAndTime)
+        cy.get(TestCasesPage.relevantPeriodStartDate).type(startDateAndTime)
+        cy.get(TestCasesPage.relevantPeriodEndDate).type(endDateAndTime)
+    }
+
+    public static addTimingPrevalencePeriodDateTime(startDateAndTime: string, endDateAndTime: string): void {
+
+        cy.get(TestCasesPage.prevalencePeriodStartDate).type(startDateAndTime)
+        cy.get(TestCasesPage.prevalencePeriodEndDate).type(endDateAndTime)
     }
 
     public static addCode(codeSystem: string, code: string): void {

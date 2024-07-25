@@ -280,7 +280,7 @@ describe('QDM Test Case Excel Export', () => {
         //Element - Laboratory Test:Performed: Sodium lab test
         //add Element
         QDMElements.addElement('laboratory', 'Performed: Sodium lab test')
-        cy.get('[id="dateTime"]').eq(1).type('06/20/2012 12:01 PM')
+        cy.get(TestCasesPage.relevantPeriodEndDate).type('06/20/2012 12:01 PM')
         //add Code
         QDMElements.addCode('LOINC', '2947-0')
         // Enter attribute and its type
@@ -295,7 +295,7 @@ describe('QDM Test Case Excel Export', () => {
         //Element - Laboratory Test:Performed: Sodium lab test
         //add Element
         QDMElements.addElement('laboratory', 'Performed: Sodium lab test')
-        cy.get('[id="dateTime"]').eq(1).type('06/21/2012 12:03 PM')
+        cy.get(TestCasesPage.relevantPeriodEndDate).type('06/21/2012 12:03 PM')
         //add Code
         QDMElements.addCode('LOINC', '2947-0')
         // Enter attribute and its type
@@ -338,7 +338,7 @@ describe('QDM Test Case Excel Export', () => {
         //Element - Laboratory Test:Performed: Sodium lab test
         //add Element
         QDMElements.addElement('laboratory', 'Performed: Sodium lab test')
-        cy.get('[id="dateTime"]').eq(1).type('06/19/2012 12:01 PM')
+        cy.get(TestCasesPage.relevantPeriodEndDate).type('06/19/2012 12:01 PM')
         //add Code
         QDMElements.addCode('LOINC', '2947-0')
         // Enter attribute and its type

@@ -277,8 +277,9 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //Element - Condition:Diagnosis: Uveitis
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Uveitis')
-        //add Timing Relevant Period DateTime
-        QDMElements.addTimingRelevantPeriodDateTime('03/15/2012 07:00 PM', '03/15/2012 07:00 PM')
+        //add Timing Prevalence Period DateTime
+        cy.get('[data-testid="Prevalence Period - Start-input"]').type('03/15/2012 07:00 PM')
+        cy.get('[data-testid="Prevalence Period - End-input"]').type('03/15/2012 07:00 PM')
         cy.wait(3000)
         //add Code
         QDMElements.addCode('SNOMEDCT', '4927003')
@@ -296,7 +297,8 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Optic Atrophy')
         //add Timing Relevant Period DateTime
-        QDMElements.addTimingRelevantPeriodDateTime('03/15/2012 07:00 PM', '03/15/2012 07:00 PM')
+        cy.get('[data-testid="Prevalence Period - Start-input"]').type('03/15/2012 07:00 PM')
+        cy.get('[data-testid="Prevalence Period - End-input"]').type('03/15/2012 07:00 PM')
         cy.wait(3000)
         //add Code
         QDMElements.addCode('SNOMEDCT', '111527005')
@@ -324,8 +326,9 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //Element - Condition:Diagnosis: Disorders of Visual Cortex
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Disorders of Visual Cortex')
-        //add Timing Relevant Period DateTime
-        QDMElements.addTimingRelevantPeriodDateTime('01/01/2012 01:15 PM', '01/02/2012 01:15 PM')
+        //add Timing Prevalence Period DateTime
+        cy.get('[data-testid="Prevalence Period - Start-input"]').type('01/01/2012 01:15 PM')
+        cy.get('[data-testid="Prevalence Period - End-input"]').type('01/02/2012 01:15 PM')
         //add Code
         QDMElements.addCode('Icd10CM', 'H47.611')
 
@@ -352,7 +355,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //Element - Physical Exam:Performed: Best Corrected Visual Acuity Exam Using Snellen Chart
         //add Element
         QDMElements.addElement('physicalexam', 'Performed: Best Corrected Visual Acuity Exam Using Snellen Chart')
-        cy.get('[id="dateTime"]').eq(2).type('02/02/2012 01:15 PM')
+        cy.get(TestCasesPage.authorDateTime).type('02/02/2012 01:15 PM')
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid="option-Result"]').click()
