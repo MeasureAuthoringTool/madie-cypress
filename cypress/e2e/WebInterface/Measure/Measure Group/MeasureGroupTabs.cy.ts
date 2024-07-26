@@ -954,13 +954,13 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
         //select a definition and enter a description for ipp
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('ipp').click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).eq(0).contains('ipp').click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
             .first() // select the first element
             .type('Initial Population Description')
         //select a definition and enter a description for denom
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).eq(0).click()
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('denom').click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
 
@@ -1054,13 +1054,15 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
             .first() // select the first element
             .type('Initial Population Description')
 
+        //'Include in Report Type' field added when Supplemental data element is added
+        cy.get(MeasureGroupPage.includeInReportTypeField).should('exist')
+        cy.get(MeasureGroupPage.QDMSupplementalDataDefinitionSelect).eq(1).click()
+        cy.get(MeasureGroupPage.includeInReportTypeDropdownList).should('contain.text', 'Individual' && 'Subject List' && 'Summary' && 'Data Collection')
+        cy.get(MeasureGroupPage.QDMSupplementalDataDefinitionSelect).eq(1).click()
+
         //Save Supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
         cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
-
-        //Click on clear Icon and verify description field is removed
-        cy.get(MeasureGroupPage.cancelIcon).click({ force: true })
-
 
     })
 

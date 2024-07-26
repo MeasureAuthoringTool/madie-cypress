@@ -242,6 +242,8 @@ export class MeasureGroupPage {
     public static readonly discardChangesConfirmationMsg = '.MuiDialogContent-root'
     public static readonly discardChangesContinueBtn = '[data-testid="discard-dialog-continue-button"]'
     public static readonly supplementalDataDefinitionTextBox = '#supplementalDataElements'
+    public static readonly includeInReportTypeField= '[data-testid="ipp-include-in-report-type-dropdown"]'
+    public static readonly includeInReportTypeDropdownList = '#ipp-include-in-report-type-listbox'
 
 
     public static createMeasureGroupforProportionMeasure(): void {
