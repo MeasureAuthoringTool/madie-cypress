@@ -353,8 +353,12 @@ export class TestCasesPage {
     public static readonly importTestCaseSuccessMessage = '[data-testid="population-criteria-success"]'
     public static readonly importTestCaseAlertMessage = '[class="madie-alert warning"]'
     public static readonly importTestCaseDetailedAlertMessage = '[class="StatusHandler___StyledSpan-sc-1tujbo9-0 dBOLeU"]'
-    public static readonly importTestCaseBtn = '[data-testid=import-test-case-btn]'
-    public static readonly testCaseFileImport = '[data-testid=import-file-input]'
+    public static readonly importTestCaseBtn = '[data-testid="import-test-case-btn"]'
+    public static readonly testCaseFileImport = '[data-testid="import-file-input"]'
+    public static readonly tcFileDropInput = '[data-testid="file-drop-input"]'
+    public static readonly tcFileDrop = '[data-testid="file-drop-div"]'
+    public static readonly tcImportButton = '[data-testid="select-file-button"]'
+    public static readonly tcImportError = '[data-testid="test-case-import-error-div"]'
     public static readonly testCasesNonBonnieFileImportModal = '[data-testid="test-case-import-content-div"]'
     public static readonly testCasesNonBonnieFileImport = '[data-testid="file-drop-input"]'
     public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile = '.TestCaseImportDialog___StyledSmall-sc-v92oci-5'
@@ -831,7 +835,7 @@ export class TestCasesPage {
                                 "code": 201,
                                 "message": null,
                                 "outcomeResponse": null
-                             }
+                            }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(201)
