@@ -964,6 +964,18 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('denom').click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
 
+        //'Include in Report Type' field added for Initial Population when Risk adjustment variable is added
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeField).should('exist')
+        cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Individual' && 'Subject List' && 'Summary' && 'Data Collection')
+        cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
+
+        //'Include in Report Type' field added for Denominator when Risk adjustment variable is added
+        cy.get(MeasureGroupPage.denomIncludeInReportTypeField).should('exist')
+        cy.get('[data-testid=ArrowDropDownIcon]').eq(2).click()
+        cy.get(MeasureGroupPage.denomIncludeInReportTypeDropdownList).should('contain.text', 'Individual' && 'Subject List' && 'Summary' && 'Data Collection')
+        cy.get('[data-testid=ArrowDropDownIcon]').eq(2).click()
+
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
         cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
@@ -1055,10 +1067,10 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
             .type('Initial Population Description')
 
         //'Include in Report Type' field added when Supplemental data element is added
-        cy.get(MeasureGroupPage.includeInReportTypeField).should('exist')
-        cy.get(MeasureGroupPage.QDMSupplementalDataDefinitionSelect).eq(1).click()
-        cy.get(MeasureGroupPage.includeInReportTypeDropdownList).should('contain.text', 'Individual' && 'Subject List' && 'Summary' && 'Data Collection')
-        cy.get(MeasureGroupPage.QDMSupplementalDataDefinitionSelect).eq(1).click()
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeField).should('exist')
+        cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Individual' && 'Subject List' && 'Summary' && 'Data Collection')
+        cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
 
         //Save Supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
@@ -1066,7 +1078,6 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
     })
 
-    //Ethan is working on dup class element issue
     it('Clicking on Discard changes button on Supplemental data elements page will revert the changes made before save', () => {
 
         MeasuresPage.measureAction("edit")
