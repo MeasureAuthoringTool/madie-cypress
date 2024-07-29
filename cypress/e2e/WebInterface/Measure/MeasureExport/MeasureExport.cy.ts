@@ -5,6 +5,7 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import {Header} from "../../../../Shared/Header";
 
 let versionNumber = '1.0.000'
 
@@ -45,7 +46,8 @@ let baseXMLFileThirteenthSection = 'cypress/fixtures/QICoreHQMFCompareFile_Thirt
 let baseXMLFileFourteenthSection = 'cypress/fixtures/QICoreHQMFCompareFile_FourteenthSection.xml'
 let baseXMLFileFifteenthSection = 'cypress/fixtures/QICoreHQMFCompareFile_FifteenthSection.xml'
 let baseXMLFileSixteenthSection = 'cypress/fixtures/QICoreHQMFCompareFile_SixteenthSection.xml'
-
+let baseXMLFileSDESection = 'cypress/fixtures/QICoreHQMFCompareFile_SDESection.xml'
+let baseXMLFileRAVSection = 'cypress/fixtures/QICoreHQMFCompareFile_RAVSection.xml'
 
 let exported = ''
 let expected = ''
@@ -134,6 +136,60 @@ describe('QI-Core Measure Export', () => {
 
     it('Validate the zip file Export is downloaded for QI-Core Measure', () => {
 
+        //Add RAV to the Measure
+        MeasuresPage.measureAction("edit")
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Click on Risk Adjustment tab
+        cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
+        //select a definition and enter a description for ipp
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).eq(0).contains('ipp').click()
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
+            .first() // select the first element
+            .type('Initial Population Description')
+        //select a definition and enter a description for denom
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).eq(0).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('denom').click()
+        cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
+
+        //'Include in Report Type' field added for Initial Population when Risk adjustment variable is added
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeField).should('exist')
+        cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Individual' && 'Subject List' && 'Summary' && 'Data Collection')
+        cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
+
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click()
+        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+
+        //Add SDE to the Measure
+        //Click on Supplemental data tab
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('ipp').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
+            .first() // select the first element
+            .type('Initial Population Description')
+
+        //'Include in Report Type' field added when Supplemental data element is added
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeField).should('exist')
+        cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Individual' && 'Subject List' && 'Summary' && 'Data Collection')
+        cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
+
+        //Save Supplemental data
+        cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
+        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+
+        //Navigate to Measures page
+        cy.get(Header.measures).click()
         MeasuresPage.measureAction('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -445,6 +501,20 @@ describe.skip('QI-Core Measure Export: Validating contents of Human Readable and
                 debugger
                 expected = dataComparedSixteenth.toString() //'compareFile'
                 cy.log('expected Sixteenth section file contents are: \n' + expected)
+                expect((exported).toString()).to.includes((expected).toString())
+            })
+
+            cy.readFile(baseXMLFileSDESection).should('exist').then((dataComparedSDE) => {
+                debugger
+                expected = dataComparedSDE.toString() //'compareFile'
+                cy.log('expected SDE file contents are: \n' + expected)
+                expect((exported).toString()).to.includes((expected).toString())
+            })
+
+            cy.readFile(baseXMLFileRAVSection).should('exist').then((dataComparedRAV) => {
+                debugger
+                expected = dataComparedRAV.toString() //'compareFile'
+                cy.log('expected RAV file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
         })
