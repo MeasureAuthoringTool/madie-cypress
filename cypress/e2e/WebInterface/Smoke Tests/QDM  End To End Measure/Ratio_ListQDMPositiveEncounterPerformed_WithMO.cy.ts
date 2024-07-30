@@ -347,7 +347,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //Element - Condition: Diagnosis: Diabetes
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Diabetes')
-        cy.get('[id="dateTime"]').eq(0).type('07/09/2023 08:00 AM')
+        cy.get(TestCasesPage.prevalencePeriodStartDate).type('07/09/2023 08:00 AM')
         //add Code
         QDMElements.addCode('SNOMEDCT', '46635009')
 
@@ -362,7 +362,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
         //add Element
         QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
-        cy.get('[id="dateTime"]').eq(2).type('07/11/2023 07:00 AM')
+        cy.get('[data-testid="Relevant Datetime-input"]').type('07/11/2023 07:00 AM')
         //add Code
         QDMElements.addCode('LOINC', '1556-0')
         // Enter attribute and its type
@@ -383,7 +383,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
         //add Element
         QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
-        cy.get('[id="dateTime"]').eq(2).type('10/13/2023 08:00 AM')
+        cy.get('[data-testid="Relevant Datetime-input"]').type('10/13/2023 08:00 AM')
         //add Code
         QDMElements.addCode('LOINC', '1556-0')
         // Enter attribute and its type
@@ -430,7 +430,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Diabetes')
         //add Timing Relevant Period DateTime
-        QDMElements.addTimingRelevantPeriodDateTime('07/09/2023 08:00 AM', '07/11/2023 08:00 AM')
+        QDMElements.addTimingPrevalencePeriodDateTime('07/09/2023 08:00 AM', '07/11/2023 08:00 AM')
         //add Code
         QDMElements.addCode('SNOMEDCT', '46635009')
 
@@ -451,7 +451,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
         //add Element
         QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
-        cy.get('[id="dateTime"]').eq(2).type('07/11/2023 08:00 AM')
+        cy.get('[data-testid="Relevant Datetime-input"]').type('07/11/2023 08:00 AM')
         //add Code
         QDMElements.addCode('LOINC', '1556-0')
         // Enter attribute and its type

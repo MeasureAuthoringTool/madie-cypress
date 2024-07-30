@@ -7,6 +7,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage";
+import {QDMElements} from "../../../../Shared/QDMElements";
 
 let measureName = 'CVWithMOAndStratification' + Date.now()
 let CqlLibraryName = 'CVWithMOAndStratification' + Date.now()
@@ -243,8 +244,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         //Element - Encounter:Performed:Emergency Department Visit
         cy.get('[data-testid="elements-tab-encounter"]').click()
         cy.get('[data-testid="data-type-Encounter, Performed: Emergency Department Visit"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('06/10/2025 05:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('06/10/2025 07:15 AM')
+        QDMElements.addTimingRelevantPeriodDateTime('06/10/2025 05:00 AM', '06/10/2025 07:15 AM')
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
         cy.get('[id="code-selector"]').click()
@@ -259,7 +259,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="option-SNOMEDCT"]').click()
         cy.get('[id="code-selector"]').click()
         cy.get('[data-testid="option-4525004"]').click()
-        cy.get('[id="dateTime"]').eq(3).type('06/10/2025 05:00 AM')
+        cy.get(TestCasesPage.authorDateTime).type('06/10/2025 05:00 AM')
         cy.get('[id="dateTime"]').eq(4).type('06/10/2025 08:00 AM')
         cy.get('[data-testid="add-attribute-button"]').click()
         cy.get('[id="attribute-select"]').click()
@@ -273,8 +273,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         //Element - Encounter:Performed:Encounter Inpatient
         cy.get('[data-testid="elements-tab-encounter"]').click()
         cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('06/10/2025 07:15 AM')
-        cy.get('[id="dateTime"]').eq(1).type('06/10/2025 10:00 AM')
+        QDMElements.addTimingRelevantPeriodDateTime('06/10/2025 07:15 AM', '06/10/2025 10:00 AM')
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
@@ -293,7 +292,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         //Element - Encounter, Order Decision to Admit to Hospital Inpatient
         cy.get('[data-testid="elements-tab-encounter"]').click()
         cy.get('[data-testid="data-type-Encounter, Order: Decision to Admit to Hospital Inpatient"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('06/10/2025 07:00 AM')
+        cy.get(TestCasesPage.relevantPeriodStartDate).type('06/10/2025 07:00 AM')
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
@@ -330,8 +329,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         //Element - Encounter:Performed:Emergency Department Visit
         cy.get('[data-testid="elements-tab-encounter"]').click()
         cy.get('[data-testid="data-type-Encounter, Performed: Emergency Department Visit"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('01/29/2025 08:30 AM')
-        cy.get('[id="dateTime"]').eq(1).type('01/29/2025 06:00 PM')
+        QDMElements.addTimingRelevantPeriodDateTime('01/29/2025 08:30 AM', '01/29/2025 06:00 PM')
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
         cy.get('[id="code-selector"]').click()
@@ -346,7 +344,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="option-SNOMEDCT"]').click()
         cy.get('[id="code-selector"]').click()
         cy.get('[data-testid="option-4525004"]').click()
-        cy.get('[id="dateTime"]').eq(3).type('01/29/2025 08:30 AM')
+        cy.get(TestCasesPage.authorDateTime).type('01/29/2025 08:30 AM')
         cy.get('[id="dateTime"]').eq(4).type('01/29/2025 06:15 PM')
         cy.get('[data-testid="add-attribute-button"]').click()
         //Close the Element
@@ -355,8 +353,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         //Element - Encounter:Performed:Encounter Inpatient
         cy.get('[data-testid="elements-tab-encounter"]').click()
         cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('01/29/2025 06:55 PM')
-        cy.get('[id="dateTime"]').eq(1).type('01/30/2025 08:15 AM')
+        QDMElements.addTimingRelevantPeriodDateTime('01/29/2025 06:55 PM', '01/30/2025 08:15 AM')
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
@@ -369,7 +366,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         //Element - Encounter: Order: Decision to Admit to Hospital Inpatient
         cy.get('[data-testid="elements-tab-encounter"]').click()
         cy.get('[data-testid="data-type-Encounter, Order: Decision to Admit to Hospital Inpatient"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('01/29/2025 05:30 PM')
+        cy.get(TestCasesPage.relevantPeriodStartDate).type('01/29/2025 05:30 PM')
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
@@ -382,8 +379,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         //Element - Encounter:Performed:Emergency Department Visit
         cy.get('[data-testid="elements-tab-encounter"]').click()
         cy.get('[data-testid="data-type-Encounter, Performed: Emergency Department Visit"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('02/06/2025 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('02/06/2025 08:15 PM')
+        QDMElements.addTimingRelevantPeriodDateTime('02/06/2025 08:00 AM', '02/06/2025 08:15 PM')
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
         cy.get('[id="code-selector"]').click()
@@ -398,7 +394,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="option-SNOMEDCT"]').click()
         cy.get('[id="code-selector"]').click()
         cy.get('[data-testid="option-4525004"]').click()
-        cy.get('[id="dateTime"]').eq(3).type('02/06/2025 08:00 AM')
+        cy.get(TestCasesPage.authorDateTime).type('02/06/2025 08:00 AM')
         cy.get('[id="dateTime"]').eq(4).type('02/06/2025 08:15 PM')
         cy.get('[data-testid="add-attribute-button"]').click()
         //Close the Element
@@ -407,8 +403,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         //Element - Encounter:Performed:Encounter Inpatient
         cy.get('[data-testid="elements-tab-encounter"]').click()
         cy.get('[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('02/06/2025 08:15 PM')
-        cy.get('[id="dateTime"]').eq(1).type('02/09/2025 08:15 AM')
+        QDMElements.addTimingRelevantPeriodDateTime('02/06/2025 08:15 PM', '02/09/2025 08:15 AM')
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
@@ -421,7 +416,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         //Element - Assessment: Performed: Emergency Department Evaluation
         cy.get('[data-testid="elements-tab-assessment"]').click()
         cy.get('[data-testid="data-type-Assessment, Performed: Emergency Department Evaluation"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('02/06/2025 08:15 PM')
+        cy.get(TestCasesPage.relevantPeriodStartDate).type('02/06/2025 08:15 PM')
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-LOINC"]').click()
         cy.get('[id="code-selector"]').click()

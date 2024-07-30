@@ -357,6 +357,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 

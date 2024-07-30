@@ -628,7 +628,7 @@ export class Utilities {
         // cy.get(errorContainer).invoke('show').should('contain.text', errorMsg1)
         if ((errorMsg1 != null) || (errorMsg1 != undefined)) {
             cy.wait(1000)
-            cy.get(errorContainer).invoke('show').should('contain.text', errorMsg1)
+            cy.get(errorContainer).invoke('show').should('contain', errorMsg1)
         }
 
     }

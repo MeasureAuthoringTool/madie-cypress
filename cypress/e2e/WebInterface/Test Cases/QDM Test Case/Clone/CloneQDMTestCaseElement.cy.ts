@@ -7,6 +7,7 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import {QDMElements} from "../../../../../Shared/QDMElements";
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -139,8 +140,7 @@ describe('Clone QDM Test Case', () => {
         //Element - Encounter:Performed: Observation Services
         cy.get('[data-testid="elements-tab-encounter"]').click()
         cy.get('[data-testid="data-type-Encounter, Performed: Observation Services"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('03/07/2023 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('03/08/2023 08:15 AM')
+        QDMElements.addTimingRelevantPeriodDateTime('03/07/2023 08:00 AM', '03/08/2023 08:15 AM')
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
@@ -167,8 +167,7 @@ describe('Clone QDM Test Case', () => {
 
         // eidt the element
         TestCasesPage.qdmTestCaseElementAction('edit')
-        cy.get('[id="dateTime"]').eq(0).type('03/09/2023 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('03/10/2023 08:15 AM')
+        QDMElements.addTimingRelevantPeriodDateTime('03/09/2023 08:00 AM', '03/10/2023 08:15 AM')
 
         //Close the Element
         cy.get('[data-testid=CloseIcon]').click()
@@ -279,8 +278,7 @@ describe('Clone QDM Test Case', () => {
         //Element - Encounter:Performed: Observation Services
         cy.get('[data-testid="elements-tab-encounter"]').click()
         cy.get('[data-testid="data-type-Encounter, Performed: Observation Services"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('03/07/2023 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('03/08/2023 08:15 AM')
+        QDMElements.addTimingRelevantPeriodDateTime('03/07/2023 08:00 AM', '03/08/2023 08:15 AM')
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()

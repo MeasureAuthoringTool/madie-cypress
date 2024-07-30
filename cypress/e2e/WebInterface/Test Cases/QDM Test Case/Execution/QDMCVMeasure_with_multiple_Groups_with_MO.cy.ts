@@ -7,6 +7,7 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
+import {QDMElements} from "../../../../../Shared/QDMElements";
 
 let measureName = 'CVListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'CVListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -136,8 +137,7 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         //Element - Encounter:Performed: Observation Services
         cy.get('[data-testid="elements-tab-encounter"]').click()
         cy.get('[data-testid="data-type-Encounter, Performed: Observation Services"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('03/07/2023 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('03/08/2023 08:15 AM')
+        QDMElements.addTimingRelevantPeriodDateTime('03/07/2023 08:00 AM', '03/08/2023 08:15 AM')
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
@@ -301,8 +301,7 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         //Element - Encounter:Performed: Observation Services
         cy.get('[data-testid="elements-tab-encounter"]').click()
         cy.get('[data-testid="data-type-Encounter, Performed: Observation Services"]').click()
-        cy.get('[id="dateTime"]').eq(0).type('03/07/2023 08:00 AM')
-        cy.get('[id="dateTime"]').eq(1).type('03/08/2023 08:15 AM')
+        QDMElements.addTimingRelevantPeriodDateTime('03/07/2023 08:00 AM', '03/08/2023 08:15 AM')
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()

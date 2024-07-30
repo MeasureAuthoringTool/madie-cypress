@@ -159,12 +159,10 @@ describe.skip('MADIE Zip Test Case Import', () => {
         cy.get('[data-testid="test-case-title-0_group"]').invoke('text').then(
             (seriesText) => {
                 let check = true
-                if (seriesText === testCaseSeries || seriesText === secondTestCaseSeries)
-                {
+                if (seriesText === testCaseSeries || seriesText === secondTestCaseSeries) {
 
                 }
-                else
-                {
+                else {
                     check = false
                 }
 
@@ -175,12 +173,10 @@ describe.skip('MADIE Zip Test Case Import', () => {
         cy.get('[data-testid="test-case-title-0_title"]').invoke('text').then(
             (titleText) => {
                 let check = true
-                if (titleText === testCaseTitle || titleText === secondTestCaseTitle)
-                {
+                if (titleText === testCaseTitle || titleText === secondTestCaseTitle) {
 
                 }
-                else
-                {
+                else {
                     check = false
                 }
 
@@ -192,12 +188,10 @@ describe.skip('MADIE Zip Test Case Import', () => {
         cy.get('[data-testid="test-case-title-1_group"]').invoke('text').then(
             (seriesText) => {
                 let check = true
-                if (seriesText === testCaseSeries || seriesText === secondTestCaseSeries)
-                {
+                if (seriesText === testCaseSeries || seriesText === secondTestCaseSeries) {
 
                 }
-                else
-                {
+                else {
                     check = false
                 }
 
@@ -208,12 +202,10 @@ describe.skip('MADIE Zip Test Case Import', () => {
         cy.get('[data-testid="test-case-title-1_title"]').invoke('text').then(
             (titleText) => {
                 let check = true
-                if (titleText === testCaseTitle || titleText === secondTestCaseTitle)
-                {
+                if (titleText === testCaseTitle || titleText === secondTestCaseTitle) {
 
                 }
-                else
-                {
+                else {
                     check = false
                 }
 
@@ -224,3 +216,64 @@ describe.skip('MADIE Zip Test Case Import', () => {
     })
 
 })
+describe('MADIE Zip Test Case Import: error message should appear when the .madie file is missing', () => {
+
+    beforeEach('Create measure, login and update CQL, create group, and login', () => {
+
+        CqlLibraryName = 'TestLibrary5' + Date.now()
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
+
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        OktaLogin.Login()
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.UILogout()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+    it('MADIE Zip Test Case Import', () => {
+
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
+        cy.get(Header.cqlLibraryTab).click().wait(3000)
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //click on the Import Test Cases button
+        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+
+        //wait until select / drag and drop modal window appears
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
+        Utilities.waitForElementVisible(TestCasesPage.tcImportButton, 3750)
+
+        //Upload valid Json file via drag and drop
+        cy.get(TestCasesPage.tcFileDrop).find(TestCasesPage.tcFileDropInput).attachFile("TestCase7345TsteCQM-v0.0.000-FHIR4-TestCases.zip").wait(3000)
+        cy.get(TestCasesPage.tcImportError).should('contain.text', 'Zip file is in an incorrect format. If this is an export prior to June 20, 2024 please reexport your test case and try again.')
+
+        //close the test case import modal
+        cy.get(TestCasesPage.importTestCaseCancelBtnOnModal).click()
+    })
+})
+
