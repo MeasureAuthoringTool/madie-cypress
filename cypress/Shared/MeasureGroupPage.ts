@@ -230,7 +230,7 @@ export class MeasureGroupPage {
     public static readonly riskAdjDropDown = '[data-testid="risk-adjustment-dropdown"]'
 
     //Supplemental data elements
-    public static readonly SDELeftNav = '[datatestid="leftPanelMeasurePopulationsSupplementalDataTab"]'//<button class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary Mui-selected css-622xeo" tabindex="0" type="button" role="tab" aria-selected="true" datatestid="leftPanelMeasurePopulationsSupplementalDataTab" id="sideNavMeasurePopulationsSupplementalData">Supplemental Data<span class="MuiTouchRipple-root css-w0pj6f"></span></button>
+    public static readonly SDELeftNav = '[datatestid="leftPanelMeasurePopulationsSupplementalDataTab"]'
     public static readonly SDEPageContent = '[class="content"]'
     public static readonly SDEContainer = '[class="sc-fEOsli hQkopF"]'
     public static readonly supplementalDataDefinitionSelect = '#supplemental-data'
