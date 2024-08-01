@@ -10,6 +10,17 @@ export class EditMeasurePage {
     public static readonly testCasesTab = '[data-testid=patients-tab]'
     public static readonly reviewInfoTab = '[data-testid=review-tab]'
 
+    //Associate QDM and QI Core measures:
+    public static readonly associateCmsIdDialog = '[data-testid="associate-cms-id-dialog-tbl"]'
+    public static readonly cpyMetaDataCheckBox = '[data-testid="copy-cms-id-checkbox"]'
+    public static readonly associateCmsCancel = '[data-testid="cancel-button"]'
+    public static readonly sureDialog = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-1uop03p react-draggable"]'
+    public static readonly sureDialogCancelBtn = '[data-testid="associate-cms-identifier-confirmation-dialog-cancel-button"]'
+    public static readonly sureDialogContinueBtn = '[data-testid="associate-cms-identifier-confirmation-dialog-continue-button"]'
+    public static readonly sureDialogBody = '[id="discard-changes-dialog-body"]'
+    public static readonly associateCmsAssociateBtn = '[data-testid="associate-cms-id-button"]'
+    public static readonly associateCopyMetaData = '[data-testid="copy-cms-id-checkbox"]'
+
     //Measurement Information
     public static readonly measurementInformationForm = '[data-testid="measure-information-edit"]'
     public static readonly measureNameTextBox = '[data-testid="measure-name-input"]'
@@ -32,7 +43,6 @@ export class EditMeasurePage {
 
     //left panel
     public static readonly leftPanelMeasureInformation = '[data-testid="leftPanelMeasureInformation"]'
-    public static readonly leftPanelMeasureSteward = '[data-testid="leftPanelMeasureSteward"]'
     public static readonly leftPanelDescription = '[data-testid="leftPanelMeasureDescription"]'
     public static readonly leftPanelCopyright = '[data-testid="leftPanelMeasureCopyright"]'
     public static readonly leftPanelDisclaimer = '[data-testid="leftPanelMeasureDisclaimer"]'
