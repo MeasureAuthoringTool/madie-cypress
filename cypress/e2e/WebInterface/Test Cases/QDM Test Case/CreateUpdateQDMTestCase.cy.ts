@@ -286,12 +286,19 @@ describe('QDM element tabs', () => {
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.get(TestCasesPage.QDMElementsTab).scrollIntoView().should('contain', 'Adverse Event' && 'Allergy' && 'Assessment' && 'Care Experience')
+        cy.get(TestCasesPage.QDMElementsTab).scrollIntoView()
+            .should('contain', 'Adverse Event')
+            .should('contain', 'Allergy')
+            .should('contain', 'Assessment')
+            .should('contain', 'Care Experience')
 
         //Navigate to CQL Editor tab and verify the same Elements are present in the Measure CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView().should('contain', 'Adverse Event' && 'Allergy' && 'Assessment' && 'Care Experience')
-
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+            .should('contain', 'Adverse Event')
+            .should('contain', 'Allergy')
+            .should('contain', 'Assessment')
+            .should('contain', 'Care Experience')
     })
 })
 

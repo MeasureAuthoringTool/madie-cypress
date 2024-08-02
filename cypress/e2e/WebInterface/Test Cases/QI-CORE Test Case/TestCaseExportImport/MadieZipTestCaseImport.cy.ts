@@ -245,7 +245,7 @@ describe('MADIE Zip Test Case Import: error message should appear when the .madi
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    it('MADIE Zip Test Case Import', () => {
+    it('MADIE Zip Test Case Import: error message appears when .madie file is missing from the .zip file', () => {
 
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
         cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
