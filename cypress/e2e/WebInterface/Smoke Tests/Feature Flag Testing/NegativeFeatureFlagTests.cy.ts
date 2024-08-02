@@ -446,37 +446,28 @@ describe('QDM - to - QI Core measure association: Button to associate a QDM meas
 //"MeasureListCheckboxes": false
 describe('Measure list page: Check boxes are not present', () => {
 
+    let newMeasureName = measureName + randValue + 8 + randValue
+    let newCQLLibraryName = cqlLibraryName + randValue + 9 + randValue
+
     beforeEach('Create Measure', () => {
 
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
-        QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
-
         //Create New QDM Measure
-        //0
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName1, QDMCqlLibraryName1, 'Proportion', false, qdmManifestTestCQL, false, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Proportion', false, qdmManifestTestCQL, false, false,
             '2025-01-01', '2025-12-31')
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
-        TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit", false, true, true)
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
+
     })
     afterEach('Log Out', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureQDMManifestName1, QDMCqlLibraryName1)
+        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
 
     })
     it('Confirm that the measure list check boxes feature is turned off', () => {
-        OktaLogin.Login()
         Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 35000)
         Utilities.waitForElementVisible('[class="cursor-pointer select-none header-button"]', 35000)
 
@@ -488,37 +479,28 @@ describe('Measure list page: Check boxes are not present', () => {
 //"CQLBuilderDefinitions": false
 describe('CQL Editor Page: Definition sub tab is not present', () => {
 
+    let newMeasureName = measureName + randValue + 8 + randValue
+    let newCQLLibraryName = cqlLibraryName + randValue + 9 + randValue
+
     beforeEach('Create Measure', () => {
 
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
-        QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
-
         //Create New QDM Measure
-        //0
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName1, QDMCqlLibraryName1, 'Proportion', false, qdmManifestTestCQL, false, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Proportion', false, qdmManifestTestCQL, false, false,
             '2025-01-01', '2025-12-31')
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
-        TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit", false, true, true)
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
+
     })
     afterEach('Log Out', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureQDMManifestName1, QDMCqlLibraryName1)
+        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
 
     })
     it('Confirm that the CQL Editor definition sub tab feature is turned off', () => {
-        OktaLogin.Login()
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
@@ -528,5 +510,42 @@ describe('CQL Editor Page: Definition sub tab is not present', () => {
 
         //check boxes are not present
         Utilities.waitForElementToNotExist(CQLEditorPage.cqlEditorPageDefinitionSubTab, 3500)
+    })
+})
+
+//"CQLBuilderIncludes": false
+describe('CQL Editor Page: Includes sub tab is not present', () => {
+
+    let newMeasureName= measureName + Date.now() + randValue + 8 + randValue
+    let newCQLLibraryName = cqlLibraryName + Date.now() + randValue + 9 + randValue
+
+    beforeEach('Create Measure', () => {
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        //Create New QDM Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Proportion', false, qdmManifestTestCQL, false, false,
+            '2025-01-01', '2025-12-31')
+        OktaLogin.Login()
+
+    })
+    afterEach('Log Out', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
+
+    })
+    it('Confirm that the CQL Editor includes sub tab feature is turned off', () => {
+
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to the CQL Editor page
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        //check boxes are not present
+        Utilities.waitForElementToNotExist(CQLEditorPage.cqlEditorPageIncludesSubTab, 3500)
     })
 })
