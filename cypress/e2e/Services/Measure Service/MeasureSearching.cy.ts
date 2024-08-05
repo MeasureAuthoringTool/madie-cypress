@@ -1,5 +1,5 @@
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {Utilities} from "../../../Shared/Utilities"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { Utilities } from "../../../Shared/Utilities"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -23,7 +23,7 @@ describe('Measure List Page Searching', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
-                url: '/api/measures/search/' + measureName + '?currentUser=true',
+                url: '/api/measures/search?query=TestMeasure',
                 method: 'GET',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value
