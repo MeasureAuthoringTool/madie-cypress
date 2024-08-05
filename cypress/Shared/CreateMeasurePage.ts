@@ -180,6 +180,7 @@ export class CreateMeasurePage {
                     },
                     'measureMetaData': {
                         "description": "SemanticBits",
+                        "experimental": false,
                         "steward": {
                             "name": "SemanticBits",
                             "id": "64120f265de35122e68dac40",
@@ -275,6 +276,7 @@ export class CreateMeasurePage {
                     //'elmJson': elmJson,
                     'measureMetaData': {
                         "description": "SemanticBits",
+                        "experimental": false,
                         "steward": {
                             "name": "SemanticBits",
                             "id": "64120f265de35122e68dac40",
