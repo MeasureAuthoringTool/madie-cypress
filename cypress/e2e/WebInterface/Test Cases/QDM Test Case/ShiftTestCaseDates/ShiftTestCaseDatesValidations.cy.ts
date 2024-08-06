@@ -332,7 +332,6 @@ describe.skip('MADiE Shift Test Case Dates tests', () => {
 
         //confirm value that is in test case
         cy.get(TestCasesPage.QDMDob).should('contain.value', '01/01/2003')
-        cy.pause()
 
         /*Additional automated test work: 1.) verify remaining date fields 
         (including those that should take into account leap year date(s); 2.) Decrement shift date(s) (including those that
