@@ -18,6 +18,16 @@ export class TestCasesPage {
     //QDM Bread Crumb
     public static readonly testCasesBCLink = '[data-testid="qdm-test-cases"]'
 
+    //QDM Shift Test Case dates
+    public static readonly testCaseDataSideLink = '[data-testid="test-case-data"]'
+    public static readonly shiftAllTestCaseDates = '[data-testid="shift-test-case-dates-input"]'
+    public static readonly shiftAllTestCasesDiscardBtn = '[data-testid="cancel-button"]'
+    public static readonly shftAllTestCasesSaveBtn = '[data-testid="test-case-data-save"]'
+    public static readonly shiftAllTestCasesSuccessMsg = '[data-testid="shift-all-test-case-dates-success-text"]'
+    public static readonly incrementDatesOnSpecificTCModal = '[data-testid="dialog-form"]'
+    public static readonly incrementDatesOnSpecificTCModalText = '[data-testid="shift-dates-dialog"]'
+    public static readonly shiftSpecificTestCaseDates = '[data-testid="shift-dates-input"]'
+
     //QDM Test Case Demographics elements
     public static readonly QDMDob = '[id="birth-date"]'
     public static readonly QDMLivingStatus = '[id="demographics-living-status-select-id"]'
@@ -595,6 +605,16 @@ export class TestCasesPage {
                     cy.get(this.tcSaveSuccessMsg).should('contain.text', 'Test case exported successfully')
                     break
                 }
+                case 'shift': {
+                    //<button id="shift-dates-btn-66b11f92a2c8670f96babdc2" aria-label="shift-dates-QDMManifestTC" data-testid="shift-dates-btn-66b11f92a2c8670f96babdc2">Increment Dates</button>
+                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
+                    Utilities.waitForElementVisible('[data-testid="shift-dates-btn-' + fileContents + '"]', 55000)
+                    cy.get('[data-testid="shift-dates-btn-' + fileContents + '"]').should('be.visible')
+                    Utilities.waitForElementEnabled('[data-testid="shift-dates-btn-' + fileContents + '"]', 55000)
+                    cy.get('[data-testid="shift-dates-btn-' + fileContents + '"]').should('be.enabled')
+                    cy.get('[data-testid="shift-dates-btn-' + fileContents + '"]').scrollIntoView().click({ force: true })
+                    break
+                }
                 case 'delete': {
                     cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="delete-test-case-btn-' + fileContents + '"]', 55000)
@@ -925,7 +945,7 @@ export class TestCasesPage {
 
     public static enterPatientDemographics(dob?: dateTimeISO, livingStatus?: string, race?: string, gender?: string, ethnicity?: string): void {
 
-        cy.get(TestCasesPage.QDMDob).click().wait(1000)
+        cy.get(TestCasesPage.QDMDob).wait(1700).click().wait(1000)
         cy.get(TestCasesPage.QDMDob).type(dob).click()
         cy.get(TestCasesPage.QDMLivingStatus).click()
         cy.get(TestCasesPage.QDMLivingStatusOPtion).contains(livingStatus).click()
