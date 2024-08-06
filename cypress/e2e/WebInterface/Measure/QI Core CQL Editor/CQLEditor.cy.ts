@@ -344,6 +344,37 @@ describe('Measure: CQL Editor', () => {
 
         cy.get(Global.dirtCheckModal).should('be.visible')
     })
+
+    it('Verify error message if FHIR Helpers is missing in CQL', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Click on the CQL Editor tab
+        CQLEditorPage.clickCQLEditorTab()
+
+        cy.readFile('cypress/fixtures/QICoreCQL_MissingFHIRHelpers_Error.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+        })
+
+        //save the value in the CQL Editor
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //Validate message on page
+        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        cy.get('[data-testid="generic-errors-text-list"] > :nth-child(1)').should('contain.text', 'Row: 1, Col:0: ELM: 0:0 | FHIRHelpers is required as an included library for QI-Core. Please add the appropriate version of FHIRHelpers to your CQL.')
+
+        //Validate error(s) in CQL Editor after saving
+        cy.scrollTo('top')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 0:0 | FHIRHelpers is required as an included library for QI-Core. Please add the appropriate version of FHIRHelpers to your CQL.')
+
+    })
 })
 
 describe('Measure: CQL Editor: valueSet', () => {
