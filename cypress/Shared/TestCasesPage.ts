@@ -606,7 +606,6 @@ export class TestCasesPage {
                     break
                 }
                 case 'shift': {
-                    //<button id="shift-dates-btn-66b11f92a2c8670f96babdc2" aria-label="shift-dates-QDMManifestTC" data-testid="shift-dates-btn-66b11f92a2c8670f96babdc2">Increment Dates</button>
                     cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
                     Utilities.waitForElementVisible('[data-testid="shift-dates-btn-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="shift-dates-btn-' + fileContents + '"]').should('be.visible')
