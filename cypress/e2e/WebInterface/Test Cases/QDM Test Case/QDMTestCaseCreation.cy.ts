@@ -150,7 +150,7 @@ describe('Validating the creation of QDM Test Case', () => {
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Login()
     })
@@ -169,7 +169,7 @@ describe('Validating the creation of QDM Test Case', () => {
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click().wait(1700)
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
         TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
@@ -182,7 +182,7 @@ describe('Validating the creation of QDM Test Case', () => {
 
         //save dob value
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(1000)
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
         //click on bread crumb to navigate back to the main test case list page
         cy.get(TestCasesPage.testCasesBCLink).should('contain.text', 'Test Cases').wait(500).click()
 
@@ -217,7 +217,7 @@ describe('Validating the Elements section on Test Cases', () => {
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click().wait(1700)
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
         TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
@@ -256,7 +256,7 @@ describe('Validating the Elements section on Test Cases', () => {
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click().wait(1700)
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
         TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
@@ -328,7 +328,7 @@ describe('Run QDM Test Case ', () => {
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Login()
     })
@@ -346,7 +346,7 @@ describe('Run QDM Test Case ', () => {
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click().wait(1700)
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
         TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
@@ -368,7 +368,7 @@ describe('Run QDM Test Case ', () => {
 
         //save the Test Case
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(1000)
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
     })
@@ -387,11 +387,11 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click().wait(1700)
+        cy.get(EditMeasurePage.testCasesTab).click()
         //navigate to the test case list Expansion page
         cy.get(TestCasesPage.qdmExpansionSubTab).click()
         //selecting initial manifest value that will allow test case to pass
@@ -404,7 +404,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
 
                 cy.get(TestCasesPage.qdmManifestSelectDropDownBox).click()
                 cy.get(TestCasesPage.qdmManifestMaySecondOption).click()
-                cy.get(TestCasesPage.qdmManifestSaveBtn).click().wait(1000)
+                cy.get(TestCasesPage.qdmManifestSaveBtn).click()
                 cy.get(TestCasesPage.qdmManifestSuccess).should('contain.text', 'Expansion details Updated Successfully')
 
             })
@@ -412,7 +412,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('contain.text', 'ecqm-update-2024-05-02')
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click().wait(1700)
+        cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
         TestCasesPage.testCaseAction('edit')
         //enter a value of the dob, Race and gender
@@ -430,9 +430,9 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get('[data-testid="add-code-concept-button"]').click()
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(1000)
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click().wait(1700)
+        cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
         TestCasesPage.testCaseAction('edit')
         TestCasesPage.grabElementId()
@@ -462,7 +462,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         //save changes
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(1000)
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
         //add element - code system to TC
         //Element - Encounter:Performed: Nonelective Inpatient Encounter
         cy.get('[data-testid="elements-tab-encounter"]').scrollIntoView().click()
@@ -489,7 +489,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         //save changes
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(1000)
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
         //Add Expected value for Test case
         //navigate to the Expected / Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click()
@@ -516,7 +516,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         //save changes
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(1000)
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
         //logout of MADiE
         OktaLogin.UILogout()
         OktaLogin.Login()
@@ -536,7 +536,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click().wait(1700)
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //clicking on running the test case
         cy.get(TestCasesPage.executeTestCaseButton).click()
@@ -564,12 +564,12 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
                 // Verify that first radio button is no longer checked
                 cy.wrap(radio).eq(1).should('not.be.checked');
             })
-        cy.get(TestCasesPage.qdmManifestSaveBtn).click().wait(1000)
+        cy.get(TestCasesPage.qdmManifestSaveBtn).click()
         cy.get(TestCasesPage.qdmManifestSuccess).should('contain.text', 'Expansion details Updated Successfully')
         cy.reload()
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click().wait(1700)
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //clicking on running the test case
         cy.get(TestCasesPage.executeTestCaseButton).click()
