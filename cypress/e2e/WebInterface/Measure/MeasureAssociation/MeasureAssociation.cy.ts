@@ -51,8 +51,7 @@ let QDMCqlLibraryName0 = ''
 let measureQDMManifestName1 = ''
 let QDMCqlLibraryName1 = ''
 
-//skipping until feature flag is removed and feature is turned on permanently 
-describe.skip('Measure Association: Validations', () => {
+describe('Measure Association: Validations', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -264,7 +263,7 @@ describe.skip('Measure Association: Validations', () => {
     })
 
 })
-describe.skip('Measure Association: General Modal functionality', () => {
+describe('Measure Association: General Modal functionality', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -332,6 +331,7 @@ describe.skip('Measure Association: General Modal functionality', () => {
 
     })
     it('Association: QDM -> Qi Core measure: Modal window and functionality of the modal window buttons', () => {
+        cy.pause()
         cy.get('[class="MeasureList___StyledDiv3-sc-pt5u8-5 jILQHN"]').click()
         Utilities.waitForElementVisible('[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthMd MuiDialog-paperFullWidth css-cwpu7v"]', 37800)
         cy.get('[data-testid="associate-cms-id-dialog-tbl"]').should('include.text', '0.0.000QI-Core v4.1.1Copy QDM Metadata to QI-Core measure')
@@ -339,7 +339,7 @@ describe.skip('Measure Association: General Modal functionality', () => {
         Utilities.waitForElementVisible('[data-testid="associate-cms-id-button"]', 3700)
     })
 })
-describe.skip('Measure Association: Transferring meta data and CMS ID from QDM to QI Core measre', () => {
+describe('Measure Association: Transferring meta data and CMS ID from QDM to QI Core measre', () => {
 
     beforeEach('Create Measure', () => {
 
