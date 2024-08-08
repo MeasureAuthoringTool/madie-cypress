@@ -151,7 +151,7 @@ describe('CQL Builder Lookups: QDM', () => {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + accessToken.value,
-                    'Content-Type': 'application/json; charset=utf-8'
+                    'Content-Type': 'text/plain'
                 },
                 body: cql
             }).then((response) => {
