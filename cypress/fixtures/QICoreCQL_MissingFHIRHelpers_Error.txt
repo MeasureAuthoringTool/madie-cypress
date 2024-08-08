@@ -1,0 +1,41 @@
+library FHII version '0.0.000'
+
+include QICoreCommon version '2.1.000' called QICoreCommon
+include CQMCommon version '2.2.000' called Common
+
+using QICore version '4.1.1'
+
+codesystem "sex-parameter-for-clinical-use": 'http://terminology.hl7.org/CodeSystem/sex-parameter-for-clinical-use'
+
+valueset "Non-Elective Inpatient Encounter": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.424'
+valueset "Ischemic Stroke": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.247'
+valueset "Anticoagulant Therapy": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.200'
+
+code "male": 'male-typical' from "sex-parameter-for-clinical-use"
+
+context Patient
+
+define "Initial Population":
+    "Inpatient Encounters"
+
+define "Denominator":
+    "Initial Population" IP
+        where IP.encounterDiagnosis().code in "Ischemic Stroke"
+
+define "Numerator":
+    "Denominator" D
+      with [MedicationRequest: medication in "Anticoagulant Therapy"] Anticoagulant
+        such that Anticoagulant.isDischarge()
+            and Anticoagulant.authoredOn during D.period
+
+define "Inpatient Encounters":
+    [Encounter: "Non-Elective Inpatient Encounter"]
+
+define "x":
+    Patient p
+        let sexParameterForClinicalUse: singleton from (p.extension e
+                                            where e.url = 'http://hl7.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse'),
+            sex: (sexParameterForClinicalUse.extension s
+                    where s.url = 'value')
+        where exists (sex.value sexValue
+            where (sexValue as System.Concept) ~ "male" )

@@ -230,6 +230,7 @@ export class MeasureGroupPage {
     public static readonly riskAdjDropDown = '[data-testid="risk-adjustment-dropdown"]'
 
     //Supplemental data elements
+    public static readonly SDELeftNav = '[datatestid="leftPanelMeasurePopulationsSupplementalDataTab"]'
     public static readonly SDEPageContent = '[class="content"]'
     public static readonly SDEContainer = '[class="sc-fEOsli hQkopF"]'
     public static readonly supplementalDataDefinitionSelect = '#supplemental-data'
@@ -242,7 +243,7 @@ export class MeasureGroupPage {
     public static readonly discardChangesConfirmationMsg = '.MuiDialogContent-root'
     public static readonly discardChangesContinueBtn = '[data-testid="discard-dialog-continue-button"]'
     public static readonly supplementalDataDefinitionTextBox = '#supplementalDataElements'
-    public static readonly ippIncludeInReportTypeField= '[data-testid="ipp-include-in-report-type-dropdown"]'
+    public static readonly ippIncludeInReportTypeField = '[data-testid="ipp-include-in-report-type-dropdown"]'
     public static readonly ippIncludeInReportTypeDropdownList = '#ipp-include-in-report-type-listbox'
     public static readonly denomIncludeInReportTypeField = '[data-testid="denom-include-in-report-type-dropdown"]'
     public static readonly denomIncludeInReportTypeDropdownList = '#denom-include-in-report-type-listbox'

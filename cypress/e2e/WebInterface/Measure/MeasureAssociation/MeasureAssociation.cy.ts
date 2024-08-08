@@ -14,6 +14,32 @@ import { Header } from "../../../../Shared/Header"
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
+const now = require('dayjs')
+let QDMdescription = 'QDM description'
+let QDMcopyright = 'QDM copyright'
+let QDMdisclaimer = 'QDM disclaimer'
+let QDMrationale = 'QDM rationale'
+let QDMguidance = 'QDM guidance'
+let QDMclinicalRecommendation = 'QDM Clinical Recommendation'
+let QDMendorsingNumber = '345678'
+let QDMmeasurePStartD = '01/01/2025'
+let QDMmeasurePEndD = '12/31/2025'
+let QDMsteward = '3Cloud Solution'
+let QDMstewardDev = 'SemanticBits'
+let QICoredescription = 'QI Core description'
+let QICorecopyright = 'QI Core copyright'
+let QICoredisclaimer = 'QI Core disclaimer'
+let QICorerationale = 'QI Core rationale'
+let QICoreguidance = 'QI Core guidance'
+let QICoreclinicalRecommendation = 'QI Core Clinical Recommendation'
+let QICoreendorsingNumber = '12345'
+let QICoremeasurePStartD = now().subtract('2', 'year').format('MM/DD/YYYY')//('YYYY-MM-DD')
+let QICoremeasurePEndD = now().format('MM/DD/YYYY')//('YYYY-MM-DD')
+let QICoresteward = 'Able Health'
+let QICorestewardDEV = 'ACO Health Solutions'
+let eCQMQICOREOrgValue = 'eCQMTitle4QICore'
+let qdmMeasureSetId = 'cypress/fixtures/QDMMeasureSetId'
+let newQDMMeasureSetID = ''
 let QiCoreMeasureNameAlt = ''
 let QiCoreCqlLibraryNameAlt = ''
 let QiCoreMeasureName0 = ''
@@ -25,8 +51,7 @@ let QDMCqlLibraryName0 = ''
 let measureQDMManifestName1 = ''
 let QDMCqlLibraryName1 = ''
 
-//skipping until feature flag is removed and feature is turned on permanently 
-describe.skip('Measure Association', () => {
+describe('Measure Association: Validations', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -238,7 +263,7 @@ describe.skip('Measure Association', () => {
     })
 
 })
-describe.skip('Measure Association', () => {
+describe('Measure Association: General Modal functionality', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -306,6 +331,7 @@ describe.skip('Measure Association', () => {
 
     })
     it('Association: QDM -> Qi Core measure: Modal window and functionality of the modal window buttons', () => {
+        cy.pause()
         cy.get('[class="MeasureList___StyledDiv3-sc-pt5u8-5 jILQHN"]').click()
         Utilities.waitForElementVisible('[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthMd MuiDialog-paperFullWidth css-cwpu7v"]', 37800)
         cy.get('[data-testid="associate-cms-id-dialog-tbl"]').should('include.text', '0.0.000QI-Core v4.1.1Copy QDM Metadata to QI-Core measure')
@@ -313,3 +339,306 @@ describe.skip('Measure Association', () => {
         Utilities.waitForElementVisible('[data-testid="associate-cms-id-button"]', 3700)
     })
 })
+describe('Measure Association: Transferring meta data and CMS ID from QDM to QI Core measre', () => {
+
+    beforeEach('Create Measure', () => {
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
+        QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
+
+        //Create New QDM Measure
+        //1
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName1, QDMCqlLibraryName1, 'Proportion', false, qdmManifestTestCQL, false, false,
+            '2025-01-01', '2025-12-31')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
+        OktaLogin.Login()
+        cy.reload()
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 900000)
+        MeasuresPage.measureAction("edit", false, true, true)
+
+        //Save Endorsement Organization
+        cy.get(EditMeasurePage.endorsingOrganizationTextBox).click().wait(500)
+        cy.get(EditMeasurePage.endorsingOrganizationOption).click()
+        cy.get(EditMeasurePage.endorsementNumber).should('be.enabled')
+        cy.get(EditMeasurePage.endorsementNumber).type(QDMendorsingNumber)
+        cy.get(EditMeasurePage.measurementInformationSaveButton).click()
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('exist')
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('be.visible')
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
+
+        //measure period start and end dates
+        cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
+        cy.get(EditMeasurePage.mpStart).should('contain.value', QDMmeasurePStartD)
+        cy.get(EditMeasurePage.mpEnd).should('contain.value', QDMmeasurePEndD)
+
+
+        //Description
+        cy.get(EditMeasurePage.leftPanelDescription).click()
+        cy.get(EditMeasurePage.measureDescriptionTextBox).clear().type(QDMdescription)
+        cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
+        cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
+
+        //Copyright
+        cy.get(EditMeasurePage.leftPanelCopyright).click()
+        cy.get(EditMeasurePage.measureCopyrightTextBox).clear().type(QDMcopyright)
+        cy.get(EditMeasurePage.measureCopyrightSaveButton).click()
+        cy.get(EditMeasurePage.measureCopyrightSuccessMessage).should('be.visible')
+
+        //Disclaimer
+        cy.get(EditMeasurePage.leftPanelDisclaimer).click()
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).clear().type(QDMdisclaimer)
+        cy.get(EditMeasurePage.measureDisclaimerSaveButton).click()
+        cy.get(EditMeasurePage.measureDisclaimerSuccessMessage).should('be.visible')
+
+        //Rationale
+        cy.get(EditMeasurePage.leftPanelRationale).click()
+        cy.get(EditMeasurePage.measureRationaleTextBox).clear().type(QDMrationale)
+        cy.get(EditMeasurePage.measureRationaleSaveButton).click()
+        cy.get(EditMeasurePage.measureRationaleSuccessMessage).should('be.visible')
+
+        //Steward & Developers
+        cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
+        //select a value for Steward
+        cy.get(EditMeasurePage.measureStewardDrpDwn).should('exist').should('be.visible').click().clear().type(QDMsteward)
+        cy.get(EditMeasurePage.measureStewardDrpDwnOption).click()
+
+        //select a value for Developers
+        Utilities.waitForElementVisible('[data-testid="CancelIcon"]', 3500)
+        cy.get('[data-testid="CancelIcon"]').click()
+        cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('exist').should('be.visible').click().type(QDMstewardDev)
+        cy.get(EditMeasurePage.measureDevelopersDrpDwnOption).click()
+        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('exist')
+        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
+        //save button should become available, now, because a value is, now, in both fields
+        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.enabled')
+
+        //save Steward & Developers
+        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).click({ force: true })
+        cy.get(EditMeasurePage.measureStewardDevelopersSuccessMessage).should('be.visible')
+
+        //Guidance
+        cy.get(EditMeasurePage.leftPanelGuidance).click()
+        cy.get(EditMeasurePage.measureGuidanceTextBox).clear().type(QDMguidance)
+        cy.get(EditMeasurePage.measureGuidanceSaveButton).click()
+        cy.get(EditMeasurePage.measureGuidanceSuccessMessage).should('be.visible')
+
+        //Clinical Recommendation
+        cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
+        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).clear().type(QDMclinicalRecommendation)
+        cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
+        cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
+
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        QiCoreMeasureName1 = 'ProportionPatientMN1' + Date.now() + randValue + 4 + randValue
+        QiCoreCqlLibraryName1 = 'ProportionPatientLN1' + Date.now() + randValue + 5 + randValue
+        //Create new QI Core measure
+        //0
+        CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests)
+        OktaLogin.Login()
+        cy.reload()
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 900000)
+        MeasuresPage.measureAction("edit", false, false, true)
+
+        //Save Endorsement Organization
+        cy.get(EditMeasurePage.endorsingOrganizationTextBox).click().wait(500)
+        cy.get(EditMeasurePage.endorsingOrganizationOption).click()
+        cy.get(EditMeasurePage.endorsementNumber).should('be.enabled')
+        cy.get(EditMeasurePage.endorsementNumber).type(QICoreendorsingNumber)
+        cy.get(EditMeasurePage.measurementInformationSaveButton).click()
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('exist')
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('be.visible')
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
+
+        //measure period start and end dates
+        cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
+        cy.get(EditMeasurePage.mpStart).should('contain.value', QICoremeasurePStartD)
+        cy.get(EditMeasurePage.mpEnd).should('contain.value', QICoremeasurePEndD)
+
+
+        //Description
+        cy.get(EditMeasurePage.leftPanelDescription).click()
+        cy.get(EditMeasurePage.measureDescriptionTextBox).clear().type(QICoredescription)
+        cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
+        cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
+
+        //Copyright
+        cy.get(EditMeasurePage.leftPanelCopyright).click()
+        cy.get(EditMeasurePage.measureCopyrightTextBox).clear().type(QICorecopyright)
+        cy.get(EditMeasurePage.measureCopyrightSaveButton).click()
+        cy.get(EditMeasurePage.measureCopyrightSuccessMessage).should('be.visible')
+
+        //Disclaimer
+        cy.get(EditMeasurePage.leftPanelDisclaimer).click()
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).clear().type(QICoredisclaimer)
+        cy.get(EditMeasurePage.measureDisclaimerSaveButton).click()
+        cy.get(EditMeasurePage.measureDisclaimerSuccessMessage).should('be.visible')
+
+        //Rationale
+        cy.get(EditMeasurePage.leftPanelRationale).click()
+        cy.get(EditMeasurePage.measureRationaleTextBox).clear().type(QICorerationale)
+        cy.get(EditMeasurePage.measureRationaleSaveButton).click()
+        cy.get(EditMeasurePage.measureRationaleSuccessMessage).should('be.visible')
+
+        //Steward & Developers
+        cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
+        //select a value for Steward
+        cy.get(EditMeasurePage.measureStewardDrpDwn).should('exist').should('be.visible').click().clear().type(QICoresteward)
+        cy.get(EditMeasurePage.measureStewardDrpDwnOption).click()
+
+        //select a value for Developers
+        Utilities.waitForElementVisible('[data-testid="CancelIcon"]', 3500)
+        cy.get('[data-testid="CancelIcon"]').click()
+        cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('exist').should('be.visible').click().type(QICorestewardDEV)
+        cy.get(EditMeasurePage.measureDevelopersDrpDwnOption).click()
+        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('exist')
+        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
+        //save button should become available, now, because a value is, now, in both fields
+        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.enabled')
+
+        //save Steward & Developers
+        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).click({ force: true })
+        cy.get(EditMeasurePage.measureStewardDevelopersSuccessMessage).should('be.visible')
+
+        //Guidance
+        cy.get(EditMeasurePage.leftPanelGuidance).click()
+        cy.get(EditMeasurePage.measureGuidanceTextBox).clear().type(QICoreguidance)
+        cy.get(EditMeasurePage.measureGuidanceSaveButton).click()
+        cy.get(EditMeasurePage.measureGuidanceSuccessMessage).should('be.visible')
+
+        //Clinical Recommendation
+        cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
+        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).clear().type(QICoreclinicalRecommendation)
+        cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
+        cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        OktaLogin.Login()
+        cy.reload()
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 900000)
+        MeasuresPage.measureAction("edit", false, true, true)
+        cy.get(EditMeasurePage.generateCmsIdButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
+        cy.get(EditMeasurePage.cmsIDDialogCancel).click()
+        cy.get(EditMeasurePage.cmsIdInput).should('not.exist')
+        cy.get(EditMeasurePage.generateCmsIdButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
+        cy.readFile(qdmMeasureSetId).should('exist').then((fileContents) => {
+            cy.intercept('PUT', '/api/measures/' + fileContents + '/create-cms-id').as('cmsid')
+        })
+        cy.get(EditMeasurePage.cmsIDDialogContinue).click()
+        cy.wait('@cmsid', { timeout: 60000 }).then((request) => {
+            newQDMMeasureSetID = request.response.body.cmsId
+        })
+        cy.get(Header.mainMadiePageButton).click()
+        cy.reload()
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 900000)
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+        cy.get('[data-testid="measure-name-1_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+
+    })
+    it('Association: QDM -> Qi Core measure: Copying meta data and CMS Id from QDM - to - QI Core measure; also validating the \'are you sure\' modal / dialog window', () => {
+
+        cy.get('[class="MeasureList___StyledDiv3-sc-pt5u8-5 jILQHN"]').click()
+        Utilities.waitForElementVisible('[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthMd MuiDialog-paperFullWidth css-1m0tajg react-draggable"]', 37800)
+        cy.get(EditMeasurePage.associateCmsIdDialog).should('include.text', '0.0.000QI-Core v4.1.1Copy QDM Metadata to QI-Core measure')
+        Utilities.waitForElementVisible(EditMeasurePage.associateCmsCancel, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.associateCmsAssociateBtn, 3700)
+        cy.get(EditMeasurePage.associateCmsAssociateBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.sureDialog, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.sureDialogCancelBtn, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.sureDialogContinueBtn, 3500)
+        cy.get(EditMeasurePage.sureDialog).find(EditMeasurePage.sureDialogBody).should('contain.text', 'Are you sure you wish to associate this CMS ID?This Action cannot be undone.')
+
+        cy.get(EditMeasurePage.sureDialogCancelBtn).click()
+        Utilities.waitForElementToNotExist(EditMeasurePage.sureDialog, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.associateCmsAssociateBtn, 3700)
+        cy.get(EditMeasurePage.associateCopyMetaData).click()
+        cy.get(EditMeasurePage.associateCmsAssociateBtn).click()
+        cy.get(EditMeasurePage.sureDialogContinueBtn).click()
+
+        MeasuresPage.measureAction('edit', false, false, true, false)
+
+        //confirming the cms id on the QI Core measure
+        cy.get(EditMeasurePage.cmsIdInput).invoke('val').then(val => {
+            expect(val).to.contain(newQDMMeasureSetID + 'FHIR')
+        })
+
+        //Confirm that eCQM value was not copied over
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).should('contain.value', eCQMQICOREOrgValue)
+
+        //Confirm Endorsement Organization value
+        cy.get(EditMeasurePage.endorsingOrganizationTextBox).should('contain.value', 'CMS Consensus Based Entity')
+        cy.get(EditMeasurePage.endorsementNumber).should('contain.value', QDMendorsingNumber)
+
+        //confirm measure period start and end dates
+        cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
+        cy.get(EditMeasurePage.mpStart).should('contain.value', QDMmeasurePStartD)
+        cy.get(EditMeasurePage.mpEnd).should('contain.value', QDMmeasurePEndD)
+
+        //Confirm Description
+        cy.get(EditMeasurePage.leftPanelDescription).click()
+        cy.get(EditMeasurePage.measureDescriptionTextBox).should('contain.value', QDMdescription)
+
+        //Confirm Copyright
+        cy.get(EditMeasurePage.leftPanelCopyright).click()
+        cy.get(EditMeasurePage.measureCopyrightTextBox).should('contain.value', QDMcopyright)
+
+        //Confirm Disclaimer
+        cy.get(EditMeasurePage.leftPanelDisclaimer).click()
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).should('contain.value', QDMdisclaimer)
+
+        //Confirm Rationale
+        cy.get(EditMeasurePage.leftPanelRationale).click()
+        cy.get(EditMeasurePage.measureRationaleTextBox).should('contain.value', QDMrationale)
+
+        //Confirm Steward & Developers
+        cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
+        //Confirm  Steward
+        cy.get(EditMeasurePage.measureStewardDrpDwn).find('[id="steward"]').should('contain.value', QDMsteward)
+
+        //Confirm Developers
+        cy.get(EditMeasurePage.measureDeveloperDrpDwn)
+            .find('.MuiChip-label')
+            .should('contain.text', QDMstewardDev)
+
+        //Confirm Guidance
+        cy.get(EditMeasurePage.leftPanelGuidance).click()
+        cy.get(EditMeasurePage.measureGuidanceTextBox).should('contain.value', QDMguidance)
+
+        //Confirm Clinical Recommendation
+        cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
+        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.value', QDMclinicalRecommendation)
+
+    })
+})
+

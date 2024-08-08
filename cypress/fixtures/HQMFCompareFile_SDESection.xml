@@ -1,0 +1,25 @@
+<supplementalData id="denom">
+   <extension url="http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-includeInReportType">
+      <valueCode value="individual"/>
+   </extension>
+   <extension url="http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-includeInReportType">
+      <valueCode value="subject-list"/>
+   </extension>
+   <extension url="http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-includeInReportType">
+      <valueCode value="summary"/>
+   </extension>
+   <extension url="http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-includeInReportType">
+      <valueCode value="data-collection"/>
+   </extension>
+   <usage>
+      <coding>
+         <system value="http://terminology.hl7.org/CodeSystem/measure-data-usage"/>
+         <code value="risk-adjustment-factor"/>
+      </coding>
+   </usage>
+   <description value="denom"/>
+   <criteria>
+      <language value="text/cql-identifier"/>
+      <expression value="denom"/>
+   </criteria>
+</supplementalData>
