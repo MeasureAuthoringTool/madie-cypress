@@ -91,7 +91,7 @@
 		"registry": "https://npm.pkg.github.com/"
 	},
 	"dependencies": {
-		"convert": "^5.1.0",
+		"convert": "^5.2.0",
 		"excel-to-json": "^1.0.0",
 		"node": "^18.17.0",
 		"unzipper": "^0.10.11",
