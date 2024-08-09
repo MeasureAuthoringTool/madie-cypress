@@ -92,6 +92,7 @@ export class MeasuresPage {
         }
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.reload()
             Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
             cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="measure-action-' + fileContents + '"]', 100000)
@@ -122,6 +123,7 @@ export class MeasuresPage {
                     cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')
                     Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 125000)
                     cy.get('.toast').should('contain.text', 'Measure exported successfully')
+                    cy.reload()
                     break
                 }
                 case 'qdmexport': {
