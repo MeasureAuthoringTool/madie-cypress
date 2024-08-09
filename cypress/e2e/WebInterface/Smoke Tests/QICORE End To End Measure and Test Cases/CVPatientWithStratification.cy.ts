@@ -73,7 +73,6 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
 
     before('Create Measure, Test Case and Login', () => {
 
-        OktaLogin.Login()
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2012-01-01', '2012-12-31')
