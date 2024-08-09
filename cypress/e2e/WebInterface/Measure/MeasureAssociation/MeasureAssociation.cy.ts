@@ -9,8 +9,6 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../Shared/Header"
 
-
-
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
@@ -50,6 +48,7 @@ let measureQDMManifestName0 = ''
 let QDMCqlLibraryName0 = ''
 let measureQDMManifestName1 = ''
 let QDMCqlLibraryName1 = ''
+
 
 describe('Measure Association: Validations', () => {
 
@@ -152,6 +151,7 @@ describe('Measure Association: Validations', () => {
     })
 
     it('Association: QDM -> Qi Core measure: Validations', () => {
+
 
         //validation test: only one measure is selected
         cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()

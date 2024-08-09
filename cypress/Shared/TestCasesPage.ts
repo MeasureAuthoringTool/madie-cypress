@@ -27,6 +27,9 @@ export class TestCasesPage {
     public static readonly incrementDatesOnSpecificTCModal = '[data-testid="dialog-form"]'
     public static readonly incrementDatesOnSpecificTCModalText = '[data-testid="shift-dates-dialog"]'
     public static readonly shiftSpecificTestCaseDates = '[data-testid="shift-dates-input"]'
+    public static readonly shiftSpecificTestCasesCancelBtn = '[data-testid="shift-dates-cancel-button"]'
+    public static readonly shiftSpecificTestCasesSaveBtn = '[data-testid="shift-dates-save-button"]'
+    public static readonly shiftSpecificTestCasesSuccessMsg = '[data-testid="test-case-list-success"]'
 
     //QDM Test Case Demographics elements
     public static readonly QDMDob = '[id="birth-date"]'
@@ -556,7 +559,6 @@ export class TestCasesPage {
             filePath = 'cypress/fixtures/testCaseId2'
         }
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            //cy.reload()
             Utilities.waitForElementVisible('[data-testid="select-action-' + fileContents + '"]', 50000)
             cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="select-action-' + fileContents + '"]', 50000)
