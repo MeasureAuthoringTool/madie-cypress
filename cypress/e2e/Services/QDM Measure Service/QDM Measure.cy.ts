@@ -219,7 +219,7 @@ describe('QDM Measure: Transmission format', () => {
                             "version": "0.0.000",
                             "measureScoring": "Ratio",
                             "versionId": vId,
-                            "measureMetaData": { "draft": true, "transmissionFormat": "Test Transmission format" },
+                            "measureMetaData": { "experimental": false, "draft": true, "transmissionFormat": "Test Transmission format" },
                             "measureSetId": uuidv4(),
                             "ecqmTitle": "ecqmTitle",
                             "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",

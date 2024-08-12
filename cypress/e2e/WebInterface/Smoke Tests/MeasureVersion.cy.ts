@@ -1,12 +1,12 @@
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
-import {TestCaseJson} from "../../../Shared/TestCaseJson"
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
-import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
-import {TestCasesPage} from "../../../Shared/TestCasesPage"
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import { TestCaseJson } from "../../../Shared/TestCaseJson"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { Utilities } from "../../../Shared/Utilities"
 
 let measureName = 'TestMeasure' + Date.now()
@@ -253,7 +253,7 @@ describe('QI-Core Measure Versioning', () => {
 
     after('Logout and cleanup', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
 
     })

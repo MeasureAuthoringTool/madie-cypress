@@ -177,6 +177,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
 
     afterEach('Clean up', () => {
 
+
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
@@ -200,7 +201,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                     expect(response.body.entry[0].resource.effectivePeriod).to.have.property('start')
                     expect(response.body.entry[0].resource.effectivePeriod).to.have.property('end')
                     expect(response.body.entry[0].resource.library[0]).is.not.empty
-                    expect(response.body.entry[0].resource.identifier[0].value).to.eql('eCQMTitle')
+                    expect(response.body.entry[0].resource.identifier[0].value).to.eql('eCQMTitle4QICore')
                     expect(response.body.entry[0].resource.identifier[1].value).is.not.empty
                     expect(response.body.entry[0].resource.identifier[2].value).is.not.empty
                     expect(response.body.entry[0].resource.publisher).to.eql('SemanticBits')
@@ -277,6 +278,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                                     }
                                 ],
                                 "measureMetaData": {
+                                    "experimental": false,
                                     "description": "Measure Description",
                                     "steward": {
                                         "name": "Able Health",
@@ -925,6 +927,24 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
                     'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
                     'versionId': uuidv4(),
                     'measureSetId': uuidv4(),
+                    'measureMetaData': {
+                        "description": "SemanticBits",
+                        "experimental": false,
+                        "steward": {
+                            "name": "SemanticBits",
+                            "id": "64120f265de35122e68dac40",
+                            "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
+                            "url": "https://semanticbits.com/"
+
+                        }, "developers": [
+                            {
+                                "id": "64120f265de35122e68dabf7",
+                                "name": "Academy of Nutrition and Dietetics",
+                                "oid": "2.16.840.1.113883.3.6308",
+                                "url": "www.eatrightpro.org"
+                            }
+                        ]
+                    },
                     "supplementalData": [
                         {
                             "definition": "SDE Race",
