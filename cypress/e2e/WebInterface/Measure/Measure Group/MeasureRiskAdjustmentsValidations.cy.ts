@@ -178,7 +178,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //navigate to the Risk Adjustment tab and clear it's, current, value and add another value (to the same for SA and RA)
         cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
-        cy.get(MeasureGroupPage.removeCloseDefinitionSelection).click()
+        cy.get(MeasureGroupPage.removeCloseDefinitionSelection).eq(0).click()
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
 
         cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
@@ -286,7 +286,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
             .first() // select the first element
             .type('Initial Population Description')
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).eq(0).click()
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Num').click().wait(1000)
 
         //save the Risk Adjustment data
@@ -305,7 +305,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(MeasureGroupPage.riskAdjDropDown).should('contain.text', 'DefinitionDenom+1')
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('contain.text', 'Initial Population Description')
 
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).eq(0).click()
         cy.get(MeasureGroupPage.cancelIcon).first().click()
         cy.get(MeasureGroupPage.saveRiskAdjustments).click().wait(100).click()
         cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
