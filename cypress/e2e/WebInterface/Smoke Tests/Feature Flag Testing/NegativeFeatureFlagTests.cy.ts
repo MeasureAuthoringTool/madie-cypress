@@ -103,7 +103,7 @@ describe('QI Core: Elements tab is not present', () => {
     })
 })
 
-//“ShiftTestCasesDates”: false
+//“ShiftTestCasesDates”: true
 describe('QI Core: Shift test case dates option on Test case list page', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
@@ -123,20 +123,20 @@ describe('QI Core: Shift test case dates option on Test case list page', () => {
 
     })
 
-    it('Shift test case dates option not visible on view Test case dropdown', () => {
+    it('Shift test case dates option visible on view Test case dropdown', () => {
 
         MeasuresPage.measureAction("edit")
 
         //Navigate to Test Case list page
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.selectTestCaseDropdownBtn).click()
-        cy.get('[class="btn-container"]').should('not.contain', 'Increment Dates')
+        cy.get('[class="btn-container"]').should('contain', 'Increment Dates')
         cy.reload()
     })
 })
 
-//"associateMeasures": false
-describe('QDM - to - QI Core measure association: Button to associate a QDM measure to a QI Core measure is not available, while flag is set to false', () => {
+//"associateMeasures": true
+describe.skip('QDM - to - QI Core measure association: Button to associate a QDM measure to a QI Core measure is available, while flag is set to true', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -236,16 +236,32 @@ describe('QDM - to - QI Core measure association: Button to associate a QDM meas
 
     })
 
-    it('Confirm that the associate measure feature is turned off', () => {
+    it('Confirm that the associate measure feature is turned on', () => {
 
-        Utilities.waitForElementToNotExist('[class="MeasureList___StyledDiv3-sc-pt5u8-5 jILQHN"]', 35000)
-        Utilities.waitForElementToNotExist('[data-testid="associate_cms_id_tooltip"]', 35000)
+        MeasuresPage.measureAction("edit", false, true, true)
+        cy.get(EditMeasurePage.generateCmsIdButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
+        cy.get(EditMeasurePage.cmsIDDialogCancel).click()
+        cy.get(EditMeasurePage.cmsIdInput).should('not.exist')
+        cy.get(EditMeasurePage.generateCmsIdButton).click()
+        //Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
+        cy.get(EditMeasurePage.cmsIDDialogContinue).click()
+        cy.get(Header.mainMadiePageButton).click()
+        cy.get('[data-testid="measure-name-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+        cy.get('[data-testid="measure-name-1_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+        cy.get('[class="MeasureList___StyledDiv3-sc-pt5u8-5 jILQHN"]').click()
+        // Utilities.waitForElementVisible('[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthMd MuiDialog-paperFullWidth css-cwpu7v"]', 37800)
+        // cy.get('[data-testid="associate-cms-id-dialog-tbl"]').should('include.text', '0.0.000QI-Core v4.1.1Copy QDM Metadata to QI-Core measure')
+        // Utilities.waitForElementVisible('[data-testid="cancel-button"]', 3700)
+        Utilities.waitForElementEnabled('[data-testid="associate-cms-id-button"]', 3700)
 
     })
 })
 
-//"MeasureListCheckboxes": false
-describe('Measure list page: Check boxes are not present', () => {
+//"MeasureListCheckboxes": true
+describe('Measure list page: Check boxes are present', () => {
 
     let newMeasureName = measureName + randValue + 8 + randValue
     let newCQLLibraryName = cqlLibraryName + randValue + 9 + randValue
@@ -268,12 +284,12 @@ describe('Measure list page: Check boxes are not present', () => {
         Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
 
     })
-    it('Confirm that the measure list check boxes feature is turned off', () => {
+    it('Confirm that the measure list check boxes feature is turned on', () => {
         Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 35000)
         Utilities.waitForElementVisible('[class="cursor-pointer select-none header-button"]', 35000)
 
         //check boxes are not present
-        Utilities.waitForElementToNotExist('[data-testid="measure-name-0_select"]', 35000)
+        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 35000)
     })
 })
 

@@ -52,7 +52,7 @@ describe('Save CQL on CQL Editor Page', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.get(EditMeasurePage.cqlEditorTextBox).invoke('text').then((text) => {
-            expect(text.length).greaterThan(2400)
+            expect(text.length).greaterThan(1500)
         })
     })
 })

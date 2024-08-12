@@ -112,7 +112,7 @@ describe('Successful QDM Measure Export', () => {
 
         MeasuresPage.measureAction('qdmexport')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
     })
@@ -148,7 +148,7 @@ describe('QDM Measure Export for CMS Measure with huge included Library', () => 
 
         MeasuresPage.measureAction('qdmexport')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM.zip'), {timeout: 500000}).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
     })

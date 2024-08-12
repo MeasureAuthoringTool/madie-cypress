@@ -97,7 +97,7 @@ describe('FHIR Measure Export, Not the Owner', () => {
 
         MeasuresPage.measureAction('export')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
         OktaLogin.Logout()
@@ -107,14 +107,14 @@ describe('FHIR Measure Export, Not the Owner', () => {
     it('Unzip the downloaded file and verify file types for FHIR Measure', () => {
 
         // unzipping the Measure Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle-v0.0.000-FHIR4.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR4.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
 
         //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v0.0.000-FHIR.html' &&
-            'eCQMTitle-v0.0.000-FHIR.xml' && 'eCQMTitle-v0.0.000-FHIR.json')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4.zip')).should('contain', 'eCQMTitle4QICore-v0.0.000-FHIR.html' &&
+            'eCQMTitle4QICore-v0.0.000-FHIR.xml' && 'eCQMTitle4QICore-v0.0.000-FHIR.json')
 
         // cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v1.0.000-FHIR.html' &&
         //     'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json' && 'FHIRHelpers-4.1.000.cql' && 'CQMCommon-1.0.000.cql' && 'FHIRCommon-4.1.000.cql'

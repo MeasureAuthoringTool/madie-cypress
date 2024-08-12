@@ -54,7 +54,6 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
     before('Create Measure, Test Case and Login', () => {
 
-        OktaLogin.Login()
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2023-01-01', '2023-12-31')
