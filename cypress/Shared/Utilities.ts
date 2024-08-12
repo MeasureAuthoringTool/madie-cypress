@@ -41,6 +41,7 @@ export class Utilities {
                             'cql': measureCQL,
                             'elmJson': elmJson,
                             'measureMetaData': {
+                                "experimental": false,
                                 "steward": {
                                     "name": "SemanticBits",
                                     "id": "64120f265de35122e68dac40",

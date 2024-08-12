@@ -271,6 +271,6 @@ describe('CQL Library: CQL Editor: valueSet', () => {
 
         cy.get(Header.mainMadiePageButton).click()
 
-        cy.get(Global.dirtCheckModal).should('be.visible')
+        cy.get(CQLLibrariesPage.cqlLibraryDirtyCheck).should('be.visible')
     })
 })
