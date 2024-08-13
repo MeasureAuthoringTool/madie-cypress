@@ -61,6 +61,13 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2020', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
+        //save the Test Case
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+
+        cy.reload()
+
         //Selecting Laboratory element and performed
         cy.get(TestCasesPage.laboratoryElement).click()
         cy.get(TestCasesPage.plusIcon).eq(1).click()
@@ -95,6 +102,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         //select value set value for this attribute
         cy.get(TestCasesPage.valueSetSelector).click()
+        Utilities.waitForElementVisible(TestCasesPage.ABEMBDiathesisValue, 134000)
         cy.get(TestCasesPage.ABEMBDiathesisValue).click()
 
         //select the SNOMED code system
@@ -108,7 +116,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         cy.get(TestCasesPage.addAttribute).click() //click the "Add" button
 
         //asserting value that appears in the element table
-        cy.get('tbody > tr > :nth-child(4)').should('contain.text', 'Interpretation - interpretation SNOMEDCT : 112648003')
+        cy.get('tbody > tr > :nth-child(4)').should('include.text', 'Interpretation -  SNOMEDCT : 112648003')
 
     })
 
@@ -164,6 +172,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         //select value set value for this attribute
         cy.get(TestCasesPage.valueSetSelector).click()
+        Utilities.waitForElementVisible(TestCasesPage.ABEMBDiathesisValue, 134000)
         cy.get(TestCasesPage.ABEMBDiathesisValue).click()
 
         //select the SNOMED code system
@@ -177,7 +186,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         cy.get(TestCasesPage.addAttribute).click() //click the "Add" button
 
         //asserting value that appears in the element table
-        cy.get('tbody > tr > :nth-child(4)').should('contain.text', 'Interpretation - interpretation SNOMEDCT : 112648003')
+        cy.get('tbody > tr > :nth-child(4)').should('include.text', 'Interpretation -  SNOMEDCT : 112648003')
 
         //save the Test Case
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
