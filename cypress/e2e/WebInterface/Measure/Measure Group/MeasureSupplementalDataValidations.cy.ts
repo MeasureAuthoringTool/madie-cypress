@@ -177,7 +177,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //navigate to the supplemental data tab and clear it's, current, value and add another value (to the same for SA and RA)
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
-        cy.get(MeasureGroupPage.removeCloseDefinitionSelection).click()
+        cy.get(MeasureGroupPage.removeCloseDefinitionSelection).eq(0).click()
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
 
         cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')

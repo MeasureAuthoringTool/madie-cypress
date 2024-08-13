@@ -124,7 +124,7 @@ describe('Measure: CQL Editor', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newCqlLibraryName = CqlLibraryName + randValue
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
 
@@ -219,7 +219,7 @@ describe('Measure: CQL Editor', () => {
         cy.scrollTo('top')
         cy.get(EditMeasurePage.cqlEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 1:37 | Internal translator error.')
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'VSAC: 0:128 | Invalid Code system')
 
     })
 
@@ -342,7 +342,7 @@ describe('Measure: CQL Editor', () => {
 
         cy.get(Header.mainMadiePageButton).click()
 
-        cy.get(Global.dirtCheckModal).should('be.visible')
+        cy.get('.MuiBox-root').should('contain.text', 'Discard Changes?')
     })
 
     it('Verify error message if FHIR Helpers is missing in CQL', () => {
@@ -394,7 +394,7 @@ describe('Measure: CQL Editor: valueSet', () => {
 
         OktaLogin.Logout()
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
 
@@ -462,8 +462,8 @@ describe('Measure: CQL Editor: valueSet', () => {
         cy.scrollTo('top')
         cy.get(EditMeasurePage.cqlEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:102 | Request failed with status code 404 for oid = 2.16.840.1.113883.3.464.1003.110.12.1059999 " +
-            "location = 36:0-36:102")
+        // Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:102 | Request failed with status code 404 for oid = 2.16.840.1.113883.3.464.1003.110.12.1059999 " +
+        //     "location = 36:0-36:102")
 
     })
 

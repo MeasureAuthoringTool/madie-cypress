@@ -357,7 +357,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.numeratorAggregateFunction).contains('Maximum')
 
         //second / non-owner user
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         OktaLogin.AltLogin()
 
         //navigate away from measure group page
@@ -469,7 +469,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.cvAggregateFunction).contains('Count')
 
         //second / non-owner user
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         OktaLogin.AltLogin()
 
         //navigate away from measure group page
