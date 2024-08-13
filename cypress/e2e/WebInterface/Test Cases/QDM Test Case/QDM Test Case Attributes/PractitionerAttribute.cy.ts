@@ -152,27 +152,32 @@ describe('Practitioner Attribute', () => {
         cy.get('[data-testid=string-field-id-input]').type('3')
         //Role
         cy.get(':nth-child(3) > :nth-child(1) > .MuiFormControl-root > [data-testid="value-set-selector"] > #value-set-selector').click()
+        Utilities.waitForElementVisible('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.292"]', 134000)
         cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.292"]').click()//Select Emergency Department Visit
         cy.get(TestCasesPage.codeSystemSelector).click()
         cy.get('[data-testid=option-SNOMEDCT]').click()
         cy.get(TestCasesPage.codeSelector).click()
+        Utilities.waitForElementVisible('[data-testid=option-4525004]', 134000)
         cy.get('[data-testid=option-4525004]').click()//Select Emergency Department Patient visit (Procedure)
         //Speciality
         cy.get(':nth-child(4) > :nth-child(1) > .MuiFormControl-root > [data-testid="value-set-selector"] > #value-set-selector').click()
+        Utilities.waitForElementVisible('[data-testid="option-2.16.840.1.113883.3.666.5.307"]', 134000)
         cy.get('[data-testid="option-2.16.840.1.113883.3.666.5.307"]').click()//Select Encounter Inpatient
         cy.get(TestCasesPage.codeSystemSelector).eq(1).click()
         cy.get('[data-testid=option-SNOMEDCT]').click()
         cy.get(TestCasesPage.codeSelector).eq(1).click()
+        Utilities.waitForElementVisible('[data-testid=option-183452005]', 134000)
         cy.get('[data-testid=option-183452005]').click()//Select Emergency Hospital Admission
         //Qualification
         cy.get(':nth-child(5) > :nth-child(1) > .MuiFormControl-root > [data-testid="value-set-selector"] > #value-set-selector').click()
+        Utilities.waitForElementVisible('[data-testid="option-2.16.840.1.114222.4.11.837"]', 134000)
         cy.get('[data-testid="option-2.16.840.1.114222.4.11.837"]').click()//Select Ethnicity
         cy.get(TestCasesPage.codeSystemSelector).eq(2).click()
         cy.get('[data-testid="option-CDCREC"]').click()
         cy.get(TestCasesPage.codeSelector).eq(2).click()
         cy.get('[data-testid=option-2135-2]').click()//Select Hispanic or Latino
         cy.get(TestCasesPage.addAttribute).click()
-        cy.get(TestCasesPage.attributeChip).should('contain.text', 'Performer - Practitioner: Identifier: { Naming System: TestIdentifier, Value: TestValue }, Id: 3, Role: SNOMEDCT : 4525004, Specialty: SNOMEDCT : 183452005, Qualification: CDCREC : 2135-2')
+        cy.get(TestCasesPage.attributeChip).should('contain.text', 'Performer - Practitioner Identifier: { Naming System: TestIdentifier, Value: TestValue }, Id: 3, Role: SNOMEDCT : 4525004, Specialty: SNOMEDCT : 183452005, Qualification: CDCREC : 2135-2')
 
     })
 })

@@ -316,7 +316,7 @@ export class TestCasesPage {
     public static readonly measurePopulationStratificationExpectedValue = '[data-testid="test-population-Strata-2 Measure Population-expected"]'
 
     //measure versioning attempt with invalid test case
-    public static readonly versionMeasureWithTCErrors = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-mbdu2s"]'
+    public static readonly versionMeasureWithTCErrors = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-1uop03p react-draggable"]'
     public static readonly versionMeasurewithTCErrorsModalBody = '[id="discard-changes-dialog-body"]'
     public static readonly versionMeasurewithTCErrorsCancel = '[data-testid="invalid-test-dialog-cancel-button"]'
     public static readonly versionMeasurewithTCErrorsContinue = '[data-testid="invalid-test-dialog-continue-button"]'
