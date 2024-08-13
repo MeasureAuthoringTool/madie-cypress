@@ -11,6 +11,7 @@ import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { Global } from "../../../../../Shared/Global"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { CQLLibrariesPage } from "../../../../../Shared/CQLLibrariesPage"
 
 let testCaseDescription = 'DENOMFail' + Date.now()
 let QDMTCJson = TestCaseJson.QDMTestCaseJson
@@ -347,7 +348,7 @@ describe('Edit Test Case Validations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        Utilities.waitForElementVisible(Global.discardChangesConfirmationModal, 37000)
+        Utilities.waitForElementVisible(CQLLibrariesPage.cqlLibraryDirtyCheck, 37000)
 
         //verify that the discard modal appears
         Global.clickOnDirtyCheckCancelChanges()
@@ -356,7 +357,7 @@ describe('Edit Test Case Validations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        Utilities.waitForElementVisible(Global.discardChangesConfirmationModal, 37000)
+        Utilities.waitForElementVisible(CQLLibrariesPage.cqlLibraryDirtyCheck, 37000)
         //verify that the discard modal appears
         Global.clickOnDirtyCheckDiscardChanges()
 
