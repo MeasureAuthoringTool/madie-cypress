@@ -74,16 +74,16 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.get(TestCasesPage.successMsg).should('contain.text', 'QRDA exported successfully')
 
         //verify zip file exists
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.zip'), {timeout: 500000}).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip'), {timeout: 500000}).should('exist')
         cy.log('Successfully verified zip file export')
 
         // unzipping the QRDA Export
-        cy.task('unzipFile', {zipFile: 'eCQMTitle-v0.0.000-QDM-TestCases.zip', path: downloadsFolder}).then(results => {
+        cy.task('unzipFile', {zipFile: 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip', path: downloadsFolder}).then(results => {
             cy.log('unzipFile Task finished')
         })
 
         //read contents of the html file and compare that with the expected file contents (minus specific measure name)
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle_patients_results.html')).should('exist').then((exportedFile) => {
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html')).should('exist').then((exportedFile) => {
             debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents is: \n' + exported)
@@ -96,7 +96,7 @@ describe('QDM Test Cases : Export Test Case', () => {
         })
 
         //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle_patients_results.html'), null).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html'), null).should('exist')
         cy.readFile(path.join(downloadsFolder, 'html/2_SBTestSeries_PDxNotPsych60MinsDepart.html')).should('exist')
         cy.readFile(path.join(downloadsFolder, 'html/1_SBTestSeries2nd_PDxNotPsych60MinsDepart2nd.html')).should('exist')
         cy.readFile(path.join(downloadsFolder, 'qrda/2_SBTestSeries_PDxNotPsych60MinsDepart.xml')).should('exist')
@@ -186,7 +186,7 @@ describe('Export Test cases by Non Measure Owner', () => {
         cy.get('[class="btn-container"]').contains('QRDA').click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'QRDA exported successfully')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.zip'), {timeout: 500000}).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip'), {timeout: 500000}).should('exist')
         cy.log('Successfully verified zip file export')
 
     })
