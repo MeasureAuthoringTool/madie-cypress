@@ -54,7 +54,7 @@ export class MeasuresPage {
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 100000)
             let element = cy.get('[data-testid=measure-action-' + fileContents + ']').parent()
-            cy.wait(1000)
+            cy.wait(4270)
             cy.reload()
             cy.get('[data-testid="measure-name-0_version"]').should('contain', versionNumber)
             //element.parent().should('contain', expectedValue).children().eq(0).should('contain', versionNumber)
@@ -155,7 +155,7 @@ export class MeasuresPage {
                 }
                 case 'draft': {
 
-                    cy.get('[data-testid="measure-action-' + fileContents + '"]').click().wait(3000)
+                    cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
                     Utilities.waitForElementVisible('[data-testid="draft-measure-' + fileContents + '"]', 105000)
                     cy.get('[data-testid="draft-measure-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="draft-measure-' + fileContents + '"]', 105000)

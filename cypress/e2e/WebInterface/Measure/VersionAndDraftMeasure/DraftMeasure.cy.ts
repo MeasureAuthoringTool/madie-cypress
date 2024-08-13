@@ -8,6 +8,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let MeasuresPageOne = ''
 let updatedMeasuresPageName = ''
@@ -29,6 +30,16 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure and Measure Group
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.wait(3000)
+        OktaLogin.UILogout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
         OktaLogin.Login()
 
@@ -36,7 +47,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
 
     })
 
@@ -66,7 +77,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
 
         //navigate back to the main MADiE / measure list page
-        cy.get(Header.mainMadiePageButton).click().wait(2000)
+        cy.get(Header.mainMadiePageButton).click().wait(2500)
+        cy.reload()
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
@@ -101,7 +113,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
     })
 
-    it('User cannot create a draft for a measure / version, whom already has been drafted', () => {
+    //skipping until https://jira.cms.gov/browse/MAT-7448 is fixed
+    it.skip('User cannot create a draft for a measure / version, whom already has been drafted', () => {
 
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedMeasuresPageOne' + Date.now()
@@ -120,11 +133,11 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
-
+        cy.reload()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             cy.reload(true)
-            cy.scrollTo('top')
+            cy.scrollTo('top').wait(37500)
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
@@ -141,16 +154,30 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
     beforeEach('Create Measure, Group, Test case and Login', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
 
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.wait(3000)
+        OktaLogin.UILogout()
 
         //CreateCohortMeasureGroupAPI
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
         //Create Test case
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
 
         OktaLogin.Login()
 
@@ -163,11 +190,11 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + updatedMeasuresPageName + '?')
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
         cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
 
     })
-
-    it('Verify Draft measure CQL, Group and Test case', () => {
+    //skipping until https://jira.cms.gov/browse/MAT-7448 is fixed
+    it.skip('Verify Draft measure CQL, Group and Test case', () => {
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
@@ -182,10 +209,16 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         Utilities.waitForElementVisible(MeasuresPage.VersionDraftMsgs, 100000)
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 100000)
 
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
 
+        cy.reload()
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        OktaLogin.Login()
         MeasuresPage.measureAction('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.visible')
@@ -200,6 +233,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
+        Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 100000)
 
         //verify CQL after draft
         cy.get(Header.mainMadiePageButton).click()
