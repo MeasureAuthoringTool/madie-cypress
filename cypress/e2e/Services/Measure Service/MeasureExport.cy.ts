@@ -308,6 +308,7 @@ describe('Error Message on Measure Export when the Measure does not have Steward
                     'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
                     'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
                     'measureMetaData': {
+                        "experimental": false,
                         "description": "SemanticBits"
                     }
                 }
@@ -374,6 +375,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
                     'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
                     'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
                     'measureMetaData': {
+                        "experimental": false,
                         "steward": {
                             "name": "SemanticBits",
                             "id": "64120f265de35122e68dac40",

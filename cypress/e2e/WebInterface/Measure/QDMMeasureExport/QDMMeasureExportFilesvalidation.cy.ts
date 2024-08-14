@@ -55,6 +55,7 @@ const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 
+//Need to debug more for File comparisons
 describe('Verify QDM Measure Export file contents', () => {
 
     deleteDownloadsFolderBeforeAll()
@@ -107,18 +108,18 @@ describe('Verify QDM Measure Export file contents', () => {
         MeasuresPage.measureAction('qdmexport')
 
         //verify zip file exists
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
         // unzipping the Measure Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle-v0.0.000-QDM.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QDM-v0.0.000-QDM.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
 
         //read contents of the html / human readable file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated HR file -to- the next)
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM.html')).should('exist').then((exportedFile) => {
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.html')).should('exist').then((exportedFile) => {
             debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents are: \n' + exported)
@@ -150,7 +151,7 @@ describe('Verify QDM Measure Export file contents', () => {
 
         //read contents of the xml / HQMF file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated HQMF file -to- the next)
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM.xml')).should('exist').then((exportedFile) => {
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.xml')).should('exist').then((exportedFile) => {
             debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents are: \n' + exported)
@@ -294,8 +295,8 @@ describe('Verify QDM Measure Export file contents', () => {
             })
         })
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM.html')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM.xml')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.html')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.xml')).should('exist')
         cy.readFile(path.join(downloadsFolder, 'cql/MATGlobalCommonFunctionsQDM-1.0.000.cql')).should('exist')
 
 
@@ -334,7 +335,7 @@ describe('QDM Measure Export, Not the Owner', () => {
 
         MeasuresPage.measureAction('qdmexport')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
         cy.reload()
@@ -401,18 +402,18 @@ describe('Successful QDM Measure Export with versioned measure', () => {
         MeasuresPage.measureAction('qdmexport')
 
         //verify zip file exists
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v1.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
         // unzipping the Measure Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle-v1.0.000-QDM.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QDM-v1.0.000-QDM.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
 
         //read contents of the html / human readable file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated HR file -to- the next)
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-QDM.html')).should('exist').then((exportedFile) => {
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v1.0.000-QDM.html')).should('exist').then((exportedFile) => {
             debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents are: \n' + exported)
@@ -445,7 +446,7 @@ describe('Successful QDM Measure Export with versioned measure', () => {
 
         //read contents of the xml / HQMF file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated HQMF file -to- the next)
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-QDM.xml')).should('exist').then((exportedFile) => {
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.xml')).should('exist').then((exportedFile) => {
             debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents are: \n' + exported)
@@ -589,8 +590,8 @@ describe('Successful QDM Measure Export with versioned measure', () => {
             })
         })
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-QDM.html')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-QDM.xml')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v1.0.000-QDM.html')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v1.0.000-QDM.xml')).should('exist')
         cy.readFile(path.join(downloadsFolder, 'cql/MATGlobalCommonFunctionsQDM-1.0.000.cql')).should('exist')
 
         cy.readFile(path.join(downloadsFolder, 'resources/MATGlobalCommonFunctionsQDM-1.0.000.json'), null).should('exist')

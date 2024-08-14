@@ -17,6 +17,7 @@ export class CQLLibrariesPage {
     public static readonly versionCancelBtn = '[data-testid="create-version-cancel-button"]'
     public static readonly infoMsg = '[class="EditCqlLibrary__InfoAlert-sc-j81nve-3 eTmbnI"]'
     public static readonly editCQLLibraryAlertMessage = '.madie-alert'
+    public static readonly cqlLibraryDirtyCheck = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-1uop03p react-draggable"]'
 
 
     public static clickEditforCreatedLibrary(secondLibrary?: boolean): void {
@@ -37,6 +38,7 @@ export class CQLLibrariesPage {
 
             cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').should('exist')
             cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=cqlLibrary-button-' + fileContents + ']', 3500)
             cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').wait(1000).click()
 
             cy.wait('@cqlLibrary').then(({ response }) => {

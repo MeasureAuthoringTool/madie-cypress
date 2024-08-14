@@ -189,7 +189,7 @@ describe('QDM Code Search fields', () => {
 
         //Navigate to Saved Codes tab
         cy.get(CQLEditorPage.savedCodesTab).click()
-        cy.get('[data-testid="terminology-section-sub-header-content-Saved Codes"]').should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02')
+        cy.get('.right-panel > .panel-content').should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02')
     })
 
     it('Edit Code with Suffix and Version from Results Grid', () => {
@@ -262,10 +262,10 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been successfully added to the CQL.')
 
         //Save CQL
-        cy.get(CQLEditorPage.saveCQLButton).click()
+        cy.get(CQLEditorPage.saveCQLButton).click().wait(1000)
 
         //Navigate to Saved Codes page
-        cy.get(CQLEditorPage.savedCodesTab).click()
+        cy.get(CQLEditorPage.savedCodesTab).click().wait(1000)
 
         //Edit code
         cy.get(CQLEditorPage.selectDropdownBtn).click()
@@ -316,10 +316,10 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been successfully added to the CQL.')
 
         //Save CQL
-        cy.get(CQLEditorPage.saveCQLButton).click()
+        cy.get(CQLEditorPage.saveCQLButton).click().wait(1000)
 
         //Navigate to Saved Codes page
-        cy.get(CQLEditorPage.savedCodesTab).click()
+        cy.get(CQLEditorPage.savedCodesTab).click().wait(1000)
 
         //Remove Code
         cy.get(CQLEditorPage.selectDropdownBtn).click()

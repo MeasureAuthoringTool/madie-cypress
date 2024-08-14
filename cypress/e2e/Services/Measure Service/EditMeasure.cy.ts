@@ -56,7 +56,7 @@ describe('Measure Service: Edit Measure', () => {
                             "version": "0.0.000",
                             "measureScoring": "Ratio",
                             "versionId": vId,
-                            "measureMetaData": { "draft": true },
+                            "measureMetaData": { "experimental": false, "draft": true },
                             "measureSetId": uuidv4(),
                             "ecqmTitle": "ecqmTitle",
                             "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
@@ -89,7 +89,7 @@ describe('Measure Service: Edit Measure', () => {
                             "model": model,
                             "version": "0.0.000",
                             "measureScoring": "Ratio",
-                            "measureMetaData": { "draft": true },
+                            "measureMetaData": { "experimental": false, "draft": true },
                             "versionId": vId,
                             "measureSetId": uuidv4(),
                             "ecqmTitle": "ecqmTitle",
@@ -157,7 +157,7 @@ describe('Measure Service: Edit Measure', () => {
                             'ecqmTitle': "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            "measureMetaData": { "draft": true }
+                            "measureMetaData": { "experimental": false, "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -192,6 +192,7 @@ describe('Measure Service: Edit Measure', () => {
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
                             'measureMetaData': {
+                                "experimental": false,
                                 "steward": {
                                     "name": "SemanticBits",
                                     "id": "64120f265de35122e68dac40",
@@ -232,7 +233,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "description": "SemanticBits", "draft": true }
+                            'measureMetaData': { "experimental": false, "description": "SemanticBits", "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -266,7 +267,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "copyright": "copyright", "draft": true }
+                            'measureMetaData': { "experimental": false, "copyright": "copyright", "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -300,7 +301,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "disclaimer": "disclaimer", "draft": true }
+                            'measureMetaData': { "experimental": false, "disclaimer": "disclaimer", "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -334,7 +335,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "rationale": "rationale", "draft": true }
+                            'measureMetaData': { "experimental": false, "rationale": "rationale", "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -368,7 +369,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "author": "author", "draft": true }
+                            'measureMetaData': { "experimental": false, "author": "author", "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -402,7 +403,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "guidance": "guidance", "draft": true }
+                            'measureMetaData': { "experimental": false, "guidance": "guidance", "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(200)
@@ -436,7 +437,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "riskAdjustment": "Risk Adjustment", "draft": true },
+                            'measureMetaData': { "experimental": false, "riskAdjustment": "Risk Adjustment", "draft": true },
                             'riskAdjustmentDescription': "desc",
                             'riskAdjustments': [{ 'definition': "SDE Payer" }]
                         }
@@ -468,7 +469,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "riskAdjustment": "Risk Adjustment", "draft": true },
+                            'measureMetaData': { "experimental": false, "riskAdjustment": "Risk Adjustment", "draft": true },
                             'riskAdjustmentDescription': "desc",
                             'riskAdjustments': [{ 'definition': "" }]
                         }
@@ -500,7 +501,7 @@ describe('Measure Service: Edit Measure', () => {
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "riskAdjustment": "Risk Adjustment", "draft": true },
+                            'measureMetaData': { "experimental": false, "riskAdjustment": "Risk Adjustment", "draft": true },
                             'riskAdjustmentDescription': "desc",
                             'riskAdjustments': [{ 'definition': null }]
                         }
@@ -535,6 +536,7 @@ describe('Measure Service: Edit Measure', () => {
                             'measureSetId': uuidv4(),
                             "ecqmTitle": "eCQMTitle",
                             'measureMetaData': {
+                                "experimental": false,
                                 "endorsements": [
                                     {
                                         "endorser": "NQF",
@@ -600,7 +602,7 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
                             "ecqmTitle": "eCQMTitle",
                             "measurementPeriodStart": mpStartDate,
                             "measurementPeriodEnd": mpEndDate,
-                            'measureMetaData': { "riskAdjustment": "Risk Adjustment", "draft": true },
+                            'measureMetaData': { "experimental": false, "riskAdjustment": "Risk Adjustment", "draft": true },
                             'riskAdjustmentDescription': "desc",
                             'riskAdjustments': [{ 'definition': "SDE Payer" }]
                         }
@@ -816,7 +818,7 @@ describe('Measurement Period Validations', () => {
                             "measurementPeriodStart": mpEndDate,
                             "measurementPeriodEnd": mpStartDate,
                             'measureScoring': 'Ratio',
-                            "measureMetaData": { "draft": true }
+                            "measureMetaData": { "experimental": false, "draft": true }
                         }
                     }).then((response) => {
                         expect(response.status).to.eql(400)

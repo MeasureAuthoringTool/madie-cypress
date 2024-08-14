@@ -367,7 +367,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             .should('be.checked')
     })
     //non-owner of measure cannot edit Base Configuration fields
-    it('Non-owner of measure cannot edit any of the the Base Configuration fields', () => {
+    it('Non-owner of measure cannot edit any of the Base Configuration fields', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
@@ -602,7 +602,7 @@ describe('Updates on Base Configuration page', () => {
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
 
         //Assert the confirmation message
-        cy.get('[id="mui-7"]').should('contain.text', 'Change Patient Basis?')
+        cy.get('[id="mui-5"]').should('contain.text', 'Change Patient Basis?')
         cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Patient Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.').wait(3000)
 
         //Click on 'No, Keep Working' button

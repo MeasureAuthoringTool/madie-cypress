@@ -355,7 +355,7 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
                         body: {
                             'id': testCaseId,
                             'name': "IPPPass",
-                            'series': "WhenBP<120",
+                            'series': "WhenBP120",
                             'title': "test case title edited",
                             'description': "IPP Pass Test BP <120",
                             'json': TCJsonRace_Update
@@ -941,8 +941,8 @@ describe('Measure Service: Test Case Endpoints', () => {
 
     it('Create Test Case', () => {
         let randValue = (Math.floor((Math.random() * 2000) + 3))
-        let title = 'test case title ~!@#!@#$$%^&%^&* &()(?><'
-        let series = 'test case series ~!@#!@#$$%^&%^&* &()(?><'
+        let title = 'test case title create'
+        let series = 'test case series create'
         let description = 'DENOME pass Test HB <120 ~!@#!@#$$%^&%^&* &()(?><'
         //Add Test Case to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -990,7 +990,7 @@ describe('Measure Service: Test Case Endpoints', () => {
                         body: {
                             'id': testCaseId,
                             'name': "IPPPass",
-                            'series': "WhenBP<120",
+                            'series': "WhenBP120",
                             'title': "test case title edited",
                             'description': "IPP Pass Test BP <120",
                             'json': "{ \n  Encounter: \"Office Visit union\" \n  Id: \"Identifier\" \n  value: \"Visit out of hours (procedure)\" \n}"
@@ -999,7 +999,7 @@ describe('Measure Service: Test Case Endpoints', () => {
                         expect(response.status).to.eql(200)
                         expect(response.body.id).to.eql(testCaseId)
                         expect(response.body.json).to.be.exist
-                        expect(response.body.series).to.eql("WhenBP<120")
+                        expect(response.body.series).to.eql("WhenBP120")
                         expect(response.body.title).to.eql('test case title edited')
                         expect(response.body.json).to.be.exist
                         cy.writeFile('cypress/fixtures/testCaseId', response.body.id)
