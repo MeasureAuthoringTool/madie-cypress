@@ -219,8 +219,11 @@ export class CQLLibraryPage {
         return user
     }
 
-    public static createCQLLibraryAPI(CqlLibraryName: string, CQLLibraryPublisher: string, twoLibraries?: boolean, altUser?: boolean): string {
+    public static createCQLLibraryAPI(CqlLibraryName: string, CQLLibraryPublisher: string, twoLibraries?: boolean, altUser?: boolean, cql?: string): string {
         let user = ''
+        if ((cql === undefined) || (cql === null)) {
+            cql = ""
+        }
 
         if (altUser) {
             cy.setAccessTokenCookieALT()
@@ -246,8 +249,8 @@ export class CQLLibraryPage {
                     "librarySetId": uuidv4(),
                     "description": "description",
                     "publisher": CQLLibraryPublisher,
-                    'cql': "",
-                    "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
+                    'cql': cql//,
+                    //"programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
@@ -291,6 +294,7 @@ export class CQLLibraryPage {
                     'cql': "library SupplementalDataElementsQICore4 version '2.0.0'\n" +
                         "\n" +
                         "using QICore version '4.1.1'\n" +
+                        'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
                         "valueset \"ONC Administrative Sex\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1'",
                     "librarySetId": uuidv4(),
                     "description": "description",
