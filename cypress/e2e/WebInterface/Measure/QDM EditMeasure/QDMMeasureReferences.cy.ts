@@ -4,7 +4,6 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import {Global} from "../../../../Shared/Global"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
@@ -89,9 +88,9 @@ describe('QDM Measure Reference', () => {
         //Delete Measure Reference
         cy.get(EditMeasurePage.selectMeasureReference).click()
         cy.get(EditMeasurePage.measureReferenceDropdown).contains('Delete').click()
-        cy.get(Global.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to delete ' + 'Measure Reference' + '?')
+        cy.get('[class="dialog-warning-body"]').should('contain.text', 'Are you sure you want to delete ' + 'Measure Reference' + '?')
         cy.get('[data-testid="delete-dialog-continue-button"]').click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text','Measure reference deleted successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure reference deleted successfully')
 
     })
 })

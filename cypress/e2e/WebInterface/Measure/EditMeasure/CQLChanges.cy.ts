@@ -101,8 +101,10 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.cqlEditorTab).click()
 
             cy.get(EditMeasurePage.cqlEditorTextBox).invoke('click')
+
             //remove the dayObs line(s) from CQL
-            cy.get(EditMeasurePage.cqlEditorTextBox).type('{end}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{moveToEnd}{backspace}{backspace}' +
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{end}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{end}{backspace}' +
+                '{backspace}' +
                 '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
                 '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
                 '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
@@ -247,7 +249,8 @@ describe('CQL Changes and how that impacts test cases, observations and populati
 
             cy.get(EditMeasurePage.cqlEditorTextBox).invoke('click')
             //remove the dayObs line(s) from CQL
-            cy.get(EditMeasurePage.cqlEditorTextBox).type('{end}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{moveToEnd}{backspace}{backspace}' +
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{end}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{end}{backspace}' +
+                '{backspace}' +
                 '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
                 '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
                 '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' +
