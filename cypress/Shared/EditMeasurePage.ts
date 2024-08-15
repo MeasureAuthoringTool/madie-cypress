@@ -1,7 +1,7 @@
 export class EditMeasurePage {
 
     //dirty modal
-    public static readonly dirtCheckModal = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-mbdu2s"]'
+    public static readonly dirtCheckModal = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-1uop03p react-draggable"]'
 
     //Edit Measure tab menu
     public static readonly measureDetailsTab = '[data-testid=measure-details-tab]'
