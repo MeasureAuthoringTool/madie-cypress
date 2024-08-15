@@ -292,8 +292,6 @@ export class CQLLibraryPage {
                         "\n" +
                         'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
                         "using QICore version '4.1.1'\n" +
-                        "\n" +
-                        "include FHIRHelpers version '4.1.000' called FHIRHelpers\n" +
                         "valueset \"ONC Administrative Sex\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1'",
                     "librarySetId": uuidv4(),
                     "description": "description",
