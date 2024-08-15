@@ -2915,6 +2915,133 @@ export class TestCaseJson {
         '0", "display": "Unscheduled (qualifier value)" } ] }, "subject": { "reference": "Patient/609bde3598086b0a16d79fc6" }, "period": { "start": "2' +
         '022-01-16T08:00:00+00:00", "end": "2023-07-15T09:00:00+00:00" } } } ] }'
 
+    public static readonly TestCaseJson_ShiftTCDates = '{\n' +
+        '  "resourceType": "Bundle",\n' +
+        '  "id": "1366",\n' +
+        '  "meta": {\n' +
+        '    "versionId": "1"\n' +
+        '  },\n' +
+        '  "type": "collection",\n' +
+        '  "entry": [\n' +
+        '    {\n' +
+        '      "fullUrl": "https://madie.cms.gov/Encounter/Encounter-1",\n' +
+        '      "resource": {\n' +
+        '        "resourceType": "Encounter",\n' +
+        '        "id": "Encounter-1",\n' +
+        '        "meta": {\n' +
+        '          "versionId": "1",\n' +
+        '          "profile": [\n' +
+        '            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"\n' +
+        '          ]\n' +
+        '        },\n' +
+        '        "period": {\n' +
+        '          "start": "2024-01-01T03:34:10.054Z"\n' +
+        '        },\n' +
+        '        "status": "finished",\n' +
+        '        "class": {\n' +
+        '          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '          "code": "IMP",\n' +
+        '          "display": "inpatient encounter"\n' +
+        '        },\n' +
+        '        "type": [\n' +
+        '          {\n' +
+        '            "text": "OutPatient"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "subject": {\n' +
+        '          "reference": "Patient/dc01381b-c407-4cf7-8e7e-4b789c268726"\n' +
+        '        }\n' +
+        '      }\n' +
+        '    },\n' +
+        '    {\n' +
+        '      "fullUrl": "https://madie.cms.gov/Encounter/Encounter-2",\n' +
+        '      "resource": {\n' +
+        '        "resourceType": "Encounter",\n' +
+        '        "id": "Encounter-2",\n' +
+        '        "meta": {\n' +
+        '          "versionId": "1",\n' +
+        '          "lastUpdated": "2027-10-13T03:34:10.160+00:00",\n' +
+        '          "source": "#nEcAkGd8PRwPP5fA",\n' +
+        '          "profile": [\n' +
+        '            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"\n' +
+        '          ]\n' +
+        '        },\n' +
+        '        "text": {\n' +
+        '          "status": "generated",\n' +
+        '          "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Sep 9th 2021 for Asthma<a name=\\"mm\\"/></div>"\n' +
+        '        },\n' +
+        '        "status": "finished",\n' +
+        '        "class": {\n' +
+        '          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
+        '          "code": "IMP",\n' +
+        '          "display": "inpatient encounter"\n' +
+        '        },\n' +
+        '        "type": [\n' +
+        '          {\n' +
+        '            "coding": [\n' +
+        '              {\n' +
+        '                "system": "http://snomed.info/sct",\n' +
+        '                "version": "2022-09",\n' +
+        '                "code": "185463005",\n' +
+        '                "display": "Visit out of hours (procedure)"\n' +
+        '              }\n' +
+        '            ]\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "subject": {\n' +
+        '          "reference": "Patient/dc01381b-c407-4cf7-8e7e-4b789c268726"\n' +
+        '        },\n' +
+        '        "participant": [\n' +
+        '          {\n' +
+        '            "individual": {\n' +
+        '              "reference": "Practitioner/30164",\n' +
+        '              "display": "Dr John Doe"\n' +
+        '            }\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "period": {\n' +
+        '          "start": "2027-11-11T03:34:10.054Z",\n' +
+        '          "end": "2028-01-01T03:34:10.054Z"\n' +
+        '        }\n' +
+        '      }\n' +
+        '    },\n' +
+        '    {\n' +
+        '      "fullUrl": "https://madie.cms.gov/Patient/dc01381b-c407-4cf7-8e7e-4b789c268726",\n' +
+        '      "resource": {\n' +
+        '        "resourceType": "Patient",\n' +
+        '        "id": "dc01381b-c407-4cf7-8e7e-4b789c268726",\n' +
+        '        "meta": {\n' +
+        '          "profile": [\n' +
+        '            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"\n' +
+        '          ]\n' +
+        '        },\n' +
+        '        "text": {\n' +
+        '          "status": "generated",\n' +
+        '          "div": "<div xmlns=\\"http://www.w3.org/1999/xhtml\\">Lizzy Health</div>"\n' +
+        '        },\n' +
+        '        "identifier": [\n' +
+        '          {\n' +
+        '            "system": "http://clinfhir.com/fhir/NamingSystem/identifier",\n' +
+        '            "value": "20181011LizzyHealth"\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "name": [\n' +
+        '          {\n' +
+        '            "use": "official",\n' +
+        '            "text": "Lizzy Health",\n' +
+        '            "family": "Health",\n' +
+        '            "given": [\n' +
+        '              "Lizzy"\n' +
+        '            ]\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        "gender": "female",\n' +
+        '        "birthDate": "2006-10-11"\n' +
+        '      }\n' +
+        '    }\n' +
+        '  ]\n' +
+        '}'
+
     public static readonly TestCase_XML = '<?xml version="1.0" encoding="UTF-8"?>\n' +
         '\n' +
         '<Patient xmlns="http://hl7.org/fhir">\n' +
