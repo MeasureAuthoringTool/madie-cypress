@@ -3,6 +3,7 @@ import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { LandingPage } from "../../../../Shared/LandingPage"
+import {Utilities} from "../../../../Shared/Utilities";
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -74,6 +75,30 @@ describe('Measure List Page Searching', () => {
         cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
         cy.get(MeasuresPage.searchInputBox).clear().type('&%*').wait(2000).type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('not.exist')
+
+    })
+})
+
+describe('Measure search by Non Measure owner', () => {
+
+    beforeEach('Create Measure and Login', () => {
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        OktaLogin.AltLogin()
+    })
+
+    afterEach('Logout and Clean up', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+    })
+
+    it('Verify Measure not owned by the user is not visible under My Measures tab', () => {
+
+        //Search for the Measure
+        cy.log('Search Measure with measure name')
+        cy.get(MeasuresPage.searchInputBox).type(measureName).wait(2000).type('{enter}')
+        cy.get('[data-testid="row-item"]').should('not.exist')
 
     })
 })
