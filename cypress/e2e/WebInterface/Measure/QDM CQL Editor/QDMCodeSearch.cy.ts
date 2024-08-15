@@ -373,10 +373,10 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code ACUTE has been successfully added to the CQL.')
 
         //Save CQL
-        cy.get(CQLEditorPage.saveCQLButton).click()
+        cy.get(CQLEditorPage.saveCQLButton).click().wait(1000)
 
         //Navigate to Saved Codes page
-        cy.get(CQLEditorPage.savedCodesTab).click()
+        cy.get(CQLEditorPage.savedCodesTab).click().wait(2000)
 
         //Remove Code
         cy.get(CQLEditorPage.selectDropdownBtn).click()
