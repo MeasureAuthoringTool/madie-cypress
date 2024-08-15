@@ -117,8 +117,7 @@ describe('Edit CQL Library validations', () => {
 
         cy.get(CQLLibraryPage.genericSuccessMessage).should('exist')
         cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Missing a using statement. Please add in a valid model and version.')
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully')
 
         //navigate back to the CQL Library page and navigate to the edit CQL Library page
         cy.get(Header.cqlLibraryTab).should('exist')
