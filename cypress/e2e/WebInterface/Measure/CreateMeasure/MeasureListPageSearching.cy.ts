@@ -99,6 +99,6 @@ describe('Measure search by Non Measure owner', () => {
         cy.log('Search Measure with measure name')
         cy.get(MeasuresPage.searchInputBox).type(measureName).wait(2000).type('{enter}')
         cy.get('[data-testid="row-item"]').should('not.exist')
-
     })
 })
+
