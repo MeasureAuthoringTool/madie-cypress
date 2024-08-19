@@ -68,6 +68,12 @@ export class CQLEditorPage {
     public static readonly cqlEditorPageDefinitionSubTab = '[data-testid="definitions-tab"]'
     public static readonly cqlEditorPageIncludesSubTab = '[data-testid="includes-tab"]'
 
+    //Includes page
+    public static readonly includesTab = '[data-testid="includes-tab"]'
+    public static readonly librarySearchTextBox = '[data-testid="searchTerm-text-input"]'
+    public static readonly librarySearchBtn = '[data-testid="search-btn"]'
+    public static readonly librarySearchTable = '[data-testid="terminology-section-Library Results-sub-heading"]'
+
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
 
