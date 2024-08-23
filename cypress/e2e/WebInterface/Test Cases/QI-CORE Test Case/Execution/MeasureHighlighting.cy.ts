@@ -1563,7 +1563,12 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).wait(4000).click()
+        cy.get(EditMeasurePage.testCasesTab).wait(4000).click().wait(2000)
+
+        cy.reload()
+        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 55000)
+        cy.get(TestCasesPage.executeTestCaseButton).scrollIntoView()
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 55000)
 
         //Navigate to test case detail / edit page
         TestCasesPage.testCaseAction('edit')

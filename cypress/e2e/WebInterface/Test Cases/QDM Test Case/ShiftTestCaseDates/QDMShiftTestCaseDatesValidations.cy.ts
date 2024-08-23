@@ -7,7 +7,7 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { QDMElements } from "../../../../../Shared/QDMElements";
+import { QDMElements } from "../../../../../Shared/QDMElements"
 
 
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
@@ -16,9 +16,9 @@ let measureQDMManifestName = 'QDMManifestTest' + Date.now()
 let CqlLibraryName = 'ProportionPatient' + Date.now()
 
 
-describe('MADiE Shift Test Case Dates tests', () => {
+describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
 
-    beforeEach('Create Measure, test cases, and set the manifest option for the test case', () => {
+    beforeEach('Create Measure, test cases and Login', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName, CqlLibraryName, 'Proportion', false, qdmManifestTestCQL, false, false,
@@ -283,7 +283,7 @@ describe('MADiE Shift Test Case Dates tests', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    it('MADiE Shift Test Case Dates -> Shift All Test Cases\' dates', () => {
+    it('MADiE Shift Test Case Dates -> Shift All Test Cases\' dates for QDM Measure', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -391,7 +391,7 @@ describe('MADiE Shift Test Case Dates tests', () => {
 
     })
 
-    it('MADiE Shift Test Case Dates -> Shift single / specific test case\'s dates', () => {
+    it('MADiE Shift Test Case Dates -> Shift single / specific test case\'s dates for QDM Measure', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")

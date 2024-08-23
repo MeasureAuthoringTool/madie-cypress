@@ -449,14 +449,8 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases (5).zip')
 
-        //import the tests cases from selected / dragged and dropped .zip file
-        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
+        cy.get(TestCasesPage.testCaseImportErrorAtValidating).should('include.text', 'Zip file is in an incorrect format. If this is an export prior to June 20, 2024 please reexport your test case and try again.')
 
-        //verifies alert message at tope of page informing user that no test case was imported
-        Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(1) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('.StatusHandler___StyledSpan-sc-1tujbo9-1').should('contain.text', 'Reason: Error while processing Test Case JSON. Please make sure Test Case JSON is valid.')
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('.StatusHandler___StyledDiv2-sc-1tujbo9-2').should('contain.text', 'Following test case(s) were imported successfully, but the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been set.')
     })
 })
 describe('Test Case Import: New Test cases on measure validations: uniqueness tests related to family name and given name', () => {
