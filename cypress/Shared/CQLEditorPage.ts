@@ -74,6 +74,14 @@ export class CQLEditorPage {
     public static readonly librarySearchBtn = '[data-testid="search-btn"]'
     public static readonly librarySearchTable = '[data-testid="terminology-section-Library Results-sub-heading"]'
 
+    //Definitions page
+    public static readonly definitionsTab = '[data-testid="definitions-tab"]'
+    public static readonly definitionNameTextBox = '[data-testid="definition-name-text-input"]'
+    public static readonly expressionEditorTypeDropdown = '[id="type-selector"]'
+    public static readonly definitionOption = '[data-testid="Definitions-option"]'
+    public static readonly expressionEditorNameDropdown = '[id="name-selector"]'
+    public static readonly expressionEditorNameList = '#name-selector-listbox'
+
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
 
