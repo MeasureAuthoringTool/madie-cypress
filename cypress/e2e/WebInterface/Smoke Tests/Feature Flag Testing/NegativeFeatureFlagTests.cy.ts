@@ -130,7 +130,7 @@ describe('QI Core: Shift test case dates option on Test case list page', () => {
         //Navigate to Test Case list page
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.selectTestCaseDropdownBtn).click()
-        cy.get('[class="btn-container"]').should('contain', 'Increment Dates')
+        cy.get('[class="btn-container"]').should('contain', 'Shift Test Case Dates')
         cy.reload()
     })
 })
@@ -289,7 +289,7 @@ describe('Measure list page: Check boxes are present', () => {
         Utilities.waitForElementVisible('[class="cursor-pointer select-none header-button"]', 35000)
 
         //check boxes are not present
-        Utilities.waitForElementVisible('[data-testid="measure-name-0_select"]', 35000)
+        Utilities.waitForElementVisible('.header-button > .cursor-pointer', 35000)
     })
 })
 
