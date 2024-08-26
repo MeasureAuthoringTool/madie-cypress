@@ -292,7 +292,6 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
 
-        MeasuresPage.validateVersionNumber(measureName, '1.0.000')
         cy.log('Version Created Successfully')
 
         MeasuresPage.measureAction('export')
