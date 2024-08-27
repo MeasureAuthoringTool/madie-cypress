@@ -549,7 +549,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Definitions').click()
         Utilities.waitForElementVisible(TestCasesPage.tcDEFINITIONSHighlightingDetails, 35000)
-        cy.get(TestCasesPage.tcDEFINITIONSHighlightingDetails).should('contain.text', '\ndefine "Qualifying Encounters":\n(\n[Encounter: "Office Visit"]\nunion [Encounter: "Annual Wellness Visit"]\nunion [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\nunion [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\nunion [Encounter: "Home Healthcare Services"]\n\n) ValidEncounter\nwhere ValidEncounter.period during "Measurement Period"\nand ValidEncounter.isFinishedEncounter()\nResultsFALSE ([]) \ndefine "Initial Population":\nexists "Qualifying Encounters"\nResultsFALSE (false) ')
+        cy.get(TestCasesPage.tcDEFINITIONSHighlightingDetails).should('contain.text', '\ndefine "Qualifying Encounters":\n(\n[Encounter: "Office Visit"]\nunion [Encounter: "Annual Wellness Visit"]\nunion [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\nunion [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\nunion [Encounter: "Home Healthcare Services"]\n) ValidEncounter\nwhere ValidEncounter.period during "Measurement Period"\n\nand ValidEncounter.isFinishedEncounter()\nResultsFALSE ([]) \ndefine "Initial Population":\nexists "Qualifying Encounters"\nResultsFALSE (false) ')
         cy.get('[data-ref-id="42"]').should('have.color', '#A63B12')
 
         //Click on Execute Test Case button on Edit Test Case page
@@ -820,7 +820,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         //Verify Highlighting tab before clicking on Run Test button
         cy.get(TestCasesPage.tcHighlightingTab).click()
-        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'')
+        cy.get(TestCasesPage.runTestAlertMsg).should('contain.text', 'To see the logic highlights, click \'Run Test\'').wait(1000)
 
         //create a test case that will fail:
 
@@ -1140,7 +1140,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         //refresh test case list page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(EditMeasurePage.testCasesTab).click().wait(2000)
 
         //open edit page for test case
         TestCasesPage.clickEditforCreatedTestCase()
@@ -1654,7 +1654,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-            cy.get(EditMeasurePage.testCasesTab).click()
+            cy.get(EditMeasurePage.testCasesTab).click().wait(2000)
 
             TestCasesPage.clickEditforCreatedTestCase()
 
@@ -1690,7 +1690,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //refresh test case list page
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-            cy.get(EditMeasurePage.testCasesTab).click()
+            cy.get(EditMeasurePage.testCasesTab).click().wait(2000)
 
             //open edit page for test case
             TestCasesPage.clickEditforCreatedTestCase()
@@ -1729,7 +1729,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-            cy.get(EditMeasurePage.testCasesTab).click()
+            cy.get(EditMeasurePage.testCasesTab).click().wait(2000)
 
             TestCasesPage.clickEditforCreatedTestCase()
 
@@ -1789,7 +1789,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-            cy.get(EditMeasurePage.testCasesTab).click()
+            cy.get(EditMeasurePage.testCasesTab).click().wait(2000)
 
             TestCasesPage.clickEditforCreatedTestCase()
 
@@ -1832,7 +1832,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-            cy.get(EditMeasurePage.testCasesTab).click()
+            cy.get(EditMeasurePage.testCasesTab).click().wait(2000)
 
             TestCasesPage.clickEditforCreatedTestCase()
 
