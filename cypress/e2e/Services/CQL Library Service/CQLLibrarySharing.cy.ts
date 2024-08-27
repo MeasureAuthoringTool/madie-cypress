@@ -4,7 +4,7 @@ import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
-let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
+let measureSharingAPIKey = Environment.credentials().deleteMeasureAdmin_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
 
 describe('CQL Library Sharing Service', () => {

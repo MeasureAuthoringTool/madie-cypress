@@ -10,7 +10,7 @@ let filePath = 'cypress/fixtures/cqlLibraryId'
 let CQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = Environment.credentials().harpUserALT
-let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
+let measureSharingAPIKey = Environment.credentials().deleteMeasureAdmin_API_Key
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 
 describe('Delete CQL Library: Tests covering Libraries that are in draft and versioned states as well as when user is the owner, when user has had Library transferred to them, and when the user is neither the owner nor has had the Library transferred to them', () => {
