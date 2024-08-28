@@ -56,7 +56,7 @@ export class MeasuresPage {
             let element = cy.get('[data-testid=measure-action-' + fileContents + ']').parent()
             cy.wait(4270)
             cy.reload()
-            cy.get('[data-testid="measure-name-0_version"]').should('contain', versionNumber)
+            cy.get('[data-testid="measure-name-' + fileContents + '_version"]').should('contain', versionNumber)
             //element.parent().should('contain', expectedValue).children().eq(0).should('contain', versionNumber)
         })
     }
