@@ -130,7 +130,7 @@ describe('QI Core: Shift test case dates option on Test case list page', () => {
         //Navigate to Test Case list page
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.selectTestCaseDropdownBtn).click()
-        cy.get('[class="btn-container"]').should('contain', 'Shift Test Case Dates')
+        cy.get('[class="btn-container"]').should('contain', 'Shift Test Case dates')
         cy.reload()
     })
 })
@@ -333,7 +333,7 @@ describe('CQL Editor Page: Definition sub tab is not present', () => {
 //"CQLBuilderIncludes": false
 describe('CQL Editor Page: Includes sub tab is not present', () => {
 
-    let newMeasureName= measureName + Date.now() + randValue + 8 + randValue
+    let newMeasureName = measureName + Date.now() + randValue + 8 + randValue
     let newCQLLibraryName = cqlLibraryName + Date.now() + randValue + 9 + randValue
 
     beforeEach('Create Measure', () => {

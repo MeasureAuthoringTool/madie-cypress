@@ -5,13 +5,9 @@ include CQMCommon version '2.2.000' called Common
 
 using QICore version '4.1.1'
 
-codesystem "sex-parameter-for-clinical-use": 'http://terminology.hl7.org/CodeSystem/sex-parameter-for-clinical-use'
-
 valueset "Non-Elective Inpatient Encounter": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.424'
 valueset "Ischemic Stroke": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.247'
 valueset "Anticoagulant Therapy": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.200'
-
-code "male": 'male-typical' from "sex-parameter-for-clinical-use"
 
 context Patient
 
@@ -33,9 +29,4 @@ define "Inpatient Encounters":
 
 define "x":
     Patient p
-        let sexParameterForClinicalUse: singleton from (p.extension e
-                                            where e.url = 'http://hl7.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse'),
-            sex: (sexParameterForClinicalUse.extension s
-                    where s.url = 'value')
-        where exists (sex.value sexValue
-            where (sexValue as System.Concept) ~ "male" )
+        let sexParameterForClinicalUse: singleton from (p.extension e)
