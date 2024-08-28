@@ -92,7 +92,7 @@ export class MeasuresPage {
         }
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.reload()
+            //cy.reload()
             Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
             cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="measure-action-' + fileContents + '"]', 100000)
@@ -136,6 +136,7 @@ export class MeasuresPage {
                     Utilities.waitForElementEnabled('[data-testid="export-measure-' + fileContents + '"]', 105000)
                     cy.get('[data-testid="export-measure-' + fileContents + '"]').should('be.enabled')
                     cy.get('[data-testid="export-measure-' + fileContents + '"]').click()
+                    cy.wait('@measureExport', { timeout: 60000 })
 
                     cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
                     //cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')

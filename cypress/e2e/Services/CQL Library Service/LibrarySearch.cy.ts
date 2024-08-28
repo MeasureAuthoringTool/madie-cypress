@@ -14,8 +14,10 @@ import { Environment } from "../../../Shared/Environment"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Global } from "../../../Shared/Global"
+import { v4 as uuidv4 } from 'uuid'
 
-
+let libraryName = "SupplementalDataElements"
+let model = "Cohort"
 let apiCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
 let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
@@ -50,6 +52,7 @@ describe.skip('Test Case Import: functionality tests', () => {
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
+        apiCQLLibraryName = 'TestLibrary1' + Date.now()
 
         cy.clearAllCookies()
         cy.clearLocalStorage()
@@ -60,13 +63,13 @@ describe.skip('Test Case Import: functionality tests', () => {
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{end}{downArrow}{downArrow}{enter}')
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.pause()
+
         //wait for alert / succesful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -83,10 +86,9 @@ describe.skip('Test Case Import: functionality tests', () => {
         cy.get(Header.cqlLibraryTab).click()
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
-        cy.pause()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{end}{downArrow}{downArrow}{enter}')
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
@@ -107,20 +109,37 @@ describe.skip('Test Case Import: functionality tests', () => {
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
+
     it('Return libraries that uses a, specific, library', () => {
-        cy.pause()
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/cql-libraries/usage?libraryName=' + libraryName,
+                method: 'GET',
+                headers: {
+                    authorization: 'Bearer ' + accessToken.value
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(200)
+                expect(response.body).to.not.be.null
+                expect(response.body).to.include('"name": "' + apiCQLLibraryName + '"')
+            })
+        })
+        cy.log('CQL Library was used in the ' + apiCQLLibraryName + ' library')
 
     })
+
     it('Return measures that uses a, specific, library', () => {
 
     })
+
     it('Delete a, specific, library only when it is not in use', () => {
 
     })
