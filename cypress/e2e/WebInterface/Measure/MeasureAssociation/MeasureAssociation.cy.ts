@@ -245,7 +245,6 @@ describe('Measure Association: Validations', () => {
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
         cy.get(EditMeasurePage.cmsIDDialogContinue).click()
-        cy.pause()
         cy.get(Header.mainMadiePageButton).click()
 
 
@@ -259,7 +258,6 @@ describe('Measure Association: Validations', () => {
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
         cy.get(EditMeasurePage.cmsIDDialogContinue).click()
-        cy.pause()
         cy.get(Header.mainMadiePageButton).click()
         cy.readFile('cypress/fixtures/QiCoreMeasureId').should('exist').then((measureId) => {
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
