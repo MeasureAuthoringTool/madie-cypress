@@ -56,7 +56,8 @@ const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-fol
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 
 //Need to debug more for File comparisons
-describe('Verify QDM Measure Export file contents', () => {
+//skipping all of these tests until a better cypress unzip / extraction mechanism can be used
+describe.skip('Verify QDM Measure Export file contents', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -97,13 +98,14 @@ describe('Verify QDM Measure Export file contents', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
+        //Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
     })
 
     it('Unzip the downloaded file and verify file types and contest of the HR and HQMF files, for QDM Measure', () => {
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
-        cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.get(MeasuresPage.allMeasuresTab).click().wait(7000)
+
 
         MeasuresPage.measureAction('qdmexport')
 
@@ -111,11 +113,23 @@ describe('Verify QDM Measure Export file contents', () => {
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
+        cy.pause()
+
         // unzipping the Measure Export
         cy.task('unzipFile', { zipFile: 'eCQMTitle4QDM-v0.0.000-QDM.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
+
+        cy.pause()
+
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QDM-v0.0.000-QDM.zip', path: downloadsFolder, force: true })
+            .then(results => {
+                cy.log('unzipFile Task finished')
+            })
+
+        cy.pause()
+
 
         //read contents of the html / human readable file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated HR file -to- the next)
@@ -306,7 +320,8 @@ describe('Verify QDM Measure Export file contents', () => {
     })
 
 })
-describe('QDM Measure Export, Not the Owner', () => {
+//skipping all of these tests until a better cypress unzip / extraction mechanism can be used
+describe.skip('QDM Measure Export, Not the Owner', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -345,7 +360,8 @@ describe('QDM Measure Export, Not the Owner', () => {
     })
 })
 
-describe('Successful QDM Measure Export with versioned measure', () => {
+//skipping all of these tests until a better cypress unzip / extraction mechanism can be used
+describe.skip('Successful QDM Measure Export with versioned measure', () => {
 
     deleteDownloadsFolderBeforeAll()
 
