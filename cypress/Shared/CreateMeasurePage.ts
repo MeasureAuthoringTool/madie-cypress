@@ -163,7 +163,7 @@ export class CreateMeasurePage {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
-                url: '/api/measure',
+                url: '/api/measure?addDefaultCQL=false',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value
                 },
@@ -263,7 +263,7 @@ export class CreateMeasurePage {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
-                url: '/api/measure',
+                url: '/api/measure?addDefaultCQL=false',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value
                 },
@@ -358,7 +358,7 @@ export class CreateMeasurePage {
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
-                url: '/api/measure',
+                url: '/api/measure?addDefaultCQL=false',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value
                 },
@@ -456,7 +456,7 @@ export class CreateMeasurePage {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
-                url: '/api/measure',
+                url: '/api/measure?addDefaultCQL=false',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value
                 },
@@ -553,7 +553,7 @@ export class CreateMeasurePage {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
                 failOnStatusCode: false,
-                url: '/api/measure',
+                url: '/api/measure?addDefaultCQL=false',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value
                 },
