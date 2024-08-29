@@ -101,7 +101,7 @@ describe.skip('Verify QDM Measure Export file contents', () => {
         //Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
     })
 
-    it.only('Unzip the downloaded file and verify file types and contest of the HR and HQMF files, for QDM Measure', () => {
+    it('Unzip the downloaded file and verify file types and contest of the HR and HQMF files, for QDM Measure', () => {
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click().wait(7000)
