@@ -374,7 +374,7 @@ export class TestCasesPage {
     public static readonly tcImportError = '[data-testid="test-case-import-error-div"]'
     public static readonly testCasesNonBonnieFileImportModal = '[data-testid="test-case-import-content-div"]'
     public static readonly testCasesNonBonnieFileImport = '[data-testid="file-drop-input"]'
-    public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile = '.TestCaseImportDialog___StyledSmall-sc-v92oci-5'
+    public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile = '[data-testid="test-case-preview-header"]'
     public static readonly testCasesNonBonnieFileImportFileUploadStatusDetails = '[class="TestCaseImportDialog___StyledSmall2-sc-v92oci-6 gpyrWs"]'
     public static readonly testCasesNonBonnieFileImportErrorOnImport = '[data-testid="test-case-import-error-div"]'
     public static readonly importTestCaseSuccessMsg = '[data-testid=success-toast]'

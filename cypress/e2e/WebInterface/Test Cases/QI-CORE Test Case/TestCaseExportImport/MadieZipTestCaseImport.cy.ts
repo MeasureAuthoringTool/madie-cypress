@@ -25,9 +25,9 @@ let validTestCaseJsonLizzy = TestCaseJson.TestCaseJson_Valid
 let validTestCaseJsonBobby = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let validFileToUpload = downloadsFolder.toString()
+let zipFileToUpload = 'cypress/fixtures'
 
-//Skipping until MAT-7436 is fixed
-describe.skip('MADIE Zip Test Case Import', () => {
+describe('MADIE Zip Test Case Import', () => {
 
     deleteDownloadsFolderBeforeAll()
     deleteDownloadsFolderBeforeEach()
@@ -125,7 +125,7 @@ describe.skip('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({ force: true })
 
         //verify that the export occurred
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
         cy.reload()
@@ -141,11 +141,11 @@ describe.skip('MADIE Zip Test Case Import', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -213,6 +213,83 @@ describe.skip('MADIE Zip Test Case Import', () => {
 
             })
 
+    })
+
+    it('Copy Warning message while importing Test cases', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //navigate to the edit page for the second test case
+        TestCasesPage.testCaseAction('edit', true)
+
+        //edit second test case so that it will fail
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).check()
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
+        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
+
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //navigate to the edit page for the second test case
+        TestCasesPage.testCaseAction('edit')
+
+        //edit second test case so that it will fail
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).check()
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
+        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
+
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+
+        //export test case
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //click on the Import Test Cases button
+        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+
+        //wait until select / drag and drop modal window appears
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
+
+        //Upload valid Json file via drag and drop
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(zipFileToUpload, 'CMS108FHIR-v0.2.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+
+        //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'CMS108FHIR-v0.2.000-FHIR4-TestCases.zip')
+
+        //import the tests cases from selected / dragged and dropped .zip file
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
+
+        //Click on the Copy button and verify success msg
+        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 65000)
+        cy.get('[data-testid="copy-button-tooltip"]').should('exist')
+        cy.get('[data-testid="copy-button-tooltip"]').click()
+        cy.get('[class="toast success"]').should('contain.text', 'Copied to clipboard!')
     })
 
 })
