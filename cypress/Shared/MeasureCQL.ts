@@ -1541,15 +1541,14 @@ export class MeasureCQL {
         '    exists ["Encounter, Performed"] E'
 
     public static readonly qiCoreTestCQL = 'library TestLibrary51723751438142 version \'0.0.000\'\n' +
-
         'using QICore version \'4.1.1\'\n' +
         '\n' +
         'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
         'include SupplementalDataElements version \'3.5.000\' called SDE\n' +
         'include MATGlobalCommonFunctionsFHIR4 version \'1.0.000\' called Global\n' +
-        'n' +
+        '\n' +
         'codesystem "ICD10CM": \'http://hl7.org/fhir/sid/icd-10-cm\'\n' +
-        'n' +
+        '\n' +
         'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\' \n' +
         'valueset "Atherosclerosis and Peripheral Arterial Disease": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1047.21\' \n' +
         'valueset "Breastfeeding": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1047.73\' \n' +
@@ -1558,8 +1557,6 @@ export class MeasureCQL {
         'valueset "Carotid Intervention": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.204\' \n' +
         'valueset "Cerebrovascular Disease, Stroke, TIA": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1047.44\' \n' +
         'valueset "Diabetes": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.103.12.1001\' \n' +
-        'n' +
-        'n' +
         'valueset "End Stage Renal Disease": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.353\' \n' +
         'valueset "Hepatitis A": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.110.12.1024\' \n' +
         'valueset "Hepatitis B": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.67.1.101.1.269\' \n' +
@@ -1593,8 +1590,6 @@ export class MeasureCQL {
         'parameter "Measurement Period" Interval<DateTime>\n' +
         '\n' +
         'context Patient\n' +
-        '\n' +
-        '\n' +
         '\n' +
         'define "SDE Ethnicity":\n' +
         '  SDE."SDE Ethnicity"\n' +
