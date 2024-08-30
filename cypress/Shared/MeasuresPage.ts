@@ -99,7 +99,7 @@ export class MeasuresPage {
             cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.enabled')
             switch ((action.valueOf()).toString().toLowerCase()) {
                 case "edit": {
-                    cy.wait(3700)
+                    cy.wait(7000)
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
                     Utilities.waitForElementVisible('[data-testid="view-measure-' + fileContents + '"]', 105000)
                     cy.get('[data-testid="view-measure-' + fileContents + '"]').should('be.visible')
@@ -110,7 +110,7 @@ export class MeasuresPage {
                     break
                 }
                 case 'export': {
-
+                    cy.wait(7000)
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
                     Utilities.waitForElementVisible('[data-testid="export-measure-' + fileContents + '"]', 105000)
@@ -127,7 +127,7 @@ export class MeasuresPage {
                     break
                 }
                 case 'qdmexport': {
-                    cy.wait(3750)
+                    cy.wait(7000)
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').scrollIntoView()
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
@@ -145,7 +145,7 @@ export class MeasuresPage {
                     break
                 }
                 case 'version': {
-
+                    cy.wait(7000)
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
                     Utilities.waitForElementVisible('[data-testid="create-version-measure-' + fileContents + '"]', 105000)
                     cy.get('[data-testid="create-version-measure-' + fileContents + '"]').should('be.visible')
@@ -155,7 +155,7 @@ export class MeasuresPage {
                     break
                 }
                 case 'draft': {
-
+                    cy.wait(7000)
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
                     Utilities.waitForElementVisible('[data-testid="draft-measure-' + fileContents + '"]', 105000)
                     cy.get('[data-testid="draft-measure-' + fileContents + '"]').should('be.visible')

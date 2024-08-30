@@ -60,7 +60,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasuresPage.measureAction('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(5000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
@@ -80,8 +80,10 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(Header.mainMadiePageButton).click().wait(2500)
         cy.reload()
 
+
         cy.readFile(filePath).should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
+            cy.wait(7000)
             cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="measure-action-' + fileContents + '"]', 100000)
             cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.enabled')
@@ -113,8 +115,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
     })
 
-    //skipping until https://jira.cms.gov/browse/MAT-7448 is fixed
-    it.skip('User cannot create a draft for a measure / version, whom already has been drafted', () => {
+
+    it('User cannot create a draft for a measure / version, whom already has been drafted', () => {
 
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedMeasuresPageOne' + Date.now()
@@ -122,7 +124,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasuresPage.measureAction('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(5000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
@@ -136,9 +138,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.reload()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            cy.reload(true)
-            cy.scrollTo('top').wait(37500)
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.wait(7000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
@@ -193,15 +194,15 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         OktaLogin.UILogout()
 
     })
-    //skipping until https://jira.cms.gov/browse/MAT-7448 is fixed
-    it.skip('Verify Draft measure CQL, Group and Test case', () => {
+
+    it('Verify Draft measure CQL, Group and Test case', () => {
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
         //version and draft measure
         MeasuresPage.measureAction('version')
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(5000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
@@ -251,7 +252,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(7000)
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)
 
