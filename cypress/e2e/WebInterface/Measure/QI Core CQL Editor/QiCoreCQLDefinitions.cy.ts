@@ -11,6 +11,7 @@ let measureCQL = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'include SupplementalDataElements version \'3.5.000\' called SupplementalData\n' +
+    'include CQMCommon version \'2.2.000\' called CQMCommon\n' +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
@@ -84,10 +85,10 @@ describe.skip('Qi-Core CQL Definitions - Expression Editor Name Options', () => 
 
     it('Search for Qi-Core CQL Definitions Expression Editor Name Options', () => {
 
-
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
@@ -97,10 +98,34 @@ describe.skip('Qi-Core CQL Definitions - Expression Editor Name Options', () => 
         cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
 
         //Expression Editor Name dropdown should contain Definition Names
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
         cy.get(CQLEditorPage.expressionEditorNameList).should('contain.text', 'Initial Population')
 
         //Expression Editor Name dropdown should also contain Included Library name.Definition name
         cy.get(CQLEditorPage.expressionEditorNameList).should('contain.text', 'SupplementalData.SDE Ethnicity')
+
+    })
+
+    it('Search for Qi-Core CQL Definitions Expression Editor Fluent Function Options', () => {
+
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+        cy.get(CQLEditorPage.definitionNameTextBox).type('Test')
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+        cy.get(CQLEditorPage.fluentFunctionOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+
+        //Expression Editor Name dropdown should contain Fluent Functions
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).should('contain.text', 'isFinishedEncounter()')
+
+        //Expression Editor Name dropdown should also contain Fluent functions from Included Library
+        cy.get(CQLEditorPage.expressionEditorNameList).should('contain.text', 'abatementInterval()')
 
     })
 })
@@ -128,6 +153,7 @@ describe.skip('Qi-Core CQL Definitions - Expression Editor Name Option Validatio
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
@@ -141,5 +167,3 @@ describe.skip('Qi-Core CQL Definitions - Expression Editor Name Option Validatio
         cy.get('.MuiAutocomplete-noOptions').should('contain.text', 'No options')
     })
 })
-
-

@@ -67,6 +67,7 @@ export class CQLEditorPage {
     //CQL Builder Sub tabs
     public static readonly cqlEditorPageDefinitionSubTab = '[data-testid="definitions-tab"]'
     public static readonly cqlEditorPageIncludesSubTab = '[data-testid="includes-tab"]'
+    public static readonly expandCQLBuilder = '[data-testid="expanded"]'
 
     //Includes page
     public static readonly includesTab = '[data-testid="includes-tab"]'
@@ -81,6 +82,8 @@ export class CQLEditorPage {
     public static readonly definitionOption = '[data-testid="Definitions-option"]'
     public static readonly expressionEditorNameDropdown = '[id="name-selector"]'
     public static readonly expressionEditorNameList = '#name-selector-listbox'
+    public static readonly fluentFunctionOption = '[data-testid="Fluent Functions-option"]'
+    public static readonly expressionEditorFluentFunctionList = '#name-selector-listbox'
 
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
