@@ -32,7 +32,9 @@ let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     'define "d":\n' +
     '\t true\n' +
     'define "n":\n' +
-    '\ttrue'
+    '\ttrue\n' +
+    'define fluent function "test"():\n' +
+    '\t true\n'
 
 let measureCQL_withError = 'library QDMLibrary1724174199255 version \'0.0.000\'\n' +
     'using QDM version \'5.6\'\n' +
@@ -79,7 +81,7 @@ describe.skip('QDM CQL Definitions - Expression Editor Name Options', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
         cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -105,6 +107,21 @@ describe.skip('QDM CQL Definitions - Expression Editor Name Options', () => {
         cy.get(CQLEditorPage.expressionEditorNameList).should('contain.text', 'Common.ED Encounter')
 
     })
+
+    it('Search for QDM CQL Definitions Expression Editor Fluent Function Options', () => {
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+        cy.get(CQLEditorPage.definitionNameTextBox).type('Test')
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+        cy.get(CQLEditorPage.fluentFunctionOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+
+        //Expression Editor Name dropdown should contain Fluent Functions
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).should('contain.text', 'test()')
+
+    })
 })
 
 //Skipping until feature flag is removed
@@ -126,6 +143,7 @@ describe.skip('QDM CQL Definitions - Expression Editor Name Option Validations',
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
         cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -149,5 +167,3 @@ describe.skip('QDM CQL Definitions - Expression Editor Name Option Validations',
         cy.get('.MuiAutocomplete-noOptions').should('contain.text', 'No options')
     })
 })
-
-
