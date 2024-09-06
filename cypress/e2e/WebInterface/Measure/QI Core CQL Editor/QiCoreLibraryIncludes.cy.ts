@@ -11,7 +11,7 @@ let CqlLibraryName = 'QiCoreLibrary' + Date.now()
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
 
 //Skipping until feature flag is removed
-describe.skip('Qi-Core Library Includes fields', () => {
+describe('Qi-Core Library Includes fields', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -34,6 +34,7 @@ describe.skip('Qi-Core Library Includes fields', () => {
 
         //Navigate to CQL Editor page
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
 
         //Click on Includes tab
         cy.get(CQLEditorPage.includesTab).click()
@@ -41,11 +42,31 @@ describe.skip('Qi-Core Library Includes fields', () => {
         //Search for FHIR Library
         cy.get(CQLEditorPage.librarySearchTextBox).type('qdm')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get('[class="Results___StyledTd-sc-wvb0lh-0 jvRQdT"]').should('contain.text', 'No Results were found')
+        cy.get('.Results___StyledTd-sc-18pioce-0').should('contain.text', 'No Results were found')
 
         //Search for QDM Libraries
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
         cy.get(CQLEditorPage.librarySearchTable).should('contain','nameversionownerActionVTE8.8.000YaHu1257VTE8.7.000YaHu1257VTE8.6.000YaHu1257VTE8.5.000YaHu1257VTE8.4.000YaHu1257')
+    })
+
+    it('Verify Included Libraries under Saved Libraries tab', () => {
+
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to CQL Editor page
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Click on Includes tab
+        cy.get(CQLEditorPage.includesTab).click()
+
+        //Navigate to Saved Libraries tab
+        cy.get(CQLEditorPage.savedLibrariesTab).click()
+        cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', 'FHIRHelpers')//Alias
+        cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', 'FHIRHelpers')//Name
+        cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', '4.1.000')//Version
+        cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', 'julietrubini')//Owner
     })
 })

@@ -74,6 +74,8 @@ export class CQLEditorPage {
     public static readonly librarySearchTextBox = '[data-testid="searchTerm-text-input"]'
     public static readonly librarySearchBtn = '[data-testid="search-btn"]'
     public static readonly librarySearchTable = '[data-testid="terminology-section-Library Results-sub-heading"]'
+    public static readonly savedLibrariesTab = '[data-testid="saved-libraries-tab"]'
+    public static readonly savedLibrariesTable = '[data-testid="includes-panel"]'
 
     //Definitions page
     public static readonly definitionsTab = '[data-testid="definitions-tab"]'
@@ -83,7 +85,7 @@ export class CQLEditorPage {
     public static readonly expressionEditorNameDropdown = '[id="name-selector"]'
     public static readonly expressionEditorNameList = '#name-selector-listbox'
     public static readonly fluentFunctionOption = '[data-testid="Fluent Functions-option"]'
-    public static readonly expressionEditorFluentFunctionList = '#name-selector-listbox'
+
 
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
