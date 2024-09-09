@@ -263,7 +263,7 @@ describe('Measure with Negation Rationale', () => {
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Bladder Cancer for Urology Care')
         //add Timing Relevant Period DateTime
-        QDMElements.addTimingPrevalencePeriodDateTime('09/30/2011 08:00 AM')
+        QDMElements.addTimingPrevalencePeriodDateTime('09/30/2011 08:00 AM', ' ')
         //add Code
         QDMElements.addCode('Icd10CM', 'C67.3')
 

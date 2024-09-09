@@ -347,7 +347,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //Element - Condition: Diagnosis: Diabetes
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Diabetes')
-        QDMElements.addTimingPrevalencePeriodDateTime('07/09/2023 08:00 AM')
+        QDMElements.addTimingPrevalencePeriodDateTime('07/09/2023 08:00 AM', ' ')
 
         //add Code
         QDMElements.addCode('SNOMEDCT', '46635009')

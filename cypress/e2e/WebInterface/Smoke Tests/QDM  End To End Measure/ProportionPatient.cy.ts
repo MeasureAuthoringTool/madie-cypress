@@ -278,7 +278,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //add Element
         QDMElements.addElement('diagnosis', 'Diagnosis: Status Post Right Mastectomy')
         //add Timing Prevalence Period DateTime
-        QDMElements.addTimingPrevalencePeriodDateTime('12/31/2012 11:59 PM')
+        QDMElements.addTimingPrevalencePeriodDateTime('12/31/2012 11:59 PM', ' ')
         //add Code
         QDMElements.addCode('SNOMEDCT', '137681000119108')
         //Close the Element
@@ -288,7 +288,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //add Element
         QDMElements.addElement('diagnosis', 'Diagnosis: Status Post Left Mastectomy')
         //add Timing Relevant Period DateTime
-        QDMElements.addTimingPrevalencePeriodDateTime('12/31/2012 11:59 PM')
+        QDMElements.addTimingPrevalencePeriodDateTime('12/31/2012 11:59 PM', ' ')
 
         //add Code
         QDMElements.addCode('SNOMEDCT', '137671000119105')

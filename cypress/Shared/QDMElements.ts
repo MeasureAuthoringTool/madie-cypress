@@ -1,4 +1,5 @@
 import { TestCasesPage } from "./TestCasesPage";
+import { Utilities } from "./Utilities";
 
 export class QDMElements {
 
@@ -94,6 +95,7 @@ export class QDMElements {
 
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
+        Utilities.waitForElementVisible('[data-testid="code-system-option-' + codeSystem + '"]', 700000)
         cy.get('[data-testid="code-system-option-' + codeSystem + '"]').click()
 
         cy.get('[id="code-selector"]').click()
