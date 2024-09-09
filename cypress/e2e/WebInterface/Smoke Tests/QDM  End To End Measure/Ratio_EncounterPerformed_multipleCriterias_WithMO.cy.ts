@@ -7,7 +7,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QDMElements } from "../../../../Shared/QDMElements"
-import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage";
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
 
 let measureName = 'RatioEncounterPerformedMultipleCriteriasWithMO' + Date.now()
 let CqlLibraryName = 'RatioEncounterPerformedMultipleCriteriasWithMO' + Date.now()
@@ -196,7 +196,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Adding Element data to the test case
 

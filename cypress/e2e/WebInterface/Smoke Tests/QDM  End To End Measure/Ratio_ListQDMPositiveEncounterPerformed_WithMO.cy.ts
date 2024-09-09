@@ -342,12 +342,13 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Element - Condition: Diagnosis: Diabetes
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Diabetes')
-        cy.get(TestCasesPage.prevalencePeriodStartDate).type('07/09/2023 08:00 AM')
+        QDMElements.addTimingPrevalencePeriodDateTime('07/09/2023 08:00 AM')
+
         //add Code
         QDMElements.addCode('SNOMEDCT', '46635009')
 
@@ -362,7 +363,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
         //add Element
         QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
-        cy.get('[data-testid="Relevant Datetime-input"]').type('07/11/2023 07:00 AM')
+        cy.get('[data-testid="relevant-datetime-input"]').type('07/11/2023 07:00 AM')
         //add Code
         QDMElements.addCode('LOINC', '1556-0')
         // Enter attribute and its type
@@ -383,7 +384,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
         //add Element
         QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
-        cy.get('[data-testid="Relevant Datetime-input"]').type('10/13/2023 08:00 AM')
+        cy.get('[data-testid="relevant-datetime-input"]').type('10/13/2023 08:00 AM')
         //add Code
         QDMElements.addCode('LOINC', '1556-0')
         // Enter attribute and its type
@@ -424,7 +425,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Element - Condition: Diagnosis: Diabetes
         //add Element
@@ -451,7 +452,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //Element - Laboratory Test: Performed: Glucose Lab Test Mass Per Volume
         //add Element
         QDMElements.addElement('laboratory', 'Performed: Glucose Lab Test Mass Per Volume')
-        cy.get('[data-testid="Relevant Datetime-input"]').type('07/11/2023 08:00 AM')
+        cy.get('[data-testid="relevant-datetime-input"]').type('07/11/2023 08:00 AM')
         //add Code
         QDMElements.addCode('LOINC', '1556-0')
         // Enter attribute and its type

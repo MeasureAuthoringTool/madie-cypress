@@ -7,7 +7,7 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import {QDMElements} from "../../../../../Shared/QDMElements";
+import { QDMElements } from "../../../../../Shared/QDMElements";
 
 let measureName = 'CVListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'CVListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -131,7 +131,7 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //add element - code system to TC
         //Element - Encounter:Performed: Observation Services
@@ -295,7 +295,7 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //add element - code system to TC
         //Element - Encounter:Performed: Observation Services
