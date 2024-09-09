@@ -138,7 +138,7 @@ describe('Quantity Attribute', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2020', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         cy.get(TestCasesPage.laboratoryElement).click()
         cy.get(TestCasesPage.plusIcon).eq(1).click()

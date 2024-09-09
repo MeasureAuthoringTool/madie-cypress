@@ -6,8 +6,8 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage";
-import {QDMElements} from "../../../../Shared/QDMElements";
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
+import { QDMElements } from "../../../../Shared/QDMElements";
 
 let measureName = 'CVWithMOAndStratification' + Date.now()
 let CqlLibraryName = 'CVWithMOAndStratification' + Date.now()
@@ -239,7 +239,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('06/15/1935', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('06/15/1935 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Element - Encounter:Performed:Emergency Department Visit
         cy.get('[data-testid="elements-tab-encounter"]').click()
@@ -260,7 +260,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[id="code-selector"]').click()
         cy.get('[data-testid="option-4525004"]').click()
         cy.get(TestCasesPage.authorDateTime).type('06/10/2025 05:00 AM')
-        cy.get('[data-testid="Location Period - End-input"]').type('06/10/2025 08:00 AM')
+        cy.get('[data-testid="location-period-end-input"]').type('06/10/2025 08:00 AM')
         cy.get('[data-testid="add-attribute-button"]').click()
         cy.get('[id="attribute-select"]').click()
         cy.get('[data-testid="option-Length Of Stay"]').click()
@@ -324,7 +324,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('11/12/1995', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('11/12/1995 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Element - Encounter:Performed:Emergency Department Visit
         cy.get('[data-testid="elements-tab-encounter"]').click()
@@ -345,7 +345,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[id="code-selector"]').click()
         cy.get('[data-testid="option-4525004"]').click()
         cy.get(TestCasesPage.authorDateTime).type('01/29/2025 08:30 AM')
-        cy.get('[data-testid="Location Period - End-input"]').type('01/29/2025 06:15 PM')
+        QDMElements.addTimingLocationPeriodDateTime(' ', '01/29/2025 06:15 PM')
         cy.get('[data-testid="add-attribute-button"]').click()
         //Close the Element
         cy.get('[data-testid=CloseIcon]').click()
@@ -395,7 +395,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[id="code-selector"]').click()
         cy.get('[data-testid="option-4525004"]').click()
         cy.get(TestCasesPage.authorDateTime).type('02/06/2025 08:00 AM')
-        cy.get('[data-testid="Location Period - End-input"]').type('02/06/2025 08:15 PM')
+        QDMElements.addTimingLocationPeriodDateTime(' ', '02/06/2025 08:15 PM')
         cy.get('[data-testid="add-attribute-button"]').click()
         //Close the Element
         cy.get('[data-testid=CloseIcon]').click()

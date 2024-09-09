@@ -7,7 +7,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QDMElements } from "../../../../Shared/QDMElements"
-import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage";
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
 
 let measureName = 'ProportionListQDMPositiveProcedurePerformed' + Date.now()
 let CqlLibraryName = 'ProportionListQDMPositiveProcedurePerformed' + Date.now()
@@ -272,14 +272,13 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('08/17/1957', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('08/17/1957 12:00 AM', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
 
         //Element - Condition:Diagnosis: Uveitis
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Uveitis')
         //add Timing Prevalence Period DateTime
-        cy.get('[data-testid="Prevalence Period - Start-input"]').type('03/15/2012 07:00 PM')
-        cy.get('[data-testid="Prevalence Period - End-input"]').type('03/15/2012 07:00 PM')
+        QDMElements.addTimingPrevalencePeriodDateTime('03/15/2012 07:00 PM', '03/15/2012 07:00 PM')
         cy.wait(3000)
         //add Code
         QDMElements.addCode('SNOMEDCT', '4927003')
@@ -296,9 +295,9 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //Element - Condition:Diagnosis: Optic Atrophy
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Optic Atrophy')
-        //add Timing Relevant Period DateTime
-        cy.get('[data-testid="Prevalence Period - Start-input"]').type('03/15/2012 07:00 PM')
-        cy.get('[data-testid="Prevalence Period - End-input"]').type('03/15/2012 07:00 PM')
+        //add Timing Prevalent Period DateTime
+        QDMElements.addTimingPrevalencePeriodDateTime('03/15/2012 07:00 PM', '03/15/2012 07:00 PM')
+
         cy.wait(3000)
         //add Code
         QDMElements.addCode('SNOMEDCT', '111527005')
@@ -321,14 +320,13 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/28/1977', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('07/28/1977 12:00 AM', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
 
         //Element - Condition:Diagnosis: Disorders of Visual Cortex
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Disorders of Visual Cortex')
         //add Timing Prevalence Period DateTime
-        cy.get('[data-testid="Prevalence Period - Start-input"]').type('01/01/2012 01:15 PM')
-        cy.get('[data-testid="Prevalence Period - End-input"]').type('01/02/2012 01:15 PM')
+        QDMElements.addTimingPrevalencePeriodDateTime('01/01/2012 01:15 PM', '01/02/2012 01:15 PM')
         //add Code
         QDMElements.addCode('Icd10CM', 'H47.611')
 

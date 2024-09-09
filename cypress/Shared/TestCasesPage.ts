@@ -32,7 +32,7 @@ export class TestCasesPage {
     public static readonly shiftSpecificTestCasesSuccessMsg = '[data-testid="test-case-list-success"]'
 
     //QDM Test Case Demographics elements
-    public static readonly QDMDob = '[id="birth-date"]'
+    public static readonly QDMDob = '[data-testid="date-of-birth-input"]'
     public static readonly QDMLivingStatus = '[id="demographics-living-status-select-id"]'
     public static readonly QDMLivingStatusOPtion = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiPaper-root MuiMenu-paper MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-177ic5c"]'
     public static readonly QDMRace = '[id="demographics-race-select-id"]'
@@ -109,11 +109,13 @@ export class TestCasesPage {
     public static readonly LaboratorySLTCard = '[data-testid="data-type-Laboratory Test, Performed: Sodium lab test"]'
     public static readonly LaboratoryPLTCard = '[data-testid="data-type-Laboratory Test, Performed: Potassium lab test"]'
     public static readonly LaboratoryCLTCard = '[data-testid="data-type-Laboratory Test, Performed: Creatinine lab test"]'
-    public static readonly relevantPeriodStartDate = '[data-testid="Relevant Period - Start-input"]'
-    public static readonly relevantPeriodEndDate = '[data-testid="Relevant Period - End-input"]'
-    public static readonly authorDateTime = '[data-testid="Author Datetime-input"]'
-    public static readonly prevalencePeriodStartDate = '[data-testid="Prevalence Period - Start-input"]'
-    public static readonly prevalencePeriodEndDate = '[data-testid="Prevalence Period - End-input"]'
+    public static readonly locationPeriodStartDate = '[data-testid="location-period-start-input"]'
+    public static readonly locationPeriodEndDate = '[data-testid="location-period-end-input"]'
+    public static readonly relevantPeriodStartDate = '[data-testid="relevant-period-start-input"]'
+    public static readonly relevantPeriodEndDate = '[data-testid="relevant-period-end-input"]'
+    public static readonly authorDateTime = '[data-testid="author-datetime-input"]'
+    public static readonly prevalencePeriodStartDate = '[data-testid="prevalence-period-start-input"]'
+    public static readonly prevalencePeriodEndDate = '[data-testid="prevalence-period-end-input"]'
 
     //QDM Test Case Elements elements / objects -- Characteristic
     public static readonly CharacteristicMAPCard = '[data-testid="data-type-Patient Characteristic Payer: Medicare Advantage payer"]'
@@ -944,9 +946,11 @@ export class TestCasesPage {
             })
     }
 
+
+
     public static enterPatientDemographics(dob?: dateTimeISO, livingStatus?: string, race?: string, gender?: string, ethnicity?: string): void {
 
-        cy.get(TestCasesPage.QDMDob).wait(1700).click().wait(1000)
+        cy.get(TestCasesPage.QDMDob).clear().wait(1700).click().wait(1000)
         cy.get(TestCasesPage.QDMDob).type(dob).click()
         cy.get(TestCasesPage.QDMLivingStatus).click()
         cy.get(TestCasesPage.QDMLivingStatusOPtion).contains(livingStatus).click()
