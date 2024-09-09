@@ -416,7 +416,8 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
         TestCasesPage.testCaseAction('edit')
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2000', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('01/01/2000 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+
         //add element - code system to TC
         //Element - Medication:Discharged: Antithrombotic Therapy for Ischemic Stroke
         cy.get('[data-testid="elements-tab-medication"]').click()
@@ -430,7 +431,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get('[data-testid="add-code-concept-button"]').click()
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(4000)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
@@ -486,10 +487,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get('[data-value="111297002"]').click()
         cy.get('[data-testid="integer-input-field-Rank"]').type('1')
         cy.get(TestCasesPage.addAttribute).click()
-        //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+
         //Add Expected value for Test case
         //navigate to the Expected / Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click()
