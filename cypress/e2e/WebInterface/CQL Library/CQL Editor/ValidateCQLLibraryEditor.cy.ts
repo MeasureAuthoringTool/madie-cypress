@@ -170,36 +170,6 @@ describe('CQL Library: CQL Editor: valueSet', () => {
 
     })
 
-    //Need to skip this test for now until we are able to manipulate the DB and remove the API Key and TGT from
-    //Mongo DB with a DB connection or new API Call
-    it.skip('UMLS Error: User Not Logged in', () => {
-        //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).click()
-        //Click Edit CQL Library
-        CQLLibrariesPage.clickEditforCreatedLibrary()
-        Utilities.typeFileContents('cypress/fixtures/ValueSetTestingEntryValid.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
-
-        //enter description detail
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).type('Some random data')
-
-        //enter / select a publisher value
-        cy.get(CQLLibraryPage.cqlLibraryEditPublisher).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryEditPublisher).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryEditPublisher).type('Able Health')
-        cy.get(CQLLibraryPage.cqlLibraryEditPublisher).type('{downArrow}').type('{enter}')
-
-        cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLLibraryPage.successfulCQLSaveNoErrors).should('contain.text', 'Cql Library successfully updated')
-
-        cy.get(CQLLibraryPage.umlsErrorMessage).should('be.visible')
-        cy.get(CQLLibraryPage.umlsErrorMessage).should('contain.text', 'Please log in to UMLS!')
-
-    })
-
     it('Value Sets are valid', () => {
         //Navigate to CQL Library Page
         cy.get(Header.cqlLibraryTab).click()

@@ -478,7 +478,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
     })
 })
-describe.skip('QDM Measure: Test Case: with Observations: Expected / Actual results', () => {
+describe('QDM Measure: Test Case: with Observations: Expected / Actual results', () => {
 
     beforeEach('Create Measure', () => {
 

@@ -44,7 +44,7 @@ let invalidFileToUpload = 'cypress/fixtures'
 let firstMeasureName = ''
 let updatedCQLLibraryName = ''
 
-describe.skip('Test Case Import: functionality tests', () => {
+describe('Test Case Import: functionality tests', () => {
 
     deleteDownloadsFolderBeforeAll()
     deleteDownloadsFolderBeforeEach()

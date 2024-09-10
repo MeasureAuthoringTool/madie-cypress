@@ -81,32 +81,6 @@ describe('Import Test Case into the Test Case Editor', () => {
 
     })
 
-    //Need to work with Ben to get the EICAR files allowed
-    it.skip('Verify error message when virus file is imported', () => {
-
-        //const virusString = new Blob(['X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'])
-        const virusString = 'X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'
-
-        //Click on Edit Button
-        MeasuresPage.measureAction("edit")
-
-        //Navigate to Test case list page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        // @ts-ignore
-        cy.get(TestCasesPage.testCaseFileImport).attachFile({
-            fileContent: virusString,
-            filePath: 'VIRUS - Virus-v2-0-004-QDM-5-6.json',
-            encoding: 'utf-8',
-            lastModified: new Date().getTime()
-        })
-
-        cy.get(TestCasesPage.importTestCaseErrorMsg).should('contain.text', 'There was an error importing this file. Please contact the help desk for error code V100')
-
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-
-    })
 
     it('Verify error message when bulk Json file is imported', () => {
 
