@@ -40,7 +40,7 @@ let measureCQL = 'library SimpleFhirMeasure version \'0.0.001\'\n' +
     'define "numeratorExclusion":\n' +
     '    "num"'
 
-describe.skip('Measure Human Readable', () => {
+describe('Measure Human Readable', () => {
 
     beforeEach('Create Measure, Measure group and set Access token', () => {
 

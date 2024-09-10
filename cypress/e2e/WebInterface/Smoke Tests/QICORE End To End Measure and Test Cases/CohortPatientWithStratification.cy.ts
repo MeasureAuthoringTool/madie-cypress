@@ -143,6 +143,5 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
-
     })
 })

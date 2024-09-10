@@ -26,7 +26,7 @@ const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 let validFileToUpload = downloadsFolder.toString()
 
-describe.skip('QI-Core: Export Bundle options: Transaction or Collection', () => {
+describe('QI-Core: Export Bundle options: Transaction or Collection', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -128,7 +128,7 @@ describe.skip('QI-Core: Export Bundle options: Transaction or Collection', () =>
         })
     })
 })
-describe.skip('QI-Core: Single Test Case on Measure: Export / Import Bundle options: Transaction', () => {
+describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: Transaction', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -216,7 +216,7 @@ describe.skip('QI-Core: Single Test Case on Measure: Export / Import Bundle opti
 
     })
 })
-describe.skip('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options: Transaction', () => {
+describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options: Transaction', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -322,7 +322,7 @@ describe.skip('QI-Core: Multiple Test Case on Measure: Export / Import Bundle op
     })
 })
 
-describe.skip('QI-Core: Single Test Case on Measure: Export / Import Bundle options: Collection', () => {
+describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: Collection', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -410,7 +410,7 @@ describe.skip('QI-Core: Single Test Case on Measure: Export / Import Bundle opti
 
     })
 })
-describe.skip('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options: Collection', () => {
+describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options: Collection', () => {
 
     deleteDownloadsFolderBeforeAll()
 
