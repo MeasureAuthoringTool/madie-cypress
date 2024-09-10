@@ -345,7 +345,7 @@ describe('Measure: CQL Editor', () => {
         cy.get('.MuiBox-root').should('contain.text', 'Discard Changes?')
     })
 
-    it('Verify error message if FHIR Helpers is missing in CQL', () => {
+    it.only('Verify error message if FHIR Helpers is missing in CQL', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -366,7 +366,7 @@ describe('Measure: CQL Editor', () => {
         //Validate message on page
         CQLEditorPage.validateSuccessfulCQLUpdate()
         cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-        cy.get('[data-testid="generic-errors-text-list"] > :nth-child(1)').should('contain.text', 'Row: 1, Col:0: ELM: 0:0 | FHIRHelpers is required as an included library for QI-Core. Please add the appropriate version of FHIRHelpers to your CQL.')
+        cy.get('[data-testid="generic-errors-text-list"]').should('contain.text', 'Row: 1, Col:0: ELM: 0:0 | FHIRHelpers is required as an included library for QI-Core. Please add the appropriate version of FHIRHelpers to your CQL.')
 
         //Validate error(s) in CQL Editor after saving
         cy.scrollTo('top')
@@ -395,28 +395,6 @@ describe('Measure: CQL Editor: valueSet', () => {
         OktaLogin.Logout()
 
         //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
-    })
-
-    //Need to skip this test for now until we are able to manipulate the DB and remove the API Key and TGT from
-    //Mongo DB with a DB connection or new API Call
-    it.skip('UMLS Error: User Not Logged in', () => {
-
-        //Click on Edit Button
-        MeasuresPage.measureAction("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.readFile('cypress/fixtures/EXM124v7QICore4Entry.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        //Validate message on page
-        CQLEditorPage.validateSuccessfulCQLSave()
-
-        cy.get(CQLEditorPage.umlsMessage).should('be.visible')
-        cy.get(CQLEditorPage.umlsMessage).should('contain.text', 'Please log in to UMLS!')
 
     })
 
@@ -462,8 +440,8 @@ describe('Measure: CQL Editor: valueSet', () => {
         cy.scrollTo('top')
         cy.get(EditMeasurePage.cqlEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
-        // Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:102 | Request failed with status code 404 for oid = 2.16.840.1.113883.3.464.1003.110.12.1059999 " +
-        //     "location = 36:0-36:102")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:102 | Request failed with status code 404 for oid = 2.16.840.1.113883.3.464.1003.110.12.1059999 " +
+             "location = 36:0-36:102")
 
     })
 

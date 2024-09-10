@@ -21,8 +21,8 @@ let testCaseDescription = 'testDescription' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.QDMTestCaseJson
 
-//Skipping until MAT-7448 is fixed
-describe.skip('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
+
+describe('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
