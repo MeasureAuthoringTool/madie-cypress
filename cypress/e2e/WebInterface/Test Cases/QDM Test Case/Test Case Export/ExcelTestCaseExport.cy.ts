@@ -256,7 +256,7 @@ describe('QDM Test Case Excel Export', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('06/15/1935', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('06/15/1935 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -371,7 +371,7 @@ describe('QDM Test Case Excel Export', () => {
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('06/15/1935', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('06/15/1935 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

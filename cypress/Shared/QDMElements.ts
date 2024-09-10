@@ -1,4 +1,5 @@
-import {TestCasesPage} from "./TestCasesPage";
+import { TestCasesPage } from "./TestCasesPage";
+import { Utilities } from "./Utilities";
 
 export class QDMElements {
 
@@ -30,7 +31,7 @@ export class QDMElements {
                 break
             }
 
-            case  'patientcharacteristic': {
+            case 'patientcharacteristic': {
 
                 cy.get('[data-testid=elements-tab-patient_characteristic]').click()
                 cy.get('[data-testid="data-type-Patient Characteristic ' + elementTitle + '"]').click()
@@ -38,7 +39,7 @@ export class QDMElements {
                 break
             }
 
-            case  'condition': {
+            case 'condition': {
 
                 cy.get('[data-testid="elements-tab-condition"]').click()
                 cy.get('[data-testid="data-type-' + elementTitle + '"]').click()
@@ -57,7 +58,7 @@ export class QDMElements {
             case 'diagnosis': {
 
                 cy.get('[data-testid=elements-tab-condition]').click()
-                cy.get('[data-testid="data-type-'  + elementTitle + '"]').click()
+                cy.get('[data-testid="data-type-' + elementTitle + '"]').click()
 
                 break
             }
@@ -72,13 +73,19 @@ export class QDMElements {
         }
     }
 
-    public static addTimingRelevantPeriodDateTime(startDateAndTime: string, endDateAndTime: string): void {
+    public static addTimingLocationPeriodDateTime(startDateAndTime?: string, endDateAndTime?: string): void {
+
+        cy.get(TestCasesPage.locationPeriodStartDate).type(startDateAndTime)
+        cy.get(TestCasesPage.locationPeriodEndDate).type(endDateAndTime)
+    }
+
+    public static addTimingRelevantPeriodDateTime(startDateAndTime: string, endDateAndTime?: string): void {
 
         cy.get(TestCasesPage.relevantPeriodStartDate).type(startDateAndTime)
         cy.get(TestCasesPage.relevantPeriodEndDate).type(endDateAndTime)
     }
 
-    public static addTimingPrevalencePeriodDateTime(startDateAndTime: string, endDateAndTime: string): void {
+    public static addTimingPrevalencePeriodDateTime(startDateAndTime: string, endDateAndTime?: string): void {
 
         cy.get(TestCasesPage.prevalencePeriodStartDate).type(startDateAndTime)
         cy.get(TestCasesPage.prevalencePeriodEndDate).type(endDateAndTime)
@@ -88,6 +95,7 @@ export class QDMElements {
 
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
+        Utilities.waitForElementVisible('[data-testid="code-system-option-' + codeSystem + '"]', 700000)
         cy.get('[data-testid="code-system-option-' + codeSystem + '"]').click()
 
         cy.get('[id="code-selector"]').click()

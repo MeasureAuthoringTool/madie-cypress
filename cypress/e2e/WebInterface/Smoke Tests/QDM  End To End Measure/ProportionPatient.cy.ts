@@ -7,7 +7,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QDMElements } from "../../../../Shared/QDMElements"
-import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage";
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
 
 let measureName = 'ProportionPatient' + Date.now()
 let CqlLibraryName = 'ProportionPatient' + Date.now()
@@ -214,7 +214,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('12/31/1966', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('12/31/1966 12:00 AM', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
 
         //Element - Encounter:Performed: Annual Wellness Visit
         //add Element
@@ -258,7 +258,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('12/31/1946', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('12/31/1946 12:00 AM', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
 
         //Element - Encounter:Performed: Preventive Care Services - Established Office Visit, 18 and Up
         //add Element
@@ -278,7 +278,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //add Element
         QDMElements.addElement('diagnosis', 'Diagnosis: Status Post Right Mastectomy')
         //add Timing Prevalence Period DateTime
-        cy.get(TestCasesPage.prevalencePeriodStartDate).type('12/31/2012 11:59 PM')
+        QDMElements.addTimingPrevalencePeriodDateTime('12/31/2012 11:59 PM', ' ')
         //add Code
         QDMElements.addCode('SNOMEDCT', '137681000119108')
         //Close the Element
@@ -288,7 +288,8 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //add Element
         QDMElements.addElement('diagnosis', 'Diagnosis: Status Post Left Mastectomy')
         //add Timing Relevant Period DateTime
-        cy.get(TestCasesPage.prevalencePeriodStartDate).type('12/31/2012 11:59 PM')
+        QDMElements.addTimingPrevalencePeriodDateTime('12/31/2012 11:59 PM', ' ')
+
         //add Code
         QDMElements.addCode('SNOMEDCT', '137671000119105')
 

@@ -60,7 +60,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
         TestCasesPage.testCaseAction('edit', false)
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2000', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('01/01/2000 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
         //add element - code system to TC
         //Element - Medication:Discharged: Antithrombotic Therapy for Ischemic Stroke
         cy.get('[data-testid="elements-tab-medication"]').click()
@@ -171,7 +171,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
         TestCasesPage.testCaseAction('edit', true)
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('02/29/1980', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('02/29/1980 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
         //add element - code system to TC
         //Element - Medication:Discharged: Antithrombotic Therapy for Ischemic Stroke
         cy.get('[data-testid="elements-tab-medication"]').click()

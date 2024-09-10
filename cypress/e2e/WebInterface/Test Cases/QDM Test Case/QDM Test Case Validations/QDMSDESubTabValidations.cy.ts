@@ -16,12 +16,12 @@ let firstTestCaseTitle = 'PDxNotPsych60MinsDepart'
 let testCaseDescription = 'IPPStrat1Pass' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 
-describe( 'QDM Test Cases : SDE Sub tab validations', () => {
+describe('QDM Test Cases : SDE Sub tab validations', () => {
 
     beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
 
         //Create New Measure and Test case
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName,'Cohort', false, qdmMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', false, qdmMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
 
@@ -85,7 +85,7 @@ describe( 'QDM Test Cases : SDE Sub tab validations', () => {
         TestCasesPage.testCaseAction('edit')
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2020', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Selecting Laboratory element and performed
         cy.get(TestCasesPage.laboratoryElement).click()
@@ -220,7 +220,7 @@ describe( 'QDM Test Cases : SDE Sub tab validations', () => {
         TestCasesPage.testCaseAction('edit')
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2020', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Selecting Laboratory element and performed
         cy.get(TestCasesPage.laboratoryElement).click()

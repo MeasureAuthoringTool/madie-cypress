@@ -257,13 +257,13 @@ describe('Measure with Negation Rationale', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('04/10/1942', 'Living', 'White', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('04/10/1942 12:00 AM', 'Living', 'White', 'Female', 'Not Hispanic or Latino')
 
         //Element - Condition, Diagnosis: Bladder Cancer for Urology Care
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Bladder Cancer for Urology Care')
         //add Timing Relevant Period DateTime
-        cy.get('[data-testid="Prevalence Period - Start-input"]').type('09/30/2011 08:00 AM')
+        QDMElements.addTimingPrevalencePeriodDateTime('09/30/2011 08:00 AM', ' ')
         //add Code
         QDMElements.addCode('Icd10CM', 'C67.3')
 
