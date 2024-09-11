@@ -374,8 +374,8 @@ describe('Run QDM Test Case ', () => {
     })
 })
 
-//skipping until MAT-7665 is fixed
-describe.skip('Validating Expansion -> Manifest selections / navigation functionality', () => {
+
+describe('Validating Expansion -> Manifest selections / navigation functionality', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -418,7 +418,36 @@ describe.skip('Validating Expansion -> Manifest selections / navigation function
         TestCasesPage.testCaseAction('edit')
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2000 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
-
+        //add element - code system to TC
+        //Element - Encounter:Performed: Nonelective Inpatient Encounter
+        cy.get('[data-testid="elements-tab-encounter"]').scrollIntoView().click()
+        cy.get('[data-testid="data-type-Encounter, Performed: Nonelective Inpatient Encounter"]').click()
+        QDMElements.addTimingRelevantPeriodDateTime('06/01/2025 01:00 PM', '06/02/2025 01:00 PM')
+        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-testid="code-option-183452005"]').click()
+        cy.get('[data-testid="add-code-concept-button"]').click()
+        //navigate to the attribute sub tab and enter value
+        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.selectAttributeDropdown).click()
+        cy.get('[data-testid="option-Diagnoses"]').click()
+        cy.get('[data-testid="value-set-selector"]').scrollIntoView().click()
+        cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.247"]').click() //Select IschemicStroke from dropdown
+        cy.get('[id="code-system-selector"]').click()
+        cy.get('[data-testid="option-SNOMEDCT"]').click()
+        cy.get('[id="code-selector"]').click()
+        cy.get('[data-value="111297002"]').click()
+        cy.get('[data-testid="integer-input-field-Rank"]').type('1')
+        cy.get(TestCasesPage.addAttribute).click()
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
+        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(4000)
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
+        TestCasesPage.testCaseAction('edit')
         //add element - code system to TC
         //Element - Medication:Discharged: Antithrombotic Therapy for Ischemic Stroke
         cy.get('[data-testid="elements-tab-medication"]').click()
@@ -465,30 +494,7 @@ describe.skip('Validating Expansion -> Manifest selections / navigation function
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
-        //add element - code system to TC
-        //Element - Encounter:Performed: Nonelective Inpatient Encounter
-        cy.get('[data-testid="elements-tab-encounter"]').scrollIntoView().click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Nonelective Inpatient Encounter"]').click()
-        QDMElements.addTimingRelevantPeriodDateTime('06/01/2025 01:00 PM', '06/02/2025 01:00 PM')
-        cy.pause()
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-testid="code-option-183452005"]').click()
-        cy.get('[data-testid="add-code-concept-button"]').click()
-        //navigate to the attribute sub tab and enter value
-        cy.get(TestCasesPage.attributesTab).click()
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Diagnoses"]').click()
-        cy.get('[data-testid="value-set-selector"]').scrollIntoView().click()
-        cy.get('[data-testid="option-2.16.840.1.113883.3.117.1.7.1.247"]').click() //Select IschemicStroke from dropdown
-        cy.get('[id="code-system-selector"]').click()
-        cy.get('[data-testid="option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
-        cy.get('[data-value="111297002"]').click()
-        cy.get('[data-testid="integer-input-field-Rank"]').type('1')
-        cy.get(TestCasesPage.addAttribute).click()
+
 
         //Add Expected value for Test case
         //navigate to the Expected / Actual tab
@@ -529,7 +535,7 @@ describe.skip('Validating Expansion -> Manifest selections / navigation function
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    it.only('Verify Expansion -> Manifest: When code does not exist on value set, test case will fail. When value set does contain code, and all other expected equals actual then test case passes.', () => {
+    it('Verify Expansion -> Manifest: When code does not exist on value set, test case will fail. When value set does contain code, and all other expected equals actual then test case passes.', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
