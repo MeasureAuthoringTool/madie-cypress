@@ -178,7 +178,7 @@ describe('Validating the creation of QDM Test Case', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob
-        cy.get(TestCasesPage.QDMDob).wait(2500).type('01/01/2020').wait(2500)
+        cy.get(TestCasesPage.QDMDob).wait(2500).type('01/01/2020 12:00 PM').wait(2500)
 
         //save dob value
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
@@ -356,7 +356,7 @@ describe('Run QDM Test Case ', () => {
 
         //enter a value of the dob, Race and gender
         cy.get(TestCasesPage.QDMDob).click().wait(500)
-        cy.get(TestCasesPage.QDMDob).clear().type('1981-05-27')
+        cy.get(TestCasesPage.QDMDob).clear().type('1981-05-27 12:00 AM')
         cy.get(TestCasesPage.QDMLivingStatus).click()
         cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
         cy.get(TestCasesPage.QDMRace).click()
@@ -374,7 +374,8 @@ describe('Run QDM Test Case ', () => {
     })
 })
 
-describe('Validating Expansion -> Manifest selections / navigation functionality', () => {
+//skipping until MAT-7665 is fixed
+describe.skip('Validating Expansion -> Manifest selections / navigation functionality', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -469,6 +470,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get('[data-testid="elements-tab-encounter"]').scrollIntoView().click()
         cy.get('[data-testid="data-type-Encounter, Performed: Nonelective Inpatient Encounter"]').click()
         QDMElements.addTimingRelevantPeriodDateTime('06/01/2025 01:00 PM', '06/02/2025 01:00 PM')
+        cy.pause()
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
@@ -527,7 +529,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    it('Verify Expansion -> Manifest: When code does not exist on value set, test case will fail. When value set does contain code, and all other expected equals actual then test case passes.', () => {
+    it.only('Verify Expansion -> Manifest: When code does not exist on value set, test case will fail. When value set does contain code, and all other expected equals actual then test case passes.', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")

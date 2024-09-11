@@ -60,7 +60,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql('3.3.2')
+                    expect(response.body).to.eql('3.14.0')
                 })
             })
         })
@@ -105,7 +105,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql('3.3.2')
+                    expect(response.body).to.eql('3.14.0')
                 })
             })
         })
@@ -163,7 +163,7 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql('3.3.2')
+                    expect(response.body).to.eql('3.14.0')
                 })
             })
         })
@@ -208,7 +208,7 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql('3.3.2')
+                    expect(response.body).to.eql('3.14.0')
                 })
             })
         })

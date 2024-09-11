@@ -110,8 +110,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
     })
 })
 
-//Skipping until MAT-7448 is fixed
-describe.skip('Draft and Version Validations -- CQL and Group are correct', () => {
+
+describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
     beforeEach('Create Measure, Group, Test case and Login', () => {
 
