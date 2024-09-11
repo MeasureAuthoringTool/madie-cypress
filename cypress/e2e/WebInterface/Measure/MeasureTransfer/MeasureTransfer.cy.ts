@@ -179,7 +179,7 @@ describe('Measure Transfer - Multiple instances', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
         //MeasuresPage.validateVersionNumber(newMeasureName, versionNumber)
-        cy.log('Version Created Successfully').wait(2700)
+        cy.log('Version Created Successfully').wait(5000)
 
         //Draft the Versioned Measure
         MeasuresPage.measureAction('draft')

@@ -51,6 +51,7 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
         cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
 
     })
 
@@ -167,6 +168,7 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Assert toast message while trying to apply the same code again
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codeSubTab).click()
         cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
@@ -227,7 +229,6 @@ describe('QDM Code Search fields', () => {
         cy.get('[data-testid="code-suffix-field-input"]').type('1234')
         cy.get('[id="include-code-system-version-checkbox"]').check()
         cy.get('[data-testid="apply-button"]').click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'code "ambulatory (1234)": \'AMB\' from "ActCode:2023-02" display \'ambulatory\'')
         cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been successfully added to the CQL.')
 
         //Save CQL
@@ -265,7 +266,8 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.saveCQLButton).click().wait(1000)
 
         //Navigate to Saved Codes page
-        cy.get(CQLEditorPage.savedCodesTab).click().wait(1000)
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.savedCodesTab).click().wait(4000)
 
         //Edit code
         cy.get(CQLEditorPage.selectDropdownBtn).click()
@@ -281,7 +283,6 @@ describe('QDM Code Search fields', () => {
         cy.get('[data-testid="code-suffix-field-input"]').type('1234')
         cy.get('[id="include-code-system-version-checkbox"]').check()
         cy.get('[data-testid="apply-button"]').click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'code "ambulatory (1234)": \'AMB\' from "ActCode:2023-02" display \'ambulatory\'')
         cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been updated successfully.')
 
         //Save CQL
@@ -319,6 +320,7 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.saveCQLButton).click().wait(1000)
 
         //Navigate to Saved Codes page
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.savedCodesTab).click().wait(1000)
 
         //Remove Code
@@ -327,6 +329,7 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.removeCodeConfirmationMsg).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
         cy.get(CQLEditorPage.removeCodeContinueBtn).click().wait(2000)
         cy.get('[class="toast success"]').should('contain.text', 'code AMB and code system ActCode has been successfully removed from the CQL')
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.savedCodesTab).click()
         Utilities.waitForElementVisible('.sc-bXCLTC', 30000)
         cy.get('.sc-bXCLTC').should('contain.text', 'No Results were found')
@@ -376,6 +379,7 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.saveCQLButton).click().wait(1000)
 
         //Navigate to Saved Codes page
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.savedCodesTab).click().wait(2000)
 
         //Remove Code

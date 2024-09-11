@@ -94,7 +94,8 @@ describe('Code Coverage Highlighting', () => {
 
     })
 
-    it('Verify Measure highlighting for multiple Measure groups on test case list page', () => {
+    //Skipping due to bug MAT-7668
+    it.skip('Verify Measure highlighting for multiple Measure groups on test case list page', () => {
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")

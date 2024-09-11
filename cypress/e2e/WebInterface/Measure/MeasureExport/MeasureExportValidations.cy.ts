@@ -42,7 +42,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
         //Create Measure with out Steward and Developer
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
-                url: '/api/measure',
+                url: '/api/measure?addDefaultCQL=false',
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + accessToken.value
@@ -73,7 +73,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
 
     after('Cleanup', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Verify error message on Measure Export when the Measure does not have Description, Steward and Developers', () => {

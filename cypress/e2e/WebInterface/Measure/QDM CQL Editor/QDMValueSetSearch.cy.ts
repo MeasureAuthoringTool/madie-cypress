@@ -163,6 +163,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
 
         //Navigate to CQL Editor tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
 
         //Click on Value Set tab
         cy.get(CQLEditorPage.valueSetsTab).click()
@@ -218,6 +219,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
 
         //Navigate to CQL Editor tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
 
         //Verify that the Search Definition Version field is disabled before selecting OID/URL field
         cy.get(CQLEditorPage.valueSetsTab).click()
@@ -251,6 +253,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
 
         //Navigate to CQL Editor tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
 
         //Click on Value Set tab
         cy.get(CQLEditorPage.valueSetsTab).click()
@@ -286,6 +289,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
 
         //Navigate to CQL Editor tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
 
         //Click on Value Set tab
         cy.get(CQLEditorPage.valueSetsTab).click()
