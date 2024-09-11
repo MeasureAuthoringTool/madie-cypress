@@ -122,6 +122,74 @@ describe.skip('QDM CQL Definitions - Expression Editor Name Options', () => {
         cy.get(CQLEditorPage.expressionEditorNameList).should('contain.text', 'test()')
 
     })
+
+    it('Insert Definitions through Expression Editor', () => {
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+        cy.get(CQLEditorPage.definitionNameTextBox).type('Test')
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+
+        //Type=Parameters
+        cy.get(CQLEditorPage.parametersOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).contains('Measurement Period').click()
+        //Insert
+        cy.get(CQLEditorPage.expressionInsertBtn).click()
+        cy.get('[class="ace_content"]').eq(1).should('contain', 'Measurement Period')
+
+        //Type=Definitions
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+        cy.get(CQLEditorPage.definitionOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).contains('Common.Inpatient Encounter').click()
+        //Insert
+        cy.get(CQLEditorPage.expressionInsertBtn).click()
+        cy.get('[class="ace_content"]').eq(1).should('contain', 'Common."Inpatient Encounter"')
+
+        //Type=Functions
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+        cy.get(CQLEditorPage.functionsOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).contains('Common.EmergencyDepartmentArrivalTime()').click()
+        //Insert
+        cy.get(CQLEditorPage.expressionInsertBtn).click()
+        cy.get('[class="ace_content"]').eq(1).should('contain', 'Common."EmergencyDepartmentArrivalTime"()')
+
+        //Type=Fluent Functions
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+        cy.get(CQLEditorPage.fluentFunctionOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).contains('test()').click()
+        //Insert
+        cy.get(CQLEditorPage.expressionInsertBtn).click()
+        cy.get('[class="ace_content"]').eq(1).should('contain', '"test"()')
+
+        //Type=Timing
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+        cy.get(CQLEditorPage.timingOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).contains('after end').click()
+        //Insert
+        cy.get(CQLEditorPage.expressionInsertBtn).click()
+        cy.get('[class="ace_content"]').eq(1).should('contain', 'after end')
+
+        //Type=Pre-Defined Functions
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+        cy.get(CQLEditorPage.preDefinedFunctionsOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).contains('AgeInDays()').click()
+        //Insert
+        cy.get(CQLEditorPage.expressionInsertBtn).click()
+        cy.get('[class="ace_content"]').eq(1).should('contain', 'AgeInDays()')
+
+    })
 })
 
 //Skipping until feature flag is removed
