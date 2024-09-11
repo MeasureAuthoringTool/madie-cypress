@@ -57,7 +57,7 @@ let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 
 //Need to debug more for File comparisons
 //skipping all of these tests until a better cypress unzip / extraction mechanism can be used
-describe('Verify QDM Measure Export file contents', () => {
+describe.skip('Verify QDM Measure Export file contents', () => {
 
     deleteDownloadsFolderBeforeAll()
 
