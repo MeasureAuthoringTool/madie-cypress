@@ -128,6 +128,79 @@ describe.skip('Qi-Core CQL Definitions - Expression Editor Name Options', () => 
         cy.get(CQLEditorPage.expressionEditorNameList).should('contain.text', 'abatementInterval()')
 
     })
+
+    it('Insert Definitions through Expression Editor', () => {
+
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+        cy.get(CQLEditorPage.definitionNameTextBox).type('Test')
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+
+        //Type=Parameters
+        cy.get(CQLEditorPage.parametersOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).contains('Measurement Period').click()
+        //Insert
+        cy.get(CQLEditorPage.expressionInsertBtn).click()
+        cy.get('[class="ace_content"]').eq(1).should('contain', 'Measurement Period')
+
+        //Type=Definitions
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+        cy.get(CQLEditorPage.definitionOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).contains('Initial Population').click()
+        //Insert
+        cy.get(CQLEditorPage.expressionInsertBtn).click()
+        cy.get('[class="ace_content"]').eq(1).should('contain', 'Initial Population')
+
+        //Type=Functions
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+        cy.get(CQLEditorPage.functionsOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).contains('CQMCommon.Emergency Department Arrival Time()').click()
+        //Insert
+        cy.get(CQLEditorPage.expressionInsertBtn).click()
+        cy.get('[class="ace_content"]').eq(1).should('contain', 'CQMCommon."Emergency Department Arrival Time"()')
+
+        //Type=Fluent Functions
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+        cy.get(CQLEditorPage.fluentFunctionOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).contains('emergencyDepartmentArrivalTime()').click()
+        //Insert
+        cy.get(CQLEditorPage.expressionInsertBtn).click()
+        cy.get('[class="ace_content"]').eq(1).should('contain', '"emergencyDepartmentArrivalTime"()')
+
+        //Type=Timing
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+        cy.get(CQLEditorPage.timingOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).contains('after end').click()
+        //Insert
+        cy.get(CQLEditorPage.expressionInsertBtn).click()
+        cy.get('[class="ace_content"]').eq(1).should('contain', 'after end')
+
+        //Type=Pre-Defined Functions
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+        cy.get(CQLEditorPage.preDefinedFunctionsOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).contains('AgeInDays()').click()
+        //Insert
+        cy.get(CQLEditorPage.expressionInsertBtn).click()
+        cy.get('[class="ace_content"]').eq(1).should('contain', 'AgeInDays()')
+
+    })
 })
 
 //Skipping until feature flag is removed

@@ -67,7 +67,7 @@ export class CQLEditorPage {
     //CQL Builder Sub tabs
     public static readonly cqlEditorPageDefinitionSubTab = '[data-testid="definitions-tab"]'
     public static readonly cqlEditorPageIncludesSubTab = '[data-testid="includes-tab"]'
-    public static readonly expandCQLBuilder = '[data-testid="expanded"]'
+    public static readonly expandCQLBuilder = '[data-testid="KeyboardTabOutlinedIcon"]'
 
     //Includes page
     public static readonly includesTab = '[data-testid="includes-tab"]'
@@ -85,6 +85,11 @@ export class CQLEditorPage {
     public static readonly expressionEditorNameDropdown = '[id="name-selector"]'
     public static readonly expressionEditorNameList = '#name-selector-listbox'
     public static readonly fluentFunctionOption = '[data-testid="Fluent Functions-option"]'
+    public static readonly parametersOption = '[data-testid="Parameters-option"]'
+    public static readonly expressionInsertBtn = '[data-testid="expression-insert-btn"]'
+    public static readonly functionsOption = '[data-testid="Functions-option"]'
+    public static readonly timingOption = '[data-testid="Timing-option"]'
+    public static readonly preDefinedFunctionsOption = '[data-testid="Pre-Defined Functions-option"]'
 
 
     //editor message
