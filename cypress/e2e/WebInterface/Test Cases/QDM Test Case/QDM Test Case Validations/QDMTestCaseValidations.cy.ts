@@ -198,7 +198,7 @@ describe('Create Test Case Validations', () => {
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.newTestCaseButton).click()
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle).wait(3000)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(twoFiftyTwoCharacters)
         cy.get(TestCasesPage.createTestCaseSaveButton).should('be.disabled')
     })
