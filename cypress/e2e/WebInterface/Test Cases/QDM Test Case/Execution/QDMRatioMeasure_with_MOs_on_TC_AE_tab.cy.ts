@@ -505,7 +505,6 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    // skipping due to flag that prevents running measures whom has observations and/or stratifications
     it('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropirate fields and sections', () => {
 
         //fill out group details
@@ -517,7 +516,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         cy.get(MeasureGroupPage.measurePopulationOption).eq(4).click()
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(3).click()
+        cy.get(MeasureGroupPage.measureObservationSelect).contains('Denominator Observations').click()
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionDropdownList).eq(0).click()
         cy.get(MeasureGroupPage.denominatorExclusionSelect).click()
@@ -526,9 +525,9 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         cy.get(MeasureGroupPage.measurePopulationOption).eq(15).click()
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
         cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(4).click()
+        cy.get(MeasureGroupPage.measureObservationSelect).contains('Numerator Observations').click()
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
-        cy.get(MeasureGroupPage.aggregateFunctionDropdownList).eq(5).click()
+        cy.get(MeasureGroupPage.aggregateFunctionDropdownList).contains('Sum').click()
 
         //save group details
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()

@@ -75,7 +75,7 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.codeText).should('not.be.enabled')
 
         //Assert when the Code is Active in VSAC
-        cy.get(CQLEditorPage.codeSystemDropdown).type('SNOMEDCT')
+        cy.get(CQLEditorPage.codeSystemDropdown).type('SNOMEDCT').wait(1000)
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('SNOMEDCT').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
         cy.get('[data-testid="2024-03-option"]').click()

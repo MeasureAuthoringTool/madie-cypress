@@ -67,7 +67,7 @@ export class CQLEditorPage {
     //CQL Builder Sub tabs
     public static readonly cqlEditorPageDefinitionSubTab = '[data-testid="definitions-tab"]'
     public static readonly cqlEditorPageIncludesSubTab = '[data-testid="includes-tab"]'
-    public static readonly expandCQLBuilder = '[data-testid="KeyboardTabOutlinedIcon"]'
+    public static readonly expandCQLBuilder = '[data-testid="expanded"]'
 
     //Includes page
     public static readonly includesTab = '[data-testid="includes-tab"]'
