@@ -176,7 +176,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         TestCasesPage.testCaseAction('exportTransaction')
 
         //verify that the export occurred 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
@@ -196,23 +196,19 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
 
         //navigate to test case edit / detail page
         TestCasesPage.testCaseAction('edit')
-        Utilities.waitForElementVisible(TestCasesPage.QiCoreEleEnabledJSONTab, 35000)
 
-        //click on json tab
-        cy.get(TestCasesPage.QiCoreEleEnabledJSONTab).click()
-
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
+        cy.get(TestCasesPage.aceEditor).wait(3000).should('include.text', '"type": "transaction"')
 
     })
 })
@@ -267,7 +263,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(TestCasesPage.exportTransactionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist').wait(1000)
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist').wait(1000)
         cy.log('Successfully verified zip file export')
 
         cy.reload()
@@ -288,35 +284,27 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
 
         //navigate to test case edit / detail page for the first test case
         TestCasesPage.testCaseAction('edit')
-        Utilities.waitForElementVisible(TestCasesPage.QiCoreEleEnabledJSONTab, 35000)
 
-        //click on json tab
-        cy.get(TestCasesPage.QiCoreEleEnabledJSONTab).click()
-
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
+        cy.get(TestCasesPage.aceEditor).wait(3000).should('include.text', '"type": "transaction"')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to test case edit / detail page for the second test case
         TestCasesPage.testCaseAction('edit', true)
-        Utilities.waitForElementVisible(TestCasesPage.QiCoreEleEnabledJSONTab, 35000)
 
-        //click on json tab
-        cy.get(TestCasesPage.QiCoreEleEnabledJSONTab).click()
-
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
+        cy.get(TestCasesPage.aceEditor).wait(3000).should('include.text', '"type": "transaction"')
 
 
     })
@@ -370,7 +358,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         TestCasesPage.testCaseAction('exportCollection')
 
         //verify that the export occurred 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
@@ -390,23 +378,19 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
 
         //navigate to test case edit / detail page
         TestCasesPage.testCaseAction('edit')
-        Utilities.waitForElementVisible(TestCasesPage.QiCoreEleEnabledJSONTab, 35000)
 
-        //click on json tab
-        cy.get(TestCasesPage.QiCoreEleEnabledJSONTab).click()
-
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
+        cy.get(TestCasesPage.aceEditor).wait(3000).should('include.text', '"type": "collection"')
 
     })
 })
@@ -461,7 +445,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')).should('exist').wait(1000)
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist').wait(1000)
         cy.log('Successfully verified zip file export')
 
         cy.reload()
@@ -482,35 +466,27 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
 
         //navigate to test case edit / detail page for the first test case
         TestCasesPage.testCaseAction('edit')
-        Utilities.waitForElementVisible(TestCasesPage.QiCoreEleEnabledJSONTab, 35000)
 
-        //click on json tab
-        cy.get(TestCasesPage.QiCoreEleEnabledJSONTab).click()
-
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
+        cy.get(TestCasesPage.aceEditor).wait(3000).should('include.text', '"type": "collection"')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to test case edit / detail page for the second test case
         TestCasesPage.testCaseAction('edit', true)
-        Utilities.waitForElementVisible(TestCasesPage.QiCoreEleEnabledJSONTab, 35000)
 
-        //click on json tab
-        cy.get(TestCasesPage.QiCoreEleEnabledJSONTab).click()
-
-        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
+        cy.get(TestCasesPage.aceEditor).wait(3000).should('include.text', '"type": "collection"')
 
 
     })

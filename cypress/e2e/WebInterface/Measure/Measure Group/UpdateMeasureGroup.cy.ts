@@ -426,6 +426,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         //change value of first IP association
         cy.get(MeasureGroupPage.rdioFirstNum).check()
         cy.get(MeasureGroupPage.rdioFirstNum).invoke('click')
+        cy.get(MeasureGroupPage.rdioFirstNum).click()
         cy.get(MeasureGroupPage.rdioFirstNum).should('be.checked')
         cy.get(MeasureGroupPage.rdioFirstDenom).should('not.be.checked')
 
