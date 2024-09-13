@@ -484,6 +484,23 @@ export class TestCasesPage {
         })
     }
 
+    public static clickQDMImportTestCaseButton(): void {
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((measureID) => {
+            cy.intercept('PUT', '/api/measures/' + measureID + '/test-cases/imports/qdm').as('testCaseList')
+            //click import button on modal window
+            cy.get(this.importTestCaseModalBtn).click()
+            //spinner indicating that import progress is busy is shown / is visible
+            cy.get(this.importInProgress).should('be.visible')
+            //wait until the import buttong appears on the page, again
+            Utilities.waitForElementVisible(this.importTestCasesBtn, 50000)
+
+            //list is returned
+            cy.wait('@testCaseList').then(({ response }) => {
+                expect(response.statusCode).to.eq(200)
+            })
+        })
+    }
+
     public static grabValidateTestCaseTitleAndSeries(testCaseTitle: string, testCaseSeries: string): void {
 
         cy.get('[data-testid="test-case-title-0_group"]').should('be.visible')
