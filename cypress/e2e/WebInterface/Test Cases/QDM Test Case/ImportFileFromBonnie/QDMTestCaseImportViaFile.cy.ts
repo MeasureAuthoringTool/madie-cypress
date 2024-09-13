@@ -11,14 +11,11 @@ import { Header } from "../../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
-let singleTestCaseFile = 'SinglePatient_BonnieQDM56.json'
-let smallBatchTestCaseFile = 'PatientBatchFile_BonnieQDM56.json'
+let singleTestCaseFile = 'patients_42BF391F-38A3-4C0F-9ECE-DCD47E9609D9_QDM_56_1712926664.json'
 let testCaseWInvalidGroup = 'TestingWithGroupInvalidCharacters.json'
 let testCaseWInvalidTitle = 'TestingWithTitleInvalidCharacters.json'
 let genericTextFile = 'GenericCQLBoolean.txt'
 let measureCQLPFTests = MeasureCQL.simpleQDM_CQL
-let editTestCaseURL = ''
-let testCaseJsonTstOne = "{\"qdmVersion\":\"5.6\",\"dataElements\":[{\"dataElementCodes\":[{\"code\":\"1\",\"system\":\"2.16.840.1.113883.3.221.5\",\"version\":null,\"display\":null}],\"_id\":\"6553805d0aa75c0000707a8a\",\"qdmTitle\":\"Patient Characteristic Payer\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.58\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"payer\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicPayer\",\"codeListId\":\"2.16.840.1.114222.4.11.3591\",\"description\":\"Patient Characteristic Payer: Payer\",\"id\":\"645133ba118def0000463cf5\",\"relevantPeriod\":{\"low\":\"2012-05-02T08:00:00.000+00:00\",\"high\":\"2012-05-02T08:15:00.000+00:00\",\"lowClosed\":true,\"highClosed\":true}},{\"dataElementCodes\":[{\"code\":\"99395\",\"system\":\"2.16.840.1.113883.6.12\",\"version\":null,\"display\":null}],\"_id\":\"6553805d0aa75c0000707a8c\",\"participant\":[],\"relatedTo\":[],\"qdmTitle\":\"Encounter, Performed\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.5\",\"qdmCategory\":\"encounter\",\"qdmStatus\":\"performed\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::EncounterPerformed\",\"admissionSource\":null,\"authorDatetime\":\"2012-05-02T08:00:00.000+00:00\",\"codeListId\":\"2.16.840.1.113883.3.464.1003.101.12.1025\",\"description\":\"Encounter, Performed: Preventive Care Services Established Office Visit, 18 and Up\",\"diagnoses\":[],\"dischargeDisposition\":null,\"facilityLocations\":[],\"id\":\"645133c5118def0000463d01\",\"lengthOfStay\":null,\"priority\":null,\"relevantPeriod\":{\"low\":\"2012-05-02T08:00:00.000+00:00\",\"high\":\"2012-05-02T08:15:00.000+00:00\",\"lowClosed\":true,\"highClosed\":true}},{\"dataElementCodes\":[{\"code\":\"75622-1\",\"system\":\"2.16.840.1.113883.6.1\",\"version\":null,\"display\":null}],\"_id\":\"6553805d0aa75c0000707a8e\",\"performer\":[],\"relatedTo\":[],\"qdmTitle\":\"Laboratory Test, Performed\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.42\",\"qdmCategory\":\"laboratory_test\",\"qdmStatus\":\"performed\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::LaboratoryTestPerformed\",\"authorDatetime\":\"2012-05-02T08:00:00.000+00:00\",\"codeListId\":\"drc-e6dbb081bf69856d28619b4d19cdf56358f082b4514d4ac0fd8fa3b619c37bd7\",\"components\":[],\"description\":\"Laboratory Test, Performed: HIV 1 and 2 tests - Meaningful Use set\",\"id\":\"64513481118def0000463d2e\",\"interpretation\":null,\"method\":null,\"negationRationale\":null,\"reason\":null,\"referenceRange\":null,\"relevantDatetime\":\"2012-05-02T08:00:00.000+00:00\",\"relevantPeriod\":{\"low\":\"2012-05-02T08:00:00.000+00:00\",\"high\":\"2012-05-02T08:15:00.000+00:00\",\"lowClosed\":true,\"highClosed\":true},\"result\":null,\"resultDatetime\":\"2012-05-02T08:00:00.000+00:00\",\"status\":null},{\"dataElementCodes\":[{\"code\":\"F\",\"system\":\"2.16.840.1.113883.5.1\",\"version\":null,\"display\":\"Female\"}],\"_id\":\"6553805d0aa75c0000707a90\",\"qdmTitle\":\"Patient Characteristic Sex\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.55\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"gender\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicSex\",\"codeListId\":\"2.16.840.1.113762.1.4.1\",\"description\":\"Patient Characteristic Sex: ONCAdministrativeSex\",\"id\":\"6451331dd2d5770121fc165e\"},{\"dataElementCodes\":[],\"_id\":\"6553805d0aa75c0000707a92\",\"qdmTitle\":\"Patient Characteristic Birthdate\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.54\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"birthdate\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicBirthdate\",\"birthDatetime\":\"1991-10-21T08:00:00.000+00:00\",\"codeListId\":null,\"description\":null,\"id\":\"6452aada30d26c0000f1aa56\"},{\"dataElementCodes\":[{\"code\":\"2106-3\",\"system\":\"2.16.840.1.113883.6.238\",\"version\":null,\"display\":\"White\"}],\"_id\":\"6553805d0aa75c0000707a94\",\"qdmTitle\":\"Patient Characteristic Race\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.59\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"race\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicRace\",\"codeListId\":\"2.16.840.1.114222.4.11.836\",\"description\":\"Patient Characteristic Race: Race\",\"id\":\"6451331dd2d5770121fc1665\"},{\"dataElementCodes\":[{\"code\":\"2135-2\",\"system\":\"2.16.840.1.113883.6.238\",\"version\":null,\"display\":\"Hispanic or Latino\"}],\"_id\":\"6553805d0aa75c0000707a96\",\"qdmTitle\":\"Patient Characteristic Ethnicity\",\"hqmfOid\":\"2.16.840.1.113883.10.20.28.4.56\",\"qdmCategory\":\"patient_characteristic\",\"qdmStatus\":\"ethnicity\",\"qdmVersion\":\"5.6\",\"_type\":\"QDM::PatientCharacteristicEthnicity\",\"codeListId\":\"2.16.840.1.114222.4.11.837\",\"description\":\"Patient Characteristic Ethnicity: Ethnicity\",\"id\":\"6451331dd2d5770121fc165f\"}],\"_id\":\"6553805d0aa75c0000707a88\",\"birthDatetime\":\"1991-10-21T08:00:00.000+00:00\",\"extendedData\":null}"
 
 describe('Import Test cases onto an existing QDM measure via file', () => {
 
@@ -51,7 +48,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    it('Import new test case onto an existing measure -- single test case and verify JSON', () => {
+    it('Import new test case onto an existing measure', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
@@ -65,92 +62,17 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //select file
-        cy.get('[data-testid="file-drop-div"] > p').click()
+        cy.get('[data-testid="file-drop-div"]' /*> p'*/).click()
         cy.get(TestCasesPage.filAttachDropBox).attachFile(singleTestCaseFile)
-        //cy.get('[data-testid="test-case-import-import-btn"]').click()
-
-        //import modal should contain test case name
-        cy.get(TestCasesPage.importTestCaseModalList).should('contain.text', 'TestFemale')
 
         //click on the 'Import' button on the modal window
-        TestCasesPage.clickImportTestCaseButton()
+        TestCasesPage.clickQDMImportTestCaseButton()
 
         //test case list table contains the group name of the test case that was imported
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Test')
-        //test case list table contains the title of the test case that was imported
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Female')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionActionN/AIPFailNoEncounterPatient is 19 with no Encounter InpatientSelectN/AIPFailTooYoungPatient is 17 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...moreSelectN/ANUMERFailAntithromboticStartBeforeIPEncPatient received anti thrombotic before and during encounterSelectN/AIPFailEncEndsBeforeMPPatient is 18 with Non-Elective Inpatient Encounter ends before MP with principal diagnosis of strokeSelectN/ANUMERFailAntithromboticAfterEncIPPatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...moreSelectN/ADENEXPassLeftAMAPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP left agai...moreSelectN/ADENEXPassExpiredPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP patient e...moreSelectN/ADENEXPassDischargeHomeHospicePatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...moreSelectN/ADENEXPassDischargeFacilityHospicePatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...moreSelectN/ADENEXCEPFailMedRsnStartTmLTEncInpAdmTmPatient does not get antithrombotic medication due to medical reasons before IP encounter. This case tests the timing bo...moreSelectN/ADENOMPassPrinDxIschemicStkPatient turns 18 day before admission with Non-Elective Inpatient Encounter ends during MP with principal diagnosis of s...moreSelectN/AIPPassLOS119daysPatient is 18 with Non-Elective Inpatient Encounter (LOS 119 days) with principal diagnosis of ischemic stroke ends duri...moreSelectN/AIPPassIPEncDuringMPExpiresAfterIPEncPatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...moreSelectN/ANUMERFailCustom CodePatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...moreSelectN/ANUMERPassAntithromboticTMeqIPDischargeTMPatient is GT 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends d...moreSelectN/ADENEXCEPFailAntiThrpNotgivenDischargePatient is GT 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke  and d...moreSelectN/ADENEXCEPPassMedRsnStartTmEQEncInpAdmTmPatient does not get antithrombotic medication due to medical reasons after IP encounter. This case tests the timing bou...moreSelectN/ADENEXCEPPassMedRsnStartTmEQEncInpDischTmPatient does not get antithrombotic medication due to medical reasons after IP encounter. This case tests the timing bou...moreSelectN/ADENEXCEPPassPatRefDuringEncIpPatient does not get antithrombotic medication due to patient refusal during IP encounter. This case tests the timing bo...moreSelectN/ADENEXCEPPassMedRsnDuringEncIpPatient does not get antithrombotic medication due to medical reasons after IP encounter. This case tests the timing bou...moreSelectN/ANUMERPassAntithromboticTMeqIPAdmTM Patient is GT 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends d...moreSelectN/ADENEXCEPPassMedRsnDuringEncIpTestOccurrPatient does not get antithrombotic medication due to medical reasons after IP encounter. Testing multiple IP encounters...moreSelectN/ADENEXPass CMOdurDiffEDTestOccurPatient receives CMO during a different ED encounter.  Testing multiple  Encounter.SelectN/AIPPassNonEleInpEncx2Patient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP contains ...moreSelectN/ADENEXCEPPassMedDscPatRsnDTimeEQEncStartTimePatient does not get antithrombotic medication due to patient refusal during IP encounter. This case tests the timing bo...moreSelectN/ADENEXCEPPassMedDscPatRsnDTimeEQEncStopTimePatient does not get antithrombotic medication due to patient refusal during IP encounter. This case tests the timing bo...moreSelectN/AIPFailPrinDxIsHemoPatient is 18 with Encounter Inpatient (LOS 120 days) with principal diagnosis of hemorrhagic stroke.SelectN/ADENEXCEPFailMedRsnStartTmGTEncInpDischTmPatient does not get antithrombotic medication due to medical reasons after IP encounter. This case tests the timing bou...moreSelectN/AIPPassageeq18Patient is  18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends dur...moreSelectN/AIPFailBadDefSTKEQRank2Patient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) ends during MP with no principal diagnosis of stroke,...moreSelectN/AIPFailBadDefNoneSTKPatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) ends during MP with no principal diagnosis of strokeSelectN/AIPFailAllSTKEncounterFailAllNoSTKPatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) ends during MP with no diagnosis of strokeSelectN/ADENEXPassCMPdurEncNoEDNoObsBFEncPatient receives CMP during inpatient encounter. No ED. No Observation. Testing day of operator with HospitalizationWith...moreSelectN/ADENEXPassCMOdurObsNoEDObsLT1hrBFEncPatient receives CMO during observation. No ED. Obs ends 1 min before inpatient encounter start. Testing day of operator...moreSelectN/ADENEXPassCMOdurObsEDLT1hrObsLT1hrBFEncPatient receives comfort measures order during ED visit that ends <= 1 hour before IP EncounterSelectN/ADENEXPassCMOdurEncNoEDNoObsBFEncdateTimePatient receives CMO during inpatient encounter. No ED. No Observation. Testing day of operator with HospitalizationWith...moreSelectN/ADENEXPassCMOdurEncNoEDNoObsBFEncRelePerPatient receives CMO during inpatient encounter. No ED. No Observation. Testing day of operator with HospitalizationWith...moreSelectN/ADENEXPassCMOdurEncEDLT1hrObsLT1hrBFEncPatient receives CMO during inpatient encounter. ED ends 1 minute before observation. Obs ends 1 min before inpatient en...moreSelectN/ADENEXPassCMOdurEncEDLT1hrNoObsBFEncPatient receives CMO during inpatient encounter. ED ends 1 minute before inpatient encounter start. No Observation. Test...moreSelectN/ADENEXPassCMOdurEncEDGT1hrObsGT1hrBFEncPatient receives CMO during inpatient encounter. ED ends 61 minute before observation. Obs ends 61 min before inpatient ...moreSelectN/ADENEXPassCMOdurEncEDGT1hrNoObsBFEncPatient receives CMO during inpatient encounter. ED ends 61 minutes before inpatient encounter start. No Observation. Te...moreSelectN/ADENEXPassCMOdurEncEDEQ1hrObsEQ1hrBFEncPatient receives CMO during inpatient encounter. ED ends 60 minutes before observation. Obs ends 60 min before inpatient...moreSelectN/ADENEXPassCMOdurEncTMEDEndTMEQObsTMObsEndTMEQEncTMPatient receives CMO on IP start. ED ends on OBS start and OBS ends on IP start. Testing day of operator with Hospitaliz...moreSelectN/ADENEXPassCMOdurEDEDLT1hrObsLT1hrBFEncPatient receives CMO during ED. ED ends 1 minute before Observation. Obs ends 1 min before IP start. Testing day of oper...moreSelectN/ADENEXPassCMOdurEDEDLT1hrNoObsBFEncPatient receives CMO during ED. ED ends 1 minute before inpatient encounter start. No Observation. Testing day of operat...moreSelectN/ADENEXPassCMOdurEDEDEQ1hrObsEQ1hrBFEncPatient receives CMO during ED. ED ends 60 minute before Observation. Obs ends 60 min before IP start. Testing day of op...moreSelectN/ADENEXPassCMOdurEDEDEQ1hrNoObsBFEncPatient receives CMO during ED. ED ends 60 minute before inpatient encounter start. No Observation. Testing day of opera...moreSelectN/ADENEXPass CMOdurObsEDb41hrObsEQ1hrBFEncPatient receives CMO during observation.ED ends 1 min before Obs. Obs ends 60 min before inpatient encounter start. Test...moreSelectN/ADENEXPass CMOdurEncNoEDObsLT1hrBFEncPatient receives CMO during inpatient encounter. No ED.  Observation ends 1 min before IP start. Testing day of operator...moreSelectN/ADENEXPass CMOdurEncEDEQ1hrNoObsBFEncPatient receives CMO during inpatient encounter. ED ends 60 minutes before inpatient encounter start. No Observation. Te...moreSelectN/ADENEXFailIschSTKwDischgDisposionFailAllPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...moreSelectN/ADENEXFailDenomExclusionsFailAllPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...moreSelectN/ADENEXFailCMOdurObsEDLT1hrObsGT1hrBFEncPatient receives CMO during observation. ED ends 1 minute before observation. Obs ends 61 min before inpatient encounter...moreSelectN/ADENEXFailCMOdurObsEDGT1hrObsGT1hrBFEncPatient receives CMO during observation. ED ends 61 minute before observation. Obs ends 61 min before inpatient encounte...moreSelectN/ADENEXFailCMOdurEDEDLT1hrObsGT1hrBFEncPatient receives CMO during ED. ED ends 1 minute before Obs. Obs ends 61 min before inpatient encounter start.  Testing ...moreSelectN/ADENEXFailCMOdurEDEDGT1hrObsLT1hrBFEncPatient receives CMO during ED. ED ends 61 minute before obs. Obs ends 1 min before inpatient encounter start.Testing da...moreSelectN/ADENEXFailCMOdurEDEDGT1hrObsGT1hrBFEncPatient receives CMO during ED. ED ends 61 minute before Obs. Obs ends 61 min before inpatient encounter start. Testing ...moreSelectN/ADENEXFailCMOBFEncNoEDNoObsBFEncPatient receives CMO before inpatient encounter. No ED. No Obs. Testing HospitalizationWithObservation Function.SelectN/ADENEXFail CMOdurEDEDGT1hrNoObsBFEncPatient receives CMO during ED. ED ends 61 minute before inpatient encounter start. No Observation. Testing day of opera...moreSelectN/ADENEXCEPPassPharmContraDurEncStartNoEDNoObsBFEncPatient receives Ticagrelor during inpatient encounter. No ED. No Observation. Testing medication data type for Hospital...moreSelectN/ADENEXCEPFailPharmContraBeforeEncStartNoEDNoObsBFEncPatient receives Ticagrelor before inpatient encounter. No ED. No Observation. Testing medication data type for Hospital...moreSelectN/ADENEXCEPFailPharmContraAfterEncEndNoEDNoObsBFEncPatient receives Ticagrelor after inpatient encounter. No ED. No Observation. Testing medication data type for Hospitali...moreSelectN/ADENEXCEPFailNoPharmContraDurEncStartNoEDNoObsBFEncPatient receives Ticagrelor during inpatient encounter but that is now acceptable antithrombotic therapy. No ED. No Obse...moreSelectN/ANUMERPassAntithromboticDuringIPTestOccurPatient is GT 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends d...moreSelectN/ANUMERPass3Enc2WithAntithrombotic1WithExcep1ExcluPatient is GT 18 with 2 Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends...moreSelectN/ANUMERPass2Enc3WithAntithromboticPatient is GT 18 with 2 Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends...moreSelectN/ANUMERPass3Enc2WithAntithrombotic2WithExcepPatient is GT 18 with 2 Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends...moreSelectN/ANUMERPassDENEXCEPPASS3Enc2WithAntithrombotic1WithExcepPatient is GT 18 with 2 Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends...moreSelectN/AIPPassPrincDxIsIschemicStkPatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...moreSelectN/AIPFailNoPrincDxPatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) ends during MP with no principal diagnosis of strokeSelectN/AIPFailEncEndsAfterMPPatient is 18 with Non-Elective Inpatient Encounter ends after MP with principal diagnosis of strokeSelectN/ANUMERPassAntithromboticDuringIPPatient is GT 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends d...moreSelectN/ADENEXPassDischargeACFPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...moreSelect')
 
-        //click on action button
-        cy.get(TestCasesPage.qdmTestCaseViewBtn).click()
-        //click on edit 
-        cy.get(TestCasesPage.editBtnNoId).contains('edit').click()
 
-        //get current web address and use that to form API request to validate JSON
-        cy.window().then((win) => {
-            cy.log((win.location).toString())
-            editTestCaseURL = (win.location).toString()
-            let urlSectionid = editTestCaseURL.split('/')
-            let Measure4tcID = urlSectionid[4]
-            let testCaseID = urlSectionid[7]
-            OktaLogin.Logout()
-            cy.setAccessTokenCookie()
-            cy.getCookie('accessToken').then((accessToken) => {
-                cy.request({
-                    url: '/api/measures/' + Measure4tcID + '/test-cases/' + testCaseID,
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    },
-                    method: 'GET',
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.json).to.be.exist
-                    expect(response.body.json).to.eql(testCaseJsonTstOne)
 
-                })
-            })
-        })
-    })
-
-    it('Import new test case onto an existing measure -- small batch file', () => {
-        //navigate to the main measures page
-        cy.get(Header.measures).click()
-
-        //click on created measure
-        MeasuresPage.measureAction("edit")
-
-        //click on the test case tab
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //click on the import test case button
-        cy.get(TestCasesPage.importTestCasesBtn).click()
-
-        //select file
-        cy.get(TestCasesPage.filAttachDropBox).attachFile(smallBatchTestCaseFile)
-
-        //import modal should contain test case name
-        cy.get(TestCasesPage.importTestCaseModalList).should('contain.text', 'CMS844_DYvonneCMS844_CYvonneCMS844_BYvonneCMS844_AYvonne')
-
-        //click on the 'Import' button on the modal window
-        TestCasesPage.clickImportTestCaseButton()
-
-        //test case list table contains the group name of the test case that was imported
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'CMS844_AYvonne')
-        //test case list table contains the title of the test case that was imported
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'CMS844_BYvonne')
-        //test case list table contains the group name of the test case that was imported
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'CMS844_CYvonne')
-        //test case list table contains the title of the test case that was imported
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'CMS844_DYvonne')
-
-        for (let i = 0; i <= 3; i++) {
-            //click on action button
-            cy.get(TestCasesPage.qdmTestCaseViewBtn).eq(i).click()
-            //click on edit
-            cy.get(TestCasesPage.editBtnNoId).contains('edit').click()
-            cy.get('[data-testid="json-tab"]').click()
-            cy.get('[class="ace_content"]').should('contain', 'qdmTitle')
-            cy.get(EditMeasurePage.testCasesTab).click()
-        }
     })
 
     it('Verify error message when a Text file is imported', () => {
@@ -200,62 +122,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
     })
 })
 
-//skipping all test case import tests until flag is removed
-describe.skip('Import Test Case: Ownership', () => {
-
-    beforeEach('Login and Create Measure', () => {
-
-        CqlLibraryName = 'TestLibrary2' + Date.now()
-
-        //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQLPFTests, false, true)
-        OktaLogin.AltLogin()
-        //click on the all measures tab
-        cy.get(MeasuresPage.allMeasuresTab).click()
-        MeasuresPage.measureAction("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp')
-        OktaLogin.Login()
-    })
-
-    afterEach('Logout and Clean up', () => {
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName, false, true)
-
-    })
-    it('Verify that non-owner cannot click on the import test cases button', () => {
-        //navigate to the main measures page
-        cy.get(Header.measures).click().wait(500)
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 47700)
-
-        //click on the all measures tab
-        cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
-
-        //Click on Edit Button
-        MeasuresPage.measureAction("edit")
-
-        //Navigate to Test case list page
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //click on the import test case button
-        cy.get(TestCasesPage.importTestCasesBtn).should('not.be.enabled')
-    })
-})
-
-//skipping all test case import tests until flag is removed
-describe.skip('Import Test cases onto an existing QDM measure via file -- Message that appears when invalid characters are using in the Title or Group', () => {
+describe('Import Test cases onto an existing QDM measure via file -- Message that appears when invalid characters are using in the Title or Group', () => {
 
     beforeEach('Login and Create Measure', () => {
 
@@ -282,7 +149,7 @@ describe.skip('Import Test cases onto an existing QDM measure via file -- Messag
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
@@ -353,7 +220,4 @@ describe.skip('Import Test cases onto an existing QDM measure via file -- Messag
         cy.get(TestCasesPage.importWarningMessages).should('include.text', '(0) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
         cy.get(TestCasesPage.importWarningMessages).should('include.text', ' Reason: Test Cases Group or Title cannot contain special characters.')
     })
-
-
-
 })
