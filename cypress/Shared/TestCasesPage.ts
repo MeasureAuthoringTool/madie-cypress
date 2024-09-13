@@ -499,6 +499,7 @@ export class TestCasesPage {
                 expect(response.statusCode).to.eq(200)
             })
         })
+
     }
 
     public static grabValidateTestCaseTitleAndSeries(testCaseTitle: string, testCaseSeries: string): void {
