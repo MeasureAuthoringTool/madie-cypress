@@ -120,11 +120,11 @@ export class OktaLogin {
 
     public static UILogout(): void {
 
-        cy.wait(5000)
+        cy.wait(7000)
         Utilities.waitForElementVisible(Header.userProfileSelect, 500000)
         cy.get(Header.userProfileSelect).scrollIntoView()
         cy.get(Header.userProfileSelect).click()
-        cy.get(Header.userProfileSelectSignOutOption).click({ force: true }).wait(4000)
+        cy.get(Header.userProfileSelectSignOutOption).click({ force: true }).wait(8000)
         cy.log('Log out successful')
     }
 }
