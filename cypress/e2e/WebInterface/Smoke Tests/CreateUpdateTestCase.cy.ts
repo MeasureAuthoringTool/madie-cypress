@@ -7,7 +7,7 @@ import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage";
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -19,6 +19,8 @@ let updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDes
 let updatedTestCaseSeries = 'CMSTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
+const now = require('dayjs')
+let todaysDate = now().format('MM/DD/YYYY')
 
 describe('Create Test Case', () => {
 
@@ -59,6 +61,10 @@ describe('Create Test Case', () => {
         MeasuresPage.measureAction("edit")
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+
+        //Verify Last Saved Date on Test case list page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.lastSavedDate).should('contain', todaysDate)
 
     })
 

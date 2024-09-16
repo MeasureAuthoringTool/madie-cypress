@@ -310,6 +310,7 @@ export class TestCasesPage {
     public static readonly bonnieImportTestCaseBtn = '[data-testid="import-test-cases-from-bonnie-button"]'
     public static readonly highlightingPCTabSelector = '[data-testid="population-criterion-selector"]'
     public static readonly qdmTestCaseViewBtn = '.action'
+    public static readonly lastSavedDate = '[data-testid="test-case-title-0_lastSaved"]'
 
     //Stratifications
     public static readonly denominatorStratificationOneExpectedValue = '[data-testid="test-population-Strata-1 Denominator-expected"]'
