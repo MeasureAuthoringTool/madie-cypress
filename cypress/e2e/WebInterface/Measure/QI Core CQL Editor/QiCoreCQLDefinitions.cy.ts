@@ -67,7 +67,7 @@ let measureCQL_withError = 'library QiCoreLibrary1723824228401 version \'0.0.000
     '  (Enc E where E.status = \'finished\') is not null'
 
 //Skipping until feature flag is removed
-describe.skip('Qi-Core CQL Definitions - Expression Editor Name Options', () => {
+describe.skip('Qi-Core CQL Definitions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -200,6 +200,23 @@ describe.skip('Qi-Core CQL Definitions - Expression Editor Name Options', () => 
         cy.get(CQLEditorPage.expressionInsertBtn).click()
         cy.get('[class="ace_content"]').eq(1).should('contain', 'AgeInDays()')
 
+    })
+
+    it('Verify Included Definitions under Saved Definitions tab', () => {
+
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+
+        //Navigate to Saved Definitions tab
+        cy.get(CQLEditorPage.savedDefinitionsTab).click()
+        Utilities.waitForElementVisible('[data-testid="definitions-row-0"] > :nth-child(1)', 60000)
+        cy.get('[data-testid="definitions-row-0"] > :nth-child(1)').should('contain.text', 'Initial Population')
+        cy.get('[data-testid="definitions-row-1"] > :nth-child(1)').should('contain.text', 'Qualifying Encounters')
     })
 })
 

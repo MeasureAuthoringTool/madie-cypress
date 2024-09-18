@@ -63,7 +63,7 @@ let measureCQL_withError = 'library QDMLibrary1724174199255 version \'0.0.000\'\
     '\ttruetest'
 
 //Skipping until feature flag is removed
-describe.skip('QDM CQL Definitions - Expression Editor Name Options', () => {
+describe.skip('QDM CQL Definitions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -189,6 +189,18 @@ describe.skip('QDM CQL Definitions - Expression Editor Name Options', () => {
         cy.get(CQLEditorPage.expressionInsertBtn).click()
         cy.get('[class="ace_content"]').eq(1).should('contain', 'AgeInDays()')
 
+    })
+
+    it('Verify Included Definitions under Saved Definitions tab', () => {
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+
+        //Navigate to Saved Definitions tab
+        cy.get(CQLEditorPage.savedDefinitionsTab).click()
+        Utilities.waitForElementVisible('[data-testid="definitions-row-0"] > :nth-child(1)', 60000)
+        cy.get('[data-testid="definitions-row-0"] > :nth-child(1)').should('contain.text', 'SDE Sex')
+        cy.get('[data-testid="definitions-row-1"] > :nth-child(1)').should('contain.text', 'SDE Payer')
     })
 })
 

@@ -90,6 +90,7 @@ export class CQLEditorPage {
     public static readonly functionsOption = '[data-testid="Functions-option"]'
     public static readonly timingOption = '[data-testid="Timing-option"]'
     public static readonly preDefinedFunctionsOption = '[data-testid="Pre-Defined Functions-option"]'
+    public static readonly savedDefinitionsTab = '[data-testid="saved-definitions-tab"]'
 
 
     //editor message
