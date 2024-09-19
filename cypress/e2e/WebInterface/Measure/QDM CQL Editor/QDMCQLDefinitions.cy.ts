@@ -123,7 +123,7 @@ describe.skip('QDM CQL Definitions', () => {
 
     })
 
-    it('Insert Definitions through Expression Editor', () => {
+    it('Insert QDM CQL Definitions through Expression Editor', () => {
 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
@@ -191,7 +191,7 @@ describe.skip('QDM CQL Definitions', () => {
 
     })
 
-    it('Verify Included Definitions under Saved Definitions tab', () => {
+    it('Verify Included QDM CQL Definitions under Saved Definitions tab', () => {
 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
@@ -201,6 +201,25 @@ describe.skip('QDM CQL Definitions', () => {
         Utilities.waitForElementVisible('[data-testid="definitions-row-0"] > :nth-child(1)', 60000)
         cy.get('[data-testid="definitions-row-0"] > :nth-child(1)').should('contain.text', 'SDE Sex')
         cy.get('[data-testid="definitions-row-1"] > :nth-child(1)').should('contain.text', 'SDE Payer')
+    })
+
+    it('Edit Saved QDM CQL Definitions', () => {
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+
+        //Navigate to Saved Definitions tab
+        cy.get(CQLEditorPage.savedDefinitionsTab).click()
+        cy.get('[data-testid="edit-button-0"]').click()
+
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+        cy.get(CQLEditorPage.definitionOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).contains('Common.Inpatient Encounter').click()
+        //Insert
+        cy.get(CQLEditorPage.expressionInsertBtn).click()
+        cy.get('[class="ace_content"]').eq(1).should('contain', 'Common."Inpatient Encounter"')
     })
 })
 

@@ -129,7 +129,7 @@ describe.skip('Qi-Core CQL Definitions', () => {
 
     })
 
-    it('Insert Definitions through Expression Editor', () => {
+    it('Insert Qi-Core CQL Definitions through Expression Editor', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
@@ -202,7 +202,7 @@ describe.skip('Qi-Core CQL Definitions', () => {
 
     })
 
-    it('Verify Included Definitions under Saved Definitions tab', () => {
+    it('Verify Included Qi-Core CQL Definitions under Saved Definitions tab', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
@@ -217,6 +217,30 @@ describe.skip('Qi-Core CQL Definitions', () => {
         Utilities.waitForElementVisible('[data-testid="definitions-row-0"] > :nth-child(1)', 60000)
         cy.get('[data-testid="definitions-row-0"] > :nth-child(1)').should('contain.text', 'Initial Population')
         cy.get('[data-testid="definitions-row-1"] > :nth-child(1)').should('contain.text', 'Qualifying Encounters')
+    })
+
+    it('Edit Saved Qi-Core CQL Definitions', () => {
+
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+
+        //Navigate to Saved Definitions tab
+        cy.get(CQLEditorPage.savedDefinitionsTab).click()
+        cy.get('[data-testid="edit-button-0"]').click()
+
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
+        cy.get(CQLEditorPage.definitionOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
+        cy.get(CQLEditorPage.expressionEditorNameList).contains('Initial Population').click()
+        //Insert
+        cy.get(CQLEditorPage.expressionInsertBtn).click()
+        cy.get('[class="ace_content"]').eq(1).should('contain', 'Initial Population')
     })
 })
 
