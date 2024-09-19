@@ -23,7 +23,7 @@ describe('Clone QDM Test Case', () => {
     beforeEach('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Ratio', false, measureQDMNPBCQL, false, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Ratio', false, measureQDMNPBCQL, null, false,
             '2023-01-01', '2024-12-31')
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")

@@ -38,7 +38,7 @@ describe('Create Test Case', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, null, null, null, null, null, null, null, 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null, null, null, 'Procedure')
     })
     beforeEach('Login', () => {
         OktaLogin.Login()

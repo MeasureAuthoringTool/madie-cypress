@@ -22,7 +22,7 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
     before('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Ratio', true, measureQDMPBCQL, false, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Ratio', true, measureQDMPBCQL, null, false,
             '2023-01-01', '2024-12-31')
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
@@ -190,7 +190,7 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
     before('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Ratio', false, measureQDMNPBCQL, false, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Ratio', false, measureQDMNPBCQL, null, false,
             '2023-01-01', '2024-12-31')
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")

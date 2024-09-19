@@ -39,7 +39,7 @@ describe('Code Coverage Highlighting', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false,
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false,
             'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'Boolean')
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)

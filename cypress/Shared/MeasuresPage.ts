@@ -57,49 +57,24 @@ export class MeasuresPage {
             cy.wait(4270)
             cy.reload()
             cy.get('[data-testid="measure-name-' + fileContents + '_version"]').should('contain', versionNumber)
-            //element.parent().should('contain', expectedValue).children().eq(0).should('contain', versionNumber)
         })
     }
 
-    public static measureAction(action: string, secondMeasure?: boolean, QDMMeasure?: boolean, associationMeasure?: boolean, secondMeasureForAssociation?: boolean): void {
+    public static measureAction(action: string, measureNumber?: number): void {
         let filePath = 'cypress/fixtures/measureId'
 
-        if (secondMeasure === true) {
-            filePath = 'cypress/fixtures/measureId2'
-        }
-        //association related checks:
-        //is this a QDM measure? if so, use the id for the QDM measure. If not, use the id for the QI Core measure.
-        if (QDMMeasure === false) {
-            if (associationMeasure === true) {
-                filePath = 'cypress/fixtures/QiCoreMeasureId'
-                secondMeasureForAssociation = false
-            }
-            else if (secondMeasureForAssociation === true) {
-                filePath = 'cypress/fixtures/QiCoreMeasureId2'
-                associationMeasure = false
-            }
-        }
-
-        if (QDMMeasure === true) {
-            if (associationMeasure === true) {
-                filePath = 'cypress/fixtures/QDMMeasureId'
-                secondMeasureForAssociation = false
-            }
-            else if (secondMeasureForAssociation === true) {
-                filePath = 'cypress/fixtures/QDMMeasureId2'
-                associationMeasure = false
-            }
+        if (measureNumber > 0) {
+            filePath = 'cypress/fixtures/measureId' + measureNumber
         }
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            //cy.reload()
             Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
             cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="measure-action-' + fileContents + '"]', 100000)
             cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.enabled')
             switch ((action.valueOf()).toString().toLowerCase()) {
                 case "edit": {
-                    //cy.wait(7000)
+
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
                     Utilities.waitForElementVisible('[data-testid="view-measure-' + fileContents + '"]', 105000)
                     cy.get('[data-testid="view-measure-' + fileContents + '"]').should('be.visible')
@@ -110,7 +85,7 @@ export class MeasuresPage {
                     break
                 }
                 case 'export': {
-                    //cy.wait(7000)
+
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
                     Utilities.waitForElementVisible('[data-testid="export-measure-' + fileContents + '"]', 105000)
@@ -127,7 +102,7 @@ export class MeasuresPage {
                     break
                 }
                 case 'qdmexport': {
-                    //cy.wait(7000)
+
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').scrollIntoView()
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
@@ -145,7 +120,7 @@ export class MeasuresPage {
                     break
                 }
                 case 'version': {
-                    //cy.wait(7000)
+
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
                     Utilities.waitForElementVisible('[data-testid="create-version-measure-' + fileContents + '"]', 105000)
                     cy.get('[data-testid="create-version-measure-' + fileContents + '"]').should('be.visible')
@@ -155,7 +130,7 @@ export class MeasuresPage {
                     break
                 }
                 case 'draft': {
-                    //cy.wait(7000)
+
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
                     Utilities.waitForElementVisible('[data-testid="draft-measure-' + fileContents + '"]', 105000)
                     cy.get('[data-testid="draft-measure-' + fileContents + '"]').should('be.visible')
@@ -167,5 +142,65 @@ export class MeasuresPage {
                 default: { }
             }
         })
+    }
+
+    public static actionCenter(action: string, measureNumber?: number): void {
+
+        //There is a prerequsite that you have a measure created and measure ID stored to a file
+
+        let filePath = 'cypress/fixtures/measureId'
+
+        if (measureNumber > 0) {
+            filePath = 'cypress/fixtures/measureId' + measureNumber
+        }
+
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+        })
+
+        switch ((action.valueOf()).toString().toLowerCase()) {
+
+            case 'export': {
+
+                cy.get('[data-testid="export-action-btn"]').should('be.visible')
+                cy.get('[data-testid="export-action-btn"]').should('be.enabled')
+                cy.get('[data-testid="export-action-btn"]').click()
+
+                cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
+                cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')
+                Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 125000)
+                cy.get('.toast').should('contain.text', 'Measure exported successfully')
+                cy.get('[data-testid="ds-btn"]').click()
+
+                break
+            }
+
+            case 'version': {
+
+                break
+            }
+            case 'draft': {
+
+                break
+            }
+            case 'associateMeasure': {
+
+                //there is a prerequsite that you have a measure created and measure ID stored for 'measureId' and 'measureId2'
+
+                cy.readFile('cypress/fixtures/measureId2').should('exist').then((fileContents) => {
+                    cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+                })
+
+                cy.get('[data-testid="associate-cms-id-action-btn"]').should('be.visible')
+                cy.get('[data-testid="associate-cms-id-action-btn"]').should('be.enabled')
+                cy.get('[data-testid="associate-cms-id-action-btn"]').click()
+
+                cy.get('[data-testid="associate-cms-id-button"]').should('be.visible')
+                cy.get('[data-testid="associate-cms-id-button"]').should('be.enabled')
+
+                break
+            }
+            default: { }
+        }
     }
 }

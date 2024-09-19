@@ -18,7 +18,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
 
         cy.setAccessTokenCookie()
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL, false, false)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL)
 
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
@@ -80,7 +80,7 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
 
         cy.setAccessTokenCookie()
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, false, booleanPatientBasisQDM_CQL, false, false)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, false, booleanPatientBasisQDM_CQL)
 
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")

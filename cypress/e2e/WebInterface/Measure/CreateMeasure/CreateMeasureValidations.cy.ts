@@ -774,7 +774,7 @@ describe('CQL Library Validations -- Attempting to use a QDM Library in a QI Cor
 
         CQLLibraryPage.createAPILibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher, QDMModel, LibCQLQDMVal, false, false)
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, measureCQLLibName, null, false, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, measureCQLLibName, null, null, false)
         OktaLogin.Login()
 
 

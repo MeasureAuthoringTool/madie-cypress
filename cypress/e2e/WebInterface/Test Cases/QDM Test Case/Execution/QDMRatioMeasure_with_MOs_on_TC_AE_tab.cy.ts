@@ -252,7 +252,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
     beforeEach('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringValue, false, measureCQL, false, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringValue, false, measureCQL, null, false,
             '2023-01-01', '2024-01-01')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson, false, false)
         OktaLogin.Login()
@@ -483,7 +483,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
     beforeEach('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringValue, false, measureCQL2RunObservations, false, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringValue, false, measureCQL2RunObservations, null, false,
             '2023-01-01', '2025-01-01')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJsonwMOElements, false, false)
         OktaLogin.Login()

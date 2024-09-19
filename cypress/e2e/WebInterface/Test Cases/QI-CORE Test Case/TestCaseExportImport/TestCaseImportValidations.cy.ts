@@ -43,7 +43,7 @@ describe('Test Case Import: functionality tests', () => {
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
@@ -230,7 +230,7 @@ describe('Test Case Import validations for versioned Measures', () => {
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
@@ -345,7 +345,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
 
@@ -462,7 +462,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         firstMeasureName = measureName + 'a'
         updatedCQLLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
     })
 
@@ -480,9 +480,9 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         CqlLibraryName = 'TestLibrary6' + Date.now()
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, true)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, 2)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit", true)
+        MeasuresPage.measureAction("edit", 2)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().wait(1000).type('{moveToEnd}{enter}')
@@ -496,7 +496,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
         OktaLogin.Login()
 
-        MeasuresPage.measureAction("edit", true)
+        MeasuresPage.measureAction("edit", 2)
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
             .click()
@@ -510,7 +510,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.get(Header.mainMadiePageButton).click().wait(3000)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit", true)
+        MeasuresPage.measureAction("edit", 2)
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -572,7 +572,7 @@ describe('Test case uniqueness error validation', () => {
         firstMeasureName = measureName + 'a'
         updatedCQLLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
     })
 
@@ -682,7 +682,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         firstMeasureName = measureName + 'a'
         updatedCQLLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
     })
 
@@ -701,14 +701,14 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         cy.setAccessTokenCookie()
         CqlLibraryName = 'TestLibrary6' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, true)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(true, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, 2)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(2, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonLizzy, true, false)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
         OktaLogin.Login()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit", true)
+        MeasuresPage.measureAction("edit", 2)
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()

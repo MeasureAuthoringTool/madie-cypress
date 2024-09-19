@@ -762,8 +762,8 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
 
     before('Create Measure', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 2, measureCQL, true, true)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(true, true, 'Initial Population', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne')
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 2, measureCQL, null, true)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(2, true, 'Initial Population', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne')
     })
 
     beforeEach('Set Access Token', () => {
@@ -858,7 +858,7 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.wait(13500)
         OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
         cy.setAccessTokenCookie()
     })
 
@@ -980,7 +980,7 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(Header.measures).click()
         OktaLogin.UILogout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'num', '', '', 'num', '', 'numeratorExclusion')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'num', '', '', 'num', '', 'numeratorExclusion')
 
     })
 

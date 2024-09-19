@@ -631,7 +631,7 @@ describe.skip('QI-Core Test Case Element tab tests', () => {
         //Create New Measure
         cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, null, null, null, null, null, null, null, 'Procedure')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null, null, null, 'Procedure')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
     })
 

@@ -31,7 +31,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes validate /
         newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringPropValue, false, measureCQLDUTest, false, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringPropValue, false, measureCQLDUTest, null, false,
             '2025-01-01', '2025-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
         OktaLogin.Login()
@@ -115,7 +115,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
         newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringPropValue, false, measureCQLPFTests, false, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringPropValue, false, measureCQLPFTests, null, false,
             '2025-01-01', '2025-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
         OktaLogin.Login()
@@ -211,7 +211,7 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
         newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringPropValue, false, measureCQLPFTests, false, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringPropValue, false, measureCQLPFTests, null, false,
             '2025-01-01', '2025-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
         OktaLogin.Login()
@@ -311,7 +311,7 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringPropValue, false, measureCQLPFTests, false, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringPropValue, false, measureCQLPFTests, null, false,
             '2025-01-01', '2025-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
         OktaLogin.Login()

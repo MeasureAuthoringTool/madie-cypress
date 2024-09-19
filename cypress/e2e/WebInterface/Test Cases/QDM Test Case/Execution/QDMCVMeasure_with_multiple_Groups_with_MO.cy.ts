@@ -22,7 +22,7 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
     before('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Continuous Variable', true, measureQDMPBCQL, false, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Continuous Variable', true, measureQDMPBCQL, null, false,
             '2023-01-01', '2024-12-31')
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
@@ -186,7 +186,7 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
     before('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Continuous Variable', false, measureQDMNPBCQL, false, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Continuous Variable', false, measureQDMNPBCQL, null, false,
             '2023-01-01', '2024-12-31')
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
