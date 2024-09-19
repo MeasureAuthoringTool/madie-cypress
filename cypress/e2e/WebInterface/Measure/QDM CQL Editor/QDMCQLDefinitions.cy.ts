@@ -191,7 +191,7 @@ describe.skip('QDM CQL Definitions', () => {
 
     })
 
-    it('Verify Included QDM CQL Definitions under Saved Definitions tab', () => {
+      it('Verify Included QDM CQL Definitions under Saved Definitions tab', () => {
 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
@@ -203,7 +203,7 @@ describe.skip('QDM CQL Definitions', () => {
         cy.get('[data-testid="definitions-row-1"] > :nth-child(1)').should('contain.text', 'SDE Payer')
     })
 
-    it('Edit Saved QDM CQL Definitions', () => {
+     it('Edit Saved QDM CQL Definitions', () => {
 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
