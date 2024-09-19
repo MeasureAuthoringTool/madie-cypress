@@ -177,9 +177,17 @@ export class MeasuresPage {
 
             case 'version': {
 
+                cy.get('[data-testid="version-action-btn"]').should('be.visible')
+                cy.get('[data-testid="version-action-btn"]').should('be.enabled')
+                cy.get('[data-testid="version-action-btn"]').click()
+
                 break
             }
             case 'draft': {
+
+                cy.get('[data-testid="draft-action-btn"]').should('be.visible')
+                cy.get('[data-testid="draft-action-btn"]').should('be.enabled')
+                cy.get('[data-testid="draft-action-btn"]').click()
 
                 break
             }
