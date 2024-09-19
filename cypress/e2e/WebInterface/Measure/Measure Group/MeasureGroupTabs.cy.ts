@@ -21,7 +21,7 @@ describe('Validating Population tabs', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
         OktaLogin.Login()
 
     })
@@ -320,7 +320,7 @@ describe('Validating Stratification tabs', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.Login()
 
@@ -746,7 +746,7 @@ describe('Validating Reporting tabs', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.Login()
 
@@ -925,7 +925,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.Login()
 

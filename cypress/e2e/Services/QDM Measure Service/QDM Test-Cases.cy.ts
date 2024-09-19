@@ -38,7 +38,7 @@ describe('Test Case population values based on Measure Group population definiti
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL, false, false)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL)
 
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
@@ -206,7 +206,7 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
         cy.setAccessTokenCookie()
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryNameDeux, measureScoring, true, booleanPatientBasisQDM_CQL, false, false)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryNameDeux, measureScoring, true, booleanPatientBasisQDM_CQL)
     })
 
     beforeEach('Set Token', () => {
@@ -303,7 +303,7 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
         CQLLibraryName = 'QDMTestCql' + Date.now()
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CQLLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL, false, false)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CQLLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL)
         cy.setAccessTokenCookie()
     })
 

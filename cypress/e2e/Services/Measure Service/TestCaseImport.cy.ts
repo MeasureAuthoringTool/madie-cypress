@@ -57,7 +57,7 @@ describe('Test Case Import', () => {
         cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
 
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
     })
@@ -195,7 +195,7 @@ describe('Test Case import for versioned Measure', () => {
         cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
     })
 
@@ -258,7 +258,7 @@ describe('Multiple Test Case Import', () => {
         cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
 
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
         TestCasesPage.CreateTestCaseAPI(secondTCTitle, secondTCDescription, secondTCSeries, TCJson)

@@ -128,13 +128,11 @@ export class CreateMeasurePage {
     }
 
     public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
-        twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
+        measureNumber?: number, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
 
         let user = ''
         const now = require('dayjs')
-        if ((twoMeasures === undefined) || (twoMeasures === null)) {
-            twoMeasures = false
-        }
+
         if ((altUser === undefined) || (altUser === null)) {
             altUser = false
         }
@@ -212,21 +210,16 @@ export class CreateMeasurePage {
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
-                if (twoMeasures === true) {
-                    cy.writeFile('cypress/fixtures/measureId2', response.body.id)
-                    cy.writeFile('cypress/fixtures/QiCoreMeasureId2', response.body.id)
-                    cy.writeFile('cypress/fixtures/versionId2', response.body.versionId)
-                    cy.writeFile('cypress/fixtures/QiCoreVersionId2', response.body.versionId)
-                    cy.writeFile('cypress/fixtures/measureSetId2', response.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/QiCoreMeasureSetId2', response.body.measureSetId)
+                if (measureNumber !== null)  {
+                    cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
+                    cy.writeFile('cypress/fixtures/versionId' + measureNumber, response.body.versionId)
+                    cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
+
                 }
                 else {
                     cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                    cy.writeFile('cypress/fixtures/QiCoreMeasureId', response.body.id)
                     cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-                    cy.writeFile('cypress/fixtures/QiCoreVersionId', response.body.versionId)
                     cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/QiCoreMeasureSetId', response.body.measureSetId)
                 }
 
             })
@@ -424,7 +417,7 @@ export class CreateMeasurePage {
         return user
     }
 
-    public static CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName: string, CqlLibraryName: string, measureScoring: string, patientBasis?: boolean, measureCQL?: string, twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
+    public static CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName: string, CqlLibraryName: string, measureScoring: string, patientBasis?: boolean, measureCQL?: string, measureNumber?: number, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
 
         let user = ''
         const now = require('dayjs')
@@ -504,19 +497,13 @@ export class CreateMeasurePage {
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
-                if (twoMeasures === true) {
-                    cy.writeFile('cypress/fixtures/measureId2', response.body.id)
-                    cy.writeFile('cypress/fixtures/QDMMeasureId2', response.body.id)
-                    //cy.writeFile('cypress/fixtures/versionId2', response.body.versionId)
-                    cy.writeFile('cypress/fixtures/measureSetId2', response.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/QDMMeasureSetId2', response.body.measureSetId)
+                if (measureNumber !== null) {
+                    cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
+                    cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
                 }
                 else {
                     cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                    cy.writeFile('cypress/fixtures/QDMMeasureId', response.body.id)
-                    //cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
                     cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
-                    cy.writeFile('cypress/fixtures/QDMMeasureSetId', response.body.measureSetId)
                 }
 
             })

@@ -33,7 +33,7 @@ describe('QI-Core : Delete All Test Cases', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-02', '2013-01-01')
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null,
             null, null, 'Procedure')

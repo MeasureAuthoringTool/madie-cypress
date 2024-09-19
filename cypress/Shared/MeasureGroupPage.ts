@@ -374,7 +374,7 @@ export class MeasureGroupPage {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
     }
 
-    public static CreateProportionMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, DenomExcl?: string, DenomExcep?: string, PopNumP?: string, NumerExcl?: string, PopDenomP?: string, popBasis?: string): string {
+    public static CreateProportionMeasureGroupAPI(measureNumber?: number, altUser?: boolean, PopIniPopP?: string, DenomExcl?: string, DenomExcep?: string, PopNumP?: string, NumerExcl?: string, PopDenomP?: string, popBasis?: string): string {
         let user = ''
         let measurePath = ''
         let measureGroupPath = ''
@@ -391,13 +391,13 @@ export class MeasureGroupPage {
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
         }
-        if (twoMeasureGroups === true) {
-            measurePath = 'cypress/fixtures/measureId2'
-            measureGroupPath = 'cypress/fixtures/groupId2'
-        }
-        else {
+        if (measureNumber === 1 || measureNumber === null) {
             measurePath = 'cypress/fixtures/measureId'
             measureGroupPath = 'cypress/fixtures/groupId'
+        }
+        else {
+            measurePath = 'cypress/fixtures/measureId' + measureNumber
+            measureGroupPath = 'cypress/fixtures/groupId' + measureNumber
         }
 
         //Add Measure Group to the Measure

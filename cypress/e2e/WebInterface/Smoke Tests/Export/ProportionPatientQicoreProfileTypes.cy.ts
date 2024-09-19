@@ -214,7 +214,7 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', '', 'Numerator', '', 'Denominator', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Numerator', '', 'Denominator', 'boolean')
         OktaLogin.Login()
 
     })

@@ -72,7 +72,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Initial Population', '', '',
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '',
             'Num', '', 'Initial Population', 'boolean')
 
         OktaLogin.Login()

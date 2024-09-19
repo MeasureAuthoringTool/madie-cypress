@@ -24,8 +24,8 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, mesureCQLPFTests, false, true)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, true, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, mesureCQLPFTests, 2, true)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(2, true, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         OktaLogin.AltLogin()
     })
 

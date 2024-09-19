@@ -132,7 +132,7 @@ describe('QDM Measure Export for CMS Measure with huge included Library', () => 
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Denominator Exclusions', '', 'Encounter without Food Screening', '', 'Qualifying Encounters')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', 'Denominator Exclusions', '', 'Encounter without Food Screening', '', 'Qualifying Encounters')
         OktaLogin.Login()
 
     })
