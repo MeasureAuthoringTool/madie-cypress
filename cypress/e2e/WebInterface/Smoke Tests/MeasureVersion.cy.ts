@@ -119,6 +119,9 @@ describe('QDM Measure Versioning', () => {
 
     it('Add Major Version to the QDM Measure and verify that the versioned Measure is in read only', () => {
 
+        //Commenting until 'MeasureListButtons' feature flag is removed
+        //MeasuresPage.actionCenter('version')
+
         MeasuresPage.measureAction('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -190,6 +193,9 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
 
     it('Add Major Version to the QDM Measure and verify that the versioned Measure is in read only', () => {
 
+        //Commenting until 'MeasureListButtons' feature flag is removed
+        //MeasuresPage.actionCenter('version')
+
         MeasuresPage.measureAction('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -259,6 +265,9 @@ describe('QI-Core Measure Versioning', () => {
     })
 
     it('Add Major Version to the Qi-Core Measure and verify that the versioned Measure is in read only', () => {
+
+        //Commenting until 'MeasureListButtons' feature flag is removed
+        //MeasuresPage.actionCenter('version')
 
         MeasuresPage.measureAction('version')
 

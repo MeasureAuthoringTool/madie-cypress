@@ -124,7 +124,8 @@ export class OktaLogin {
         Utilities.waitForElementVisible(Header.userProfileSelect, 500000)
         cy.get(Header.userProfileSelect).scrollIntoView()
         cy.get(Header.userProfileSelect).click()
-        cy.get(Header.userProfileSelectSignOutOption).click({ force: true }).wait(8000)
+        Utilities.waitForElementVisible(Header.userProfileSelectSignOutOption, 60000)
+        cy.get(Header.userProfileSelectSignOutOption).click({ force: true })
         cy.log('Log out successful')
     }
 }

@@ -57,6 +57,9 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
         let filePath = 'cypress/fixtures/measureId'
 
+        //Commenting until 'MeasureListButtons' feature flag is removed
+        //MeasuresPage.actionCenter('version')
+
         MeasuresPage.measureAction('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -80,20 +83,11 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(Header.mainMadiePageButton).click().wait(2500)
         cy.reload()
 
+        MeasuresPage.measureAction('draft')
 
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
-            cy.wait(7000)
-            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="measure-action-' + fileContents + '"]', 100000)
-            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.enabled')
-            cy.get('[data-testid="measure-action-' + fileContents + '"]').click().wait(1000)
-            Utilities.waitForElementVisible('[data-testid="draft-measure-' + fileContents + '"]', 105000)
-            cy.get('[data-testid="draft-measure-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="draft-measure-' + fileContents + '"]', 105000)
-            cy.get('[data-testid="draft-measure-' + fileContents + '"]').should('be.enabled')
-            cy.get('[data-testid="draft-measure-' + fileContents + '"]').click()
-        })
+        //Commenting until 'MeasureListButtons' feature flag is removed
+        //MeasuresPage.measureAction('draft')
+
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         //intercept draft id once measure is drafted
         cy.readFile(filePath).should('exist').then((fileContents) => {
@@ -121,6 +115,9 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedMeasuresPageOne' + Date.now()
 
+        //Commenting until 'MeasureListButtons' feature flag is removed
+        //MeasuresPage.actionCenter('version')
+
         MeasuresPage.measureAction('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -139,7 +136,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.wait(7000)
+            //cy.wait(7000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
@@ -148,6 +145,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
             //Verify version button is not visible
             cy.get('[data-testid=draft-measure-' + fileContents + ']').should('not.exist')
+            cy.reload()
         })
     })
 })
@@ -199,6 +197,9 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
+        //Commenting until 'MeasureListButtons' feature flag is removed
+        //MeasuresPage.actionCenter('version')
+
         //version and draft measure
         MeasuresPage.measureAction('version')
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -215,11 +216,9 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
 
-        cy.reload()
-        OktaLogin.UILogout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        OktaLogin.Login()
+        //Commenting until 'MeasureListButtons' feature flag is removed
+        //MeasuresPage.actionCenter('draft')
+
         MeasuresPage.measureAction('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.visible')
