@@ -117,4 +117,12 @@ export class CQLEditorPage {
 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
     }
+
+    public static applyDefinition(): void {
+
+        cy.get('[data-testid="definition-apply-btn"]').click()
+        cy.get('[data-testid="measure-editor-toast"]').should('be.visible')
+        cy.get('[data-testid="measure-editor-toast"]').should('contain.text', 'successfully added to the CQL')
+
+    }
 }
