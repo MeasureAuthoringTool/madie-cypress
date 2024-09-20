@@ -129,7 +129,7 @@ describe.skip('Qi-Core CQL Definitions', () => {
 
     })
 
-    it('Insert Qi-Core CQL Definitions through Expression Editor', () => {
+    it('Insert Qi-Core CQL Definitions through Expression Editor and Apply to CQL editor', () => {
 
         //Click on Edit Button
         MeasuresPage.measureAction("edit")
@@ -199,6 +199,19 @@ describe.skip('Qi-Core CQL Definitions', () => {
         //Insert
         cy.get(CQLEditorPage.expressionInsertBtn).click()
         cy.get('[class="ace_content"]').eq(1).should('contain', 'AgeInDays()')
+
+        CQLEditorPage.applyDefinition()
+
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).type('{pageDown}')
+
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'define "Test":')
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'CQMCommon."Measurement Period"')
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', '"Initial Population"')
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'CQMCommon."Emergency Department Arrival Time"()')
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', '"emergencyDepartmentArrivalTime"()')
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'after end')
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'AgeInDays()')
 
     })
 

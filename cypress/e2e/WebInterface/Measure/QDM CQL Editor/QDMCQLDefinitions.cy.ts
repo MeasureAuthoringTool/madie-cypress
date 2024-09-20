@@ -123,7 +123,7 @@ describe.skip('QDM CQL Definitions', () => {
 
     })
 
-    it('Insert QDM CQL Definitions through Expression Editor', () => {
+    it('Insert QDM CQL Definitions through Expression Editor and Apply to CQL editor', () => {
 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
@@ -188,6 +188,19 @@ describe.skip('QDM CQL Definitions', () => {
         //Insert
         cy.get(CQLEditorPage.expressionInsertBtn).click()
         cy.get('[class="ace_content"]').eq(1).should('contain', 'AgeInDays()')
+
+        CQLEditorPage.applyDefinition()
+
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).type('{pageDown}')
+
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'define "Test":')
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'Common."Measurement Period"')
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'Common."Inpatient Encounter"')
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'Common."EmergencyDepartmentArrivalTime"()')
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', '"test"()')
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'after end')
+        cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'AgeInDays()')
 
     })
 
