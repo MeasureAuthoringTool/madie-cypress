@@ -61,6 +61,7 @@ export class MeasuresPage {
     }
 
     public static measureAction(action: string, measureNumber?: number): void {
+
         let filePath = 'cypress/fixtures/measureId'
 
         if (measureNumber > 0) {

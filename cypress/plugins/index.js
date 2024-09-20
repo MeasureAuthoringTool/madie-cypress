@@ -16,6 +16,7 @@ const path = require('path')
 const unzipper = require('unzipper')
 const { removeDirectory } = require('cypress-delete-downloads-folder')
 
+
 function getConfigurationByFile (file) {
   const pathToConfigFile = path.resolve('./cypress/', 'config', `${file}.json`)
   return fs.readJson(pathToConfigFile)
@@ -29,35 +30,46 @@ function unzipFile (zipFile, path) {
   readStream.pipe(unzipper.Extract({path: `${path}`}))
 }
 const browserify = require('@cypress/browserify-preprocessor')
+module.exports = {
+    e2e: {
+        //baseUrl: "http://bstackdemo.com", // this is your app
+        setupNodeEvents(on, config) {
+          on("before:browser:launch", (browser = {}, launchOptions) => {
+          prepareAudit(launchOptions);
+      });
+      on("task", {
+        lighthouse: lighthouse(),
+        // pa11y: pa11y(console.log.bind(console)),
+      });
+    },
+  },
+};
 
 module.exports = (on, config) => {
   const file = config.env.configFile
   const options = {
     ...browserify.defaultOptions,
-    typescript: require.resolve('typescript'),
+    typescript: require.resolve('typescript')
   }
-  on('task', {
-    log(message) {
-      console.log(message)
-
-      return null
-    },
-    table(message) {
-      console.table(message)
-
-      return null
-    }
-  })
-  on('task', {
-    unzipFile: zipFileAndPath => {
-      unzipFile(zipFileAndPath.zipFile, zipFileAndPath.path)
-      return null
-    }
-  })
-  on('task', {
-    removeDirectory
-  })
-  on('file:preprocessor', browserify(options))
-  return getConfigurationByFile(file)
-}
-
+    on('task', {
+      log(message) {
+        console.log(message)
+        return null
+      },
+      table(message) {
+        console.table(message)
+        return null
+      }
+    })
+    on('task', {
+      unzipFile: zipFileAndPath => {
+        unzipFile(zipFileAndPath.zipFile, zipFileAndPath.path)
+        return null
+      }
+    })
+    on('task', {
+      removeDirectory
+    })
+    on('file:preprocessor', browserify(options))
+    return getConfigurationByFile(file)
+  }

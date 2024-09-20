@@ -149,10 +149,16 @@ export class CreateMeasurePage {
         }
 
         if (altUser) {
+            sessionStorage.clear()
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
             cy.setAccessTokenCookieALT()
             user = Environment.credentials().harpUserALT
         }
         else {
+            sessionStorage.clear()
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
         }
@@ -210,7 +216,7 @@ export class CreateMeasurePage {
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
-                if (measureNumber > 0)  {
+                if (measureNumber > 0) {
                     cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
                     cy.writeFile('cypress/fixtures/versionId' + measureNumber, response.body.versionId)
                     cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
@@ -497,7 +503,7 @@ export class CreateMeasurePage {
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
-                if (measureNumber > 0)  {
+                if (measureNumber > 0) {
                     cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
                     cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
 
