@@ -792,3 +792,67 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
     })
 })
 
+describe('Non Boolean Population basis Expected values', () => {
+
+    beforeEach('Create Measure, and Test Case', () => {
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringCohort, false, qdmMeasureCQLwNonVsacValueset)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Denominator', '', 'Numerator')
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
+        OktaLogin.Login()
+    })
+
+    afterEach('Logout and Clean up', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+
+    it('Validate Non Boolean Expected values', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.measureAction("edit")
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //click on Expected/Actual tab
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+
+        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseIPPExpected).type('abc')
+        cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
+
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseDENOMExpected).type('$%@')
+        cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
+
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseNUMERExpected).type('13@a')
+        cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
+
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
+        cy.get(TestCasesPage.testCaseNUMERExpected).clear().type('1.9')
+        cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Decimals values cannot be entered in the population expected values')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
+
+    })
+})
+
