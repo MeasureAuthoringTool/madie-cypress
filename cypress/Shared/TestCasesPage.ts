@@ -34,9 +34,8 @@ export class TestCasesPage {
     //QDM Test Case Demographics elements
     public static readonly QDMDob = '[data-testid="date-of-birth-input"]'
     public static readonly QDMLivingStatus = '[id="demographics-living-status-select-id"]'
-    public static readonly QDMLivingStatusOPtion = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiPaper-root MuiMenu-paper MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-177ic5c"]'
+    public static readonly QDMLivingStatusOPtion = '[data-value="Living"]'
     public static readonly QDMRace = '[id="demographics-race-select-id"]'
-    public static readonly QDMRaceOption = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
     public static readonly QDMGender = '[id="demographics-gender-select-id"]'
     public static readonly QDMGenderOption = '.MuiList-root'
     public static readonly QDMEthnicity = '[id="demographics-ethnicity-select-id"]'
@@ -974,10 +973,10 @@ export class TestCasesPage {
         cy.get(TestCasesPage.QDMLivingStatus).click()
         cy.get(TestCasesPage.QDMLivingStatusOPtion).contains(livingStatus).click()
         cy.get(TestCasesPage.QDMRace).click()
-        cy.get(TestCasesPage.QDMRaceOption).contains(race).click()
+        cy.get('[data-value="'+ race +'"]').click()
         cy.get(TestCasesPage.QDMGender).click()
         cy.get(TestCasesPage.QDMGenderOption).contains(gender).click()
         cy.get(TestCasesPage.QDMEthnicity).click()
-        cy.get(TestCasesPage.QEMEthnicityOptions).contains(ethnicity).click()
+        cy.get('[data-value="'+ ethnicity +'"]').click()
     }
 }
