@@ -43,6 +43,21 @@ describe('Run / Execute Test Case button validations', () => {
     })
 
     it('Run Test Case button is disabled  -- CQL Errors', () => {
+        /*         const thresholds = {
+                    performance: 50,
+                    accessibility: 80,
+                    'first-contentful-paint': 2000,
+                    'largest-contentful-paint': 3000,
+                    interactive: 2000,
+                    seo: 60,
+                    pwa: 50
+                };
+                const lighthouseConfig = {
+                    formFactor: 'desktop',
+                    screenEmulation: { disabled: true },
+                }; */
+
+        //
 
         //Click on Edit Measure
         MeasuresPage.measureAction("edit")
@@ -97,6 +112,10 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
         cy.get(TestCasesPage.runTestButton).should('be.disabled')
+        /*                 //cy.pause()
+                cy.visit('/');
+                cy.lighthouse(thresholds, lighthouseConfig) */
+
     })
 
     it('Run / Execute Test Case button is disabled  -- Missing group / population selections', () => {

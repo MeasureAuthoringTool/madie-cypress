@@ -75,7 +75,11 @@ export class CQLEditorPage {
     public static readonly librarySearchBtn = '[data-testid="search-btn"]'
     public static readonly librarySearchTable = '[data-testid="terminology-section-Library Results-sub-heading"]'
     public static readonly savedLibrariesTab = '[data-testid="saved-libraries-tab"]'
+    public static readonly toastMeasureMessage = '[data-testid="measure-editor-toast"]'
     public static readonly savedLibrariesTable = '[data-testid="includes-panel"]'
+    public static readonly deleteSavedLibrary = '[data-testid="DeleteOutlineIcon"]'
+    public static readonly editSavedLibrary = '[data-testid="BorderColorOutlinedIcon"]'
+    public static readonly libraryResultsTable = '[data-testid="library-results-table-body"]'
 
     //Definitions page
     public static readonly definitionsTab = '[data-testid="definitions-tab"]'

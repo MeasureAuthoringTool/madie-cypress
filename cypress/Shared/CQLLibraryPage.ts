@@ -8,7 +8,9 @@ export class CQLLibraryPage {
     public static readonly measureCQLGenericErrorsList = '[data-testid="generic-errors-text-list"]'
     public static readonly cqlLibrarySuccessfulDeleteMsgBox = '[data-testid="cql-library-list-snackBar"]'
     public static readonly cqlLibraryDeleteDialogContinueBtn = '[data-testid="delete-dialog-continue-button"]'
+    public static readonly applyEditsSavedLibraryBtn = '[data-testid="apply-button"]'
     public static readonly cqlLibraryDeleteDialogCancelBtn = '[data-testid="delete-dialog-cancel-button"]'
+    public static readonly savedLibrariesEditDetailsCancelBtn = '[data-testid="cancel-button"]'
     public static readonly cqlLibraryDeleteDialog = '[data-testid="delete-dialog"]'
     public static readonly cqlLibSaveSuccessMessage = '[class="madie-alert success"]'
     public static readonly cqlLibSearchResultsTable = '[data-testid="table-body"]'
@@ -54,6 +56,7 @@ export class CQLLibraryPage {
     public static readonly cqlLibPubHelperText = '[data-testid="publisher-helper-text"]'
     public static readonly cqlLibraryExperimentalChkBox = '[id="experimental"]'
     public static readonly editLibraryOwnershipError = '[id="content"]'
+    public static readonly editSavedLibraryAlias = '[data-testid="library-alias-input"]'
 
     //CQL Editor
     public static readonly cqlLibraryEditorTextBox = '.ace_content'
