@@ -69,6 +69,7 @@ let measureCQL = 'library CVPatientWithStratification version \'0.0.000\'\n' +
     'define "Stratification 2":\n' +
     '  true'
 
+//MAT-7727
 describe('Measure Creation and Testing: CV Patient Measure With Stratification', () => {
 
     before('Create Measure, Test Case and Login', () => {
@@ -118,12 +119,10 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Stratification 1')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
         cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
 
         //Add Stratification 2
         Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'Stratification 2')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'measurePopulation')
         cy.get(MeasureGroupPage.stratDescTwo).type('StratificationTwo')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')

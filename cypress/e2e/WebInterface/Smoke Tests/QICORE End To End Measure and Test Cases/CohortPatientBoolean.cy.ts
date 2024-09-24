@@ -43,6 +43,9 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
+        //Clear the text in CQL Library Editor
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+
         cy.readFile('cypress/fixtures/CQLForCohortPatientBoolean.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
 
