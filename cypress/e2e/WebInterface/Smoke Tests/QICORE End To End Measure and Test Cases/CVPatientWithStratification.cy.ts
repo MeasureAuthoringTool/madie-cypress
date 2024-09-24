@@ -74,7 +74,7 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
     before('Create Measure, Test Case and Login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-01', '2012-12-31')
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)

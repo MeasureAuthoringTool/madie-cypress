@@ -63,7 +63,7 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
     before('Create Measure and Test Case', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2023-01-01', '2024-01-01')
 
         //create test case

@@ -62,7 +62,7 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
     before('Create Measure and Test Case', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2022-01-01', '2022-12-31')
 
         //create test case
