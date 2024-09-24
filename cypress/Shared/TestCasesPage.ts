@@ -968,15 +968,15 @@ export class TestCasesPage {
 
     public static enterPatientDemographics(dob?: dateTimeISO, livingStatus?: string, race?: string, gender?: string, ethnicity?: string): void {
 
-        cy.get(TestCasesPage.QDMDob).clear().wait(1700).click().wait(1000)
-        cy.get(TestCasesPage.QDMDob).type(dob).click()
         cy.get(TestCasesPage.QDMLivingStatus).click()
         cy.get(TestCasesPage.QDMLivingStatusOPtion).contains(livingStatus).click()
         cy.get(TestCasesPage.QDMRace).click()
-        cy.get('[data-value="'+ race +'"]').click()
+        cy.get('[data-value="' + race + '"]').click()
         cy.get(TestCasesPage.QDMGender).click()
         cy.get(TestCasesPage.QDMGenderOption).contains(gender).click()
         cy.get(TestCasesPage.QDMEthnicity).click()
-        cy.get('[data-value="'+ ethnicity +'"]').click()
+        cy.get('[data-value="' + ethnicity + '"]').click()
+        cy.get(TestCasesPage.QDMDob).clear().wait(1700).click().wait(1000)
+        cy.get(TestCasesPage.QDMDob).type(dob).click()
     }
 }

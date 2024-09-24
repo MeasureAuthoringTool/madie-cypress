@@ -509,7 +509,6 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
         TestCasesPage.clickEditforCreatedTestCase()
 
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
-        cy.get(TestCasesPage.QDMDob).wait(1500).type('01/01/2020 12:00 AM').click()
 
         //select element and begin to add attribute
         cy.get(TestCasesPage.laboratoryElement).click()
