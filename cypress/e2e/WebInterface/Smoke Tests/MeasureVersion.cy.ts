@@ -97,7 +97,7 @@ describe('QDM Measure Versioning', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, 'Cohort', true, QDMMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true, QDMMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -113,7 +113,7 @@ describe('QDM Measure Versioning', () => {
     afterEach('Logout and delete Measure', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
+        Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
 
     })
 
@@ -166,12 +166,12 @@ describe('QDM Measure Versioning', () => {
 
 describe('QDM Measure Version for CMS Measure with huge included Library', () => {
 
-    newMeasureName = measureName + randValue + 1
-    newCQLLibraryName = cqlLibraryName + randValue + 1
+    newMeasureName = measureName + randValue + 2
+    newCQLLibraryName = cqlLibraryName + randValue + 2
 
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, 'Cohort', false, qdmCMSMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', false, qdmCMSMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -187,7 +187,7 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
     afterEach('Logout and delete Measure', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
+        Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
 
     })
 
@@ -240,12 +240,12 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
 
 describe('QI-Core Measure Versioning', () => {
 
-    newMeasureName = measureName + randValue + 2
-    newCQLLibraryName = cqlLibraryName + randValue + 2
+    newMeasureName = measureName + randValue + 3
+    newCQLLibraryName = cqlLibraryName + randValue + 3
 
     before('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, QiCoreMeasureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, QiCoreMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -260,7 +260,7 @@ describe('QI-Core Measure Versioning', () => {
     after('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
+        Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
 
     })
 
