@@ -55,7 +55,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
     before('Create Measure, Test Case and Login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2023-01-01', '2023-12-31')
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)

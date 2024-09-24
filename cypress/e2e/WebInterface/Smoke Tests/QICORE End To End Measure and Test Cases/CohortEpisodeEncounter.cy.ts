@@ -32,7 +32,7 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
     before('Create Measure and Test Case', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-02', '2013-01-01')
 
         //create test case

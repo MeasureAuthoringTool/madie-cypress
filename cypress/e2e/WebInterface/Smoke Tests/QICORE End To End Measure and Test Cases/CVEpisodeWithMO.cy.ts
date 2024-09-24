@@ -55,7 +55,7 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
     before('Create Measure, Test Case and Login', () => {
 
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2023-01-01', '2023-12-31')
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
