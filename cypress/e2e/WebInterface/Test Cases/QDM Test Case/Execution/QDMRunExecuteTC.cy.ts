@@ -193,6 +193,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.testCaseAction('edit')
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('07/01/2002 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        cy.get(TestCasesPage.QDMDob).wait(1500).type('07/01/2002 12:00 AM').click()
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
@@ -273,6 +274,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.clickEditforCreatedTestCase()
 
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        cy.get(TestCasesPage.QDMDob).wait(1500).type('01/01/2020 12:00 AM').click()
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -330,6 +332,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.clickEditforCreatedTestCase()
 
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        cy.get(TestCasesPage.QDMDob).wait(1500).type('01/01/2020 12:00 AM').click()
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -361,6 +364,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(1/2)')
 
     })
+
     it('Run / Execute single failing Test Cases', () => {
 
         OktaLogin.Login()
@@ -399,6 +403,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         TestCasesPage.clickEditforCreatedTestCase()
 
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        cy.get(TestCasesPage.QDMDob).wait(1500).type('01/01/2020 12:00 AM').click()
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')

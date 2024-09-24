@@ -133,6 +133,7 @@ describe('Create and Update QDM Test Case', () => {
 
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        cy.get(TestCasesPage.QDMDob).wait(1500).type('01/01/2020 12:00 AM').click()
 
         //Navigate to Details tab and Edit
         cy.get(TestCasesPage.detailsTab).click()

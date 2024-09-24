@@ -139,6 +139,7 @@ describe('Test Case Attributes', () => {
 
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        cy.get(TestCasesPage.QDMDob).wait(1500).type('01/01/2020 12:00 AM').click()
 
         cy.get(TestCasesPage.laboratoryElement).click()
         cy.get(TestCasesPage.plusIcon).eq(1).click()
@@ -171,6 +172,7 @@ describe('Test Case Attributes', () => {
 
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        cy.get(TestCasesPage.QDMDob).wait(1500).type('01/01/2020 12:00 AM').click()
 
         //Add Date Time Attribute
         cy.get(TestCasesPage.laboratoryElement).click()
