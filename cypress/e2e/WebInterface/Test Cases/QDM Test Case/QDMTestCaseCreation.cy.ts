@@ -16,6 +16,8 @@ let measurePath = 'cypress/fixtures/measureId'
 let mCQLForElementsValidation = MeasureCQL.QDMTestCaseCQLFullElementSection
 let CQLSimple_for_QDM = MeasureCQL.QDMSimpleCQL
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
+const now = require('dayjs')
+let todaysDate = now().format('MM/DD/YYYY')
 
 let measureName = 'ProportionPatient' + Date.now()
 let measureQDMManifestName = 'QDMManifestTest' + Date.now()
@@ -355,16 +357,7 @@ describe('Run QDM Test Case ', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        cy.get(TestCasesPage.QDMDob).click().wait(500)
-        cy.get(TestCasesPage.QDMDob).clear().type('1981-05-27 12:00 AM')
-        cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains('Living').click()
-        cy.get(TestCasesPage.QDMRace).click()
-        cy.get(TestCasesPage.QDMRaceOption).contains('White').click()
-        cy.get(TestCasesPage.QDMGender).click()
-        cy.get(TestCasesPage.QDMGenderOption).contains('Male').click()
-        cy.get(TestCasesPage.QDMEthnicity).click()
-        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Not Hispanic or Latino').click()
+        TestCasesPage.enterPatientDemographics('085/27/1981 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //save the Test Case
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
@@ -401,7 +394,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
             .then((radio) => {
                 //check / select radio button for manifest
                 cy.wrap(radio).eq(1).check({ force: true }).should('be.checked');
-                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Manifest');
+                cy.contains('[id="manifest-select-label"]', 'Manifest');
 
                 cy.get(TestCasesPage.qdmManifestSelectDropDownBox).click()
                 cy.get(TestCasesPage.qdmManifestMaySecondOption).click()
@@ -548,7 +541,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'PassQDMManifestTCGroupQDMManifestTCQDMManifestTCSelect')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'PassQDMManifestTCGroupQDMManifestTCQDMManifestTC' +todaysDate+ 'Select')
 
         //navigate to the test case list Expansion page
         cy.get(TestCasesPage.qdmExpansionSubTab).click()
@@ -559,11 +552,11 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
             .then((radio) => {
                 //confirm that initial value is set to 'Manifest'
                 cy.wrap(radio).eq(1).should('be.checked');
-                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Manifest');
+                cy.contains('[id="manifest-select-label"]', 'Manifest');
 
                 //check / select radio button for the value of 'Latest'
                 cy.wrap(radio).eq(0).check({ force: true }).should('be.checked');
-                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Latest');
+                cy.contains('[data-testid="manifest-expansion-radio-buttons-group"] > :nth-child(1) > .MuiTypography-root', 'Latest');
 
                 cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('not.exist')
 
@@ -581,7 +574,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'FailQDMManifestTCGroupQDMManifestTCQDMManifestTCSelect')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'FailQDMManifestTCGroupQDMManifestTCQDMManifestTC' +todaysDate+ 'Select')
 
     })
 

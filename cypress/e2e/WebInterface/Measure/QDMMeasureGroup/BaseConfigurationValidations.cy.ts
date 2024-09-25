@@ -53,7 +53,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
-        MeasuresPage.measureAction("edit", true)
+        MeasuresPage.measureAction("edit", 2)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -377,7 +377,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         Utilities.waitForElementEnabled(MeasuresPage.allMeasuresTab, 70000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.enabled').wait(1000)
         cy.get(MeasuresPage.allMeasuresTab).wait(10000).click()
-        MeasuresPage.measureAction("edit", true)
+        MeasuresPage.measureAction("edit", 2)
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
