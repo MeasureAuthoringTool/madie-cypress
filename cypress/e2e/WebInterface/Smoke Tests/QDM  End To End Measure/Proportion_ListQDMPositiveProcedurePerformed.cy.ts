@@ -278,8 +278,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Uveitis')
         //add Timing Prevalence Period DateTime
-        QDMElements.addTimingPrevalencePeriodDateTime('03/15/2012 07:00 PM', '03/15/2012 07:00 PM')
-        cy.wait(3000)
+        QDMElements.addTimingPrevalencePeriodDateTime('03/15/2012 07:00 PM')
         //add Code
         QDMElements.addCode('SNOMEDCT', '4927003')
 
@@ -288,7 +287,6 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         QDMElements.addElement('procedure', 'Performed: Cataract Surgery')
         //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('03/15/2012 05:00 PM', '03/15/2012 07:00 PM')
-        cy.wait(3000)
         //add Code
         QDMElements.addCode('SNOMEDCT', '9137006')
 
@@ -296,9 +294,8 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Optic Atrophy')
         //add Timing Prevalent Period DateTime
-        QDMElements.addTimingPrevalencePeriodDateTime('03/15/2012 07:00 PM', '03/15/2012 07:00 PM')
+        QDMElements.addTimingPrevalencePeriodDateTime('03/15/2012 07:00 PM')
 
-        cy.wait(3000)
         //add Code
         QDMElements.addCode('SNOMEDCT', '111527005')
 
@@ -326,7 +323,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Disorders of Visual Cortex')
         //add Timing Prevalence Period DateTime
-        QDMElements.addTimingPrevalencePeriodDateTime('01/01/2012 01:15 PM', '01/02/2012 01:15 PM')
+        QDMElements.addTimingPrevalencePeriodDateTime('01/03/2012 01:15 PM', '03/01/2012 01:15 PM')
         //add Code
         QDMElements.addCode('Icd10CM', 'H47.611')
 
@@ -335,7 +332,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         QDMElements.addElement('procedure', 'Performed: Cataract Surgery')
         //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('01/02/2012 10:15 PM', '01/02/2012 01:15 PM')
-        cy.wait(3000)
+
         //add Code
         QDMElements.addCode('SNOMEDCT', '10178000')
         //Close the Element
@@ -346,7 +343,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         QDMElements.addElement('procedure', 'Performed: Cataract Surgery')
         //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('02/02/2012 01:15 PM', '02/02/2012 04:15 PM')
-        cy.wait(3000)
+
         //add Code
         QDMElements.addCode('SNOMEDCT', '446548003')
 

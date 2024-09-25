@@ -88,11 +88,15 @@ export class QDMElements {
     public static addTimingPrevalencePeriodDateTime(startDateAndTime: string, endDateAndTime?: string): void {
 
         cy.get(TestCasesPage.prevalencePeriodStartDate).type(startDateAndTime)
-        cy.get(TestCasesPage.prevalencePeriodEndDate).type(endDateAndTime)
+        if (endDateAndTime != null){
+            cy.get(TestCasesPage.prevalencePeriodEndDate).type(endDateAndTime)
+        }
+
     }
 
     public static addCode(codeSystem: string, code: string): void {
 
+        Utilities.waitForElementVisible('[data-testid="sub-navigation-tab-codes"]', 700000)
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
         Utilities.waitForElementVisible('[data-testid="code-system-option-' + codeSystem + '"]', 700000)

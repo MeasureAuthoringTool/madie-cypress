@@ -286,9 +286,9 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).type('4')
         cy.get(TestCasesPage.testCaseDENOMExpected).eq(0).type('1')
-        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).clear().type('3')
+        cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(0).clear().type('4')
         cy.get(TestCasesPage.testCaseNUMERExpected).eq(0).type('1')
-        cy.get(TestCasesPage.numeratorObservationRow).eq(0).clear().type('1')
+        cy.get(TestCasesPage.numeratorObservationRow).eq(0).clear().type('2')
 
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).should('be.enabled')
@@ -297,7 +297,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(TestCasesPage.testCaseDENOMExpected).eq(1).type('1')
         cy.get(TestCasesPage.denominatorObservationExpectedRow).eq(1).clear().type('24')
         cy.get(TestCasesPage.testCaseNUMERExpected).eq(1).type('1')
-        cy.get(TestCasesPage.numeratorObservationRow).eq(1).clear().type('7')
+        cy.get(TestCasesPage.numeratorObservationRow).eq(1).clear().type('8')
 
         //run test case on edit test case page
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
