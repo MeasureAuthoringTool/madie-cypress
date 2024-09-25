@@ -50,6 +50,7 @@ let measureCQL = 'library CohortPatientWithStrartification version \'0.0.000\'\n
     'define "Stratification 1":\n' +
     'true'
 
+//MAT-7727
 describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () => {
 
     before('Create Measure, Test Case and Login', () => {
@@ -95,7 +96,7 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         cy.get(MeasureGroupPage.stratificationTab).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Stratification 1')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
+        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
         cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')

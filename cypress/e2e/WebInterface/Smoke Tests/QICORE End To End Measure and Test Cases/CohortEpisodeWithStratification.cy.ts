@@ -54,6 +54,7 @@ let measureCQL = 'library CohortEpisodeWithStrat1668108456699 version \'0.0.000\
     ' "Qualifying Encounters" Enc\n' +
     ' where Enc.type in "Annual Wellness Visit"'
 
+//MAT-7727
 describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () => {
 
     before('Create Measure, Test Case and Login', () => {
@@ -104,7 +105,7 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
         cy.get(MeasureGroupPage.stratificationTab).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Stratificaction 1')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
+        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
         cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')

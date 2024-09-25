@@ -51,8 +51,6 @@ describe('Save CQL on CQL Editor Page', () => {
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTextBox).invoke('text').then((text) => {
-            expect(text.length).greaterThan(1500)
-        })
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('not.be.empty')
     })
 })

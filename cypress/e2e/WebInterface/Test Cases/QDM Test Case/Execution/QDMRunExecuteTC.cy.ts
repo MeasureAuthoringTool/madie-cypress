@@ -361,6 +361,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(1/2)')
 
     })
+
     it('Run / Execute single failing Test Cases', () => {
 
         OktaLogin.Login()
