@@ -6,6 +6,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 
 let measureName = 'MeasureName ' + Date.now()
 let CqlLibraryName = 'CQLLibraryName' + Date.now()
@@ -335,12 +336,12 @@ describe('Measure bundle end point returns stratifications', () => {
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Surgical Absence of Cervix')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
+        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
         cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
 
         //Add Stratification 2
         Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'Surgical Absence of Cervix')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'initialPopulation')
+        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'initialPopulation')
         cy.get(MeasureGroupPage.stratDescTwo).type('StratificationTwo')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -423,18 +424,21 @@ describe('Measure bundle end point returns stratifications', () => {
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'ipp')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
+        cy.get('[data-testid="ArrowDropDownIcon"]').eq(2).click()
+        cy.get('#association-select-1-option-2').click()
         cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
 
         //Add Stratification 2
         Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'num')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'measurePopulation')
+        cy.get('[data-testid="ArrowDropDownIcon"]').eq(3).click()
+        cy.get('#association-select-2-option-1').click()
         cy.get(MeasureGroupPage.stratDescTwo).type('StratificationTwo')
 
         //Add Stratification 3
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratThree, 'numeratorExclusion')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'initialPopulation')
+        cy.get('[data-testid="ArrowDropDownIcon"]').eq(4).click()
+        cy.get('#association-select-3-option-2').click()
         cy.get(MeasureGroupPage.stratDescThree).type('StratificationThree')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -514,18 +518,24 @@ describe('Measure bundle end point returns stratifications', () => {
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Surgical Absence of Cervix')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
+        cy.get('[data-testid="ArrowDropDownIcon"]').eq(2).click()
+        cy.get('#association-select-1-option-0').click()
+        cy.get('#association-select-1-option-1').click()
         cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
 
         //Add Stratification 2
         Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'Surgical Absence of Cervix')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'denominator')
+        cy.get('[data-testid="ArrowDropDownIcon"]').eq(3).click()
+        cy.get('#association-select-2-option-0').click()
+        cy.get('#association-select-2-option-2').click()
         cy.get(MeasureGroupPage.stratDescTwo).type('StratificationTwo')
 
         //Add Stratification 3
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratThree, 'Surgical Absence of Cervix')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'numerator')
+        cy.get('[data-testid="ArrowDropDownIcon"]').eq(4).click()
+        cy.get('#association-select-3-option-0').click()
+        cy.get('#association-select-3-option-4').click()
         cy.get(MeasureGroupPage.stratDescThree).type('StratificationThree')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -577,8 +587,8 @@ describe('Measure bundle end point returns stratifications', () => {
 describe('Verify the criteria reference for measure observations', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
-    newMeasureName = measureName + randValue
-    newCqlLibraryName = CqlLibraryName + randValue + 2
+    newMeasureName = measureName + randValue + 3
+    newCqlLibraryName = CqlLibraryName + randValue + 3
 
     beforeEach('Create Measure', () => {
 
@@ -601,6 +611,9 @@ describe('Verify the criteria reference for measure observations', () => {
 
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        //Clear the text in CQL Library Editor
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
         cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents, { delay: 50 })
@@ -632,18 +645,18 @@ describe('Verify the criteria reference for measure observations', () => {
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'ipp')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
+        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
         cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
 
         //Add Stratification 2
         Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'num')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'measurePopulation')
+        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'measurePopulation')
         cy.get(MeasureGroupPage.stratDescTwo).type('StratificationTwo')
 
         //Add Stratification 3
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratThree, 'numeratorExclusion')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'measurePopulation')
+        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'measurePopulation')
         cy.get(MeasureGroupPage.stratDescThree).type('StratificationThree')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -685,6 +698,9 @@ describe('Verify the criteria reference for measure observations', () => {
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        //Clear the text in CQL Library Editor
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
         cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)

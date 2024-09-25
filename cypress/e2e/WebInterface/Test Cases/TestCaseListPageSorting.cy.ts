@@ -20,8 +20,8 @@ let testCaseSeries = 'A Test Series 1'
 let secondTestCaseSeries = 'B Test Series 2'
 let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 let measureCQLPFTests = MeasureCQL.CQL_Populations
-
-
+const now = require('dayjs')
+let todaysDate = now().format('MM/DD/YYYY')
 
 describe('Sort by each of the test case list page\'s columns', () => {
 
@@ -104,57 +104,57 @@ describe('Sort by each of the test case list page\'s columns', () => {
         cy.get(TestCasesPage.tcColumnHeading).contains('Group').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Group').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionActionN/AA Test Series 1A Test Case 1 FailsA Description 1SelectN/AB Test Series 2Be Test Case 2 PassesB Description 2Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionLast SavedActionN/AA Test Series 1A Test Case 1 FailsA Description 1' +todaysDate+ 'SelectN/AB Test Series 2Be Test Case 2 PassesB Description 2' +todaysDate+ 'Select')
 
         //click group to sort descending
         cy.get(TestCasesPage.tcColumnHeading).contains('Group').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Group').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionActionN/AB Test Series 2Be Test Case 2 PassesB Description 2SelectN/AA Test Series 1A Test Case 1 FailsA Description 1Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionLast SavedActionN/AB Test Series 2Be Test Case 2 PassesB Description 2' +todaysDate+ 'SelectN/AA Test Series 1A Test Case 1 FailsA Description 1' +todaysDate+ 'Select')
 
         //click group to remove sorting
         cy.get(TestCasesPage.tcColumnHeading).contains('Group').click()
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionActionN/AA Test Series 1A Test Case 1 FailsA Description 1SelectN/AB Test Series 2Be Test Case 2 PassesB Description 2Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionLast SavedActionN/AA Test Series 1A Test Case 1 FailsA Description 1' +todaysDate+ 'SelectN/AB Test Series 2Be Test Case 2 PassesB Description 2' +todaysDate+ 'Select')
 
 
         //click title to sort ascending
         cy.get(TestCasesPage.tcColumnHeading).contains('Title').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Title').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionActionN/AA Test Series 1A Test Case 1 FailsA Description 1SelectN/AB Test Series 2Be Test Case 2 PassesB Description 2Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionLast SavedActionN/AA Test Series 1A Test Case 1 FailsA Description 1' +todaysDate+ 'SelectN/AB Test Series 2Be Test Case 2 PassesB Description 2' +todaysDate+ 'Select')
 
         //click title to sort descending
         cy.get(TestCasesPage.tcColumnHeading).contains('Title').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Title').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionActionN/AB Test Series 2Be Test Case 2 PassesB Description 2SelectN/AA Test Series 1A Test Case 1 FailsA Description 1Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionLast SavedActionN/AB Test Series 2Be Test Case 2 PassesB Description 2' +todaysDate+ 'SelectN/AA Test Series 1A Test Case 1 FailsA Description 1' +todaysDate+ 'Select')
 
         //click title to remove sorting
         cy.get(TestCasesPage.tcColumnHeading).contains('Title').click()
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionActionN/AA Test Series 1A Test Case 1 FailsA Description 1SelectN/AB Test Series 2Be Test Case 2 PassesB Description 2Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionLast SavedActionN/AA Test Series 1A Test Case 1 FailsA Description 1' +todaysDate+ 'SelectN/AB Test Series 2Be Test Case 2 PassesB Description 2' +todaysDate+ 'Select')
 
 
         //click description to sort ascending
         cy.get(TestCasesPage.tcColumnHeading).contains('Description').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Description').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionActionN/AA Test Series 1A Test Case 1 FailsA Description 1SelectN/AB Test Series 2Be Test Case 2 PassesB Description 2Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionLast SavedActionN/AA Test Series 1A Test Case 1 FailsA Description 1' +todaysDate+ 'SelectN/AB Test Series 2Be Test Case 2 PassesB Description 2' +todaysDate+ 'Select')
 
         //click description to sort descending
         cy.get(TestCasesPage.tcColumnHeading).contains('Description').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Description').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionActionN/AB Test Series 2Be Test Case 2 PassesB Description 2SelectN/AA Test Series 1A Test Case 1 FailsA Description 1Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionLast SavedActionN/AB Test Series 2Be Test Case 2 PassesB Description 2' +todaysDate+ 'SelectN/AA Test Series 1A Test Case 1 FailsA Description 1' +todaysDate+ 'Select')
 
         //click description to remove sorting
         cy.get(TestCasesPage.tcColumnHeading).contains('Description').click()
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionActionN/AA Test Series 1A Test Case 1 FailsA Description 1SelectN/AB Test Series 2Be Test Case 2 PassesB Description 2Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionLast SavedActionN/AA Test Series 1A Test Case 1 FailsA Description 1' +todaysDate+ 'SelectN/AB Test Series 2Be Test Case 2 PassesB Description 2' +todaysDate+ 'Select')
 
         //run test case
         cy.get(TestCasesPage.executeTestCaseButton).click().wait(1500)
@@ -163,19 +163,19 @@ describe('Sort by each of the test case list page\'s columns', () => {
         cy.get(TestCasesPage.tcColumnHeading).contains('Status').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Status').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionActionFailA Test Series 1A Test Case 1 FailsA Description 1SelectPassB Test Series 2Be Test Case 2 PassesB Description 2Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionLast SavedActionFailA Test Series 1A Test Case 1 FailsA Description 1' +todaysDate+ 'SelectPassB Test Series 2Be Test Case 2 PassesB Description 2' +todaysDate+ 'Select')
 
         //click status to sort descending
         cy.get(TestCasesPage.tcColumnHeading).contains('Status').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Status').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionActionPassB Test Series 2Be Test Case 2 PassesB Description 2SelectFailA Test Series 1A Test Case 1 FailsA Description 1Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionLast SavedActionPassB Test Series 2Be Test Case 2 PassesB Description 2' +todaysDate+ 'SelectFailA Test Series 1A Test Case 1 FailsA Description 1' +todaysDate+ 'Select')
 
         //click status to remove sorting
         cy.get(TestCasesPage.tcColumnHeading).contains('Status').click()
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionActionFailA Test Series 1A Test Case 1 FailsA Description 1SelectPassB Test Series 2Be Test Case 2 PassesB Description 2Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'StatusGroupTitleDescriptionLast SavedActionFailA Test Series 1A Test Case 1 FailsA Description 1' +todaysDate+ 'SelectPassB Test Series 2Be Test Case 2 PassesB Description 2' +todaysDate+ 'Select')
 
     })
 })
