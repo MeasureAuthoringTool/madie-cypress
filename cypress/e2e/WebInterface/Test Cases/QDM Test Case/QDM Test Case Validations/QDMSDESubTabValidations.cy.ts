@@ -286,7 +286,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '6%')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '5%')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
 
     })

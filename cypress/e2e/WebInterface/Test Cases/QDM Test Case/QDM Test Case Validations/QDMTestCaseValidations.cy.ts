@@ -341,7 +341,7 @@ describe('Edit Test Case Validations', () => {
         cy.get(TestCasesPage.elementsTab).click()
 
         //enter a value of the dob
-        cy.get(TestCasesPage.QDMDob).type('01/01/2000').click()
+        cy.get(TestCasesPage.QDMDob).type('01/01/2000').click().wait(1000)
 
         //attempt to navigate away from the test case page
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -403,36 +403,29 @@ describe('Dirty Check Validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //navigate to the details page
-        cy.get(TestCasesPage.elementsTab).should('exist')
-        cy.get(TestCasesPage.elementsTab).should('be.enabled')
-        cy.get(TestCasesPage.elementsTab).click()
+        cy.get(TestCasesPage.detailsTab).click().wait(2000)
 
-        //enter a value of the Ethnicity
-        cy.get(TestCasesPage.QDMEthnicity).should('contain.text', 'Not Hispanic or Latino')
+        cy.get(TestCasesPage.testCaseTitle).click().focus()
+        cy.get(TestCasesPage.testCaseTitle).clear().type('tc01')
 
+        //attempt to navigate away from the test case page
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        //take focus off of the date field
-        cy.get(TestCasesPage.elementsTab).click()
+        Utilities.waitForElementVisible(CQLLibrariesPage.cqlLibraryDirtyCheck, 37000)
 
-        //verify that the Ethnicity value changes back to it's previous value
-        cy.get(TestCasesPage.QDMEthnicity).should('contain.text', 'Not Hispanic or Latino')
+        //verify that the discard modal appears
+        Global.clickOnDirtyCheckCancelChanges()
 
-        //change a value for the dob, again
-        cy.get(TestCasesPage.QDMEthnicity).click()
-        cy.get(TestCasesPage.QEMEthnicityOptions).contains('Hispanic or Latino').click()
+        //attempt to navigate away from the test case page
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+        Utilities.waitForElementVisible(CQLLibrariesPage.cqlLibraryDirtyCheck, 37000)
+        //verify that the discard modal appears
+        Global.clickOnDirtyCheckDiscardChanges()
 
-        //take focus off of the date field
-        cy.get(TestCasesPage.elementsTab).click()
-
-        cy.get(TestCasesPage.QDMTcDiscardChangesButton).should('exist')
-        cy.get(TestCasesPage.QDMTcDiscardChangesButton).should('be.enabled')
-        cy.get(TestCasesPage.QDMTcDiscardChangesButton).click()
-
-        //verify discard modal and click on keep working
-        Global.clickDiscardAndKeepWorking()
-
-        //verify that the Ethnicity value is left unchanged from it's last change
-        cy.get(TestCasesPage.QDMEthnicity).should('contain.text', 'Not Hispanic or Latino')
     })
 
     it('Validate dirty check on Testcase Expected/Actual tab', () => {
