@@ -382,10 +382,11 @@ describe('Validating Stratification tabs', () => {
             expect($ele.text()).to.be.oneOf(['Select Definition', 'denom', 'ipp', 'num'])
         })
         //Association -- default value -- score type is Proportion
-        cy.get(MeasureGroupPage.stratAssociationOne).should('contain.text', '-')
+        cy.get(MeasureGroupPage.stratAssociationOne).should('have.attr', 'placeholder', 'Select All That Apply')
         //Association -- contains these values based off score type -- score type is Proportion
-        cy.get(MeasureGroupPage.stratAssociationOne).each(($ele) => {
-            expect($ele.text()).to.be.oneOf(['-', 'Initial Population', 'Denominator', 'Denominator Exclusion', 'Numerator', 'Numerator Exclusion', 'Denominator Exception'])
+        cy.get(MeasureGroupPage.stratAssociationOne).click()
+        cy.get('[class="base-Popper-root MuiAutocomplete-popper MuiAutocomplete-popperDisablePortal css-1pxin5q"]').each(($ele) => {
+            expect($ele.text()).to.be.equal('Select AllinitialPopulationdenominatornumerator')
         })
 
         //change score type to Cohort
@@ -395,8 +396,7 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).click()
         //Association -- contains these values based off score type -- score type is Cohort
-        cy.get(MeasureGroupPage.stratAssociationOne)
-            .should('contain.text', '-')
+        cy.get(MeasureGroupPage.stratAssociationOne).should('have.attr', 'placeholder', 'Select All That Apply')
         //change score type to Continuous Variable
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
@@ -404,11 +404,11 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).click()
         //Association -- default value -- score type is Continuous Variable
-        cy.get(MeasureGroupPage.stratAssociationOne)
-            .should('contain.text', '-')
+        cy.get(MeasureGroupPage.stratAssociationOne).should('have.attr', 'placeholder', 'Select All That Apply')
         //Association -- contains these values based off score type -- score type is Continuous Variable
-        cy.get(MeasureGroupPage.stratAssociationOne).each(($ele) => {
-            expect($ele.text()).to.be.oneOf(['-', 'Initial Population', 'Measure Population', 'Measure Population Exclusion'])
+        cy.get(MeasureGroupPage.stratAssociationOne).click()
+        cy.get('[class="base-Popper-root MuiAutocomplete-popper MuiAutocomplete-popperDisablePortal css-1pxin5q"]').each(($ele) => {
+            expect($ele.text()).to.be.equal('Select All')
         })
 
     })
@@ -444,7 +444,10 @@ describe('Validating Stratification tabs', () => {
         })
 
         //select a value only for Association
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'denominator')
+        cy.get(MeasureGroupPage.stratAssociationOne).click()
+        cy.get(MeasureGroupPage.stratAssociationOne).should('exist').should('be.visible').click().type('denominator')
+        cy.get('[id="association-select-1-option-0"]').click()
+
 
         //save
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
@@ -469,7 +472,7 @@ describe('Validating Stratification tabs', () => {
             }
         })
         //Association -- default value -- score type is Proportion
-        cy.get(MeasureGroupPage.stratAssociationOne).should('contain.text', '-')
+        cy.get(MeasureGroupPage.stratAssociationOne).should('have.attr', 'placeholder', 'Select All That Apply')
     })
 
     it('Add multiple stratifications to the measure group', () => {
@@ -505,24 +508,20 @@ describe('Validating Stratification tabs', () => {
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'denom')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'denominator')
         cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
 
         //Add Stratification 2
         Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'denom')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'numerator')
         cy.get(MeasureGroupPage.stratDescTwo).type('StratificationTwo')
 
         //Add Stratification 3
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratThree, 'ipp')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'numerator')
         cy.get(MeasureGroupPage.stratDescThree).type('StratificationThree')
 
         //Add Stratification 4
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratFour, 'denom')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationFour, 'initialPopulation')
         cy.get(MeasureGroupPage.stratDescFour).type('StratificationFour')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -598,24 +597,20 @@ describe('Validating Stratification tabs', () => {
 
         //Add Stratification 1
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'denom')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'denominator')
         cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
 
         //Add Stratification 2
         Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'denom')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'numerator')
         cy.get(MeasureGroupPage.stratDescTwo).type('StratificationTwo')
 
         //Add Stratification 3
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratThree, 'ipp')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'numerator')
         cy.get(MeasureGroupPage.stratDescThree).type('StratificationThree')
 
         //Add Stratification 4
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratFour, 'denom')
-        Utilities.dropdownSelect(MeasureGroupPage.stratAssociationFour, 'initialPopulation')
         cy.get(MeasureGroupPage.stratDescFour).type('StratificationFour')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click({ force: true })
@@ -1045,7 +1040,6 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         cy.get(MeasureGroupPage.discardChangesContinueBtn).click()
 
     })
-
 
     it('Add Supplemental data elements to the Measure group', () => {
 

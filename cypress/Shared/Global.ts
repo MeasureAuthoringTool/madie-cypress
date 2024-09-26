@@ -1,7 +1,7 @@
 export class Global {
 
     //dirty modal
-    public static readonly dirtCheckModal = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-mbdu2s"]'
+    public static readonly dirtCheckModal = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-aa4ov7 react-draggable"]'
     public static readonly discardChangesBtn = '[data-testid="group-form-discard-btn"]'
     public static readonly discardChangesContinue = '[data-testid="discard-dialog-continue-button"]'
     public static readonly discardChangesConfirmationModal = '.MuiBox-root'

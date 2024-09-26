@@ -90,7 +90,7 @@ describe.skip('Verify QDM Measure Export file contents', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
+        //Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
     })
 
     it('Unzip the downloaded file and verify file types and contest of the HR and HQMF files, for QDM Measure', () => {
@@ -112,7 +112,7 @@ describe.skip('Verify QDM Measure Export file contents', () => {
             debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents are: \n' + exported)
-            /* cy.readFile(baseHTMLFileFirstSection).should('exist').then((dataComparedFirst) => {
+            cy.readFile(baseHTMLFileFirstSection).should('exist').then((dataComparedFirst) => {
                 debugger
                 expected = dataComparedFirst.toString() //'compareFile'
                 cy.log('expected first section file contents are: \n' + expected)
@@ -129,7 +129,7 @@ describe.skip('Verify QDM Measure Export file contents', () => {
                 expected = dataComparedThird.toString() //'compareFile'
                 cy.log('expected third section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
-            }) */
+            })
             cy.readFile(baseHTMLFileFourthSection).should('exist').then((dataComparedFourth) => {
                 debugger
                 expected = dataComparedFourth.toString() //'compareFile'
@@ -137,7 +137,7 @@ describe.skip('Verify QDM Measure Export file contents', () => {
                 expect((exported).toString()).to.includes((expected).toString())
             })
         })
-
+        cy.pause()
         //read contents of the xml / HQMF file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated HQMF file -to- the next)
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.xml')).should('exist').then((exportedFile) => {

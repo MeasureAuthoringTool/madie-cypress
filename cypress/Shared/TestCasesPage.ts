@@ -345,7 +345,7 @@ export class TestCasesPage {
     public static readonly importTestCasesBtn = '[data-testid="show-import-test-cases-button"]'
     public static readonly filAttachDropBox = '[data-testid="file-drop-input"]'
     public static readonly importTestCaseModalBtn = '[data-testid="test-case-import-import-btn"]'
-    public static readonly importInProgress = '[class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-1mbw3kc"]'
+    public static readonly importInProgress = '[class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-deukzi"]'//'[class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-1mbw3kc"]'
     public static readonly testCaseImportErrorAtValidating = '[data-testid="test-case-import-error-div"]'
     public static readonly importTestCaseModalList = '[data-testid="test-case-preview-list"]'
     public static readonly importTestCaseModalHeader = '[data-testid="test-case-preview-header"]'
@@ -485,12 +485,15 @@ export class TestCasesPage {
     }
 
     public static clickQDMImportTestCaseButton(): void {
+
         cy.readFile('cypress/fixtures/measureId').should('exist').then((measureID) => {
             cy.intercept('PUT', '/api/measures/' + measureID + '/test-cases/imports/qdm').as('testCaseList')
             //click import button on modal window
+
             cy.get(this.importTestCaseModalBtn).click()
             //spinner indicating that import progress is busy is shown / is visible
             cy.get(this.importInProgress).should('be.visible')
+
             //wait until the import buttong appears on the page, again
             Utilities.waitForElementVisible(this.importTestCasesBtn, 50000)
 
@@ -499,6 +502,7 @@ export class TestCasesPage {
                 expect(response.statusCode).to.eq(200)
             })
         })
+
 
     }
 
