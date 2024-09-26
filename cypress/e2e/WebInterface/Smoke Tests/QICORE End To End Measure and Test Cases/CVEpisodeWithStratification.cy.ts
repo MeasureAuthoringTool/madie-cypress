@@ -151,6 +151,9 @@ describe('Measure Creation and Testing: CV Episode Measure With Stratification',
         cy.get(TestCasesPage.measureObservationRow).type('2')
 
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).type('1')
+        cy.get(TestCasesPage.measurePopulationStratificationExpectedValue).type('1')
+        cy.get(TestCasesPage.initialPopulationStrata2ExpectedValue).type('0')
+        cy.get(TestCasesPage.measurePopulationStrata2ExpectedValue).type('0')
 
         cy.get(TestCasesPage.detailsTab).should('exist')
         cy.get(TestCasesPage.detailsTab).should('be.visible')
