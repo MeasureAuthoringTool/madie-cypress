@@ -33,7 +33,11 @@ describe('Measure Sharing', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
         cy.setAccessTokenCookie()
+        cy.wait(1000)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
     })
@@ -41,6 +45,11 @@ describe('Measure Sharing', () => {
     afterEach('Log out and Clean up', () => {
 
         OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        //set local user that does not own the measure
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
@@ -147,7 +156,7 @@ describe('Measure Sharing - Multiple instances', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         //set local user that does not own the measure
         cy.setAccessTokenCookie()

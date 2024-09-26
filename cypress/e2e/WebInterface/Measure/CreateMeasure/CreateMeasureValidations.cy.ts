@@ -1049,11 +1049,11 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
             .then((radio) => {
                 //confirm that initial value is set to 'No'
                 cy.wrap(radio).eq(1).should('be.checked');
-                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'No');
+                cy.contains('[class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1jaw3da"]', 'No');
 
                 //check / select radio button for the value of 'Yes'
                 cy.wrap(radio).eq(0).check({ force: true }).should('be.checked');
-                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Yes');
+                cy.contains('[class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1jaw3da"]', 'Yes');
 
                 cy.get(TestCasesPage.sdeTestCaseSaveButton).click()
                 cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Configuration Updated Successfully')
@@ -1080,7 +1080,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
 
                 //check / select radio button for the value of 'Yes'
                 cy.wrap(radio).eq(0).should('be.checked');
-                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Yes');
+                cy.contains('[class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1jaw3da"]', 'Yes');
 
                 // Verify that first radio button is no longer checked
                 cy.wrap(radio).eq(1).should('not.be.checked');
@@ -1093,7 +1093,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
 
                 //check / select radio button for the value of 'Yes'
                 cy.wrap(radio).eq(1).check({ force: true }).should('be.checked');
-                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'No');
+                cy.contains('[class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1jaw3da"]', 'No');
 
                 // Verify that first radio button is no longer checked
                 cy.wrap(radio).eq(0).should('not.be.checked');
@@ -1119,7 +1119,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
 
                 //check / select radio button for the value of 'Yes'
                 cy.wrap(radio).eq(1).should('be.checked');
-                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'No');
+                cy.contains('[class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1jaw3da"]', 'No');
 
                 // Verify that first radio button is no longer checked
                 cy.wrap(radio).eq(0).should('not.be.checked');
@@ -1136,7 +1136,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
 
                 //check / select radio button for the value of 'Yes'
                 cy.wrap(radio).eq(0).should('be.checked');
-                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Yes');
+                cy.contains('[class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-1jaw3da"]', 'Yes');
 
                 // Verify that first radio button is no longer checked
                 cy.wrap(radio).eq(1).should('not.be.checked');

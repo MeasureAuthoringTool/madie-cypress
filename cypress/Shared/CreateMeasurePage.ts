@@ -148,6 +148,10 @@ export class CreateMeasurePage {
             mpEndDate = now().format('YYYY-MM-DD')
         }
 
+        if ((measureNumber === undefined) || (measureNumber === null)) {
+            measureNumber = 0
+        }
+
         if (altUser) {
             sessionStorage.clear()
             cy.clearAllCookies()
