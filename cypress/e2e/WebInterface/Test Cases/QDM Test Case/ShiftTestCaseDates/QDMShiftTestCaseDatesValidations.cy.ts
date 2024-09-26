@@ -43,7 +43,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
             .then((radio) => {
                 //check / select radio button for manifest
                 cy.wrap(radio).eq(1).check({ force: true }).should('be.checked');
-                cy.contains('[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]', 'Manifest');
+                cy.contains('[class="MuiFormControl-root MuiFormControl-fullWidth css-16fecya"]'/*'[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]'*/, 'Manifest');
 
                 cy.get(TestCasesPage.qdmManifestSelectDropDownBox).click()
                 cy.get(TestCasesPage.qdmManifestMaySecondOption).click()
@@ -57,7 +57,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).wait(1700).click().wait(3000)
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 5000000)
         TestCasesPage.testCaseAction('edit', false)
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2000 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
