@@ -1,4 +1,5 @@
 import { EditMeasurePage } from "./EditMeasurePage"
+import puppeteer from "puppeteer-core";
 export class CQLEditorPage {
 
 
@@ -95,6 +96,8 @@ export class CQLEditorPage {
     public static readonly timingOption = '[data-testid="Timing-option"]'
     public static readonly preDefinedFunctionsOption = '[data-testid="Pre-Defined Functions-option"]'
     public static readonly savedDefinitionsTab = '[data-testid="saved-definitions-tab"]'
+    public static readonly editCQLDefinitions = '[data-testid="edit-button-0"]'
+    public static readonly deleteCQLDefinitions = '[data-testid="delete-button-0"]'
 
 
     //editor message

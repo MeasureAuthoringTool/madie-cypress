@@ -234,6 +234,28 @@ describe.skip('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.expressionInsertBtn).click()
         cy.get('[class="ace_content"]').eq(1).should('contain', 'Common."Inpatient Encounter"')
     })
+
+    it('Delete saved QDM CQL Definitions', () => {
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+
+        //Navigate to Saved Definitions tab
+        cy.get(CQLEditorPage.savedDefinitionsTab).click()
+        cy.get(CQLEditorPage.deleteCQLDefinitions).click()
+        cy.get(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn).click()
+        Utilities.waitForElementVisible('[class="toast success"]', 60000)
+        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text','Definition SDE Sex has been successfully removed from the CQL.')
+
+        //Navigate to Saved Definitions again and assert if the Definition is removed from Saved Definitions
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+        cy.get(CQLEditorPage.savedDefinitionsTab).click()
+        Utilities.waitForElementVisible(CQLEditorPage.deleteCQLDefinitions, 60000)
+        cy.get('.right-panel > .panel-content').should('not.contain', 'Common."Inpatient Encounter')
+    })
 })
 
 //Skipping until feature flag is removed
