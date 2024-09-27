@@ -1049,8 +1049,6 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
             .then((radio) => {
                 //confirm that initial value is set to 'No'
                 cy.wrap(radio).eq(1).should('be.checked');
-                cy.pause()
-
 
                 //check / select radio button for the value of 'Yes'
                 cy.wrap(radio).eq(0).check({ force: true }).should('be.checked');
