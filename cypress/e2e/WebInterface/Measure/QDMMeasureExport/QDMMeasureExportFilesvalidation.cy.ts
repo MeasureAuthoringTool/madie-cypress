@@ -55,9 +55,7 @@ const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 
-//Need to debug more for File comparisons
-//skipping all of these tests until a better cypress unzip / extraction mechanism can be used
-describe.skip('Verify QDM Measure Export file contents', () => {
+describe('Verify QDM Measure Export file contents', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -90,7 +88,7 @@ describe.skip('Verify QDM Measure Export file contents', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        //Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
+        Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
     })
 
     it('Unzip the downloaded file and verify file types and contest of the HR and HQMF files, for QDM Measure', () => {
@@ -105,31 +103,35 @@ describe.skip('Verify QDM Measure Export file contents', () => {
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
-        //cy.pause()
+
         //read contents of the html / human readable file and compare that with the expected file contents (minus specific
         //measure name and other data that can change from one generated HR file -to- the next)
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.html')).should('exist').then((exportedFile) => {
             debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents are: \n' + exported)
-            cy.readFile(baseHTMLFileFirstSection).should('exist').then((dataComparedFirst) => {
-                debugger
-                expected = dataComparedFirst.toString() //'compareFile'
-                cy.log('expected first section file contents are: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
-            })
-            cy.readFile(baseHTMLFileSecondSection).should('exist').then((dataComparedSecond) => {
-                debugger
-                expected = dataComparedSecond.toString() //'compareFile'
-                cy.log('expected second section file contents are: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
-            })
-            cy.readFile(baseHTMLFileThirdSection).should('exist').then((dataComparedThird) => {
-                debugger
-                expected = dataComparedThird.toString() //'compareFile'
-                cy.log('expected third section file contents are: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
-            })
+
+            //commenting out the first three below comparisons to focus only on validating the definitons and the valuesets
+            //in the humn readable file
+            /*             cy.readFile(baseHTMLFileFirstSection).should('exist').then((dataComparedFirst) => {
+                            debugger
+                            expected = dataComparedFirst.toString() //'compareFile'
+                            cy.log('expected first section file contents are: \n' + expected)
+                            expect((exported).toString()).to.includes((expected).toString())
+                        })
+                        cy.readFile(baseHTMLFileSecondSection).should('exist').then((dataComparedSecond) => {
+                            debugger
+                            expected = dataComparedSecond.toString() //'compareFile'
+                            cy.log('expected second section file contents are: \n' + expected)
+                            expect((exported).toString()).to.includes((expected).toString())
+                        })
+                        cy.readFile(baseHTMLFileThirdSection).should('exist').then((dataComparedThird) => {
+                            debugger
+                            expected = dataComparedThird.toString() //'compareFile'
+                            cy.log('expected third section file contents are: \n' + expected)
+                            expect((exported).toString()).to.includes((expected).toString())
+                        }) */
+
             cy.readFile(baseHTMLFileFourthSection).should('exist').then((dataComparedFourth) => {
                 debugger
                 expected = dataComparedFourth.toString() //'compareFile'
@@ -137,7 +139,7 @@ describe.skip('Verify QDM Measure Export file contents', () => {
                 expect((exported).toString()).to.includes((expected).toString())
             })
         })
-        cy.pause()
+
         //read contents of the xml / HQMF file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated HQMF file -to- the next)
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.xml')).should('exist').then((exportedFile) => {
@@ -295,13 +297,17 @@ describe.skip('Verify QDM Measure Export file contents', () => {
     })
 
 })
-//skipping all of these tests until a better cypress unzip / extraction mechanism can be used
-describe.skip('QDM Measure Export, Not the Owner', () => {
+
+describe('QDM Measure Export, Not the Owner', () => {
 
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
 
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         //Create Measure and Measure group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
         OktaLogin.Login()
@@ -346,8 +352,7 @@ describe.skip('QDM Measure Export, Not the Owner', () => {
     })
 })
 
-//skipping all of these tests until a better cypress unzip / extraction mechanism can be used
-describe.skip('Successful QDM Measure Export with versioned measure', () => {
+describe('Successful QDM Measure Export with versioned measure', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -374,6 +379,11 @@ describe.skip('Successful QDM Measure Export with versioned measure', () => {
         OktaLogin.Login()
 
     })
+    after('Clean up', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+    })
 
     it('Version measure, unzip the downloaded file, and verify file contents for the HR and HQMF files, for QDM Measure', () => {
         //Navigate to All Measures tab
@@ -384,7 +394,7 @@ describe.skip('Successful QDM Measure Export with versioned measure', () => {
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).wait(1500).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -412,6 +422,9 @@ describe.skip('Successful QDM Measure Export with versioned measure', () => {
             debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents are: \n' + exported)
+
+            //commenting out the first three below comparisons to focus only on validating the definitons and the valuesets
+            //in the humn readable file
             /* cy.readFile(baseHTMLFileFirstSection).should('exist').then((dataComparedFirst) => {
                 debugger
                 expected = dataComparedFirst.toString() //'compareFile'
@@ -430,6 +443,7 @@ describe.skip('Successful QDM Measure Export with versioned measure', () => {
                 cy.log('expected third section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             }) */
+
             cy.readFile(baseHTMLFileFourthSection).should('exist').then((dataComparedFourth) => {
                 debugger
                 expected = dataComparedFourth.toString() //'compareFile'
@@ -441,7 +455,7 @@ describe.skip('Successful QDM Measure Export with versioned measure', () => {
 
         //read contents of the xml / HQMF file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated HQMF file -to- the next)
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.xml')).should('exist').then((exportedFile) => {
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v1.0.000-QDM.xml')).should('exist').then((exportedFile) => {
             debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents are: \n' + exported)
