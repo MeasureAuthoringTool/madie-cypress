@@ -62,7 +62,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //select file
-        cy.get('[data-testid="file-drop-div"]' /*> p'*/).click()
+        cy.get('[data-testid="file-drop-div"]').click()
         cy.get(TestCasesPage.filAttachDropBox).attachFile(singleTestCaseFile)
 
         //click on the 'Import' button on the modal window

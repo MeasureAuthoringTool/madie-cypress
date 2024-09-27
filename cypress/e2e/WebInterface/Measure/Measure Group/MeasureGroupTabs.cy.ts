@@ -385,7 +385,8 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratAssociationOne).should('have.attr', 'placeholder', 'Select All That Apply')
         //Association -- contains these values based off score type -- score type is Proportion
         cy.get(MeasureGroupPage.stratAssociationOne).click()
-        cy.get('[class="base-Popper-root MuiAutocomplete-popper MuiAutocomplete-popperDisablePortal css-1pxin5q"]').each(($ele) => {
+
+        cy.get('[id="association-select-1-listbox"]').each(($ele) => {
             expect($ele.text()).to.be.equal('Select AllinitialPopulationdenominatornumerator')
         })
 
@@ -407,7 +408,7 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratAssociationOne).should('have.attr', 'placeholder', 'Select All That Apply')
         //Association -- contains these values based off score type -- score type is Continuous Variable
         cy.get(MeasureGroupPage.stratAssociationOne).click()
-        cy.get('[class="base-Popper-root MuiAutocomplete-popper MuiAutocomplete-popperDisablePortal css-1pxin5q"]').each(($ele) => {
+        cy.get('[id="association-select-1-listbox"]').each(($ele) => {
             expect($ele.text()).to.be.equal('Select All')
         })
 
