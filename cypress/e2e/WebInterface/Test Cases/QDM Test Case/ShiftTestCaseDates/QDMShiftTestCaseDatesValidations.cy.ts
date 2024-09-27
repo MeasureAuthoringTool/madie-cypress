@@ -43,7 +43,9 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
             .then((radio) => {
                 //check / select radio button for manifest
                 cy.wrap(radio).eq(1).check({ force: true }).should('be.checked');
-                cy.contains('[class="MuiFormControl-root MuiFormControl-fullWidth css-16fecya"]'/*'[class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-9l3uo3"]'*/, 'Manifest');
+
+                Utilities.waitForElementVisible('[id="manifest-select-label"]', 5000)
+                cy.contains('[id="manifest-select-label"]', 'Manifest');
 
                 cy.get(TestCasesPage.qdmManifestSelectDropDownBox).click()
                 cy.get(TestCasesPage.qdmManifestMaySecondOption).click()
