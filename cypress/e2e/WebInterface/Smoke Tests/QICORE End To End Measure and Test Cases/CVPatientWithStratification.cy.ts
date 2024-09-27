@@ -150,6 +150,8 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
 
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).check().should('be.checked')
         cy.get(TestCasesPage.measurePopulationStratificationExpectedValue).check().should('be.checked')
+        cy.get(TestCasesPage.initialPopulationStrata2ExpectedValue).check().should('be.checked')
+        cy.get(TestCasesPage.measurePopulationStrata2ExpectedValue).check().should('be.checked')
 
         cy.get(TestCasesPage.detailsTab).should('exist')
         cy.get(TestCasesPage.detailsTab).should('be.visible')

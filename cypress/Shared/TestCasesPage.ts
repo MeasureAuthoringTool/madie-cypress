@@ -314,8 +314,10 @@ export class TestCasesPage {
     //Stratifications
     public static readonly denominatorStratificationOneExpectedValue = '[data-testid="test-population-Strata-1 Denominator-expected"]'
     public static readonly numeratorStratificationTwoExpectedValue = '[data-testid="test-population-Strata-2 Numerator-expected"]'
-    public static readonly initialPopulationStratificationExpectedValue = '[data-testid="test-population-Strata-1 Initial Population-expected"]'
-    public static readonly measurePopulationStratificationExpectedValue = '[data-testid="test-population-Strata-2 Measure Population-expected"]'
+    public static readonly initialPopulationStratificationExpectedValue = '[data-testid="Strata 1-initialPopulation-expected"]'
+    public static readonly measurePopulationStratificationExpectedValue = '[data-testid="Strata 1-measurePopulation-expected"]'
+    public static readonly initialPopulationStrata2ExpectedValue = '[data-testid="Strata 2-initialPopulation-expected"]'
+    public static readonly measurePopulationStrata2ExpectedValue = '[data-testid="Strata 2-measurePopulation-expected"]'
 
     //measure versioning attempt with invalid test case
     public static readonly versionMeasureWithTCErrors = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-1uop03p react-draggable"]'
