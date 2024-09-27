@@ -1,5 +1,5 @@
 import { EditMeasurePage } from "./EditMeasurePage"
-import puppeteer from "puppeteer-core";
+
 export class CQLEditorPage {
 
 
