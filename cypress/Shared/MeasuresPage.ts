@@ -192,6 +192,14 @@ export class MeasuresPage {
 
                 break
             }
+            case 'delete': {
+
+                cy.get('[data-testid="delete-action-btn"]').should('be.visible')
+                cy.get('[data-testid="delete-action-btn"]').should('be.enabled')
+                cy.get('[data-testid="delete-action-btn"]').click()
+
+                break
+            }
             case 'associateMeasure': {
 
                 //there is a prerequsite that you have a measure created and measure ID stored for 'measureId' and 'measureId2'
