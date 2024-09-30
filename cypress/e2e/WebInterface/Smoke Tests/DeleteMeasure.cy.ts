@@ -29,8 +29,9 @@ describe('Delete Measure', () => {
 
     it('Verify Measure Owner can Delete Measure', () => {
 
-        MeasuresPage.actionCenter('delete')
+        MeasuresPage.measureAction('edit')
 
+        cy.get(EditMeasurePage.deleteMeasureButton).click()
         cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + measureOne + '?')
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
 
