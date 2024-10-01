@@ -98,6 +98,7 @@ export class CQLEditorPage {
     public static readonly savedDefinitionsTab = '[data-testid="saved-definitions-tab"]'
     public static readonly editCQLDefinitions = '[data-testid="edit-button-0"]'
     public static readonly deleteCQLDefinitions = '[data-testid="delete-button-0"]'
+    public static readonly saveDefinitionBtn = '[data-testid="definition-save-btn"]'
 
 
     //editor message

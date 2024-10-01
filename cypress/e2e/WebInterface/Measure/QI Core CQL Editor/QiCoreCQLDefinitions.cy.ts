@@ -5,6 +5,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage";
+import {Global} from "../../../../Shared/Global";
 
 let measureName = 'QiCoreTestMeasure' + Date.now()
 let CqlLibraryName = 'QiCoreTestLibrary' + Date.now()
@@ -255,6 +256,31 @@ describe.skip('Qi-Core CQL Definitions', () => {
         //Insert
         cy.get(CQLEditorPage.expressionInsertBtn).click()
         cy.get('[class="ace_content"]').eq(1).should('contain', 'Initial Population')
+        //Save
+        cy.get(CQLEditorPage.saveDefinitionBtn).click()
+
+    })
+
+    it('Dirty check pops up when there are changes in CQL and Edit CQL definition button is clicked', () => {
+
+        //Click on Edit Button
+        MeasuresPage.measureAction("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        //Make changes to CQL editor
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+
+        //Navigate to Saved Definitions tab
+        cy.get(CQLEditorPage.savedDefinitionsTab).click()
+        cy.get(CQLEditorPage.editCQLDefinitions).click()
+
+        //Click on Discard changes
+        Global.clickOnDiscardChanges()
+        cy.get(CQLEditorPage.expressionEditorTypeDropdown).should('be.visible')
     })
 
     it('Delete saved Qi-Core CQL Definitions', () => {
