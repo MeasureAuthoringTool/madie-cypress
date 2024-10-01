@@ -29,7 +29,7 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         // cy.wait(5000)
         cy.setAccessTokenCookieALT()
         //Create QDM Measure, PC and Test Case with ALT user
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, true, measureCQL, false, true)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, true, measureCQL, null, true)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp')
         OktaLogin.Login()
 
