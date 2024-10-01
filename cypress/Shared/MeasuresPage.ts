@@ -151,11 +151,17 @@ export class MeasuresPage {
 
         let filePath = 'cypress/fixtures/measureId'
 
+        if ((measureNumber === undefined) || (measureNumber === null)) {
+            measureNumber = 0
+        }
+
+
         if (measureNumber > 0) {
             filePath = 'cypress/fixtures/measureId' + measureNumber
         }
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
@@ -200,17 +206,18 @@ export class MeasuresPage {
 
                 break
             }
-            case 'associateMeasure': {
+            case 'associatemeasure': {
 
                 //there is a prerequsite that you have a measure created and measure ID stored for 'measureId' and 'measureId2'
 
                 cy.readFile('cypress/fixtures/measureId2').should('exist').then((fileContents) => {
+                    cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500)
                     cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
                 })
 
                 cy.get('[data-testid="associate-cms-id-action-btn"]').should('be.visible')
                 cy.get('[data-testid="associate-cms-id-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="associate-cms-id-action-btn"]').click()
+                cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView().wait(2000).click()
 
                 cy.get('[data-testid="associate-cms-id-button"]').should('be.visible')
                 cy.get('[data-testid="associate-cms-id-button"]').should('be.enabled')
