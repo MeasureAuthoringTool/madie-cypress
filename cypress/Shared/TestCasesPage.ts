@@ -416,6 +416,12 @@ export class TestCasesPage {
     public static readonly codeSystemOptionValue = '[data-testid="option-112648003"]'
     public static readonly codeSelector = '[id="code-selector"]'
 
+    //Pagination
+    public static readonly paginationNextButton = '[data-testid="NavigateNextIcon"]'
+    public static readonly paginationPreviousButton = '[data-testid=NavigateBeforeIcon]'
+    public static readonly paginationLimitSelect = '#pagination-limit-select'
+    public static readonly paginationLimitEquals25 = '[data-value="25"]'
+
     //QDM Test Case Negation tab and associated fields
     public static readonly negationTab = '[data-testid="sub-navigation-tab-negation_rationale"]'
     public static readonly valueSetDirectRefCode = '[id="value-set-selector"]'
