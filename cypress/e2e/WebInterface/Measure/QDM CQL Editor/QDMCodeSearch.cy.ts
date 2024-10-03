@@ -328,7 +328,7 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.selectOptionListBox).contains('Remove').click()
         cy.get(CQLEditorPage.removeCodeConfirmationMsg).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
         cy.get(CQLEditorPage.removeCodeContinueBtn).click().wait(2000)
-        cy.get('[class="toast success"]').should('contain.text', 'code AMB and code system ActCode has been successfully removed from the CQL')
+        cy.get('[class="toast success"]').should('contain.text', 'Code AMB and code system ActCode has been successfully removed from the CQL')
         cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.savedCodesTab).click()
         Utilities.waitForElementVisible('.sc-bXCLTC', 30000)
@@ -383,6 +383,7 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.savedCodesTab).click().wait(2000)
 
         //Remove Code
+        Utilities.waitForElementVisible(CQLEditorPage.selectDropdownBtn, 60000)
         cy.get(CQLEditorPage.selectDropdownBtn).click()
         cy.get(CQLEditorPage.selectOptionListBox).contains('Remove').click()
         cy.get(CQLEditorPage.removeCodeConfirmationMsg).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
