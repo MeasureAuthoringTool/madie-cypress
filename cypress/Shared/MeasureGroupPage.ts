@@ -243,10 +243,10 @@ export class MeasureGroupPage {
     public static readonly discardChangesConfirmationMsg = '.MuiDialogContent-root'
     public static readonly discardChangesContinueBtn = '[data-testid="discard-dialog-continue-button"]'
     public static readonly supplementalDataDefinitionTextBox = '#supplementalDataElements'
-    public static readonly ippIncludeInReportTypeField = '[data-testid="ipp-include-in-report-type-dropdown"]'
-    public static readonly ippIncludeInReportTypeDropdownList = '#ipp-include-in-report-type-listbox'
-    public static readonly denomIncludeInReportTypeField = '[data-testid="denom-include-in-report-type-dropdown"]'
-    public static readonly denomIncludeInReportTypeDropdownList = '#denom-include-in-report-type-listbox'
+    public static readonly ippIncludeInReportTypeField = '[data-testid="includeInReportType-container"] > :nth-child(1)'
+    public static readonly ippIncludeInReportTypeDropdownList = '[class="MuiAutocomplete-listbox css-ue1yok"]'
+    public static readonly denomIncludeInReportTypeField = '[data-testid="includeInReportType-container"] > :nth-child(2)'
+    public static readonly denomIncludeInReportTypeDropdownList = '[id=\"denom\"-include-in-report-type-listbox]'
 
     public static createMeasureGroupforProportionMeasure(): void {
 

@@ -16,7 +16,7 @@ describe('Create New Measure', () => {
     afterEach('Cleanup and Logout', () => {
 
         //edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.deleteMeasureButton).click()
         cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + measureName + '?')

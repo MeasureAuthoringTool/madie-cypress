@@ -166,7 +166,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
     it('End to End Cohort ListQDMPositiveEncounterPerformed', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         //save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

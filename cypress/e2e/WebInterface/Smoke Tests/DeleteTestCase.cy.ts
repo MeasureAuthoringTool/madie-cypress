@@ -31,7 +31,7 @@ describe('Delete Test Case', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-02', '2013-01-01')
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -63,7 +63,7 @@ describe('Delete Test Case', () => {
 
     it('Delete Test Case - Success scenario', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
@@ -79,7 +79,7 @@ describe('Delete Test Case', () => {
 
     it('Verify Non owner of the Measure unable to delete Test Case', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
@@ -91,7 +91,7 @@ describe('Delete Test Case', () => {
         cy.get(MeasuresPage.allMeasuresTab).wait(3000).click({ force: true })
         cy.reload()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

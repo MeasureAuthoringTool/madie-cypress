@@ -46,7 +46,7 @@ describe('Execute Test Case', () => {
     it('Verify that the Execute Test Case button is disabled when Measure has no Group', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         //navigate to the test case list page
         cy.get(EditMeasurePage.testCasesTab).should('exist')

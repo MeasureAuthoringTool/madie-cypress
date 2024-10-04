@@ -159,7 +159,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
     it('End to End CV ListQDMPositiveEncounterPerformed With MO And Stratification', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

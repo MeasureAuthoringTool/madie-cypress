@@ -53,7 +53,7 @@ describe('Test Case Import button - BONNIE: verify that the BONNIE import button
 
     it('Test Case Import button - BONNIE: verify that the BONNIE import button is not available', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -93,7 +93,7 @@ describe('QI Core: Elements tab is not present', () => {
     it('QI Core Test Case edit page: Ensure / verify that the Elements tab does not exist on the QI Core Test Case edit page', () => {
 
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.testCaseAction('edit')
@@ -125,7 +125,7 @@ describe('QI Core: Shift test case dates option on Test case list page', () => {
 
     it('Shift test case dates option visible on view Test case dropdown', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         //Navigate to Test Case list page
         cy.get(EditMeasurePage.testCasesTab).click()
