@@ -34,7 +34,7 @@ describe('Save CQL on CQL Editor Page', () => {
     it('Create New Measure and Add CQL to the Measure', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/EXM124v7QICore4Entry.txt').should('exist').then((fileContents) => {
@@ -48,7 +48,7 @@ describe('Save CQL on CQL Editor Page', () => {
         cy.get(Header.measures).click()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.get(EditMeasurePage.cqlEditorTextBox).should('not.be.empty')

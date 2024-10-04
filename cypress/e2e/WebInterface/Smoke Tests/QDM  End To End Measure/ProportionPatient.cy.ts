@@ -159,7 +159,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
     it('End to End Proportion Patient Based', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')

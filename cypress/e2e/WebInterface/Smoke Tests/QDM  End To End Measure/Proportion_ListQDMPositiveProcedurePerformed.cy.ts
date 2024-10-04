@@ -214,7 +214,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
     it('End to End Proportion ListQDMPositiveProcedurePerformed', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')

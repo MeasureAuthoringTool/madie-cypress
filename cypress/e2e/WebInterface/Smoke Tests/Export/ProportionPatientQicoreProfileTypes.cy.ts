@@ -205,7 +205,7 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
 
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -221,7 +221,7 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
 
     it('Validate the zip file Export is downloaded and can be unzipped', () => {
 
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
@@ -279,7 +279,7 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
 
         cy.get(Header.measures).click().wait(1000)
 
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.versionMeasuresSelectionButton).click()
         cy.get(MeasuresPage.measureVersionMajor).should('exist')
@@ -294,7 +294,7 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
         MeasuresPage.validateVersionNumber(measureName, '1.0.000')
         cy.log('Version Created Successfully')
 
-        MeasuresPage.measureAction('export')
+        MeasuresPage.actionCenter('export')
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')

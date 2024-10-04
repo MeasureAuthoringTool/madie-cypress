@@ -99,7 +99,7 @@ describe('QDM Measure Versioning', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true, QDMMeasureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -122,7 +122,7 @@ describe('QDM Measure Versioning', () => {
         //Commenting until 'MeasureListButtons' feature flag is removed
         //MeasuresPage.actionCenter('version')
 
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -139,7 +139,7 @@ describe('QDM Measure Versioning', () => {
         cy.log('Major Version Created Successfully')
 
         //Verify that the fields on Measure details page, CQL Editor page and Test case page are read only
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Measure details page
         cy.get(EditMeasurePage.measureNameTextBox).should('not.be.enabled')
@@ -175,7 +175,7 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', false, qdmCMSMeasureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -198,7 +198,7 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         //Commenting until 'MeasureListButtons' feature flag is removed
         //MeasuresPage.actionCenter('version')
 
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -215,7 +215,7 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         cy.log('Major Version Created Successfully')
 
         //Verify that the fields on Measure details page, CQL Editor page and Test case page are read only
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Measure details page
         cy.get(EditMeasurePage.measureNameTextBox).should('not.be.enabled')
@@ -251,7 +251,7 @@ describe('QI-Core Measure Versioning', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, QiCoreMeasureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -273,7 +273,7 @@ describe('QI-Core Measure Versioning', () => {
         //Commenting until 'MeasureListButtons' feature flag is removed
         //MeasuresPage.actionCenter('version')
 
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -289,7 +289,7 @@ describe('QI-Core Measure Versioning', () => {
         cy.log('Version Created Successfully')
 
         //Verify that the fields on Measure details page, CQL Editor page and Test case page are read only
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Measure details page
         cy.get(EditMeasurePage.measureNameTextBox).should('not.be.enabled')

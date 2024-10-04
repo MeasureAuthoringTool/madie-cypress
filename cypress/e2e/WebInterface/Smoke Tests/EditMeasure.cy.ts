@@ -54,7 +54,7 @@ describe('Edit Measure', () => {
     it('Edit Measure Name and verify the measure name is updated on Measures page', () => {
 
         //Edit Measure Name
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.measureNameTextBox).clear()
         cy.get(EditMeasurePage.measureNameTextBox).type(updatedMeasureName)

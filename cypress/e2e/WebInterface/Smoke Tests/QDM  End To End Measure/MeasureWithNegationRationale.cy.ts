@@ -188,7 +188,7 @@ describe('Measure with Negation Rationale', () => {
     it('End to End Measure with Negation Rationale', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         //save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
