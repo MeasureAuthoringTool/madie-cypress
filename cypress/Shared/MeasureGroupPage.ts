@@ -294,7 +294,7 @@ export class MeasureGroupPage {
     public static createMeasureGroupforRatioMeasure(): void {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

@@ -40,7 +40,7 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
     it('End to End CV Patient with MO, Pass Result', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         //Clear the text in CQL Library Editor

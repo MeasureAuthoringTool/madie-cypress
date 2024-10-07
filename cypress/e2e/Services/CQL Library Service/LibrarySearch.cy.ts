@@ -58,7 +58,7 @@ describe('Test Case Import: functionality tests', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.measureAction("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -143,8 +143,4 @@ describe('Test Case Import: functionality tests', () => {
     it('Delete a, specific, library only when it is not in use', () => {
 
     })
-
-
-
-
 })

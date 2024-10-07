@@ -82,7 +82,7 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
     it('End to End Cohort Ratio Episode Single IP w/o MO, IPP Pass Result', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
@@ -159,7 +159,7 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
