@@ -81,7 +81,7 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
     it('End to End Cohort Episode w/ Stratification, Pass Result', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')

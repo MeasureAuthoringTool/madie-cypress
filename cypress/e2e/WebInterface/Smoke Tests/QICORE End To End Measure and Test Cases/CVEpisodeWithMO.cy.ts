@@ -75,7 +75,7 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
     it('End to End CV Episode Measure with MO, Pass Result', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')

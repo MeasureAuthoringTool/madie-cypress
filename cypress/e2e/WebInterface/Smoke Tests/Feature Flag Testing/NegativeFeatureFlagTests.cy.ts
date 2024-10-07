@@ -154,7 +154,7 @@ describe.skip('QDM - to - QI Core measure association: Button to associate a QDM
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -176,7 +176,7 @@ describe.skip('QDM - to - QI Core measure association: Button to associate a QDM
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC0', 'QDMManifestTCGroup0', 'QDMManifestTC0', '', false, false)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -194,7 +194,7 @@ describe.skip('QDM - to - QI Core measure association: Button to associate a QDM
         //1
         CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -216,7 +216,7 @@ describe.skip('QDM - to - QI Core measure association: Button to associate a QDM
         //0
         CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName0, QiCoreCqlLibraryName0, measureCQLPFTests, 2)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit", 2)
+        MeasuresPage.actionCenter("edit", 2)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -238,7 +238,7 @@ describe.skip('QDM - to - QI Core measure association: Button to associate a QDM
 
     it('Confirm that the associate measure feature is turned on', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
@@ -320,7 +320,7 @@ describe('CQL Editor Page: Definition sub tab is not present', () => {
     it('Confirm that the CQL Editor definition sub tab feature is turned off', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         //Navigate to the CQL Editor page
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -357,7 +357,7 @@ describe('CQL Editor Page: Includes sub tab is not present', () => {
     it('Confirm that the CQL Editor includes sub tab feature is turned off', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         //Navigate to the CQL Editor page
         cy.get(EditMeasurePage.cqlEditorTab).click()

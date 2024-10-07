@@ -88,7 +88,7 @@ describe('Measure Creation and Testing: CV Episode Measure With Stratification',
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')

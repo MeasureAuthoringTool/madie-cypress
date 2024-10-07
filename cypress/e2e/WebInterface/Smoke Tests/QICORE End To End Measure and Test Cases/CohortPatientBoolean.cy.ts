@@ -40,7 +40,7 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
     it('End to End Cohort Patient Boolean, Pass Result', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         //Clear the text in CQL Library Editor

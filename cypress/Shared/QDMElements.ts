@@ -96,6 +96,7 @@ export class QDMElements {
 
     public static addCode(codeSystem: string, code: string): void {
 
+        cy.get('[data-testid="sub-navigation-tab-codes"]').scrollIntoView()
         Utilities.waitForElementVisible('[data-testid="sub-navigation-tab-codes"]', 700000)
         cy.get('[data-testid="sub-navigation-tab-codes"]').click()
         cy.get('[id="code-system-selector"]').click()
