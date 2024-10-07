@@ -12,10 +12,12 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let MeasuresPageOne = ''
 let updatedMeasuresPageName = ''
+let updatedMeasuresPageNameSecond = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
+let cohortMeasureCQLSix = MeasureCQL.CQL_For_Cohort_Six
 let testCaseTitle = 'testCaseTitle'
 let testCaseDescription = 'testDescription' + Date.now()
 let testCaseSeries = 'SBTestSeries'
@@ -33,7 +35,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.clearAllCookies()
         cy.clearLocalStorage()
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -57,10 +59,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
         let filePath = 'cypress/fixtures/measureId'
 
-        //Commenting until 'MeasureListButtons' feature flag is removed
-        //MeasuresPage.actionCenter('version')
-
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click().wait(5000)
@@ -74,7 +73,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         //verify that the CQL to ELM version is not empty
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
@@ -83,10 +82,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(Header.mainMadiePageButton).click().wait(2500)
         cy.reload()
 
-        MeasuresPage.measureAction('draft')
-
-        //Commenting until 'MeasureListButtons' feature flag is removed
-        //MeasuresPage.measureAction('draft')
+        MeasuresPage.actionCenter('draft')
 
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         //intercept draft id once measure is drafted
@@ -103,7 +99,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         //navigate back to the main MADiE / measure list page
         cy.get(Header.mainMadiePageButton).scrollIntoView().click()
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         //verify that the CQL to ELM version is not empty
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
@@ -115,10 +111,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedMeasuresPageOne' + Date.now()
 
-        //Commenting until 'MeasureListButtons' feature flag is removed
-        //MeasuresPage.actionCenter('version')
-
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click().wait(5000)
@@ -128,7 +121,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
 
-        MeasuresPage.measureAction('draft')
+        MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
@@ -136,7 +129,6 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-            //cy.wait(7000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
@@ -147,6 +139,142 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
             cy.get('[data-testid=draft-measure-' + fileContents + ']').should('not.exist')
             cy.reload()
         })
+    })
+
+    it.only('Change / update model from v4.1.1 - to - v6.0.0 and vice versa with versioning and drafting', () => {
+
+        let versionNumberFirst = '1.0.000'
+        updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
+
+        let versionNumberSecond = '2.0.000'
+        updatedMeasuresPageNameSecond = 'UpdatedTestMeasures2' + Date.now()
+
+        MeasuresPage.actionCenter('version')
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(5000)
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        Utilities.waitForElementVisible(MeasuresPage.VersionDraftMsgs, 100000)
+        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 100000)
+
+        MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumberFirst)
+        cy.log('Version Created Successfully')
+
+        MeasuresPage.actionCenter('draft')
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.visible')
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.enabled')
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
+
+        cy.get(MeasuresPage.createDraftContinueBtn).should('exist')
+        cy.get(MeasuresPage.createDraftContinueBtn).should('be.visible')
+        cy.get(MeasuresPage.createDraftContinueBtn).should('be.enabled')
+
+        cy.get(MeasuresPage.draftModalSelectionBox).click()
+        Utilities.waitForElementVisible(MeasuresPage.draftModalVersionSix, 5000)
+        cy.get(MeasuresPage.draftModalVersionSix).click()
+
+        CreateMeasurePage.clickCreateDraftButton()
+
+        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.log('Draft Created Successfully')
+        Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 100000)
+
+        //verify CQL after draft
+        cy.get(Header.mainMadiePageButton).click()
+        //Search for the Measure using Measure name
+        cy.log('Search Measure with measure name')
+        cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).wait(1000).type('{enter}')
+        cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
+        MeasuresPage.actionCenter('edit')
+
+        //verify that the CQL to ELM version is not empty
+        cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
+
+        //verify that the CQL to ELM version is not empty
+        cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(7000)
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'using QICore version \'6.0.0\'')
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'include FHIRHelpers version \'4.1.000\' called FHIRHelpers')
+        cy.get(EditMeasurePage.cqlEditorTextBox).wait(1500).click().wait(1500).type('{ctrl+a}{backspace}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).wait(1500).click().wait(1500).type('{backspace}{del}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cohortMeasureCQLSix)
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{del}{backspace}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(7000)
+
+        //navigate to main measure list page and version and draft to put measure back on 4.1.1 modal version
+        cy.get(Header.mainMadiePageButton).click()
+        MeasuresPage.actionCenter('version')
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(5000)
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('2.0.000')
+
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        Utilities.waitForElementVisible(MeasuresPage.VersionDraftMsgs, 100000)
+        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 100000)
+
+        MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumberSecond)
+        cy.log('Version Created Successfully')
+
+        MeasuresPage.actionCenter('draft')
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.visible')
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.enabled')
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageNameSecond)
+
+        cy.get(MeasuresPage.createDraftContinueBtn).should('exist')
+        cy.get(MeasuresPage.createDraftContinueBtn).should('be.visible')
+        cy.get(MeasuresPage.createDraftContinueBtn).should('be.enabled')
+
+        cy.get(MeasuresPage.draftModalSelectionBox).click()
+        Utilities.waitForElementVisible(MeasuresPage.draftModalVersionFourOneOne, 5000)
+        cy.get(MeasuresPage.draftModalVersionFourOneOne).click()
+
+        CreateMeasurePage.clickCreateDraftButton()
+
+        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.log('Draft Created Successfully')
+        Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 100000)
+
+        //verify CQL after draft
+        cy.get(Header.mainMadiePageButton).click()
+        //Search for the Measure using Measure name
+        cy.log('Search Measure with measure name')
+        cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageNameSecond).wait(1000).type('{enter}')
+        cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageNameSecond)
+        MeasuresPage.actionCenter('edit')
+
+        //verify that the CQL to ELM version is not empty
+        cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
+
+        //verify that the CQL to ELM version is not empty
+        cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(7000)
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'using QICore version \'4.1.1\'')
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'include FHIRHelpers version \'4.1.000\' called FHIRHelpers')
+        cy.get(EditMeasurePage.cqlEditorTextBox).wait(1500).click().wait(1500).type('{ctrl+a}{backspace}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).wait(1500).click().wait(1500).type('{backspace}{del}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(cohortMeasureCQL)
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{del}{backspace}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(7000)
+
     })
 })
 
@@ -163,7 +291,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -197,11 +325,8 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
-        //Commenting until 'MeasureListButtons' feature flag is removed
-        //MeasuresPage.actionCenter('version')
-
         //version and draft measure
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click().wait(5000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
@@ -216,10 +341,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
 
-        //Commenting until 'MeasureListButtons' feature flag is removed
-        //MeasuresPage.actionCenter('draft')
-
-        MeasuresPage.measureAction('draft')
+        MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.visible')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.enabled')
@@ -241,7 +363,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.log('Search Measure with measure name')
         cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).wait(1000).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //verify that the CQL to ELM version is not empty
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')

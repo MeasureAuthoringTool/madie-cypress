@@ -27,6 +27,9 @@ export class MeasuresPage {
     public static readonly VersionDraftErrMsgs = '[data-testid="error-toast"]'
     public static readonly updateDraftedMeasuresTextBox = '[data-testid="measure-name-input"]'
     public static readonly createDraftContinueBtn = '[data-testid="create-draft-continue-button"]'
+    public static readonly draftModalSelectionBox = '[data-testid="measure-model-select"]'
+    public static readonly draftModalVersionSix = '[data-testid="measure-model-option-QI-Core v6.0.0"]'
+    public static readonly draftModalVersionFourOneOne = '[data-testid="measure-model-option-QI-Core v4.1.1"]'
     public static readonly measureVersionTypeDropdown = '[id="version-type"]'
     public static readonly measureVersionMajor = '[data-testid="major-option"]'
     public static readonly measureVersionMinor = '[data-testid="minor-option"]'
@@ -76,7 +79,7 @@ export class MeasuresPage {
             switch ((action.valueOf()).toString().toLowerCase()) {
                 case "edit": {
 
-                    cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
+                    cy.get('[data-testid="measure-action-' + fileContents + '"]').wait(1500).click()
                     Utilities.waitForElementVisible('[data-testid="view-measure-' + fileContents + '"]', 105000)
                     cy.get('[data-testid="view-measure-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="view-measure-' + fileContents + '"]', 105000)
@@ -87,7 +90,7 @@ export class MeasuresPage {
                 }
                 case 'export': {
 
-                    cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
+                    cy.get('[data-testid="measure-action-' + fileContents + '"]').wait(1500).click()
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
                     Utilities.waitForElementVisible('[data-testid="export-measure-' + fileContents + '"]', 105000)
                     cy.get('[data-testid="view-measure-' + fileContents + '"]').should('be.visible')
@@ -104,7 +107,7 @@ export class MeasuresPage {
                 }
                 case 'qdmexport': {
 
-                    cy.get('[data-testid="measure-action-' + fileContents + '"]').scrollIntoView()
+                    cy.get('[data-testid="measure-action-' + fileContents + '"]').wait(1500).scrollIntoView()
                     cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
                     cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
                     Utilities.waitForElementVisible('[data-testid="export-measure-' + fileContents + '"]', 105000)
@@ -122,7 +125,7 @@ export class MeasuresPage {
                 }
                 case 'version': {
 
-                    cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
+                    cy.get('[data-testid="measure-action-' + fileContents + '"]').wait(1500).click()
                     Utilities.waitForElementVisible('[data-testid="create-version-measure-' + fileContents + '"]', 105000)
                     cy.get('[data-testid="create-version-measure-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="create-version-measure-' + fileContents + '"]', 105000)
@@ -132,7 +135,7 @@ export class MeasuresPage {
                 }
                 case 'draft': {
 
-                    cy.get('[data-testid="measure-action-' + fileContents + '"]').click()
+                    cy.get('[data-testid="measure-action-' + fileContents + '"]').wait(1500).click()
                     Utilities.waitForElementVisible('[data-testid="draft-measure-' + fileContents + '"]', 105000)
                     cy.get('[data-testid="draft-measure-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="draft-measure-' + fileContents + '"]', 105000)
