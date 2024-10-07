@@ -95,7 +95,7 @@ describe('FHIR Measure Export, Not the Owner', () => {
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        MeasuresPage.measureAction('export')
+        MeasuresPage.actionCenter('export')
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')

@@ -151,7 +151,7 @@ describe('MO datatype Error', () => {
     it('MO datatype Error', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

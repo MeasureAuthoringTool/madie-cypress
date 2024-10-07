@@ -61,7 +61,7 @@ describe('Validations on Measure Details page', () => {
     it('Verify Steward & Developers section of Measure Details page', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
@@ -81,7 +81,7 @@ describe('Validations on Measure Details page', () => {
     it('Verify fields on the Steward & Developers section of Measure Details page are required and the messaging around the requirement', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
@@ -123,7 +123,7 @@ describe('Validations on Measure Details page', () => {
     it('Validate Save buttons accessibility (Save when both fields have value)', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
@@ -152,7 +152,7 @@ describe('Validations on Measure Details page', () => {
     it('Validate Discard button accessibility and text / label on button', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
@@ -202,7 +202,7 @@ describe('Validations on Measure Details page', () => {
     it('Validate dirty check on Steward & Developers section of Measure Details page', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
@@ -268,7 +268,7 @@ describe('Validations on Measure Details page', () => {
     it('Validate success message once both fields have value and are saved', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
@@ -326,7 +326,7 @@ describe('Validations on Measure Details page', () => {
     it('Validating the Clinical Recommendation page and the fields, buttons, and messaging for that page', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //navigate to the clinical recommendation page
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).should('exist')
@@ -754,7 +754,7 @@ describe('Setting time / date value in EST reflects as the same in user time zon
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
 
@@ -787,7 +787,7 @@ describe('CQL Library Validations -- Attempting to use a QDM Library in a QI Cor
     })
     it('Proper error appears when attempting to use a QDM Library in a QI Core measure CQL', () => {
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //create test case
         //Navigate to Test Cases page and add Test Case details
@@ -856,7 +856,7 @@ describe('CQL Library Validations -- Attempting to use a QI Core Library in a QD
     })
     it('Proper error appears when attempting to use a QI Core Library in a QDM measure CQL', () => {
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //create test case
         //Navigate to Test Cases page and add Test Case details
@@ -959,7 +959,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
     it('Creating a measure With MO And Stratification: Selecting SDE values / radio buttons', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //verify that the CQL to ELM version is not empty
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')

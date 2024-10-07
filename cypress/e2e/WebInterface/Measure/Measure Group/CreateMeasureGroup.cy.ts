@@ -88,7 +88,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
     it('"Please complete the CQL Editor process before continuing" appears when there are issues with entered CQL', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).click()
@@ -122,7 +122,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
     it('Scoring unit, UCUM, population association, population basis, measure group type and description saves and persists', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
@@ -161,7 +161,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(LandingPage.myMeasuresTab).should('exist')
         cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -182,7 +182,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
     it('Add second initial population for Ratio Measure', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
@@ -231,7 +231,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(LandingPage.myMeasuresTab).should('exist')
         cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //verify that the population and the scoring unit that was saved, together, appears
@@ -245,7 +245,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
 
         cy.log('Create Ratio Measure')
         //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
@@ -278,7 +278,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
         cy.get(LandingPage.myMeasuresTab).should('exist')
         cy.get(LandingPage.myMeasuresTab).should('be.visible')
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Change scoring type & population
@@ -346,7 +346,7 @@ describe('Validate Population Basis', () => {
 
     it('Verify default Value and if no value is selected for Population Basis, the save button is unavailable', () => {
         //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)

@@ -102,7 +102,7 @@ describe('Test Case Attributes', () => {
         //Create QDM Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringProportion, false, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -125,7 +125,7 @@ describe('Test Case Attributes', () => {
     it('Add Date Time attribute to the Test case', () => {
 
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -157,7 +157,7 @@ describe('Test Case Attributes', () => {
     it('Add Related To attribute to the Test case', () => {
 
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

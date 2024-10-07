@@ -88,7 +88,7 @@ describe.skip('Qi-Core CQL Definitions', () => {
     it('Search for Qi-Core CQL Definitions Expression Editor Name Options', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
@@ -111,7 +111,7 @@ describe.skip('Qi-Core CQL Definitions', () => {
     it('Search for Qi-Core CQL Definitions Expression Editor Fluent Function Options', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
@@ -134,7 +134,7 @@ describe.skip('Qi-Core CQL Definitions', () => {
     it('Insert Qi-Core CQL Definitions through Expression Editor and Apply to CQL editor', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
@@ -220,7 +220,7 @@ describe.skip('Qi-Core CQL Definitions', () => {
     it('Verify Included Qi-Core CQL Definitions under Saved Definitions tab', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
@@ -237,7 +237,7 @@ describe.skip('Qi-Core CQL Definitions', () => {
     it('Edit Saved Qi-Core CQL Definitions', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
@@ -264,7 +264,7 @@ describe.skip('Qi-Core CQL Definitions', () => {
     it('Dirty check pops up when there are changes in CQL and Edit CQL definition button is clicked', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //Make changes to CQL editor
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -286,7 +286,7 @@ describe.skip('Qi-Core CQL Definitions', () => {
     it('Delete saved Qi-Core CQL Definitions', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
@@ -332,7 +332,7 @@ describe.skip('Qi-Core CQL Definitions - Expression Editor Name Option Validatio
 
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 

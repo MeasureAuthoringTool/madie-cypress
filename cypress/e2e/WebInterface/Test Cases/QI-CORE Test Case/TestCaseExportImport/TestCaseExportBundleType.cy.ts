@@ -67,7 +67,7 @@ describe('QI-Core: Export Bundle options: Transaction or Collection', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -109,7 +109,7 @@ describe('QI-Core: Export Bundle options: Transaction or Collection', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -134,7 +134,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
@@ -167,7 +167,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -184,7 +184,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         cy.get(Header.mainMadiePageButton).click().wait(3000)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -218,7 +218,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'a', testCaseSeries + 'a', testCaseDescription + 'a', testCaseJson)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b', testCaseSeries + 'b', testCaseDescription + 'b', testCaseJson, false, true)
@@ -252,7 +252,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -272,7 +272,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(Header.mainMadiePageButton).click().wait(3000)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -316,7 +316,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
 
@@ -349,7 +349,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -366,7 +366,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         cy.get(Header.mainMadiePageButton).click().wait(3000)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -400,7 +400,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'a', testCaseSeries + 'a', testCaseDescription + 'a', testCaseJson)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b', testCaseSeries + 'b', testCaseDescription + 'b', testCaseJson, false, true)
@@ -434,7 +434,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -454,7 +454,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(Header.mainMadiePageButton).click().wait(3000)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()

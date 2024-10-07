@@ -141,7 +141,7 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
         cy.get(LandingPage.allMeasuresTab).click()
 
         //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -193,7 +193,7 @@ describe('Create Test Case Validations', () => {
     it('Description more than 250 characters', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -206,7 +206,7 @@ describe('Create Test Case Validations', () => {
     it('Title more than 250 characters', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -227,7 +227,7 @@ describe('Create Test Case Validations', () => {
     it('Create Test Case without a title', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -256,7 +256,7 @@ describe('Edit Test Case Validations', () => {
     it('Description more than 250 characters', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -279,7 +279,7 @@ describe('Edit Test Case Validations', () => {
     it('Title more than 250 characters', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -303,7 +303,7 @@ describe('Edit Test Case Validations', () => {
     it('Edit Test Case without a title', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -326,7 +326,7 @@ describe('Edit Test Case Validations', () => {
     //dirty check validation
     it('Validate dirty check when user attempts to navigate away from the QDM Test Case edit page', () => {
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -370,7 +370,7 @@ describe('Dirty Check Validations', () => {
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Ratio', false, measureQDMCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -393,7 +393,7 @@ describe('Dirty Check Validations', () => {
     it('Validate dirty check on the test case title, in the test case details tab', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -431,7 +431,7 @@ describe('Dirty Check Validations', () => {
     it('Validate dirty check on Testcase Expected/Actual tab', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -468,7 +468,7 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
         //Create QDM Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringCohort, false, measureQDMCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -489,7 +489,7 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
     })
     it('Validate dirty check on the test case attributes', () => {
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -543,7 +543,7 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
 
         //when the user navigates back to the test case details page the attribute details are not present**
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -581,7 +581,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //navigate to the CQL Editor tab, for the measure
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
@@ -618,7 +618,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //navigate to the CQL Editor tab, for the measure
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
@@ -679,7 +679,7 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //navigate to the CQL Editor tab, for the measure
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
@@ -740,7 +740,7 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //navigate to the CQL Editor tab, for the measure
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
@@ -796,7 +796,7 @@ describe('Non Boolean Population basis Expected values', () => {
     it('Validate Non Boolean Expected values', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

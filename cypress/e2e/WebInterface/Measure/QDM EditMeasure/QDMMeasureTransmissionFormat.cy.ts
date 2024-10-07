@@ -32,7 +32,7 @@ describe('QDM Measure: Transmission Format', () => {
 
     it('Add Transmission Format to the QDM Measure', () => {
 
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Add Definition
         cy.get(EditMeasurePage.leftPanelTransmissionFormat).click()
@@ -44,7 +44,7 @@ describe('QDM Measure: Transmission Format', () => {
 
     it('Discard changes button', () => {
 
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelTransmissionFormat).click()
@@ -78,7 +78,7 @@ describe('QDM Measure: Transmission format ownership validation', () => {
 
         cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
         cy.reload()
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelTransmissionFormat).click()

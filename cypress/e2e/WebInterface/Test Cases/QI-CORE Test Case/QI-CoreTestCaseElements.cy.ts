@@ -38,7 +38,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Create
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -67,7 +67,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Create
     it('Enter Valid Test Case Json that contains DOB, Gender, Race, and Ethnicity data and confirm those pieces of data appears on the element tab', () => {
 
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Create test case
@@ -159,7 +159,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -188,7 +188,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
     it('Edit current test case to add an additional race but include the same DOB, Gender, Race, and Ethnicity data', () => {
 
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Create test case
@@ -311,7 +311,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -340,7 +340,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
     it('Edit current test case to add an additional race, when the user has had the measure shared with them. The edit contains DOB, Gender, Race, and Ethnicity data.', () => {
 
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Create test case
@@ -440,7 +440,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
         OktaLogin.AltLogin()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.testCaseAction('edit')
@@ -497,7 +497,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -526,7 +526,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
     it('Attempt to edit current test case to add an additional race, when the user is not the owner nor when the user has had the measure shared with them.', () => {
 
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Create test case
@@ -610,7 +610,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 20000)
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.testCaseAction('edit')
@@ -646,7 +646,7 @@ describe.skip('QI-Core Test Case Element tab tests', () => {
         OktaLogin.Login()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
@@ -666,7 +666,7 @@ describe.skip('QI-Core Test Case Element tab tests', () => {
         cy.reload()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()

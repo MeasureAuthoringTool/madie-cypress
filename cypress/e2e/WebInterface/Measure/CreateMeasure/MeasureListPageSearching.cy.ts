@@ -40,7 +40,7 @@ describe('Measure List Page Searching', () => {
         cy.get(LandingPage.myMeasuresTab).wait(1000).click()
         cy.get(MeasuresPage.searchInputBox).clear().type('eCQMTitle01').wait(1000).type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', measureName)
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).should('have.value', 'eCQMTitle01')
 
         //Delete the Measure & search for deleted Measure under My Measures tab

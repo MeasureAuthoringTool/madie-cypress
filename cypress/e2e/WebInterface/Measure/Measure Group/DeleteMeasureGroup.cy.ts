@@ -43,7 +43,7 @@ describe('Validate Measure Group deletion functionality', () => {
 
     it('Delete button brings up confirmation modal and clicking yes, removes the existing Measure group', () => {
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -83,7 +83,7 @@ describe('Validate Measure Group deletion functionality', () => {
 
     it('Confirmation modal has a Keep button and clicking on it will result in the group persisting', () => {
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -121,7 +121,7 @@ describe('Validate Measure Group deletion functionality', () => {
     //This test case needs review for validity
     it.skip('Test Cases still loads after a one from multiple groups are deleted', () => {
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -208,7 +208,7 @@ describe('Validate Measure Group deletion functionality', () => {
 
     it('Test Cases still loads after all groups are deleted', () => {
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -290,7 +290,7 @@ describe('Ownership test when deleting groups', () => {
         cy.get(MeasuresPage.measureListTitles).should('contain', measureTwo)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction('edit', 2)
+        MeasuresPage.actionCenter('edit', 2)
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')

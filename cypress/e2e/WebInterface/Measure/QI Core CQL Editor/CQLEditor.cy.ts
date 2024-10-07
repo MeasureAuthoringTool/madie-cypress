@@ -74,7 +74,7 @@ describe('Validate CQL Editor tab sticky footer', () => {
 
     it('Validate Save and Discard buttons -- text, functionality, and availability', () => {
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //create test case
         //Navigate to Test Cases page and add Test Case details
@@ -131,7 +131,7 @@ describe('Measure: CQL Editor', () => {
     it('Verify errors appear on CQL Editor page and in the CQL Editor object, on save and on tab / page load', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -166,7 +166,7 @@ describe('Measure: CQL Editor', () => {
         'included library is not found', () => {
 
             //Click on Edit Measure
-            MeasuresPage.measureAction("edit")
+            MeasuresPage.actionCenter('edit')
 
             //Click on the CQL Editor tab
             CQLEditorPage.clickCQLEditorTab()
@@ -194,7 +194,7 @@ describe('Measure: CQL Editor', () => {
     it('Graceful error msg if model is missing in CQL', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -226,7 +226,7 @@ describe('Measure: CQL Editor', () => {
     it('Verify Library name and version are replaced with the actual Library Name and Version for the Measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -265,7 +265,7 @@ describe('Measure: CQL Editor', () => {
     it('CQL updates when CQL Library name is updated in Measure Details', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -303,7 +303,7 @@ describe('Measure: CQL Editor', () => {
     it('Verify error appears on CQL Editor when concept construct is used', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -331,7 +331,7 @@ describe('Measure: CQL Editor', () => {
     it('Dirty Check Modal is displayed', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -348,7 +348,7 @@ describe('Measure: CQL Editor', () => {
     it.only('Verify error message if FHIR Helpers is missing in CQL', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -401,7 +401,7 @@ describe('Measure: CQL Editor: valueSet', () => {
     it('Value Sets are valid', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/EXM124v7QICore4Entry.txt').should('exist').then((fileContents) => {
@@ -420,7 +420,7 @@ describe('Measure: CQL Editor: valueSet', () => {
     it('Value Set Invalid, 404', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/EXM124v7QICore4EntryInvalidValueSet.txt').should('exist').then((fileContents) => {
@@ -448,7 +448,7 @@ describe('Measure: CQL Editor: valueSet', () => {
     it('Value Set Invalid, 404 undefined', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/ValueSetTestingEntryInValid400.txt').should('exist').then((fileContents) => {
@@ -501,7 +501,7 @@ describe('CQL errors with included libraries', () => {
     it('Verify errors appear on CQL Editor page when multiple versions of CQL library is included ', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the CQL Editor tab
         CQLEditorPage.clickCQLEditorTab()
@@ -546,7 +546,7 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
     it('Verify error message when there is no using statement in the CQL', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -566,7 +566,7 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
     it('Verify error message when there is an using statement in the CQL, but it is not accurate', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -583,7 +583,7 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
     it('Verify error message when there is an using statement in the CQL, but it is not accurate, and the library name used is not correct', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -618,7 +618,7 @@ describe('Measure: CQL Editor: using line : FHIR', () => {
     it('Verify error message when there is an using statement in the CQL, but it is invalid', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

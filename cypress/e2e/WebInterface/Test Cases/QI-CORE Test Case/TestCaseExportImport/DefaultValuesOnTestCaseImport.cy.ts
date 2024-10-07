@@ -41,7 +41,7 @@ describe('Validate Test case Json on import', () => {
     it('Verify the default values are added to the Test case Json on import', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()

@@ -32,7 +32,7 @@ describe('QDM Measure Definition', () => {
 
     it('Add QDM Measure Definitions', () => {
 
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.leftPanelDefinition).click()
         cy.get(EditMeasurePage.definitionInputTextbox).type('Measure Definition')
@@ -43,7 +43,7 @@ describe('QDM Measure Definition', () => {
 
     it('Discard changes button', () => {
 
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelDefinition).click()
@@ -77,7 +77,7 @@ describe('QDM Measure Definition ownership validation', () => {
 
         cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
         cy.reload()
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelDefinition).click()

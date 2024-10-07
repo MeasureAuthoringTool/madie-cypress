@@ -55,7 +55,7 @@ describe('QI-Core Single Test Case Export', () => {
         cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
         cy.get(Header.mainMadiePageButton).click().wait(3000)
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -86,7 +86,7 @@ describe('QI-Core Single Test Case Export', () => {
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -147,7 +147,7 @@ describe('QI-Core Test Case Export for all test cases', () => {
         cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
         cy.get(Header.mainMadiePageButton).click().wait(3000)
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -187,7 +187,7 @@ describe('QI-Core Test Case Export for all test cases', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()

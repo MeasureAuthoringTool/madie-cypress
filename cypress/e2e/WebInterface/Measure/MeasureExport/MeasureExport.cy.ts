@@ -137,7 +137,7 @@ describe('QI-Core Measure Export', () => {
     it('Validate the zip file Export is downloaded for QI-Core Measure', () => {
 
         //Add RAV to the Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -190,7 +190,7 @@ describe('QI-Core Measure Export', () => {
 
         //Navigate to Measures page
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -204,7 +204,7 @@ describe('QI-Core Measure Export', () => {
         MeasuresPage.validateVersionNumber(measureName, '1.0.000')
         cy.log('Version Created Successfully')
 
-        MeasuresPage.measureAction('export')
+        MeasuresPage.actionCenter('export')
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
@@ -262,7 +262,7 @@ describe.skip('QI-Core Measure Export: Validating contents of Human Readable and
         cy.clearLocalStorage()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -288,7 +288,7 @@ describe.skip('QI-Core Measure Export: Validating contents of Human Readable and
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        MeasuresPage.measureAction('export')
+        MeasuresPage.actionCenter('export')
 
 
         //verify zip file exists
@@ -551,7 +551,7 @@ describe.skip('QI-Core Measure Export: Validating contents of Human Readable and
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -565,7 +565,7 @@ describe.skip('QI-Core Measure Export: Validating contents of Human Readable and
         MeasuresPage.validateVersionNumber(measureName, versionNumber)
         cy.log('Major Version Created Successfully')
 
-        MeasuresPage.measureAction('qdmexport')
+        MeasuresPage.actionCenter('export')
 
         //verify zip file exists
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')

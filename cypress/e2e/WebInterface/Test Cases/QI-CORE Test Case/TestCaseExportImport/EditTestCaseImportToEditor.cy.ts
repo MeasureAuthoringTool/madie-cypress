@@ -32,7 +32,7 @@ describe('Import Test Case into the Test Case Editor', () => {
     it('Successful Json file Import', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -50,7 +50,7 @@ describe('Import Test Case into the Test Case Editor', () => {
     it('Verify error message when a Text file is imported', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -67,7 +67,7 @@ describe('Import Test Case into the Test Case Editor', () => {
     it('Verify error message when an invalid Json file is imported', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -85,7 +85,7 @@ describe('Import Test Case into the Test Case Editor', () => {
     it('Verify error message when bulk Json file is imported', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()

@@ -36,7 +36,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, false, false)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -53,7 +53,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
-        MeasuresPage.measureAction("edit", 2)
+        MeasuresPage.actionCenter('edit', 2)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -80,7 +80,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             //navigate to the main measures page
             cy.get(Header.measures).click()
 
-            MeasuresPage.measureAction("edit")
+            MeasuresPage.actionCenter('edit')
 
             //Click on Measure Group tab
             Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -160,7 +160,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             //navigate to the main measures page
             cy.get(Header.measures).click()
 
-            MeasuresPage.measureAction("edit")
+            MeasuresPage.actionCenter('edit')
 
             //Click on Measure Group tab
             Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -204,7 +204,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -300,7 +300,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(Header.mainMadiePageButton).click()
         //click on 'No, Keep working' button
         cy.get(MeasureGroupPage.qdmDiscardModalContinueButton).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -349,7 +349,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         Global.clickOnDiscardChanges()
 
         //navigate back to the PC -> Base Configuration page
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -377,7 +377,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         Utilities.waitForElementEnabled(MeasuresPage.allMeasuresTab, 70000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.enabled').wait(1000)
         cy.get(MeasuresPage.allMeasuresTab).wait(10000).click()
-        MeasuresPage.measureAction("edit", 2)
+        MeasuresPage.actionCenter('edit', 2)
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -429,7 +429,7 @@ describe('Updates on Base Configuration page', () => {
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, true, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -449,7 +449,7 @@ describe('Updates on Base Configuration page', () => {
         cy.get(Header.measures).click()
 
         //click edit on measure action
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -486,7 +486,7 @@ describe('Updates on Base Configuration page', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -550,7 +550,7 @@ describe('Updates on Base Configuration page', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -574,7 +574,7 @@ describe('Updates on Base Configuration page', () => {
         cy.get(Header.measures).click()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)

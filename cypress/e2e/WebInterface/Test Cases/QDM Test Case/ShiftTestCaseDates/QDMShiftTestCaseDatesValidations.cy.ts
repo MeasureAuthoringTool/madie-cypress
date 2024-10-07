@@ -26,7 +26,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 3500)
@@ -166,7 +166,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         OktaLogin.UILogout()
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC2', 'QDMManifestTCGroup2', 'QDMManifestTC2', '', true, false)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).wait(1700).click().wait(3000)
@@ -288,7 +288,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
     it('MADiE Shift Test Case Dates -> Shift All Test Cases\' dates for QDM Measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -396,7 +396,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
     it('MADiE Shift Test Case Dates -> Shift single / specific test case\'s dates for QDM Measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

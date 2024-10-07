@@ -49,7 +49,7 @@ describe('Measure Versioning validations', () => {
 
     it('User can not version Measure if there is no CQL', () => {
 
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -65,7 +65,7 @@ describe('Measure Versioning validations', () => {
 
     it('User can not Version if the Measure CQL has errors', () => {
 
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -78,7 +78,7 @@ describe('Measure Versioning validations', () => {
         //Navigate to Measures Page
         cy.get(Header.measures).click()
 
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -113,7 +113,7 @@ describe('Measure Versioning when the measure has test case with errors', () => 
     it('User receives "Version Measures with Invalid Test Cases?" prompt / modal, if measure has test case with errors', () => {
         let versionNumber = '1.0.000'
 
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -128,7 +128,7 @@ describe('Measure Versioning when the measure has test case with errors', () => 
         //Navigate to Measures Page
         cy.get(Header.measures).click()
 
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -147,7 +147,7 @@ describe('Measure Versioning when the measure has test case with errors', () => 
 
         Utilities.waitForElementToNotExist(TestCasesPage.versionMeasureWithTCErrors, 20000)
 
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()

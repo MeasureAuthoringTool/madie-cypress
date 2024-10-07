@@ -28,7 +28,7 @@ describe('Measure Group', () => {
     it('Measure Group Population based on Scoring Rule', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()

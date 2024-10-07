@@ -205,7 +205,7 @@ describe('Measure observation expected result', () => {
     it('Verify Measure Observation expected result for CV measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -264,7 +264,7 @@ describe('Measure observation expected result', () => {
     it('Verify Measure Observation expected result for Ratio measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

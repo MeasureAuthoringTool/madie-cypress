@@ -102,7 +102,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.wait(3700)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -118,7 +118,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
     it('Verify errors appear on CQL Editor component and in the CQL Editor object, on save and on tab / page load', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -140,7 +140,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
     it('Verify warnings appear on CQL Editor component and in the CQL Editor object, on save and on tab / page load', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -191,7 +191,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
     it('Verify success message on CQL editor component, on CQL update and on tab / page load', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //Clear the text in CQL Library Editor
@@ -209,7 +209,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
     it('Verify errors appear on CQL Editor component and in the CQL Editor object, on CQL update and on tab / page load', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //Clear the text in CQL Library Editor
@@ -234,7 +234,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
     it('Verify warnings appear on CQL Editor component and in the CQL Editor object, on CQL update and on tab / page load', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //Clear the text in CQL Library Editor

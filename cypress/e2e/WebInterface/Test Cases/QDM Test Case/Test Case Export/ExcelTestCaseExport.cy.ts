@@ -174,7 +174,7 @@ describe('QDM Test Case Excel Export', () => {
     it.skip('Successful Excel Export for QDM Test Cases', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

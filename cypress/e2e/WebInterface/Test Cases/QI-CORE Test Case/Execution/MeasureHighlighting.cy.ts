@@ -813,7 +813,7 @@ describe('Measure Highlighting', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, null)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -845,7 +845,7 @@ describe('Measure Highlighting', () => {
         OktaLogin.Login()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -925,9 +925,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -958,7 +958,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         OktaLogin.Login()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -1048,9 +1048,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -1080,7 +1080,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         OktaLogin.Login()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -1224,9 +1224,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLDFUTests, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLDFUTests)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -1256,7 +1256,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         OktaLogin.Login()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -1367,9 +1367,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLResults, false)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLResults)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -1399,7 +1399,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         OktaLogin.Login()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -1552,7 +1552,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         OktaLogin.Login()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')

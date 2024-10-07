@@ -32,7 +32,7 @@ describe('QDM Measure Reference', () => {
     it('Add and Edit QDM Measure reference', () => {
 
         //Add Measure Reference
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelReference).click()
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
@@ -58,7 +58,7 @@ describe('QDM Measure Reference', () => {
 
     it('Discard changes button', () => {
 
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelReference).click()
@@ -74,7 +74,7 @@ describe('QDM Measure Reference', () => {
     it('Delete Measure Reference', () => {
 
         //Add Measure Reference
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelReference).click()
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
@@ -118,7 +118,7 @@ describe('Add Measure Reference - ownership validation', () => {
 
         cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
         cy.reload()
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelReference).click()
@@ -138,7 +138,7 @@ describe('Delete Measure Reference - Ownership validation', () => {
 
         //Login to UI and Add Measure reference
         OktaLogin.Login()
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelReference).click()
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
@@ -164,7 +164,7 @@ describe('Delete Measure Reference - Ownership validation', () => {
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
         cy.reload()
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelReference).click()

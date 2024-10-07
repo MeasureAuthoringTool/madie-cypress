@@ -39,7 +39,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
     it('SDE sub tab is visible on Edit Test case Highlighting page when SDE is included', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -136,7 +136,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
     it('SDE sub tab is not visible on Edit Test case Highlighting page when SDE is not included', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -185,7 +185,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
     it('Test Case Coverage Percentage updated based on the SDE selection', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

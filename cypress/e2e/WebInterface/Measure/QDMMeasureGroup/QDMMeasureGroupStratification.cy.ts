@@ -136,7 +136,7 @@ describe('Validating Stratification tabs', () => {
             '2023-01-01', '2024-01-01')
 
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -155,7 +155,7 @@ describe('Validating Stratification tabs', () => {
 
         //Click on Edit Measure
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -229,7 +229,7 @@ describe('Validating Stratification tabs', () => {
 
         //Click on Edit Measure
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -340,7 +340,7 @@ describe('Validating Stratification tabs', () => {
 
         //Click on Edit Measure
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -390,7 +390,7 @@ describe('Validating Stratification tabs', () => {
 
         //Click on Edit Measure
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)

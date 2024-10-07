@@ -82,7 +82,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
     it('Verify success message on CQL editor component, on save and on tab / page load', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -97,7 +97,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
     it('Verify error message when there is no using statement in the CQL', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -113,7 +113,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
     it('Verify error message when there is an using statement in the CQL, but it is not accurate', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter("edit")
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -129,7 +129,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
     it('Verify error message when there is an using statement in the CQL, but it is not accurate, and the library name used is not correct', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

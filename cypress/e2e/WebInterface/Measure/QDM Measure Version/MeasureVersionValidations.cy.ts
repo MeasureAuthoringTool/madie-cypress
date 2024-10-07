@@ -64,7 +64,7 @@ describe('Measure Versioning validations', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, 'Cohort', true)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -80,7 +80,7 @@ describe('Measure Versioning validations', () => {
     it('User can not version Measure if there is no CQL', () => {
 
         cy.get(Header.measures).click().wait(2000)
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -98,7 +98,7 @@ describe('Measure Versioning validations', () => {
     it('User can not Version if the Measure CQL has errors', () => {
 
         cy.get(Header.measures).click().wait(2000)
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -111,7 +111,7 @@ describe('Measure Versioning validations', () => {
         //Navigate to Measures Page
         cy.get(Header.measures).click()
 
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -129,7 +129,7 @@ describe('Measure Versioning validations', () => {
     it('Error message on popup screen when the confirmed version number does not match new version number', () => {
 
         cy.get(Header.measures).click().wait(2000)
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -140,7 +140,7 @@ describe('Measure Versioning validations', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
 
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -164,7 +164,7 @@ describe('Non Measure owner unable to create Version', () => {
         cy.setAccessTokenCookie()
         cy.wait(1000)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()

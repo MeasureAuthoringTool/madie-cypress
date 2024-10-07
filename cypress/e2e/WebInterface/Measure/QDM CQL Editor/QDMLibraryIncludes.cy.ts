@@ -47,7 +47,7 @@ describe.skip('QDM Library Includes fields', () => {
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -95,7 +95,7 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         //make a change to CQL (don't save)
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
@@ -142,7 +142,7 @@ describe.skip('QDM Library Includes fields', () => {
 
         //make a change to the CQL but do not save
         cy.get(Header.mainMadiePageButton).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
@@ -192,7 +192,7 @@ describe.skip('QDM Library Includes fields', () => {
         //make a change and save changes
         cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -239,7 +239,7 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         //make a change to CQL (don't save)
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
@@ -287,7 +287,7 @@ describe.skip('QDM Library Includes fields', () => {
 
         //make a change to the CQL but do not save
         cy.get(Header.mainMadiePageButton).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
@@ -336,7 +336,7 @@ describe.skip('QDM Library Includes fields', () => {
         //make a change and save changes
         cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()

@@ -44,7 +44,7 @@ describe('Test case Coverage tab', () => {
     it('Execute Test cases and verify Coverage and the population tabs', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -150,7 +150,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -185,7 +185,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         OktaLogin.Login()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -209,7 +209,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(Header.mainMadiePageButton).click()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -241,7 +241,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         OktaLogin.Login()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -339,7 +339,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(Header.mainMadiePageButton).click()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         //Click on Execute Test Case button on Edit Test Case page
@@ -366,7 +366,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         OktaLogin.Login()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //create a test case that will fail:
 
@@ -419,7 +419,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(Header.mainMadiePageButton).click()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -460,7 +460,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
     it('Run Test Case button is disabled  -- CQL Errors', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -506,7 +506,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
     it('Run / Execute Test Case button is disabled  -- Missing group / population selections', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
@@ -537,7 +537,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
     it('Run / Execute Test Case button is disabled -- missing TC Json', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -581,7 +581,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -603,7 +603,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
     it('Run and Execute Test case for multiple Population Criteria', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -664,7 +664,7 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -691,7 +691,7 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
 
         OktaLogin.Login()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -716,7 +716,7 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         cy.reload()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

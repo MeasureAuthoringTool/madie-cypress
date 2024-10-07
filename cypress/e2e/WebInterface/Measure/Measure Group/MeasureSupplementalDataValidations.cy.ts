@@ -84,7 +84,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         OktaLogin.Login()
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //click on the Supplemental button / link on the left page to populate fields on the right
@@ -130,7 +130,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         OktaLogin.Login()
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //click on the Supplemental button / link on the left page to populate fields on the right
@@ -209,7 +209,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         OktaLogin.Login()
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //click on the Supplemental button / link on the left page to populate fields on the right

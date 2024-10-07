@@ -41,7 +41,7 @@ describe('Measure Association: Validations', () => {
             '2025-01-01', '2025-12-31')
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -63,7 +63,7 @@ describe('Measure Association: Validations', () => {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC0', 'QDMManifestTCGroup0', 'QDMManifestTC0', '', false, false)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -81,7 +81,7 @@ describe('Measure Association: Validations', () => {
         //1
         CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit", 2)
+        MeasuresPage.actionCenter('edit', 2)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -103,7 +103,7 @@ describe('Measure Association: Validations', () => {
         //0
         CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName0, QiCoreCqlLibraryName0, measureCQLPFTests, 3)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit", 3)
+        MeasuresPage.actionCenter('edit', 3)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -185,7 +185,7 @@ describe('Measure Association: Validations', () => {
 
         //validation test: Qi Core measure must be in draft status
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
@@ -197,7 +197,7 @@ describe('Measure Association: Validations', () => {
         cy.get(EditMeasurePage.cmsIDDialogContinue).click()
         cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.measureAction("version")
+        MeasuresPage.actionCenter('version')
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
@@ -231,7 +231,7 @@ describe('Measure Association: Validations', () => {
 
         //validation test: Qi Core measure must NOT contain CMS id
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
@@ -273,7 +273,7 @@ describe('Measure Association: Validations', () => {
         //validation test: both measures the user is not the owner of
         CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureNameAlt, QiCoreCqlLibraryNameAlt, measureCQLPFTests, null, true)
         OktaLogin.AltLogin()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -325,7 +325,7 @@ describe('Measure Association: Validations', () => {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -342,7 +342,7 @@ describe('Measure Association: Validations', () => {
         //0
         CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -360,7 +360,7 @@ describe('Measure Association: Validations', () => {
     })
     it('Association: QDM -> Qi Core measure: Successful Association', () => {
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)

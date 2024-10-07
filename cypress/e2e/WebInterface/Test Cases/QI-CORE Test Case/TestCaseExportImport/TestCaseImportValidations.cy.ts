@@ -76,7 +76,7 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -98,7 +98,7 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(Header.mainMadiePageButton).click().wait(3000)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -153,7 +153,7 @@ describe('Test Case Import: functionality tests', () => {
         cy.reload()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -240,7 +240,7 @@ describe('Test Case Import validations for versioned Measures', () => {
     it('Measure is in VERSIONED status: user is owner: import button is not available', () => {
 
         //Click on Version Measure
-        MeasuresPage.measureAction("version")
+        MeasuresPage.actionCenter('version')
 
         //Version measure and verify that it was versioned
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -255,7 +255,7 @@ describe('Test Case Import validations for versioned Measures', () => {
         cy.log('Version Created Successfully')
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -268,7 +268,7 @@ describe('Test Case Import validations for versioned Measures', () => {
     it('Measure is in VERSIONED status: measure has been shared with user: import button is not available', () => {
 
         //Click on Version Measure
-        MeasuresPage.measureAction("version")
+        MeasuresPage.actionCenter('version')
 
         //Version measure and verify that it was versioned
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -326,7 +326,7 @@ describe('Test Case Import validations for versioned Measures', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -361,7 +361,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
     it('Importing: not a .zip file', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -383,7 +383,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
     it('Importing: .zip\'s test case folder does not contain a json file', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -407,7 +407,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
     it('Importing: .zip\'s test case folder contains multiple json files', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -431,7 +431,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
     it('Importing: .zip\'s test case folder contains malformed json file', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -482,7 +482,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         CqlLibraryName = 'TestLibrary6' + Date.now()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, 2)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit", 2)
+        MeasuresPage.actionCenter('edit', 2)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().wait(1000).type('{moveToEnd}{enter}')
@@ -496,7 +496,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
         OktaLogin.Login()
 
-        MeasuresPage.measureAction("edit", 2)
+        MeasuresPage.actionCenter('edit', 2)
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
             .click()
@@ -510,7 +510,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.get(Header.mainMadiePageButton).click().wait(3000)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit", 2)
+        MeasuresPage.actionCenter('edit', 2)
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -531,7 +531,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.get(Header.mainMadiePageButton).click().wait(3000)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -595,7 +595,7 @@ describe('Test case uniqueness error validation', () => {
         OktaLogin.Login()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -645,7 +645,7 @@ describe('Test case uniqueness error validation', () => {
         cy.get(Header.mainMadiePageButton).click().wait(3000)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -708,7 +708,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         OktaLogin.Login()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit", 2)
+        MeasuresPage.actionCenter('edit', 2)
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -730,7 +730,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         cy.get(Header.mainMadiePageButton).click().wait(3000)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
