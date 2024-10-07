@@ -86,7 +86,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
     })
     it('Removing definition related to the RA alerts user.', () => {
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //click on the Risk Adjustment button / link on the left page to populate fields on the right
@@ -131,7 +131,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
     it('Fixing RA to point to something that is, now, in CQL, resolves alert.', () => {
 
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //click on the Risk Adjustment button / link on the left page to populate fields on the right
@@ -207,7 +207,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
     })
     it('Placing definition back into CQL and saving resolves the alert.', () => {
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //click on the Risk Adjustment button / link on the left page to populate fields on the right
@@ -273,7 +273,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
     // user is able to create, add, and save RAs on a group
     it('QI Core: User able to create, add, and save RA and RA description', () => {
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //click on the Risk Adjustment button / link on the left page to populate fields on the right
@@ -295,7 +295,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //navigate back to main measures page
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //click on the Risk Adjustment button / link on the left page to populate fields on the right
@@ -312,7 +312,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //navigate back to main measures page
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //click on the Risk Adjustment button / link on the left page to populate fields on the right

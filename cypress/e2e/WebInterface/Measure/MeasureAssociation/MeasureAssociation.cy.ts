@@ -72,7 +72,7 @@ describe('Measure Association: Validations', () => {
 
         OktaLogin.Login()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -80,7 +80,7 @@ describe('Measure Association: Validations', () => {
 
         cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.measureAction("edit", 2)
+        MeasuresPage.actionCenter('edit', 2)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -88,7 +88,7 @@ describe('Measure Association: Validations', () => {
 
         cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.measureAction("edit", 3)
+        MeasuresPage.actionCenter('edit', 3)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -96,7 +96,7 @@ describe('Measure Association: Validations', () => {
 
         cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.measureAction("edit", 4)
+        MeasuresPage.actionCenter('edit', 4)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -164,7 +164,7 @@ describe('Measure Association: Validations', () => {
         cy.reload()
 
         //validation test: Qi Core measure must be in draft status
-        MeasuresPage.measureAction("version", 4)
+        MeasuresPage.actionCenter('version', 4)
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
@@ -202,7 +202,7 @@ describe('Measure Association: Validations', () => {
 
         //validation test: Qi Core measure must NOT contain CMS id
         //add cms id to the Qi Core measure
-        MeasuresPage.measureAction("edit", 3)
+        MeasuresPage.actionCenter('edit', 3)
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
@@ -210,7 +210,7 @@ describe('Measure Association: Validations', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         //add cms id to the QDM measure
-        MeasuresPage.measureAction("edit", 2)
+        MeasuresPage.actionCenter('edit', 2)
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
@@ -247,7 +247,7 @@ describe('Measure Association: Validations', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureNameAlt, QiCoreCqlLibraryNameAlt, measureCQLPFTests, 5, true)
 
         OktaLogin.AltLogin()
-        MeasuresPage.measureAction("edit", 5)
+        MeasuresPage.actionCenter('edit', 5)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -306,7 +306,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         OktaLogin.Login()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
@@ -404,7 +404,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.measureAction("edit", 2)
+        MeasuresPage.actionCenter('edit', 2)
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -434,7 +434,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.associateCmsAssociateBtn).click()
         cy.get(EditMeasurePage.sureDialogContinueBtn).click()
 
-        MeasuresPage.measureAction('edit', 2)
+        MeasuresPage.actionCenter('edit', 2)
 
         //confirming the cms id on the QI Core measure
         cy.get(EditMeasurePage.cmsIdInput).invoke('val').then(val => {

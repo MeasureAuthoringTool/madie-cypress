@@ -37,7 +37,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
     })
     it('Verify Population Criteria page is properly populated, per Scoring type.', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
@@ -64,7 +64,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
     it('Confirm that a new Population Criteria can be added', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -93,7 +93,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
     it('Add UCUM Scoring Unit to Population Criteria', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
@@ -124,7 +124,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(LandingPage.myMeasuresTab).should('exist')
         cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //navigate to the criteria section of the PC
@@ -145,7 +145,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
     it('Add Rate Aggregation and Improvement Notation to Population Criteria', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
@@ -175,7 +175,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(LandingPage.myMeasuresTab).should('exist')
         cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Assert Rate Aggregation and Improvement Notation text box
@@ -201,7 +201,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(LandingPage.myMeasuresTab).should('exist')
         cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Assert Rate Aggregation and Improvement Notation text box
@@ -231,7 +231,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(LandingPage.myMeasuresTab).should('exist')
         cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Assert Rate Aggregation and Improvement Notation text box
@@ -245,7 +245,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
     it('Add Improvement Notation (Other) to Population Criteria', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
@@ -274,7 +274,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(LandingPage.myMeasuresTab).should('exist')
         cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Assert Rate Aggregation and Improvement Notation text box
@@ -287,7 +287,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
     it('Add Risk Adjustment Variables and Supplemental Data Elements to Population Criteria', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
@@ -337,7 +337,7 @@ describe('No values in QDM PC fields, when no CQL', () => {
     //no definitions in CQL -- no values for PC fields
     it('Verify that when there is no CQL or no definitions in the CQL, QDM Population Criteria fields have no values', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -375,7 +375,7 @@ describe('Save Population Criteria on QDM measure', () => {
     })
     it('Confirm that initial and new Population Criteria can have values saved', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -420,7 +420,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -435,7 +435,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
     })
 
     it('Validations when the Patient Basis is set to "Yes" and return type should be boolean', () => {
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -485,7 +485,7 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, booleanPatientBasisQDM_CQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -501,7 +501,7 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
 
     it('Validations when the Patient Basis is set to "No" and return type should be Non-boolean', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)

@@ -196,7 +196,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
     it('Verify if group populations are added/deleted, test case expected values will be updated', () => {
 
         //Create Ratio Measure group
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
 

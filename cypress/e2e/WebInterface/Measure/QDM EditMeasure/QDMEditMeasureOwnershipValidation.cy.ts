@@ -53,7 +53,7 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         cy.reload()
 
         //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)

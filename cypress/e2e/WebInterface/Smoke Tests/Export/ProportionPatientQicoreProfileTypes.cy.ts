@@ -205,7 +205,7 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
 
         OktaLogin.Login()
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()

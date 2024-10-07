@@ -105,7 +105,7 @@ describe('Measure Sharing', () => {
         OktaLogin.AltLogin()
 
         //Edit Measure details
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
         cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(updatedCqlLibraryName)
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
@@ -164,7 +164,7 @@ describe('Measure Sharing - Multiple instances', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{end} {enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -188,7 +188,7 @@ describe('Measure Sharing - Multiple instances', () => {
 
 
         //Version the Measure
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.versionMeasuresConfirmInput).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
@@ -305,7 +305,7 @@ describe('Delete Test Case with Shared user', () => {
         //Login as Alt User
         OktaLogin.AltLogin()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

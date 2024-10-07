@@ -104,7 +104,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
 
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -134,7 +134,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
     it('Verify error message on Measure Export when the Measure CQL has errors', () => {
 
         //Update Measure CQL with errors
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
             '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
@@ -176,7 +176,7 @@ describe('Error Message on Measure Export when the Measure does not have Populat
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
 
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -237,7 +237,7 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
         cy.get(Header.measures).click()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
         cy.get(EditMeasurePage.cqlEditorTextBox).type(updatedMeasureCQL)

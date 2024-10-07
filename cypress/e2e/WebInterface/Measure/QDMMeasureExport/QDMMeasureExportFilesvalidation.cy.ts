@@ -68,7 +68,7 @@ describe('Verify QDM Measure Export file contents', () => {
         //Create Measure and Measure group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -93,7 +93,7 @@ describe('Verify QDM Measure Export file contents', () => {
 
     it('Unzip the downloaded file and verify file types and contest of the HR and HQMF files, for QDM Measure', () => {
 
-        MeasuresPage.measureAction('qdmexport')
+        MeasuresPage.actionCenter('export')
 
         //verify zip file exists
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
@@ -311,7 +311,7 @@ describe('QDM Measure Export, Not the Owner', () => {
         //Create Measure and Measure group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -340,7 +340,7 @@ describe('QDM Measure Export, Not the Owner', () => {
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        MeasuresPage.measureAction('qdmexport')
+        MeasuresPage.actionCenter('export')
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
@@ -365,7 +365,7 @@ describe('Successful QDM Measure Export with versioned measure', () => {
         //Create Measure and Measure group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -390,7 +390,7 @@ describe('Successful QDM Measure Export with versioned measure', () => {
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        MeasuresPage.measureAction('version')
+        MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
@@ -404,7 +404,7 @@ describe('Successful QDM Measure Export with versioned measure', () => {
         MeasuresPage.validateVersionNumber(measureName, versionNumber)
         cy.log('Major Version Created Successfully')
 
-        MeasuresPage.measureAction('qdmexport')
+        MeasuresPage.actionCenter('export')
 
         //verify zip file exists
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v1.0.000-QDM.zip'), { timeout: 500000 }).should('exist')

@@ -268,7 +268,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
     it('Test Case expected / actual measure observation field aligns with what has been entered in the population criteria and other appropriate fields and sections', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -342,7 +342,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
         //navigate to the main measures page and edit the measure
         cy.get(Header.measures).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //navigate to the test case and the E/A sub-tab
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -369,7 +369,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
     it('Non-owner of measure cannot edit observation fields', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -453,7 +453,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.reload()
 
         //edit the measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //click on the test case main tab
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -488,7 +488,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJsonwMOElements, false, false)
         OktaLogin.Login()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()

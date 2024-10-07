@@ -25,7 +25,7 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Continuous Variable', true, measureQDMPBCQL, null, false,
             '2023-01-01', '2024-12-31')
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -48,7 +48,7 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
     it('Test Case execution with patient based groups with MOs', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -189,7 +189,7 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Continuous Variable', false, measureQDMNPBCQL, null, false,
             '2023-01-01', '2024-12-31')
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -212,7 +212,7 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
     it('Test Case execution with non-patient based groups with MOs', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')

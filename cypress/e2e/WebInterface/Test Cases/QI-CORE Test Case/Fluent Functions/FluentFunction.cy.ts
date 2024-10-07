@@ -44,7 +44,7 @@ describe('Fluent Function Capability', () => {
     it('Verify Fluent function for the Measure', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').should('exist').then((fileContents) => {
@@ -59,7 +59,7 @@ describe('Fluent Function Capability', () => {
         cy.get(Header.measures).click()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()

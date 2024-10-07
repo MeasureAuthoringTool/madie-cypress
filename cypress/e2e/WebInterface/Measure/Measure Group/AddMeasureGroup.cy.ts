@@ -33,7 +33,7 @@ describe('Validate Measure Group additions', () => {
     it('Able to add complete group to a measure whom already has a group and previous group is not affected', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click Second Measure Group
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)

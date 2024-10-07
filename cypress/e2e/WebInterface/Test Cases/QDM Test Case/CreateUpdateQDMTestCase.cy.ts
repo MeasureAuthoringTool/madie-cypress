@@ -119,7 +119,7 @@ describe('Create and Update QDM Test Case', () => {
 
     it('Create and Update Test Case for QDM Measure', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -173,7 +173,7 @@ describe('Create and Update QDM Test Case', () => {
 
     it('Add Test Case Expected values for Boolean Measure', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -223,7 +223,7 @@ describe('Non Boolean Test case Expected Values', () => {
 
     it('Add Test Case Expected values for Non Boolean Measure', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -274,7 +274,7 @@ describe('QDM element tabs', () => {
 
     it('Verify QDM Element tabs relevant to the Measure CQL', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -324,7 +324,7 @@ describe('Create and update QDM Test case validations', () => {
 
     it('Create Test case Validation: Test case Title has special characters', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -361,7 +361,7 @@ describe('Create and update QDM Test case validations', () => {
 
     it('Create Test case Validation: Test Case Group has special characters', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -398,7 +398,7 @@ describe('Create and update QDM Test case validations', () => {
 
     it('Edit Test case Validation: Test case Title has special characters', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -422,7 +422,7 @@ describe('Create and update QDM Test case validations', () => {
 
     it('Edit Test case Validation: Test case Group has special characters', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

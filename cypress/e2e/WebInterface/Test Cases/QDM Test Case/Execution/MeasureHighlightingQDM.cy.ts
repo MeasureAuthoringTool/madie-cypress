@@ -36,7 +36,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes validate /
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
         OktaLogin.Login()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -63,7 +63,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes validate /
 
         cy.get(Header.measures).click()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -120,7 +120,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
         OktaLogin.Login()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -147,7 +147,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
 
         cy.get(Header.measures).click()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -216,7 +216,7 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
         OktaLogin.Login()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -243,7 +243,7 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
 
         cy.get(Header.measures).click()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -316,7 +316,7 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
         OktaLogin.Login()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -343,7 +343,7 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
 
         cy.get(Header.measures).click()
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()

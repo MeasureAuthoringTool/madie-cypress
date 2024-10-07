@@ -26,7 +26,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQLPFTests)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -53,7 +53,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         cy.get(Header.measures).click()
 
         //click on created measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //click on the test case tab
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -80,7 +80,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         cy.get(Header.measures).click()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -103,7 +103,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         cy.get(Header.measures).click()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -131,7 +131,7 @@ describe('Import Test cases onto an existing QDM measure via file -- Message tha
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQLPFTests)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -160,7 +160,7 @@ describe('Import Test cases onto an existing QDM measure via file -- Message tha
         cy.get(Header.measures).click()
 
         //click on created measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //click on the test case tab
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -193,7 +193,7 @@ describe('Import Test cases onto an existing QDM measure via file -- Message tha
         cy.get(Header.measures).click()
 
         //click on created measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //click on the test case tab
         cy.get(EditMeasurePage.testCasesTab).click()

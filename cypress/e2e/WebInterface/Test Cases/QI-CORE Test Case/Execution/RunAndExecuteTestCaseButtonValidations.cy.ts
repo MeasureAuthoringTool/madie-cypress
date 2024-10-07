@@ -60,7 +60,7 @@ describe('Run / Execute Test Case button validations', () => {
         //
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -120,7 +120,7 @@ describe('Run / Execute Test Case button validations', () => {
 
     it('Run / Execute Test Case button is disabled  -- Missing group / population selections', () => {
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
@@ -153,7 +153,7 @@ describe('Run / Execute Test Case button validations', () => {
 
     it('Run / Execute Test Case button is disabled -- Invalid TC Json', () => {
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -258,7 +258,7 @@ describe('Run / Execute Test Case button validations', () => {
 
     it('Run / Execute Test Case button is disabled -- missing TC Json', () => {
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -345,7 +345,7 @@ describe('Run / Execute Test Case button validations', () => {
     it('Test case Json validated upon clicking Run Test button before Test Case is saved', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -445,7 +445,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -474,7 +474,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         let measurePath = 'cypress/fixtures/measureId'
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -598,7 +598,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -624,7 +624,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
     it('Run / Execute single passing Test Case', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -747,7 +747,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
     it('Run / Execute one passing and one failing Test Cases', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -915,7 +915,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
     it('Run / Execute single failing Test Cases', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -1026,7 +1026,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -1052,7 +1052,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
     it('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -1189,7 +1189,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
     it('Cannot "Run Test Case" or "Execute Test Case" when a test case has multiple errors and a warning', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -1318,7 +1318,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
     it('Cannot "Run Test Case" or "Execute Test Case" when a test case has an error and warning', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -1453,7 +1453,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -1479,7 +1479,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
     it('Can "Run Test Cases" on test case list page after when created after pristine groups', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -1595,7 +1595,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         ' (displays pass / fail) and results are the same for individual run on edit page', () => {
 
             //Click on Edit Measure
-            MeasuresPage.measureAction("edit")
+            MeasuresPage.actionCenter('edit')
 
             //Add second Measure Group with return type as Boolean
             cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -1887,7 +1887,7 @@ describe('Verify multiple IPs on the highlighting tab', () => {
         cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -1917,7 +1917,7 @@ describe('Verify multiple IPs on the highlighting tab', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()

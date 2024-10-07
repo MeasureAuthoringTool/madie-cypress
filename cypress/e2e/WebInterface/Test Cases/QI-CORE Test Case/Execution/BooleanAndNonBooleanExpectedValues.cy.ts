@@ -26,7 +26,7 @@ describe('Non Boolean Population Basis Expected values', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-02', '2013-01-01')
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -51,7 +51,7 @@ describe('Non Boolean Population Basis Expected values', () => {
     it('Verify Expected values for non boolean population basis', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -97,7 +97,7 @@ describe('Non Boolean Population Basis Expected values', () => {
     it('Verify Expected values for multiple measure groups with Boolean and Non boolean Population Basis', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -179,7 +179,7 @@ describe('Non Boolean Population Basis Expected values', () => {
     it('Verify Expected / Actual page dirty check with Non-Boolean Population Basis', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -222,7 +222,7 @@ describe('Non Boolean Population Basis Expected values', () => {
     it('Validate and save Non Boolean Expected values', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -289,7 +289,7 @@ describe('Boolean Population Basis Expected Values', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-02', '2013-01-01')
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -313,7 +313,7 @@ describe('Boolean Population Basis Expected Values', () => {
     it('Verify Boolean Expected values are saved to the database upon clicking save button for multiple Measure groups', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -398,7 +398,7 @@ describe('Boolean Population Basis Expected Values', () => {
     it('Verify Expected / Actual page dirty check with Boolean Population Basis and with multiple groups', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -477,7 +477,7 @@ describe('Expected values for second initial population', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-02', '2013-01-01')
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -501,7 +501,7 @@ describe('Expected values for second initial population', () => {
     it('Verify that the Expected value for second initial population can be selected', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')

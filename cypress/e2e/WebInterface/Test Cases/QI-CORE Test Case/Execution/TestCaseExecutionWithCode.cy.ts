@@ -36,7 +36,7 @@ describe('Test Case Execution with codes', () => {
     it('Verify Test Case Execution for the CQL that uses codes', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.readFile('cypress/fixtures/CQLWithCodes.txt').should('exist').then((fileContents) => {

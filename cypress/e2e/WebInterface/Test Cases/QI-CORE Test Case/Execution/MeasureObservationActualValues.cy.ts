@@ -81,7 +81,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
     it('Verify Actual values for Non Boolean CV Measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
@@ -135,7 +135,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
     it('Verify Actual values for Non Boolean Ratio Measure with MO', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
@@ -234,7 +234,7 @@ describe('Boolean Measure Observation Actual values', () => {
     it('Verify Actual values for Boolean CV Measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
@@ -282,7 +282,7 @@ describe('Boolean Measure Observation Actual values', () => {
     it('Verify Actual values for Boolean Ratio Measure with MO', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')

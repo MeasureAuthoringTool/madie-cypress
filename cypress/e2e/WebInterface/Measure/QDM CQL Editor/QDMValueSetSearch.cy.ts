@@ -159,7 +159,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
     it('Search, filter and apply Value Set to CQL', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to CQL Editor tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -215,7 +215,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
     it('Verify that Definition Version is disabled until OID/URL field is selected', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to CQL Editor tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -249,7 +249,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
     it('Value set Details screen', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to CQL Editor tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -285,7 +285,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
     it('Edit Value Set with suffix and apply to CQL', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to CQL Editor tab
         cy.get(EditMeasurePage.cqlEditorTab).click()

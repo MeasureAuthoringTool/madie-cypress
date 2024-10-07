@@ -32,7 +32,7 @@ describe('QDM Measure Set', () => {
 
     it('Add QDM Measure Set', () => {
 
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelMeasureSet).click()
         cy.get(EditMeasurePage.measureSetText).type('Measure Set')
         cy.get(EditMeasurePage.measureSetSaveBtn).click()
@@ -43,7 +43,7 @@ describe('QDM Measure Set', () => {
 
     it('Discard changes button', () => {
 
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Measure set page
         cy.get(EditMeasurePage.leftPanelMeasureSet).click()
@@ -77,7 +77,7 @@ describe('QDM Measure Set - ownership validations', () => {
 
         cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
         cy.reload()
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Measure set page
         cy.get(EditMeasurePage.leftPanelMeasureSet).click()

@@ -845,7 +845,7 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, newmeasureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -970,7 +970,7 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
             })
         })
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL)
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{end} {enter}')

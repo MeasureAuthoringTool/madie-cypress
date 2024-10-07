@@ -46,7 +46,7 @@ describe('Edit Measure Validations', () => {
     it('Verify error messages when the edit measure name entered is invalid', () => {
 
         //Click on Edit Button, Verify error message when the Measure Name field is empty
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.measureNameTextBox).clear()
         cy.get(EditMeasurePage.measureNameTextBox).focus().blur()
@@ -73,7 +73,7 @@ describe('Edit Measure Validations', () => {
 
     it('Verify error message when the eCQM abbreviated title entered is invalid or empty', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //eCQM abbreviated title empty
         cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).clear().focus().blur()
@@ -91,7 +91,7 @@ describe('Edit Measure Validations', () => {
 
     it('Verify error message when the endorsement id is null or invalid', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add invalid Endorser Number
         cy.get(EditMeasurePage.endorsingOrganizationTextBox).click()
@@ -135,7 +135,7 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period end date is after the start date', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(EditMeasurePage.mpEnd).clear().type('01/01/1999')
         cy.get(EditMeasurePage.mpStart).clear().type('12/01/2022')
@@ -146,7 +146,7 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period start and end dates are empty', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(EditMeasurePage.mpStart).type('{selectall}{backspace}{backspace}{backspace}').wait(1000)
         cy.get(EditMeasurePage.mpStart).focus().blur()
@@ -158,7 +158,7 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period start and end dates are not in valid range', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(EditMeasurePage.mpStart).clear().type('01/01/1800')
         cy.get(EditMeasurePage.mpEnd).click()
@@ -170,7 +170,7 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period start and end date format is not valid', () => {
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(EditMeasurePage.mpStart).clear().type('2020/01/02')
         cy.get(EditMeasurePage.mpEnd).click()
@@ -226,7 +226,7 @@ describe('Setting time / date value in EST reflects as the same in user time zon
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
 
@@ -266,7 +266,7 @@ describe('Setting time / date value in EST reflects as the same in user time zon
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
 

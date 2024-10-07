@@ -45,7 +45,7 @@ describe('Edit Measure: Add Meta Data', () => {
         let clinicalRecommendation = 'Clinical Recommendation'
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Verify that the Endorsement Number field is disabled before adding Endorsement Organization
         cy.get(EditMeasurePage.endorsementNumber).should('be.disabled')
@@ -120,7 +120,7 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(LandingPage.myMeasuresTab).should('be.visible')
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //verify that the CQL to ELM version is not empty
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
@@ -206,7 +206,7 @@ describe('Verify Measure Id and Version Id', () => {
         CreateMeasurePage.CreateQICoreMeasure(measureName, CqlLibraryName)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.measureId).should('exist')
         cy.get(EditMeasurePage.measureId).should('have.attr', 'readonly', 'readonly')
@@ -237,7 +237,7 @@ describe('Generate CMS ID for QI-Core Measure', () => {
     it('Verify that the CMS ID can be generated successfully for QI-Core Measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.generateCmsIdButton).should('exist')
         cy.get(EditMeasurePage.generateCmsIdButton).should('be.enabled')
@@ -285,7 +285,7 @@ describe('Generate CMS ID for QDM Measure', () => {
     it('Verify that the CMS ID can be generated successfully for QDM Measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //verify that the CQL to ELM version is not empty
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')

@@ -70,7 +70,7 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(Header.mainMadiePageButton).click().wait(3000)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -218,7 +218,7 @@ describe('MADIE Zip Test Case Import', () => {
     it('Copy Warning message while importing Test cases', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -333,7 +333,7 @@ describe('MADIE Zip Test Case Import: error message should appear when the .madi
         cy.get(Header.mainMadiePageButton).click().wait(3000)
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()

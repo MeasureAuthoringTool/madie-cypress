@@ -26,7 +26,7 @@ describe('Shift Test Case Dates tests for Qi-Core Measure', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -55,7 +55,7 @@ describe('Shift Test Case Dates tests for Qi-Core Measure', () => {
     it('MADiE Shift Test Case Dates -> Shift All Test Case\'s dates for Qi-Core Measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -136,7 +136,7 @@ describe('Shift Test Case Dates tests for Qi-Core Measure', () => {
     it('MADiE Shift Test Case Dates -> Shift single / specific test case\'s dates for Qi-Core Measure', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

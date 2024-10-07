@@ -42,7 +42,7 @@ describe('Clone QDM Test Case', () => {
     it('Clone QDM Test Case - Success scenario', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -67,7 +67,7 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

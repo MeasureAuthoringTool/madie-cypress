@@ -73,7 +73,7 @@ describe.skip('QDM CQL Definitions', () => {
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -286,7 +286,7 @@ describe.skip('QDM CQL Definitions - Expression Editor Name Option Validations',
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

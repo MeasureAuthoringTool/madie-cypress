@@ -57,7 +57,7 @@ describe('QI-Core : Delete All Test Cases', () => {
 
         OktaLogin.Login()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.deleteAllTestCasesBtn).click()
@@ -102,7 +102,7 @@ describe('QI-Core : Delete All Test Cases', () => {
         //Login to UI as ALT User
         OktaLogin.AltLogin()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.deleteAllTestCasesBtn).click()
@@ -130,7 +130,7 @@ describe('QI-Core : Delete All Test Cases', () => {
         cy.get(MeasuresPage.allMeasuresTab).wait(3000).click({ force: true })
         cy.reload()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -169,7 +169,7 @@ describe('QDM : Delete All Test Cases', () => {
 
         OktaLogin.Login()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.deleteAllTestCasesBtn).click()
@@ -214,7 +214,7 @@ describe('QDM : Delete All Test Cases', () => {
         //Login to UI as ALT User
         OktaLogin.AltLogin()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.deleteAllTestCasesBtn).click()
@@ -242,7 +242,7 @@ describe('QDM : Delete All Test Cases', () => {
         cy.get(MeasuresPage.allMeasuresTab).wait(3000).click({ force: true })
         cy.reload()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

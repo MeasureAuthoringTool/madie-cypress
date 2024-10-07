@@ -42,7 +42,7 @@ describe('QDM Code Search fields', () => {
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()

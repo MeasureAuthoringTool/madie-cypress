@@ -25,7 +25,7 @@ describe.skip('Qi-Core Library Includes fields', () => {
         OktaLogin.Login()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit", 0)
+        MeasuresPage.actionCenter('edit', 0)
 
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -73,7 +73,7 @@ describe.skip('Qi-Core Library Includes fields', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         //make a change to CQL (don't save)
-        MeasuresPage.measureAction("edit", 0)
+        MeasuresPage.actionCenter('edit', 0)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
@@ -120,7 +120,7 @@ describe.skip('Qi-Core Library Includes fields', () => {
 
         //make a change to the CQL but do not save
         cy.get(Header.mainMadiePageButton).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
@@ -170,7 +170,7 @@ describe.skip('Qi-Core Library Includes fields', () => {
         //make a change and save changes
         cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -217,7 +217,7 @@ describe.skip('Qi-Core Library Includes fields', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         //make a change to CQL (don't save)
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
@@ -265,7 +265,7 @@ describe.skip('Qi-Core Library Includes fields', () => {
 
         //make a change to the CQL but do not save
         cy.get(Header.mainMadiePageButton).click()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
@@ -313,7 +313,7 @@ describe.skip('Qi-Core Library Includes fields', () => {
         //make a change and save changes
         cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()

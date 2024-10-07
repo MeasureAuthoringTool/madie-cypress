@@ -43,7 +43,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
 
             //Click on Edit Measure
-            MeasuresPage.measureAction("edit")
+            MeasuresPage.actionCenter('edit')
 
             //Add second Measure Group with return type as Boolean
             cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -146,7 +146,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.reload()
 
             //Click on Edit Measure
-            MeasuresPage.measureAction("edit")
+            MeasuresPage.actionCenter('edit')
 
             //Click on Execute Test Case button on Edit Test Case page
             Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 37700)
@@ -179,7 +179,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         ' -- Run button is available and correct results are provided', () => {
 
             //Click on Edit Measure
-            MeasuresPage.measureAction("edit")
+            MeasuresPage.actionCenter('edit')
 
             //Add second Measure Group with return type as Boolean
             cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -283,7 +283,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.reload()
 
             //Click on Edit Measure
-            MeasuresPage.measureAction("edit")
+            MeasuresPage.actionCenter('edit')
             //refresh test case list page
             Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 37700)
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -317,7 +317,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
     it('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning -- when user is not the owner', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -418,7 +418,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         cy.reload()
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

@@ -52,7 +52,7 @@ describe('QDM Test Cases : Export Test Case', () => {
     it('Successful QRDA Export for QDM Test Cases', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -107,7 +107,7 @@ describe('QDM Test Cases : Export Test Case', () => {
     it('Export Test Case button is disabled until Test cases are executed', () => {
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -146,7 +146,7 @@ describe('Export Test cases by Non Measure Owner', () => {
 
         OktaLogin.Login()
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         //Save CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -173,7 +173,7 @@ describe('Export Test cases by Non Measure Owner', () => {
         cy.reload()
 
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
