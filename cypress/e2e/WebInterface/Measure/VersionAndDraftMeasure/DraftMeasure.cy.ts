@@ -141,7 +141,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         })
     })
 
-    it.only('Change / update model from v4.1.1 - to - v6.0.0 and vice versa with versioning and drafting', () => {
+    it('Change / update model from v4.1.1 - to - v6.0.0 and vice versa with versioning and drafting', () => {
 
         let versionNumberFirst = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
