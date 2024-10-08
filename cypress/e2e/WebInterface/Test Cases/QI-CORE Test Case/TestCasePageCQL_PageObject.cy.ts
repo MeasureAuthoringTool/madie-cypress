@@ -33,7 +33,7 @@ describe('Test Case Page CQL page object', () => {
 
     it('Updates applied and saved from the Measure CQL page / tab are updated and reflective in the Test Case Page', () => {
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -74,7 +74,7 @@ describe('Test Case Page CQL page object', () => {
 
     it('A message is displayed if there are issues with the CQL', () => {
         //Click on Edit Button
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //navigate to the CQL Editor tab, for the measure
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')

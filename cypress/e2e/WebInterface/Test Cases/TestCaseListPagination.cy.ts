@@ -76,7 +76,7 @@ describe('Test Case List Pagination', () => {
 
     it('Verify Pagination', () => {
 
-        MeasuresPage.measureAction('edit')
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()

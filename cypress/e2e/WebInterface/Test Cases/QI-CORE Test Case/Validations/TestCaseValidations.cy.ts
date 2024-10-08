@@ -45,7 +45,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Create test
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -74,7 +74,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Create test
     it('Enter Valid Test Case Json that contains Gender, Race, and Ethnicity data and confirm those pieces of data appears on the element tab', () => {
 
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Create test case
@@ -165,7 +165,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -194,7 +194,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
     it('Edit current test case to add an additional race but include the same Gender, Race, and Ethnicity data', () => {
 
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Create test case
@@ -314,7 +314,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -343,7 +343,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
     it('Edit current test case to add an additional race, when the user has had the measure shared with them. The edit contains Gender, Race, and Ethnicity data.', () => {
 
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Create test case
@@ -442,7 +442,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
 
         OktaLogin.AltLogin()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.testCaseAction('edit')
@@ -497,7 +497,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -526,7 +526,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
     it('Attempt to edit current test case to add an additional race, when the user is not the owner nor when the user has had the measure shared with them.', () => {
 
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Create test case
@@ -609,7 +609,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 20000)
         cy.get(MeasuresPage.allMeasuresTab).click()
 
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.testCaseAction('edit')
@@ -639,7 +639,7 @@ describe('Test Case Validations', () => {
     it('Create Test Case: Description more than 250 characters', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -653,7 +653,7 @@ describe('Test Case Validations', () => {
     it('Edit Test Case: Description more than 250 characters', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
@@ -671,7 +671,7 @@ describe('Test Case Validations', () => {
     it('Create Test Case: Title more than 250 characters', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -693,7 +693,7 @@ describe('Test Case Validations', () => {
     it('Edit Test Case: Title more than 250 characters', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
@@ -728,7 +728,7 @@ describe('Attempting to create a test case without a title', () => {
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -748,7 +748,7 @@ describe('Attempting to create a test case without a title', () => {
     it('Create Test Case without a title', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -766,7 +766,7 @@ describe('Attempting to create a test case without a title', () => {
     it('Edit and update test case to have no title', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
@@ -807,7 +807,7 @@ describe('Attempting to create a test case without a title', () => {
 
     it('Validate dirty check on the test case title, in the test case details tab', () => {
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
@@ -843,7 +843,7 @@ describe('Attempting to create a test case without a title', () => {
     })
     it('Validate dirty check on the test case description, in the test case details tab', () => {
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
@@ -872,7 +872,7 @@ describe('Attempting to create a test case without a title', () => {
     })
     it('Validate dirty check on the test case series, in the test case details tab', () => {
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
@@ -920,7 +920,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
     it('Create Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Create first Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -955,7 +955,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
     it('Edit Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
 
         //Click on Edit Measure
-        MeasuresPage.measureAction("edit")
+        MeasuresPage.actionCenter('edit')
 
         //Create second test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

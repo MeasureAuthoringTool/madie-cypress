@@ -231,7 +231,7 @@ export class MeasuresPage {
             }
             case 'associatemeasure': {
 
-                //there is a prerequsite that you have a measure created and measure ID stored for 'measureId' and 'measureId2'
+                //there is a prerequisite that you have a measure created and measure ID stored for 'measureId' and 'measureId2'
 
                 cy.readFile('cypress/fixtures/measureId2').should('exist').then((fileContents) => {
                     cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500)
