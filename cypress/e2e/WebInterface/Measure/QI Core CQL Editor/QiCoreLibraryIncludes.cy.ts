@@ -125,7 +125,8 @@ describe.skip('Qi-Core Library Includes fields', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         //make a change to CQL (don't save)
-        MeasuresPage.actionCenter("edit", 0)
+        MeasuresPage.actionCenter('edit', 0)
+
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
@@ -178,7 +179,7 @@ describe.skip('Qi-Core Library Includes fields', () => {
 
         //make a change to the CQL but do not save
         cy.get(Header.mainMadiePageButton).click()
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
