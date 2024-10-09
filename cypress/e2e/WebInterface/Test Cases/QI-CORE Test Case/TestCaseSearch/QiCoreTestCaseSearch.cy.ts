@@ -7,7 +7,8 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../../Shared/Header";
+import { Header } from "../../../../../Shared/Header"
+import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -15,8 +16,8 @@ let randValue = (Math.floor((Math.random() * 1000) + 1))
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
-let testCaseJson = 'test'
-let testCaseJson2nd = 'test'
+let testCaseJson = TestCaseJson.TestCaseJson_Valid
+let testCaseJson2nd = TestCaseJson.TestCaseJson_Valid
 let newMeasureName = measureName + randValue
 let measureCQL = MeasureCQL.CQL_Multiple_Populations
 let testCaseTitle2nd = 'Second TC - Title for Auto Test'
@@ -25,7 +26,7 @@ let testCaseSeries2nd = 'SecondTC-SBTestSeries'
 const now = require('dayjs')
 let todaysDate = now().format('MM/DD/YYYY')
 
-describe.skip('Non Boolean Population Basis Expected values', () => {
+describe('Non Boolean Population Basis Expected values', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -37,6 +38,12 @@ describe.skip('Non Boolean Population Basis Expected values', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
@@ -54,54 +61,8 @@ describe.skip('Non Boolean Population Basis Expected values', () => {
 
     })
 
-    it('Verify Expected values for non boolean population basis', () => {
 
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        //click on Expected/Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
-
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('2')
-
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('3')
-
-        //Save updated test case
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with ' +
-            'errors in JSON')
-
-        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseIPPExpected).should('contain.value', '1')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('contain.value', '2')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('contain.value', '3')
-
-    })
-
-    //
-    it('QDM Test Case search and filter functionality', () => {
+    it('Qi Core Test Case search and filter functionality', () => {
 
         //
         //Click on Edit Measure
@@ -113,63 +74,83 @@ describe.skip('Non Boolean Population Basis Expected values', () => {
 
         TestCasesPage.createTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd, testCaseJson2nd)
 
-        //navigate to the test case's edit page
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        //save the Test Case
-
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
-        //
-
-        //navigate back to main measure list page
-        cy.get(Header.mainMadiePageButton).click()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //start of work on MAT-7601
-
-
         //search for something that is in the description field
+        cy.get(TestCasesPage.tcSearchInput).type('Second')
+        cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select')
+        Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
+        cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.tcClearSearchIcon).click()
+        Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
         //search for soemthing that is in the status field
+        cy.get(TestCasesPage.tcSearchInput).type('NA')
+        cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select')
+        Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
         //search for something that is in the group field
+        cy.get(TestCasesPage.tcSearchInput).clear().type('SecondTC-SBTestSeries')
+        cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select')
+        Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
+        cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.tcClearSearchIcon).click()
+        Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
         //search for something that is in the title field
+        cy.get(TestCasesPage.tcSearchInput).type('Second TC - Title')
+        cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select')
+        Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
+        cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.tcClearSearchIcon).click()
+        Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
 
         //the filter by field
-
-        //search result should have no results
-
-        //clear search by clicking on "x"
+        cy.get(TestCasesPage.tcFilterInput).scrollIntoView().wait(1500).click()
+        cy.get(TestCasesPage.tcFilterByGroup).click()
+        cy.get(TestCasesPage.tcSearchInput).type('NA')
+        cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
+        Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow, 5000)
+        Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
+        cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.tcClearSearchIcon).click()
+        cy.get(TestCasesPage.tcSearchInput).type('Second TC - Title')
+        cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select')
+        Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
+        cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.tcClearSearchIcon).click()
+        Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
 
         //clear the Filter By by selecting the "-" option
+        cy.get(TestCasesPage.tcFilterInput).click()
+        cy.get(TestCasesPage.tcFilterByGroup).click()
+        cy.get(TestCasesPage.tcSearchInput).type('NA')
+        cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
+        Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow, 5000)
+        Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
+        cy.get(TestCasesPage.tcFilterInput).click()
+        cy.get(TestCasesPage.tcFilterByDeselect).click()
+        cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
+        Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow, 5000)
+        Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
+
 
         //running test cases on the test case list page runs all test wheither they are in the search results or not
-
-
-
+        cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.tcClearSearchIcon).click()
+        cy.get(TestCasesPage.tcSearchInput).type('Second TC - Title')
+        cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select')
+        Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
         //clicking on running the test case
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'PassQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'PassSecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select')
 
-
-        //Navigate to Test Cases page
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //clicking on running the test case
-        cy.get(TestCasesPage.executeTestCaseButton).click()
+        //clear search to show all test cases
+        cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.tcClearSearchIcon).click()
 
         //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'FailQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'PassSecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', 'PassSBTestSeriesTitle for Auto Test' + testCaseDescription + todaysDate + 'Select')
 
     })
-    it('QDM Test Case number and sorting behavior', () => {
+    it.skip('QDM Test Case number and sorting behavior', () => {
 
         //
         //Click on Edit Measure
