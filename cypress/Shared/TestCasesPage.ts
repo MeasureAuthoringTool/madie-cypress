@@ -151,6 +151,7 @@ export class TestCasesPage {
     //TC error concerning CQL and PC mismatch
     public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
     public static readonly testCaseResultrow = '[data-testid="test-case-row-0"]'
+    public static readonly testCaseResultrow2 = '[data-testid="test-case-row-1"]'
 
     //edit test case without knowing test case ID
     public static readonly actionBtnNoId = '[class="action-button"]'
@@ -223,6 +224,17 @@ export class TestCasesPage {
     public static readonly aceEditorJsonInput = '[data-testid="test-case-json-editor-input"]'
     public static readonly testCaseTitle = '[data-testid="test-case-title"]'
     public static readonly executeTestCaseButton = '[data-testid="execute-test-cases-button"]'
+    public static readonly tcSearchInput = '[data-testid="test-case-list-search-input"]'
+    public static readonly tcTriggerSearch = '[data-testid="test-cases-trigger-search"]'
+    public static readonly tcSearchIcone = '[data-testid="SearchIcon"]'
+    public static readonly tcClearSearch = '[data-testid="test-cases-clear-search"]'
+    public static readonly tcClearSearchIcon = '[data-testid="ClearIcon"]'
+    public static readonly tcFilterInput = '[data-testid="filter-by-select"]'
+    public static readonly tcFilterByStatus = '[data-testid="filter-by-Status"]'
+    public static readonly tcFilterByGroup = '[data-testid="filter-by-Group"]'
+    public static readonly tcFilterByTitle = '[data-testid="filter-by-Title"]'
+    public static readonly tcFilterByDescription = '[data-testid="filter-by-Description"]'
+    public static readonly tcFilterByDeselect = '[data-testid="filter-by--"]'
     public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
     public static readonly qdmSDESidNavLink = '[data-testid="nav-link-sde"]'
     public static readonly createTestCaseTitleInlineError = '[data-testid="create-test-case-title-helper-text"]'
