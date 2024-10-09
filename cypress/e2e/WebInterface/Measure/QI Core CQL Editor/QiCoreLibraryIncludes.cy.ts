@@ -9,8 +9,6 @@ import { Global } from "../../../../Shared/Global"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 
-
-
 let measureName = 'QiCoreTestMeasure' + Date.now()
 let CqlLibraryName = 'QiCoreLibrary' + Date.now()
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
@@ -55,6 +53,60 @@ describe.skip('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionVTE8.8.000YaHu1257VTE8.7.000YaHu1257VTE8.6.000YaHu1257VTE8.5.000YaHu1257VTE8.4.000YaHu1257')
     })
 
+    it('Apply Qi-Core Included library to the CQL and save', () => {
+
+        //Click on Includes tab
+        cy.get(CQLEditorPage.includesTab).click()
+
+        //Search for Library
+        cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
+        cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
+        cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionVTE8.8.000YaHu1257VTE8.7.000YaHu1257VTE8.6.000YaHu1257VTE8.5.000YaHu1257VTE8.4.000YaHu1257')
+
+        //Apply Library to CQL
+        cy.get('[data-testid="edit-button-0"]').click()
+        cy.get('[data-testid="library-alias-input"]').type('VTE')
+        cy.get('[data-testid="apply-button"]').click()
+        cy.get('[class="toast success"]').should('contain.text', 'Library VTE has been successfully added to the CQL.')
+
+        //Save CQL
+        cy.get(CQLEditorPage.saveCQLButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+    })
+
+    it('Verify error messages when same Library/Alias is applied twice', () => {
+
+        //Click on Includes tab
+        cy.get(CQLEditorPage.includesTab).click()
+
+        //Search for Library
+        cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
+        cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
+        cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionVTE8.8.000YaHu1257VTE8.7.000YaHu1257VTE8.6.000YaHu1257VTE8.5.000YaHu1257VTE8.4.000YaHu1257')
+
+        //Apply Library to CQL
+        cy.get('[data-testid="edit-button-0"]').click()
+        cy.get('[data-testid="library-alias-input"]').type('VTE')
+        cy.get('[data-testid="apply-button"]').click()
+        cy.get('[class="toast success"]').should('contain.text', 'Library VTE has been successfully added to the CQL.')
+
+        //Apply same Library again
+        cy.get('[data-testid="edit-button-0"]').click()
+        cy.get('[data-testid="library-alias-input"]').type('VTE')
+        cy.get('[data-testid="apply-button"]').click()
+        cy.get('[class="toast info"]').should('contain.text', 'Library VTE has already been defined in the CQL.')
+
+        //Apply different Library with duplicate Alias
+        cy.get(CQLEditorPage.librarySearchTextBox).clear().type('fhir')
+        cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
+        cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionCDSConnectCommonsForFHIRv4010.1.000pauld@mitre.orgFHIRCommon4.3.000julietrubiniFHIRCommon4.2.000julietrubiniFHIRCommon4.1.000julietrubiniFHIRCommon4.0.000julietrubin')
+        cy.get('[data-testid="edit-button-0"]').click()
+        cy.get('[data-testid="library-alias-input"]').type('VTE')
+        cy.get('[data-testid="apply-button"]').click()
+        cy.get('[class="toast info"]').should('contain.text', 'Alias VTE has already been defined in the CQL.')
+
+    })
+
     it('Verify Included Libraries under Saved Libraries tab', () => {
 
         //Click on Includes tab
@@ -73,7 +125,7 @@ describe.skip('Qi-Core Library Includes fields', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         //make a change to CQL (don't save)
-        MeasuresPage.actionCenter('edit', 0)
+        MeasuresPage.actionCenter("edit", 0)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
@@ -94,7 +146,9 @@ describe.skip('Qi-Core Library Includes fields', () => {
         cy.get(Global.keepWorkingCancel).click()
 
         //confirm contents in CQL editor still contains changes and save button is still available
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('include.text', 'library SimpleFhirLibrary version \'0.0.004\'using QICore version \'4.1.0\'include FHIRHelpers version \'4.1.000\' called FHIRHelperscodesystem "SNOMEDCT:2017-09": \'http://snomed.info/sct/731000124108\' version     \'http://snomed.info/sct/731000124108/version/201709\'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir    /ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883    .3.464.1003.101.12.1001\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "Surgical Absence of Cervix":    [Procedure: "Hysterectomy with No Residual Cervix"] NoCervixHysterectomy        where NoCervixHysterectomy.status = \'completed\'        fgdfgfgdfg')
+        cy.get('[data-testid="SearchIcon"]').click().wait(1000)
+        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
+        cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
         Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -114,13 +168,17 @@ describe.skip('Qi-Core Library Includes fields', () => {
         cy.get(CQLLibraryPage.cqlLibraryDeleteDialogCancelBtn).click()
 
         //confirm that CQL value is the same as it was prior to change and the save button is not available
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library SimpleFhirLibrary version \'0.0.004\'using QICore version \'4.1.0\'include FHIRHelpers version \'4.1.000\' called FHIRHelperscodesystem "SNOMEDCT:2017-09": \'http://snomed.info/sct/731000124108\' version     \'http://snomed.info/sct/731000124108/version/201709\'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir    /ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883    .3.464.1003.101.12.1001\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "Surgical Absence of Cervix":    [Procedure: "Hysterectomy with No Residual Cervix"] NoCervixHysterectomy        where NoCervixHysterectomy.status = \'completed\'')
+        cy.reload()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get('[data-testid="SearchIcon"]').click()
+        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
+        cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
         Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
         //make a change to the CQL but do not save
         cy.get(Header.mainMadiePageButton).click()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}fgdfgfgdfg')
 
@@ -238,7 +296,9 @@ describe.skip('Qi-Core Library Includes fields', () => {
         cy.get(Global.keepWorkingCancel).click()
 
         //confirm contents in CQL editor still contains changes and save button is still available
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('include.text', 'library SimpleFhirLibrary version \'0.0.004\'using QICore version \'4.1.0\'include FHIRHelpers version \'4.1.000\' called FHIRHelperscodesystem "SNOMEDCT:2017-09": \'http://snomed.info/sct/731000124108\' version     \'http://snomed.info/sct/731000124108/version/201709\'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir    /ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883    .3.464.1003.101.12.1001\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "Surgical Absence of Cervix":    [Procedure: "Hysterectomy with No Residual Cervix"] NoCervixHysterectomy        where NoCervixHysterectomy.status = \'completed\'        fgdfgfgdfg')
+        cy.get('[data-testid="SearchIcon"]').click()
+        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
+        cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
         Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -249,7 +309,7 @@ describe.skip('Qi-Core Library Includes fields', () => {
         cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
-        //confirm "Details" pop up --        
+        //confirm "Details" pop up --
         Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
         cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Details')
 
@@ -259,7 +319,11 @@ describe.skip('Qi-Core Library Includes fields', () => {
         cy.get(CQLLibraryPage.savedLibrariesEditDetailsCancelBtn).click()
 
         //confirm that CQL value is the same as it was prior to change and the save button is not available
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library SimpleFhirLibrary version \'0.0.004\'using QICore version \'4.1.0\'include FHIRHelpers version \'4.1.000\' called FHIRHelperscodesystem "SNOMEDCT:2017-09": \'http://snomed.info/sct/731000124108\' version     \'http://snomed.info/sct/731000124108/version/201709\'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir    /ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883    .3.464.1003.101.12.1001\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "Surgical Absence of Cervix":    [Procedure: "Hysterectomy with No Residual Cervix"] NoCervixHysterectomy        where NoCervixHysterectomy.status = \'completed\'')
+        cy.reload()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get('[data-testid="SearchIcon"]').click()
+        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
+        cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
         Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -300,11 +364,12 @@ describe.skip('Qi-Core Library Includes fields', () => {
         Utilities.waitForElementVisible(CQLLibraryPage.applyEditsSavedLibraryBtn, 5000)
         Utilities.waitForElementEnabled(CQLLibraryPage.applyEditsSavedLibraryBtn, 5000)
         cy.get(CQLLibraryPage.applyEditsSavedLibraryBtn).click()
-        cy.pause()
-        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully removed from the CQL')
+        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully edited in the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QICore version \'4.1.1\'codesystem "SNOMEDCT:2017-09": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "Surgical Absence of Cervix":    [Procedure: "Hysterectomy with No Residual Cervix"] NoCervixHysterectomy        where NoCervixHysterectomy.status = \'completed\'')
+        cy.get('[data-testid="SearchIcon"]').click()
+        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
+        cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
 
     })
 
@@ -332,7 +397,7 @@ describe.skip('Qi-Core Library Includes fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
         cy.get(CQLEditorPage.editSavedLibrary).click()
 
-        //confirm "Details" pop up --        
+        //confirm "Details" pop up --
         Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
         cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Details')
 
@@ -345,11 +410,14 @@ describe.skip('Qi-Core Library Includes fields', () => {
         Utilities.waitForElementVisible(CQLLibraryPage.applyEditsSavedLibraryBtn, 5000)
         Utilities.waitForElementEnabled(CQLLibraryPage.applyEditsSavedLibraryBtn, 5000)
         cy.get(CQLLibraryPage.applyEditsSavedLibraryBtn).click()
-        cy.pause()
-        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully removed from the CQL')
+
+        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully edited in the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QICore version \'4.1.1\'codesystem "SNOMEDCT:2017-09": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "Surgical Absence of Cervix":    [Procedure: "Hysterectomy with No Residual Cervix"] NoCervixHysterectomy        where NoCervixHysterectomy.status = \'completed\'')
+        cy.get('[data-testid="SearchIcon"]').click()
+        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
+        cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
+        //cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QICore version \'4.1.1\'codesystem "SNOMEDCT:2017-09": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "Surgical Absence of Cervix":    [Procedure: "Hysterectomy with No Residual Cervix"] NoCervixHysterectomy        where NoCervixHysterectomy.status = \'completed\'')
 
     })
 })

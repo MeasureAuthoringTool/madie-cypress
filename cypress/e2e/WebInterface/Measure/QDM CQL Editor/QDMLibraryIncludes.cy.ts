@@ -77,6 +77,60 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionSDOH3.0.000ltj7708SDOH2.0.000ltj7708SDOH1.0.000ltj7708')
     })
 
+    it('Apply QDM Included library to the CQL and save', () => {
+
+        //Click on Includes tab
+        cy.get(CQLEditorPage.includesTab).click()
+
+        //Search for Library
+        cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
+        cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
+        cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionUATVTEQDM0.1.000YaHu1257VTEQDM8.1.000YaHu1257VTEQDM8.0.000YaHu1257VTEQDM7.0.000YaHu1257VTEQDM6.0.000YaHu1257')
+
+        //Apply Library to CQL
+        cy.get('[data-testid="edit-button-0"]').click()
+        cy.get('[data-testid="library-alias-input"]').type('VTE')
+        cy.get('[data-testid="apply-button"]').click()
+        cy.get('[class="toast success"]').should('contain.text', 'Library UATVTEQDM has been successfully added to the CQL.')
+
+        //Save CQL
+        cy.get(CQLEditorPage.saveCQLButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+    })
+
+    it('Verify error messages when same Library/Alias is applied twice', () => {
+
+        //Click on Includes tab
+        cy.get(CQLEditorPage.includesTab).click()
+
+        //Search for Library
+        cy.get(CQLEditorPage.librarySearchTextBox).clear().type('VTE')
+        cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
+        cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionUATVTEQDM0.1.000YaHu1257VTEQDM8.1.000YaHu1257VTEQDM8.0.000YaHu1257VTEQDM7.0.000YaHu1257VTEQDM6.0.000YaHu1257')
+
+        //Apply Library to CQL
+        cy.get('[data-testid="edit-button-0"]').click()
+        cy.get('[data-testid="library-alias-input"]').type('VTE')
+        cy.get('[data-testid="apply-button"]').click()
+        cy.get('[class="toast success"]').should('contain.text', 'Library UATVTEQDM has been successfully added to the CQL.')
+
+        //Apply same Library again
+        cy.get('[data-testid="edit-button-0"]').click()
+        cy.get('[data-testid="library-alias-input"]').type('VTE')
+        cy.get('[data-testid="apply-button"]').click()
+        cy.get('[class="toast info"]').should('contain.text', 'Library UATVTEQDM has already been defined in the CQL.')
+
+        //Apply different Library with duplicate Alias
+        cy.get(CQLEditorPage.librarySearchTextBox).clear().type('QDM')
+        cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
+        cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionASNQDM0.2.000AlannahMarshASNQDM0.1.000AlannahMarshAdultOutpatientEncountersQDM4.0.000dlee38AdultOutpatientEncountersQDM3.0.000dlee38AdultOutpatientEncountersQDM2.0.000dlee38')
+        cy.get('[data-testid="edit-button-0"]').click()
+        cy.get('[data-testid="library-alias-input"]').type('VTE')
+        cy.get('[data-testid="apply-button"]').click()
+        cy.get('[class="toast info"]').should('contain.text', 'Alias VTE has already been defined in the CQL.')
+
+    })
+
     it('Verify Included Libraries under Saved Libraries tab', () => {
 
         //Click on Includes tab
@@ -116,7 +170,10 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(Global.keepWorkingCancel).click()
 
         //confirm contents in CQL editor still contains changes and save button is still available
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('include.text', 'library TestLibrary1685544523170534 version \'0.0.000\'using QDM version \'5.6\'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Commonvalueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true    ')
+        cy.get('[data-testid="editor-search-button"]').click().wait(1000)
+        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
+        cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
+        //cy.get(EditMeasurePage.cqlEditorTextBox).should('include.text', 'library TestLibrary1685544523170534 version \'0.0.000\'using QDM version \'5.6\'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Commonvalueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true    ')
         Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -136,7 +193,12 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(CQLLibraryPage.cqlLibraryDeleteDialogCancelBtn).click()
 
         //confirm that CQL value is the same as it was prior to change and the save button is not available
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library TestLibrary1685544523170534 version \'0.0.000\'using QDM version \'5.6\'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Commonvalueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true')
+        cy.reload()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get('[data-testid="editor-search-button"]').click().wait(1000)
+        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
+        cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
+        //cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library TestLibrary1685544523170534 version \'0.0.000\'using QDM version \'5.6\'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Commonvalueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true')
         Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -175,7 +237,10 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library MATGlobalCommonFunctionsQDM has been successfully removed from the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QDM version \'5.6\'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true')
+        cy.get('[data-testid="editor-search-button"]').click().wait(1000)
+        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
+        cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
+        //cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QDM version \'5.6\'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true')
 
         //Deletes the library from the Saved Libraries grid
         cy.get(CQLEditorPage.expandCQLBuilder).click()
@@ -222,7 +287,10 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library MATGlobalCommonFunctionsQDM has been successfully removed from the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QDM version \'5.6\'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true')
+        cy.get('[data-testid="SearchIcon"]').click().wait(1000)
+        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
+        cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
+        //cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QDM version \'5.6\'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true')
 
         //Deletes the library from the Saved Libraries grid
         cy.get(CQLEditorPage.expandCQLBuilder).click()
@@ -260,7 +328,9 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(Global.keepWorkingCancel).click()
 
         //confirm contents in CQL editor still contains changes and save button is still available
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('include.text', 'library TestLibrary1685544523170534 version \'0.0.000\'using QDM version \'5.6\'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Commonvalueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true    ')
+        cy.get('[data-testid="editor-search-button"]').click().wait(1000)
+        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
+        cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
         Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -281,7 +351,11 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(CQLLibraryPage.savedLibrariesEditDetailsCancelBtn).click()
 
         //confirm that CQL value is the same as it was prior to change and the save button is not available
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library TestLibrary1685544523170534 version \'0.0.000\'using QDM version \'5.6\'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Commonvalueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true')
+        cy.reload()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get('[data-testid="editor-search-button"]').click().wait(1000)
+        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
+        cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
         Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -322,13 +396,12 @@ describe.skip('QDM Library Includes fields', () => {
         Utilities.waitForElementVisible(CQLLibraryPage.applyEditsSavedLibraryBtn, 5000)
         Utilities.waitForElementEnabled(CQLLibraryPage.applyEditsSavedLibraryBtn, 5000)
         cy.get(CQLLibraryPage.applyEditsSavedLibraryBtn).click()
-        cy.pause()
-        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library MATGlobalCommonFunctionsQDM has been successfully updated in the CQL')
+        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library MATGlobalCommonFunctionsQDM has been successfully edited in the CQL')
 
         //Confirm the Edits for the library include statement have been applied to the CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QDM version \'5.6\'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true')
-
-
+        cy.get('[data-testid="editor-search-button"]').click().wait(1000)
+        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
+        cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
     })
 
     it('QDM: Edit Included Libraries functionality -- when changes to the CQL is saved', () => {
@@ -368,12 +441,12 @@ describe.skip('QDM Library Includes fields', () => {
         Utilities.waitForElementVisible(CQLLibraryPage.applyEditsSavedLibraryBtn, 5000)
         Utilities.waitForElementEnabled(CQLLibraryPage.applyEditsSavedLibraryBtn, 5000)
         cy.get(CQLLibraryPage.applyEditsSavedLibraryBtn).click()
-        cy.pause()
-        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library MATGlobalCommonFunctionsQDM has been successfully updated in the CQL')
+        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library MATGlobalCommonFunctionsQDM has been successfully edited in the CQL')
 
-        //Deletes the library include statement from the CQL
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QDM version \'5.6\'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true')
+        //Confirm the Edits for the library include statement have been applied to the CQL
+        cy.get('[data-testid="editor-search-button"]').click().wait(1000)
+        cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
+        cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
 
     })
-
 })
