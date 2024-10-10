@@ -449,11 +449,6 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratAssociationOne).should('exist').should('be.visible').click().type('denominator')
         cy.get('[id="association-select-1-option-0"]').click()
 
-
-        //save
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
         //Click on Stratification tab
         Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')

@@ -14,56 +14,30 @@ let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let measureCQL = 'library Generic version \'0.0.000\'\n' +
+let measureCQL = 'library CQLLibrary5170 version \'0.0.000\'\n' +
     '\n' +
-    '/*\n' +
-    'Based on CMS124v7 - Cervical Cancer Screening\n' +
-    '*/\n' +
+    'using FHIR version \'4.0.1\'\n' +
     '\n' +
-    '/*\n' +
-    'This example is a work in progress and should not be considered a final specification\n' +
-    'or recommendation for guidance. This example will help guide and direct the process\n' +
-    'of finding conventions and usage patterns that meet the needs of the various stakeholders\n' +
-    'in the measure development community.\n' +
-    '*/\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
-    'include FHIRHelpers version \'4.1.000\'\n' +
-    'include CQMCommon version \'1.0.000\' called Global\n' +
-    '\n' +
-    'valueset "ONC Administrative Sex": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1\'\n' +
-    'valueset "Race": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836\'\n' +
-    'valueset "Ethnicity": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837\'\n' +
-    'valueset "Payer": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.3591\'\n' +
-    'valueset "Female": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.560.100.2\'\n' +
-    'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
-    'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
-    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-    'valueset "Pap Test": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.108.12.1017\'\n' +
-    'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
-    'valueset "Preventive Care Services-Initial Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\'\n' +
-    'valueset "HPV Test": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.110.12.1059\'\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     '\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
-    '  default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
     '\n' +
     'context Patient\n' +
     '\n' +
     'define "Initial Population":\n' +
-    ' true\n' +
-    '\n' +
-    'define "Initial Population2":\n' +
-    '  true\n' +
-    '\n' +
-    'define "Denominator":\n' +
-    '   \t"Initial Population"\n' +
-    '\n' +
-    'define "Denominator Exclusion":\n' +
-    '\ttrue\n' +
-    '\n' +
-    'define "Numerator":\n' +
-    '\ttrue'
+        ' true\n' +
+        '\n' +
+        'define "Initial Population2":\n' +
+        '  true\n' +
+        '\n' +
+        'define "Denominator":\n' +
+        '   \t"Initial Population"\n' +
+        '\n' +
+        'define "Denominator Exclusion":\n' +
+        '\ttrue\n' +
+        '\n' +
+        'define "Numerator":\n' +
+        '\ttrue'
 
 describe('Validate Measure Group -- scoring and populations', () => {
 

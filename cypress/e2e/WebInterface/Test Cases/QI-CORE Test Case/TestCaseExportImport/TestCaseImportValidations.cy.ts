@@ -249,6 +249,8 @@ describe('Test Case Import validations for versioned Measures', () => {
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
+        Utilities.waitForElementEnabled(MeasuresPage.measureVersionContinueBtn, 60000)
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.enabled')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(measureName, versionNumber)
@@ -277,6 +279,8 @@ describe('Test Case Import validations for versioned Measures', () => {
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
+        Utilities.waitForElementEnabled(MeasuresPage.measureVersionContinueBtn, 60000)
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.enabled')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(measureName, versionNumber)
