@@ -79,22 +79,17 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
     it('Verify error message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
 
-            Utilities.waitForElementVisible('[data-testid=export-measure-' + fileContents + ']', 30000)
-            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=export-measure-' + fileContents + ']', 30000)
-            cy.get('[data-testid=export-measure-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=export-measure-' + fileContents + ']').click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
+            cy.get('[data-testid="export-action-btn"]').should('be.visible')
+            cy.get('[data-testid="export-action-btn"]').should('be.enabled')
+            cy.get('[data-testid="export-action-btn"]').click()
 
             cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
             cy.get('[data-testid="error-message"] > ul > :nth-child(1)').should('contain.text', 'Missing Measure Developers')
             cy.get('[data-testid="error-message"] > ul > :nth-child(2)').should('contain.text', 'Missing Steward')
             cy.get('[data-testid="error-message"] > ul > :nth-child(3)').should('contain.text', 'Missing Description')
+
         })
     })
 })
@@ -131,21 +126,13 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         cy.get(Header.measures).click()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
-
-            Utilities.waitForElementVisible('[data-testid=export-measure-' + fileContents + ']', 30000)
-            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=export-measure-' + fileContents + ']', 30000)
-            cy.get('[data-testid=export-measure-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=export-measure-' + fileContents + ']').click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
+            cy.get('[data-testid="export-action-btn"]').should('be.visible')
+            cy.get('[data-testid="export-action-btn"]').should('be.enabled')
+            cy.get('[data-testid="export-action-btn"]').click()
 
             cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
-            //Need to re visit once MAT-6976 is fixed
-            //cy.get('[data-testid="error-message"] > ul > :nth-child(1)').should('contain.text', 'Missing CQL')
+
         })
     })
 
@@ -164,21 +151,13 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         cy.get(Header.measures).click()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
-
-            Utilities.waitForElementVisible('[data-testid=export-measure-' + fileContents + ']', 30000)
-            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=export-measure-' + fileContents + ']', 30000)
-            cy.get('[data-testid=export-measure-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=export-measure-' + fileContents + ']').click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
+            cy.get('[data-testid="export-action-btn"]').should('be.visible')
+            cy.get('[data-testid="export-action-btn"]').should('be.enabled')
+            cy.get('[data-testid="export-action-btn"]').click()
 
             cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
-            //Need to re visit once MAT-6976 is fixed
-            //cy.get('[data-testid="error-message"] > ul > :nth-child(1)').should('contain.text', 'CQL Contains Errors')
+
         })
     })
 })
@@ -215,17 +194,10 @@ describe('Error Message on Measure Export when the Measure does not have Populat
         cy.get(Header.measures).click()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
-
-            Utilities.waitForElementVisible('[data-testid=export-measure-' + fileContents + ']', 30000)
-            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=export-measure-' + fileContents + ']', 30000)
-            cy.get('[data-testid=export-measure-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=export-measure-' + fileContents + ']').click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
+            cy.get('[data-testid="export-action-btn"]').should('be.visible')
+            cy.get('[data-testid="export-action-btn"]').should('be.enabled')
+            cy.get('[data-testid="export-action-btn"]').click()
 
             cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
             cy.get('[data-testid="error-message"] > ul > :nth-child(1)').should('contain.text', 'Missing Population Criteria')
@@ -269,17 +241,10 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
         cy.get(Header.measures).click()
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
-
-            Utilities.waitForElementVisible('[data-testid=export-measure-' + fileContents + ']', 30000)
-            cy.get('[data-testid=view-measure-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=export-measure-' + fileContents + ']', 30000)
-            cy.get('[data-testid=export-measure-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=export-measure-' + fileContents + ']').click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
+            cy.get('[data-testid="export-action-btn"]').should('be.visible')
+            cy.get('[data-testid="export-action-btn"]').should('be.enabled')
+            cy.get('[data-testid="export-action-btn"]').click()
 
             cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
             cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'CQL Populations Return Types are invalid')

@@ -195,15 +195,13 @@ describe('Non Measure owner unable to create Version', () => {
         cy.reload()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
 
             //Verify version button is not visible
             cy.get('[data-testid=create-version-measure-' + fileContents + ']').should('not.exist')
-            cy.get('[data-testid="view-measure-' + fileContents + '"]').click()
+            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
         })
     })
 })

@@ -198,16 +198,10 @@ describe('Measure Sharing - Multiple instances', () => {
 
         //Draft the Versioned Measure
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-action-' + fileContents + '"]', 100000)
-            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="measure-action-' + fileContents + '"]', 100000)
-            cy.get('[data-testid="measure-action-' + fileContents + '"]').should('be.enabled')
-            cy.get('[data-testid="measure-action-' + fileContents + '"]').click().wait(1000)
-            Utilities.waitForElementVisible('[data-testid="draft-measure-' + fileContents + '"]', 105000)
-            cy.get('[data-testid="draft-measure-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="draft-measure-' + fileContents + '"]', 105000)
-            cy.get('[data-testid="draft-measure-' + fileContents + '"]').should('be.enabled')
-            cy.get('[data-testid="draft-measure-' + fileContents + '"]').click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
+            cy.get('[data-testid="draft-action-btn"]').should('be.visible')
+            cy.get('[data-testid="draft-action-btn"]').should('be.enabled')
+            cy.get('[data-testid="draft-action-btn"]').click()
         })
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         //intercept draft id once measure is drafted

@@ -53,7 +53,8 @@ describe('Measure Versioning validations', () => {
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 7000)
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).wait(2000).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -82,7 +83,8 @@ describe('Measure Versioning validations', () => {
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 7000)
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).wait(2000).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -126,13 +128,14 @@ describe('Measure Versioning when the measure has test case with errors', () => 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, invalidTestCaseJson)
 
         //Navigate to Measures Page
-        cy.get(Header.measures).click()
+        cy.get(Header.measures).click().wait(3500)
 
-        MeasuresPage.actionCenter('version')
+        MeasuresPage.actionCenter('version', 0)
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 7000)
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).wait(2000).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -147,11 +150,15 @@ describe('Measure Versioning when the measure has test case with errors', () => 
 
         Utilities.waitForElementToNotExist(TestCasesPage.versionMeasureWithTCErrors, 20000)
 
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(3500).click()
+        })
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 7000)
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).wait(2000).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -190,21 +197,19 @@ describe('Non Measure owner unable to create Version', () => {
     it('Verify Version button is not visible for non Measure owner', () => {
 
         //Navigate to Measures Page
-        cy.get(Header.measures).click()
+        cy.get(Header.measures).click().wait(3500)
 
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
 
             //Verify version button is not visible
             cy.get('[data-testid=create-version-measure-' + fileContents + ']').should('not.exist')
-            cy.get('[data-testid="view-measure-' + fileContents + '"]').click()
+            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
         })
 
     })
