@@ -6,7 +6,23 @@ cypress/results/
 .vscode/
 .idea/*
 
-
+# files for local processing
+cypress/fixtures/cqlLibraryId
+cypress/fixtures/cqlLibraryId2
+cypress/fixtures/groupId
+cypress/fixtures/groupId2
+cypress/fixtures/measureId
+cypress/fixtures/measureId2
+cypress/fixtures/measureId3
+cypress/fixtures/measureId4
+cypress/fixtures/measureSetId
+cypress/fixtures/measureSetId2
+cypress/fixtures/measureSetId3
+cypress/fixtures/measureSetId4
+cypress/fixtures/testCaseId
+cypress/fixtures/testCaseId2
+cypress/fixtures/versionId
+cypress/fixtures/versionId2
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/node
