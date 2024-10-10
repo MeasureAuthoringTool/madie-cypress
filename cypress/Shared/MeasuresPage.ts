@@ -172,7 +172,7 @@ export class MeasuresPage {
 
             case 'edit': {
 
-                cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.readFile(filePath).should('exist').then((fileContents) => {
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
                     cy.get('[data-testid=measure-action-' + fileContents + ']').click()
@@ -182,7 +182,7 @@ export class MeasuresPage {
 
             case 'view': {
 
-                cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.readFile(filePath).should('exist').then((fileContents) => {
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
                     cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
                     cy.get('[data-testid=measure-action-' + fileContents + ']').click()
