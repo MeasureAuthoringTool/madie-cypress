@@ -5,6 +5,7 @@ cypress/videos/
 cypress/results/
 .vscode/
 .idea/*
+cypress.env.json
 
 # files for local processing
 cypress/fixtures/cqlLibraryId
