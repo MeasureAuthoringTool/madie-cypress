@@ -81,6 +81,9 @@ export class CQLEditorPage {
     public static readonly deleteSavedLibrary = '[data-testid="DeleteOutlineIcon"]'
     public static readonly editSavedLibrary = '[data-testid="BorderColorOutlinedIcon"]'
     public static readonly libraryResultsTable = '[data-testid="library-results-table-body"]'
+    public static readonly viewSavedLibrary = '[data-testid="view-button-0"]'
+    public static readonly aliasName = '[data-testid="library-alias-container"]'
+    public static readonly versionNumber = '[data-testid="library-version-container"]'
 
     //Definitions page
     public static readonly definitionsTab = '[data-testid="definitions-tab"]'
