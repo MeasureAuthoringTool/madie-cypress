@@ -553,11 +553,20 @@ export class MeasureGroupPage {
         return user
     }
 
-    public static CreateCohortMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, popBasis?: string): string {
+    public static CreateCohortMeasureGroupAPI(twoMeasureGroups?: boolean, altUser?: boolean, PopIniPopP?: string, popBasis?: string, measureNumber?: number): string {
         let user = ''
         let measurePath = ''
         let measureGroupPath = ''
         let measureScoring = 'Cohort'
+        if ((measureNumber === undefined) || (measureNumber === null)) {
+            measureNumber = 0
+            measurePath = 'cypress/fixtures/measureId'
+        }
+
+
+        if (measureNumber > 0) {
+            measurePath = 'cypress/fixtures/measureId' + measureNumber
+        }
         if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
         if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Initial PopulationOne' }
         if (altUser) {
@@ -569,12 +578,10 @@ export class MeasureGroupPage {
             user = Environment.credentials().harpUser
         }
         if (twoMeasureGroups === true) {
-            measurePath = 'cypress/fixtures/measureId2'
             measureGroupPath = 'cypress/fixtures/groupId2'
             //cy.writeFile('cypress/fixtures/measureId2', response.body.id)
         }
         else {
-            measurePath = 'cypress/fixtures/measureId'
             measureGroupPath = 'cypress/fixtures/groupId'
         }
 

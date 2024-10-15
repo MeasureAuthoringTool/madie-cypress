@@ -7,7 +7,6 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../../Shared/Header"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 
 let measureName = 'TestMeasure' + Date.now()
@@ -63,8 +62,6 @@ describe('Non Boolean Population Basis Expected values', () => {
 
 
     it('Qi Core Test Case search and filter functionality', () => {
-
-        //
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -150,67 +147,4 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', 'PassSBTestSeriesTitle for Auto Test' + testCaseDescription + todaysDate + 'Select')
 
     })
-    it.skip('QDM Test Case number and sorting behavior', () => {
-
-        //
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd)
-
-        //navigate to the test case's edit page
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        //save the Test Case
-
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
-        //
-
-        //navigate back to main measure list page
-        cy.get(Header.mainMadiePageButton).click()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //start of work on MAT-7604
-
-        //test case numbers appear
-
-
-        //first click sorts ascending order
-        //second click sorts in descending order
-        //thrid click removes sorting
-
-        //sort by case number and then edit some test case that is not at the top
-
-
-
-        //clicking on running the test case
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-
-        //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'PassQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
-
-
-        //Navigate to Test Cases page
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //clicking on running the test case
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-
-        //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'FailQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
-
-    })
-    //
 })
