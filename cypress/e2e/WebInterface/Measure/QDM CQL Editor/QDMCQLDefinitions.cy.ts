@@ -6,6 +6,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import {Global} from "../../../../Shared/Global";
+import {Header} from "../../../../Shared/Header";
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
@@ -205,7 +206,7 @@ describe.skip('QDM CQL Definitions', () => {
 
     })
 
-      it('Verify Included QDM CQL Definitions under Saved Definitions tab', () => {
+    it('Verify Included QDM CQL Definitions under Saved Definitions tab', () => {
 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
@@ -217,7 +218,7 @@ describe.skip('QDM CQL Definitions', () => {
         cy.get('[data-testid="definitions-row-1"] > :nth-child(1)').should('contain.text', 'SDE Payer')
     })
 
-     it('Edit Saved QDM CQL Definitions', () => {
+    it('Edit Saved QDM CQL Definitions', () => {
 
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
@@ -226,6 +227,10 @@ describe.skip('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         cy.get('[data-testid="edit-button-0"]').click()
 
+        //Return type populated for Saved Definitions
+        cy.get('[data-testid="return-type"]').should('contain.text', 'Return TypePatientCharacteristicSex')
+
+        //Edit Definition
         cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
         cy.get(CQLEditorPage.definitionOption).click()
         cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
@@ -317,5 +322,44 @@ describe.skip('QDM CQL Definitions - Expression Editor Name Option Validations',
 
         //Expression editor name dropdown should be empty when there are CQL errors
         cy.get('.MuiAutocomplete-noOptions').should('contain.text', 'No options')
+    })
+})
+
+//Skipping until feature flag is removed
+describe.skip('QDM CQL Definitions - Measure ownership Validations', () => {
+
+    beforeEach('Create Measure and Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        OktaLogin.AltLogin()
+
+    })
+
+    afterEach('Clean up and Logout', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+
+    it('Verify Non Measure owner unable to Edit/Delete saved Definitions', () => {
+
+        //Navigate to All Measures page
+        cy.get(MeasuresPage.allMeasuresTab).click()
+        MeasuresPage.actionCenter('view')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Navigate to Saved Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+        cy.get(CQLEditorPage.savedDefinitionsTab).click()
+
+        //Edit button should not be visible
+        cy.get(CQLEditorPage.editCQLDefinitions).should('not.exist')
+
+        //Delete button should not be visible
+        cy.get(CQLEditorPage.deleteCQLDefinitions).should('not.exist')
+
     })
 })

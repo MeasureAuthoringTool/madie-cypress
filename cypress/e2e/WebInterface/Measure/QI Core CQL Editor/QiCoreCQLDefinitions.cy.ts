@@ -248,6 +248,10 @@ describe.skip('Qi-Core CQL Definitions', () => {
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         cy.get(CQLEditorPage.editCQLDefinitions).click()
 
+        //Return type populated for Saved Definitions
+        cy.get('[data-testid="return-type"]').should('contain.text', 'Return TypeBoolean')
+
+        //Edit Definition
         cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
         cy.get(CQLEditorPage.definitionOption).click()
         cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
@@ -346,5 +350,45 @@ describe.skip('Qi-Core CQL Definitions - Expression Editor Name Option Validatio
 
         //Expression editor name dropdown should be empty when there are CQL errors
         cy.get('.MuiAutocomplete-noOptions').should('contain.text', 'No options')
+    })
+})
+
+//Skipping until feature flag is removed
+describe.skip('Qi-Core CQL Definitions - Measure ownership Validations', () => {
+
+    beforeEach('Create Measure and Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        OktaLogin.AltLogin()
+
+    })
+
+    afterEach('Clean up and Logout', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+
+    it('Verify Non Measure owner unable to Edit/Delete saved Definitions', () => {
+
+        //Navigate to All Measures page
+        cy.get(MeasuresPage.allMeasuresTab).click()
+        MeasuresPage.actionCenter('view')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Navigate to Saved Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+        cy.get(CQLEditorPage.savedDefinitionsTab).click()
+
+        //Edit button should not be visible
+        Utilities.waitForElementVisible('[data-testid="definitions-row-0"] > :nth-child(1)', 60000)
+        cy.get(CQLEditorPage.editCQLDefinitions).should('not.exist')
+
+        //Delete button should not be visible
+        cy.get(CQLEditorPage.deleteCQLDefinitions).should('not.exist')
+
     })
 })
