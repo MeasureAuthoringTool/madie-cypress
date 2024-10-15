@@ -8,7 +8,6 @@ import { Global } from "../../../../Shared/Global"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 
-
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
 let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
@@ -341,7 +340,7 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
-        //confirm "Details" pop up --        
+        //confirm "Details" pop up --
         Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
         cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Details')
 
@@ -428,7 +427,7 @@ describe.skip('QDM Library Includes fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
         cy.get(CQLEditorPage.editSavedLibrary).click()
 
-        //confirm "Details" pop up --        
+        //confirm "Details" pop up --
         Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
         cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Details')
 
@@ -449,4 +448,22 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
 
     })
+
+    it('View Included Library Details', () => {
+
+        cy.get(CQLEditorPage.includesTab).click()
+
+        //Navigate to Saved Libraries tab
+        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+        cy.get(CQLEditorPage.savedLibrariesTab).click()
+
+        //Click on View Details
+        cy.get(CQLEditorPage.viewSavedLibrary).click()
+        //Verify Alias and Version number fields are read only
+        cy.get(CQLEditorPage.aliasName).should('contain.text', 'AliasCommon')
+        cy.get('[data-testid="library-alias-container"] > .result-value').should('not.be.enabled')
+        cy.get(CQLEditorPage.versionNumber).should('contain.text', 'Version8.0.000')
+        cy.get('[data-testid="library-version-container"] > .result-value').should('not.be.enabled')
+    })
+
 })

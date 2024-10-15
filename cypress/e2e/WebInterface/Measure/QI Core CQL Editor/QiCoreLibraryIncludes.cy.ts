@@ -421,4 +421,22 @@ describe.skip('Qi-Core Library Includes fields', () => {
         //cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QICore version \'4.1.1\'codesystem "SNOMEDCT:2017-09": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "Surgical Absence of Cervix":    [Procedure: "Hysterectomy with No Residual Cervix"] NoCervixHysterectomy        where NoCervixHysterectomy.status = \'completed\'')
 
     })
+
+    it('View Included Library Details', () => {
+
+        cy.get(CQLEditorPage.includesTab).click()
+
+        //Navigate to Saved Libraries tab
+        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+        cy.get(CQLEditorPage.savedLibrariesTab).click()
+
+        //Click on View Details
+        cy.get(CQLEditorPage.viewSavedLibrary).click()
+        //Verify Alias and Version number fields are read only
+        cy.get(CQLEditorPage.aliasName).should('contain.text', 'AliasFHIRHelpers')
+        cy.get('[data-testid="library-alias-container"] > .result-value').should('not.be.enabled')
+        cy.get(CQLEditorPage.versionNumber).should('contain.text', 'Version4.1.000')
+        cy.get('[data-testid="library-version-container"] > .result-value').should('not.be.enabled')
+    })
+
 })
