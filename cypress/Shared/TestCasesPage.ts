@@ -262,6 +262,7 @@ export class TestCasesPage {
     public static readonly testCaseListCoverageHighlighting = '[data-testid="code-coverage-highlighting"]'
     public static readonly selectTestCaseDropdownBtn = '.chevron-container > [data-testid="ExpandMoreIcon"]'
     public static readonly testCaseListTable = '[data-testid="test-case-tbl"]'
+    public static readonly testCaseAction0Btn = '[data-testid="test-case-title-0_action"]'
     public static readonly tcPopulationCriteriaNavLink = '[data-testid="test-case-pop-criteria-nav"]'
     public static readonly tcCoverageTabList = '[data-testid="coverage-tab-list"]'
     public static readonly tcCoverageTabIPpop = '[data-testid="Initial Population-population"]'
@@ -752,9 +753,13 @@ export class TestCasesPage {
     }
 
     public static editTestCaseAddJSON(testCaseJson: string): void {
+        //the below commented out block of code will need to be un-commented and used once MAT-6437 is moved into PROD
+        /*         this.clickEditforCreatedTestCase()
+                Utilities.waitForElementVisible(this.tcJsonTab, 5000)
+                cy.get(this.tcJsonTab).click() */
 
+        //edit test test case
         this.clickEditforCreatedTestCase()
-
         //Add json to the test case
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
 
@@ -849,7 +854,7 @@ export class TestCasesPage {
         })
 
     }
-    public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, secondMeasure?: boolean, twoTestCases?: boolean, altUser?: boolean): string {
+    public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, secondMeasure?: boolean, twoTestCases?: boolean, altUser?: boolean, measureNumber?: number): string {
         let user = ''
         let measurePath = 'cypress/fixtures/measureId'
         let measureGroupPath = 'cypress/fixtures/groupId'
@@ -863,13 +868,19 @@ export class TestCasesPage {
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
         }
+        if ((measureNumber === undefined) || (measureNumber === null)) {
+            measureNumber = 0
+            measurePath = 'cypress/fixtures/measureId'
+        }
+        if (measureNumber > 0) {
+            measurePath = 'cypress/fixtures/measureId' + measureNumber
+        }
         if (secondMeasure === true) {
             measurePath = 'cypress/fixtures/measureId2'
             //testCasePIdPath = 'cypress/fixtures/measureId2'
         }
         else {
-            measurePath = 'cypress/fixtures/measureId'
-            //testCasePIdPath = 'cypress/fixtures/measureId'
+            measurePath = measurePath
         }
         if (twoTestCases === true) {
             testCasePath = 'cypress/fixtures/testCaseId2'

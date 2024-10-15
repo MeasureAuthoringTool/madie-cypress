@@ -65,6 +65,41 @@ describe('Test Case Import button - BONNIE: verify that the BONNIE import button
     })
 })
 
+// "TestCaseID": false
+describe('Test Case ID header is not present', () => {
+
+    beforeEach('Create measure, login and update CQL, create group, and login', () => {
+
+        CqlLibraryName = 'TestLibrary5' + Date.now()
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
+
+        OktaLogin.Login()
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+
+    it('Test Case ID header is not present', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        cy.get(TestCasesPage.tcColumnHeading).should('not.contain.text', 'Case #')
+
+    })
+})
+
 // "qiCoreElementsTab": false
 describe('QI Core: Elements tab is not present', () => {
 

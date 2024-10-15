@@ -10,15 +10,10 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { QDMElements } from "../../../../../Shared/QDMElements";
 import { Header } from "../../../../../Shared/Header";
 
-let testCaseTitle = 'Title for Auto Test'
-let testCaseDescription = 'DENOMFail' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-
 let testCaseTitle2nd = 'Second TC - Title for Auto Test'
 let testCaseDescription2nd = 'SecondTC-DENOMFail' + Date.now()
 let testCaseSeries2nd = 'SecondTC-SBTestSeries'
 
-let CQLSimple_for_QDM = MeasureCQL.QDMSimpleCQL
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 const now = require('dayjs')
 let todaysDate = now().format('MM/DD/YYYY')
@@ -293,94 +288,6 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
         cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'PassSecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select')
         cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', 'PassQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
 
-
-    })
-    it.skip('QDM Test Case number and sorting behavior', () => {
-
-        //
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd)
-
-        //navigate to the test case's edit page
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('085/27/1981 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
-
-        //save the Test Case
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
-        //
-
-        //navigate back to main measure list page
-        cy.get(Header.mainMadiePageButton).click()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //start of work on MAT-7604
-
-        //test case numbers appear
-
-
-        //first click sorts ascending order
-        //second click sorts in descending order
-        //thrid click removes sorting
-
-        //sort by case number and then edit some test case that is not at the top
-
-
-
-        //clicking on running the test case
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-
-        //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'PassQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
-
-        //navigate to the test case list Expansion page
-        cy.get(TestCasesPage.qdmExpansionSubTab).click()
-
-        //validating that manifest is, now, selected and make a change in the selection
-        cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
-            .find('[type="radio"]')
-            .then((radio) => {
-                //confirm that initial value is set to 'Manifest'
-                cy.wrap(radio).eq(1).should('be.checked');
-                cy.contains('[id="manifest-select-label"]', 'Manifest');
-
-                //check / select radio button for the value of 'Latest'
-                cy.wrap(radio).eq(0).check({ force: true }).should('be.checked');
-                cy.contains('[data-testid="manifest-expansion-radio-buttons-group"] > :nth-child(1) > .MuiTypography-root', 'Latest');
-
-                cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('not.exist')
-
-                // Verify that first radio button is no longer checked
-                cy.wrap(radio).eq(1).should('not.be.checked');
-            })
-        cy.get(TestCasesPage.qdmManifestSaveBtn).click()
-        cy.get(TestCasesPage.qdmManifestSuccess).should('contain.text', 'Expansion details Updated Successfully')
-        cy.reload()
-        //Navigate to Test Cases page
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //clicking on running the test case
-        cy.get(TestCasesPage.executeTestCaseButton).click()
-
-        //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'FailQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
 
     })
 
