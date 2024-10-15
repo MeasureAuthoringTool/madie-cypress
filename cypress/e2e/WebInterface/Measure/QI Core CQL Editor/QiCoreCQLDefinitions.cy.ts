@@ -248,6 +248,10 @@ describe.skip('Qi-Core CQL Definitions', () => {
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         cy.get(CQLEditorPage.editCQLDefinitions).click()
 
+        //Return type populated for Saved Definitions
+        cy.get('[data-testid="return-type"]').should('contain.text', 'Return TypeBoolean')
+
+        //Edit Definition
         cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
         cy.get(CQLEditorPage.definitionOption).click()
         cy.get(CQLEditorPage.expressionEditorNameDropdown).click()

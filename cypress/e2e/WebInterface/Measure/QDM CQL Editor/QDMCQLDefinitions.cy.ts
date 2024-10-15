@@ -227,6 +227,10 @@ describe.skip('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         cy.get('[data-testid="edit-button-0"]').click()
 
+        //Return type populated for Saved Definitions
+        cy.get('[data-testid="return-type"]').should('contain.text', 'Return TypePatientCharacteristicSex')
+
+        //Edit Definition
         cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
         cy.get(CQLEditorPage.definitionOption).click()
         cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
