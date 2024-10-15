@@ -103,7 +103,6 @@ export class CQLEditorPage {
     public static readonly deleteCQLDefinitions = '[data-testid="delete-button-0"]'
     public static readonly saveDefinitionBtn = '[data-testid="definition-save-btn"]'
 
-
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
 
