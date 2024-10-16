@@ -21,6 +21,8 @@ let prodBonneTestCasesFile = 'patients_39E0424A-1727-4629-89E2-C46C2FBB3F5F_QDM_
 let measureNamePropListQDM = 'QDMTestMeasure' + Date.now()
 let CqlLibraryNamePropListQDM = 'QDMTestLibrary' + Date.now()
 let measureCQLPRODCat = MeasureCQL.qdmMeasureCQLPRODCataracts2040BCVAwithin90Days
+const now = require('dayjs')
+let todaysDate = now().format('MM/DD/YYYY')
 
 describe('Test case Coverage tab', () => {
 
@@ -112,6 +114,8 @@ describe('Test case Coverage tab', () => {
 
         //click on the 'Import' button on the modal window
         cy.get(TestCasesPage.importTestCaseModalBtn).click()
+
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction82N/ADENEXPassCertTypeIridOverlapsCatSurgPatient with certain types of iridocyclitis overlapping cataract surgery. ' + todaysDate + 'Select81N/ADENEXPassChorioretinitis and RetinochoroiditisOverlapsCatSurgPatient with moderate or severe impairment better eye overlapping cataract surgery. ' + todaysDate + 'Select80N/ADENEXPassChoroidDegenOverlapsCatSurgPatient with choroidal degenerations overlapping cataract surgery. ' + todaysDate + 'Select79N/ADENEXPassCloudyCorneaOverlapsCatSurgPatient with cloudy cornea overlapping cataract surgery. ' + todaysDate + 'Select78N/ADENEXPassDegenDisGlobeOverlapsCatSurgPatient with degenerative disorders of globe overlapping cataract surgery. ' + todaysDate + 'Select77N/ADENEXPassDisVisualCortexOverlapsCatSurgPatient with disorders of visual cortex overlapping cataract surgery. ' + todaysDate + 'Select76N/ADENEXPassDissChorioretOverlapsCatSurgPatient with disseminated chorioretinitis overlapping cataract surgery. ' + todaysDate + 'Select75N/ADENEXPassHeredCornDysOverlapsCatSurgPatient with hereditary corneal dystrophies overlapping cataract surgery. ' + todaysDate + 'Select74N/ADENEXPassHypotonyOverlapsCatSurgPatient with hypotony of eye overlapping cataract surgery. ' + todaysDate + 'Select73N/ADENEXPassInjOptNrvOverlapsCatSurgPatient with injury to optic nerve overlapping cataract surgery. ' + todaysDate + 'Select')
 
         //success message that appears after import
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', '(82) Test cases imported successfully')
