@@ -10,6 +10,9 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../../Shared/Header";
 
 let singleTestCaseFile = 'patients_42BF391F-38A3-4C0F-9ECE-DCD47E9609D9_QDM_56_1712926664.json'
+let testCaseTitle = 'Test Case 1'
+let testCaseDescription = 'Description 1'
+let testCaseSeries = 'Test Series 1'
 let testCaseTitle2nd = 'Second TC - Title for Auto Test'
 let testCaseDescription2nd = 'SecondTC-DENOMFail' + Date.now()
 let testCaseSeries2nd = 'SecondTC-SBTestSeries'
@@ -19,7 +22,8 @@ let todaysDate = now().format('MM/DD/YYYY')
 let measureName = 'ProportionPatient' + Date.now()
 let measureQDMManifestName = 'QDMManifestTest' + Date.now()
 let CqlLibraryName = 'ProportionPatient' + Date.now()
-
+let versionNumber = '1.0.000'
+let newMeasureName = 'Updated' + measureName
 
 //skipping tests until the TestCaseID feature flag is set permanently to true, in PROD
 describe.skip('QDM Test Case sorting by Test Case number', () => {
@@ -259,6 +263,85 @@ describe.skip('Import Test cases onto an existing QDM measure via file and ensur
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction75N/AIPFailNoEncounterPatient is 19 with no Encounter Inpatient' + todaysDate + 'Select74N/AIPFailTooYoungPatient is 17 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...more' + todaysDate + 'Select73N/ANUMERFailAntithromboticStartBeforeIPEncPatient received anti thrombotic before and during encounter' + todaysDate + 'Select72N/AIPFailEncEndsBeforeMPPatient is 18 with Non-Elective Inpatient Encounter ends before MP with principal diagnosis of stroke' + todaysDate + 'Select71N/ANUMERFailAntithromboticAfterEncIPPatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...more' + todaysDate + 'Select70N/ADENEXPassLeftAMAPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP left agai...more' + todaysDate + 'Select69N/ADENEXPassExpiredPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP patient e...more' + todaysDate + 'Select68N/ADENEXPassDischargeHomeHospicePatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...more' + todaysDate + 'Select67N/ADENEXPassDischargeFacilityHospicePatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...more' + todaysDate + 'Select66N/ADENEXCEPFailMedRsnStartTmLTEncInpAdmTmPatient does not get antithrombotic medication due to medical reasons before IP encounter. This case tests the timing bo...more' + todaysDate + 'Select')
+
+    })
+})
+
+//skipping tests until the TestCaseID feature flag is set permanently to true, in PROD
+describe.skip('QDM Measure - Test case number on a Draft Measure', () => {
+
+    beforeEach('Create Measure, Test case & Login', () => {
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName, CqlLibraryName, 'Proportion', false, qdmManifestTestCQL)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        TestCasesPage.CreateTestCaseAPI(testCaseSeries, testCaseTitle, testCaseDescription)
+        OktaLogin.Login()
+    })
+
+    afterEach('Delete Measure and Logout', () => {
+
+        Utilities.deleteVersionedMeasure(measureName, CqlLibraryName)
+        OktaLogin.Logout()
+    })
+
+    it('Test case number assigned to a Draft Measure for QDM Measure', () => {
+
+        //Version the Measure
+        MeasuresPage.actionCenter('version')
+        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
+        cy.get(MeasuresPage.versionMeasuresConfirmInput).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        MeasuresPage.validateVersionNumber(newMeasureName, versionNumber)
+        cy.log('Version Created Successfully').wait(5000)
+
+        //Draft the Versioned Measure
+        MeasuresPage.actionCenter('draft')
+
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(newMeasureName)
+        cy.get(MeasuresPage.createDraftContinueBtn).click()
+        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.log('Draft Created Successfully')
+
+        cy.reload()
+
+        cy.get('[data-testid="row-item"]').eq(0).contains('Edit').click()
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click()
+
+        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
+
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle2nd.toString())
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription2nd)
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries2nd).type('{enter}')
+
+        cy.get(TestCasesPage.createTestCaseSaveButton).click()
+
+        //Navigate to test case list page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Need to revisit once MAT-7827 is fixed
+        cy.get('[data-testid="test-case-title-0_caseNumber"]').should('contain.text', '1')
 
     })
 })
