@@ -22,6 +22,7 @@ let testCaseSeries = 'Test Series 1'
 let secondTestCaseSeries = 'Test Series 2'
 let validTestCaseJsonLizzy = TestCaseJson.TestCaseJson_Valid
 let validTestCaseJsonBobby = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
+let versionNumber = '1.0.000'
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let validFileToUpload = downloadsFolder.toString()
 let testCaseJson2nd = TestCaseJson.TestCaseJson_Valid
@@ -231,6 +232,78 @@ describe.skip('Import Test cases onto an existing Qi Core measure via file and e
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
+
+    })
+})
+
+//skipping tests until the TestCaseID feature flag is set permanently to true, in PROD
+describe.skip('Qi Core Measure - Test case number on a Draft Measure', () => {
+
+    beforeEach('Create Measure, Test case & Login', () => {
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        TestCasesPage.CreateTestCaseAPI(testCaseSeries, testCaseTitle, testCaseDescription, testCaseJson)
+        OktaLogin.Login()
+    })
+
+    afterEach('Delete Measure and Logout', () => {
+
+        Utilities.deleteVersionedMeasure(measureName, CqlLibraryName)
+        OktaLogin.Logout()
+    })
+
+    it('Test case number assigned to a Draft Measure for Qi Core Measure', () => {
+
+        //Version the Measure
+        MeasuresPage.actionCenter('version')
+        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
+        cy.get(MeasuresPage.versionMeasuresConfirmInput).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        MeasuresPage.validateVersionNumber(newMeasureName, versionNumber)
+        cy.log('Version Created Successfully').wait(5000)
+
+        //Draft the Versioned Measure
+        MeasuresPage.actionCenter('draft')
+
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(newMeasureName)
+        cy.get(MeasuresPage.createDraftContinueBtn).click()
+        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.log('Draft Created Successfully')
+
+        cy.reload()
+
+        cy.get('[data-testid="row-item"]').eq(0).contains('Edit').click()
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.newTestCaseButton).click()
+
+        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
+
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
+        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(secondTestCaseTitle.toString())
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(secondTestCaseDescription)
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(secondTestCaseSeries).type('{enter}')
+
+        cy.get(TestCasesPage.createTestCaseSaveButton).click()
+
+        //Navigate to test case list page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Need to revisit once MAT-7827 is fixed
+        cy.get('[data-testid="test-case-title-0_caseNumber"]').should('contain.text', '1')
 
     })
 })
