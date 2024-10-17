@@ -11,6 +11,8 @@ import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { Header } from "../../../../../Shared/Header"
 import { Environment } from "../../../../../Shared/Environment"
 
+const now = require('dayjs')
+let todaysDate = now().format('MM/DD/YYYY')
 let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
 let versionNumber = '1.0.000'
@@ -184,6 +186,8 @@ describe('Test Case Import: functionality tests', () => {
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
+
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASBTestSeriesFFailing Test Case' + secondTestCaseDescription + todaysDate + 'Select1N/ASBTestSeriesPPassing Test Case' + testCaseDescription + todaysDate + 'Select')
 
         //verify confirmation message
         Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 35000)
@@ -485,6 +489,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.setAccessTokenCookie()
         CqlLibraryName = 'TestLibrary6' + Date.now()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, 2)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean', 2)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit', 2)
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -558,6 +563,8 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
+
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASBTestSeriesPb1Passing Test Caseb1' + testCaseDescription + 'b1' + todaysDate + 'Select1N/ASBTestSeriesFb2Failing Test Caseb2' + secondTestCaseDescription + 'b2' + todaysDate + 'Select')
 
         //verify confirmation message
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessInfo, 35000)
@@ -670,6 +677,8 @@ describe('Test case uniqueness error validation', () => {
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
 
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1InvalidSBTestSeriesPb1Passing Test Caseb1' + testCaseDescription + 'b1' + todaysDate + 'Select')
+
         //verifies alert message at top of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
         cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(0) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
@@ -754,6 +763,8 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
+
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASBTestSeriesPb1Passing Test Caseb1' + testCaseDescription + 'b1' + todaysDate + 'Select1N/ASBTestSeriesFb2Failing Test Caseb2' + secondTestCaseDescription + 'b2' + todaysDate + 'Select')
 
         //verifies alert message at tope of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)

@@ -8,8 +8,9 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../../Shared/Header"
-import { util } from "chai"
 
+const now = require('dayjs')
+let todaysDate = now().format('MM/DD/YYYY')
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -205,6 +206,8 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
 
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/ASBTestSeriesTitle for Auto Test' + testCaseDescription + todaysDate + 'Select')
+
         //navigate to test case edit / detail page
         TestCasesPage.testCaseAction('edit')
 
@@ -292,6 +295,8 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
+
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/A' + testCaseSeries + 'b' + 'Title for Auto Testb' + testCaseDescription + 'b' + todaysDate + 'Select1N/A' + testCaseSeries + 'a' + 'Title for Auto Testa' + testCaseDescription + 'a' + todaysDate + 'Select')
 
         //navigate to test case edit / detail page for the first test case
         TestCasesPage.testCaseAction('edit')
@@ -387,6 +392,8 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
 
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/ASBTestSeriesTitle for Auto Test' + testCaseDescription + todaysDate + 'Select')
+
         //navigate to test case edit / detail page
         TestCasesPage.testCaseAction('edit')
 
@@ -474,6 +481,8 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
+
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASBTestSeriesbTitle for Auto Testb' + testCaseDescription + 'b' + todaysDate + 'Select1N/ASBTestSeriesaTitle for Auto Testa' + testCaseDescription + 'a' + todaysDate + 'Select')
 
         //navigate to test case edit / detail page for the first test case
         TestCasesPage.testCaseAction('edit')
