@@ -274,6 +274,7 @@ export class TestCasesPage {
     public static readonly tcCoverageTabUnusedDef = '[data-testid="Unused-definition"]'
     public static readonly tcCoverageSections = '[class="accordion-section"]'
     public static readonly tcCoverageContent = '[class="accordion-content"]'
+    public static readonly testCaseCountByCaseNumber = '[data-testid*="_caseNumber"]'
 
     //Test Case Population Values
     public static readonly testCaseIPPExpected = '[data-testid="test-population-initialPopulation-expected"]'
@@ -470,6 +471,28 @@ export class TestCasesPage {
 
     }
 
+    /* 
+        this is functionally similar to the above grabElementId, but works with testCaseId
+        the primary use-case for grabTestCaseId would be to prep for using testCaseAction()
+    */
+    public static grabTestCaseId(testCaseNumber?: number): void {
+        // ToDo: expand to allow option for testCaseId2
+
+        let testCaseId: string
+        const testCaseIdPath = 'cypress/fixtures/testCaseId'
+
+        cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
+            .parent('tr')
+            .find('button')
+            .invoke('attr', 'data-testid')
+            .then(idValue => {
+                testCaseId = idValue.split('-')[2].toString().valueOf()
+                cy.writeFile(testCaseIdPath, testCaseId)
+            })
+            
+        
+    }
+
     public static clickCreateTestCaseButton(): void {
 
         //setup for grabbing the measure create call
@@ -525,6 +548,15 @@ export class TestCasesPage {
         })
 
 
+    }
+
+    public static grabValidateTestCaseNumber(testCaseNumber: number): void {
+
+        cy.get('[data-testid="test-case-title-0_caseNumber"]').should('be.visible')
+        cy.get('[data-testid="test-case-title-0_caseNumber"]').invoke('text').then(
+            (visibleNumber) => {
+                expect(visibleNumber).to.include(testCaseNumber)
+            })
     }
 
     public static grabValidateTestCaseTitleAndSeries(testCaseTitle: string, testCaseSeries: string): void {

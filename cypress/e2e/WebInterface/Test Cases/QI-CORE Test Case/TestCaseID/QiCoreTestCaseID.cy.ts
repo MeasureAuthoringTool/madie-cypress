@@ -307,3 +307,74 @@ describe.skip('Qi Core Measure - Test case number on a Draft Measure', () => {
 
     })
 })
+
+describe.skip('QICore Test Case - Deleting all test cases resets test case counter', () => {
+
+    beforeEach('Create measure and login', () => {
+
+        CqlLibraryName = 'TestLibrary5' + Date.now()
+
+        //create measure and two test cases on it
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName + 'firstMeasure', measureCQLPFTests)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        OktaLogin.Login()
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.UILogout()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        Utilities.deleteMeasure(measureName, CqlLibraryName + 'firstMeasure')
+    })
+
+    it('Test case number resets when test case count equals 0', () => {
+
+        MeasuresPage.actionCenter('edit')
+
+        //Navigate to Test Cases page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        // verify there are 2 test cases shown
+        cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 2)
+
+        // delete test case #1
+        TestCasesPage.grabTestCaseId(1)   
+        TestCasesPage.testCaseAction("delete")
+        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCaseTitle + '?')
+        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+
+        // verify test case #1 no longer shown, test case #2 is still shown
+        cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCaseTitle)
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(secondTestCaseTitle, secondTestCaseSeries)
+
+        // delete test case #2
+        TestCasesPage.grabTestCaseId(2)   
+        TestCasesPage.testCaseAction("delete")
+        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+
+        // verify no test cases associated with this measure
+        cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 0)
+        cy.get(EditMeasurePage.testCasesTab).should('contain.text', 'Test Cases (0)')
+      
+        // create new case
+        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+
+        // verify one test case shown
+        cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 1)
+        cy.get(EditMeasurePage.testCasesTab).should('contain.text', 'Test Cases (1)')
+
+        // verify test case is test case #1
+        TestCasesPage.grabValidateTestCaseNumber(1)
+
+    })
+
+})
