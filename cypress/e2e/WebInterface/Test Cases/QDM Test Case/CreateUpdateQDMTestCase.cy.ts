@@ -96,7 +96,7 @@ let measureCQLWithElements = 'library QDMTestLibrary1686087138930 version \'0.0.
     '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n'
 
 
-describe('Create and Update QDM Test Case', () => {
+describe.only('Create and Update QDM Test Case', () => {
 
     newMeasureName = measureName + randValue
     newCQLLibraryName = CqlLibraryName + randValue
@@ -117,7 +117,7 @@ describe('Create and Update QDM Test Case', () => {
 
     })
 
-    it('Create and Update Test Case for QDM Measure', () => {
+    it.only('Create and Update Test Case for QDM Measure', () => {
 
         MeasuresPage.actionCenter('edit')
 
@@ -130,6 +130,13 @@ describe('Create and Update QDM Test Case', () => {
 
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
+
+        // check gender dropdown for all new options - MAT-7798
+        cy.get(TestCasesPage.QDMGender).click()
+        cy.get(TestCasesPage.QDMGenderOption).find('li').should('contain.text', 'Asked But DeclinedFemaleFemale (finding)MaleMale (finding)Patient sex unknown (finding)')
+
+        // need this to dismiss the dropdown
+        cy.get(TestCasesPage.QDMGenderOption).contains('Asked But Declined').click()
 
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
