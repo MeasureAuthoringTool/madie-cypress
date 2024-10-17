@@ -301,9 +301,8 @@ describe.skip('Qi Core Measure - Test case number on a Draft Measure', () => {
 
         //Navigate to test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
-
-        //Need to revisit once MAT-7827 is fixed
-        cy.get('[data-testid="test-case-title-0_caseNumber"]').should('contain.text', '1')
+        //Validate Test case ID for Draft Measure
+        TestCasesPage.grabValidateTestCaseNumber(2)
 
     })
 })
