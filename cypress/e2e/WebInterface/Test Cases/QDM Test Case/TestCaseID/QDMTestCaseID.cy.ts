@@ -345,3 +345,91 @@ describe.skip('QDM Measure - Test case number on a Draft Measure', () => {
 
     })
 })
+
+//skipping tests until the TestCaseID feature flag is set permanently to true, in PROD
+describe.skip('QDM Test Case - Deleting all test cases resets test case counter', () => {
+
+    beforeEach('Create Measure', () => {
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName, CqlLibraryName, 'Proportion', false, qdmManifestTestCQL, null, false,
+            '2025-01-01', '2025-12-31')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
+    })
+
+    afterEach('Clean up', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+    })
+
+    it('Test case number resets when test case count equals 0', () => {
+
+        OktaLogin.Login()
+
+        MeasuresPage.actionCenter('edit')
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //create test case
+        TestCasesPage.createQDMTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd)
+
+        //navigate to the test case's edit page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //enter a value of the dob, Race and gender
+        TestCasesPage.enterPatientDemographics('05/27/1981 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+
+        //save the Test Case
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+
+        // navigate to test case tab
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        // verify there are 2 test cases shown
+        cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 2)
+
+        // delete test case #1
+        TestCasesPage.grabTestCaseId(1)   
+        TestCasesPage.testCaseAction("delete")
+        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete QDMManifestTC?')
+        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+
+        // verify test case #1 no longer shown, test case #2 is still shown
+        cy.get(TestCasesPage.testCaseListTable).should('not.contain', 'QDMManifestTC')
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle2nd, testCaseSeries2nd)
+
+        // delete test case #2
+        TestCasesPage.grabTestCaseId(2)   
+        TestCasesPage.testCaseAction("delete")
+        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+
+        // verify no test cases associated with this measure
+        cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 0)
+        cy.get(EditMeasurePage.testCasesTab).should('contain.text', 'Test Cases (0)')
+      
+        // create new case
+        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+
+        // verify one test case shown
+        cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 1)
+        cy.get(EditMeasurePage.testCasesTab).should('contain.text', 'Test Cases (1)')
+
+        // verify test case is test case #1
+        TestCasesPage.grabValidateTestCaseNumber(1)
+      
+    })
+
+})
