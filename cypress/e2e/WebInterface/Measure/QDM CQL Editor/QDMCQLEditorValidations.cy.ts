@@ -62,6 +62,62 @@ let measureCQL = 'library ' + newCqlLibraryName + ' version \'0.0.000\'\n' +
     'define "n":\n' +
     '  true'
 
+let measureCQL_withSameLibraryVersionAndDifferentAlias = 'library ' + newCqlLibraryName + ' version \'0.0.000\'\n' +
+    'using QDM version \'5.6\'\n' +
+    '\n' +
+    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Global\n' +
+    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called GlobalOne\n' +
+    '\n' +
+    'valueset "Ethnicity": \'urn:oid:2.16.840.1.113883.3.3616.200.110.102.5069\'\n' +
+    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+    '\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'context Patient\n' +
+    'define "SDE Ethnicity":\n' +
+    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+    'define "SDE Payer":\n' +
+    '  ["Patient Characteristic Payer": "Payer"]\n' +
+    'define "SDE Race":\n' +
+    '  ["Patient Characteristic Race": "Race"]\n' +
+    'define "SDE Sex":\n' +
+    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+    'define "i":\n' +
+    '  true\n' +
+    'define "d":\n' +
+    '  true\n' +
+    'define "n":\n' +
+    '  true'
+
+let measureCQL_withDifferentLibraryVersionAndDifferentAlias = 'library ' + newCqlLibraryName + ' version \'0.0.000\'\n' +
+    'using QDM version \'5.6\'\n' +
+    '\n' +
+    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Global\n' +
+    'include MATGlobalCommonFunctionsQDM version \'7.0.000\' called GlobalOne\n' +
+    '\n' +
+    'valueset "Ethnicity": \'urn:oid:2.16.840.1.113883.3.3616.200.110.102.5069\'\n' +
+    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+    '\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'context Patient\n' +
+    'define "SDE Ethnicity":\n' +
+    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+    'define "SDE Payer":\n' +
+    '  ["Patient Characteristic Payer": "Payer"]\n' +
+    'define "SDE Race":\n' +
+    '  ["Patient Characteristic Race": "Race"]\n' +
+    'define "SDE Sex":\n' +
+    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+    'define "i":\n' +
+    '  true\n' +
+    'define "d":\n' +
+    '  true\n' +
+    'define "n":\n' +
+    '  true'
+
 describe('Validate errors/warnings/success messages on CQL editor component on save', () => {
 
     beforeEach('Create measure and login', () => {
@@ -140,6 +196,41 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+
+    })
+
+    it('Verify error message when same included Library with same version is used with different alias', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_withSameLibraryVersionAndDifferentAlias)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        cy.get('[data-testid="generic-errors-text-list"] > li').should('contain.text', 'Row: 4, Col:0: ELM: 0:0 | Library MATGlobalCommonFunctionsQDM Version 8.0.000 is already in use in this library.')
+
+    })
+
+    it('Verify error message when same included Library with different version is used with different alias', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_withDifferentLibraryVersionAndDifferentAlias)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementVisible('[data-testid="generic-errors-text-list"] > li', 60000)
+
+        cy.get('[data-testid="generic-errors-text-list"] > li').should('contain.text', 'Row: 4, Col:0: ELM: 0:0 | Library MATGlobalCommonFunctionsQDM is already in use in this library.')
 
     })
 
