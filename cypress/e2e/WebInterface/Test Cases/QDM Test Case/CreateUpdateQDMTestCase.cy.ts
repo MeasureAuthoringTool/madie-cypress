@@ -96,7 +96,7 @@ let measureCQLWithElements = 'library QDMTestLibrary1686087138930 version \'0.0.
     '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n'
 
 
-describe.only('Create and Update QDM Test Case', () => {
+describe('Create and Update QDM Test Case', () => {
 
     newMeasureName = measureName + randValue
     newCQLLibraryName = CqlLibraryName + randValue
@@ -117,7 +117,7 @@ describe.only('Create and Update QDM Test Case', () => {
 
     })
 
-    it.only('Create and Update Test Case for QDM Measure', () => {
+    it('Create and Update Test Case for QDM Measure', () => {
 
         MeasuresPage.actionCenter('edit')
 
