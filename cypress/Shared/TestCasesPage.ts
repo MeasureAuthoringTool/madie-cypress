@@ -360,7 +360,7 @@ export class TestCasesPage {
     public static readonly importTestCasesBtn = '[data-testid="show-import-test-cases-button"]'
     public static readonly filAttachDropBox = '[data-testid="file-drop-input"]'
     public static readonly importTestCaseModalBtn = '[data-testid="test-case-import-import-btn"]'
-    public static readonly importInProgress = '[data-testid = "testcase-list-loading-spinner"]'//'[class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-deukzi"]'//'[class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-1mbw3kc"]'
+    public static readonly importInProgress = '[data-testid = "testcase-list-loading-spinner"]'
     public static readonly testCaseImportErrorAtValidating = '[data-testid="test-case-import-error-div"]'
     public static readonly importTestCaseModalList = '[data-testid="test-case-preview-list"]'
     public static readonly importTestCaseModalHeader = '[data-testid="test-case-preview-header"]'
