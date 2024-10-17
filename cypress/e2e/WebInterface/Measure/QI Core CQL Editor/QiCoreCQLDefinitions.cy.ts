@@ -68,8 +68,7 @@ let measureCQL_withError = 'library QiCoreLibrary1723824228401 version \'0.0.000
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
     '  (Enc E where E.status = \'finished\') is not null'
 
-//Skipping until feature flag is removed
-describe.skip('Qi-Core CQL Definitions', () => {
+describe('Qi-Core CQL Definitions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -315,8 +314,7 @@ describe.skip('Qi-Core CQL Definitions', () => {
     })
 })
 
-//Skipping until feature flag is removed
-describe.skip('Qi-Core CQL Definitions - Expression Editor Name Option Validations', () => {
+describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -353,8 +351,7 @@ describe.skip('Qi-Core CQL Definitions - Expression Editor Name Option Validatio
     })
 })
 
-//Skipping until feature flag is removed
-describe.skip('Qi-Core CQL Definitions - Measure ownership Validations', () => {
+describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
