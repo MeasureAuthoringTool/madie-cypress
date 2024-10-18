@@ -13,8 +13,7 @@ let measureName = 'QiCoreTestMeasure' + Date.now()
 let CqlLibraryName = 'QiCoreLibrary' + Date.now()
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
 
-//Skipping until feature flag is removed
-describe.skip('Qi-Core Library Includes fields', () => {
+describe('Qi-Core Library Includes fields', () => {
 
     beforeEach('Create Measure and Login', () => {
 

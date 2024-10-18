@@ -36,8 +36,7 @@ let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     'define "n":\n' +
     '\ttrue'
 
-//Skipping until feature flag is removed
-describe.skip('QDM Library Includes fields', () => {
+describe('QDM Library Includes fields', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -164,28 +163,27 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.deleteSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
         cy.get(Global.keepWorkingCancel).click()
 
         //confirm contents in CQL editor still contains changes and save button is still available
         cy.get('[data-testid="editor-search-button"]').click().wait(1000)
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
-        //cy.get(EditMeasurePage.cqlEditorTextBox).should('include.text', 'library TestLibrary1685544523170534 version \'0.0.000\'using QDM version \'5.6\'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Commonvalueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true    ')
         Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
         //attempt to delete and choose yes to discard changes
         Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "are you sure" pop up
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Are you sure?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Are you sure?')
 
         //choose cancel
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialogCancelBtn, 5000)
@@ -197,7 +195,6 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get('[data-testid="editor-search-button"]').click().wait(1000)
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
-        //cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library TestLibrary1685544523170534 version \'0.0.000\'using QDM version \'5.6\'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Commonvalueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true')
         Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5000)
 
@@ -221,13 +218,13 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.deleteSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "are you sure" pop up
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Are you sure?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Are you sure?')
 
         //choose yes to delete
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn, 5000)
@@ -239,7 +236,6 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get('[data-testid="editor-search-button"]').click().wait(1000)
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
-        //cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QDM version \'5.6\'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true')
 
         //Deletes the library from the Saved Libraries grid
         cy.get(CQLEditorPage.expandCQLBuilder).click()
@@ -276,8 +272,8 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
 
         //confirm "are you sure" pop up
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Are you sure?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Are you sure?')
 
         //choose yes to delete
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn, 5000)
@@ -289,7 +285,6 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get('[data-testid="SearchIcon"]').click().wait(1000)
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
-        //cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QDM version \'5.6\'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer"]define "SDE Race":  ["Patient Characteristic Race": "Race"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "ipp":    truedefine "d":     truedefine "n":    true')
 
         //Deletes the library from the Saved Libraries grid
         cy.get(CQLEditorPage.expandCQLBuilder).click()
@@ -299,6 +294,30 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (0)')
         cy.get(CQLEditorPage.savedLibrariesTab).click()
         cy.get(CQLEditorPage.libraryResultsTable).find('[data-test-id="row-0"]').should('not.exist')
+    })
+})
+
+describe('View and Edit Included Libraries', () => {
+
+    beforeEach('Create Measure and Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        OktaLogin.Login()
+
+        //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
+
+        //Save CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+    })
+
+    afterEach('Clean up and Logout', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
     })
 
     it('QDM: Edit Included Libraries functionality -- when changes to the CQL is not saved', () => {
@@ -322,8 +341,8 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
         cy.get(CQLEditorPage.editSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
         cy.get(Global.keepWorkingCancel).click()
 
         //confirm contents in CQL editor still contains changes and save button is still available
@@ -336,13 +355,13 @@ describe.skip('QDM Library Includes fields', () => {
         //attempt to edit and choose yes to discard changes
         Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
         cy.get(CQLEditorPage.editSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "Details" pop up --
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Details')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Details')
 
         //choose cancel
         cy.get(CQLLibraryPage.savedLibrariesEditDetailsCancelBtn).scrollIntoView()
@@ -378,13 +397,13 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
         cy.get(CQLEditorPage.editSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "Details" pop up
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Details')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Details')
 
         //make an edit
         Utilities.waitForElementVisible(CQLLibraryPage.editSavedLibraryAlias, 5000)
@@ -428,8 +447,8 @@ describe.skip('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).click()
 
         //confirm "Details" pop up --
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Details')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Details')
 
         //make an edit
         Utilities.waitForElementVisible(CQLLibraryPage.editSavedLibraryAlias, 5000)
