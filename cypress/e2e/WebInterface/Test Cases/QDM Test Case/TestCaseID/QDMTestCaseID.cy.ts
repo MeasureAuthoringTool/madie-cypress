@@ -25,8 +25,7 @@ let CqlLibraryName = 'ProportionPatient' + Date.now()
 let versionNumber = '1.0.000'
 let newMeasureName = 'Updated' + measureName
 
-//skipping tests until the TestCaseID feature flag is set permanently to true, in PROD
-describe.skip('QDM Test Case sorting by Test Case number', () => {
+describe('QDM Test Case sorting by Test Case number', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -176,8 +175,7 @@ describe.skip('QDM Test Case sorting by Test Case number', () => {
 
 })
 
-//skipping tests until the TestCaseID feature flag is set permanently to true, in PROD
-describe.skip('Import Test cases onto an existing QDM measure via file and ensure test case ID / numbering appears', () => {
+describe('Import Test cases onto an existing QDM measure via file and ensure test case ID / numbering appears', () => {
 
     beforeEach('Login and Create Measure', () => {
 
@@ -267,8 +265,7 @@ describe.skip('Import Test cases onto an existing QDM measure via file and ensur
     })
 })
 
-//skipping tests until the TestCaseID feature flag is set permanently to true, in PROD
-describe.skip('QDM Measure - Test case number on a Draft Measure', () => {
+describe('QDM Measure - Test case number on a Draft Measure', () => {
 
     beforeEach('Create Measure, Test case & Login', () => {
 
@@ -345,8 +342,7 @@ describe.skip('QDM Measure - Test case number on a Draft Measure', () => {
     })
 })
 
-//skipping tests until the TestCaseID feature flag is set permanently to true, in PROD
-describe.skip('QDM Test Case - Deleting all test cases resets test case counter', () => {
+describe('QDM Test Case - Deleting all test cases resets test case counter', () => {
 
     beforeEach('Create Measure', () => {
 
@@ -401,7 +397,7 @@ describe.skip('QDM Test Case - Deleting all test cases resets test case counter'
         cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 2)
 
         // delete test case #1
-        TestCasesPage.grabTestCaseId(1)   
+        TestCasesPage.grabTestCaseId(1)
         TestCasesPage.testCaseAction("delete")
         cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete QDMManifestTC?')
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
@@ -411,14 +407,14 @@ describe.skip('QDM Test Case - Deleting all test cases resets test case counter'
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle2nd, testCaseSeries2nd)
 
         // delete test case #2
-        TestCasesPage.grabTestCaseId(2)   
+        TestCasesPage.grabTestCaseId(2)
         TestCasesPage.testCaseAction("delete")
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
 
         // verify no test cases associated with this measure
         cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 0)
         cy.get(EditMeasurePage.testCasesTab).should('contain.text', 'Test Cases (0)')
-      
+
         // create new case
         TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
@@ -428,7 +424,7 @@ describe.skip('QDM Test Case - Deleting all test cases resets test case counter'
 
         // verify test case is test case #1
         TestCasesPage.grabValidateTestCaseNumber(1)
-      
+
     })
 
 })
