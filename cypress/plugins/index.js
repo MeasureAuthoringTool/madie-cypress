@@ -15,6 +15,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const unzipper = require('unzipper')
 const { removeDirectory } = require('cypress-delete-downloads-folder')
+const { lighthouse, prepareAudit } = require("@cypress-audit/lighthouse")
 
 
 function getConfigurationByFile (file) {
@@ -37,10 +38,10 @@ module.exports = {
           on("before:browser:launch", (browser = {}, launchOptions) => {
           prepareAudit(launchOptions);
       });
-      on("task", {
-        lighthouse: lighthouse(),
-        // pa11y: pa11y(console.log.bind(console)),
-      });
+          on("task", {
+            lighthouse: lighthouse(),
+// pa11y: pa11y(console.log.bind(console)),
+          });
     },
   },
 };
@@ -67,6 +68,10 @@ module.exports = (on, config) => {
         return null
       }
     })
+    on("task", {
+      lighthouse: lighthouse(),
+    // pa11y: pa11y(console.log.bind(console)),
+    });
     on('task', {
       removeDirectory
     })

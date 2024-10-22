@@ -1,5 +1,7 @@
 import { defineConfig } from 'cypress'
 
+const { lighthouse, prepareAudit } = require("@cypress-audit/lighthouse")
+
 export default defineConfig({
   env: {parseSpecialCharSequences: false},
   chromeWebSecurity: false,
@@ -29,6 +31,12 @@ export default defineConfig({
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     setupNodeEvents(on, config ) {
+      on("before:browser:launch", (browser, launchOptions) => {
+        prepareAudit(launchOptions);
+      })
+      on("task", {
+        lighthouse: lighthouse(),
+      })
       on('task', {
         readXlsx() {
           return null
