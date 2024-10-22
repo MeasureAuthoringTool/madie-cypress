@@ -159,18 +159,18 @@ describe('Import Test cases onto an existing Qi Core measure via file and ensure
 
     afterEach('Logout and Clean up Measures', () => {
 
-        //OktaLogin.UILogout()
-        //cy.clearAllCookies()
-        //cy.clearLocalStorage()
-        //cy.setAccessTokenCookie()
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
 
-        //Utilities.deleteMeasure(measureName + 'firstMeasure', CqlLibraryName + 'firstMeasure')
-        //Utilities.deleteMeasure(measureName + 'secondMeasure', CqlLibraryName + 'secondMeasure', false, false, 2)
+        Utilities.deleteMeasure(measureName + 'firstMeasure', CqlLibraryName + 'firstMeasure')
+        Utilities.deleteMeasure(measureName + 'secondMeasure', CqlLibraryName + 'secondMeasure', false, false, 2)
 
     })
 
 
-    it.only('Qi Core Test Case number appears on test case import', () => {
+    it('Qi Core Test Case number appears on test case import', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
