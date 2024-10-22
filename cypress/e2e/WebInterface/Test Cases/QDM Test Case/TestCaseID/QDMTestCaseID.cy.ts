@@ -353,6 +353,8 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
 
 describe('QDM Test Case - Deleting all test cases resets test case counter', () => {
 
+    const CqlLibraryName = 'TestCaseReset' + Date.now()
+
     beforeEach('Create Measure', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName, CqlLibraryName, 'Proportion', false, qdmManifestTestCQL, null, false,
