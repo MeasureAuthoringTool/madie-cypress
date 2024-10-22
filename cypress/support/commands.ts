@@ -25,7 +25,7 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import { Environment } from "../Shared/Environment"
-import '@cypress-audit/lighthouse/commands';
+import '@cypress-audit/lighthouse/commands'
 
 import 'cypress-file-upload'
 
@@ -43,7 +43,7 @@ declare global {
             setAccessTokenCookieALT()
             setAccessTokenCookieCAMELCASE()
             UMLSAPIKeyLogin()
-            lighthouse(thresholds: object, lighthouseConfig: object)/* : Chainable<JQuery<HTMLElement>> */
+            lighthouse()
         }
     }
 }
@@ -362,25 +362,7 @@ Cypress.Commands.add('setAccessTokenCookieCAMELCASE', () => {
 Cypress.Commands.add('UMLSAPIKeyLogin', () => {
     return UMLSAPIKeyLogin()
 })
-/* Cypress.Commands.add('lighthouse', () => {
-    return lighthouse(thresholds, lighthouseConfig)
-}) */
-/* const { lighthouse, prepareAudit } = require("@cypress-audit/lighthouse");
-// const { pa11y } = require("@cypress-audit/pa11y");
-module.exports = {
-  e2e: {
-    baseUrl: "http://bstackdemo.com", // this is your app
-    setupNodeEvents(on, config) {
-      on("before:browser:launch", (browser = {}, launchOptions) => {
-        prepareAudit(launchOptions);
-      });
-      on("task", {
-        lighthouse: lighthouse(),
-        // pa11y: pa11y(console.log.bind(console)),
-      });
-    },
-  },
-}; */
+
 const compareColor = (color: string, property: keyof CSSStyleDeclaration) => (
     targetEle: JQuery
 ) => {
