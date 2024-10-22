@@ -180,7 +180,7 @@ describe('Import Test cases onto an existing Qi Core measure via file and ensure
         //TestCasesPage.testCaseAction('edit')
         cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
-        cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({ force: true })
+        cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
