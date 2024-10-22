@@ -295,30 +295,6 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.savedLibrariesTab).click()
         cy.get(CQLEditorPage.libraryResultsTable).find('[data-test-id="row-0"]').should('not.exist')
     })
-})
-
-describe('View and Edit Included Libraries', () => {
-
-    beforeEach('Create Measure and Login', () => {
-
-        //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
-
-        //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
-
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
-    })
-
-    afterEach('Clean up and Logout', () => {
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
-    })
 
     it('QDM: Edit Included Libraries functionality -- when changes to the CQL is not saved', () => {
 
