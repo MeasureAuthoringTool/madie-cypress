@@ -141,8 +141,8 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.deleteSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
         cy.get(Global.keepWorkingCancel).click()
 
         //confirm contents in CQL editor still contains changes and save button is still available
@@ -155,13 +155,13 @@ describe('Qi-Core Library Includes fields', () => {
         //attempt to delete and choose yes to discard changes
         Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "are you sure" pop up
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Are you sure?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Are you sure?')
 
         //choose cancel
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialogCancelBtn, 5000)
@@ -196,13 +196,13 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.deleteSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "are you sure" pop up
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Are you sure?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Are you sure?')
 
         //choose yes to delete
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn, 5000)
@@ -248,8 +248,8 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
 
         //confirm "are you sure" pop up
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Are you sure?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Are you sure?')
 
         //choose yes to delete
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn, 5000)
@@ -291,8 +291,8 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
         cy.get(CQLEditorPage.editSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
         cy.get(Global.keepWorkingCancel).click()
 
         //confirm contents in CQL editor still contains changes and save button is still available
@@ -305,13 +305,13 @@ describe('Qi-Core Library Includes fields', () => {
         //attempt to edit and choose yes to discard changes
         Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
         cy.get(CQLEditorPage.editSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "Details" pop up --
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Details')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Details')
 
         //choose cancel
         cy.get(CQLLibraryPage.savedLibrariesEditDetailsCancelBtn).scrollIntoView()
@@ -347,13 +347,13 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
         cy.get(CQLEditorPage.editSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "Details" pop up
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Details')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Details')
 
         //make an edit
         Utilities.waitForElementVisible(CQLLibraryPage.editSavedLibraryAlias, 5000)
@@ -398,8 +398,8 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).click()
 
         //confirm "Details" pop up --
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-1qar6n9"]').should('contain.text', 'Details')
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Details')
 
         //make an edit
         Utilities.waitForElementVisible(CQLLibraryPage.editSavedLibraryAlias, 5000)
@@ -417,7 +417,6 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get('[data-testid="SearchIcon"]').click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
-        //cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QICore version \'4.1.1\'codesystem "SNOMEDCT:2017-09": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'valueset "Hysterectomy with No Residual Cervix": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "Surgical Absence of Cervix":    [Procedure: "Hysterectomy with No Residual Cervix"] NoCervixHysterectomy        where NoCervixHysterectomy.status = \'completed\'')
 
     })
 
