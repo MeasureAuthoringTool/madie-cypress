@@ -489,8 +489,8 @@ export class TestCasesPage {
                 testCaseId = idValue.split('-')[2].toString().valueOf()
                 cy.writeFile(testCaseIdPath, testCaseId)
             })
-            
-        
+
+
     }
 
     public static clickCreateTestCaseButton(): void {
@@ -561,8 +561,8 @@ export class TestCasesPage {
 
     public static grabValidateTestCaseTitleAndSeries(testCaseTitle: string, testCaseSeries: string): void {
 
-        cy.get('[data-testid="test-case-title-0_group"]').should('be.visible')
-        cy.get('[data-testid="test-case-title-0_group"]').invoke('text').then(
+        cy.get('[data-testid="test-case-title-0_series"]').should('be.visible')
+        cy.get('[data-testid="test-case-title-0_series"]').invoke('text').then(
             (seriesText) => {
                 expect(seriesText).to.include(testCaseSeries)
             })

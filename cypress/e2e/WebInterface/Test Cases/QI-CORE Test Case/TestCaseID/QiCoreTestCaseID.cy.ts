@@ -36,8 +36,8 @@ let testCaseSeries2nd = 'SecondTC-SBTestSeries'
 const now = require('dayjs')
 let todaysDate = now().format('MM/DD/YYYY')
 
-//skipping tests until the TestCaseID feature flag is set permanently to true, in PROD
-describe.skip('Test Case sorting by Test Case number', () => {
+
+describe('Test Case sorting by Test Case number', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -109,7 +109,7 @@ describe.skip('Test Case sorting by Test Case number', () => {
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/ATest Series 1Test Case 1' + testCaseDescription + todaysDate + 'Select2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select')
         Utilities.waitForElementVisible(TestCasesPage.testCaseAction0Btn, 5000)
         cy.get(TestCasesPage.testCaseAction0Btn).find('[class="action-button"]').should('contain.text', 'Select').wait(2500).click()
-        cy.get('[class="popover-content"]').find('[class="btn-container"]').find('[aria-label="edit-test-case-Second TC - Title for Auto Test"]').contains('edit').click()
+        cy.get('[class="popover-content"]').find('[class="btn-container"]').find('[aria-label="edit-test-case-Test Case 1"]').contains('edit').click()
         cy.get(TestCasesPage.detailsTab).scrollIntoView().wait(2500).click()
         cy.get(TestCasesPage.testCaseTitle).click()
         cy.get(TestCasesPage.testCaseTitle).type('{moveToEnd}')
@@ -131,8 +131,7 @@ describe.skip('Test Case sorting by Test Case number', () => {
     })
 })
 
-//skipping tests until the TestCaseID feature flag is set permanently to true, in PROD
-describe.skip('Import Test cases onto an existing Qi Core measure via file and ensure test case ID / numbering appears', () => {
+describe('Import Test cases onto an existing Qi Core measure via file and ensure test case ID / numbering appears', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -150,7 +149,7 @@ describe.skip('Import Test cases onto an existing Qi Core measure via file and e
         TestCasesPage.CreateTestCaseAPI('secondMeasure' + testCaseTitle, 'secondMeasure' + testCaseSeries, 'secondMeasure' + testCaseDescription, validTestCaseJsonLizzy, false, false, false, 2)
         TestCasesPage.CreateTestCaseAPI('secondMeasure' + secondTestCaseTitle, 'secondMeasure' + secondTestCaseSeries, 'secondMeasure' + secondTestCaseDescription, validTestCaseJsonBobby, false, true, false, 2)
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         OktaLogin.Login()
@@ -160,18 +159,18 @@ describe.skip('Import Test cases onto an existing Qi Core measure via file and e
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        //OktaLogin.UILogout()
+        //cy.clearAllCookies()
+        //cy.clearLocalStorage()
+        //cy.setAccessTokenCookie()
 
-        Utilities.deleteMeasure(measureName + 'firstMeasure', CqlLibraryName + 'firstMeasure')
-        Utilities.deleteMeasure(measureName + 'secondMeasure', CqlLibraryName + 'secondMeasure', false, false, 2)
+        //Utilities.deleteMeasure(measureName + 'firstMeasure', CqlLibraryName + 'firstMeasure')
+        //Utilities.deleteMeasure(measureName + 'secondMeasure', CqlLibraryName + 'secondMeasure', false, false, 2)
 
     })
 
 
-    it('Qi Core Test Case number appears on test case import', () => {
+    it.only('Qi Core Test Case number appears on test case import', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -236,20 +235,23 @@ describe.skip('Import Test cases onto an existing Qi Core measure via file and e
     })
 })
 
-//skipping tests until the TestCaseID feature flag is set permanently to true, in PROD
-describe.skip('Qi Core Measure - Test case number on a Draft Measure', () => {
+describe('Qi Core Measure - Test case number on a Draft Measure', () => {
 
     beforeEach('Create Measure, Test case & Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseSeries, testCaseTitle, testCaseDescription, testCaseJson)
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         OktaLogin.Login()
     })
 
     afterEach('Delete Measure and Logout', () => {
 
+        OktaLogin.UILogout
         Utilities.deleteVersionedMeasure(measureName, CqlLibraryName)
-        OktaLogin.Logout()
+
     })
 
     it('Test case number assigned to a Draft Measure for Qi Core Measure', () => {
@@ -307,19 +309,20 @@ describe.skip('Qi Core Measure - Test case number on a Draft Measure', () => {
     })
 })
 
-describe.skip('QICore Test Case - Deleting all test cases resets test case counter', () => {
+describe('QICore Test Case - Deleting all test cases resets test case counter', () => {
 
     beforeEach('Create measure and login', () => {
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
         //create measure and two test cases on it
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName + 'firstMeasure', measureCQLPFTests)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName + '1Measure', CqlLibraryName + '1Measure', measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         OktaLogin.Login()
@@ -332,7 +335,7 @@ describe.skip('QICore Test Case - Deleting all test cases resets test case count
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName + 'firstMeasure')
+        Utilities.deleteMeasure(measureName + '1Measure', CqlLibraryName + '1Measure')
     })
 
     it('Test case number resets when test case count equals 0', () => {
@@ -346,7 +349,7 @@ describe.skip('QICore Test Case - Deleting all test cases resets test case count
         cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 2)
 
         // delete test case #1
-        TestCasesPage.grabTestCaseId(1)   
+        TestCasesPage.grabTestCaseId(1)
         TestCasesPage.testCaseAction("delete")
         cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCaseTitle + '?')
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
@@ -356,14 +359,14 @@ describe.skip('QICore Test Case - Deleting all test cases resets test case count
         TestCasesPage.grabValidateTestCaseTitleAndSeries(secondTestCaseTitle, secondTestCaseSeries)
 
         // delete test case #2
-        TestCasesPage.grabTestCaseId(2)   
+        TestCasesPage.grabTestCaseId(2)
         TestCasesPage.testCaseAction("delete")
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
 
         // verify no test cases associated with this measure
         cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 0)
         cy.get(EditMeasurePage.testCasesTab).should('contain.text', 'Test Cases (0)')
-      
+
         // create new case
         TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
