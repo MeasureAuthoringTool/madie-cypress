@@ -2,9 +2,13 @@ import { EditMeasurePage } from "./EditMeasurePage"
 
 export class CQLEditorPage {
 
+    public static readonly mainCqlDocument = '.left-panel'
 
     //button to save CQL
     public static readonly saveCQLButton = '[data-testid="save-cql-btn"]'
+
+    // discard changes
+    public static readonly discardChanges = '[data-testid="reset-cql-btn"]'
 
     //message that appears for various alerts that occur at successful saving
     public static readonly saveAlertMessage = '[id="status-handler"]'
@@ -103,6 +107,19 @@ export class CQLEditorPage {
     public static readonly deleteCQLDefinitions = '[data-testid="delete-button-0"]'
     public static readonly saveDefinitionBtn = '[data-testid="definition-save-btn"]'
 
+    //Parameters page
+    public static readonly parametersTab = '[data-testid="parameters-tab"]'
+    public static readonly parameterEntryTab = '[data-testid="parameter-tab"]'
+    public static readonly savedParametersTab = '[data-testid="saved-parameters-tab"]'
+    public static readonly parameterNameTextBox = '[data-testid="parameter-name-input"]'
+    public static readonly nameTextBoxErrors = '[data-testid="parameter-name-helper-text"]'
+    public static readonly clearParametersExpressionButton = '[data-testid="clear-parameter-btn"]'
+    public static readonly applyParametersExpressionButton = '[data-testid="apply-parameter-btn"]'
+    public static readonly parameterExpressionEditor = '[data-testid="terminology-section-sub-header-content-Expression Editor"]'
+
+
+
+
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
 
@@ -125,7 +142,9 @@ export class CQLEditorPage {
 
     public static validateSuccessfulCQLUpdate(): void {
 
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each(successMsg => {
+            expect(successMsg.text()).to.be.oneOf(['CQL updated successfully but the following issues were found', 'CQL updated successfully'])
+        })
     }
 
     public static applyDefinition(): void {
@@ -135,4 +154,5 @@ export class CQLEditorPage {
         cy.get('[data-testid="measure-editor-toast"]').should('contain.text', 'successfully added to the CQL')
 
     }
+
 }
