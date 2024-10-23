@@ -110,14 +110,14 @@ describe('QDM Test Case sorting by Test Case number', () => {
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
         //sort by case number and then edit some test case that is not at the top -- once user navigates back to the test case list page default sorting should appear
+        Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select')
         Utilities.waitForElementVisible(TestCasesPage.testCaseAction0Btn, 5000)
-        cy.get(TestCasesPage.testCaseAction0Btn).find('[class="action-button"]').should('contain.text', 'Select').wait(2500).click()
+        cy.get(TestCasesPage.testCaseAction0Btn).find('[class="action-button"]').should('contain.text', 'Select').click()
         cy.get('[class="popover-content"]').find('[class="btn-container"]').find('[aria-label="edit-test-case-QDMManifestTC"]').contains('edit').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
         cy.get(TestCasesPage.QDMRace).scrollIntoView().click()
         cy.get('[data-value="Other Race"]').click()
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
@@ -291,7 +291,7 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
 
     afterEach('Delete Measure and Logout', () => {
 
-        Utilities.deleteVersionedMeasure(measureQDMManifestName, CqlLibraryName)
+        Utilities.deleteVersionedMeasure(newMeasureName, CqlLibraryName)
         OktaLogin.UILogout()
     })
 
