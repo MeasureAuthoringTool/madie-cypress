@@ -444,7 +444,7 @@ describe('QDM Library Includes fields', () => {
 
     })
 
-    it('View Included Library Details', () => {
+    it('View Included QDM Library Details', () => {
 
         cy.get(CQLEditorPage.includesTab).click()
 
@@ -459,6 +459,28 @@ describe('QDM Library Includes fields', () => {
         cy.get('[data-testid="library-alias-container"] > .result-value').should('not.be.enabled')
         cy.get(CQLEditorPage.versionNumber).should('contain.text', 'Version8.0.000')
         cy.get('[data-testid="library-version-container"] > .result-value').should('not.be.enabled')
+    })
+
+    it('Verify all Qi Core Library versions are displayed while editing saved Libraries', () =>{
+
+        cy.get(CQLEditorPage.includesTab).click()
+
+        //Navigate to Saved Libraries tab
+        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+        cy.get(CQLEditorPage.savedLibrariesTab).click()
+
+        //click edit on the page
+        cy.get(CQLEditorPage.editSavedLibrary).scrollIntoView()
+        Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
+        cy.get(CQLEditorPage.editSavedLibrary).click()
+
+        //confirm "Details" pop up --
+        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
+        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Details')
+
+        //Confirm Library versions
+        cy.get(CQLEditorPage.versionDropdownBtn).click()
+        cy.get(CQLEditorPage.versionNumberList).should('contain.text', '1.0.0002.0.0003.0.0004.0.0005.0.0006.0.0007.0.0008.0.000')
     })
 
 })

@@ -88,6 +88,8 @@ export class CQLEditorPage {
     public static readonly viewSavedLibrary = '[data-testid="view-button-0"]'
     public static readonly aliasName = '[data-testid="library-alias-container"]'
     public static readonly versionNumber = '[data-testid="library-version-container"]'
+    public static readonly versionDropdownBtn = '[data-testid="version-select"]'
+    public static readonly versionNumberList = '[class="MuiList-root MuiList-padding MuiMenu-list css-1c1ttle"]'
 
     //Definitions page
     public static readonly definitionsTab = '[data-testid="definitions-tab"]'
