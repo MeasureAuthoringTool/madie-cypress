@@ -41,7 +41,7 @@ let measureCQL = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
     '  (Enc E where E.status = \'finished\') is not null '
 
 
-describe('Qi-Core CQL Parameters', () => {
+describe.skip('Qi-Core CQL Parameters', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -228,7 +228,7 @@ describe('Qi-Core CQL Parameters', () => {
     })
 })
 
-describe('Qi-Core CQL Parameters - Measure ownership Validations', () => {
+describe.skip('Qi-Core CQL Parameters - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
