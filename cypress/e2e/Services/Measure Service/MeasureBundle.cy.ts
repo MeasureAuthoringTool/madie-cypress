@@ -762,7 +762,7 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
 
     before('Create Measure', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 2, measureCQL, null, true)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 2, measureCQL, 2, true)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(2, true, 'Initial Population', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne')
     })
 
@@ -772,7 +772,7 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName + 2, true, true)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName + 2, true, true, 2)
 
     })
     it('Get Measure bundle resource will return details of measure, regardless if the request is comfing from the owner / creator of the measure', () => {

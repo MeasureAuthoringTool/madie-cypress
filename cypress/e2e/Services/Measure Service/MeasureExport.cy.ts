@@ -427,8 +427,8 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
         })
     })
 })
-//skipping because feature is not ready to be released to PROD
-describe.skip('QDM Measure Export', () => {
+
+describe('QDM Measure Export', () => {
 
     beforeEach('Create Measure and set access token', () => {
 

@@ -137,7 +137,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
 
                         }).then((response) => {
                             expect(response.status).to.eql(200)
-                            expect(response.body).to.eql('Succesfully deleted provided test cases')
+                            expect(response.body).to.eql('Successfully deleted provided test cases')
                         })
                     })
                 })
@@ -229,7 +229,7 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
 
                         }).then((response) => {
                             expect(response.status).to.eql(200)
-                            expect(response.body).to.eql('Succesfully deleted provided test cases')
+                            expect(response.body).to.eql('Successfully deleted provided test cases')
                         })
                     })
                 })
