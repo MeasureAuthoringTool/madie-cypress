@@ -24,33 +24,39 @@ let todaysDate = now().format('MM/DD/YYYY')
 
 describe('Create Test Case', () => {
 
-    before('Create Measure', () => {
+    beforeEach('Create Measure and login', () => {
 
         //Create New Measure
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, 0)
         OktaLogin.Login()
         MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null, null, null, 'Procedure')
-    })
-    beforeEach('Login', () => {
+        OktaLogin.UILogout()
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(0, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         OktaLogin.Login()
-
-    })
-    afterEach('Logout', () => {
-        OktaLogin.Logout()
-
     })
 
-    after('Clean up', () => {
-
+    afterEach('Logout and delete measure', () => {
+        OktaLogin.UILogout()
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
@@ -72,6 +78,8 @@ describe('Create Test Case', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter("edit")
+
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         //click tab to get to test cases
         cy.get(EditMeasurePage.testCasesTab).click()
