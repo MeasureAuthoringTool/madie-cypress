@@ -36,8 +36,8 @@ describe('Measure Association: Validations', () => {
         QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
 
         //Create New QDM Measure
-        //3
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName1, QDMCqlLibraryName1, 'Proportion', false, qdmManifestTestCQL, null, false,
+        //0
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName1, QDMCqlLibraryName1, 'Proportion', false, qdmManifestTestCQL, 0, false,
             '2025-01-01', '2025-12-31')
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         OktaLogin.Login()
@@ -57,13 +57,13 @@ describe('Measure Association: Validations', () => {
         QDMCqlLibraryName0 = 'QDMManifestTestLN0' + Date.now() + randValue + 7 + randValue
 
         //Create Second QDM Measure
-        //2
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName0, QDMCqlLibraryName0, 'Proportion', false, qdmManifestTestCQL, 2, false,
+        //1
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName0, QDMCqlLibraryName0, 'Proportion', false, qdmManifestTestCQL, 1, false,
             '2025-01-01', '2025-12-31')
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC0', 'QDMManifestTCGroup0', 'QDMManifestTC0', '', false, false)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 1)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -78,13 +78,13 @@ describe('Measure Association: Validations', () => {
         QiCoreMeasureName1 = 'ProportionPatientMN1' + Date.now() + randValue + 4 + randValue
         QiCoreCqlLibraryName1 = 'ProportionPatientLN1' + Date.now() + randValue + 5 + randValue
         //Create new QI Core measure
-        //1
-        CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests)
+        //2
+        CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests, 2)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit', 2)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
@@ -100,13 +100,13 @@ describe('Measure Association: Validations', () => {
         QiCoreMeasureName0 = 'ProportionPatientMN0' + Date.now() + randValue + 2 + randValue
         QiCoreCqlLibraryName0 = 'ProportionPatientLN0' + Date.now() + randValue + 3 + randValue
         //Create second QI Core measure
-        //0
+        //3
         CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName0, QiCoreCqlLibraryName0, measureCQLPFTests, 3)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit', 3)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
@@ -121,7 +121,7 @@ describe('Measure Association: Validations', () => {
 
         //validation test: only one measure is selected
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/QDMMeasureId').should('exist').then((id) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
                     url: '/api/measures/cms-id-association?qiCoreMeasureId=&qdmMeasureId=' + id + '&copyMetaData=true',
@@ -141,8 +141,8 @@ describe('Measure Association: Validations', () => {
 
         //validation test: must be different models
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/QDMMeasureId').should('exist').then((qdmId1) => {
-                cy.readFile('cypress/fixtures/QDMMeasureId2').should('exist').then((qdmId2) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((qdmId1) => {
+                cy.readFile('cypress/fixtures/measureId3').should('exist').then((qdmId2) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qdmId2 + '&qdmMeasureId=' + qdmId1 + '&copyMetaData=true',
@@ -164,8 +164,8 @@ describe('Measure Association: Validations', () => {
 
         //validation test: QDM measure must contain CMS id
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/QDMMeasureId').should('exist').then((qdmId1) => {
-                cy.readFile('cypress/fixtures/QiCoreMeasureId').should('exist').then((qicoreId1) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((qdmId1) => {
+                cy.readFile('cypress/fixtures/measureId2').should('exist').then((qicoreId1) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qicoreId1 + '&qdmMeasureId=' + qdmId1 + '&copyMetaData=true',
@@ -185,7 +185,7 @@ describe('Measure Association: Validations', () => {
 
         //validation test: Qi Core measure must be in draft status
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 1)
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
@@ -197,7 +197,7 @@ describe('Measure Association: Validations', () => {
         cy.get(EditMeasurePage.cmsIDDialogContinue).click()
         cy.get(Header.mainMadiePageButton).click()
 
-        MeasuresPage.actionCenter('version')
+        MeasuresPage.actionCenter('version', 2)
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
@@ -210,8 +210,8 @@ describe('Measure Association: Validations', () => {
         Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 35000)
         OktaLogin.UILogout()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/QDMMeasureId2').should('exist').then((qdmId2) => {
-                cy.readFile('cypress/fixtures/QiCoreMeasureId').should('exist').then((qicoreId1) => {
+            cy.readFile('cypress/fixtures/measureId1').should('exist').then((qdmId2) => {
+                cy.readFile('cypress/fixtures/measureId2').should('exist').then((qicoreId1) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qicoreId1 + '&qdmMeasureId=' + qdmId2 + '&copyMetaData=true',
@@ -231,7 +231,7 @@ describe('Measure Association: Validations', () => {
 
         //validation test: Qi Core measure must NOT contain CMS id
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 3)
         cy.get(EditMeasurePage.generateCmsIdButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogCancel, 3500)
         Utilities.waitForElementVisible(EditMeasurePage.cmsIDDialogContinue, 3500)
@@ -245,8 +245,8 @@ describe('Measure Association: Validations', () => {
 
         OktaLogin.UILogout()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/QDMMeasureId2').should('exist').then((qdmId2) => {
-                cy.readFile('cypress/fixtures/QiCoreMeasureId2').should('exist').then((qicoreId2) => {
+            cy.readFile('cypress/fixtures/measureId1').should('exist').then((qdmId2) => {
+                cy.readFile('cypress/fixtures/measureId3').should('exist').then((qicoreId2) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qicoreId2 + '&qdmMeasureId=' + qdmId2 + '&copyMetaData=true',
@@ -271,12 +271,12 @@ describe('Measure Association: Validations', () => {
         QiCoreCqlLibraryNameAlt = QiCoreCqlLibraryName1 + 5 + randValue
 
         //validation test: both measures the user is not the owner of
-        CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureNameAlt, QiCoreCqlLibraryNameAlt, measureCQLPFTests, null, true)
+        CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureNameAlt, QiCoreCqlLibraryNameAlt, measureCQLPFTests, 4, true)
         OktaLogin.AltLogin()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 4)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
@@ -287,11 +287,11 @@ describe('Measure Association: Validations', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/QDMMeasureId2').should('exist').then((qdmId2) => {
-                cy.readFile('cypress/fixtures/QiCoreMeasureId').should('exist').then((qicoreId1) => {
+            cy.readFile('cypress/fixtures/measureId1').should('exist').then((qdmId2) => {
+                cy.readFile('cypress/fixtures/measureId4').should('exist').then((qicoreId4) => {
                     cy.request({
                         failOnStatusCode: false,
-                        url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qicoreId1 + '&qdmMeasureId=' + qdmId2 + '&copyMetaData=true',
+                        url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qicoreId4 + '&qdmMeasureId=' + qdmId2 + '&copyMetaData=true',
                         headers: {
                             authorization: 'Bearer ' + accessToken.value
                         },
@@ -319,8 +319,8 @@ describe('Measure Association: Validations', () => {
         QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
 
         //Create New QDM Measure
-        //1
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName1, QDMCqlLibraryName1, 'Proportion', false, qdmManifestTestCQL, null, false,
+        //0
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName1, QDMCqlLibraryName1, 'Proportion', false, qdmManifestTestCQL, 0, false,
             '2025-01-01', '2025-12-31')
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
@@ -339,13 +339,13 @@ describe('Measure Association: Validations', () => {
         QiCoreMeasureName1 = 'ProportionPatientMN1' + Date.now() + randValue + 4 + randValue
         QiCoreCqlLibraryName1 = 'ProportionPatientLN1' + Date.now() + randValue + 5 + randValue
         //Create new QI Core measure
-        //0
-        CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests)
+        //1
+        CreateMeasurePage.CreateQICoreMeasureAPI(QiCoreMeasureName1, QiCoreCqlLibraryName1, measureCQLPFTests, 1)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
@@ -374,8 +374,8 @@ describe('Measure Association: Validations', () => {
 
         OktaLogin.UILogout()
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/QDMMeasureId').should('exist').then((qdmId1) => {
-                cy.readFile('cypress/fixtures/QiCoreMeasureId').should('exist').then((qicoreId1) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((qdmId1) => {
+                cy.readFile('cypress/fixtures/measureId1').should('exist').then((qicoreId1) => {
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/cms-id-association?qiCoreMeasureId=' + qicoreId1 + '&qdmMeasureId=' + qdmId1 + '&copyMetaData=true',

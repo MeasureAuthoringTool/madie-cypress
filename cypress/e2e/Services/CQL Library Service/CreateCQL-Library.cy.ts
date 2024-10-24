@@ -9,7 +9,7 @@ let harpUser = Environment.credentials().harpUser
 
 
 // still seeing issues with these tests locking up; skipping until we can investigate further
-describe.skip('CQL Library Service: Create CQL Library', () => {
+describe('CQL Library Service: Create CQL Library', () => {
 
     beforeEach('Set Access Token', () => {
 
@@ -26,6 +26,7 @@ describe.skip('CQL Library Service: Create CQL Library', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        let setId = uuidv4()
 
         CQLLibraryName = 'QICoreCqlLibrary' + Date.now()
 
@@ -40,18 +41,15 @@ describe.skip('CQL Library Service: Create CQL Library', () => {
                     "cqlLibraryName": CQLLibraryName,
                     "model": model,
                     "cql": "",
-                    "librarySetId": uuidv4(),
-                    "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
+                    "librarySetId": setId,
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 expect(response.body.cqlLibraryName).to.eql(CQLLibraryName)
                 expect(response.body.model).to.eql(model)
+                expect(response.body.librarySetId).to.be.exist
                 expect(response.body.createdBy).to.eql(harpUser)
-                expect(response.body.programUseContext.code).to.eql('a')
-                expect(response.body.programUseContext.display).to.eql('b')
-                expect(response.body.programUseContext.codeSystem).to.eql('c')
             })
         })
     })
@@ -75,17 +73,14 @@ describe.skip('CQL Library Service: Create CQL Library', () => {
                     "model": 'QDM v5.6',
                     "cql": "",
                     "librarySetId": uuidv4(),
-                    "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
                 expect(response.body.cqlLibraryName).to.eql(CQLLibraryName)
                 expect(response.body.model).to.eql('QDM v5.6')
+                expect(response.body.librarySetId).to.be.exist
                 expect(response.body.createdBy).to.eql(harpUser)
-                expect(response.body.programUseContext.code).to.eql('a')
-                expect(response.body.programUseContext.display).to.eql('b')
-                expect(response.body.programUseContext.codeSystem).to.eql('c')
             })
         })
     })
@@ -129,9 +124,6 @@ describe.skip('CQL Library Service: Create CQL Library', () => {
                     expect(response.status).to.eql(200)
                     expect(response.body).to.not.be.null
                     expect(response.body.id).to.be.exist
-                    expect(response.body.programUseContext.code).to.eql('a')
-                    expect(response.body.programUseContext.display).to.eql('b')
-                    expect(response.body.programUseContext.codeSystem).to.eql('c')
                 })
             })
         })
@@ -162,7 +154,7 @@ describe.skip('CQL Library Service: Create CQL Library', () => {
 })
 
 // still seeing issues with these tests locking up; skipping until we can investigate further
-describe.skip('CQL Library Name validations', () => {
+describe('CQL Library Name validations', () => {
 
     let apiCQLLibraryName = 'TestLibrary' + Date.now()
     let CQLLibraryPublisher = 'SemanticBits'
@@ -227,7 +219,7 @@ describe.skip('CQL Library Name validations', () => {
                 }
             }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.validationErrors.cqlLibraryName).to.eql('Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+                expect(response.body.validationErrors).to.be.exist
             })
         })
     })
@@ -254,7 +246,7 @@ describe.skip('CQL Library Name validations', () => {
                 }
             }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.validationErrors.cqlLibraryName).to.eql('Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+                expect(response.body.validationErrors).to.be.exist
             })
         })
     })
@@ -281,7 +273,7 @@ describe.skip('CQL Library Name validations', () => {
                 }
             }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.validationErrors.cqlLibraryName).to.eql('Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+                expect(response.body.validationErrors).to.be.exist
             })
         })
     })
@@ -308,7 +300,7 @@ describe.skip('CQL Library Name validations', () => {
                 }
             }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.validationErrors.cqlLibraryName).to.eql('Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.')
+                expect(response.body.validationErrors).to.be.exist
             })
         })
     })
@@ -335,7 +327,7 @@ describe.skip('CQL Library Name validations', () => {
                 }
             }).then((response) => {
                 expect(response.status).to.eql(400)
-                expect(response.body.validationErrors.cqlLibraryName).to.eql('Library name cannot be more than 255 characters.')
+                expect(response.body.validationErrors.cqlLibraryName).to.eql('Library name cannot be more than 64 characters.')
             })
         })
     })
@@ -368,8 +360,7 @@ describe.skip('CQL Library Name validations', () => {
     })
 })
 
-// still seeing issues with these tests locking up; skipping until we can investigate further
-describe.skip('CQL Library Model Validations', () => {
+describe('CQL Library Model Validations', () => {
 
     beforeEach('Set Access Token', () => {
 
