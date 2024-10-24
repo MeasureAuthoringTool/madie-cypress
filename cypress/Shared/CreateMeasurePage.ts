@@ -238,11 +238,14 @@ export class CreateMeasurePage {
     }
 
     public static CreateQICoreMeasureAPIWithoutELMJson(measureName: string, CqlLibraryName: string, measureCQL?: string,
-        twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
+        twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, measureNumber?: number): string {
 
         let user = ''
         const now = require('dayjs')
         let ecqmTitle = 'eCQMTitle'
+        if ((measureNumber === undefined) || (measureNumber === null)) {
+            measureNumber = 0
+        }
 
 
         if (mpStartDate === undefined) {
@@ -311,6 +314,15 @@ export class CreateMeasurePage {
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
+                if (measureNumber > 0) {
+                    cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
+                    cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
+
+                }
+                else {
+                    cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                }
                 if (twoMeasures === true) {
                     cy.writeFile('cypress/fixtures/measureId2', response.body.id)
                     //cy.writeFile('cypress/fixtures/versionId2', response.body.versionId)
@@ -328,7 +340,7 @@ export class CreateMeasurePage {
     }
 
     public static CreateQDMMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
-        twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
+        twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, measureNumber?: number): string {
 
         let user = ''
         const now = require('dayjs')
@@ -341,6 +353,9 @@ export class CreateMeasurePage {
 
         if (mpEndDate === undefined) {
             mpEndDate = now().format('YYYY-MM-DD')
+        }
+        if ((measureNumber === undefined) || (measureNumber === null)) {
+            measureNumber = 0
         }
 
         if (altUser) {
@@ -410,6 +425,15 @@ export class CreateMeasurePage {
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
+                if (measureNumber > 0) {
+                    cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
+                    cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
+
+                }
+                else {
+                    cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                }
                 if (twoMeasures === true) {
                     cy.writeFile('cypress/fixtures/measureId2', response.body.id)
                     //cy.writeFile('cypress/fixtures/versionId2', response.body.versionId)
@@ -440,6 +464,9 @@ export class CreateMeasurePage {
 
         if (mpEndDate === undefined) {
             mpEndDate = now().format('YYYY-MM-DD')
+        }
+        if ((measureNumber === undefined) || (measureNumber === null)) {
+            measureNumber = 0
         }
 
         if (altUser) {
@@ -523,7 +550,7 @@ export class CreateMeasurePage {
         return user
     }
 
-    public static CreateQDMMeasureWithBaseConfigurationFieldsWithoutDescriptionStewardsandDevelopersAPI(measureName: string, CqlLibraryName: string, measureScoring: string, patientBasis?: boolean, measureCQL?: string, twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
+    public static CreateQDMMeasureWithBaseConfigurationFieldsWithoutDescriptionStewardsandDevelopersAPI(measureName: string, CqlLibraryName: string, measureScoring: string, patientBasis?: boolean, measureCQL?: string, twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, measureNumber?: number): string {
 
         let user = ''
         const now = require('dayjs')
@@ -536,6 +563,9 @@ export class CreateMeasurePage {
 
         if (mpEndDate === undefined) {
             mpEndDate = now().format('YYYY-MM-DD')
+        }
+        if ((measureNumber === undefined) || (measureNumber === null)) {
+            measureNumber = 0
         }
 
         if (altUser) {
@@ -599,6 +629,16 @@ export class CreateMeasurePage {
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
+                if (measureNumber > 0) {
+                    cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
+                    cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
+
+                }
+                else {
+                    cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                }
+
                 if (twoMeasures === true) {
                     cy.writeFile('cypress/fixtures/measureId2', response.body.id)
                     //cy.writeFile('cypress/fixtures/versionId2', response.body.versionId)

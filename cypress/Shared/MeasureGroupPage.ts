@@ -379,6 +379,7 @@ export class MeasureGroupPage {
         let measurePath = ''
         let measureGroupPath = ''
         let measureScoring = 'Proportion'
+
         if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
         if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Surgical Absence of Cervix' }
         if ((PopNumP == undefined) || (PopNumP === null)) { PopNumP = 'Surgical Absence of Cervix' }
@@ -391,13 +392,14 @@ export class MeasureGroupPage {
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
         }
-        if (measureNumber === 1 || measureNumber === null) {
-            measurePath = 'cypress/fixtures/measureId'
-            measureGroupPath = 'cypress/fixtures/groupId'
+        if (measureNumber === undefined || measureNumber === null) {
+            measureNumber = 0
+        }
+        if (measureNumber > 0) {
+            measurePath = 'cypress/fixtures/measureId' + measureNumber
         }
         else {
-            measurePath = 'cypress/fixtures/measureId' + measureNumber
-            measureGroupPath = 'cypress/fixtures/groupId' + measureNumber
+            measurePath = 'cypress/fixtures/measureId'
         }
 
         //Add Measure Group to the Measure
