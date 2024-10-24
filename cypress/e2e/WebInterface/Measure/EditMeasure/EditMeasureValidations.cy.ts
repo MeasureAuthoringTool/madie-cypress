@@ -95,8 +95,8 @@ describe('Edit Measure Validations', () => {
 
         //Add invalid Endorser Number
         cy.get(EditMeasurePage.endorsingOrganizationTextBox).click()
-        cy.get(EditMeasurePage.endorsingOrganizationTextBox).type('NQF',{delay:50})
-        cy.get(EditMeasurePage.endorsingOrganizationOption).click()
+        cy.get(EditMeasurePage.endorsingOrganizationTextBox).type('CMS',{delay:50})
+        cy.get('#endorser-listbox').contains('CMS Consensus Based Entity').click()
         cy.get(EditMeasurePage.endorsementNumber).type('23!@$')
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
 
