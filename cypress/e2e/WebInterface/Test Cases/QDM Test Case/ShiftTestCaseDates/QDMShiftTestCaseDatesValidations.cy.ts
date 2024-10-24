@@ -8,7 +8,8 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { QDMElements } from "../../../../../Shared/QDMElements"
-
+import {Header} from "../../../../../Shared/Header"
+import {LandingPage} from "../../../../../Shared/LandingPage"
 
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 let measureName = 'ProportionPatient' + Date.now()
@@ -25,6 +26,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
             '2025-01-01', '2025-12-31')
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
+        TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC2', 'QDMManifestTCGroup2', 'QDMManifestTC2', '', true, false)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -35,31 +37,6 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).wait(1700).click()
-        //navigate to the test case list Expansion page
-        cy.get(TestCasesPage.qdmExpansionSubTab).click()
-        //selecting initial manifest value that will allow test case to pass
-        cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
-            .find('[type="radio"]')
-            .then((radio) => {
-                //check / select radio button for manifest
-                cy.wrap(radio).eq(1).check({ force: true }).should('be.checked');
-
-                Utilities.waitForElementVisible('[id="manifest-select-label"]', 5000)
-                cy.contains('[id="manifest-select-label"]', 'Manifest');
-
-                cy.get(TestCasesPage.qdmManifestSelectDropDownBox).click()
-                cy.get(TestCasesPage.qdmManifestMaySecondOption).click()
-                Utilities.waitForElementEnabled(TestCasesPage.qdmManifestSaveBtn, 3500)
-                cy.get(TestCasesPage.qdmManifestSaveBtn).click()
-                cy.get(TestCasesPage.qdmManifestSuccess).should('contain.text', 'Expansion details Updated Successfully')
-
-            })
-        //confirm that manifest drop down has selected value
-        cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('contain.text', 'ecqm-update-2024-05-02')
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).wait(1700).click().wait(3000)
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 5000000)
         TestCasesPage.testCaseAction('edit', false)
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2000 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
@@ -74,16 +51,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get('[id="code-selector"]').click()
         cy.get('[data-testid="code-option-1536498"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).wait(1700).click().wait(3000)
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
-        TestCasesPage.testCaseAction('edit', false)
-        TestCasesPage.grabElementId(1)
-        TestCasesPage.qdmTestCaseElementAction('edit')
+
         //add negation
         Utilities.waitForElementVisible(TestCasesPage.negationTab, 35000)
         cy.get(TestCasesPage.negationTab).scrollIntoView().click()
@@ -97,8 +65,8 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get('[data-testid="option-SNOMEDCT"]').click()
         Utilities.waitForElementVisible('[id="code-selector"]', 35000)
         cy.get('[id="code-selector"]').click()
-        Utilities.waitForElementVisible('[data-testid="option-105480006"]', 35000)
-        cy.get('[data-testid="option-105480006"]').click()
+        Utilities.waitForElementVisible('[data-testid="option-1162745003"]', 35000)
+        cy.get('[data-testid="option-1162745003"]').click()
         Utilities.waitForElementVisible('[data-testid="add-negation-rationale"]', 35000)
         cy.get('[data-testid="add-negation-rationale"]').click()
         //Close the Element
@@ -106,12 +74,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.scrollTo(100, 0)
         Utilities.waitForElementVisible('[data-testid="CloseIcon"]', 35000)
         cy.get('[data-testid="CloseIcon"]').click()
-        //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(3000)
-        //add element - code system to TC
+
         //Element - Encounter:Performed: Nonelective Inpatient Encounter
         cy.get('[data-testid="elements-tab-encounter"]').scrollIntoView().click()
         cy.get('[data-testid="data-type-Encounter, Performed: Nonelective Inpatient Encounter"]').click()
@@ -134,39 +97,12 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get('[data-value="111297002"]').click()
         cy.get('[data-testid="integer-input-field-Rank"]').type('1')
         cy.get(TestCasesPage.addAttribute).click()
-        //Add Expected value for Test case
-        //navigate to the Expected / Actual tab
-        cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click()
-        //Initial Population expected box
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
-        //Denominator expected box
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
-        //Numerator expected box
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('0')
-        //Numerator Exception expected box
-        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).type('1')
+
         //save changes
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
         Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
-        //logout of MADiE
-        OktaLogin.UILogout()
-        TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC2', 'QDMManifestTCGroup2', 'QDMManifestTC2', '', true, false)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).wait(1700).click().wait(3000)
@@ -185,16 +121,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get('[id="code-selector"]').click()
         cy.get('[data-testid="code-option-1536498"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).wait(1700).click().wait(3000)
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
-        TestCasesPage.testCaseAction('edit', true)
-        TestCasesPage.grabElementId(1)
-        TestCasesPage.qdmTestCaseElementAction('edit')
+
         //add negation
         Utilities.waitForElementVisible(TestCasesPage.negationTab, 35000)
         cy.get(TestCasesPage.negationTab).scrollIntoView().click()
@@ -208,8 +135,8 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get('[data-testid="option-SNOMEDCT"]').click()
         Utilities.waitForElementVisible('[id="code-selector"]', 35000)
         cy.get('[id="code-selector"]').click()
-        Utilities.waitForElementVisible('[data-testid="option-105480006"]', 35000)
-        cy.get('[data-testid="option-105480006"]').click()
+        Utilities.waitForElementVisible('[data-testid="option-1162745003"]', 35000)
+        cy.get('[data-testid="option-1162745003"]').click()
         Utilities.waitForElementVisible('[data-testid="add-negation-rationale"]', 35000)
         cy.get('[data-testid="add-negation-rationale"]').click()
         //Close the Element
@@ -217,12 +144,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.scrollTo(100, 0)
         Utilities.waitForElementVisible('[data-testid="CloseIcon"]', 35000)
         cy.get('[data-testid="CloseIcon"]').click()
-        //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(3000)
-        //add element - code system to TC
+
         //Element - Encounter:Performed: Nonelective Inpatient Encounter
         cy.get('[data-testid="elements-tab-encounter"]').scrollIntoView().click()
         cy.get('[data-testid="data-type-Encounter, Performed: Nonelective Inpatient Encounter"]').click()
@@ -248,34 +170,19 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         //Add Expected value for Test case
         //navigate to the Expected / Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click()
-        //Initial Population expected box
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).type('1')
-        //Denominator expected box
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
-        //Numerator expected box
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).type('0')
-        //Numerator Exception expected box
-        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('be.enabled')
-        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).type('1')
+
         //save changes
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
         Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
 
-        OktaLogin.UILogout()
-        OktaLogin.Login()
+        //navigate away from measure group page
+        cy.get(Header.mainMadiePageButton).click()
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
+        cy.get(LandingPage.myMeasuresTab).should('exist')
+        cy.get(LandingPage.myMeasuresTab).should('be.visible')
     })
 
     afterEach('Clean up', () => {
