@@ -631,7 +631,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add Demographics
-        cy.get(TestCasesPage.QDMDob).type('01/01/2020')
+        cy.get(TestCasesPage.QDMDob).type('01/01/2020 12:00 AM')
 
         //Add Expected/Actual value to first Population criteria
         cy.get(TestCasesPage.expectedOrActualTab).click()
@@ -702,7 +702,7 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add Demographics
-        cy.get(TestCasesPage.QDMDob).type('01/01/2020')
+        cy.get(TestCasesPage.QDMDob).type('01/01/2020 12:00 AM')
 
         //save dob value
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
