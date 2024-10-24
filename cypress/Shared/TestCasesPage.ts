@@ -889,7 +889,6 @@ export class TestCasesPage {
     public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, secondMeasure?: boolean, twoTestCases?: boolean, altUser?: boolean, measureNumber?: number): string {
         let user = ''
         let measurePath = 'cypress/fixtures/measureId'
-        let measureGroupPath = 'cypress/fixtures/groupId'
         let testCasePath = ''
         let testCasePIdPath = ''
         if (altUser) {
@@ -926,35 +925,34 @@ export class TestCasesPage {
         //Add Test Case to the Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((id) => {
-                cy.readFile(measureGroupPath).should('exist').then((groupIdFc) => {
-                    cy.request({
-                        url: '/api/measures/' + id + '/test-cases',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        method: 'POST',
-                        body: {
-                            'name': "TEST",
-                            'series': series,
-                            'title': title,
-                            'description': description,
-                            'json': jsonValue,
-                            "hapiOperationOutcome": {
-                                "code": 201,
-                                "message": null,
-                                "outcomeResponse": null
-                            }
+                cy.request({
+                    url: '/api/measures/' + id + '/test-cases',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'POST',
+                    body: {
+                        'name': "TEST",
+                        'series': series,
+                        'title': title,
+                        'description': description,
+                        'json': jsonValue,
+                        'hapiOperationOutcome': {
+                            "code": 201,
+                            "message": null,
+                            "outcomeResponse": null
                         }
-                    }).then((response) => {
-                        expect(response.status).to.eql(201)
-                        expect(response.body.id).to.be.exist
-                        expect(response.body.series).to.eql(series)
-                        expect(response.body.title).to.eql(title)
-                        expect(response.body.description).to.eql(description)
-                        cy.writeFile(testCasePath, response.body.id)
-                        cy.writeFile(testCasePIdPath, response.body.patientId)
-                    })
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    expect(response.body.series).to.eql(series)
+                    expect(response.body.title).to.eql(title)
+                    expect(response.body.description).to.eql(description)
+                    cy.writeFile(testCasePath, response.body.id)
+                    cy.writeFile(testCasePIdPath, response.body.patientId)
                 })
+
             })
         })
         return user
