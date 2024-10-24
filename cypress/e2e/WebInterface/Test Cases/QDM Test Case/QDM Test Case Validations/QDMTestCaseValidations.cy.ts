@@ -323,7 +323,6 @@ describe('Edit Test Case Validations', () => {
         cy.get(TestCasesPage.editTestCaseTitleInlineError).should('contain.text', 'Test Case Title is required.')
     })
 
-    //dirty check validation
     it('Validate dirty check when user attempts to navigate away from the QDM Test Case edit page', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -340,8 +339,8 @@ describe('Edit Test Case Validations', () => {
         cy.get(TestCasesPage.elementsTab).should('be.enabled')
         cy.get(TestCasesPage.elementsTab).click()
 
-        //enter a value of the dob
-        cy.get(TestCasesPage.QDMDob).type('01/01/2000').click().wait(1000)
+        // enter full patient to ensure page is dirty
+        TestCasesPage.enterPatientDemographics('04/10/1942 12:00 AM', 'Living', 'White', 'Female', 'Not Hispanic or Latino')
 
         //attempt to navigate away from the test case page
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
