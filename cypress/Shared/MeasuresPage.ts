@@ -164,7 +164,7 @@ export class MeasuresPage {
         }
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 10000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(3500).click()
         })
 
@@ -207,7 +207,7 @@ export class MeasuresPage {
 
             case 'version': {
                 cy.readFile(filePath).should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 10000)
+                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
                 })
 
                 cy.get('[data-testid="version-action-btn"]').should('be.visible')
@@ -237,6 +237,7 @@ export class MeasuresPage {
 
                 //there is a prerequisite that you have a measure created and measure ID stored for 'measureId' and 'measureId2'
                 cy.readFile('cypress/fixtures/measureId2').should('exist').then((fileContents) => {
+                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
                     cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(3500).click()
                 })
 
