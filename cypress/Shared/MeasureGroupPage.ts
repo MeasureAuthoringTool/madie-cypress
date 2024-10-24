@@ -81,7 +81,7 @@ export class MeasureGroupPage {
     public static readonly rateAggregation = '[data-testid="rateAggregationText"]'
     public static readonly improvementNotationSelect = '[id="improvement-notation-select"]'
     public static readonly improvementNotationDescText = '[data-testid="improvement-notation-description-input"]'
-    public static readonly improvementNotationValues = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
+    public static readonly improvementNotationValues = '[class="MuiList-root MuiList-padding MuiMenu-list css-1c1ttle"]'
     public static readonly measureReportingSaveBtn = '[data-testid="measure-Reporting-save"]'
     public static readonly successfulSaveMsg = '[class="toast success"]'
     //Measure Group Type
