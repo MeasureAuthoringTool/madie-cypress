@@ -8,9 +8,8 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { QDMElements } from "../../../../../Shared/QDMElements"
-import {Header} from "../../../../../Shared/Header";
-import {LandingPage} from "../../../../../Shared/LandingPage";
-
+import {Header} from "../../../../../Shared/Header"
+import {LandingPage} from "../../../../../Shared/LandingPage"
 
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 let measureName = 'ProportionPatient' + Date.now()
