@@ -377,7 +377,7 @@ export class MeasureGroupPage {
     public static CreateProportionMeasureGroupAPI(measureNumber?: number, altUser?: boolean, PopIniPopP?: string, DenomExcl?: string, DenomExcep?: string, PopNumP?: string, NumerExcl?: string, PopDenomP?: string, popBasis?: string): string {
         let user = ''
         let measurePath = ''
-        let measureGroupPath = ''
+        let measureGroupPath = 'cypress/fixtures/groupId'
         let measureScoring = 'Proportion'
 
         if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }

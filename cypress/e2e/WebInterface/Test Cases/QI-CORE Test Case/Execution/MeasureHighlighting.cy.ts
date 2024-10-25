@@ -1522,7 +1522,6 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
 
 describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a measure with same Definition in the library', () => {
 
-    deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create measure, measure group, test case and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -1546,7 +1545,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
 
     })
 
-    it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with same Definition in the included library', () => {
+    it.only('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with same Definition in the included library', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measurePath = 'cypress/fixtures/measureId'
         OktaLogin.Login()
