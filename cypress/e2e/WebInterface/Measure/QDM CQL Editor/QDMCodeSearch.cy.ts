@@ -88,7 +88,7 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version258219007Stage 2 (qualifier value)SNOMEDCT2024-03Select')
 
         //Assert when the Code is not available in VSAC
-        cy.get(CQLEditorPage.codeText).clear().type('123')
+        cy.get(CQLEditorPage.codeText).clear().type('123').wait(1000)
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
         cy.get('.sc-feUZmu').should('contain.text', 'No Results were found')
         //Clear the code search values
