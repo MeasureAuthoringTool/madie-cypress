@@ -5,16 +5,16 @@ import { Header } from "../../../Shared/Header"
 import { Utilities } from "../../../Shared/Utilities"
 import { v4 as uuidv4 } from 'uuid'
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let updatedMeasureName = 'UpdatedTestMeasure' + Date.now()
+let measureName = 'TestEditMeasure' + Date.now()
+let CqlLibraryName = 'TestEditLibrary' + Date.now()
+let updatedMeasureName = 'UpdatedTestEditMeasure' + Date.now()
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
 
 describe('Edit Measure', () => {
 
-    before('Create Measure and Login', () => {
+    beforeEach('Create Measure and Login', () => {
 
         cy.setAccessTokenCookie()
 
@@ -39,13 +39,14 @@ describe('Edit Measure', () => {
             }).then((response) => {
                 expect(response.status).to.eql(201)
                 cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
                 cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
             })
         })
         OktaLogin.Login()
     })
 
-    after('Clean up and Logout', () => {
+    afterEach('Clean up and Logout', () => {
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
         OktaLogin.Logout()
@@ -99,6 +100,22 @@ describe('Edit Measure', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.validateMeasureName(updatedMeasureName)
+
+    })
+
+    it('Measure tabs correctly show focus', () => {
+
+        MeasuresPage.actionCenter("edit")
+
+        cy.get(EditMeasurePage.measureDetailsTab).should('have.class', 'Mui-selected').and('have.class', 'active')
+
+        cy.get(EditMeasurePage.testCasesTab).should('not.have.class', 'Mui-selected').and('not.have.class', 'active')
+    
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.get(EditMeasurePage.measureGroupsTab).should('have.class', 'Mui-selected').and('have.class', 'active')
+
+        cy.get(EditMeasurePage.measureDetailsTab).should('not.have.class', 'Mui-selected').and('not.have.class', 'active')
 
     })
 })
