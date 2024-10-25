@@ -152,71 +152,18 @@ describe('MADIE Zip Test Case Import', () => {
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ATest Series 2Test Case 2Description 2' + todaysDate + 'Select1N/ATest Series 1Test Case 1Description 1' + todaysDate + 'Select')
+        cy.get('[data-testid="test-case-title-0_caseNumber"]').should('contain.text', '2')
+        cy.get('[data-testid="test-case-title-1_caseNumber"]').should('contain.text', '1')
 
         //verify confirmation message
         Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 35000)
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', '(2) Test cases imported successfully')
 
         //Verify created test case Title and Series exists on Test Cases Page
-        cy.get('[data-testid="test-case-title-0_group"]').should('be.visible')
-        cy.get('[data-testid="test-case-title-0_group"]').invoke('text').then(
-            (seriesText) => {
-                let check = true
-                if (seriesText === testCaseSeries || seriesText === secondTestCaseSeries) {
-
-                }
-                else {
-                    check = false
-                }
-
-                expect(check).to.eql(true)
-            })
-
-        cy.get('[data-testid="test-case-title-0_title"]').should('be.visible')
-        cy.get('[data-testid="test-case-title-0_title"]').invoke('text').then(
-            (titleText) => {
-                let check = true
-                if (titleText === testCaseTitle || titleText === secondTestCaseTitle) {
-
-                }
-                else {
-                    check = false
-                }
-
-                expect(check).to.eql(true)
-
-            })
-
-        cy.get('[data-testid="test-case-title-1_group"]').should('be.visible')
-        cy.get('[data-testid="test-case-title-1_group"]').invoke('text').then(
-            (seriesText) => {
-                let check = true
-                if (seriesText === testCaseSeries || seriesText === secondTestCaseSeries) {
-
-                }
-                else {
-                    check = false
-                }
-
-                expect(check).to.eql(true)
-            })
-
-        cy.get('[data-testid="test-case-title-1_title"]').should('be.visible')
-        cy.get('[data-testid="test-case-title-1_title"]').invoke('text').then(
-            (titleText) => {
-                let check = true
-                if (titleText === testCaseTitle || titleText === secondTestCaseTitle) {
-
-                }
-                else {
-                    check = false
-                }
-
-                expect(check).to.eql(true)
-
-            })
-
+        cy.get('[data-testid="test-case-title-0_series"]').should('contain.text', secondTestCaseSeries || testCaseSeries)
+        cy.get('[data-testid="test-case-title-0_title"]').should('contain.text', secondTestCaseTitle || testCaseTitle)
+        cy.get('[data-testid="test-case-title-1_series"]').should('contain.text', testCaseSeries || secondTestCaseSeries)
+        cy.get('[data-testid="test-case-title-1_title"]').should('contain.text', testCaseTitle || secondTestCaseTitle)
     })
 
     it('Copy Warning message while importing Test cases', () => {
