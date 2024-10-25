@@ -1522,7 +1522,6 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
 
 describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a measure with same Definition in the library', () => {
 
-    deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create measure, measure group, test case and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
