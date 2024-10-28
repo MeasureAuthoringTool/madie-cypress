@@ -150,19 +150,20 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         updatedMeasuresPageNameSecond = 'UpdatedTestMeasures2' + Date.now()
 
         MeasuresPage.actionCenter('version')
+
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(5000)
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumberFirst)
+
+        cy.get('.MuiDialogContent-root').click()
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        Utilities.waitForElementVisible(MeasuresPage.VersionDraftMsgs, 100000)
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
-        Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 100000)
 
+        cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumberFirst)
-        cy.log('Version Created Successfully')
+        cy.log('Major Version Created Successfully')
 
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
@@ -174,9 +175,10 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.createDraftContinueBtn).should('be.visible')
         cy.get(MeasuresPage.createDraftContinueBtn).should('be.enabled')
 
-        cy.get(MeasuresPage.draftModalSelectionBox).click()
-        Utilities.waitForElementVisible(MeasuresPage.draftModalVersionSix, 5000)
-        cy.get(MeasuresPage.draftModalVersionSix).click()
+        //Skipping until feature flag 'qiCore6' is removed
+        // cy.get(MeasuresPage.draftModalSelectionBox).click()
+        // Utilities.waitForElementVisible(MeasuresPage.draftModalVersionSix, 5000)
+        // cy.get(MeasuresPage.draftModalVersionSix).click()
 
         CreateMeasurePage.clickCreateDraftButton()
 
@@ -200,33 +202,34 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(7000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'using QICore version \'6.0.0\'')
+        //cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'using QICore version \'6.0.0\'')
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'include FHIRHelpers version \'4.1.000\' called FHIRHelpers')
-        cy.get(EditMeasurePage.cqlEditorTextBox).wait(1500).click().wait(1500).type('{ctrl+a}{backspace}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).wait(1500).click().wait(1500).type('{backspace}{del}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
         cy.get(EditMeasurePage.cqlEditorTextBox).type(cohortMeasureCQLSix)
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{del}{backspace}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(7000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //navigate to main measure list page and version and draft to put measure back on 4.1.1 modal version
         cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.actionCenter('version')
+
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(5000)
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('2.0.000')
+        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumberSecond)
+
+        cy.get('.MuiDialogContent-root').click()
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        Utilities.waitForElementVisible(MeasuresPage.VersionDraftMsgs, 100000)
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
-        Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 100000)
 
+        cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumberSecond)
-        cy.log('Version Created Successfully')
+        cy.log('Major Version Created Successfully')
 
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
@@ -238,9 +241,10 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.createDraftContinueBtn).should('be.visible')
         cy.get(MeasuresPage.createDraftContinueBtn).should('be.enabled')
 
-        cy.get(MeasuresPage.draftModalSelectionBox).click()
-        Utilities.waitForElementVisible(MeasuresPage.draftModalVersionFourOneOne, 5000)
-        cy.get(MeasuresPage.draftModalVersionFourOneOne).click()
+        //Skipping until feature flag 'qiCore6' is removed
+        // cy.get(MeasuresPage.draftModalSelectionBox).click()
+        // Utilities.waitForElementVisible(MeasuresPage.draftModalVersionFourOneOne, 5000)
+        // cy.get(MeasuresPage.draftModalVersionFourOneOne).click()
 
         CreateMeasurePage.clickCreateDraftButton()
 
@@ -264,16 +268,12 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(7000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'using QICore version \'4.1.1\'')
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'include FHIRHelpers version \'4.1.000\' called FHIRHelpers')
-        cy.get(EditMeasurePage.cqlEditorTextBox).wait(1500).click().wait(1500).type('{ctrl+a}{backspace}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).wait(1500).click().wait(1500).type('{backspace}{del}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(cohortMeasureCQL)
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{del}{backspace}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(7000)
 
     })
 })
@@ -288,6 +288,9 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI()
+        //Create Test case
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         cy.clearAllCookies()
         cy.clearLocalStorage()
         OktaLogin.Login()
@@ -296,18 +299,6 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.wait(3000)
-        OktaLogin.UILogout()
-
-        //CreateCohortMeasureGroupAPI
-        MeasureGroupPage.CreateCohortMeasureGroupAPI()
-        //Create Test case
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-
-        OktaLogin.Login()
-
     })
 
     afterEach('Clean up and Logout', () => {
@@ -325,22 +316,22 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
-        //version and draft measure
+        cy.get(Header.measures).click()
         MeasuresPage.actionCenter('version')
+
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(5000)
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumber)
+
+        cy.get('.MuiDialogContent-root').click()
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        Utilities.waitForElementVisible(MeasuresPage.VersionDraftMsgs, 100000)
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
-        Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 100000)
 
+        cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
-        cy.log('Version Created Successfully')
-
+        cy.log('Major Version Created Successfully')
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.visible')
