@@ -435,6 +435,8 @@ export class TestCasesPage {
     public static readonly paginationPreviousButton = '[data-testid=NavigateBeforeIcon]'
     public static readonly paginationLimitSelect = '#pagination-limit-select'
     public static readonly paginationLimitEquals25 = '[data-value="25"]'
+    public static readonly paginationLimitAll = '[data-value="All"]'
+    public static readonly countVisibleTestCases = 'tr[data-testid*="test-case-row-"]'
 
     //QDM Test Case Negation tab and associated fields
     public static readonly negationTab = '[data-testid="sub-navigation-tab-negation_rationale"]'

@@ -5,8 +5,8 @@ import {Utilities} from "../../../Shared/Utilities"
 import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
 import {TestCasesPage} from "../../../Shared/TestCasesPage"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+let measureName = 'TestCasePaginationMeasure' + Date.now()
+let CqlLibraryName = 'TestCasePaginationLibrary' + Date.now()
 let TCName = []
 let TCSeries = []
 let TCTitle = []
@@ -26,17 +26,16 @@ let measureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.0.000\
 
 describe('Test Case List Pagination', () => {
 
-    before('Create Measure, Test Cases and Login', () => {
+    beforeEach('Create Measure, Test Cases and Login', () => {
 
-        //Create Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
 
         for (let i = 0; i <= 15; i++) {
 
             TCName [i] = 'TCName' + i + Date.now()
-            TCSeries [i] = 'TCSeries' + i + Date.now()
-            TCTitle [i] = 'TCTitle' + i + Date.now()
-            TCDescription [i] = 'TCDescription' + i + Date.now()
+            TCSeries [i] = 'TCSeries' + i
+            TCTitle [i] = 'TCTitle' + i
+            TCDescription [i] = 'TCDescription' + i
 
             cy.getCookie('accessToken').then((accessToken) => {
                 cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -67,14 +66,14 @@ describe('Test Case List Pagination', () => {
         OktaLogin.Login()
     })
 
-    after('Delete Measure', () => {
+    afterEach('Delete Measure', () => {
 
         cy.setAccessTokenCookie()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    it('Verify Pagination', () => {
+    it('Verify pagination', () => {
 
         MeasuresPage.actionCenter('edit')
 
@@ -100,5 +99,29 @@ describe('Test Case List Pagination', () => {
         cy.get(TestCasesPage.paginationLimitEquals25).click( {force:true} )
         //Verify pagination limit after change
         cy.get(TestCasesPage.paginationLimitSelect).should('contain', '25')
+    })
+
+    it('Verify pagination option "All"', () => {
+
+        MeasuresPage.actionCenter('edit')
+
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        Utilities.waitForElementVisible(TestCasesPage.testCaseListPassingPercTab, 15000)
+
+        //Verify 10 tests show
+        cy.get(TestCasesPage.countVisibleTestCases).should('have.length', 10)
+
+        //Verify pagination limit before change
+        cy.get(TestCasesPage.paginationLimitSelect).should('contain', '10')
+
+        cy.get(TestCasesPage.paginationLimitSelect).click()
+        //Change pagination limit to all
+        cy.get(TestCasesPage.paginationLimitAll).click( {force:true} )
+        //Verify pagination limit after change
+        cy.get(TestCasesPage.paginationLimitSelect).should('contain', 'All')
+
+        cy.get(TestCasesPage.countVisibleTestCases).should('have.length', 16)
+
     })
 })
