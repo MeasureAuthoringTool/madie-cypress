@@ -250,9 +250,25 @@ describe.skip('Qi-Core CQL Parameters - Measure ownership Validations', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
-        // check Parameters tab disabled
-        cy.get(CQLEditorPage.parametersTab).should('be.disabled')
+        // check tabs are alll enabled
         cy.get(CQLEditorPage.includesTab).should('be.enabled')
         cy.get(CQLEditorPage.definitionsTab).should('be.enabled')
+        cy.get(CQLEditorPage.parametersTab).should('be.enabled').click()
+
+        // name disabled
+        cy.get(CQLEditorPage.parameterNameTextBox).should('be.disabled')
+
+        // editor hidden
+        cy.get('[data-testid="ChevronRightIcon"]').should('not.have.class', 'open')
+        cy.get('[data-testid="ChevronRightIcon"]').click()
+
+        // cannot type in expanded editor
+        cy.get(CQLEditorPage.parameterExpressionEditor)
+            .find('textarea').should('have.attr', 'readonly')
+
+        // clear & appply disabled
+        cy.get(CQLEditorPage.clearParametersExpressionButton).should('be.disabled')
+        cy.get(CQLEditorPage.applyParametersExpressionButton).should('be.disabled')
+
     })
 })
