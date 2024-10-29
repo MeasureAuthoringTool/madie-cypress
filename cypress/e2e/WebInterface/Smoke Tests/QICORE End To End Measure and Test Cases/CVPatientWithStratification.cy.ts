@@ -69,7 +69,7 @@ let measureCQL = 'library CVPatientWithStratification version \'0.0.000\'\n' +
     'define "Stratification 2":\n' +
     '  true'
 
-//MAT-7727
+//MAT-7860
 describe('Measure Creation and Testing: CV Patient Measure With Stratification', () => {
 
     before('Create Measure, Test Case and Login', () => {

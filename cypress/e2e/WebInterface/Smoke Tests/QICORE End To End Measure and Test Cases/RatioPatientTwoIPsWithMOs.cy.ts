@@ -59,6 +59,7 @@ let measureCQL = 'library MultipleIPwithObs version \'0.0.000\'\n' +
     'define function "MOMale"():\n' +
     'Patient.gender = \'male\''
 
+//MAT-7860
 describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
 
     before('Create Measure and Test Case', () => {
