@@ -43,7 +43,8 @@ declare global {
             setAccessTokenCookieALT()
             setAccessTokenCookieCAMELCASE()
             UMLSAPIKeyLogin()
-            lighthouse()
+            lighthouse(thresholds?: Object, lighthouseOptions?: Object, lighthouseConfig?: Object)
+            cssType(locator: string, text: string)
         }
     }
 }
