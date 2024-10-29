@@ -57,6 +57,7 @@ let measureCQL = 'library RatioEpisodeSingleIPNoMO version \'0.0.000\'\n' +
     '    Numerator Numer\n' +
     '        where Numer.class ~ "Emergency"'
 
+//MAT-7860
 describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
 
     before('Create Measure and Test Case', () => {
