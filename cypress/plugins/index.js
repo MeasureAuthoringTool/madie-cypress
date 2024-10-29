@@ -31,6 +31,7 @@ function unzipFile (zipFile, path) {
   readStream.pipe(unzipper.Extract({path: `${path}`}))
 }
 const browserify = require('@cypress/browserify-preprocessor')
+const { stringify } = require('querystring')
 module.exports = {
     e2e: {
         //baseUrl: "http://bstackdemo.com", // this is your app
@@ -38,10 +39,12 @@ module.exports = {
           on("before:browser:launch", (browser = {}, launchOptions) => {
           prepareAudit(launchOptions);
       });
-          on("task", {
-            lighthouse: lighthouse(),
-// pa11y: pa11y(console.log.bind(console)),
-          });
+      on("task", {
+        lighthouse: lighthouse((lighthouseReport) => {
+          console.log(lighthouseReport); // raw lighthouse reports
+        })
+        //lighthouse: lighthouse()
+      })
     },
   },
 };
@@ -69,7 +72,7 @@ module.exports = (on, config) => {
       }
     })
     on("task", {
-      lighthouse: lighthouse(),
+      lighthouse: lighthouse(Object, Object),
     // pa11y: pa11y(console.log.bind(console)),
     });
     on('task', {

@@ -20,7 +20,9 @@ import './commands'
 import 'cypress-axe'
 import 'axe-core'
 import cypress = require("cypress");
+import "@cypress-audit/lighthouse/commands"
 const addContext = require('mochawesome/addContext')
+export { }
 
 require('cypress-commands')
 
