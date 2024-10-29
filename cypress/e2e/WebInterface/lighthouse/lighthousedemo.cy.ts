@@ -33,31 +33,32 @@ describe('test', () => {
                     settings: { output: "html" },
                     extends: "lighthouse:default"
                 }; */
-        const thresholds = {
-            /* ... */
-        };
 
-        const lighthouseOptions = {
-            /* ... your lighthouse options */
-        };
-
-        const lighthouseConfig = {
-            /* ... your lighthouse configs */
-            formFactor: 'desktop',
-            screenEmulation: { disabled: true },
-            settings: { output: "html" },
-            extends: "lighthouse:default"
-
-        };
         OktaLogin.Login()
 
-        cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig).then((report) => {
-            const htmlReport = (report).valueOf()
-            // Save the HTML report to a file
-            cy.writeFile('cypress/fixtures/lighthouse-report.html', htmlReport);
-            // Use the HTML report for further analysis or sharing with stakeholders
-        })
-        //cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig);
+        const thresholds = {
+            "performance": 50,
+            "accessibility": 50,
+            "best-practices": 50,
+            "seo": 50
+        }
+
+        const lighthouseOptions = {
+            formFactor: 'desktop',
+            screenEmulation: { disabled: true },
+        }
+
+        const lighthouseConfig = {
+            settings: { output: "html" },
+            extends: "lighthouse:default",
+        }
+
+        cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig)
+
+
+        // cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig).then((report) => {
+        //     console.log(report)
+        // })
 
 
 
