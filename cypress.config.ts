@@ -36,18 +36,6 @@ export default defineConfig({
       on("before:browser:launch", (browser = Cypress.browser, launchOptions) => {
         prepareAudit(launchOptions);
       })
-      on("task", {
-        //lighthouse: lighthouse(Object, Object),
-        lighthouse: lighthouse((lighthouseReport) => {
-          console.log("---- Writing lighthouse report to disk ----");
-          fs.writeFile("cypress/fixtures/lighthouse.html", lighthouseReport.report, (error: any) => {
-            error ? console.log(error) : console.log("Report created successfully");
-          });
-          console.log(lighthouseReport)
-          //pa11y: pa11y(console.log.bind(console))
-        })
-        //lighthouse: lighthouse()
-      })
       on('task', {
         readXlsx() {
           return null

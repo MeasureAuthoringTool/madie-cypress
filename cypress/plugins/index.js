@@ -11,12 +11,13 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
+
+
 const fs = require('fs-extra')
 const path = require('path')
 const unzipper = require('unzipper')
 const { removeDirectory } = require('cypress-delete-downloads-folder')
 const { lighthouse, prepareAudit } = require("@cypress-audit/lighthouse")
-
 
 function getConfigurationByFile (file) {
   const pathToConfigFile = path.resolve('./cypress/', 'config', `${file}.json`)
@@ -32,22 +33,6 @@ function unzipFile (zipFile, path) {
 }
 const browserify = require('@cypress/browserify-preprocessor')
 const { stringify } = require('querystring')
-module.exports = {
-    e2e: {
-        //baseUrl: "http://bstackdemo.com", // this is your app
-        setupNodeEvents(on, config) {
-          on("before:browser:launch", (browser = {}, launchOptions) => {
-          prepareAudit(launchOptions);
-      });
-      on("task", {
-        lighthouse: lighthouse((lighthouseReport) => {
-          console.log(lighthouseReport); // raw lighthouse reports
-        })
-        //lighthouse: lighthouse()
-      })
-    },
-  },
-};
 
 module.exports = (on, config) => {
   const file = config.env.configFile
@@ -72,8 +57,14 @@ module.exports = (on, config) => {
       }
     })
     on("task", {
-      lighthouse: lighthouse(Object, Object),
-    // pa11y: pa11y(console.log.bind(console)),
+      lighthouse: lighthouse((lighthouseReport) => {
+        console.log("---- Writing lighthouse report to disk ----");
+
+        fs.writeFile("lighthouse.html", lighthouseReport.report, (error) => {
+          error ? console.log(error) : console.log("Report created successfully")
+        })
+      }),
+     //pa11y: pa11y(),
     });
     on('task', {
       removeDirectory
