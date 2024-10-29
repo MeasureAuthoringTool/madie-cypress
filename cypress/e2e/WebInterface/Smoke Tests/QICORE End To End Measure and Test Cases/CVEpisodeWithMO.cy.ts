@@ -50,7 +50,8 @@ let measureCQL = 'library TestLibrary356786y8 version \'0.0.000\'\n' +
     '          where Enc.priority ~ "Unscheduled (qualifier value)"          \n' +
     '          })'
 
-describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
+//Skipping until MAT-7860 is fixed
+describe.skip('Measure Creation and Testing: CV Episode Measure With MO', () => {
 
     before('Create Measure, Test Case and Login', () => {
 

@@ -72,6 +72,7 @@ let measureCQL = 'library RatioPatientSingleIPNoMO version \'0.0.000\'\n' +
     '  "Unscheduled Inpatient Encounters Ends During MP" IE\n' +
     '        where IE.class ~ "Emergency"'
 
+//MAT-7860
 describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', () => {
 
     before('Create Measure and Test Case', () => {

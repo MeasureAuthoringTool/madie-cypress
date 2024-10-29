@@ -270,9 +270,6 @@ describe('QI-Core Measure Versioning', () => {
 
     it('Add Major Version to the Qi-Core Measure and verify that the versioned Measure is in read only', () => {
 
-        //Commenting until 'MeasureListButtons' feature flag is removed
-        //MeasuresPage.actionCenter('version')
-
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -284,9 +281,10 @@ describe('QI-Core Measure Versioning', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
+
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        //MeasuresPage.validateVersionNumber(measureName, versionNumber)
-        cy.log('Version Created Successfully')
+        MeasuresPage.validateVersionNumber(newMeasureName, '1.0.000')
+        cy.log('Major Version Created Successfully')
 
         //Verify that the fields on Measure details page, CQL Editor page and Test case page are read only
         MeasuresPage.actionCenter('edit')
