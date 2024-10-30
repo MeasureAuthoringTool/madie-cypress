@@ -1,14 +1,14 @@
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { Utilities } from "../../../../Shared/Utilities"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Environment } from "../../../../Shared/Environment"
+import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
+import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { Environment } from "../../../../../Shared/Environment"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -47,7 +47,6 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Create
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-
     })
 
     beforeEach('Set Access Token', () => {
@@ -55,13 +54,11 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Create
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-
     })
 
     after('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, cqlLibraryName)
-
     })
 
     it('Enter Valid Test Case Json that contains DOB, Gender, Race, and Ethnicity data and confirm those pieces of data appears on the element tab', () => {
