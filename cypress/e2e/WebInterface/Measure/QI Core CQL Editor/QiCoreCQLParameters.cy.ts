@@ -226,6 +226,18 @@ describe.skip('Qi-Core CQL Parameters', () => {
         // same as above, verify 2 parameters in document - duplicate not added
         cy.get(CQLEditorPage.mainCqlDocument).find('.ace_line:contains("parameter")').should('have.length', 2)
     })
+
+    it('Verify Qi-Core CQL Parameters under Saved Parameters tab', () => {
+
+        cy.get(CQLEditorPage.parametersTab).click()
+
+        //Navigate to Saved Parameters tab
+        cy.get(CQLEditorPage.savedParametersTab).click()
+
+         Utilities.waitForElementVisible('[data-testid="parameters-row-0"] > :nth-child(1)', 75000)
+        cy.get('[data-testid="parameters-row-0"] > :nth-child(1)').should('contain.text', 'Measurement Period')
+
+    })
 })
 
 describe.skip('Qi-Core CQL Parameters - Measure ownership Validations', () => {
