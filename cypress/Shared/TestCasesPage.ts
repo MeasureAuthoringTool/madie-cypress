@@ -217,7 +217,7 @@ export class TestCasesPage {
     public static readonly editTestCaseSaveButton = '[data-testid="edit-test-case-save-button"]'
     public static readonly sdeTestCaseSaveButton = '[data-testid="sde-save"]'
     public static readonly tcDiscardChangesButton = '[data-testid="edit-test-case-discard-button"]'
-    public static readonly confirmationMsg = '[data-testid="create-test-case-alert"]'
+    public static readonly confirmationMsg = '[class="toast warning"]'
     public static readonly confirmationMsgWithErrorOrWarning = '#content > div > h3'
     public static readonly testCaseSeriesList = 'tbody > tr > :nth-child(3)'
     public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
