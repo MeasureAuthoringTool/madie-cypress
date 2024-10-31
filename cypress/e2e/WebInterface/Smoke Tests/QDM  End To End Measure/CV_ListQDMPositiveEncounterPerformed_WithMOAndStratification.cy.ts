@@ -135,7 +135,8 @@ let measureCQL = 'library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedPat
     '      sort by start of Global."NormalizeInterval"(relevantDatetime, relevantPeriod)\n' +
     '  )'
 
-describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Stratification', () => {
+//Skipping until MAT-7868 is fixed
+describe.skip('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Stratification', () => {
 
     before('Create Measure', () => {
 

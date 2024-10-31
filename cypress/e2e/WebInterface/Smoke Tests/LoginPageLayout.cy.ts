@@ -60,7 +60,7 @@ describe('Login page layout', () => {
 
     it('Footer displays all relevant info', () => {
 
-        cy.get(LandingPage.lowerLogo).should('have.attr', 'src', 'https://dev-madie.hcqis.org/madie-layout/ba132d3/e7cc3c1b8caf3ea13dbd.svg')
+        cy.get(LandingPage.lowerLogo).should('have.attr', 'data-testid', 'custom-madie-logo')
 
         cy.get(LandingPage.version).should('contain.text', 'Version ')
 
