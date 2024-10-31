@@ -38,7 +38,7 @@ describe('Verify Library usage and Delete Library', () => {
                 }
             }).then((response) => {
                 expect(response.status).to.eql(200)
-                expect(response.body[9].name).to.eql('PBDHospiceQDM')
+                expect(response.body[9].name).to.eql('QDMSmokeTestLibrary0228')
             })
         })
     })
