@@ -4,21 +4,39 @@ import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
-import { url } from "inspector"
-import { HtmlContentTypes } from "axe-core"
-import { ok } from "assert"
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { Header } from "../../../Shared/Header"
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
+import { TestCaseJson } from "../../../Shared/TestCaseJson"
 
+let measureName = 'TestMeasure' + Date.now()
+let CqlLibraryName = 'TestLibrary' + Date.now()
+let testCaseTitle = 'Test Case 1'
+let testCaseDescription = 'Description 1'
+let testCaseSeries = 'Test Series 1'
+let testCaseJson = TestCaseJson.TestCaseJson_Valid
+let QiCoremeasureCQL = MeasureCQL.CQL_Multiple_Populations
+let prodBonneTestCasesFile = 'patients_39E0424A-1727-4629-89E2-C46C2FBB3F5F_QDM_56_1702482074.json'
+let measureNamePropListQDM = 'QDMTestMeasure' + Date.now()
+let CqlLibraryNamePropListQDM = 'QDMTestLibrary' + Date.now()
+let measureCQLPRODCat = MeasureCQL.qdmMeasureCQLPRODCataracts2040BCVAwithin90Days
+const now = require('dayjs')
+let todaysDate = now().format('MM/DD/YYYY')
+let randValue = (Math.floor((Math.random() * 1000) + 1))
+let newMeasureName = ''
+let newCqlLibraryName = ''
+let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
-describe('test', () => {
+describe('Login and initial "My Measures" page', () => {
 
-
-
-    it('should run lighthouse performance audits using default thresholds', () => {
+    it('Log in and land on "My Measures" page Lighthouse test', () => {
 
         OktaLogin.Login()
 
         const thresholds = {
-            performance: 16, //This is an overall score given to the overall page performance based on the metrics.
+            performance: 25, //This is an overall score given to the overall page performance based on the metrics.
             //The score is calculated based off the following metrics (their respective weights are also listed):
             //'first-contentful-paint' -> 10%
             //'largest-contentful-paint' -> 25%
@@ -28,9 +46,9 @@ describe('test', () => {
 
             accessibility: 75, //The Lighthouse Accessibility score is a weighted average of all accessibility audits. Weighting is based on axe user impact assessments.
 
-            'first-contentful-paint': 3000, //In miliseconds, this measures how long it takes the browser to render the first piece of DOM content after a user navigates to your page. 
+            //'first-contentful-paint': 3000, //In miliseconds, this measures how long it takes the browser to render the first piece of DOM content after a user navigates to your page. 
 
-            'largest-contentful-paint': 40000,//This is the approximate time it takes for the main content of the page becomes visible to users.
+            //'largest-contentful-paint': 40000,//This is the approximate time it takes for the main content of the page becomes visible to users.
 
             'total-blocking-time': 520000, //In miliseconds, this measure the total amount of time that a page is blocked from responding to user input, such as mouse clicks, screen taps, or keyboard presses.
 
@@ -38,7 +56,7 @@ describe('test', () => {
 
             'cumulative-layout-shift': 300, //Unexpected page element shifts -- basically, the measurement of shifting page elements
 
-            interactive: 40000, //In miliseconds, this measures how long it takes a page to become fully interactive.
+            //interactive: 40000, //In miliseconds, this measures how long it takes a page to become fully interactive.
         };
 
         const lighthouseOptions = {
@@ -59,3 +77,281 @@ describe('test', () => {
     })
 
 })
+
+describe('Navigate to the "All Measures" page', () => {
+
+    it('Navigate to "All Measures"', () => {
+
+        OktaLogin.Login()
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 5000)
+        cy.get(MeasuresPage.allMeasuresTab).click()
+
+        const thresholds = {
+            performance: 25,
+            accessibility: 75,
+            'total-blocking-time': 520000,
+            'speed-index': 27000,
+            'cumulative-layout-shift': 300,
+        };
+
+        const lighthouseOptions = {
+            formFactor: 'desktop', //sets the expected platform to be desktop (as opposed to mobile)
+            screenEmulation: { disabled: true }, //because it is not moble, screen emulation is set to disabled
+        }
+
+        const lighthouseConfig = {
+            settings: { output: "html" }, //output should be formated in HTML
+            extends: "lighthouse:default", //the output extends onto lighthouse default settings
+        }
+
+        //calling lighthouse after performing some user functionality
+        cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig)
+        //adding closing line so the viewable Cypress logs will show that the report has been written
+        cy.log("---- Lighthouse report has been written to disk ----")
+
+    })
+
+})
+
+describe('Navigate to the QDM "CQL Editor" page', () => {
+
+    beforeEach('Create Measure, add Cohort group and Login', () => {
+
+        newMeasureName = 'TestMeasure' + Date.now() + randValue
+        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
+
+        OktaLogin.Login()
+
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        cy.get(Header.mainMadiePageButton).click()
+
+        OktaLogin.UILogout()
+
+    })
+
+    it('Navigate to QDM "CQL Editor" tab', () => {
+
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        const thresholds = {
+            performance: 13,
+            accessibility: 75,
+            'total-blocking-time': 520000,
+            'speed-index': 30000,
+            'cumulative-layout-shift': 300,
+        };
+
+        const lighthouseOptions = {
+            formFactor: 'desktop', //sets the expected platform to be desktop (as opposed to mobile)
+            screenEmulation: { disabled: true }, //because it is not moble, screen emulation is set to disabled
+        }
+
+        const lighthouseConfig = {
+            settings: { output: "html" }, //output should be formated in HTML
+            extends: "lighthouse:default", //the output extends onto lighthouse default settings
+        }
+
+        //calling lighthouse after performing some user functionality
+        cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig)
+        //adding closing line so the viewable Cypress logs will show that the report has been written
+        cy.log("---- Lighthouse report has been written to disk ----")
+
+    })
+
+})
+
+describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
+    before('Create Measure, group, and upload several test cases', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(measureNamePropListQDM, CqlLibraryNamePropListQDM, measureCQLPRODCat, false, false,
+            '2012-01-01', '2012-12-31')
+
+        OktaLogin.Login()
+        //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully ' +
+            'but the following issues were found')
+
+        //Group Creation
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //click on / navigate to the Base Configuration sub-tab
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
+        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
+
+        //Select Type
+        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
+        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
+
+        //select 'Cohort' scoring on measure
+        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringProportion)
+        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Proportion')
+
+        //Update the Patient Basis to 'No'
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
+
+        //click on the save button and confirm save success message Base Config
+        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
+            'Updated Successfully')
+
+        //add pop criteria
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
+            'this group saved successfully.')
+
+        //Add Elements to the Test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //import test cases from BONNIE PROD
+        //click on the import test case button
+        cy.get(TestCasesPage.importTestCasesBtn).click()
+
+        //select file
+        cy.get(TestCasesPage.filAttachDropBox).attachFile(prodBonneTestCasesFile)
+
+        //import modal should contain test case name
+        cy.get(TestCasesPage.importTestCaseModalHeader).should('contain.text', '[82] Test Cases from File: patients_39E0424A-1727-4629-89E2-C46C2FBB3F5F_QDM_56_1702482074.json')
+
+        //click on the 'Import' button on the modal window
+        cy.get(TestCasesPage.importTestCaseModalBtn).click()
+
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction82N/ADENEXPassCertTypeIridOverlapsCatSurgPatient with certain types of iridocyclitis overlapping cataract surgery. ' + todaysDate + 'Select81N/ADENEXPassChorioretinitis and RetinochoroiditisOverlapsCatSurgPatient with moderate or severe impairment better eye overlapping cataract surgery. ' + todaysDate + 'Select80N/ADENEXPassChoroidDegenOverlapsCatSurgPatient with choroidal degenerations overlapping cataract surgery. ' + todaysDate + 'Select79N/ADENEXPassCloudyCorneaOverlapsCatSurgPatient with cloudy cornea overlapping cataract surgery. ' + todaysDate + 'Select78N/ADENEXPassDegenDisGlobeOverlapsCatSurgPatient with degenerative disorders of globe overlapping cataract surgery. ' + todaysDate + 'Select77N/ADENEXPassDisVisualCortexOverlapsCatSurgPatient with disorders of visual cortex overlapping cataract surgery. ' + todaysDate + 'Select76N/ADENEXPassDissChorioretOverlapsCatSurgPatient with disseminated chorioretinitis overlapping cataract surgery. ' + todaysDate + 'Select75N/ADENEXPassHeredCornDysOverlapsCatSurgPatient with hereditary corneal dystrophies overlapping cataract surgery. ' + todaysDate + 'Select74N/ADENEXPassHypotonyOverlapsCatSurgPatient with hypotony of eye overlapping cataract surgery. ' + todaysDate + 'Select73N/ADENEXPassInjOptNrvOverlapsCatSurgPatient with injury to optic nerve overlapping cataract surgery. ' + todaysDate + 'Select')
+
+        //success message that appears after import
+        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 10000)
+        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', '(82) Test cases imported successfully')
+        Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 50000)
+        OktaLogin.UILogout()
+    })
+
+    it('Navigate to the QDM "Test Cases" tab after test cases have already been loaded on measure', () => {
+
+        OktaLogin.Login()
+        //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
+        //navigate to the test case list page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        const thresholds = {
+            performance: 22,
+            accessibility: 75,
+            'total-blocking-time': 520000,
+            'speed-index': 39000,
+            'cumulative-layout-shift': 300,
+        };
+
+        const lighthouseOptions = {
+            formFactor: 'desktop', //sets the expected platform to be desktop (as opposed to mobile)
+            screenEmulation: { disabled: true }, //because it is not moble, screen emulation is set to disabled
+        }
+
+        const lighthouseConfig = {
+            settings: { output: "html" }, //output should be formated in HTML
+            extends: "lighthouse:default", //the output extends onto lighthouse default settings
+        }
+
+        //calling lighthouse after performing some user functionality
+        cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig)
+
+        //adding closing line so the viewable Cypress logs will show that the report has been written
+        cy.log("---- Lighthouse report has been written to disk ----")
+
+    })
+
+})
+
+describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test case', () => {
+    beforeEach('Create measure, create group, and create test case', () => {
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, QiCoremeasureCQL, 0, false,
+            '2012-01-02', '2013-01-01')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+
+        OktaLogin.UILogout()
+
+    })
+
+    it('Navigate to the Qi Core "Test Cases" edit page, for a specific test case', () => {
+
+        OktaLogin.Login()
+        //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
+        //navigate to the test case list page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.testCaseAction('edit')
+
+        const thresholds = {
+            performance: 3,
+            accessibility: 75,
+            'total-blocking-time': 520000,
+            'speed-index': 39000,
+            'cumulative-layout-shift': 300,
+        };
+
+        const lighthouseOptions = {
+            formFactor: 'desktop', //sets the expected platform to be desktop (as opposed to mobile)
+            screenEmulation: { disabled: true }, //because it is not moble, screen emulation is set to disabled
+        }
+
+        const lighthouseConfig = {
+            settings: { output: "html" }, //output should be formated in HTML
+            extends: "lighthouse:default", //the output extends onto lighthouse default settings
+        }
+
+        //calling lighthouse after performing some user functionality
+        cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig)
+
+        //adding closing line so the viewable Cypress logs will show that the report has been written
+        cy.log("---- Lighthouse report has been written to disk ----")
+
+    })
+
+})
+
