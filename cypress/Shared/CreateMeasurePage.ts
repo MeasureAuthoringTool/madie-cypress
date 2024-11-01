@@ -3,6 +3,26 @@ import { LandingPage } from "./LandingPage"
 import { MeasuresPage } from "./MeasuresPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "./Utilities"
+const now = require('dayjs')
+
+export enum SupportedModels {
+    QDM = 'QDM v5.6',
+    qiCore4 = 'QI-Core v4.1.1',
+    qiCore6 = 'QI-Core v6.0.0'
+}
+
+export type CreateMeasureOptions = {
+	ecqmTitle?: string
+    measureCql?: string,
+    elmJson?: string, 
+    measureNumber?: number,
+    measureScoring?: string,
+    patientBasis?: boolean,
+    twoMeasures?: boolean,
+    altUser?: boolean,
+    mpStartDate?: string,
+    mpEndDate?: string      
+}
 
 export class CreateMeasurePage {
 
@@ -220,7 +240,7 @@ export class CreateMeasurePage {
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
-                if (measureNumber > 0) {
+                if (measureNumber > 0 || altUser === true) {
                     cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
                     cy.writeFile('cypress/fixtures/versionId' + measureNumber, response.body.versionId)
                     cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
@@ -655,4 +675,139 @@ export class CreateMeasurePage {
         return user
     }
 
+    public static CreateMeasureAPI(measureName: string, cqlLibraryName: string, model: SupportedModels, optionalParams?: CreateMeasureOptions): string {
+
+        let user, 
+        mpStartDate, 
+        mpEndDate, 
+        measureNumber = 0, 
+        ecqmTitle = 'AutoTestTitle', 
+        measureCql, 
+        elmJson
+
+        if (optionalParams && optionalParams.mpStartDate) {
+            mpStartDate = optionalParams.mpStartDate
+        }
+        else {
+            mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
+        }
+
+        if (optionalParams && optionalParams.mpEndDate) {
+            mpEndDate = optionalParams.mpEndDate
+        }
+        else {
+            mpEndDate = now().format('YYYY-MM-DD')
+        }
+
+        if (optionalParams && optionalParams.measureCql) {
+            measureCql = optionalParams.measureCql
+        }
+        else {
+            measureCql = '' // can add a real default here, if needed
+        }
+
+        if (optionalParams && optionalParams.elmJson) {
+            elmJson =  optionalParams.elmJson
+        }
+        else {
+            elmJson =  '' // can add a real default here, if needed
+        }
+
+        if (optionalParams && optionalParams.measureNumber) {
+            measureNumber = optionalParams.measureNumber
+        }
+        if (optionalParams && optionalParams.ecqmTitle) {
+            ecqmTitle = optionalParams.ecqmTitle
+        }
+
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        
+        if (optionalParams && optionalParams.altUser) {
+            cy.setAccessTokenCookieALT()
+            user = Environment.credentials().harpUserALT
+        }
+        else {
+            cy.setAccessTokenCookie()
+            user = Environment.credentials().harpUser
+        }
+
+        //Create New Measure
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/measure?addDefaultCQL=false',
+                headers: {
+                    authorization: 'Bearer ' + accessToken.value
+                },
+                method: 'POST',
+                body: {
+                    'measureName': measureName,
+                    'cqlLibraryName': cqlLibraryName,
+                    'model': model,
+                    'createdBy': user,
+                    "ecqmTitle": ecqmTitle,
+                    'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
+                    'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
+                    'versionId': uuidv4(),
+                    'measureSetId': uuidv4(),
+                    'cql': measureCql,
+                    'elmJson': elmJson,
+                    'measureMetaData': {
+                        "experimental": false,
+                        "description": "SemanticBits",
+                        "steward": {
+                            "name": "SemanticBits",
+                            "id": "64120f265de35122e68dac40",
+                            "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
+                            "url": "https://semanticbits.com/"
+
+                        }, "developers": [
+                            {
+                                "id": "64120f265de35122e68dabf7",
+                                "name": "Academy of Nutrition and Dietetics",
+                                "oid": "2.16.840.1.113883.3.6308",
+                                "url": "www.eatrightpro.org"
+                            }
+                        ]
+                    },
+                    "testCaseConfiguration": {
+                        "id": null,
+                        "sdeIncluded": null
+                    },
+                    'programUseContext': {
+                        "code": "mips",
+                        "display": "MIPS",
+                        "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
+                    }
+                }
+            }).then((response) => {
+                console.log(response)
+                expect(response.status).to.eql(201)
+                expect(response.body.id).to.be.exist
+
+                if (measureNumber > 0) {
+                    cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
+                    cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
+
+                }
+                else {
+                    cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                }
+
+                if (optionalParams && optionalParams.twoMeasures) {
+                    cy.writeFile('cypress/fixtures/measureId2', response.body.id)
+                    cy.writeFile('cypress/fixtures/measureSetId2', response.body.measureSetId)
+                }
+                else {
+                    cy.writeFile('cypress/fixtures/measureId', response.body.id)
+                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                }
+
+            })
+        })
+        cy.log(user)
+        return user
+    }
 }

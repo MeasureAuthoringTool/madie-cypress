@@ -49,7 +49,7 @@ let measureCQL = 'library ProportionEpisodeMeasure version \'0.0.000\'\n' +
     '        Encounter Enc\n' +
     '          where Enc.priority ~ "Unscheduled (qualifier value)"          \n' +
     '          })'
-//MAT-7860
+
 describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
     before('Create Measure, Test Case and Login', () => {

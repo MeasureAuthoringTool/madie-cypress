@@ -15,7 +15,6 @@ let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.CVPatientWithMO_PASS
 
-//MAT-7860
 describe('Measure Creation and Testing: CV Patient With MO', () => {
 
     before('Create Measure, Test Case and Login', () => {

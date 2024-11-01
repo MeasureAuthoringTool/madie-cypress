@@ -58,13 +58,11 @@ module.exports = (on, config) => {
     })
     on("task", {
       lighthouse: lighthouse((lighthouseReport) => {
-        console.log("---- Writing lighthouse report to disk ----");
-
-        fs.writeFile("lighthouse.html", lighthouseReport.report, (error) => {
+        console.log("---- Writing lighthouse report to disk ----")
+        fs.writeFile("./lighthouse-report/lighthouse.html", lighthouseReport.report, (error) => {
           error ? console.log(error) : console.log("Report created successfully")
         })
       }),
-     //pa11y: pa11y(),
     });
     on('task', {
       removeDirectory

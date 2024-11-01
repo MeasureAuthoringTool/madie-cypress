@@ -222,6 +222,18 @@ describe.skip('QDM CQL Parameters', () => {
        // same as above, verify 2 parameters in document - duplicate not added
         cy.get(CQLEditorPage.mainCqlDocument).find('.ace_line:contains("parameter")').should('have.length', 2)
     })
+
+    it('Verify QDM CQL Parameters under Saved Parameters tab', () => {
+
+        cy.get(CQLEditorPage.parametersTab).click()
+
+        //Navigate to Saved Parameters tab
+        cy.get(CQLEditorPage.savedParametersTab).click()
+
+        Utilities.waitForElementVisible('[data-testid="parameters-row-0"] > :nth-child(1)', 75000)
+        cy.get('[data-testid="parameters-row-0"] > :nth-child(1)').should('contain.text', 'Measurement Period')
+
+    })
 })
 
 describe.skip('QDM CQL Parameters - Measure ownership Validations', () => {
@@ -251,9 +263,26 @@ describe.skip('QDM CQL Parameters - Measure ownership Validations', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
-        // check Parameters tab disabled
-        cy.get(CQLEditorPage.parametersTab).should('be.disabled')
+        // check tabs are all enabled
         cy.get(CQLEditorPage.includesTab).should('be.enabled')
         cy.get(CQLEditorPage.definitionsTab).should('be.enabled')
+        cy.get(CQLEditorPage.valueSetsTab).should('be.enabled')
+        cy.get(CQLEditorPage.codeSubTab).should('be.enabled')
+        cy.get(CQLEditorPage.parametersTab).should('be.enabled').click()
+
+        // name disabled
+        cy.get(CQLEditorPage.parameterNameTextBox).should('be.disabled')
+
+        // editor hidden
+        cy.get('[data-testid="ChevronRightIcon"]').should('not.have.class', 'open')
+        cy.get('[data-testid="ChevronRightIcon"]').click()
+
+        // cannot type in expanded editor
+        cy.get(CQLEditorPage.parameterExpressionEditor)
+            .find('textarea').should('have.attr', 'readonly')
+
+        // clear & appply disabled
+        cy.get(CQLEditorPage.clearParametersExpressionButton).should('be.disabled')
+        cy.get(CQLEditorPage.applyParametersExpressionButton).should('be.disabled')
     })
 })
