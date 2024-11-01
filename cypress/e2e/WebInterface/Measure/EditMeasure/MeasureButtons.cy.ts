@@ -16,7 +16,7 @@ let measureQICore = ''
 let measureQDM = ''
 
 
-describe('Measure Association: Validations', () => {
+describe('Delete measure on the measure edit page', () => {
 
     beforeEach('Create Measure', () => {
 
