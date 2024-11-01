@@ -1546,7 +1546,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
     })
 
     it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with same Definition in the included library', () => {
-        let measureGroupPath = 'cypress/fixtures/groupId'
+        let measureGroupPath = 'cypress/fixtures/measureGroupId'
         let measurePath = 'cypress/fixtures/measureId'
         OktaLogin.Login()
 
@@ -1582,6 +1582,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         cy.get(TestCasesPage.tcHighlightingTab).click()
 
         cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="group-coverage-nav-' + fileContents + '"]', 35000)
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP').click()
             Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 35000)
             cy.get(TestCasesPage.tcIPHighlightingDetails).should('contain.text', 'define "Initial Population":\n' +
