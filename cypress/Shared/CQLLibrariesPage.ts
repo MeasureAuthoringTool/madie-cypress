@@ -17,7 +17,7 @@ export class CQLLibrariesPage {
     public static readonly versionCancelBtn = '[data-testid="create-version-cancel-button"]'
     public static readonly infoMsg = '[class="EditCqlLibrary__InfoAlert-sc-j81nve-3 eTmbnI"]'
     public static readonly editCQLLibraryAlertMessage = '.madie-alert'
-    public static readonly cqlLibraryDirtyCheck = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-1uop03p react-draggable"]'
+    public static readonly cqlLibraryDirtyCheck = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-aa4ov7 react-draggable"]'
 
 
     public static clickEditforCreatedLibrary(secondLibrary?: boolean): void {
