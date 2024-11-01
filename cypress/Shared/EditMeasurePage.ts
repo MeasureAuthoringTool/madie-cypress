@@ -9,6 +9,8 @@ export class EditMeasurePage {
     public static readonly measureGroupsTab = '[data-testid=groups-tab]'
     public static readonly testCasesTab = '[data-testid=patients-tab]'
     public static readonly reviewInfoTab = '[data-testid=review-tab]'
+    public static readonly editMeasureButtonActionBtn = '[data-testid="action-center-actual-icon"]'
+    public static readonly editMeasureDeleteActionBtn = '[data-testid="DeleteOutlinedIcon"]'
 
     //Associate QDM and QI Core measures:
     public static readonly associateCmsIdDialog = '[data-testid="associate-cms-id-dialog-tbl"]'

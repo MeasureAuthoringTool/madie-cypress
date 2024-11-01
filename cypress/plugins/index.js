@@ -32,7 +32,6 @@ function unzipFile (zipFile, path) {
   readStream.pipe(unzipper.Extract({path: `${path}`}))
 }
 const browserify = require('@cypress/browserify-preprocessor')
-const { stringify } = require('querystring')
 
 module.exports = (on, config) => {
   const file = config.env.configFile
