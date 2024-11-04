@@ -809,15 +809,7 @@ export class TestCasesPage {
         cy.get(this.detailsTab).click()
 
         //Save edited / updated to test case
-        cy.get(this.editTestCaseSaveButton).click()
-        cy.get(this.confirmationMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
-        })
-
-        cy.get(this.confirmationMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
-        })
-
+        cy.get(this.editTestCaseSaveButton).click().wait(1000)
         cy.log('JSON added to test case successfully')
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

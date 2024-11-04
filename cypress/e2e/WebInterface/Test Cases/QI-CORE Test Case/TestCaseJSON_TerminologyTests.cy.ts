@@ -310,9 +310,9 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get('[data-testid="error-toast"]').should('exist')
-        cy.get('[data-testid="error-toast"]').should('be.visible')
-        cy.get('[data-testid="error-toast"]').should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.errorToastMsg).should('exist')
+        cy.get(TestCasesPage.errorToastMsg).should('be.visible')
+        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
@@ -403,9 +403,9 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get('[data-testid="error-toast"]').should('exist')
-        cy.get('[data-testid="error-toast"]').should('be.visible')
-        cy.get('[data-testid="error-toast"]').should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.errorToastMsg).should('exist')
+        cy.get(TestCasesPage.errorToastMsg).should('be.visible')
+        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
@@ -496,9 +496,9 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get('[data-testid="error-toast"]').should('exist')
-        cy.get('[data-testid="error-toast"]').should('be.visible')
-        cy.get('[data-testid="error-toast"]').should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.errorToastMsg).should('exist')
+        cy.get(TestCasesPage.errorToastMsg).should('be.visible')
+        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
 
     })
     it('JSON has Resource IDs duplicated for different resources', () => {
@@ -584,9 +584,9 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get('[data-testid="error-toast"]').should('exist')
-        cy.get('[data-testid="error-toast"]').should('be.visible')
-        cy.get('[data-testid="error-toast"]').should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.errorToastMsg).should('exist')
+        cy.get(TestCasesPage.errorToastMsg).should('be.visible')
+        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
@@ -898,5 +898,3 @@ describe('Tests around cardinality violations', () => {
 
     })
 })
-
-
