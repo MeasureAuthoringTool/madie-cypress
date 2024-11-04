@@ -140,7 +140,7 @@ describe('Test Case Attributes', () => {
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
-        cy.get(TestCasesPage.laboratoryElement).click()
+        cy.get(TestCasesPage.AssessmentElementTab).click()
         cy.get(TestCasesPage.plusIcon).eq(1).click()
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
@@ -173,7 +173,7 @@ describe('Test Case Attributes', () => {
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Add Date Time Attribute
-        cy.get(TestCasesPage.laboratoryElement).click()
+        cy.get(TestCasesPage.AssessmentElementTab).click()
         cy.get(TestCasesPage.plusIcon).eq(1).click()
         cy.get(TestCasesPage.attributesTab).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
@@ -192,9 +192,9 @@ describe('Test Case Attributes', () => {
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid="option-Related To"]').click()
         cy.get('[id="data-element-selector"]').click()
-        cy.get('[data-testid="Laboratory Test, Performed: Chlamydia Screening-option"]').click() //Select Laboratory Test, Performed: Chlamydia Screening from dropdown
+        cy.get('[data-testid="Assessment, Performed: Falls Screening-option"]').click() //Select Laboratory Test, Performed: Chlamydia Screening from dropdown
         cy.get(TestCasesPage.addAttribute).click()
-        cy.get(TestCasesPage.attributeChip).should('contain', 'Laboratory Test, Performed: Chlamydia Screening')
+        cy.get(TestCasesPage.attributeChip).should('contain', 'Assessment, Performed: Falls Screening')
 
     })
 })
