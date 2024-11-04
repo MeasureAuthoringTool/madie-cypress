@@ -992,6 +992,6 @@ describe('Duplicate Test Case Title and Group validations', () => {
         cy.get(TestCasesPage.testCaseSeriesTextBox).clear().wait(1000).type('SecondTestCaseGroup').type('{enter}')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
+        cy.get('[data-testid="error-toast"]').should('contain.text', 'The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
     })
 })
