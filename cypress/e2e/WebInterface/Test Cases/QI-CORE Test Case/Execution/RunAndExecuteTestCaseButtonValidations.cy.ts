@@ -233,7 +233,7 @@ describe('Run / Execute Test Case button validations', () => {
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
         cy.log('JSON added to test case successfully')
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -425,7 +425,7 @@ describe('Run / Execute Test Case button validations', () => {
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
 
         //Add valid json to the test case and run
         cy.get('#ace-editor-wrapper > .ace_scroller > .ace_content').type('{selectall}{backspace}{selectall}{backspace}')
@@ -443,9 +443,9 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null)
         OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', null)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
@@ -461,20 +461,20 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
 
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newCqlLibraryName = CqlLibraryName + randValue
 
-        Utilities.deleteMeasure(measureName, newCqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Run and Execute Test case for multiple Population Criteria and validate Population Criteria discernment, on Highlighting page and Test Case list page', () => {
-        let measureGroupPath = 'cypress/fixtures/groupId'
+        let measureGroupPath = 'cypress/fixtures/measureGroupId'
         let measurePath = 'cypress/fixtures/measureId'
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', null)
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -1135,11 +1135,11 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         //check the check box for the expected IP
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check({force: true}).should('be.checked')
+        cy.get(TestCasesPage.testCaseIPPExpected).check({ force: true }).should('be.checked')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click({force: true}).wait(1000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click({ force: true }).wait(1000)
 
         //Verify Highlighting tab before clicking on Run Test button
         cy.get(TestCasesPage.tcHighlightingTab).click()
@@ -1171,18 +1171,14 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm warning message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'' +
-            'Warning: Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)' +
-            'Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: The Coding provided (http://clinfhir.com/fhir/NamingSystem/identifier#IMP) was not found in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (note that the validator cannot judge what is suitable).  (error message = Unknown code \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\' for in-memory expansion of ValueSet \'http://terminology.hl7.org/ValueSet/v3-ActEncounterCode\')Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
         //attempt to click on 'Run Test Case' to run the test case via the edit page
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click()
 
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: CodeSystem is unknown and can\'t be validated: http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'' +
-            'Warning: Could not confirm that the codes provided are in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)' +
-            'Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: The Coding provided (http://clinfhir.com/fhir/NamingSystem/identifier#IMP) was not found in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (note that the validator cannot judge what is suitable).  (error message = Unknown code \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\' for in-memory expansion of ValueSet \'http://terminology.hl7.org/ValueSet/v3-ActEncounterCode\')Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
 
     })
 
@@ -1262,7 +1258,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1276,11 +1272,11 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         //check the check box for the expected IP
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check({force: true}).should('be.checked')
+        cy.get(TestCasesPage.testCaseIPPExpected).check({ force: true }).should('be.checked')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click({force: true}).wait(1000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click({ force: true }).wait(1000)
 
         //Click on Execute Test Case button on Edit Test Case page
         Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 30000)
@@ -1388,7 +1384,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.dangerToastMsg).find(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1427,16 +1423,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm error message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an ' +
-            'IdWarning: CodeSystem is unknown and can\'t be validated: http://terminologys.hl7.org/CodeSystem/v3-ActCodes for ' +
-            '\'http://terminologys.hl7.org/CodeSystem/v3-ActCodes#IMP\'Warning: Could not confirm that the codes provided are in ' +
-            'the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), ' +
-            'and a code should come from this value set unless it has no suitable code (the validator cannot judge what is suitable)' +
-            'Error: Bundle entry missing fullUrlError: Relative Reference appears inside Bundle whose entry is missing a fullUrlError: ' +
-            'Relative Reference appears inside Bundle whose entry is missing a fullUrlWarning: No code provided, and a code should be ' +
-            'provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)' +
-            'Error: Except for transactions and batches, each entry in a Bundle must have a fullUrl which is the identity of the ' +
-            'resource in the entry')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdWarning: The Coding provided (http://terminologys.hl7.org/CodeSystem/v3-ActCodes#IMP) was not found in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (note that the validator cannot judge what is suitable).  (error message = Unknown code \'http://terminologys.hl7.org/CodeSystem/v3-ActCodes#IMP\' for in-memory expansion of ValueSet \'http://terminology.hl7.org/ValueSet/v3-ActEncounterCode\')Error: Bundle entry missing fullUrlError: Relative Reference appears inside Bundle whose entry is missing a fullUrlError: Relative Reference appears inside Bundle whose entry is missing a fullUrlWarning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)Error: Except for transactions and batches, each entry in a Bundle must have a fullUrl which is the identity of the resource in the entry')
 
         //the 'Run Test Case' button, to run the test case, is unavailable
         cy.get(TestCasesPage.runTestButton).should('exist')
@@ -1567,7 +1554,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         //check the check box for the expected IP
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check({force: true}).should('be.checked')
+        cy.get(TestCasesPage.testCaseIPPExpected).check({ force: true }).should('be.checked')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
