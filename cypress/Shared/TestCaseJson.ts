@@ -1182,7 +1182,7 @@ export class TestCaseJson {
         '  "type": "collection",\n' +
         '  "entry": [\n' +
         '    {\n' +
-        '      "fullUrl": "http://local/Encounter/1",\n' +
+        '      "fullUrl": "http://local/Encounter/Encounter-1",\n' +
         '      "resource": {\n' +
         '        "id": "Encounter-1",\n' +
         '        "resourceType": "Encounter",\n' +
@@ -1224,7 +1224,7 @@ export class TestCaseJson {
         '      }\n' +
         '    },\n' +
         '    {\n' +
-        '      "fullUrl": "http://local/Encounter/2",\n' +
+        '      "fullUrl": "http://local/Encounter/Encounter-2",\n' +
         '      "resource": {\n' +
         '        "id": "Encounter-2",\n' +
         '        "resourceType": "Encounter",\n' +
