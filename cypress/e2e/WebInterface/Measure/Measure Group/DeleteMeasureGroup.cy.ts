@@ -263,7 +263,7 @@ describe('Ownership test when deleting groups', () => {
         newCqlLibraryName = CqlLibraryName1 + randValue
 
         //create new measure via temp user
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, newCqlLibraryName + "ALT", measureCQL, null, true)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, newCqlLibraryName + "ALT", measureCQL, 1, true)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(1, true, null, null, null,
             null, null, null, 'Procedure')
 
@@ -274,7 +274,7 @@ describe('Ownership test when deleting groups', () => {
 
         OktaLogin.UILogout()
 
-        Utilities.deleteMeasure(measureTwo, newCqlLibraryName + "second", false, true)
+        Utilities.deleteMeasure(measureTwo, newCqlLibraryName + "ALT", false, true, 1)
 
     })
 
@@ -290,7 +290,7 @@ describe('Ownership test when deleting groups', () => {
         cy.get(MeasuresPage.measureListTitles).should('contain', measureTwo)
 
         //Click on Edit Measure
-        MeasuresPage.actionCenter('view')
+        MeasuresPage.actionCenter('view', 1)
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
