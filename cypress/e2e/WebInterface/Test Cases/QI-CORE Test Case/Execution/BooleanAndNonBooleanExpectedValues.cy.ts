@@ -82,9 +82,8 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(TestCasesPage.testCaseNUMERExpected).type('3')
 
         //Save updated test case
-        cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with ' +
+        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Test case updated successfully with ' +
             'errors in JSON')
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -160,9 +159,8 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).check()
 
         //Save updated test case
-        cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with ' +
+        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Test case updated successfully with ' +
             'errors in JSON')
 
         //Assert Expected values for Population Basis Encounter (Proportion Measure Group)
@@ -270,9 +268,8 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(TestCasesPage.testCaseNUMERExpected).clear().type('3')
 
         //Save updated test case
-        cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with ' +
+        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Test case updated successfully with ' +
             'errors in JSON')
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -376,9 +373,8 @@ describe('Boolean Population Basis Expected Values', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).check()
 
         //Save updated test case
-        cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with ' +
+        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Test case updated successfully with ' +
             'errors in JSON')
 
         //Assert Expected values for Population Basis Encounter (Proportion Measure Group)
@@ -543,9 +539,8 @@ describe('Expected values for second initial population', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).eq(1).check()
 
         //Save updated test case
-        cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with ' +
+        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Test case updated successfully with ' +
             'errors in JSON')
 
         //Assert Expected values for Initial population

@@ -310,12 +310,11 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
-        cy.get(TestCasesPage.confirmationMsg).should('exist')
-        cy.get(TestCasesPage.confirmationMsg).should('be.visible')
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.errorToastMsg).should('exist')
+        cy.get(TestCasesPage.errorToastMsg).should('be.visible')
+        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
 
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'HAPI-1821: [element="id"] Invalid attribute value "": Attribute value must not be empty ("")')
@@ -404,12 +403,11 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
-        cy.get(TestCasesPage.confirmationMsg).should('exist')
-        cy.get(TestCasesPage.confirmationMsg).should('be.visible')
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.errorToastMsg).should('exist')
+        cy.get(TestCasesPage.errorToastMsg).should('be.visible')
+        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
 
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: HAPI-1821: [element="id"] Invalid attribute value "": Attribute value must not be empty ("")')
@@ -498,21 +496,10 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
-        cy.get(TestCasesPage.confirmationMsg).should('exist')
-        cy.get(TestCasesPage.confirmationMsg).should('be.visible')
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.errorToastMsg).should('exist')
+        cy.get(TestCasesPage.errorToastMsg).should('be.visible')
+        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
 
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources must have an IdError: ' +
-            'All resources must have an IdError: Bundle entry missing fullUrlError: Relative Reference appears inside Bundle whose entry ' +
-            'is missing a fullUrlError: Relative Reference appears inside Bundle whose entry is missing a fullUrlWarning: No code ' +
-            'provided, and a code should be provided from the value set \'US Core Encounter Type\' ' +
-            '(http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)Error: Except for transactions and batches, each entry ' +
-            'in a Bundle must have a fullUrl which is the identity of the resource in the entryError: Except for transactions and ' +
-            'batches, each entry in a Bundle must have a fullUrl which is the identity of the resource in the entry')
     })
     it('JSON has Resource IDs duplicated for different resources', () => {
 
@@ -597,12 +584,11 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
-        cy.get(TestCasesPage.confirmationMsg).should('exist')
-        cy.get(TestCasesPage.confirmationMsg).should('be.visible')
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.errorToastMsg).should('exist')
+        cy.get(TestCasesPage.errorToastMsg).should('be.visible')
+        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
 
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'All resources in bundle must have unique ID regardless of type. Multiple resources detected with ID [1]')
@@ -912,5 +898,3 @@ describe('Tests around cardinality violations', () => {
 
     })
 })
-
-

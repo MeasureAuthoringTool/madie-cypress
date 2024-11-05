@@ -22,7 +22,7 @@ export class OktaLogin {
     public static AltLogin() {
 
         sessionStorage.clear()
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
         cy.wait(1000)
@@ -62,7 +62,7 @@ export class OktaLogin {
     public static Login() {
 
         sessionStorage.clear()
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
