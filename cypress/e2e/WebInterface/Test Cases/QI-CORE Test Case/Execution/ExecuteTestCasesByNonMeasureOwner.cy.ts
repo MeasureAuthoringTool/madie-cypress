@@ -21,6 +21,10 @@ let mesureCQLPFTests = MeasureCQL.CQL_Populations
 describe('Ability to run valid test cases whether or not the user is the owner of the measure or if the measure has not been shared with the user', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookieALT()
 
         CqlLibraryName = 'TestLibrary5' + Date.now()
 
@@ -43,7 +47,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
 
             //Click on Edit Measure
-            MeasuresPage.actionCenter('edit')
+            MeasuresPage.actionCenter('edit', null)
 
             //Add second Measure Group with return type as Boolean
             cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -140,6 +144,10 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
             //logout as ALT user and, then, log in as non-alt user
             OktaLogin.Logout()
+            sessionStorage.clear()
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
+            cy.setAccessTokenCookie()
             OktaLogin.Login()
 
             cy.get(LandingPage.allMeasuresTab).click()
@@ -175,6 +183,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
 
         })
+
     it('Run / Execute single passing Test Case, on the Test Case details page, where the user is not the owner nor shared' +
         ' -- Run button is available and correct results are provided', () => {
 
@@ -277,6 +286,10 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
             //logout as ALT user and, then, log in as non-alt user
             OktaLogin.Logout()
+            sessionStorage.clear()
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
+            cy.setAccessTokenCookie()
             OktaLogin.Login()
 
             cy.get(LandingPage.allMeasuresTab).click()
@@ -412,6 +425,10 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
         //logout as ALT user and, then, log in as non-alt user
         OktaLogin.Logout()
+        sessionStorage.clear()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         OktaLogin.Login()
 
         cy.get(LandingPage.allMeasuresTab).click()
@@ -446,26 +463,14 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
 
         //confirm warning message
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: CodeSystem is unknown and can\'t be validated:' +
-            ' http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'Warning: Could not confirm' +
-            ' that the codes provided are in the value set \'V3 Value SetActEncounterCode\'' +
-            ' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code' +
-            ' should come from this value set unless it has no suitable code (the validator cannot' +
-            ' judge what is suitable)Warning: No code provided, and a code should be provided from the' +
-            ' value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: The Coding provided (http://clinfhir.com/fhir/NamingSystem/identifier#IMP) was not found in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (note that the validator cannot judge what is suitable).  (error message = Unknown code \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\' for in-memory expansion of ValueSet \'http://terminology.hl7.org/ValueSet/v3-ActEncounterCode\')Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
         //attempt to click on 'Run Test Case' to run the test case via the edit page
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click()
 
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: CodeSystem is unknown and can\'t be validated:' +
-            ' http://clinfhir.com/fhir/NamingSystem/identifier for \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\'Warning: Could not confirm' +
-            ' that the codes provided are in the value set \'V3 Value SetActEncounterCode\'' +
-            ' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code' +
-            ' should come from this value set unless it has no suitable code (the validator cannot' +
-            ' judge what is suitable)Warning: No code provided, and a code should be provided from the' +
-            ' value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: The Coding provided (http://clinfhir.com/fhir/NamingSystem/identifier#IMP) was not found in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (note that the validator cannot judge what is suitable).  (error message = Unknown code \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\' for in-memory expansion of ValueSet \'http://terminology.hl7.org/ValueSet/v3-ActEncounterCode\')Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
 
     })
 })
