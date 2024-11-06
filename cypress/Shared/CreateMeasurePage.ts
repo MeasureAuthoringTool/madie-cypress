@@ -445,11 +445,11 @@ export class CreateMeasurePage {
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
-                if ((twoMeasures === false) && (measureNumber > 0)) {
+                if (((twoMeasures === false) || (twoMeasures === undefined) || (twoMeasures === null)) && (measureNumber > 0)) {
                     cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
                     cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
                 }
-                else if ((twoMeasures === false) && (measureNumber === 0)) {
+                else if (((twoMeasures === false) || (twoMeasures === undefined) || (twoMeasures === null)) && (measureNumber === 0)) {
                     cy.writeFile('cypress/fixtures/measureId', response.body.id)
                     cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
                 }
