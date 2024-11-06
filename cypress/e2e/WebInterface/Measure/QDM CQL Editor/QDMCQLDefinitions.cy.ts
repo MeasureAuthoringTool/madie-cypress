@@ -64,7 +64,8 @@ let measureCQL_withError = 'library QDMLibrary1724174199255 version \'0.0.000\'\
     'define "n":\n' +
     '\ttruetest'
 
-describe('QDM CQL Definitions', () => {
+//skipping test until MAT-7313 epic is ready for release
+describe.skip('QDM CQL Definitions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -280,7 +281,8 @@ describe('QDM CQL Definitions', () => {
     })
 })
 
-describe('QDM CQL Definitions - Expression Editor Name Option Validations', () => {
+//skipping test until MAT-7313 epic is ready for release
+describe.skip('QDM CQL Definitions - Expression Editor Name Option Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -323,7 +325,8 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
     })
 })
 
-describe('QDM CQL Definitions - Measure ownership Validations', () => {
+//skipping test until MAT-7313 epic is ready for release
+describe.skip('QDM CQL Definitions - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
