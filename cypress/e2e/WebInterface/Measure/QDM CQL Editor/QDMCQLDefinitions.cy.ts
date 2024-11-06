@@ -5,8 +5,8 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-import {Global} from "../../../../Shared/Global";
-import {Header} from "../../../../Shared/Header";
+import { Global } from "../../../../Shared/Global";
+
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
@@ -64,8 +64,7 @@ let measureCQL_withError = 'library QDMLibrary1724174199255 version \'0.0.000\'\
     'define "n":\n' +
     '\ttruetest'
 
-//skipping test until MAT-7313 epic is ready for release
-describe.skip('QDM CQL Definitions', () => {
+describe('QDM CQL Definitions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -268,7 +267,7 @@ describe.skip('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.deleteCQLDefinitions).click()
         cy.get(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn).click()
         Utilities.waitForElementVisible('[class="toast success"]', 60000)
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text','Definition SDE Sex has been successfully removed from the CQL.')
+        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Definition SDE Sex has been successfully removed from the CQL.')
 
         //Navigate to Saved Definitions again and assert if the Definition is removed from Saved Definitions
         cy.get(CQLEditorPage.expandCQLBuilder).click()
@@ -281,8 +280,7 @@ describe.skip('QDM CQL Definitions', () => {
     })
 })
 
-//skipping test until MAT-7313 epic is ready for release
-describe.skip('QDM CQL Definitions - Expression Editor Name Option Validations', () => {
+describe('QDM CQL Definitions - Expression Editor Name Option Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -325,8 +323,7 @@ describe.skip('QDM CQL Definitions - Expression Editor Name Option Validations',
     })
 })
 
-//skipping test until MAT-7313 epic is ready for release
-describe.skip('QDM CQL Definitions - Measure ownership Validations', () => {
+describe('QDM CQL Definitions - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
