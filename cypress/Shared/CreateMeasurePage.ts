@@ -445,18 +445,21 @@ export class CreateMeasurePage {
                 console.log(response)
                 expect(response.status).to.eql(201)
                 expect(response.body.id).to.be.exist
-                if ((twoMeasures === false) && (measureNumber > 0)) {
+
+                if ((!twoMeasures) && (measureNumber > 0)) {
                     cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
                     cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
                 }
-                else if ((twoMeasures === false) && (measureNumber === 0)) {
+                else if ((!twoMeasures) && (measureNumber === 0)) {
                     cy.writeFile('cypress/fixtures/measureId', response.body.id)
                     cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
                 }
                 else if ((twoMeasures === true) && (measureNumber === 0)) {
                     cy.writeFile('cypress/fixtures/measureId2', response.body.id)
-                    //cy.writeFile('cypress/fixtures/versionId2', response.body.versionId)
                     cy.writeFile('cypress/fixtures/measureSetId2', response.body.measureSetId)
+                }
+                else {
+                    cy.log('Something is wrong - you shouldd not see this message')
                 }
 
             })
