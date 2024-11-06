@@ -5,8 +5,8 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-import {Global} from "../../../../Shared/Global";
-import {Header} from "../../../../Shared/Header";
+import { Global } from "../../../../Shared/Global";
+
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
@@ -268,7 +268,7 @@ describe.skip('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.deleteCQLDefinitions).click()
         cy.get(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn).click()
         Utilities.waitForElementVisible('[class="toast success"]', 60000)
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text','Definition SDE Sex has been successfully removed from the CQL.')
+        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Definition SDE Sex has been successfully removed from the CQL.')
 
         //Navigate to Saved Definitions again and assert if the Definition is removed from Saved Definitions
         cy.get(CQLEditorPage.expandCQLBuilder).click()

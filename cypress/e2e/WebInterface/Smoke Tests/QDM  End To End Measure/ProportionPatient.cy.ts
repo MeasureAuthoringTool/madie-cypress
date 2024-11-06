@@ -136,8 +136,7 @@ let measureCQL = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
     '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)\n' +
     '  '
 
-//Skipping until MAT-7868 is fixed
-describe.skip('Measure Creation: Proportion Patient Based', () => {
+describe('Measure Creation: Proportion Patient Based', () => {
 
     before('Create Measure', () => {
 
