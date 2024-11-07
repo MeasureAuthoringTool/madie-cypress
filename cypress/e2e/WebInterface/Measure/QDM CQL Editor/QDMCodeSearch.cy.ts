@@ -6,8 +6,9 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 
-let measureName = 'QDMTestMeasure' + Date.now()
-let CqlLibraryName = 'QDMLibrary' + Date.now()
+const date = Date.now()
+let measureName = 'QDMCodeSearch' + date
+let CqlLibraryName = 'QDMCodeSearchLib' + date
 let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     'using QDM version \'5.6\'\n' +
     '\n' +
@@ -169,6 +170,7 @@ describe('QDM Code Search fields', () => {
 
         //Assert toast message while trying to apply the same code again
         cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.codesTab).click()
         cy.get(CQLEditorPage.codeSubTab).click()
         cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
@@ -267,6 +269,7 @@ describe('QDM Code Search fields', () => {
 
         //Navigate to Saved Codes page
         cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.codesTab).click()
         cy.get(CQLEditorPage.savedCodesTab).click().wait(4000)
 
         //Edit code
@@ -321,6 +324,7 @@ describe('QDM Code Search fields', () => {
 
         //Navigate to Saved Codes page
         cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.codesTab).click()
         cy.get(CQLEditorPage.savedCodesTab).click().wait(1000)
 
         //Remove Code
@@ -330,6 +334,7 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.removeCodeContinueBtn).click().wait(2000)
         cy.get('[class="toast success"]').should('contain.text', 'Code AMB and code system ActCode has been successfully removed from the CQL')
         cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.codesTab).click()
         cy.get(CQLEditorPage.savedCodesTab).click()
         Utilities.waitForElementVisible('.sc-bXCLTC', 30000)
         cy.get('.sc-bXCLTC').should('contain.text', 'No Results were found')
@@ -380,6 +385,7 @@ describe('QDM Code Search fields', () => {
 
         //Navigate to Saved Codes page
         cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.codesTab).click()
         cy.get(CQLEditorPage.savedCodesTab).click().wait(2000)
 
         //Remove Code
