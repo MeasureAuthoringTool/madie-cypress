@@ -234,6 +234,39 @@ describe.skip('QDM CQL Parameters', () => {
         cy.get('[data-testid="parameters-row-0"] > :nth-child(1)').should('contain.text', 'Measurement Period')
 
     })
+
+    it('Edit Saved QDM CQL Parameters', () => {
+
+        //Click on Parameters tab
+        cy.get(CQLEditorPage.parametersTab).click()
+
+        //Navigate to Saved Parameters tab
+        cy.get(CQLEditorPage.savedParametersTab).click()
+        cy.get(CQLEditorPage.editSavedCQLParameters).click()
+
+        //Edit Parameter
+        cy.get(CQLEditorPage.editParameterNameTextBox).clear().type('Measurement Period One')
+
+        //Save
+        cy.get(CQLEditorPage.saveParameterBtn).click()
+    })
+
+    it('Dirty check pops up when there are changes in CQL and Edit parameters button is clicked', () => {
+
+        //Make changes to CQL editor
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+
+        //Click on Parameters tab
+        cy.get(CQLEditorPage.parametersTab).click()
+
+        //Navigate to Saved Definitions tab
+        cy.get(CQLEditorPage.savedParametersTab).click()
+        cy.get(CQLEditorPage.editSavedCQLParameters).click()
+
+        //Click on Discard changes
+        Global.clickOnDiscardChanges()
+        cy.get(CQLEditorPage.editParameterNameTextBox).should('be.visible')
+    })
 })
 
 describe.skip('QDM CQL Parameters - Measure ownership Validations', () => {
@@ -284,5 +317,25 @@ describe.skip('QDM CQL Parameters - Measure ownership Validations', () => {
         // clear & appply disabled
         cy.get(CQLEditorPage.clearParametersExpressionButton).should('be.disabled')
         cy.get(CQLEditorPage.applyParametersExpressionButton).should('be.disabled')
+    })
+
+    it('Verify Non Measure owner unable to Edit/Delete saved Parameters', () => {
+
+        //Navigate to All Measures page
+        cy.get(MeasuresPage.allMeasuresTab).click()
+        MeasuresPage.actionCenter('view')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Navigate to Saved Parameters tab
+        cy.get(CQLEditorPage.parametersTab).click()
+        cy.get(CQLEditorPage.savedParametersTab).click()
+
+        //Edit button should not be visible
+        Utilities.waitForElementVisible('[data-testid="parameters-row-0"]', 60000)
+        cy.get(CQLEditorPage.editSavedCQLParameters).should('not.exist')
+
+        //Delete button should not be visible
+        cy.get(CQLEditorPage.deleteSavedCQLParameters).should('not.exist')
     })
 })
