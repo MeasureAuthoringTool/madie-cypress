@@ -31,7 +31,6 @@ export class CQLEditorPage {
 
     //Code Search page
     public static readonly codesTab = '[data-testid="codes-tab"]'
-    public static readonly codeSubTab = '[data-testid="code-tab"]'
     public static readonly savedCodesTab = '[data-testid="savedCodes-tab"]'
     public static readonly codeSystemVersionDropdown = '[id="code-system-version-selector"]'
     public static readonly codeSystemVersionOption = '[data-value="version 1"]'
@@ -108,6 +107,7 @@ export class CQLEditorPage {
     public static readonly editCQLDefinitions = '[data-testid="edit-button-0"]'
     public static readonly deleteCQLDefinitions = '[data-testid="delete-button-0"]'
     public static readonly saveDefinitionBtn = '[data-testid="definition-save-btn"]'
+    public static readonly commentTextBox = '[data-testid="definition-comment-text"]'
 
     //Parameters page
     public static readonly parametersTab = '[data-testid="parameters-tab"]'
@@ -118,8 +118,10 @@ export class CQLEditorPage {
     public static readonly clearParametersExpressionButton = '[data-testid="clear-parameter-btn"]'
     public static readonly applyParametersExpressionButton = '[data-testid="apply-parameter-btn"]'
     public static readonly parameterExpressionEditor = '[data-testid="terminology-section-sub-header-content-Expression Editor"]'
-
-
+    public static readonly editParameterNameTextBox = '[data-testid="parameter-name-text-input"]'
+    public static readonly saveParameterBtn = '[data-testid="parameter-save-btn"]'
+    public static readonly editSavedCQLParameters = '[data-testid="edit-button-0"]'
+    public static readonly deleteSavedCQLParameters = '[data-testid="delete-button-0"]'
 
 
     //editor message
