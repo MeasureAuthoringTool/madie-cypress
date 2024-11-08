@@ -108,6 +108,7 @@ export class CQLEditorPage {
     public static readonly editCQLDefinitions = '[data-testid="edit-button-0"]'
     public static readonly deleteCQLDefinitions = '[data-testid="delete-button-0"]'
     public static readonly saveDefinitionBtn = '[data-testid="definition-save-btn"]'
+    public static readonly commentTextBox = '[data-testid="definition-comment-text"]'
 
     //Parameters page
     public static readonly parametersTab = '[data-testid="parameters-tab"]'
