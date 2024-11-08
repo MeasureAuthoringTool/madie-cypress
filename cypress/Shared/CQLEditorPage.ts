@@ -31,7 +31,6 @@ export class CQLEditorPage {
 
     //Code Search page
     public static readonly codesTab = '[data-testid="codes-tab"]'
-    public static readonly codeSubTab = '[data-testid="codes-tab"]'
     public static readonly savedCodesTab = '[data-testid="savedCodes-tab"]'
     public static readonly codeSystemVersionDropdown = '[id="code-system-version-selector"]'
     public static readonly codeSystemVersionOption = '[data-value="version 1"]'

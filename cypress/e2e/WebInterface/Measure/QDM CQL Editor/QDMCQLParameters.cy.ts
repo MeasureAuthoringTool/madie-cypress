@@ -300,7 +300,7 @@ describe.skip('QDM CQL Parameters - Measure ownership Validations', () => {
         cy.get(CQLEditorPage.includesTab).should('be.enabled')
         cy.get(CQLEditorPage.definitionsTab).should('be.enabled')
         cy.get(CQLEditorPage.valueSetsTab).should('be.enabled')
-        cy.get(CQLEditorPage.codeSubTab).should('be.enabled')
+        cy.get(CQLEditorPage.codesTab).should('be.enabled')
         cy.get(CQLEditorPage.parametersTab).should('be.enabled').click()
 
         // name disabled

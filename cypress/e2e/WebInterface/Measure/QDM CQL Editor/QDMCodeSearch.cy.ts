@@ -68,9 +68,6 @@ describe('QDM Code Search fields', () => {
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
 
-        //Navigate to Code sub tab
-        cy.get(CQLEditorPage.codeSubTab).click()
-
         //Code system version and Code search fields should be disabled before selecting the code system
         cy.get(CQLEditorPage.codeSystemVersionDropdown).should('not.be.enabled')
         cy.get(CQLEditorPage.codeText).should('not.be.enabled')
@@ -138,9 +135,6 @@ describe('QDM Code Search fields', () => {
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
 
-        //Navigate to Code sub tab
-        cy.get(CQLEditorPage.codeSubTab).click()
-
         //Search for the Code
         cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
@@ -171,7 +165,6 @@ describe('QDM Code Search fields', () => {
         //Assert toast message while trying to apply the same code again
         cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
-        cy.get(CQLEditorPage.codeSubTab).click()
         cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
@@ -200,9 +193,6 @@ describe('QDM Code Search fields', () => {
 
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
-
-        //Navigate to Code sub tab
-        cy.get(CQLEditorPage.codeSubTab).click()
 
         //Search for the Code
         cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
@@ -242,9 +232,6 @@ describe('QDM Code Search fields', () => {
 
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
-
-        //Navigate to Code sub tab
-        cy.get(CQLEditorPage.codeSubTab).click()
 
         //Search for the Code
         cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
@@ -298,9 +285,6 @@ describe('QDM Code Search fields', () => {
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
 
-        //Navigate to Code sub tab
-        cy.get(CQLEditorPage.codeSubTab).click()
-
         //Search for the Code
         cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
@@ -344,9 +328,6 @@ describe('QDM Code Search fields', () => {
 
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
-
-        //Navigate to Code sub tab
-        cy.get(CQLEditorPage.codeSubTab).click()
 
         //Search for the Code
         cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
