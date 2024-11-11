@@ -53,9 +53,6 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
-        //Commenting until 'MeasureListButtons' feature flag is removed
-        //MeasuresPage.actionCenter('version')
-
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -66,9 +63,6 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
-
-        //Commenting until 'MeasureListButtons' feature flag is removed
-        //MeasuresPage.actionCenter('draft')
 
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
@@ -83,9 +77,6 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedMeasuresPageOne' + Date.now()
 
-        //Commenting until 'MeasureListButtons' feature flag is removed
-        //MeasuresPage.actionCenter('version')
-
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -96,9 +87,6 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
-
-        //Commenting until 'MeasureListButtons' feature flag is removed
-        //MeasuresPage.actionCenter('draft')
 
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
@@ -163,9 +151,6 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
-        //Commenting until 'MeasureListButtons' feature flag is removed
-        //MeasuresPage.actionCenter('version')
-
         //version and draft measure
         MeasuresPage.actionCenter('version')
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -181,9 +166,6 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
-
-        //Commenting until 'MeasureListButtons' feature flag is removed
-        //MeasuresPage.actionCenter('draft')
 
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
