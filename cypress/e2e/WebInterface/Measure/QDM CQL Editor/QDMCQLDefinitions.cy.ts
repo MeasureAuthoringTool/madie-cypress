@@ -21,6 +21,7 @@ let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     '\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
     'context Patient\n' +
+    '//Test Comments\n' +
     'define "SDE Ethnicity":\n' +
     '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
     'define "SDE Payer":\n' +
@@ -64,8 +65,7 @@ let measureCQL_withError = 'library QDMLibrary1724174199255 version \'0.0.000\'\
     'define "n":\n' +
     '\ttruetest'
 
-//skipping test until MAT-7313 epic is ready for release
-describe.skip('QDM CQL Definitions', () => {
+describe('QDM CQL Definitions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -279,10 +279,49 @@ describe.skip('QDM CQL Definitions', () => {
         Utilities.waitForElementVisible(CQLEditorPage.deleteCQLDefinitions, 60000)
         cy.get('.right-panel > .panel-content').should('not.contain', 'Common."Inpatient Encounter')
     })
+
+    it('QDM CQL Definition Comments were displayed under Saved Definitions tab', () => {
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+
+        //Navigate to Saved Definitions tab
+        cy.get(CQLEditorPage.savedDefinitionsTab).click()
+        cy.get('[data-testid="definitions-row-4"] > :nth-child(2)').should('contain.text', 'Test Comments')
+
+    })
+
+    it('View and Edit QDM CQL Definition Comments from Saved Definitions tab', () => {
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+
+        //Navigate to Saved Definitions tab
+        cy.get(CQLEditorPage.savedDefinitionsTab).click()
+
+        //Verify Comment
+        cy.get('[data-testid="definitions-row-4"] > :nth-child(2)').should('contain.text', 'Test Comments')
+
+        //Edit Comment
+        cy.get('[data-testid="edit-button-4"]').click()
+        cy.get(CQLEditorPage.commentTextBox).clear().type('Updated Test Comment')
+        //Save
+        cy.get(CQLEditorPage.saveDefinitionBtn).click()
+
+        //Verify Updated Comment
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+
+        //Navigate to Saved Definitions tab and verify comment
+        cy.get(CQLEditorPage.savedDefinitionsTab).click()
+        cy.get('[data-testid="definitions-row-4"] > :nth-child(2)').should('contain.text', 'Updated Test Comment')
+
+    })
 })
 
-//skipping test until MAT-7313 epic is ready for release
-describe.skip('QDM CQL Definitions - Expression Editor Name Option Validations', () => {
+describe('QDM CQL Definitions - Expression Editor Name Option Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -325,8 +364,7 @@ describe.skip('QDM CQL Definitions - Expression Editor Name Option Validations',
     })
 })
 
-//skipping test until MAT-7313 epic is ready for release
-describe.skip('QDM CQL Definitions - Measure ownership Validations', () => {
+describe('QDM CQL Definitions - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 

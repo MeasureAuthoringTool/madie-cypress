@@ -22,6 +22,7 @@ let measureCQL = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
     ' default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
     ' context Patient\n' +
+    '//Test Comments\n' +
     ' define "Initial Population":\n' +
     '   exists "Qualifying Encounters"\n' +
     '   define "Qualifying Encounters":\n' +
@@ -68,8 +69,7 @@ let measureCQL_withError = 'library QiCoreLibrary1723824228401 version \'0.0.000
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
     '  (Enc E where E.status = \'finished\') is not null'
 
-//skipping until MAT-7313 is ready for release
-describe.skip('Qi-Core CQL Definitions', () => {
+describe('Qi-Core CQL Definitions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -313,10 +313,43 @@ describe.skip('Qi-Core CQL Definitions', () => {
         Utilities.waitForElementVisible(CQLEditorPage.deleteCQLDefinitions, 60000)
         cy.get('.right-panel > .panel-content').should('not.contain', 'Initial Population')
     })
+
+    it('View and Edit Qi Core CQL Definition Comments from Saved Definitions tab', () => {
+
+        //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+
+        //Navigate to Saved Definitions tab
+        cy.get(CQLEditorPage.savedDefinitionsTab).click()
+
+        //Verify Comment
+        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'Test Comments')
+
+        //Edit Comment
+        cy.get(CQLEditorPage.editCQLDefinitions).click()
+        cy.get(CQLEditorPage.commentTextBox).clear().type('Updated Test Comment')
+        //Save
+        cy.get(CQLEditorPage.saveDefinitionBtn).click()
+
+        //Verify Updated Comment
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Click on Definitions tab
+        cy.get(CQLEditorPage.definitionsTab).click()
+
+        //Navigate to Saved Definitions tab and verify comment
+        cy.get(CQLEditorPage.savedDefinitionsTab).click()
+        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'Updated Test Comment')
+
+    })
 })
 
-//skipping until MAT-7313 is ready for release
-describe.skip('Qi-Core CQL Definitions - Expression Editor Name Option Validations', () => {
+describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -353,8 +386,7 @@ describe.skip('Qi-Core CQL Definitions - Expression Editor Name Option Validatio
     })
 })
 
-//skipping until MAT-7313 is ready for release
-describe.skip('Qi-Core CQL Definitions - Measure ownership Validations', () => {
+describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
