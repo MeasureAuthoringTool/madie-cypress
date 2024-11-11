@@ -37,8 +37,9 @@ describe('Verify Library usage and Delete Library', () => {
                     authorization: 'Bearer ' + accessToken.value
                 }
             }).then((response) => {
+                console.log(response)
                 expect(response.status).to.eql(200)
-                expect(response.body[9].name).to.eql('QDMSmokeTestLibrary0228')
+                expect(response.body[12].name).to.eql('QDMSmokeTestLibrary0228')
             })
         })
     })

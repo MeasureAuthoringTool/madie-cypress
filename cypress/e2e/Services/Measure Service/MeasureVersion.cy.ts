@@ -78,7 +78,7 @@ describe('Measure Versioning', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
         //Create second Measure with Alt User
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, cqlLibraryTwo, measureCQL, null, true)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, cqlLibraryTwo, measureCQL, 2, true)
 
     })
 
