@@ -11,6 +11,9 @@ export class EditMeasurePage {
     public static readonly reviewInfoTab = '[data-testid=review-tab]'
     public static readonly editMeasureButtonActionBtn = '[data-testid="action-center-actual-icon"]'
     public static readonly editMeasureDeleteActionBtn = '[data-testid="DeleteOutlinedIcon"]'
+    public static readonly editMeasureVersionActionBtn = '[data-testid="VersionMeasure"]'
+    public static readonly editMeasureDraftActionBtn = '[data-testid="DraftMeasure"]'
+    public static readonly editPageVersionDraftMsg = '[data-testid="edit-measure-information-success-text"]'
 
     //Associate QDM and QI Core measures:
     public static readonly associateCmsIdDialog = '[data-testid="associate-cms-id-dialog-tbl"]'

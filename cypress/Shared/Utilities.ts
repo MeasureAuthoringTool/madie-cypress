@@ -4,7 +4,6 @@ import { MeasureGroupPage } from "./MeasureGroupPage"
 import { CQLLibraryPage } from "./CQLLibraryPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Environment } from "./Environment"
-import { OktaLogin } from "../Shared/OktaLogin"
 
 let deleteMeasureAdminAPIKey = Environment.credentials().deleteMeasureAdmin_API_Key
 
@@ -126,31 +125,43 @@ export class Utilities {
         })
     }
 
-    public static deleteVersionedMeasure(measureName: string, cqlLibraryName: string, deleteSecondMeasure?: boolean, altUser?: boolean): void {
+    public static deleteVersionedMeasure(measureName: string, cqlLibraryName: string, deleteSecondMeasure?: boolean, altUser?: boolean, measureNumber?: number): void {
 
-        let path = 'cypress/fixtures/measureId'
+        let measurePath = 'cypress/fixtures/measureId'
         let versionIdPath = 'cypress/fixtures/versionId'
         let measureSetIdPath = 'cypress/fixtures/measureSetId'
         const now = require('dayjs')
         let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
         let mpEndDate = now().format('YYYY-MM-DD')
         let ecqmTitle = 'eCQMTitle'
+        if ((measureNumber === undefined) || (measureNumber === null)) {
+            measureNumber = 0
+        }
 
         if (altUser) {
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
             cy.setAccessTokenCookieALT()
         }
         else {
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
             cy.setAccessTokenCookie()
+        }
+        if (measureNumber > 0) {
+            measurePath = 'cypress/fixtures/measureId' + measureNumber
+            versionIdPath = 'cypress/fixtures/versionId' + measureNumber
+            measureSetIdPath = 'cypress/fixtures/measureSetId' + measureNumber
         }
 
         if (deleteSecondMeasure) {
-            path = 'cypress/fixtures/measureId2'
+            measurePath = 'cypress/fixtures/measureId2'
             versionIdPath = 'cypress/fixtures/versionId2'
             measureSetIdPath = 'cypress/fixtures/measureSetId2'
         }
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(path).should('exist').then((id) => {
+            cy.readFile(measurePath).should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {
                     cy.readFile(measureSetIdPath).should('exist').then((measureSetId) => {
                         cy.request({

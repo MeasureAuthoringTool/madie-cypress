@@ -11,10 +11,10 @@ import { Header } from "../../../../Shared/Header"
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
-const now = require('dayjs')
 let measureQICore = ''
 let measureQDM = ''
-
+let qdmCQLLibrary = 'QDMTestLibrary' + Date.now()
+let qiCoreCQLLibrary = 'QiCoreTestLibrary' + Date.now()
 
 describe('Delete measure on the measure edit page', () => {
 
@@ -91,5 +91,131 @@ describe('Delete measure on the measure edit page', () => {
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 10000)
         cy.url().should('be.oneOf', ['https://dev-madie.hcqis.org/measures', 'https://test-madie.hcqis.org/measures', 'https://impl-madie.hcqis.org/measures', 'https://madie.cms.gov/measures'])
 
+    })
+})
+
+describe('Version and Draft QDM Measure on the Edit Measure page', () => {
+
+    measureQDM = 'QDMMeasure' + Date.now() + randValue + 9 + randValue
+    let updatedMeasureName = 'Updated' + measureQDM
+
+    beforeEach('Create Measure', () => {
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        //Create Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, qdmCQLLibrary, 'Proportion', false, qdmManifestTestCQL, null, false,
+            '2025-01-01', '2025-12-31')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
+            'Numerator', '', 'Denominator')
+
+        OktaLogin.Login()
+
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        cy.get(Header.mainMadiePageButton).click()
+    })
+
+    afterEach('Log Out and Clean up', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteVersionedMeasure(measureQDM, qdmCQLLibrary)
+    })
+
+    it('Version and Draft QDM Measure on the edit page for a measure', () => {
+
+        //Version Measure
+        MeasuresPage.actionCenter('edit')
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureVersionActionBtn, 5000)
+        cy.get(EditMeasurePage.editMeasureVersionActionBtn).click()
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+
+        Utilities.waitForElementVisible(EditMeasurePage.editPageVersionDraftMsg, 60000)
+        cy.get(EditMeasurePage.editPageVersionDraftMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.log('Version Created Successfully')
+        cy.reload()
+
+        //Draft Measure
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDraftActionBtn, 5000)
+        cy.get(EditMeasurePage.editMeasureDraftActionBtn).click()
+        cy.get('[data-testid="measure-name-field"] > .MuiInputBase-root > [data-testid="measure-name-input"]').clear().type(updatedMeasureName)
+        cy.get(MeasuresPage.createDraftContinueBtn).click()
+        cy.get(EditMeasurePage.editPageVersionDraftMsg).should('contain.text', 'New draft created successfully.')
+
+        cy.log('Draft Created Successfully')
+    })
+})
+
+describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
+
+    measureQICore = 'QiCore' + Date.now() + randValue + 5 + randValue
+    let updatedMeasureName = 'Updated' + measureQDM
+
+    beforeEach('Create Measure', () => {
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        //Create Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '',
+            'Initial Population', '', 'Initial Population', 'boolean')
+        OktaLogin.Login()
+
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        cy.get(Header.mainMadiePageButton).click()
+    })
+
+    afterEach('Log Out and Clean up', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteVersionedMeasure(measureQICore, qiCoreCQLLibrary)
+    })
+
+    it('Version and Draft Qi Core measure on the edit page for a measure', () => {
+
+        //Version Measure
+        MeasuresPage.actionCenter('edit')
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureVersionActionBtn, 5000)
+        cy.get(EditMeasurePage.editMeasureVersionActionBtn).click()
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+
+        Utilities.waitForElementVisible(EditMeasurePage.editPageVersionDraftMsg, 60000)
+        cy.get(EditMeasurePage.editPageVersionDraftMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.log('Version Created Successfully')
+        cy.reload()
+
+        //Draft Measure
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDraftActionBtn, 5000)
+        cy.get(EditMeasurePage.editMeasureDraftActionBtn).click()
+        cy.get('[data-testid="measure-name-field"] > .MuiInputBase-root > [data-testid="measure-name-input"]').clear().type(updatedMeasureName)
+        cy.get(MeasuresPage.createDraftContinueBtn).click()
+        cy.get(EditMeasurePage.editPageVersionDraftMsg).should('contain.text', 'New draft created successfully.')
+
+        cy.log('Draft Created Successfully')
     })
 })
