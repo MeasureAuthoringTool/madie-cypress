@@ -37,7 +37,7 @@ describe('QI-Core Single Test Case Export', () => {
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
+                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases/exports',
                         headers: {
@@ -63,7 +63,7 @@ describe('QI-Core Single Test Case Export', () => {
         cy.setAccessTokenCookieALT()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
+                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
                     cy.request({
                         url: '/api/measures/' + id + '/test-cases/exports',
                         headers: {
@@ -109,8 +109,8 @@ describe('QI-Core Multiple Test Case Export', () => {
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
-                    cy.readFile('cypress/fixtures/testcaseId2').should('exist').then((testCaseId2) => {
+                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
+                    cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((testCaseId2) => {
                         cy.request({
                             url: '/api/measures/' + id + '/test-cases/exports',
                             headers: {
@@ -136,8 +136,8 @@ describe('QI-Core Multiple Test Case Export', () => {
         cy.setAccessTokenCookieALT()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testCaseId) => {
-                    cy.readFile('cypress/fixtures/testcaseId2').should('exist').then((testCaseId2) => {
+                cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
+                    cy.readFile('cypress/fixtures/testCaseId2').should('exist').then((testCaseId2) => {
                         cy.request({
                             url: '/api/measures/' + id + '/test-cases/exports',
                             headers: {
