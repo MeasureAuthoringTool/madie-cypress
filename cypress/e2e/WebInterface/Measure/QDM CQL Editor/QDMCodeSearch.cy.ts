@@ -39,7 +39,7 @@ describe('QDM Code Search fields', () => {
     beforeEach('Create Measure and Login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false)
         OktaLogin.Login()
 
         //Click on Edit Button

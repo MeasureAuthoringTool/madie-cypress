@@ -520,7 +520,7 @@ describe('Delete validations for versioned Measure', () => {
                     })
 
                     cy.log('Verify error message on delete Test case')
-                    cy.readFile('cypress/fixtures/testcaseId').should('exist').then((testcaseid) => {
+                    cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testcaseid) => {
                         cy.wait(1000)
                         cy.request({
                             failOnStatusCode: false,
