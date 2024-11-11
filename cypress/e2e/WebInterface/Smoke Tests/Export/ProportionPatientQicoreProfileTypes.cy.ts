@@ -3,18 +3,16 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { EditMeasurePage, EditMeasureActions } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-
-let measureNameTimeStamp = 'TestMeasure' + Date.now()
-let measureName = measureNameTimeStamp
-let CqlLibraryName = 'TestLibrary' + Date.now()
 const path = require('path')
-const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
+const downloadsFolder = Cypress.config('downloadsFolder')
 
+let measureName = 'ProportionPatientProfile' + Date.now()
+let CqlLibraryName = 'ProportionPatientProfileLib' + Date.now()
 let measureCQL = MeasureCQL.CQL_Populations
 
 describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profile types', () => {
@@ -122,8 +120,9 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
         cy.log('Successfully verified zip file export')
         console.log('Successfully verified zip file export')
 
-        OktaLogin.Logout()
+        Utilities.deleteVersionedMeasure(measureName, CqlLibraryName)
 
+        OktaLogin.Logout()
     })
 
     it('Unzip the downloaded file and verify file types', () => {
@@ -140,4 +139,35 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
             'eCQMTitle4QICore-v1.0.000-FHIR.xml' && 'eCQMTitle4QICore-v1.0.000-FHIR.json', { timeout: 500000 })
 
     })
+})
+
+describe('FHIR Measure Export initiated from Measure page', () => {
+
+    deleteDownloadsFolderBeforeAll()
+
+    before('Create New Measure and Login', () => {
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+
+        OktaLogin.Login()
+    })
+
+
+    it('Validate zip file Export from Edit Measure page succeeds', () => {
+        const exportName = 'eCQMTitle4QICore-v0.0.000-FHIR4.zip'
+        const fullPathToExport = path.join(downloadsFolder, exportName)
+
+        MeasuresPage.actionCenter('edit')
+
+        Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
+
+        EditMeasurePage.actionCenter(EditMeasureActions.export)
+
+        cy.readFile(fullPathToExport, { timeout: 500000 }).should('exist')
+        cy.log('Successfully verified zip file export')
+
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+    })
+
 })

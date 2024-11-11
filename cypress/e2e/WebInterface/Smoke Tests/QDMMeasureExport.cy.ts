@@ -1,17 +1,22 @@
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { EditMeasurePage, EditMeasureActions } from "../../../Shared/EditMeasurePage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { Utilities } from "../../../Shared/Utilities"
-
-let qdmMeasureName = 'QDMTestMeasure' + Date.now()
-let qdmCqlLibraryName = 'QDMLibrary' + Date.now()
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
-const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
+const {
+    deleteDownloadsFolderBeforeAll, 
+    deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
+
+const date = Date.now()
+const exportName = 'eCQMTitle4QDM-v0.0.000-QDM.zip'
+const fullPathToExport = path.join(downloadsFolder, exportName)
+let qdmMeasureName = 'QDMTestMeasure' + date
+let qdmCqlLibraryName = 'QDMLibrary' + date
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 let qdmCMSMeasureCQL = 'library CMS1192 version \'1.1.000\'\n' +
     '\n' +
@@ -84,7 +89,7 @@ let qdmCMSMeasureCQL = 'library CMS1192 version \'1.1.000\'\n' +
 
 describe('Successful QDM Measure Export', () => {
 
-    deleteDownloadsFolderBeforeAll()
+    deleteDownloadsFolderBeforeEach()
 
     beforeEach('Create New Measure and Login', () => {
 
@@ -98,23 +103,32 @@ describe('Successful QDM Measure Export', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
-
     })
 
     afterEach('Clean up and Logout', () => {
 
         Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
-
         OktaLogin.Logout()
     })
 
-    it('Validate the zip file Export is downloaded for QDM Measure', () => {
+    it('Validate zip file Export from Measures list succeeds', () => {
 
         MeasuresPage.actionCenter('export')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
+        cy.readFile(fullPathToExport, { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
+    })
 
+    it('Validate zip file Export from Edit Measure page succeeds', () => {
+
+        MeasuresPage.actionCenter('edit')
+
+        Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
+
+        EditMeasurePage.actionCenter(EditMeasureActions.export)
+
+        cy.readFile(fullPathToExport, { timeout: 500000 }).should('exist')
+        cy.log('Successfully verified zip file export')
     })
 })
 
@@ -134,13 +148,11 @@ describe('QDM Measure Export for CMS Measure with huge included Library', () => 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', 'Denominator Exclusions', '', 'Encounter without Food Screening', '', 'Qualifying Encounters')
         OktaLogin.Login()
-
     })
 
     afterEach('Clean up and Logout', () => {
 
         Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
-
         OktaLogin.Logout()
     })
 
@@ -148,9 +160,8 @@ describe('QDM Measure Export for CMS Measure with huge included Library', () => 
 
         MeasuresPage.actionCenter('export')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
+        cy.readFile(fullPathToExport, { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
-
     })
 })
 
