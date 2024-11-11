@@ -1,4 +1,21 @@
+import { MeasuresPage } from "./MeasuresPage"
+import { Utilities } from "./Utilities"
+
+export enum EditMeasureActions {
+
+    export = 'export',
+    delete = 'delete',
+    version = 'version'
+
+}
+
 export class EditMeasurePage {
+
+    // action center
+    public static readonly actionToggle = '[data-testid="action-center-actual-icon"]'
+    public static readonly actionExport = '[data-testid="ExportMeasure"]'
+    public static readonly actionDelete = '[data-testid="DeleteMeasure"]'
+    public static readonly actionVersion = 'data-testid="VersionMeasure"'
 
     //dirty modal
     public static readonly dirtCheckModal = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-aa4ov7 react-draggable"]'
@@ -163,4 +180,44 @@ export class EditMeasurePage {
     public static readonly reviewInfoFields = '.help-image'
     public static readonly approvalDate = '[data-testid="approval-date-input"]'
     public static readonly lastReviewDate = '[data-testid="review-date-input"]'
+
+    public static actionCenter(action: EditMeasureActions): void {
+
+        cy.get(this.actionToggle).click()
+        cy.wait(500)
+
+        switch (action.valueOf()) {
+
+            case 'export': {
+
+                cy.get(this.actionExport).should('be.visible')
+                cy.get(this.actionExport).should('be.enabled')
+                cy.get(this.actionExport).click()
+
+                cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
+                cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')
+                Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 125000)
+                cy.get('.toast').should('contain.text', 'Measure exported successfully')
+                cy.get('[data-testid="ds-btn"]').click()
+
+                break
+            }
+
+            case 'version': {
+
+                break
+            }
+            case 'draft': {
+
+                break
+            }
+            case 'delete': {
+
+                break
+            }
+            default: { }
+
+            cy.wait(2500)
+        }
+    }
 }
