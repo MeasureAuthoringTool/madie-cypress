@@ -480,7 +480,7 @@ describe('Delete validations for versioned Measure', () => {
                     })
 
                     cy.log('Verify error message on delete Measure group')
-                    cy.readFile('cypress/fixtures/groupId').should('exist').then((groupId) => {
+                    cy.readFile('cypress/fixtures/measureGroupId').should('exist').then((groupId) => {
                         cy.wait(1000)
                         cy.request({
                             failOnStatusCode: false,
