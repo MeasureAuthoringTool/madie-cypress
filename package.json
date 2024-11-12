@@ -80,7 +80,7 @@
 		"cypress-audit": "^1.0.0",
 		"cypress-axe": "^1.3.0",
 		"cypress-commands": "^1.1.0",
-		"cypress-delete-downloads-folder": "^0.0.2",
+		"cypress-delete-downloads-folder": "^0.0.6",
 		"cypress-file-upload": "^5.0.8",
 		"cypress-visual-regression": "^1.5.2",
 		"lighthouse": "^12.2.1",
