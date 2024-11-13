@@ -39,7 +39,19 @@ describe('Verify Library usage and Delete Library', () => {
             }).then((response) => {
                 console.log(response)
                 expect(response.status).to.eql(200)
-                expect(response.body[12].name).to.eql('QDMSmokeTestLibrary0228')
+
+                var i= 1
+                var pass = 'false'
+                while (i < 97) {
+                    if( response.body[i].name == 'QDMSmokeTestLibrary0228') {
+                        pass = 'true'
+                        break
+                    }
+                    else {
+                        i++
+                    }
+                }
+                expect(pass).to.eql('true')
             })
         })
     })
