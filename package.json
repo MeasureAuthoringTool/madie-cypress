@@ -21,6 +21,7 @@
 		"test:all:ui:tests": "NO_COLOR=1 cypress run --env configFile=test --spec 'cypress/e2e/WebInterface/**/*.cy.ts' --browser chrome --headed;",
 		"test:all:services:tests": "NO_COLOR=1 cypress run --env configFile=test --spec 'cypress/e2e/Services/**/*.cy.ts' --browser chrome --headed;",
 		"test:services:measureservice:testcaseexport": "NO_COLOR=1 cypress run --env configFile=test --spec 'cypress/e2e/Services/Measure Service/TestCaseExport.cy.ts' --browser chrome --headed;",
+		"test:services:measureservice:measureversion": "NO_COLOR=1 cypress run --env configFile=test --spec 'cypress/e2e/Services/Measure Service/MeasureVersion.cy.ts' --browser chrome --headed;",
 		"test:ui:smoketests": "NO_COLOR=1 cypress run --env configFile=test --spec 'cypress/e2e/WebInterface/Smoke Tests/**/*' --browser chrome --headed;",
 		"test:ui:cqllibrary:cqllibrarydelete": "NO_COLOR=1 cypress run --env configFile=test --spec 'cypress/e2e/WebInterface/CQL Library/CQLLibraryDelete.cy.ts' --browser chrome --headed;",
 		"test:ui:smoketests:endtoend:cohortepisodeencounter": "NO_COLOR=1 cypress run --env configFile=test --spec 'cypress/e2e/WebInterface/Smoke Tests/QICORE End To End Measure and Test Cases/CohortEpisodeEncounter.cy.ts' --browser chrome --headed;",
