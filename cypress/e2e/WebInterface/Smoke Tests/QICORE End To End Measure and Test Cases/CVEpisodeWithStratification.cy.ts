@@ -65,7 +65,7 @@ let measureCQL = 'library CVEpisodeWithStratification version \'0.0.000\'\n' +
 //MAT-7915
 describe('Measure Creation and Testing: CV Episode Measure With Stratification', () => {
 
-    before('Create Measure, Test Case and Login', () => {
+        before('Create Measure, Test Case and Login', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
