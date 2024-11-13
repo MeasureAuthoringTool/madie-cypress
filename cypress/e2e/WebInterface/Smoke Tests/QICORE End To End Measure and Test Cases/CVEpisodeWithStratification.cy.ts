@@ -62,8 +62,8 @@ let measureCQL = 'library CVEpisodeWithStratification version \'0.0.000\'\n' +
     '  "Qualifying Encounters" Enc\n' +
     ' where Enc.type in "Preventive Care Services - Established Office Visit, 18 and Up"'
 
-//Skipping until MAT-7915 is fixed
-describe.skip('Measure Creation and Testing: CV Episode Measure With Stratification', () => {
+//MAT-7915
+describe('Measure Creation and Testing: CV Episode Measure With Stratification', () => {
 
     before('Create Measure, Test Case and Login', () => {
 
