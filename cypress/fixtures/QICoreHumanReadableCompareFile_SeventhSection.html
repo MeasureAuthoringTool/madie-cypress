@@ -1,23 +1,32 @@
 
                             
                             
-                                <td>ipp</td>
+                                <td>Qualifying Encounters</td>
                             
                         </tr>
                         <tr>
                             
-                                <td></td>
+                                <td/>
                                 <td>
-                                    <pre class="highlight language-cql"><code class="language-cql">define &quot;ipp&quot;:
-  true</code></pre>
+                                    <pre class="highlight language-cql"><code class="language-cql">define &quot;Qualifying Encounters&quot;:
+  ( [Encounter: &quot;Office Visit&quot;]
+    union [Encounter: &quot;Annual Wellness Visit&quot;]
+    union [Encounter: &quot;Preventive Care Services - Established Office Visit, 18 and Up&quot;]
+    union [Encounter: &quot;Preventive Care Services-Initial Office Visit, 18 and Up&quot;]
+    union [Encounter: &quot;Home Healthcare Services&quot;] ) ValidEncounter
+    where ValidEncounter.period during &quot;Measurement Period&quot;</code></pre>
                                 </td>
                             
                         </tr>
                     
-                        <tr>
-                            <th><b>Library Name</b></th>
-                            <th><b>Name</b></th>
-                        </tr>
-                        <tr>
-                            
-                                <td>
+                    </table>
+                </td>
+            </tr>
+            
+        
+    
+
+    </table>
+</div>
+</body>
+</html>
