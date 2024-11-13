@@ -5,8 +5,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-import {Global} from "../../../../Shared/Global";
-import { CallTracker } from "assert"
+import {Global} from "../../../../Shared/Global"
 
 let measureName = 'QDMTestingParameters' + Date.now()
 let CqlLibraryName = 'QDMParametersLibrary' + Date.now()
@@ -249,6 +248,7 @@ describe.skip('QDM CQL Parameters', () => {
 
         //Save
         cy.get(CQLEditorPage.saveParameterBtn).click()
+        cy.get('[class="toast success"]').should('contain.text', 'Parameter Measurement Period has been successfully updated.')
     })
 
     it('Dirty check pops up when there are changes in CQL and Edit parameters button is clicked', () => {
