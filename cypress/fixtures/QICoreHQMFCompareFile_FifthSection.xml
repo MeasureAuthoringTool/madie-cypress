@@ -1,0 +1,76 @@
+</td> 
+                                 <td colspan="3" style="padding-left: 4px;"> 
+                                    <b>Group scoring:</b> 
+                                    <span> proportion </span>  
+                                    <tr> 
+                                       <th scope="row">
+                                          <b>Scoring unit: </b>
+                                       </th> 
+                                       <td style="padding-left: 4px;">   </td> 
+                                    </tr>   
+                                    <tr> 
+                                       <th scope="row">
+                                          <b>Type: </b>
+                                       </th> 
+                                       <td style="padding-left: 4px;">  
+                                          <p style="margin-bottom: 5px;"> 
+                                             <span>Outcome </span> 
+                                          </p>  
+                                       </td> 
+                                    </tr>   
+                                 </td> 
+                                 <tr> 
+                                    <td></td> 
+                                    <td></td> 
+                                    <td>Initial Population</td> 
+                                    <td> 
+                                       <pre><code class="language-cql">define "Qualifying Encounters":
+  ( [Encounter: "Office Visit"]
+    union [Encounter: "Annual Wellness Visit"]
+    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]
+    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]
+    union [Encounter: "Home Healthcare Services"] ) ValidEncounter
+    where ValidEncounter.period during "Measurement Period"</code></pre> 
+                                    </td> 
+                                 </tr> 
+                                 <tr> 
+                                    <td></td> 
+                                    <td></td> 
+                                    <td>Denominator</td> 
+                                    <td> 
+                                       <pre><code class="language-cql">define "Qualifying Encounters":
+  ( [Encounter: "Office Visit"]
+    union [Encounter: "Annual Wellness Visit"]
+    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]
+    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]
+    union [Encounter: "Home Healthcare Services"] ) ValidEncounter
+    where ValidEncounter.period during "Measurement Period"</code></pre> 
+                                    </td> 
+                                 </tr> 
+                                 <tr> 
+                                    <td></td> 
+                                    <td></td> 
+                                    <td>Numerator</td> 
+                                    <td> 
+                                       <pre><code class="language-cql">define "Qualifying Encounters":
+  ( [Encounter: "Office Visit"]
+    union [Encounter: "Annual Wellness Visit"]
+    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]
+    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]
+    union [Encounter: "Home Healthcare Services"] ) ValidEncounter
+    where ValidEncounter.period during "Measurement Period"</code></pre> 
+                                    </td> 
+                                 </tr>  
+                              </tr> 
+                           </table> 
+                           <table class="grid-dict"> 
+                              <tr> 
+                                 <th>
+                                    <b>Library Name</b>
+                                 </th> 
+                                 <th>
+                                    <b>Name</b>
+                                 </th> 
+                              </tr> 
+                              <tr> 
+                                 <td>

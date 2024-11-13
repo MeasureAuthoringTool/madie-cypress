@@ -5,7 +5,8 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import {Header} from "../../../../Shared/Header";
+import { Header } from "../../../../Shared/Header"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 
 let versionNumber = '1.0.000'
 
@@ -58,6 +59,7 @@ let CqlLibraryName = 'TestLibrary' + Date.now()
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
+let measureCQLContent = MeasureCQL.stndBasicQICoreCQL
 let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     '\n' +
     'using QICore version \'4.1.1\'\n' +
@@ -250,7 +252,7 @@ describe('QI-Core Measure Export', () => {
 })
 ///this will need to be re-visited -- a more elegant approach needs to be explored where we delete 
 //all un-necessary files before doing the file comparison
-describe.skip('QI-Core Measure Export: Validating contents of Human Readable and HQMF files before and after versioning', () => {
+describe('QI-Core Measure Export: Validating contents of Human Readable and HQMF files before and after versioning', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -260,7 +262,7 @@ describe.skip('QI-Core Measure Export: Validating contents of Human Readable and
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLContent)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -272,7 +274,7 @@ describe.skip('QI-Core Measure Export: Validating contents of Human Readable and
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
 
         OktaLogin.Login()
 
@@ -283,7 +285,7 @@ describe.skip('QI-Core Measure Export: Validating contents of Human Readable and
     })
     //
     // this needs to be worked on first
-    it('Unzip the downloaded file and verify file types and contest of the HR and HQMF files, for QI Core Measure', () => {
+    it.only('Unzip the downloaded file and verify file types and contest of the HR and HQMF files, for QI Core Measure', () => {
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
@@ -292,12 +294,12 @@ describe.skip('QI-Core Measure Export: Validating contents of Human Readable and
 
 
         //verify zip file exists
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
 
         // unzipping the Measure Export
-        cy.task('unzipFile', { zipFile: 'eCQMTitle-v0.0.000-FHIR4.zip', path: downloadsFolder })
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR4.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
@@ -305,7 +307,7 @@ describe.skip('QI-Core Measure Export: Validating contents of Human Readable and
 
         //read contents of the html / human readable file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated HR file -to- the next)
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR.html')).should('exist').then((exportedFile) => {
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.html')).should('exist').then((exportedFile) => {
             debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents are: \n' + exported)
@@ -362,7 +364,7 @@ describe.skip('QI-Core Measure Export: Validating contents of Human Readable and
         cy.pause()
         //read contents of the xml / HQMF file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated HQMF file -to- the next)
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR.xml')).should('exist').then((exportedFile) => {
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.xml')).should('exist').then((exportedFile) => {
             debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents are: \n' + exported)
@@ -520,9 +522,9 @@ describe.skip('QI-Core Measure Export: Validating contents of Human Readable and
         })
 
         //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR.html')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR.json'), null).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-FHIR.xml')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.html')).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.json'), null).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.xml')).should('exist')
 
         cy.readFile(path.join(downloadsFolder, 'cql/CQMCommon-1.0.000.cql')).should('exist')
         cy.readFile(path.join(downloadsFolder, 'cql/FHIRCommon-4.1.000.cql')).should('exist')
