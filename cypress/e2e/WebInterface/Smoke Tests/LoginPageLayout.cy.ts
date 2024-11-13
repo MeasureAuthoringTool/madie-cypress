@@ -1,5 +1,6 @@
 import { LandingPage } from "../../../Shared/LandingPage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
+import { Utilities } from "../../../Shared/Utilities"
 
 describe('Login page layout', () => {
 
@@ -18,10 +19,13 @@ describe('Login page layout', () => {
         // expand
         cy.get(OktaLogin.needHelpButton).click()
 
+        Utilities.waitForElementVisible(OktaLogin.forgotPassword, 3500)
         cy.get(OktaLogin.forgotPassword).click()
 
+      //  Utilities.waitForElementVisible(OktaLogin.resetViaEmail, 3500)
         cy.get(OktaLogin.resetViaEmail).should('be.visible')
 
+        Utilities.waitForElementVisible(OktaLogin.backFromReset, 3500)
         cy.get(OktaLogin.backFromReset).should('have.text', 'Back to sign in').click()
 
         // expand again
@@ -48,8 +52,7 @@ describe('Login page layout', () => {
 
         cy.contains('Privacy Policy').should('have.attr', 'href', 'https://www.cms.gov/About-CMS/Agency-Information/Aboutwebsite/Privacy-Policy')
 
-        // bug: https://jira.cms.gov/browse/MAT-7780 - the href value is correct (and will pass)
-        cy.contains('Rules of Behavior').should('have.attr', 'href', 'https://www.hhs.gov/web/governance/digital-strategy/it-policy-archive/hhs-rules-of-behavior-for-the-use-of-hhs-information-and-it-resources-policy.html')
+        cy.contains('Rules of Behavior').should('have.attr', 'href', 'https://security.cms.gov/policy-guidance/hhs-policy-rules-behavior-use-information-it-resources')
 
         cy.contains('Terms of Use').should('have.attr', 'href', 'https://harp.cms.gov/login/terms-of-use')
        
