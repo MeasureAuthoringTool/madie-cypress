@@ -16,16 +16,17 @@ describe('Create New Measure', () => {
 
     afterEach('Cleanup and Logout', () => {
 
-        //edit Measure
-        MeasuresPage.actionCenter("edit")
-
-        cy.get(EditMeasurePage.deleteMeasureButton).click()
-        cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + measureName + '?')
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 5000)
+        cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 5000)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
-
-        cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 5000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', "Measure successfully deleted")
 
         //Verify the deleted measure on My Measures page list
+        cy.get(Header.measures).click()
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureName)
 
