@@ -15,7 +15,6 @@ let newMeasureName = ''
 let newCQLLibraryName = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let QDMMeasureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
-let versionNumber = '1.0.000'
 let testCaseTitle = 'TestcaseTitle'
 let testCaseDescription = 'Description' + Date.now()
 let testCaseSeries = 'SBTestSeries'
@@ -119,9 +118,6 @@ describe('QDM Measure Versioning', () => {
 
     it('Add Major Version to the QDM Measure and verify that the versioned Measure is in read only', () => {
 
-        //Commenting until 'MeasureListButtons' feature flag is removed
-        //MeasuresPage.actionCenter('version')
-
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -161,7 +157,8 @@ describe('QDM Measure Versioning', () => {
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('not.be.enabled')
 
         //Verify that the Delete Measure button is disabled
-        cy.get(EditMeasurePage.deleteMeasureButton).should('not.be.enabled')
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        cy.get(EditMeasurePage.editMeasureDeleteActionBtn).should('not.exist')
 
     })
 })
@@ -195,9 +192,6 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
 
     it('Add Major Version to the QDM Measure and verify that the versioned Measure is in read only', () => {
 
-        //Commenting until 'MeasureListButtons' feature flag is removed
-        //MeasuresPage.actionCenter('version')
-
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -237,7 +231,8 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('not.be.enabled')
 
         //Verify that the Delete Measure button is disabled
-        cy.get(EditMeasurePage.deleteMeasureButton).should('not.be.enabled')
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        cy.get(EditMeasurePage.editMeasureDeleteActionBtn).should('not.exist')
 
     })
 })
@@ -320,7 +315,8 @@ describe('QI-Core Measure Versioning', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('not.exist')
 
         //Verify that the Delete Measure button is disabled
-        cy.get(EditMeasurePage.deleteMeasureButton).should('not.be.enabled')
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        cy.get(EditMeasurePage.editMeasureDeleteActionBtn).should('not.exist')
 
     })
 })

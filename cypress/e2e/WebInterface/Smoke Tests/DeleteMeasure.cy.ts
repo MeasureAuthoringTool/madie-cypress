@@ -27,28 +27,7 @@ describe('Delete Measure', () => {
 
     })
 
-    it('Verify Measure Owner can Delete Measure', () => {
-
-        MeasuresPage.actionCenter('edit')
-
-        cy.get(EditMeasurePage.deleteMeasureButton).click()
-        cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + measureOne + '?')
-        cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
-
-        cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')
-
-        //Verify the deleted measure on My Measures page list
-        cy.get(MeasuresPage.measureListTitles).should('not.contain', measureOne)
-
-        //Navigate to All Measures tab
-        cy.get(MeasuresPage.allMeasuresTab).click()
-        //Verify the deleted measure on All Measures page list
-        cy.get(MeasuresPage.measureListTitles).should('not.contain', measureOne)
-
-    })
-
-    //Skipping until feature flag 'MeasureListButtons' is removed
-    it.skip('Verify Measure Owner can Delete Measure through Action center', () => {
+    it('Verify Measure Owner can Delete Measure through Action center', () => {
 
         MeasuresPage.actionCenter('delete')
 
@@ -86,23 +65,7 @@ describe('Delete Measure ownership validation', () => {
         Utilities.deleteMeasure(measureTwo, CqlLibraryTwo)
     })
 
-    it('Verify Non Measure Owner can not Delete Measure', () => {
-
-        //Verify the Measure on My Measures Page List
-        cy.get(MeasuresPage.measureListTitles).should('not.contain', measureTwo)
-
-        //Navigate to All Measures tab
-        cy.get(MeasuresPage.allMeasuresTab).click()
-
-        MeasuresPage.actionCenter("edit")
-
-        //Delete Measure Button should not be visible for non owner of the Measure
-        cy.get(EditMeasurePage.deleteMeasureButton).should('not.be.enabled')
-
-    })
-
-    //Skipping until feature flag 'MeasureListButtons' is removed
-    it.skip('Verify Non Measure Owner can not Delete Measure through Action center', () => {
+    it('Verify Non Measure Owner can not Delete Measure through Action center', () => {
 
         //Verify the Measure on My Measures Page List
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureTwo)
