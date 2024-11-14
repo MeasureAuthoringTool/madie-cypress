@@ -1,0 +1,22 @@
+></url>
+            <identifier>
+               <use value="usual"></use>
+               <type>
+                  <coding>
+                     <system value="http://hl7.org/fhir/us/cqfmeasures/CodeSystem/identifier-type"></system>
+                     <code value="short-name"></code>
+                     <display value="Short Name"></display>
+                  </coding>
+               </type>
+               <system value="https://madie.cms.gov/measure/shortName"></system>
+               <value value="eCQMTitle4QICore"></value>
+            </identifier>
+            <identifier>
+               <use value="official"></use>
+               <type>
+                  <coding>
+                     <system value="http://hl7.org/fhir/us/cqfmeasures/CodeSystem/identifier-type"></system>
+                     <code value="version-independent"></code>
+                     <display value="Version Independent"></display>
+                  </coding>
+               </type>

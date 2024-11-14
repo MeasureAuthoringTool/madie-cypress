@@ -1,0 +1,77 @@
+
+            <relatedArtifact>
+               <type value="depends-on"></type>
+               <resource value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001"></resource>
+            </relatedArtifact>
+            <relatedArtifact>
+               <type value="depends-on"></type>
+               <resource value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016"></resource>
+            </relatedArtifact>
+            <relatedArtifact>
+               <type value="depends-on"></type>
+               <resource value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023"></resource>
+            </relatedArtifact>
+            <relatedArtifact>
+               <type value="depends-on"></type>
+               <resource value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025"></resource>
+            </relatedArtifact>
+            <relatedArtifact>
+               <type value="depends-on"></type>
+               <resource value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240"></resource>
+            </relatedArtifact>
+            <relatedArtifact>
+               <type value="depends-on"></type>
+               <resource value="https://madie.cms.gov/Library/FHIRHelpers|4.1.000"></resource>
+            </relatedArtifact>
+            <dataRequirement>
+               <type value="Encounter"></type>
+               <profile value="http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"></profile>
+               <mustSupport value="type"></mustSupport>
+               <mustSupport value="period"></mustSupport>
+               <codeFilter>
+                  <path value="type"></path>
+                  <valueSet value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001"></valueSet>
+               </codeFilter>
+            </dataRequirement>
+            <dataRequirement>
+               <type value="Encounter"></type>
+               <profile value="http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"></profile>
+               <mustSupport value="type"></mustSupport>
+               <mustSupport value="period"></mustSupport>
+               <codeFilter>
+                  <path value="type"></path>
+                  <valueSet value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240"></valueSet>
+               </codeFilter>
+            </dataRequirement>
+            <dataRequirement>
+               <type value="Encounter"></type>
+               <profile value="http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"></profile>
+               <mustSupport value="type"></mustSupport>
+               <mustSupport value="period"></mustSupport>
+               <codeFilter>
+                  <path value="type"></path>
+                  <valueSet value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025"></valueSet>
+               </codeFilter>
+            </dataRequirement>
+            <dataRequirement>
+               <type value="Encounter"></type>
+               <profile value="http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"></profile>
+               <mustSupport value="type"></mustSupport>
+               <mustSupport value="period"></mustSupport>
+               <codeFilter>
+                  <path value="type"></path>
+                  <valueSet value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023"></valueSet>
+               </codeFilter>
+            </dataRequirement>
+            <dataRequirement>
+               <type value="Encounter"></type>
+               <profile value="http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"></profile>
+               <mustSupport value="type"></mustSupport>
+               <mustSupport value="period"></mustSupport>
+               <codeFilter>
+                  <path value="type"></path>
+                  <valueSet value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016"></valueSet>
+               </codeFilter>
+            </dataRequirement>
+            <content>
+               <contentType value="text/cql"></contentType>
