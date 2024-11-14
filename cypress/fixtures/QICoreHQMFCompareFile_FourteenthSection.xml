@@ -1,0 +1,43 @@
+   <entry>
+      <fullUrl value="https://madie.cms.gov/Library/FHIRHelpers"></fullUrl>
+      <resource>
+         <Library xmlns="http://hl7.org/fhir">
+            <id value="FHIRHelpers"></id>
+            <meta>
+               <profile value="http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-library-cqfm"></profile>
+            </meta>
+            <language value="en"></language>
+            <text>
+               <status value="extensions"></status>
+               <div xmlns="http://www.w3.org/1999/xhtml"> 
+                  <table class="grid dict">  
+                     <tr> 
+                        <th scope="row">
+                           <b>Title: </b>
+                        </th> 
+                        <td style="padding-left: 4px;">FHIRHelpers</td> 
+                     </tr>  
+                     <tr> 
+                        <th scope="row">
+                           <b>Id: </b>
+                        </th> 
+                        <td style="padding-left: 4px;">FHIRHelpers</td> 
+                     </tr>  
+                     <tr> 
+                        <th scope="row">
+                           <b>Version: </b>
+                        </th> 
+                        <td style="padding-left: 4px;">4.1.000</td> 
+                     </tr>  
+                     <tr> 
+                        <th scope="row">
+                           <b>Url: </b>
+                        </th> 
+                        <td style="padding-left: 4px;">https://madie.cms.gov/Library/FHIRHelpers</td> 
+                     </tr>  
+                     <tr> 
+                        <th scope="row"> 
+                           <b> official </b> 
+                        </th> 
+                        <td style="padding-left: 4px;"> 
+                           <p style="margin-bottom: 5px;"> 

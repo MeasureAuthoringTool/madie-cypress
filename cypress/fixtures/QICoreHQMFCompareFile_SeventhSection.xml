@@ -1,0 +1,128 @@
+></valueString>
+                     </extension>
+                     <extension url="name">
+                        <valueString value="Qualifying Encounters"></valueString>
+                     </extension>
+                     <extension url="statement">
+                        <valueString value="define &amp;quot;Qualifying Encounters&amp;quot;:
+  ( [Encounter: &amp;quot;Office Visit&amp;quot;]
+    union [Encounter: &amp;quot;Annual Wellness Visit&amp;quot;]
+    union [Encounter: &amp;quot;Preventive Care Services - Established Office Visit, 18 and Up&amp;quot;]
+    union [Encounter: &amp;quot;Preventive Care Services-Initial Office Visit, 18 and Up&amp;quot;]
+    union [Encounter: &amp;quot;Home Healthcare Services&amp;quot;] ) ValidEncounter
+    where ValidEncounter.period during &amp;quot;Measurement Period&amp;quot;"></valueString>
+                     </extension>
+                     <extension url="displaySequence">
+                        <valueInteger value="0"></valueInteger>
+                     </extension>
+                  </extension>
+                  <name value="EffectiveDataRequirements"></name>
+                  <status value="active"></status>
+                  <type>
+                     <coding>
+                        <system value="http://terminology.hl7.org/CodeSystem/library-type"></system>
+                        <code value="module-definition"></code>
+                     </coding>
+                  </type>
+                  <relatedArtifact>
+                     <type value="depends-on"></type>
+                     <display value="Library FHIRHelpers"></display>
+                     <resource value="https://madie.cms.gov/Library/FHIRHelpers|4.1.000"></resource>
+                  </relatedArtifact>
+                  <relatedArtifact>
+                     <type value="depends-on"></type>
+                     <display value="Value set Office Visit"></display>
+                     <resource value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001"></resource>
+                  </relatedArtifact>
+                  <relatedArtifact>
+                     <type value="depends-on"></type>
+                     <display value="Value set Annual Wellness Visit"></display>
+                     <resource value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240"></resource>
+                  </relatedArtifact>
+                  <relatedArtifact>
+                     <type value="depends-on"></type>
+                     <display value="Value set Preventive Care Services - Established Office Visit, 18 and Up"></display>
+                     <resource value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025"></resource>
+                  </relatedArtifact>
+                  <relatedArtifact>
+                     <type value="depends-on"></type>
+                     <display value="Value set Preventive Care Services-Initial Office Visit, 18 and Up"></display>
+                     <resource value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023"></resource>
+                  </relatedArtifact>
+                  <relatedArtifact>
+                     <type value="depends-on"></type>
+                     <display value="Value set Home Healthcare Services"></display>
+                     <resource value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016"></resource>
+                  </relatedArtifact>
+                  <parameter>
+                     <name value="Measurement Period"></name>
+                     <use value="in"></use>
+                     <min value="0"></min>
+                     <max value="1"></max>
+                     <type value="Period"></type>
+                  </parameter>
+                  <parameter>
+                     <name value="Qualifying Encounters"></name>
+                     <use value="out"></use>
+                     <min value="0"></min>
+                     <max value="*"></max>
+                     <type value="Resource"></type>
+                  </parameter>
+                  <dataRequirement>
+                     <type value="Encounter"></type>
+                     <profile value="http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"></profile>
+                     <mustSupport value="type"></mustSupport>
+                     <mustSupport value="period"></mustSupport>
+                     <codeFilter>
+                        <path value="type"></path>
+                        <valueSet value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001"></valueSet>
+                     </codeFilter>
+                  </dataRequirement>
+                  <dataRequirement>
+                     <type value="Encounter"></type>
+                     <profile value="http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"></profile>
+                     <mustSupport value="type"></mustSupport>
+                     <mustSupport value="period"></mustSupport>
+                     <codeFilter>
+                        <path value="type"></path>
+                        <valueSet value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240"></valueSet>
+                     </codeFilter>
+                  </dataRequirement>
+                  <dataRequirement>
+                     <type value="Encounter"></type>
+                     <profile value="http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"></profile>
+                     <mustSupport value="type"></mustSupport>
+                     <mustSupport value="period"></mustSupport>
+                     <codeFilter>
+                        <path value="type"></path>
+                        <valueSet value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025"></valueSet>
+                     </codeFilter>
+                  </dataRequirement>
+                  <dataRequirement>
+                     <type value="Encounter"></type>
+                     <profile value="http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"></profile>
+                     <mustSupport value="type"></mustSupport>
+                     <mustSupport value="period"></mustSupport>
+                     <codeFilter>
+                        <path value="type"></path>
+                        <valueSet value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023"></valueSet>
+                     </codeFilter>
+                  </dataRequirement>
+                  <dataRequirement>
+                     <type value="Encounter"></type>
+                     <profile value="http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"></profile>
+                     <mustSupport value="type"></mustSupport>
+                     <mustSupport value="period"></mustSupport>
+                     <codeFilter>
+                        <path value="type"></path>
+                        <valueSet value="http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016"></valueSet>
+                     </codeFilter>
+                  </dataRequirement>
+               </Library>
+            </contained>
+            <extension url="http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-effectiveDataRequirements">
+               <valueReference>
+                  <reference value="#effective-data-requirements"></reference>
+               </valueReference>
+            </extension>
+            <url value="https://madie.cms.gov/Measure/

@@ -1,0 +1,27 @@
+</td>  
+                                 <td>Qualifying Encounters</td> 
+                              </tr> 
+                              <tr> 
+                                 <td></td> 
+                                 <td> 
+                                    <pre class="highlight language-cql"><code class="language-cql">define "Qualifying Encounters":
+  ( [Encounter: "Office Visit"]
+    union [Encounter: "Annual Wellness Visit"]
+    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]
+    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]
+    union [Encounter: "Home Healthcare Services"] ) ValidEncounter
+    where ValidEncounter.period during "Measurement Period"</code></pre> 
+                                 </td> 
+                              </tr> 
+                           </table> 
+                        </td> 
+                     </tr>  
+                  </table> 
+               </div>
+            </text>
+            <contained>
+               <Library xmlns="http://hl7.org/fhir">
+                  <id value="effective-data-requirements"></id>
+                  <extension url="http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-logicDefinition">
+                     <extension url="libraryName">
+                        <valueString value=

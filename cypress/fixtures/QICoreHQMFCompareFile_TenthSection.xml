@@ -1,0 +1,30 @@
+<extension url="http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoring">
+                  <valueCodeableConcept>
+                     <coding>
+                        <system value="http://terminology.hl7.org/CodeSystem/measure-scoring"></system>
+                        <code value="proportion"></code>
+                        <display value="Proportion"></display>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension url="http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-populationBasis">
+                  <valueCode value="Encounter"></valueCode>
+               </extension>
+               <extension url="http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-scoringUnit">
+                  <valueCodeableConcept>
+                     <coding>
+                        <system value="https://clinicaltables.nlm.nih.gov/"></system>
+                        <code value="ml"></code>
+                        <display value="ml milliLiters"></display>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>
+               <extension url="http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cqfm-type">
+                  <valueCodeableConcept>
+                     <coding>
+                        <system value="http://terminology.hl7.org/CodeSystem/measure-type"></system>
+                        <code value="outcome"></code>
+                        <display value="Outcome"></display>
+                     </coding>
+                  </valueCodeableConcept>
+               </extension>

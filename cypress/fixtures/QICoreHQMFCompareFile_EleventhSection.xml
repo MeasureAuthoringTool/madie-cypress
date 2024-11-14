@@ -1,0 +1,146 @@
+ 
+                     </tr>       
+                     <tr> 
+                        <th scope="row">
+                           <b>Related Artifacts: </b>
+                        </th> 
+                        <td style="padding-left: 4px;">  
+                           <p>
+                              <b>Dependencies</b>
+                           </p> 
+                           <ul> 
+                              <li>http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001</li> 
+                              <li>http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016</li> 
+                              <li>http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023</li> 
+                              <li>http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025</li> 
+                              <li>http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240</li> 
+                              <li>https://madie.cms.gov/Library/FHIRHelpers|4.1.000</li> 
+                           </ul>   
+                        </td> 
+                     </tr>  
+                     <tr> 
+                        <th scope="row">
+                           <b>Data Requirements:</b>
+                        </th> 
+                        <td style="padding-left: 4px;"> 
+                           <table class="grid-dict"> 
+                              <tr>
+                                 <th>
+                                    <b>Type</b>
+                                 </th>
+                                 <th>
+                                    <b>Profile</b>
+                                 </th>
+                                 <th>
+                                    <b>MS</b>
+                                 </th>
+                                 <th>
+                                    <b>Code Filter</b>
+                                 </th>
+                              </tr> 
+                              <tr> 
+                                 <th>Encounter</th> 
+                                 <th>http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter</th> 
+                                 <th>;;</th> 
+                                 <th> 
+                                    <b>code filter: </b> 
+                                    <br></br>  
+                                    <span style="padding-left: 4px;"> 
+                                       <b>path: </b>
+                                       <span>type</span> 
+                                    </span> 
+                                    <br></br>  
+                                    <span style="padding-left: 4px;"> 
+                                       <b>value set: </b>
+                                       <span>http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001</span> 
+                                    </span>  
+                                 </th> 
+                              </tr> 
+                              <tr> 
+                                 <th>Encounter</th> 
+                                 <th>http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter</th> 
+                                 <th>;;</th> 
+                                 <th> 
+                                    <b>code filter: </b> 
+                                    <br></br>  
+                                    <span style="padding-left: 4px;"> 
+                                       <b>path: </b>
+                                       <span>type</span> 
+                                    </span> 
+                                    <br></br>  
+                                    <span style="padding-left: 4px;"> 
+                                       <b>value set: </b>
+                                       <span>http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240</span> 
+                                    </span>  
+                                 </th> 
+                              </tr> 
+                              <tr> 
+                                 <th>Encounter</th> 
+                                 <th>http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter</th> 
+                                 <th>;;</th> 
+                                 <th> 
+                                    <b>code filter: </b> 
+                                    <br></br>  
+                                    <span style="padding-left: 4px;"> 
+                                       <b>path: </b>
+                                       <span>type</span> 
+                                    </span> 
+                                    <br></br>  
+                                    <span style="padding-left: 4px;"> 
+                                       <b>value set: </b>
+                                       <span>http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025</span> 
+                                    </span>  
+                                 </th> 
+                              </tr> 
+                              <tr> 
+                                 <th>Encounter</th> 
+                                 <th>http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter</th> 
+                                 <th>;;</th> 
+                                 <th> 
+                                    <b>code filter: </b> 
+                                    <br></br>  
+                                    <span style="padding-left: 4px;"> 
+                                       <b>path: </b>
+                                       <span>type</span> 
+                                    </span> 
+                                    <br></br>  
+                                    <span style="padding-left: 4px;"> 
+                                       <b>value set: </b>
+                                       <span>http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023</span> 
+                                    </span>  
+                                 </th> 
+                              </tr> 
+                              <tr> 
+                                 <th>Encounter</th> 
+                                 <th>http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter</th> 
+                                 <th>;;</th> 
+                                 <th> 
+                                    <b>code filter: </b> 
+                                    <br></br>  
+                                    <span style="padding-left: 4px;"> 
+                                       <b>path: </b>
+                                       <span>type</span> 
+                                    </span> 
+                                    <br></br>  
+                                    <span style="padding-left: 4px;"> 
+                                       <b>value set: </b>
+                                       <span>http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016</span> 
+                                    </span>  
+                                 </th> 
+                              </tr> 
+                           </table> 
+                        </td> 
+                     </tr>  
+                     <tr> 
+                        <td colspan="2"> 
+                           <table> 
+                              <tr>
+                                 <th>
+                                    <a id="cql-content">
+                                       <b>Content: </b>
+                                    </a> text/cql
+                                 </th>
+                              </tr> 
+                              <tr>
+                                 <td>
+                                    <pre><code class="language-cql">

@@ -13,10 +13,6 @@ let versionNumber = '1.0.000'
 let measureName = 'TestMeasure' + Date.now()
 
 //variables for Human Readable file detail file comparison
-let baseHTMLFileFirstSection = 'cypress/fixtures/HumanReadableCompareFile_FirstSection.html'
-let baseHTMLFileSecondSection = 'cypress/fixtures/HumanReadableCompareFile_SecondSection.html'
-let baseHTMLFileSecondSection_ver1 = 'cypress/fixtures/HumanReadableCompareFile_SecondSection_Ver1.html'
-let baseHTMLFileThirdSection = 'cypress/fixtures/HumanReadableCompareFile_ThirdSection.html'
 let baseHTMLFileFourthSection = 'cypress/fixtures/HumanReadableCompareFile_FourthSection.html'
 
 //variables for HQMF file detail file comparison
@@ -110,28 +106,6 @@ describe('Verify QDM Measure Export file contents', () => {
             debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents are: \n' + exported)
-
-            //commenting out the first three below comparisons to focus only on validating the definitons and the valuesets
-            //in the humn readable file
-            /*             cy.readFile(baseHTMLFileFirstSection).should('exist').then((dataComparedFirst) => {
-                            debugger
-                            expected = dataComparedFirst.toString() //'compareFile'
-                            cy.log('expected first section file contents are: \n' + expected)
-                            expect((exported).toString()).to.includes((expected).toString())
-                        })
-                        cy.readFile(baseHTMLFileSecondSection).should('exist').then((dataComparedSecond) => {
-                            debugger
-                            expected = dataComparedSecond.toString() //'compareFile'
-                            cy.log('expected second section file contents are: \n' + expected)
-                            expect((exported).toString()).to.includes((expected).toString())
-                        })
-                        cy.readFile(baseHTMLFileThirdSection).should('exist').then((dataComparedThird) => {
-                            debugger
-                            expected = dataComparedThird.toString() //'compareFile'
-                            cy.log('expected third section file contents are: \n' + expected)
-                            expect((exported).toString()).to.includes((expected).toString())
-                        }) */
-
             cy.readFile(baseHTMLFileFourthSection).should('exist').then((dataComparedFourth) => {
                 debugger
                 expected = dataComparedFourth.toString() //'compareFile'
@@ -422,28 +396,6 @@ describe('Successful QDM Measure Export with versioned measure', () => {
             debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents are: \n' + exported)
-
-            //commenting out the first three below comparisons to focus only on validating the definitons and the valuesets
-            //in the humn readable file
-            /* cy.readFile(baseHTMLFileFirstSection).should('exist').then((dataComparedFirst) => {
-                debugger
-                expected = dataComparedFirst.toString() //'compareFile'
-                cy.log('expected first section file contents are: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
-            })
-            cy.readFile(baseHTMLFileSecondSection_ver1).should('exist').then((dataComparedSecond_ver1) => {
-                debugger
-                expected = dataComparedSecond_ver1.toString() //'compareFile'
-                cy.log('expected second section file contents are: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
-            })
-            cy.readFile(baseHTMLFileThirdSection).should('exist').then((dataComparedThird) => {
-                debugger
-                expected = dataComparedThird.toString() //'compareFile'
-                cy.log('expected third section file contents are: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
-            }) */
-
             cy.readFile(baseHTMLFileFourthSection).should('exist').then((dataComparedFourth) => {
                 debugger
                 expected = dataComparedFourth.toString() //'compareFile'

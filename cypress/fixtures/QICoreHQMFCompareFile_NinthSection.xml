@@ -1,0 +1,10 @@
+            <publisher value="SemanticBits"></publisher>
+            <contact>
+               <telecom>
+                  <system value="url"></system>
+                  <value value="https://semanticbits.com/"></value>
+               </telecom>
+            </contact>
+            <description value="SemanticBits"></description>
+            <purpose value="UNKNOWN"></purpose>
+            <copyright value="UNKNOWN"></copyright>
