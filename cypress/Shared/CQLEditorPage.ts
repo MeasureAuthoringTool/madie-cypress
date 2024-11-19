@@ -123,6 +123,14 @@ export class CQLEditorPage {
     public static readonly editSavedCQLParameters = '[data-testid="edit-button-0"]'
     public static readonly deleteSavedCQLParameters = '[data-testid="delete-button-0"]'
 
+    public static readonly modalBody = '.MuiDialog-paper'
+    public static readonly modalXButton = '[data-testid="close-button"]'
+    public static readonly modalConfirmationText = '.dialog-warning-body'
+    public static readonly modalActionWarning = '.dialog-warning-action'
+    public static readonly discardStayButton = '[data-testid="discard-dialog-cancel-button"]'
+    public static readonly discardContinueButton = '[data-testid="discard-dialog-continue-button"]'
+    public static readonly deleteCancelButton = '[data-testid="delete-dialog-cancel-button"]'
+    public static readonly deleteContinueButton = '[data-testid="delete-dialog-continue-button"]' 
 
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
