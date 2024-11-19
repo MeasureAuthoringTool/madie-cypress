@@ -38,7 +38,7 @@ let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     '\t true\n'
 
 
-describe.skip('QDM CQL Parameters', () => {
+describe('QDM CQL Parameters', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -269,7 +269,7 @@ describe.skip('QDM CQL Parameters', () => {
     })
 })
 
-describe.skip('Delete Saved Parameters', () => {
+describe('Delete Saved Parameters', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -357,7 +357,7 @@ describe.skip('Delete Saved Parameters', () => {
     })
 })
 
-describe.skip('QDM CQL Parameters - Measure ownership Validations', () => {
+describe('QDM CQL Parameters - Measure ownership Validations', () => {
    /*
     scenario 4:
     access non-owned measure

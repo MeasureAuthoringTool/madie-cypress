@@ -28,7 +28,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -51,7 +50,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         //set local user that does not own the measure
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -70,7 +68,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -90,7 +87,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -109,7 +105,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
@@ -130,7 +125,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -151,7 +145,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
@@ -172,7 +165,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -193,7 +185,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -213,7 +204,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
@@ -234,7 +224,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -269,7 +258,6 @@ describe('Delete test Case - Versioned Library - user has had the Library transf
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
@@ -289,7 +277,6 @@ describe('Delete test Case - Versioned Library - user has had the Library transf
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
@@ -310,7 +297,6 @@ describe('Delete test Case - Versioned Library - user has had the Library transf
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
                 cy.request({

@@ -300,7 +300,6 @@ describe('Edit validations for versioned Measure', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
-                    cy.wait(1000)
                     cy.request({
                         url: '/api/measures/' + measureId + '/version?versionType=major',
                         headers: {
@@ -313,7 +312,6 @@ describe('Edit validations for versioned Measure', () => {
                     })
 
                     cy.log('Verify error message on editing Measure details')
-                    cy.wait(1000)
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId,
@@ -340,7 +338,6 @@ describe('Edit validations for versioned Measure', () => {
                     })
 
                     cy.log('Verify error message on editing Measure group')
-                    cy.wait(1000)
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId + '/groups',
@@ -385,7 +382,6 @@ describe('Edit validations for versioned Measure', () => {
 
                     cy.log('Verify error message on editing Test case')
                     cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testcaseid) => {
-                        cy.wait(1000)
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
@@ -440,7 +436,6 @@ describe('Delete validations for versioned Measure', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
-                    cy.wait(1000)
                     cy.request({
                         url: '/api/measures/' + measureId + '/version?versionType=major',
                         headers: {
@@ -453,7 +448,6 @@ describe('Delete validations for versioned Measure', () => {
                     })
 
                     cy.log('Verify error message on delete Measure')
-                    cy.wait(1000)
                     cy.request({
                         failOnStatusCode: false,
                         url: '/api/measures/' + measureId,
@@ -481,7 +475,6 @@ describe('Delete validations for versioned Measure', () => {
 
                     cy.log('Verify error message on delete Measure group')
                     cy.readFile('cypress/fixtures/measureGroupId').should('exist').then((groupId) => {
-                        cy.wait(1000)
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/measures/' + measureId + '/groups/' + groupId,
@@ -521,7 +514,6 @@ describe('Delete validations for versioned Measure', () => {
 
                     cy.log('Verify error message on delete Test case')
                     cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testcaseid) => {
-                        cy.wait(1000)
                         cy.request({
                             failOnStatusCode: false,
                             url: '/api/measures/' + measureId + '/test-cases/' + testcaseid,
