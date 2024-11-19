@@ -578,7 +578,6 @@ describe('Measure Service: Attempt to add RA when user is not owner of measure',
         OktaLogin.AltLogin()
         //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
-        cy.wait(5000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.readFile(versionIdPath).should('exist').then((vId) => {

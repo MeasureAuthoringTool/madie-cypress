@@ -856,7 +856,7 @@ describe('Non-boolean populationBasis returns the correct value and in the corre
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(13500)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
         cy.setAccessTokenCookie()

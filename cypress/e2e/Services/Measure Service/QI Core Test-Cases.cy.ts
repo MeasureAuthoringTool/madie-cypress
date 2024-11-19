@@ -83,7 +83,6 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
         cy.clearLocalStorage()
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
-        cy.wait(1000)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -293,7 +292,6 @@ describe('Test Case population values based on Measure Group population definiti
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
