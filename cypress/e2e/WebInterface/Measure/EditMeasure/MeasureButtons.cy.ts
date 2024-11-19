@@ -147,10 +147,8 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
         Utilities.waitForElementVisible(EditMeasurePage.editPageVersionDraftMsg, 60000)
         cy.get(EditMeasurePage.editPageVersionDraftMsg).should('contain.text', 'New version of measure is Successfully created')
         cy.log('Version Created Successfully')
-        cy.reload()
 
         //Draft Measure
-        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureDraftActionBtn, 5000)
         cy.get(EditMeasurePage.editMeasureDraftActionBtn).click()
         cy.get('[data-testid="measure-name-field"] > .MuiInputBase-root > [data-testid="measure-name-input"]').clear().type(updatedMeasureName)
@@ -209,10 +207,8 @@ describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
         Utilities.waitForElementVisible(EditMeasurePage.editPageVersionDraftMsg, 60000)
         cy.get(EditMeasurePage.editPageVersionDraftMsg).should('contain.text', 'New version of measure is Successfully created')
         cy.log('Version Created Successfully')
-        cy.reload()
 
         //Draft Measure
-        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureDraftActionBtn, 5000)
         cy.get(EditMeasurePage.editMeasureDraftActionBtn).click()
         cy.get('[data-testid="measure-name-field"] > .MuiInputBase-root > [data-testid="measure-name-input"]').clear().type(updatedMeasureName)
