@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
@@ -272,6 +272,94 @@ describe.skip('Qi-Core CQL Parameters', () => {
         Global.clickOnDiscardChanges()
         //cy.get(Global.discardChangesContinue).click()
         cy.get(CQLEditorPage.editParameterNameTextBox).should('be.visible')
+    })
+})
+
+describe.skip('Delete Saved Parameters', () => {
+
+    beforeEach('Create Measure and Login', () => {
+
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: measureCQL })
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+
+        //Save CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+    })
+
+    afterEach('Clean up and Logout', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+    })
+
+    it('When form is dirty, ask to Discard Changes', () => {
+
+        cy.get(CQLEditorPage.parametersTab).click()
+
+        // insert parameter to make measure dirty
+        const paramName = 'NewParameter'
+        cy.get(CQLEditorPage.parameterNameTextBox).type(paramName) 
+        cy.get(CQLEditorPage.parameterExpressionEditor)
+            .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
+        cy.get(CQLEditorPage.applyParametersExpressionButton).click()
+
+        cy.get(CQLEditorPage.savedParametersTab).click()
+
+        cy.get(CQLEditorPage.deleteSavedCQLParameters).click()
+
+        // discard modal
+        cy.get(CQLEditorPage.modalBody).within(modal => {
+            cy.get('h2').should('have.text', 'Discard Changes?')
+
+            cy.get(CQLEditorPage.modalXButton).should('be.visible')
+
+            cy.get(CQLEditorPage.modalConfirmationText).should('have.text', 'You have unsaved changes.Are you sure you want to discard your changes?')
+
+            cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
+      
+            cy.get(CQLEditorPage.discardContinueButton).should('be.enabled')    
+            cy.get(CQLEditorPage.discardStayButton).should('be.enabled').click()          
+        })
+
+        // confirm no action, still 1 saved parameter
+        cy.get(CQLEditorPage.savedParametersTab).should('have.text', 'Saved Parameters (1)')
+
+        cy.get(CQLEditorPage.deleteSavedCQLParameters).click()
+
+        cy.get(CQLEditorPage.discardContinueButton).should('be.visible').click()
+
+        // confirm measure is clean
+        cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
+    })
+
+
+    it('When form is clean ask "Are you sure?"', () => {
+
+        cy.get(CQLEditorPage.parametersTab).click()
+
+        cy.get(CQLEditorPage.savedParametersTab).click()
+
+        cy.get(CQLEditorPage.deleteSavedCQLParameters).click()
+
+        // confirmation modal
+        cy.get(CQLEditorPage.modalBody).within(modal => {
+            cy.get('h2').should('have.text', 'Are you sure?')
+
+            cy.get(CQLEditorPage.modalXButton).should('be.visible')
+
+            cy.get(CQLEditorPage.modalConfirmationText).should('have.text', 'Are you sure you want to delete this Parameter?')
+
+            cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
+      
+            cy.get(CQLEditorPage.deleteCancelButton).should('be.enabled')     
+            cy.get(CQLEditorPage.deleteContinueButton).should('be.enabled').click()         
+        })
+
+        cy.get(CQLEditorPage.saveSuccessMsg, {timeout: 6500}).should('have.text', 'Parameter Measurement Period has been successfully removed from the CQL.')
+       
+        cy.get(CQLEditorPage.saveCQLButton).should('be.disabled') 
     })
 })
 
