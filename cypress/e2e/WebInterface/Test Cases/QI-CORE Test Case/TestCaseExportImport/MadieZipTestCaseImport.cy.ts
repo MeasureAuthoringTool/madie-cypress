@@ -236,10 +236,11 @@ describe('MADIE Zip Test Case Import', () => {
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
+        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 65000)
+
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction138N/ADENEXFailICULT1DayICU LOS < 1 day\n' + todaysDate + 'Select137N/ADENEXPassSCIPKneeRank1Patient had SCIP -KneeSurg during Encounter and Rank =1\n' + todaysDate + 'Select136N/ADENEXPassSCIPHipFxRank1SMDCTDuplicate case by using SNOMDCT ' + todaysDate + 'Select135N/ANUMERPassMAOralXaKneeOnEncStartTimeoral factor Xa administered concurrent with start of IP encounter, Hip replacement concurrent with Start of IP encounter...more' + todaysDate + 'Select134N/ANUMERFailWarfarinAFDisch2Encounters2 encounters. warfarin administered after 2nd encounter discharge time\n' + todaysDate + 'Select133N/ADENEXPassCMODrgED2HrsBFAdmSameDateAdmDateDoNotPerformFalseCMO occurs in ED that ED ends > 1 hour before Adm. But this case pass because it is on the same day as adm date\n' + todaysDate + 'Select132N/ANUMERPassMedReasonMALDUHepDAGCSDuringEDmedical reasons to not receive no GCS and no low dose heparin during ED\n' + todaysDate + 'Select131N/ANUMERFailINRInvalidValue>18, dx VTE, LOS<120 day,   LabResult INR is a invalid value as coded value,  < 0 day after surgery end datetime\n' + todaysDate + 'Select130N/ADENEXFailCMO2DayAfterAnesthesiacomfort measures order 2 day after end of  anesthesia\n' + todaysDate + 'Select129N/ANUMERPassMAOralXaOnDayAFAnesMedAdmDToral factor Xa administered =0 day after end of anesthesia with MedicationAdm. effectiveDateTime\n' + todaysDate + 'Select')
 
         //Click on the Copy button and verify success msg
-        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 65000)
         cy.get('[data-testid="copy-button-tooltip"]').should('exist')
         cy.get('[data-testid="copy-button-tooltip"]').click()
         cy.get('[class="toast success"]').should('contain.text', 'Copied to clipboard!')
