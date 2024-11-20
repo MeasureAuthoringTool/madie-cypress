@@ -40,8 +40,8 @@ describe('Verify Library usage and Delete Library', () => {
                 console.log(response)
                 expect(response.status).to.eql(200)
 
-                var i= 1
-                var pass = 'false'
+                let i= 1
+                let pass = 'false'
                 while (i < 97) {
                     if( response.body[i].name == 'QDMSmokeTestLibrary0228') {
                         pass = 'true'
