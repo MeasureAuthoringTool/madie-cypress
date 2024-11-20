@@ -3,6 +3,7 @@ import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { LandingPage } from "../../../../Shared/LandingPage"
+import {Utilities} from "../../../../Shared/Utilities";
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -45,7 +46,10 @@ describe('Measure List Page Searching', () => {
 
         //Delete the Measure & search for deleted Measure under My Measures tab
         cy.log('Delete Measure')
-        cy.get(EditMeasurePage.deleteMeasureButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 5000)
+        cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
         cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + measureName + '?')
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).wait(1000).click()
         cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')

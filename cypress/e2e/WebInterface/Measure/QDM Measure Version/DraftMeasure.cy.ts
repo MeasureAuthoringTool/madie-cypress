@@ -139,7 +139,10 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
     afterEach('Clean up and Logout', () => {
 
         //Delete Drafted Measure
-        cy.get(EditMeasurePage.deleteMeasureButton).click()
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 5000)
+        cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
         cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + updatedMeasuresPageName + '?')
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
         cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')
@@ -147,7 +150,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
     })
 
-    it.only('Verify Draft measure CQL, Group and Test case', () => {
+    it('Verify Draft measure CQL, Group and Test case', () => {
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
