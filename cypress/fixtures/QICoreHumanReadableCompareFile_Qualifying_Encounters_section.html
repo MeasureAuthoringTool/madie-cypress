@@ -1,0 +1,27 @@
+</td>
+
+</tr>
+<tr>
+
+  <td>
+    <pre style="border: none;" class="content-container highlight language-cql"><code class="language-cql">define &quot;Qualifying Encounters&quot;:
+  ( [Encounter: &quot;Office Visit&quot;]
+    union [Encounter: &quot;Annual Wellness Visit&quot;]
+    union [Encounter: &quot;Preventive Care Services - Established Office Visit, 18 and Up&quot;]
+    union [Encounter: &quot;Preventive Care Services-Initial Office Visit, 18 and Up&quot;]
+    union [Encounter: &quot;Home Healthcare Services&quot;] ) ValidEncounter
+    where ValidEncounter.period during &quot;Measurement Period&quot;</code></pre>
+  </td>
+
+</tr>
+
+  
+
+<tr>
+  <th colspan="2" scope="row" class="row-header">Generated using version 0.4.6 of the sample-content-ig Liquid templates</th>
+</tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
