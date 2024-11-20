@@ -5,7 +5,7 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+let randValue = Cypress._.random(100)
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
@@ -16,17 +16,14 @@ describe('QDM Measure Reference', () => {
 
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('Add and Edit QDM Measure reference', () => {
@@ -44,8 +41,8 @@ describe('QDM Measure Reference', () => {
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Measure Reference')
 
         //Edit Measure reference
-        cy.get(EditMeasurePage.selectMeasureReference).click()
-        cy.get(EditMeasurePage.measureReferenceDropdown).contains('Edit').click()
+        // .editReference will work as long as there is only 1 item on the table
+        cy.get(EditMeasurePage.editReference).should('have.attr', 'aria-label', 'Edit').click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.justificationOption).click()
         cy.get(EditMeasurePage.measureReferenceText).clear().type('Updated Measure Reference')
@@ -53,7 +50,6 @@ describe('QDM Measure Reference', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Justification')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Updated Measure Reference')
-
     })
 
     it('Discard changes button', () => {
@@ -86,12 +82,11 @@ describe('QDM Measure Reference', () => {
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Measure Reference')
 
         //Delete Measure Reference
-        cy.get(EditMeasurePage.selectMeasureReference).click()
-        cy.get(EditMeasurePage.measureReferenceDropdown).contains('Delete').click()
+        // .deleteReference will work as long as there is only 1 item on the table
+        cy.get(EditMeasurePage.deleteReference).should('have.attr', 'aria-label', 'Delete').click()
         cy.get('[class="dialog-warning-body"]').should('contain.text', 'Are you sure you want to delete ' + 'Measure Reference' + '?')
         cy.get('[data-testid="delete-dialog-continue-button"]').click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure reference deleted successfully')
-
     })
 })
 
@@ -104,14 +99,12 @@ describe('Add Measure Reference - ownership validation', () => {
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
         OktaLogin.AltLogin()
-
     })
 
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('Non Measure owner unable to add Measure References', () => {
@@ -123,11 +116,10 @@ describe('Add Measure Reference - ownership validation', () => {
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelReference).click()
         cy.get(EditMeasurePage.addReferenceButton).should('not.be.enabled')
-
     })
 })
 
-describe('Delete Measure Reference - Ownership validation', () => {
+describe('Delete or Edit Measure Reference - Ownership validation', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
@@ -149,17 +141,15 @@ describe('Delete Measure Reference - Ownership validation', () => {
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Documentation')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Measure Reference')
         OktaLogin.UILogout()
-
     })
 
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
-    it('Non Measure owner unable to delete Measure reference', () => {
+    it('Non Measure owner unable to delete or edit Measure reference', () => {
 
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
@@ -168,8 +158,11 @@ describe('Delete Measure Reference - Ownership validation', () => {
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelReference).click()
+        // older access method
         cy.get(EditMeasurePage.selectMeasureReference).should('not.exist')
-
+        // current icons
+        cy.get(EditMeasurePage.deleteReference).should('not.exist')
+        cy.get(EditMeasurePage.editReference).should('not.exist')
     })
 })
 
