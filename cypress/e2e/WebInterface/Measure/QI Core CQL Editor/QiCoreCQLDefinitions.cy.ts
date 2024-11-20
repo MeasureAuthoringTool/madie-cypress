@@ -82,7 +82,6 @@ describe('Qi-Core CQL Definitions', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Search for Qi-Core CQL Definitions Expression Editor Name Options', () => {
@@ -301,7 +300,7 @@ describe('Qi-Core CQL Definitions', () => {
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         cy.get(CQLEditorPage.deleteCQLDefinitions).click()
         cy.get(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn).click()
-        Utilities.waitForElementVisible('[class="toast success"]', 60000)
+        Utilities.waitForElementVisible(CQLEditorPage.saveSuccessMsg, 60000)
         cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text','Definition Initial Population has been successfully removed from the CQL.')
 
         //Navigate to Saved Definitions again and assert if the Definition is removed from Saved Definitions
@@ -311,7 +310,9 @@ describe('Qi-Core CQL Definitions', () => {
         cy.get(CQLEditorPage.definitionsTab).click()
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         Utilities.waitForElementVisible(CQLEditorPage.deleteCQLDefinitions, 60000)
-        cy.get('.right-panel > .panel-content').should('not.contain', 'Initial Population')
+
+        // confirm entry for IP has been removed
+        cy.get(CQLEditorPage.savedDefinitionsTable).should('not.contain', 'Initial Population')
     })
 
     it('View and Edit Qi Core CQL Definition Comments from Saved Definitions tab', () => {
