@@ -303,11 +303,16 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
     afterEach('Clean up and Logout', () => {
 
-        //Delete Drafted Measure
-        cy.get(EditMeasurePage.deleteMeasureButton).click()
-        cy.get(EditMeasurePage.deleteMeasureConfirmationMsg).should('contain.text', 'Are you sure you want to delete ' + updatedMeasuresPageName + '?')
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 5000)
+        cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 5000)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
-        cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 5000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', "Measure successfully deleted")
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 10000)
+        cy.url().should('be.oneOf', ['https://dev-madie.hcqis.org/measures', 'https://test-madie.hcqis.org/measures', 'https://impl-madie.hcqis.org/measures', 'https://madie.cms.gov/measures'])
         OktaLogin.UILogout()
 
     })
