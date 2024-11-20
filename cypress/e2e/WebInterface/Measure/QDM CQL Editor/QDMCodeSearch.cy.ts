@@ -186,7 +186,7 @@ describe('QDM Code Search fields', () => {
 
         //Navigate to Saved Codes tab
         cy.get(CQLEditorPage.savedCodesTab).click()
-        cy.get('.right-panel > .panel-content').should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02')
+        cy.get('[class="CodesSection___StyledDiv-sc-1rldvun-0 HuXlU"]').should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02Select')
     })
 
     it('Edit Code with Suffix and Version from Results Grid', () => {
