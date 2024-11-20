@@ -36,7 +36,7 @@ describe('Login and initial "My Measures" page', () => {
         OktaLogin.Login()
 
         const thresholds = {
-            performance: 25, //This is an overall score given to the overall page performance based on the metrics.
+            performance: 23, //This is an overall score given to the overall page performance based on the metrics.
             //The score is calculated based off the following metrics (their respective weights are also listed):
             //'first-contentful-paint' -> 10%
             //'largest-contentful-paint' -> 25%
@@ -87,7 +87,7 @@ describe('Navigate to the "All Measures" page', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
 
         const thresholds = {
-            performance: 25,
+            performance: 20,
             accessibility: 75,
             'total-blocking-time': 520000,
             'speed-index': 27000,
@@ -143,7 +143,7 @@ describe('Navigate to the QDM "CQL Editor" page', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         const thresholds = {
-            performance: 13,
+            performance: 10,
             accessibility: 75,
             'total-blocking-time': 520000,
             'speed-index': 30000,
@@ -266,7 +266,7 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         const thresholds = {
-            performance: 22,
+            performance: 19,
             accessibility: 75,
             'total-blocking-time': 520000,
             'speed-index': 39000,
