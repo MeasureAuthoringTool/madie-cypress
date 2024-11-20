@@ -972,6 +972,7 @@ describe('Measure bundle end point returns Supplemental data elements and Risk a
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL)
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{end} {enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
