@@ -423,7 +423,6 @@ describe('Run / Execute Test Case button validations', () => {
         //Save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        //cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
         cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
