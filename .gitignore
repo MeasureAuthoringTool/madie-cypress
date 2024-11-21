@@ -17,12 +17,16 @@ cypress/fixtures/groupId
 cypress/fixtures/groupId*
 cypress/fixtures/measureBundle
 cypress/fixtures/measureBundle*
+cypress/fixtures/measureGroupId
+cypress/fixtures/measureGroupId*
 cypress/fixtures/measureId
 cypress/fixtures/measureId*
 cypress/fixtures/measureSetId
 cypress/fixtures/measureSetId*
 cypress/fixtures/testCaseId
 cypress/fixtures/testCaseId*
+cypress/fixtures/testCasePId
+cypress/fixtures/testCasePId*
 cypress/fixtures/versionId
 cypress/fixtures/versionId*
 

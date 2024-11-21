@@ -108,5 +108,10 @@
 		"unzipper": "^0.12.3",
 		"uuid": "^7.0.3",
 		"xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+	},
+	"overrides": {
+		"ws": "^8.17.1",
+		"cookie": "^0.7.0",
+		"got": "^11.8.5"
 	}
 }
