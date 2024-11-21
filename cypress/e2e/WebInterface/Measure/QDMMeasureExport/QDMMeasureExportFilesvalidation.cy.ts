@@ -399,16 +399,6 @@ describe('Successful QDM Measure Export with versioned measure', () => {
             })
 
     })
-    after('Clean up', () => {
-
-        MeasuresPage.actionCenter('draft')
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        OktaLogin.UILogout()
-
-        Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
-    })
 
     it('Version measure, unzip the downloaded file, and verify file contents for the HR, for QDM Measure', () => {
 
