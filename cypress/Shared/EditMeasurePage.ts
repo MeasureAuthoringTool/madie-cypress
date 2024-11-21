@@ -94,6 +94,8 @@ export class EditMeasurePage {
     public static readonly successMessage = '[class="toast success"]'
     public static readonly measureReferenceTable = '[data-testid="measure-references-table-body"]'
     public static readonly measureReferenceDiscardChanges = '[data-testid="cancel-button"]'
+    public static readonly deleteReference = '[data-testid*="delete-measure-reference"]'
+    public static readonly editReference = '[data-testid*="edit-measure-reference"]'
 
     //Definition(Terms) page
     public static readonly definitionInputTextbox = '[data-testid="measureDefinitionInput"]'
