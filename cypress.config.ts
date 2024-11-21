@@ -1,7 +1,6 @@
 import { defineConfig } from 'cypress'
 
 const { lighthouse, prepareAudit } = require("@cypress-audit/lighthouse")
-//const { pa11y } = require("@cypress-audit/pa11y");
 const fs = require('fs-extra')
 
 export default defineConfig({

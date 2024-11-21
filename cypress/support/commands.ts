@@ -26,8 +26,6 @@
 
 import { Environment } from "../Shared/Environment"
 import '@cypress-audit/lighthouse/commands'
-import "@cypress-audit/pa11y/commands";
-
 import 'cypress-file-upload'
 
 export { } // this file needs to be a module
