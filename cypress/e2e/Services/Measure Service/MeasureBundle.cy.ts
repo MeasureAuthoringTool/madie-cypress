@@ -370,20 +370,17 @@ describe('Measure Observation Validation', () => {
         cy.setAccessTokenCookie()
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPIWithoutELMJson(newMeasureName, newCqlLibraryName, measureCQL)
-
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName,measureCQL)
     })
 
     beforeEach('Set Access Token', () => {
 
         cy.setAccessTokenCookie()
-
     })
 
     after('Clean up', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('Backend user cannot create or add a Measure Observation if one is not defined in the CQL', () => {

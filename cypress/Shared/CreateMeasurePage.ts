@@ -64,6 +64,7 @@ export class CreateMeasurePage {
             cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
         })
     }
+
     public static clickCreateDraftButton(): void {
         cy.readFile('cypress/fixtures/measureId').should('exist').then((measureID) => {
 
@@ -249,108 +250,6 @@ export class CreateMeasurePage {
                 else {
                     cy.writeFile('cypress/fixtures/measureId', response.body.id)
                     cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
-                }
-
-            })
-        })
-        return user
-    }
-
-    public static CreateQICoreMeasureAPIWithoutELMJson(measureName: string, CqlLibraryName: string, measureCQL?: string,
-        twoMeasures?: boolean, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, measureNumber?: number): string {
-
-        let user = ''
-        const now = require('dayjs')
-        let ecqmTitle = 'eCQMTitle'
-        if ((measureNumber === undefined) || (measureNumber === null)) {
-            measureNumber = 0
-        }
-
-
-        if (mpStartDate === undefined) {
-            mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
-        }
-
-        if (mpEndDate === undefined) {
-            mpEndDate = now().format('YYYY-MM-DD')
-        }
-
-        if (altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
-
-        //Create New Measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                failOnStatusCode: false,
-                url: '/api/measure?addDefaultCQL=false',
-                headers: {
-                    authorization: 'Bearer ' + accessToken.value
-                },
-                method: 'POST',
-                body: {
-                    'measureName': measureName,
-                    'cqlLibraryName': CqlLibraryName,
-                    'model': 'QI-Core v4.1.1',
-                    'createdBy': user,
-                    "ecqmTitle": ecqmTitle,
-                    'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
-                    'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
-                    'versionId': uuidv4(),
-                    'measureSetId': uuidv4(),
-                    'cql': measureCQL,
-                    //'elmJson': elmJson,
-                    'measureMetaData': {
-                        "description": "SemanticBits",
-                        "experimental": false,
-                        "steward": {
-                            "name": "SemanticBits",
-                            "id": "64120f265de35122e68dac40",
-                            "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
-                            "url": "https://semanticbits.com/"
-
-                        }, "developers": [
-                            {
-                                "id": "64120f265de35122e68dabf7",
-                                "name": "Academy of Nutrition and Dietetics",
-                                "oid": "2.16.840.1.113883.3.6308",
-                                "url": "www.eatrightpro.org"
-                            }
-                        ]
-                    },
-                    'programUseContext': {
-                        "code": "mips",
-                        "display": "MIPS",
-                        "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/quality-programs"
-                    }
-                }
-            }).then((response) => {
-                console.log(response)
-                expect(response.status).to.eql(201)
-                expect(response.body.id).to.be.exist
-                if (measureNumber > 0) {
-                    cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
-                    cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
-
-                }
-                else {
-                    cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                    cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
-                }
-                if (twoMeasures === true) {
-                    cy.writeFile('cypress/fixtures/measureId2', response.body.id)
-                    //cy.writeFile('cypress/fixtures/versionId2', response.body.versionId)
-                    cy.writeFile('cypress/fixtures/measureSetId2', response.body.measureSetId)
-                }
-                else {
-                    cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                    //cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
                     cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
                 }
 
