@@ -41,14 +41,12 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.wait(3000)
         OktaLogin.UILogout()
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT().wait(3000)
+        cy.setAccessTokenCookieALT()
         CreateMeasurePage.CreateQDMMeasureAPI(altMeasureName, altCqlLibraryName, measureCQL, false, true, null, null, 1)
-        cy.wait(3000)
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
@@ -58,15 +56,11 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(3000)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.reload()
-        cy.wait(7000)
-        cy.reload()
-        cy.wait(3000)
         OktaLogin.Login()
 
     })
@@ -201,8 +195,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
 
         })
 
-    // will be need to be retested and skip will need to be removed once MAT-6918 is fixed
-    it.skip('Dirty check validation', () => {
+    it('Dirty check validation', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
@@ -223,9 +216,6 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
-
-        cy.reload()
-        cy.reload()
 
         //select 'Cohort' scoring on measure
         Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
