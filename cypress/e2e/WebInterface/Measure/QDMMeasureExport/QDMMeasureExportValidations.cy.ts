@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels, CreateMeasureOptions} from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
@@ -13,7 +13,6 @@ let CqlLibraryName = 'TestLibrary' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
-const now = require('dayjs')
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 let updatedMeasureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     'using QDM version \'5.6\'\n' +
@@ -48,7 +47,15 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
         newCqlLibraryName = CqlLibraryName + randValue
 
         cy.setAccessTokenCookie()
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsWithoutDescriptionStewardsandDevelopersAPI(newMeasureName, newCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
+
+        const measureOptions: CreateMeasureOptions = {
+            measureCql: qdmMeasureCQL,
+            measureScoring: 'Cohort', 
+            patientBasis: 'false',
+            blankMetadata: true
+        }
+        CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCqlLibraryName, SupportedModels.QDM, measureOptions)
+
         MeasureGroupPage.CreateCohortMeasureGroupWithoutTypeAPI(false, false, 'Initial Population')
         OktaLogin.Login()
     })
@@ -71,7 +78,6 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
             cy.get('[class="error-message"] > ul > :nth-child(2)').should('contain.text', 'Missing Steward')
             cy.get('[class="error-message"] > ul > :nth-child(3)').should('contain.text', 'Missing Description')
             cy.get('[class="error-message"] > ul > :nth-child(4)').should('contain.text', 'Measure Type is required')
-
         })
     })
 })
@@ -111,7 +117,6 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
             cy.get('[data-testid="export-action-btn"]').click()
 
             cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
-
         })
     })
 
@@ -135,7 +140,6 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
             cy.get('[data-testid="export-action-btn"]').click()
 
             cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
-
         })
     })
 })
@@ -177,7 +181,6 @@ describe('Error Message on Measure Export when the Measure does not have Populat
 
             cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
             cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'Missing Population Criteria')
-
         })
     })
 })
@@ -223,7 +226,6 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
             cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
             cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'CQL Populations Return Types are invalid')
-
         })
     })
 })
