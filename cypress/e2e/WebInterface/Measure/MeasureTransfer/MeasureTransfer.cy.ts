@@ -175,7 +175,7 @@ describe('Measure Transfer - Multiple instances', () => {
         //Version the Measure
         MeasuresPage.actionCenter('version')
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
-        cy.get(MeasuresPage.versionMeasuresConfirmInput).type('1.0.000')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
         //MeasuresPage.validateVersionNumber(newMeasureName, versionNumber)
