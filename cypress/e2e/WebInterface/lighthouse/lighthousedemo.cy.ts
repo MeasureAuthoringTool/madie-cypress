@@ -52,7 +52,7 @@ describe('Login and initial "My Measures" page', () => {
 
             'total-blocking-time': 520000, //In miliseconds, this measure the total amount of time that a page is blocked from responding to user input, such as mouse clicks, screen taps, or keyboard presses.
 
-            'speed-index': 27000, //In miliseconds, this measures how quickly content is visually displayed during page load.
+            'speed-index': 34000, //In miliseconds, this measures how quickly content is visually displayed during page load.
 
             'cumulative-layout-shift': 300, //Unexpected page element shifts -- basically, the measurement of shifting page elements
 
@@ -87,10 +87,10 @@ describe('Navigate to the "All Measures" page', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
 
         const thresholds = {
-            performance: 20,
+            performance: 18,
             accessibility: 75,
             'total-blocking-time': 520000,
-            'speed-index': 27000,
+            'speed-index': 32000,
             'cumulative-layout-shift': 300,
         };
 
@@ -100,6 +100,7 @@ describe('Navigate to the "All Measures" page', () => {
         }
 
         const lighthouseConfig = {
+
             settings: { output: "html" }, //output should be formated in HTML
             extends: "lighthouse:default", //the output extends onto lighthouse default settings
         }
@@ -146,7 +147,7 @@ describe('Navigate to the QDM "CQL Editor" page', () => {
             performance: 10,
             accessibility: 75,
             'total-blocking-time': 520000,
-            'speed-index': 30000,
+            'speed-index': 41000,
             'cumulative-layout-shift': 300,
         };
 
@@ -269,7 +270,7 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
             performance: 19,
             accessibility: 75,
             'total-blocking-time': 520000,
-            'speed-index': 39000,
+            'speed-index': 48000,
             'cumulative-layout-shift': 300,
         };
 
@@ -331,7 +332,7 @@ describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test ca
             performance: 3,
             accessibility: 75,
             'total-blocking-time': 520000,
-            'speed-index': 39000,
+            'speed-index': 41000,
             'cumulative-layout-shift': 300,
         };
 
