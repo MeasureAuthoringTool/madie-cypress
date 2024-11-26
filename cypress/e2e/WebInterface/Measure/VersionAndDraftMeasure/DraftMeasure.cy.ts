@@ -175,10 +175,9 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.createDraftContinueBtn).should('be.visible')
         cy.get(MeasuresPage.createDraftContinueBtn).should('be.enabled')
 
-        //Skipping until feature flag 'qiCore6' is removed
-        // cy.get(MeasuresPage.draftModalSelectionBox).click()
-        // Utilities.waitForElementVisible(MeasuresPage.draftModalVersionSix, 5000)
-        // cy.get(MeasuresPage.draftModalVersionSix).click()
+        cy.get(MeasuresPage.draftModalSelectionBox).click()
+        Utilities.waitForElementVisible(MeasuresPage.draftModalVersionSix, 5000)
+        cy.get(MeasuresPage.draftModalVersionSix).click()
 
         CreateMeasurePage.clickCreateDraftButton()
 
@@ -206,7 +205,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)
-        //cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'using QICore version \'6.0.0\'')
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'using QICore version \'6.0.0\'')
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'include FHIRHelpers version \'4.1.000\' called FHIRHelpers')
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
         cy.get(EditMeasurePage.cqlEditorTextBox).type(cohortMeasureCQLSix)
@@ -241,10 +240,9 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.createDraftContinueBtn).should('be.visible')
         cy.get(MeasuresPage.createDraftContinueBtn).should('be.enabled')
 
-        //Skipping until feature flag 'qiCore6' is removed
-        // cy.get(MeasuresPage.draftModalSelectionBox).click()
-        // Utilities.waitForElementVisible(MeasuresPage.draftModalVersionFourOneOne, 5000)
-        // cy.get(MeasuresPage.draftModalVersionFourOneOne).click()
+        cy.get(MeasuresPage.draftModalSelectionBox).click()
+        Utilities.waitForElementVisible(MeasuresPage.draftModalVersionFourOneOne, 5000)
+        cy.get(MeasuresPage.draftModalVersionFourOneOne).click()
 
         CreateMeasurePage.clickCreateDraftButton()
 

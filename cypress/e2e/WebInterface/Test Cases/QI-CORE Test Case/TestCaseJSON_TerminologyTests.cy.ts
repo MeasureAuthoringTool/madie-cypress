@@ -217,58 +217,6 @@ let dupResourceIDTCJson = '{\n' +
     '      }\n' +
     '    },\n' +
     '    {\n' +
-    '      "fullUrl": "https://madie.cms.gov/Encounter/9dju7njdn764mdjy6dm92nje",\n' +
-    '      "resource": {\n' +
-    '        "id": "9dju7njdn764mdjy6dm92nje",\n' +
-    '        "resourceType": "Encounter",\n' +
-    '        "meta": {\n' +
-    '          "profile": [\n' +
-    '            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"\n' +
-    '          ]\n' +
-    '        },\n' +
-    '        "status": "finished",\n' +
-    '        "class": {\n' +
-    '          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
-    '          "code": "EMRGONLY",\n' +
-    '          "display": "Emergency only"\n' +
-    '        },\n' +
-    '        "type": [\n' +
-    '          {\n' +
-    '            "coding": [\n' +
-    '              {\n' +
-    '                "system": "http://snomed.info/sct",\n' +
-    '                "code": "4525004",\n' +
-    '                "display": "Emergency department patient visit (procedure)"\n' +
-    '              }\n' +
-    '            ]\n' +
-    '          }\n' +
-    '        ],\n' +
-    '        "subject": {\n' +
-    '          "reference": "Patient/27b358b4-d520-422b-8ed7-a5b14f3d2a46"\n' +
-    '        },\n' +
-    '        "period": {\n' +
-    '          "start": "2012-07-14T23:00:00+00:00",\n' +
-    '          "end": "2012-07-15T07:30:00+00:00"\n' +
-    '        },\n' +
-    '        "length": {\n' +
-    '          "value": 1,\n' +
-    '          "unit": "days"\n' +
-    '        },\n' +
-    '        "location": [\n' +
-    '          {\n' +
-    '            "location": {\n' +
-    '              "reference": "Location/489juh6757h87j03jhy73mv7",\n' +
-    '              "display": "Holy Family Hospital Inpatient"\n' +
-    '            },\n' +
-    '            "period": {\n' +
-    '              "start": "2012-07-14T23:00:00+00:00",\n' +
-    '              "end": "2012-07-15T07:30:00+00:00"\n' +
-    '            }\n' +
-    '          }\n' +
-    '        ]\n' +
-    '      }\n' +
-    '    },\n' +
-    '    {\n' +
     '      "fullUrl": "https://madie.cms.gov/Location/489juh6757h87j03jhy73mv7",\n' +
     '      "resource": {\n' +
     '        "id": "489juh6757h87j03jhy73mv7",\n' +
