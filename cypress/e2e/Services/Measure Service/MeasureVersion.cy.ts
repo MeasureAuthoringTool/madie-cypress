@@ -6,7 +6,6 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { v4 as uuidv4 } from 'uuid'
-import { OktaLogin } from "../../../Shared/OktaLogin"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -86,17 +85,15 @@ describe('Measure Versioning', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + measureId + '/version?versionType=major',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        method: 'PUT'
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.version).to.include('1.0.000')
-                    })
+                cy.request({
+                    url: '/api/measures/' + measureId + '/version?versionType=major',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'PUT'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.version).to.include('1.0.000')
                 })
             })
         })

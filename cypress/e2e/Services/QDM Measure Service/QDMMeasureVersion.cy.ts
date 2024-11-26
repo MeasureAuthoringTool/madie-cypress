@@ -98,9 +98,7 @@ describe('Measure Versioning', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout
-
-
+        OktaLogin.UILogout()
     })
 
     after('Clean up', () => {

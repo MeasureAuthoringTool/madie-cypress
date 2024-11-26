@@ -16,8 +16,8 @@ let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid_w_All_Encounter
-let newMeasureName = ''
-let newCqlLibraryName = ''
+let newMeasureName: string
+let newCqlLibraryName: string
 
 describe('Delete Test Case', () => {
 

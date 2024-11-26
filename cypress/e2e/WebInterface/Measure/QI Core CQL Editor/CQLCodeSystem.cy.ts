@@ -4,7 +4,6 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Header } from "../../../../Shared/Header"
 import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage";
 
 let measureName = 'TestMeasure' + Date.now() + 1

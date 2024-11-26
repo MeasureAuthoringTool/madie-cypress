@@ -11,7 +11,6 @@ import { Header } from "../../../../Shared/Header"
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
-const now = require('dayjs')
 let QDMdescription = 'QDM description'
 let QDMcopyright = 'QDM copyright'
 let QDMdisclaimer = 'QDM disclaimer'

@@ -12,7 +12,6 @@ import { Header } from "../../../Shared/Header"
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
-const now = require('dayjs')
 let QiCoreMeasureNameAlt = ''
 let QiCoreCqlLibraryNameAlt = ''
 let QiCoreMeasureName0 = ''

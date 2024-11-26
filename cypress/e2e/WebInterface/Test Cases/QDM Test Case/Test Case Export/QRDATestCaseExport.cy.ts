@@ -84,11 +84,9 @@ describe('QDM Test Cases : Export Test Case', () => {
 
         //read contents of the html file and compare that with the expected file contents (minus specific measure name)
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM_patients_results.html')).should('exist').then((exportedFile) => {
-            debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents is: \n' + exported)
             cy.readFile(baseHTMLFile).should('exist').then((dataCompared) => {
-                debugger
                 expected = dataCompared.toString() //'compareFile'
                 cy.log('expected file contents is: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())

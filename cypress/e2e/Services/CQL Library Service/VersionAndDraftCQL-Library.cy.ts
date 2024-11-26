@@ -1,7 +1,6 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
-import { OktaLogin } from "../../../Shared/OktaLogin";
 
 let CqlLibraryOne = ''
 let CqlLibraryTwo = ''
