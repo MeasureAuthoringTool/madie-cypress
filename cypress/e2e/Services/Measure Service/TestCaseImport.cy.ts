@@ -6,7 +6,6 @@ import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { Utilities } from "../../../Shared/Utilities"
 import { v4 as uuidv4 } from 'uuid'
 import { Environment } from "../../../Shared/Environment"
-import { OktaLogin } from "../../../Shared/OktaLogin"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestLibrary' + Date.now()

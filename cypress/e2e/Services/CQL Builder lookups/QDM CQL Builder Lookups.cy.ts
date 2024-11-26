@@ -137,9 +137,6 @@ describe('CQL Builder Lookups: QDM', () => {
 
         cy.setAccessTokenCookie()
     })
-    afterEach('Clean up', () => {
-
-    })
 
     it('Verify QDM CQL is parsed correctly', () => {
 

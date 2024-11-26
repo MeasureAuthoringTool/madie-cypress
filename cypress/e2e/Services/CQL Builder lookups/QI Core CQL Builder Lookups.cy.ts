@@ -43,9 +43,6 @@ describe('CQL Builder Lookups: QI Core', () => {
 
         cy.setAccessTokenCookie()
     })
-    afterEach('Clean up', () => {
-
-    })
 
     it('Verify QI Core CQL is parsed correctly', () => {
 

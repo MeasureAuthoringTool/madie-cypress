@@ -70,7 +70,7 @@ describe('Code Coverage Highlighting', () => {
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '-')
 
         //click on edit button to go into the edit form for the test case
-        TestCasesPage.clickEditforCreatedTestCase
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //navigate back to the test case list page
         cy.get(EditMeasurePage.testCasesTab).should('exist')

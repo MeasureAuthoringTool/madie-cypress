@@ -7,19 +7,16 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 
-let randValue = (Math.floor((Math.random() * 1000) + 1))
-let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
-let QiCoreMeasureName0 = ''
-let QiCoreCqlLibraryName0 = ''
-let QiCoreMeasureName1 = ''
-let QiCoreCqlLibraryName1 = ''
-let measureQDMManifestName0 = ''
-let QDMCqlLibraryName0 = ''
-let measureQDMManifestName1 = ''
-let QDMCqlLibraryName1 = ''
+let QiCoreMeasureName0: string
+let QiCoreCqlLibraryName0: string
+let QiCoreMeasureName1: string
+let QiCoreCqlLibraryName1: string
+let measureQDMManifestName0: string
+let QDMCqlLibraryName0: string
+let measureQDMManifestName1: string
+let QDMCqlLibraryName1: string
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'test case title'

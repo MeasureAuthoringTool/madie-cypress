@@ -8,15 +8,10 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-
+const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 let measureCQLDFUTests = MeasureCQL.CQLDFN_value
 let measureCQLResults = MeasureCQL.CQLHLResults_value
-
-const path = require('path')
-const downloadsFolder = Cypress.config('downloadsFolder')
-const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'test case title'
@@ -25,8 +20,8 @@ let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 let tcDFNJson = TestCaseJson.tcJson_value
 let tcResultJson = TestCaseJson.tcResultsJson
-let newMeasureName = ''
-let newCqlLibraryName = ''
+let newMeasureName: string
+let newCqlLibraryName: string
 let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 version \'0.0.000\'\n' +
     '\n' +
     'using QICore version \'4.1.1\'\n' +

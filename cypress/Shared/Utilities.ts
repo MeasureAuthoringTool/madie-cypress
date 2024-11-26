@@ -199,7 +199,7 @@ export class Utilities {
         dataLines: null
     }
 
-    public static typeFileContents(file: string, pageResource: any): void {
+    public static typeFileContents(file: string, pageResource: string): void {
         cy.get(pageResource).should('exist')
         cy.get(pageResource).should('be.visible')
         cy.get(pageResource).click()
@@ -208,7 +208,7 @@ export class Utilities {
         })
     }
 
-    public static readWriteFileData(file: string, pageResource: any): void {
+    public static readWriteFileData(file: string, pageResource: string): void {
         cy.fixture(file).then((str) => {
             // split file by line endings
             const fileArr = str.split(/\r?\n/);
@@ -237,32 +237,6 @@ export class Utilities {
         })
     }
 
-    public static validateCQL(file: string, pageResource: any): void {
-        cy.fixture(file).then((str) => {
-            // split file by line endings
-            const fileArr = str.split(/\r?\n/);
-            // log file in form of array
-            cy.log(fileArr);
-            // remove new line endings
-            const cqlArr = fileArr.map((line: any) => {
-                const goodLine = line.split(/[\r\n]+/);
-                return goodLine[0];
-            });
-            // log new array
-            cy.log(cqlArr);
-            this.waitForElementVisible(pageResource, 3000)
-            cy.get(pageResource).invoke('show')
-            for (let i in cqlArr) {
-                this.textValues.dataLines = cqlArr[i]
-                cy.log(this.textValues.dataLines)
-                cy.get(pageResource)
-                    .should('contains.text', this.textValues.dataLines)
-                this.textValues.dataLines = null
-
-            }
-        })
-    }
-
     public static waitForElementEnabled = (element: string, timeout: number) => {
         cy.get(element, { timeout: timeout }).should('be.enabled')
     }
@@ -286,8 +260,8 @@ export class Utilities {
         cy.get(element, { timeout: timeout }).should('not.have.attr', 'readonly', 'readonly')
     }
 
-    public static validateTCPopValueCheckBoxes(measureScoreValue: string | string[]): void {
-        switch ((measureScoreValue.valueOf()).toString()) {
+    public static validateTCPopValueCheckBoxes(measureScoreValue: string): void {
+        switch (measureScoreValue) {
             case "Ratio": {
                 //validate what available check boxes should and shouldn't be present / visible
                 cy.get(TestCasesPage.testCasePopulationValuesTable)
