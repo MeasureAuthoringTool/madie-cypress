@@ -12,8 +12,7 @@ let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'ElementsBuilder1'
 let testCaseSeries = 'ElementsBuilder'
 
-// skipped until feature is released
-describe.skip('Check for UI Elements Builder on QiCore 6.0.0 measures only', () => {
+describe('Check for UI Elements Builder on QiCore 6.0.0 measures only', () => {
 
     afterEach('Clean up', () => {
 
