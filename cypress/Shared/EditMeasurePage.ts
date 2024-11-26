@@ -5,7 +5,8 @@ export enum EditMeasureActions {
 
     export = 'export',
     delete = 'delete',
-    version = 'version'
+    version = 'version',
+    draft = 'draft'
 
 }
 
@@ -186,9 +187,9 @@ export class EditMeasurePage {
         cy.get(this.editMeasureButtonActionBtn).click()
         cy.wait(500)
 
-        switch (action.valueOf()) {
+        switch (action) {
 
-            case 'export': {
+            case EditMeasureActions.export: {
 
                 cy.get(this.editMeasureExportActionBtn).should('be.visible')
                 cy.get(this.editMeasureExportActionBtn).should('be.enabled')
@@ -199,25 +200,53 @@ export class EditMeasurePage {
                 Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 125000)
                 cy.get('.toast').should('contain.text', 'Measure exported successfully')
                 cy.get('[data-testid="ds-btn"]').click()
-
                 break
             }
 
-            case 'version': {
+            case EditMeasureActions.version: {
 
+                cy.get(this.editMeasureVersionActionBtn).should('be.visible')
+                cy.get(this.editMeasureVersionActionBtn).should('be.enabled')
+                cy.get(this.editMeasureVersionActionBtn).click()
+
+                // version modal   
+                cy.get('#draggable-dialog-title').find('h2').should('have.text', 'Create Version')
+
+                cy.get(MeasuresPage.versionMeasuresSelectionButton).click()
+                cy.get(MeasuresPage.measureVersionMajor).click()
+                // need a short pause here for the modal to present new fields
+                cy.wait(1500)
+
+                cy.get('#new-version').invoke('val').then(value => {
+                    cy.get(MeasuresPage.confirmMeasureVersionNumber).type(value.toString())
+                })
+
+                cy.get(MeasuresPage.measureVersionContinueBtn).click()
+
+                Utilities.validateToastMessage('New version of measure is Successfully created')
                 break
             }
-            case 'draft': {
+            case EditMeasureActions.draft: {
 
+                cy.get(this.editMeasureDraftActionBtn).should('be.visible')
+                cy.get(this.editMeasureDraftActionBtn).should('be.enabled')
+                cy.get(this.editMeasureDraftActionBtn).click()
+
+                // ToDo: provide way to upgrade model here 4.1.1 -> 6.0.0
+
+                cy.get(MeasuresPage.createDraftContinueBtn).click()
+
+                Utilities.validateToastMessage('New draft created successfully.')
                 break
             }
-            case 'delete': {
+            case EditMeasureActions.delete: {
+                // ToDo
 
                 break
             }
             default: { }
 
-            cy.wait(2500)
+            cy.wait(1500)
         }
     }
 }
