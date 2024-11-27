@@ -8,6 +8,9 @@ import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { QDMElements } from "../../../../../Shared/QDMElements"
 import { CQLLibraryPage } from "../../../../../Shared/CQLLibraryPage"
+const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
+const path = require('path')
+const downloadsFolder = Cypress.config('downloadsFolder')
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMCQLLibrary' + Date.now()
@@ -15,12 +18,6 @@ let firstTestCaseTitle = 'Combo2 ThreeEncounter'
 let testCaseDescription = 'DENOMFail'
 let testCaseSeries = 'SBTestSeries'
 let secondTestCaseTitle = 'SBPFail GT24beforeAndGT2after'
-const path = require('path')
-const downloadsFolder = Cypress.config('downloadsFolder')
-const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-let baseExcelFile = 'cypress/fixtures/baseTestcaseExcelFile.xls'
-let exported = ''
-let expected = ''
 let measureCQL = 'library HybridHospitalWideReadmission version \'4.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
@@ -454,21 +451,15 @@ describe('QDM Test Case Excel Export', () => {
         cy.get('[class="btn-container"]').contains('Excel').click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'Excel exported successfully')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.xls'), { timeout: 500000 }).should('exist')
+
+        const file = path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.xlsx')
+        cy.readFile(file, { timeout: 15000 }).should('exist')
         cy.log('Successfully verified Excel file export')
 
-        //read contents of the html file and compare that with the expected file contents (minus specific measure name)
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v0.0.000-QDM-TestCases.xls')).should('exist').then((exportedFile) => {
-            debugger
-            exported = exportedFile.toString(); //'exportedFile'
-            cy.log('exported file contents is: \n' + exported)
-            cy.pause()
-            cy.readFile(baseExcelFile).should('exist').then((dataCompared) => {
-                debugger
-                expected = dataCompared.toString() //'compareFile'
-                cy.log('expected file contents is: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
-            })
-        })
+        cy.task('readXlsx', {file: file, sheet: '1 - Population Criteria Section'}).then(rows => {
+            expect(rows[0]['__EMPTY_3']).to.equal('birthdate')
+            expect(rows[1]['__EMPTY_1']).to.equal('SBTestSeries')
+            expect(rows[2]['Actual']).to.equal(3)
+        });
     })
 })

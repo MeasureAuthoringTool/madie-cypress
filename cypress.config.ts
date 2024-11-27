@@ -2,6 +2,7 @@ import { defineConfig } from 'cypress'
 
 const { lighthouse, prepareAudit } = require("@cypress-audit/lighthouse")
 const fs = require('fs-extra')
+const xlsx = require('xlsx')
 
 export default defineConfig({
   env: { parseSpecialCharSequences: false },
@@ -36,8 +37,11 @@ export default defineConfig({
         prepareAudit(launchOptions);
       })
       on('task', {
-        readXlsx() {
-          return null
+        readXlsx({file, sheet}) {
+          const buf = fs.readFileSync(file);
+          const workbook = xlsx.read(buf, {type:'buffer'})
+          const rows = xlsx.utils.sheet_to_json(workbook.Sheets[sheet])
+          return rows
         }
       })
 
