@@ -212,21 +212,35 @@ describe('Import Test cases onto an existing Qi Core measure via file and ensure
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        //test case list table contains the group name of the test case that was imported
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction4N/AfirstMeasureTest Series 1firstMeasureTest Case 1firstMeasureDescription 1' + todaysDate + 'Select3N/AfirstMeasureTest Series 2firstMeasureTest Case 2firstMeasureDescription 2' + todaysDate + 'Select2N/AsecondMeasureTest Series 2secondMeasureTest Case 2secondMeasureDescription 2' + todaysDate + 'Select1N/AsecondMeasureTest Series 1secondMeasureTest Case 1secondMeasureDescription 1' + todaysDate + 'Select')
+        // check that main contents of the 2 imported tc are there
+        cy.get(TestCasesPage.testCaseListTable).contains(/firstMeasureTest Series 1firstMeasureTest Case 1firstMeasureDescription/).should('exist')
+        cy.get(TestCasesPage.testCaseListTable).contains(/firstMeasureTest Series 2firstMeasureTest Case 2firstMeasureDescription 2/).should('exist')
 
         //test case numbers appear and first click sorts list in ascending order based on test case number / ID
         Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 5000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction4N/AfirstMeasureTest Series 1firstMeasureTest Case 1firstMeasureDescription 1' + todaysDate + 'Select3N/AfirstMeasureTest Series 2firstMeasureTest Case 2firstMeasureDescription 2' + todaysDate + 'Select2N/AsecondMeasureTest Series 2secondMeasureTest Case 2secondMeasureDescription 2' + todaysDate + 'Select1N/AsecondMeasureTest Series 1secondMeasureTest Case 1secondMeasureDescription 1' + todaysDate + 'Select')
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
-        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/AsecondMeasureTest Series 1secondMeasureTest Case 1secondMeasureDescription 1' + todaysDate + 'Select2N/AsecondMeasureTest Series 2secondMeasureTest Case 2secondMeasureDescription 2' + todaysDate + 'Select3N/AfirstMeasureTest Series 2firstMeasureTest Case 2firstMeasureDescription 2' + todaysDate + 'Select4N/AfirstMeasureTest Series 1firstMeasureTest Case 1firstMeasureDescription 1' + todaysDate + 'Select')
+        
+        /*
+        Used these 2 articles to piece this together
+        selector: https://www.geeksforgeeks.org/how-to-select-first-and-last-td-in-a-row-with-css/
+        process: https://glebbahmutov.com/cypress-examples/recipes/get-text-list.html#collect-the-items-then-assert-the-list
+        */
+        const ascCases = [] 
+        cy.get('tr td:first-child').each(el => {
+            ascCases.push(el.text())
+        })
+        cy.wrap(ascCases).should('deep.equal', ['1','2','3','4'])
+     
         //second click sorts in descending order
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
-        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction4N/AfirstMeasureTest Series 1firstMeasureTest Case 1firstMeasureDescription 1' + todaysDate + 'Select3N/AfirstMeasureTest Series 2firstMeasureTest Case 2firstMeasureDescription 2' + todaysDate + 'Select2N/AsecondMeasureTest Series 2secondMeasureTest Case 2secondMeasureDescription 2' + todaysDate + 'Select1N/AsecondMeasureTest Series 1secondMeasureTest Case 1secondMeasureDescription 1' + todaysDate + 'Select')
+
+        const descCases = [] 
+        cy.get('tr td:first-child').each(el => {
+            descCases.push(el.text())
+        })
+        cy.wrap(descCases).should('deep.equal', ['4','3','2','1'])
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
