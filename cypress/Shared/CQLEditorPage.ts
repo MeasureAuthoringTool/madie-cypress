@@ -44,6 +44,9 @@ export class CQLEditorPage {
     public static readonly toolTip = 'tr > :nth-child(1) > .MuiButtonBase-root'
     public static readonly toolTipMsg = '.MuiTooltip-tooltip'
     public static readonly clearCodeBtn = '[data-testid="clear-codes-btn"]'
+    public static readonly editCodeBtn = '[data-testid="edit-code-0"]'
+    public static readonly applyCodeBtn = '[data-testid="apply-code-0"]'
+    public static readonly removeCodeBtn = '[data-testid="remove-code-0"]'
     public static readonly selectDropdownBtn = '[data-testid="select-action-0_apply"]'
     public static readonly selectOptionListBox = '[class="btn-container"]'
     public static readonly removeCodeConfirmationMsg = '[class="dialog-warning-body"]'
@@ -131,7 +134,7 @@ export class CQLEditorPage {
     public static readonly discardStayButton = '[data-testid="discard-dialog-cancel-button"]'
     public static readonly discardContinueButton = '[data-testid="discard-dialog-continue-button"]'
     public static readonly deleteCancelButton = '[data-testid="delete-dialog-cancel-button"]'
-    public static readonly deleteContinueButton = '[data-testid="delete-dialog-continue-button"]' 
+    public static readonly deleteContinueButton = '[data-testid="delete-dialog-continue-button"]'
 
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
