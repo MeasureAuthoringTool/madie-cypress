@@ -32,6 +32,7 @@ export class CreateMeasurePage {
     public static readonly measureModelDropdown = '#model-select'
     public static readonly measureModelQICore = '[data-testid="measure-model-option-QI-Core v4.1.1"]'
     public static readonly measureModelQDMv5_6 = '[data-testid="measure-model-option-QDM v5.6"]'
+    public static readonly measureModelQICorev6 = '[data-testid="measure-model-option-QI-Core v6.0.0"]'
     public static readonly measureModelFieldLevelError = '.MuiFormHelperText-root'
     public static readonly eCQMAbbreviatedTitleTextbox = '[data-testid="ecqm-input"]'
     public static readonly eCQMAbbreviatedTitleFieldLevelError = '[data-testid="ecqmTitle-helper-text"]'

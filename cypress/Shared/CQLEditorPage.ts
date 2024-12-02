@@ -136,6 +136,9 @@ export class CQLEditorPage {
     public static readonly deleteCancelButton = '[data-testid="delete-dialog-cancel-button"]'
     public static readonly deleteContinueButton = '[data-testid="delete-dialog-continue-button"]'
 
+    //Functions page
+    public static readonly functionsTab = '[data-testid="functions-tab"]'
+
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
 

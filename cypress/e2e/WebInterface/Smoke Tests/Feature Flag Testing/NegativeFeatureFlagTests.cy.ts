@@ -8,6 +8,8 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { Header } from "../../../../Shared/Header"
+import {LandingPage} from "../../../../Shared/LandingPage"
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 
 let QiCoreMeasureName0: string
 let QiCoreCqlLibraryName0: string
@@ -26,6 +28,9 @@ let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 let cqlLibraryName = 'TestLibrary' + Date.now()
 let validTestCaseJsonLizzy = TestCaseJson.TestCaseJson_Valid
 let measureCQLPFTests = MeasureCQL.CQL_Populations
+const now = require('dayjs')
+let mpStartDate = now().subtract('2', 'year').format('MM-DD-YYYY')
+let mpEndDate = now().format('MM-DD-YYYY')
 
 // "qiCoreBonnieTestCases": false
 describe('Test Case Import button - BONNIE: verify that the BONNIE import button is not available', () => {
@@ -100,34 +105,68 @@ describe('QI Core: Elements tab is not present', () => {
     })
 })
 
-//“ShiftTestCasesDates”: true
-describe('QI Core: Shift test case dates option on Test case list page', () => {
+//"qiCore6": true
+describe('Qi Core6 option available', () => {
 
-    beforeEach('Create measure, login and update CQL, create group, and login', () => {
-
-        CqlLibraryName = 'TestLibrary9' + Date.now()
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
+    before('Login', () => {
 
         OktaLogin.Login()
     })
 
-    afterEach('Logout and Clean up Measures', () => {
+    it('Qi-Core v6.0.0 option available while creating New Measures', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 30000)
+        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 30000)
+        cy.wait(2000)
+        cy.get(LandingPage.newMeasureButton).click({ force: true })
+        cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
+        cy.get(CreateMeasurePage.measureModelDropdown).click()
+        cy.get(CreateMeasurePage.measureModelQICorev6).click()
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).type('eCQMTitle01')
+        cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(CqlLibraryName)
 
-    })
+        cy.get(CreateMeasurePage.measurementPeriodStartDate).type(mpStartDate)
+        cy.get(CreateMeasurePage.measurementPeriodEndDate).type(mpEndDate)
 
-    it('Shift test case dates option visible on view Test case dropdown', () => {
-
-        MeasuresPage.actionCenter("edit")
-
-        //Navigate to Test Case list page
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.selectTestCaseDropdownBtn).click()
-        cy.get('[class="btn-container"]').should('contain', 'Shift Test Case dates')
-        cy.reload()
+        cy.get(CreateMeasurePage.createMeasureButton).should('be.enabled')
     })
 })
+
+//"CQLBuilderFunctions": false
+describe('QI Core: CQL Builder Functions tab is not present', () => {
+
+    before('Create Measure and Login', () => {
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        measureName = 'TestMeasure' + Date.now() + 5
+        cqlLibraryName = 'TestCql' + Date.now() + 5
+
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
+        OktaLogin.Login()
+    })
+
+    after('Log out and Clean up', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+
+    })
+
+    it('Functions tab not present under CQL builder tabs', () => {
+
+        //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        cy.get(CQLEditorPage.functionsTab).should('not.exist')
+    })
+
+})
+
+
+
