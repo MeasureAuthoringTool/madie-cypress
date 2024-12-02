@@ -131,7 +131,10 @@ export class CQLEditorPage {
     public static readonly discardStayButton = '[data-testid="discard-dialog-cancel-button"]'
     public static readonly discardContinueButton = '[data-testid="discard-dialog-continue-button"]'
     public static readonly deleteCancelButton = '[data-testid="delete-dialog-cancel-button"]'
-    public static readonly deleteContinueButton = '[data-testid="delete-dialog-continue-button"]' 
+    public static readonly deleteContinueButton = '[data-testid="delete-dialog-continue-button"]'
+
+    //Functions page
+    public static readonly functionsTab = '[data-testid="functions-tab"]'
 
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
