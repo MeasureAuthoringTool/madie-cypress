@@ -53,21 +53,19 @@ describe('QDM Test Case sorting by Test Case number', () => {
     })
     it('QDM Test Case number and sorting behavior', () => {
 
-        //login
         OktaLogin.Login()
 
-        //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //create test case
         TestCasesPage.createQDMTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd)
-
-        //navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()
+
+        // test for https://jira.cms.gov/browse/MAT-7893
+        cy.get(TestCasesPage.testCasesBCText).should('contain.text', 'Case #2:')
 
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('05/27/1981 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
