@@ -8,8 +8,8 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import {Header} from "../../../../../Shared/Header"
-import {CQLLibraryPage} from "../../../../../Shared/CQLLibraryPage"
+import { Header } from "../../../../../Shared/Header"
+import { CQLLibraryPage } from "../../../../../Shared/CQLLibraryPage"
 
 let measureCQLPFTests = MeasureCQL.QDMHighlightingTab_CQL
 let measureCQLDUTest = MeasureCQL.QDMHightlightingTabDefUsed_CQL
@@ -294,8 +294,10 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
                 '      union ["Encounter, Performed": "Dementia"]')
         })
 
+       
+        // verify Results arrow is shown
+        cy.contains('Results').should('have.descendants', 'svg')
         //Verify Test case Execution Results
-        cy.get('.GroupCoverageResultsSection___StyledDiv-sc-x9ujt7-0 > button > div').should('contain.text', 'Results')
         cy.get('[data-testid="results-section"]').should('contain.text', '[Encounter, Performed: Closed Head and Facial Trauma\n' +
             'START: 01/09/2025 6:00 AM\n' +
             'STOP: 01/17/2025 6:00 AM\n' +
