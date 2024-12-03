@@ -59,16 +59,27 @@ describe('Measure Sharing', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    url: '/api/measures/' + id + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': measureSharingAPIKey
                     },
-                    method: 'PUT'
-
+                    method: 'PUT',
+                    body: {
+                        "acls": [
+                            {
+                                "userId": harpUserALT,
+                                "roles": [
+                                    "SHARED_WITH"
+                                ]
+                            }
+                        ],
+                        "action": "GRANT"
+                    }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                    expect(response.body[0].userId).to.eql(harpUserALT)
+                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
                 })
             })
         })
@@ -87,16 +98,27 @@ describe('Measure Sharing', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    url: '/api/measures/' + id + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': measureSharingAPIKey
                     },
-                    method: 'PUT'
-
+                    method: 'PUT',
+                    body: {
+                        "acls": [
+                            {
+                                "userId": harpUserALT,
+                                "roles": [
+                                    "SHARED_WITH"
+                                ]
+                            }
+                        ],
+                        "action": "GRANT"
+                    }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                    expect(response.body[0].userId).to.eql(harpUserALT)
+                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
                 })
             })
         })
@@ -224,16 +246,27 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    url: '/api/measures/' + id + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': measureSharingAPIKey
                     },
-                    method: 'PUT'
-
+                    method: 'PUT',
+                    body: {
+                        "acls": [
+                            {
+                                "userId": harpUserALT,
+                                "roles": [
+                                    "SHARED_WITH"
+                                ]
+                            }
+                        ],
+                        "action": "GRANT"
+                    }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                    expect(response.body[0].userId).to.eql(harpUserALT)
+                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
                 })
             })
         })
@@ -282,16 +315,27 @@ describe('Delete Test Case with Shared user', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    url: '/api/measures/' + id + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': measureSharingAPIKey
                     },
-                    method: 'PUT'
-
+                    method: 'PUT',
+                    body: {
+                        "acls": [
+                            {
+                                "userId": harpUserALT,
+                                "roles": [
+                                    "SHARED_WITH"
+                                ]
+                            }
+                        ],
+                        "action": "GRANT"
+                    }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                    expect(response.body[0].userId).to.eql(harpUserALT)
+                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
                 })
             })
         })
