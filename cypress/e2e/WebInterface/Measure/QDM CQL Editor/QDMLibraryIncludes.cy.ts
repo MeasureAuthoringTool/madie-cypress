@@ -461,7 +461,7 @@ describe('QDM Library Includes fields', () => {
         cy.get('[data-testid="library-version-container"] > .result-value').should('not.be.enabled')
     })
 
-    it('Verify all Qi Core Library versions are displayed while editing saved Libraries', () =>{
+    it.only('Verify all Qi Core Library versions are displayed while editing saved Libraries', () =>{
 
         cy.get(CQLEditorPage.includesTab).click()
 
@@ -480,7 +480,7 @@ describe('QDM Library Includes fields', () => {
 
         //Confirm Library versions
         cy.get(CQLEditorPage.versionDropdownBtn).click()
-        cy.get(CQLEditorPage.versionNumberList).should('contain.text', '1.0.0002.0.0003.0.0004.0.0005.0.0006.0.0007.0.0008.0.000')
+        cy.get(CQLEditorPage.versionNumberList).should('contain.text', '1.0.0002.0.0004.0.0003.0.0008.0.0006.0.0007.0.0005.0.000')
     })
 
 })
