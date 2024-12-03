@@ -9,6 +9,7 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
+import { Global } from "../../../../Shared/Global"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -260,6 +261,7 @@ let dupResourceIDTCJson = '{\n' +
     '    }\n' +
     '  ]\n' +
     '}'
+
 describe('Warning modal on Test Case JSON Editor', () => {
 
     beforeEach('Create measure and login', () => {
@@ -288,6 +290,7 @@ describe('Warning modal on Test Case JSON Editor', () => {
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, newCqlLibraryName)
     })
+
     it('Verify warning modal when the Test Case JSON has unsaved changes', () => {
 
         //Click on Edit Measure
@@ -328,21 +331,21 @@ describe('Warning modal on Test Case JSON Editor', () => {
 
         //Warning Modal displayed when user navigated to Measure Group tab without saving changes
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(TestCasesPage.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
+        cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
         cy.get(TestCasesPage.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
         cy.get(TestCasesPage.discardChangesCancelBtn).click()
 
         //Click on details tab & the warning modal should not display
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.discardChangesConfirmationModal).should('not.exist')
+        cy.get(Global.discardChangesConfirmationModal).should('not.exist')
 
         //Click on Test Cases tab and discard all changes
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.continueDiscardChangesBtn).click()
         cy.get(TestCasesPage.newTestCaseButton).should('exist')
-
     })
 })
+
 describe('JSON Resource ID tests', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
@@ -649,8 +652,8 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
         cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
-
     })
+
     it('JSON has Resource IDs duplicated for different resources', () => {
 
         //Click on Edit Measure
@@ -689,7 +692,6 @@ describe('JSON Resource ID tests', () => {
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
-
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -798,6 +800,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Resource of type [Encounter] is missing the Meta.profile. Resource Id: [5c6c61ceb84846536a9a98f9]. Resources missing Meta.profile may cause incorrect results while executing this test case.')
     })
 })
+
 describe('JSON Resource ID tests - Proportion Score Type', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
@@ -831,6 +834,7 @@ describe('JSON Resource ID tests - Proportion Score Type', () => {
 
         Utilities.deleteMeasure(measureName, newCqlLibraryName)
     })
+
     it('Expect / Actual Labels are correct', () => {
 
         //Click on Edit Measure
@@ -859,7 +863,6 @@ describe('JSON Resource ID tests - Proportion Score Type', () => {
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
-
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -912,6 +915,7 @@ describe('JSON Resource ID tests - Proportion Score Type', () => {
     })
 
 })
+
 describe('JSON Resource ID tests -- CV', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
@@ -920,7 +924,6 @@ describe('JSON Resource ID tests -- CV', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, CQLForCVMeasure)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -932,6 +935,7 @@ describe('JSON Resource ID tests -- CV', () => {
 
         Utilities.deleteMeasure(measureName, newCqlLibraryName)
     })
+
     it('Measure bundle end point returns stratifications for Continuous Variable Measure', () => {
 
         //Click on Edit Measure
@@ -1000,6 +1004,7 @@ describe('JSON Resource ID tests -- CV', () => {
     })
 
 })
+
 describe('Tests around cardinality violations', () => {
 
     beforeEach('Create New Measure and Login', () => {
@@ -1019,7 +1024,6 @@ describe('Tests around cardinality violations', () => {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Num', '', 'Initial Population', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, cardInvalidTCJson)
         OktaLogin.Login()
-
     })
 
     afterEach('Log out', () => {
@@ -1027,6 +1031,7 @@ describe('Tests around cardinality violations', () => {
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
+
     it('Verify error is returned when there is a model violation -- use an object where expecting an array', () => {
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
@@ -1044,6 +1049,5 @@ describe('Tests around cardinality violations', () => {
         //wait for and confirm the correct error appears
         Utilities.waitForElementVisible(TestCasesPage.testCaseJsonValidationDisplayList, 30700)
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'HAPI-1820: Found incorrect type for element partOf - Expected ARRAY and found OBJECT')
-
     })
 })
