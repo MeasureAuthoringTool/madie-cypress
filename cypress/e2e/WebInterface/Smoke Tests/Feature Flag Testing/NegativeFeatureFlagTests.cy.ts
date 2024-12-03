@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
@@ -8,8 +8,8 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { Header } from "../../../../Shared/Header"
-import {LandingPage} from "../../../../Shared/LandingPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import { LandingPage } from "../../../../Shared/LandingPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let QiCoreMeasureName0: string
 let QiCoreCqlLibraryName0: string
@@ -168,5 +168,40 @@ describe('QI Core: CQL Builder Functions tab is not present', () => {
 
 })
 
+//"qiCoreElementsTab": false
+describe('QI Core v6: UI Elements Builder tab is not shown', () => {
+
+    afterEach('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+    })
+
+    it('UI Elements Builder not shown on test cases for 6.0.0 measures', () => {
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore6)
+
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
+
+        OktaLogin.Login()
+
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.testCaseAction('edit')
+
+        // no options show, only default editor
+        cy.get(TestCasesPage.jsonTab).should('not.exist')
+        cy.get(TestCasesPage.elementsTab).should('not.exist')
+        cy.get('.tab-container').should('not.exist')
+
+        // assert that blank editor field is there
+        cy.get(TestCasesPage.aceEditorJsonInput).should('be.empty')
+    })
+
+})
 
 
