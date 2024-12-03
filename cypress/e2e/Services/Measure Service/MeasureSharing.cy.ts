@@ -29,16 +29,28 @@ describe('Measure Sharing Service', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                        url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value,
-                            'api-key': measureSharingAPIKey
-                        },
-                        method: 'PUT'
+                    url: '/api/measures/' + id + '/acls',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        'api-key': measureSharingAPIKey
+                    },
+                    method: 'PUT',
+                    body: {
+                        "acls": [
+                            {
+                                "userId": harpUserALT,
+                                "roles": [
+                                    "SHARED_WITH"
+                                ]
+                            }
+                        ],
+                        "action": "GRANT"
+                    }
 
                 }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                    expect(response.status).to.eql(200)
+                    expect(response.body[0].userId).to.eql(harpUserALT)
+                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
                 })
             })
         })
@@ -50,12 +62,23 @@ describe('Measure Sharing Service', () => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    url: '/api/measures/' + id + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': '1233'
                     },
-                    method: 'PUT'
+                    method: 'PUT',
+                    body: {
+                        "acls": [
+                            {
+                                "userId": harpUserALT,
+                                "roles": [
+                                    "SHARED_WITH"
+                                ]
+                            }
+                        ],
+                        "action": "GRANT"
+                    }
                 }).then((response) => {
                     expect(response.status).to.eql(403)
                 })
@@ -69,18 +92,28 @@ describe('Measure Sharing Service', () => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/measures/' + id+5 + '/grant?userid=' + harpUserALT,
+                    url: '/api/measures/' + id+5 + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': measureSharingAPIKey
                     },
-                    method: 'PUT'
+                    method: 'PUT',
+                    body: {
+                        "acls": [
+                            {
+                                "userId": harpUserALT,
+                                "roles": [
+                                    "SHARED_WITH"
+                                ]
+                            }
+                        ],
+                        "action": "GRANT"
+                    }
                 }).then((response) => {
-                    expect(response.status).to.eql(400)
-                    expect(response.body).to.eql('Measure does not exist.')
+                    expect(response.status).to.eql(404)
+                    expect(response.body.message).to.eql('Measure does not exist: ' + id + '5')
                 })
             })
         })
     })
 })
-
