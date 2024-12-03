@@ -69,11 +69,9 @@ describe('QDM CQL Definitions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
 
-        //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
@@ -90,7 +88,6 @@ describe('QDM CQL Definitions', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Search for QDM CQL Definitions Expression Editor Name Options', () => {
@@ -107,7 +104,6 @@ describe('QDM CQL Definitions', () => {
 
         //Expression Editor Name dropdown should also contain Included Library name.Definition name
         cy.get(CQLEditorPage.expressionEditorNameList).should('contain.text', 'Common.ED Encounter')
-
     })
 
     it('Search for QDM CQL Definitions Expression Editor Fluent Function Options', () => {
@@ -122,7 +118,6 @@ describe('QDM CQL Definitions', () => {
         //Expression Editor Name dropdown should contain Fluent Functions
         Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
         cy.get(CQLEditorPage.expressionEditorNameList).should('contain.text', 'test()')
-
     })
 
     it('Insert QDM CQL Definitions through Expression Editor and Apply to CQL editor', () => {
@@ -203,7 +198,6 @@ describe('QDM CQL Definitions', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', '"test"()')
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'after end')
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'AgeInDays()')
-
     })
 
     it('Verify Included QDM CQL Definitions under Saved Definitions tab', () => {
@@ -214,18 +208,20 @@ describe('QDM CQL Definitions', () => {
         //Navigate to Saved Definitions tab
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         Utilities.waitForElementVisible('[data-testid="definitions-row-0"] > :nth-child(1)', 60000)
-        cy.get('[data-testid="definitions-row-0"] > :nth-child(1)').should('contain.text', 'SDE Sex')
+        cy.get('[data-testid="definitions-row-0"] > :nth-child(1)').should('contain.text', 'SDE Ethnicity')
         cy.get('[data-testid="definitions-row-1"] > :nth-child(1)').should('contain.text', 'SDE Payer')
+        cy.get('[data-testid="definitions-row-2"] > :nth-child(1)').should('contain.text', 'SDE Race')
+        cy.get('[data-testid="definitions-row-3"] > :nth-child(1)').should('contain.text', 'SDE Sex')
+        cy.get('[data-testid="definitions-row-4"] > :nth-child(1)').should('contain.text', 'ipp')
     })
 
     it('Edit Saved QDM CQL Definitions', () => {
 
-        //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
 
         //Navigate to Saved Definitions tab
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
-        cy.get('[data-testid="edit-button-0"]').click()
+        cy.get('[data-testid="edit-button-3"]').click()
 
         //Return type populated for Saved Definitions
         cy.get('[data-testid="return-type"]').should('contain.text', 'Return TypePatientCharacteristicSex')
@@ -243,7 +239,6 @@ describe('QDM CQL Definitions', () => {
 
     it('Dirty check pops up when there are changes in CQL and Edit CQL definition button is clicked', () => {
 
-        //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
 
         //Make changes to CQL editor
@@ -260,7 +255,6 @@ describe('QDM CQL Definitions', () => {
 
     it('Delete saved QDM CQL Definitions', () => {
 
-        //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
 
         //Navigate to Saved Definitions tab
@@ -268,7 +262,8 @@ describe('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.deleteCQLDefinitions).click()
         cy.get(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.saveSuccessMsg, 60000)
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Definition SDE Sex has been successfully removed from the CQL.')
+
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Navigate to Saved Definitions again and assert if the Definition is removed from Saved Definitions
         cy.get(CQLEditorPage.expandCQLBuilder).click()
@@ -278,34 +273,31 @@ describe('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         Utilities.waitForElementVisible(CQLEditorPage.deleteCQLDefinitions, 60000)
         
-        // confirm entry for SDE Sex has been removed
-        cy.get(CQLEditorPage.savedDefinitionsTable).should('not.contain', 'SDE Sex')
+        // confirm entry for SDE Ethnicity has been removed
+        cy.get(CQLEditorPage.savedDefinitionsTable).should('not.contain', 'SDE Ethnicity')
     })
 
     it('QDM CQL Definition Comments were displayed under Saved Definitions tab', () => {
 
-        //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
 
         //Navigate to Saved Definitions tab
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
-        cy.get('[data-testid="definitions-row-4"] > :nth-child(2)').should('contain.text', 'Test Comments')
-
+        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'Test Comments')
     })
 
     it('View and Edit QDM CQL Definition Comments from Saved Definitions tab', () => {
 
-        //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
 
         //Navigate to Saved Definitions tab
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
 
         //Verify Comment
-        cy.get('[data-testid="definitions-row-4"] > :nth-child(2)').should('contain.text', 'Test Comments')
+        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'Test Comments')
 
         //Edit Comment
-        cy.get('[data-testid="edit-button-4"]').click()
+        cy.get('[data-testid="edit-button-0"]').click()
         cy.get(CQLEditorPage.commentTextBox).clear().type('Updated Test Comment')
         //Save
         cy.get(CQLEditorPage.saveDefinitionBtn).click()
@@ -318,8 +310,7 @@ describe('QDM CQL Definitions', () => {
 
         //Navigate to Saved Definitions tab and verify comment
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
-        cy.get('[data-testid="definitions-row-4"] > :nth-child(2)').should('contain.text', 'Updated Test Comment')
-
+        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'Updated Test Comment')
     })
 })
 
@@ -327,11 +318,9 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
 
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL_withError)
         OktaLogin.Login()
 
-        //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
         //Save CQL
@@ -348,7 +337,6 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('QDM CQL Definitions Expression editor Name options are not available when CQL has errors', () => {
@@ -370,17 +358,14 @@ describe('QDM CQL Definitions - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.AltLogin()
-
     })
 
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Verify Non Measure owner unable to Edit/Delete saved Definitions', () => {
@@ -400,6 +385,5 @@ describe('QDM CQL Definitions - Measure ownership Validations', () => {
 
         //Delete button should not be visible
         cy.get(CQLEditorPage.deleteCQLDefinitions).should('not.exist')
-
     })
 })
