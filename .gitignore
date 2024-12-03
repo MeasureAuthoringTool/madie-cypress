@@ -7,6 +7,8 @@ cypress/downloads/
 .vscode/
 .idea/*
 cypress.env.json
+.DS_Store
+**/.DS_Store
 
 # files for local processing
 cypress/fixtures/cqlLibraryId

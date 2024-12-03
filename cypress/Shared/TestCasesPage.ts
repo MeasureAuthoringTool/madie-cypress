@@ -17,6 +17,7 @@ export class TestCasesPage {
 
     //QDM Bread Crumb
     public static readonly testCasesBCLink = '[data-testid="qdm-test-cases"]'
+    public static readonly testCasesBCText = '[data-testid="qdm-test-cases-testcase"]'
 
     //QDM Shift Test Case dates
     public static readonly testCaseDataSideLink = '[data-testid="test-case-data"]'

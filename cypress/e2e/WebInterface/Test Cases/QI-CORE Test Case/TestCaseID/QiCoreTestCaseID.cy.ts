@@ -70,9 +70,9 @@ describe('Test Case sorting by Test Case number', () => {
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
+
     it('Qi Core Test Case number and sorting behavior', () => {
 
-        //login
         OktaLogin.Login()
 
         //Click on Edit Measure
@@ -82,7 +82,10 @@ describe('Test Case sorting by Test Case number', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //create test case
+        // test for https://jira.cms.gov/browse/MAT-7893
+        TestCasesPage.testCaseAction('edit')
+        cy.get(TestCasesPage.testCasesBCText).should('contain.text', 'Case #1:')    
+
         TestCasesPage.createTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd, testCaseJson2nd)
 
         //test case numbers appear and first click sorts list in ascending order based on test case number / ID
