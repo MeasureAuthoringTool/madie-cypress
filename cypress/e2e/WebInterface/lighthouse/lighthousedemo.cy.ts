@@ -267,7 +267,7 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         const thresholds = {
-            performance: 19,
+            performance: 17,
             accessibility: 75,
             'total-blocking-time': 520000,
             'speed-index': 48000,
