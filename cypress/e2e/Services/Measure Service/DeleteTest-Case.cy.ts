@@ -4,7 +4,6 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { Utilities } from "../../../Shared/Utilities"
 import { Environment } from "../../../Shared/Environment"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import { OktaLogin } from "../../../Shared/OktaLogin"
 
 let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
@@ -182,16 +181,28 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    url: '/api/measures/' + id + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': measureSharingAPIKey
                     },
-                    method: 'PUT'
+                    method: 'PUT',
+                    body: {
+                        "acls": [
+                            {
+                                "userId": harpUserALT,
+                                "roles": [
+                                    "SHARED_WITH"
+                                ]
+                            }
+                        ],
+                        "action": "GRANT"
+                    }
 
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                    expect(response.body[0].userId).to.eql(harpUserALT)
+                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
                 })
             })
         })
