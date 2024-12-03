@@ -93,9 +93,10 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
+        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -116,9 +117,9 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-
         cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+
+        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
         //export test case
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -190,9 +191,9 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-
         cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+
+        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -213,9 +214,9 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-
         cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+
+        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
         //export test case
         cy.get(EditMeasurePage.testCasesTab).click()
