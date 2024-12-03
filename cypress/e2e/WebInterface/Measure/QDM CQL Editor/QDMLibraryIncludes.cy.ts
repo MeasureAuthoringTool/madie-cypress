@@ -461,7 +461,7 @@ describe('QDM Library Includes fields', () => {
         cy.get('[data-testid="library-version-container"] > .result-value').should('not.be.enabled')
     })
 
-    it.only('Verify all Qi Core Library versions are displayed while editing saved Libraries', () =>{
+    it('Verify all Qi Core Library versions are displayed while editing saved Libraries', () =>{
 
         cy.get(CQLEditorPage.includesTab).click()
 
