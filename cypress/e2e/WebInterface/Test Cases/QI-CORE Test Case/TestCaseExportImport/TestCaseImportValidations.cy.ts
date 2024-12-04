@@ -24,8 +24,8 @@ let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'Passing Test Case'
 let secondTestCaseTitle = 'Failing Test Case'
-let testCaseDescription = 'DENOMPass' + Date.now()
-let secondTestCaseDescription = 'DENOMFail' + Date.now()
+let testCaseDescription = 'DENOMPass'
+let secondTestCaseDescription = 'DENOMFail'
 let testCaseSeries = 'SBTestSeriesP'
 let secondTestCaseSeries = 'SBTestSeriesF'
 let validTestCaseJsonLizzy = TestCaseJson.TestCaseJson_Valid
@@ -35,6 +35,7 @@ let validFileToUpload = downloadsFolder.toString()
 let invalidFileToUpload = 'cypress/fixtures'
 let firstMeasureName = ''
 let updatedCQLLibraryName = ''
+
 
 describe('Test Case Import: functionality tests', () => {
 
@@ -50,12 +51,9 @@ describe('Test Case Import: functionality tests', () => {
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
 
-
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        //OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -66,7 +64,6 @@ describe('Test Case Import: functionality tests', () => {
         cy.setAccessTokenCookie()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Measure is not owned by nor shared with user: import button is not available', () => {
@@ -85,9 +82,8 @@ describe('Test Case Import: functionality tests', () => {
 
         //confirm that the import button is disabled / not available
         Utilities.waitForElementDisabled(TestCasesPage.importNonBonnieTestCasesBtn, 35000)
-
-
     })
+
     it('Measure is in DRAFT status: measure has been shared with user: import button is available, import can occur, import can be cancelled and modal will close, upon cancelling', () => {
 
         OktaLogin.Login()
@@ -126,21 +122,33 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         OktaLogin.UILogout()
+
         //Share Measure with ALT User
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    url: '/api/measures/' + id + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': measureSharingAPIKey
                     },
-                    method: 'PUT'
-
+                    method: 'PUT',
+                    body: {
+                        "acls": [
+                            {
+                                "userId": harpUserALT,
+                                "roles": [
+                                    "SHARED_WITH"
+                                ]
+                            }
+                        ],
+                        "action": "GRANT"
+                    }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                    expect(response.body[0].roles).to.contain('SHARED_WITH')
+                    expect(response.body[0].userId).to.eql(harpUserALT)
                 })
             })
         })
@@ -224,11 +232,9 @@ describe('Test Case Import: functionality tests', () => {
         //wait until select / drag and drop modal no longer appears
         Utilities.waitForElementToNotExist(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
     })
-
 })
 
 describe('Test Case Import validations for versioned Measures', () => {
-
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
@@ -268,7 +274,6 @@ describe('Test Case Import validations for versioned Measures', () => {
 
         //confirm that the import button is disabled / not available
         Utilities.waitForElementDisabled(TestCasesPage.importNonBonnieTestCasesBtn, 35000)
-
     })
 
     it('Measure is in VERSIONED status: measure has been shared with user: import button is not available', () => {
@@ -294,21 +299,33 @@ describe('Test Case Import validations for versioned Measures', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+
         //Share Measure with ALT User
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
+                    url: '/api/measures/' + id + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': measureSharingAPIKey
                     },
-                    method: 'PUT'
-
+                    method: 'PUT',
+                    body: {
+                        "acls": [
+                            {
+                                "userId": harpUserALT,
+                                "roles": [
+                                    "SHARED_WITH"
+                                ]
+                            }
+                        ],
+                        "action": "GRANT"
+                    }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
+                    expect(response.body[0].roles).to.contain('SHARED_WITH')
+                    expect(response.body[0].userId).to.eql(harpUserALT)
                 })
             })
         })
@@ -341,9 +358,9 @@ describe('Test Case Import validations for versioned Measures', () => {
 
         //confirm that the import button is disabled / not available
         Utilities.waitForElementDisabled(TestCasesPage.importNonBonnieTestCasesBtn, 35000)
-
     })
 })
+
 describe('Test Case Import: File structure Not Accurate validation tests', () => {
 
     deleteDownloadsFolderBeforeAll()
@@ -366,6 +383,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         OktaLogin.Logout()
 
     })
+
     it('Importing: not a .zip file', () => {
 
         //Click on Edit Measure
@@ -386,8 +404,8 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportErrorOnImport, 35000)
         cy.get('[data-testid="test-case-import-error-div"] > small').should('contain.text', 'The import file must be a zip file. No Test Cases can be imported.')
-
     })
+
     it('Importing: .zip\'s test case folder does not contain a json file', () => {
 
         //Click on Edit Measure
@@ -412,6 +430,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         //verifies alert message at top of page informing user that no test case was imported
         cy.get('[data-testid="test-case-import-error-div"] > small').should('contain.text', 'Unable to find any valid test case json. Please make sure the format is accurate')
     })
+
     it('Importing: .zip\'s test case folder contains multiple json files', () => {
 
         //Click on Edit Measure
@@ -436,6 +455,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         //verifies alert message at tope of page informing user that no test case was imported
         cy.get('[data-testid="test-case-import-error-div"] > small').should('contain.text', 'Unable to find any valid test case json. Please make sure the format is accurate')
     })
+
     it('Importing: .zip\'s test case folder contains malformed json file', () => {
 
         //Click on Edit Measure
@@ -458,9 +478,9 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases (5).zip')
 
         cy.get(TestCasesPage.testCaseImportErrorAtValidating).should('include.text', 'Zip file is in an incorrect format. If this is an export prior to June 20, 2024 please reexport your test case and try again.')
-
     })
 })
+
 describe('Test Case Import: New Test cases on measure validations: uniqueness tests related to family name and given name', () => {
 
     deleteDownloadsFolderBeforeAll()
@@ -483,6 +503,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
         Utilities.deleteMeasure(measureName + 'b', CqlLibraryName, true)
     })
+
     it('Importing two new test cases with unique family name and given name: verify expected match that of original test case; verify family name is Test Case group; verify that given name is Test Case title; verify that test case is editable', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
@@ -563,13 +584,15 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASBTestSeriesFb2Failing Test Caseb2' + secondTestCaseDescription + 'b2' + todaysDate + 'Select1N/ASBTestSeriesPb1Passing Test Caseb1' + testCaseDescription + 'b1' + todaysDate + 'Select')
-
+     
+        // checks for details of tc1 and tc2, but does not care about order
+        cy.get(TestCasesPage.testCaseListTable).contains(/SBTestSeriesFb2Failing Test Caseb2DENOMFailb2/).should('exist')
+        cy.get(TestCasesPage.testCaseListTable).contains(/SBTestSeriesPb1Passing Test Caseb1DENOMPassb1/).should('exist')
+        
         //verify confirmation message
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessInfo, 35000)
 
         cy.get(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'Following test case(s) were imported successfully, but the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been')
-
     })
 })
 
@@ -594,6 +617,7 @@ describe('Test case uniqueness error validation', () => {
 
         Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
     })
+
     it('Export existing test case, then delete the existing test case, then create new test case with previous series and title and, then, attempt to import previously exported test case: verify uniqueness error', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
@@ -681,10 +705,11 @@ describe('Test case uniqueness error validation', () => {
         //verifies alert message at top of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
         cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(0) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
-        cy.get('[id="content"]').find('[data-testid="failed-test-cases"]').find('[class="sc-hCPjZK iYkvOm"]').should('contain.text', 'Reason: The Test Case Group and Title are already used in another test case on this measure. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
+        cy.get('[id="content"]').find('[data-testid="failed-test-cases"]').find('span').should('contain.text', 'Reason: The Test Case Group and Title are already used in another test case on this measure. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
     })
 
 })
+
 describe('Test Case Import: New Test cases on measure validations: PC does not match between measures', () => {
 
     deleteDownloadsFolderBeforeAll()
@@ -705,8 +730,8 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         cy.setAccessTokenCookie()
 
         Utilities.deleteMeasure(firstMeasureName, updatedCQLLibraryName)
-
     })
+
     it('Importing two new test cases with the pc not matching on the measure in which the test cases is being imported into', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
@@ -763,8 +788,10 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASBTestSeriesPb1Passing Test Caseb1' + testCaseDescription + 'b1' + todaysDate + 'Select1N/ASBTestSeriesFb2Failing Test Caseb2' + secondTestCaseDescription + 'b2' + todaysDate + 'Select')
-
+        // checks for details of tc1 and tc2, but does not care about order
+        cy.get(TestCasesPage.testCaseListTable).contains(/SBTestSeriesFb2Failing Test Caseb2DENOMFailb2/).should('exist')
+        cy.get(TestCasesPage.testCaseListTable).contains(/SBTestSeriesPb1Passing Test Caseb1DENOMPassb1/).should('exist')
+        
         //verifies alert message at tope of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
         cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Following test case(s) were imported successfully, but the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been')
