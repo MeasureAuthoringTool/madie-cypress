@@ -1380,7 +1380,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).wait(2000).click()
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
