@@ -317,8 +317,7 @@ describe('QDM Code Search fields', () => {
         cy.get('.sc-bXCLTC').should('contain.text', 'No Results were found')
     })
 
-    //Skipping until MAT-7987 is fixed
-    it.skip('Code system not removed from CQL when there are multiple codes associated with Code system and one of them removed', () => {
+    it('Code system not removed from CQL when there are multiple codes associated with Code system and one of them removed', () => {
 
         //Click on Codes tab
         cy.get(CQLEditorPage.codesTab).click()
@@ -339,9 +338,6 @@ describe('QDM Code Search fields', () => {
         //Apply code to the Measure
         cy.get(CQLEditorPage.applyCodeBtn).click()
         cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been successfully added to the CQL.')
-
-        //Save CQL
-        cy.get(CQLEditorPage.saveCQLButton).click().wait(1000)
 
         //Add another code with the same Code system
         cy.get(CQLEditorPage.codeText).clear().type('ACUTE')

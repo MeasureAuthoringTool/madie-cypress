@@ -480,7 +480,7 @@ describe('QDM Library Includes fields', () => {
 
         //Confirm Library versions
         cy.get(CQLEditorPage.versionDropdownBtn).click()
-        cy.get(CQLEditorPage.versionNumberList).should('contain.text', '1.0.0002.0.0004.0.0003.0.0008.0.0006.0.0007.0.0005.0.000')
+        cy.get(CQLEditorPage.versionNumberList).should('contain.text', '8.0.0007.0.0006.0.0005.0.0004.0.0003.0.0002.0.0001.0.000')
     })
 
 })
