@@ -1,5 +1,6 @@
 import {Environment} from "../../../Shared/Environment"
 import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
+import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utilities"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
@@ -19,22 +20,7 @@ describe('CQL Library Transfer Service', () => {
 
     it('Successful CQL Library transfer', () => {
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT'
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
-                })
-            })
-        })
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
     })
 })
 
@@ -54,12 +40,24 @@ describe('CQL Library Transfer Validations', () => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
+                    url: '/api/cql-libraries/' + id + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': '1233'
                     },
-                    method: 'PUT'
+                    method: 'PUT',
+                    body: {
+                        "acls": [
+                            {
+                                "userId": harpUserALT,
+                                "roles": [
+                                    "SHARED_WITH"
+                                ]
+                            }
+                        ],
+                        "action": "GRANT"
+                    }
+
                 }).then((response) => {
                     expect(response.status).to.eql(403)
                 })
@@ -73,15 +71,27 @@ describe('CQL Library Transfer Validations', () => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
                 cy.request({
                     failOnStatusCode: false,
-                    url: '/api/cql-libraries/' + id+5 + '/ownership?userid=' + harpUserALT,
+                    url: '/api/cql-libraries/' + id + 25 + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
                         'api-key': measureSharingAPIKey
                     },
-                    method: 'PUT'
+                    method: 'PUT',
+                    body: {
+                        "acls": [
+                            {
+                                "userId": harpUserALT,
+                                "roles": [
+                                    "SHARED_WITH"
+                                ]
+                            }
+                        ],
+                        "action": "GRANT"
+                    }
+
                 }).then((response) => {
-                    expect(response.status).to.eql(400)
-                    expect(response.body).to.eql('Library does not exist.')
+                    expect(response.status).to.eql(404)
+                    expect(response.body.message).to.contain('Library does not exist:')
                 })
             })
         })

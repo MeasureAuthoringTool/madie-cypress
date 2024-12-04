@@ -1,5 +1,6 @@
 import { Environment } from "../../../Shared/Environment"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
+import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utilities"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
@@ -19,33 +20,7 @@ describe('CQL Library Sharing Service', () => {
 
     it('Successful CQL Library sharing', () => {
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/cql-libraries/' + id + '/acls',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT',
-                    body: {
-                        "acls": [
-                            {
-                                "userId": harpUserALT,
-                                "roles": [
-                                    "SHARED_WITH"
-                                ]
-                            }
-                        ],
-                        "action": "GRANT"
-                    }
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    //expect(response.body).to.eql(harpUserALT + ' granted access to Library successfully.')
-                })
-            })
-        })
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
     })
 })
 

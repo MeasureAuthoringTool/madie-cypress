@@ -10,9 +10,7 @@ import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { Environment } from "../../../Shared/Environment"
 
-let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
-
 let TCJsonRace = TestCaseJson.TCJsonRaceOMBRaceDetailed
 let TCJsonRace_Update = TestCaseJson.TCJsonRaceOMBRaceDetailed_Update
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
