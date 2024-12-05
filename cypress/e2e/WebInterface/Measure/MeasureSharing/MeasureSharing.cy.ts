@@ -1,7 +1,7 @@
 import { Environment } from "../../../../Shared/Environment"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { Utilities } from "../../../../Shared/Utilities"
+import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
@@ -17,7 +17,6 @@ let cqlLibraryName = 'TestCql' + Date.now()
 let updatedCqlLibraryName = cqlLibraryName + 'someUpdate'
 let updatedMeasureName = measureName + 'someUpdate'
 let updatedMeasuresPageName = ''
-let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
 let measureCQL = MeasureCQL.SBTEST_CQL
 let testCaseTitle = 'Title for Auto Test'
@@ -35,7 +34,6 @@ describe('Measure Sharing', () => {
 
         cy.clearAllCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
 
@@ -47,7 +45,6 @@ describe('Measure Sharing', () => {
         OktaLogin.UILogout()
         cy.clearAllCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
@@ -56,72 +53,19 @@ describe('Measure Sharing', () => {
     it('Verify shared Measure is viewable under My Measures tab', () => {
 
         //Share Measure with ALT User
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/acls',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT',
-                    body: {
-                        "acls": [
-                            {
-                                "userId": harpUserALT,
-                                "roles": [
-                                    "SHARED_WITH"
-                                ]
-                            }
-                        ],
-                        "action": "GRANT"
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body[0].userId).to.eql(harpUserALT)
-                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
-                })
-            })
-        })
-
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
+        
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
         cy.reload()
         cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
-
     })
 
     it('Verify Measure can be edited by the shared user', () => {
 
         //Share Measure with ALT User
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/acls',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT',
-                    body: {
-                        "acls": [
-                            {
-                                "userId": harpUserALT,
-                                "roles": [
-                                    "SHARED_WITH"
-                                ]
-                            }
-                        ],
-                        "action": "GRANT"
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body[0].userId).to.eql(harpUserALT)
-                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
-                })
-            })
-        })
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -166,7 +110,6 @@ describe('Measure Sharing', () => {
 
         //Create New Test case
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-
     })
 })
 
@@ -199,7 +142,6 @@ describe('Measure Sharing - Multiple instances', () => {
     afterEach('LogOut', () => {
 
         OktaLogin.Logout()
-
     })
 
     it('Verify all instances in the Measure set (Version and Draft) are shared to the user', () => {
@@ -207,7 +149,6 @@ describe('Measure Sharing - Multiple instances', () => {
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
         let filePath = 'cypress/fixtures/measureId'
-
 
         //Version the Measure
         MeasuresPage.actionCenter('version')
@@ -237,39 +178,13 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
-        //Share Measure with ALT User
         cy.clearCookies()
         cy.clearLocalStorage()
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/acls',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT',
-                    body: {
-                        "acls": [
-                            {
-                                "userId": harpUserALT,
-                                "roles": [
-                                    "SHARED_WITH"
-                                ]
-                            }
-                        ],
-                        "action": "GRANT"
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body[0].userId).to.eql(harpUserALT)
-                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
-                })
-            })
-        })
+        //Share Measure with ALT User
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -312,33 +227,7 @@ describe('Delete Test Case with Shared user', () => {
         cy.wait(1000)
 
         //Share Measure with ALT User
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/acls',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT',
-                    body: {
-                        "acls": [
-                            {
-                                "userId": harpUserALT,
-                                "roles": [
-                                    "SHARED_WITH"
-                                ]
-                            }
-                        ],
-                        "action": "GRANT"
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body[0].userId).to.eql(harpUserALT)
-                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
-                })
-            })
-        })
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
         //Login as Alt User
         OktaLogin.AltLogin()
@@ -354,6 +243,5 @@ describe('Delete Test Case with Shared user', () => {
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCaseTitle)
-
     })
 })
