@@ -5,7 +5,18 @@ import { CQLLibraryPage } from "./CQLLibraryPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Environment } from "./Environment"
 
-let deleteMeasureAdminAPIKey = Environment.credentials().deleteMeasureAdmin_API_Key
+const deleteMeasureAdminAPIKey = Environment.credentials().deleteMeasureAdmin_API_Key
+const measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
+
+export enum PermissionActions {
+    GRANT = 'GRANT',
+    REVOKE = 'REVOKE'
+}
+
+export enum MadieObject {
+    Measure = 'measure',
+    Library = 'library'
+}
 
 export class Utilities {
 
@@ -634,5 +645,50 @@ export class Utilities {
         } else {
             cy.get('.toast', { timeout }).should('have.text', message)
         }
+    }
+
+    public static setSharePermissions(objectType: MadieObject, action: PermissionActions, user: string) {
+        let path: string
+        let urlPath: string
+
+        if (objectType === MadieObject.Library) {
+            path = 'cypress/fixtures/cqlLibraryId'
+            urlPath = 'cql-libraries'
+        } else {
+            path = 'cypress/fixtures/measureId'
+            urlPath = 'measures'
+        }
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(path).should('exist').then((id) => {
+                cy.request({
+                    url: '/api/' + urlPath + '/' + id + '/acls',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        'api-key': measureSharingAPIKey
+                    },
+                    method: 'PUT',
+                    body: {
+                        "acls": [
+                            {
+                                "userId": user,
+                                "roles": [
+                                    "SHARED_WITH"
+                                ]
+                            }
+                        ],
+                        "action": action
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body[0].userId).to.eql(user)
+                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
+                })
+            })
+        })
+
+
+
+
     }
 }
