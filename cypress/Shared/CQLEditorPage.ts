@@ -138,6 +138,7 @@ export class CQLEditorPage {
 
     //Functions page
     public static readonly functionsTab = '[data-testid="functions-tab"]'
+    public static readonly savedFunctionsTab = '[data-testid="saved-functions-tab"]'
 
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
