@@ -240,3 +240,48 @@ describe('Delete Test Case with Shared user', () => {
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCaseTitle)
     })
 })
+
+describe('Remove user\'s share access from a measure', () => {
+
+    beforeEach('Create Measure and Set Access Token', () => {
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+
+        // initial share to harpUserAlt
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
+    })
+
+    afterEach('Log out and Clean up', () => {
+
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+    })
+
+    it('After removing access, user can no longer edit on the measure', () => {
+
+        OktaLogin.AltLogin()
+
+        MeasuresPage.actionCenter('edit')
+
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        // add a test case to prove edit access
+        TestCasesPage.createTestCase('fresh tc', 'created by harpUserAlt', 'PASS', 'null')
+
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.REVOKE, harpUserALT)
+
+        // refresh to update permissions
+        cy.reload()
+
+        // proves that edit access was removed
+        cy.get(TestCasesPage.newTestCaseButton).should('be.disabled')
+    })
+})

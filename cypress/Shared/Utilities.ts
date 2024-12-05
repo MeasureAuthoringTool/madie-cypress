@@ -681,8 +681,10 @@ export class Utilities {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body[0].userId).to.eql(user)
-                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
+                    if (action === PermissionActions.GRANT) {
+                        expect(response.body[0].userId).to.eql(user)
+                        expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
+                    }
                 })
             })
         })

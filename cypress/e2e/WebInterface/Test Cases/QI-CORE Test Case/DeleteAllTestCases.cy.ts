@@ -4,7 +4,7 @@ import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Utilities } from "../../../../Shared/Utilities"
+import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { Environment } from "../../../../Shared/Environment"
@@ -20,7 +20,6 @@ let secondTestCaseSeries = 'ICFTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid_w_All_Encounter
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
 let qdmMeasureCQL = MeasureCQL.QDMSimpleCQL
 
@@ -79,37 +78,7 @@ describe('QI-Core : Delete All Test Cases', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/acls',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT',
-                    body: {
-                        "acls": [
-                            {
-                                "userId": harpUserALT,
-                                "roles": [
-                                    "SHARED_WITH"
-                                ]
-                            }
-                        ],
-                        "action": "GRANT"
-                    }
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body[0].userId).to.eql(harpUserALT)
-                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
-                })
-            })
-        })
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
         //Login to UI as ALT User
         OktaLogin.AltLogin()
@@ -203,37 +172,7 @@ describe('QDM : Delete All Test Cases', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/acls',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT',
-                    body: {
-                        "acls": [
-                            {
-                                "userId": harpUserALT,
-                                "roles": [
-                                    "SHARED_WITH"
-                                ]
-                            }
-                        ],
-                        "action": "GRANT"
-                    }
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body[0].userId).to.eql(harpUserALT)
-                    expect(response.body[0].roles[0]).to.eql('SHARED_WITH')
-                })
-            })
-        })
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
         //Login to UI as ALT User
         OktaLogin.AltLogin()
