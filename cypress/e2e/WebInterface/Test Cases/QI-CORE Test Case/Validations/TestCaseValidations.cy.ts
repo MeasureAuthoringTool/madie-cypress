@@ -28,7 +28,13 @@ let TCJsonRace = TestCaseJson.TCJsonRaceOMBRaceDetailed
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 let cqlLibraryName = 'TestLibrary' + Date.now()
 
-// unverified after changes to measure sharing
+/*
+    These tests all need to be updated to use QiCore STU6.
+    They were written before we restricted the UI Builder to STU 6 only.
+
+    Some tests also contain unverified changes to "measure sharing"
+    https://jira.cms.gov/browse/MAT-7913
+ */
 
 // skipping the below test until the feature flag controlling the element tab for QI Core Test Cases is removed
 describe.skip('QI Core Gender, Race, and Ethnicity data validations: Create test case with Gender, Race, and Ethnicity data in Json', () => {
