@@ -95,7 +95,7 @@ describe('Edit Measure Validations', () => {
 
         //Add invalid Endorser Number
         cy.get(EditMeasurePage.endorsingOrganizationTextBox).click()
-        cy.get(EditMeasurePage.endorsingOrganizationTextBox).type('CMS',{delay:50})
+        cy.get(EditMeasurePage.endorsingOrganizationTextBox).type('CMS', { delay: 50 })
         cy.get('#endorser-listbox').contains('CMS Consensus Based Entity').click()
         cy.get(EditMeasurePage.endorsementNumber).type('23!@$')
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
@@ -148,10 +148,10 @@ describe('Measurement Period Validations', () => {
 
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
-        cy.get(EditMeasurePage.mpStart).type('{selectall}{backspace}{backspace}{backspace}').wait(1000)
+        cy.get(EditMeasurePage.mpStart).type('{selectall}{backspace}{backspace}{backspace}')
         cy.get(EditMeasurePage.mpStart).focus().blur()
         cy.get(CreateMeasurePage.editMeasurementPeriodStartDateError).should('contain.text', 'Measurement period start date is required')
-        cy.get(EditMeasurePage.mpEnd).type('{selectall}{backspace}{backspace}{backspace}').wait(1000)
+        cy.get(EditMeasurePage.mpEnd).type('{selectall}{backspace}{backspace}{backspace}')
         cy.get(EditMeasurePage.mpEnd).focus().blur()
         cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'Measurement period end date is required')
     })

@@ -168,8 +168,6 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
 
-        cy.wait(1000)
-
         //run test cases
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('exist')
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
@@ -333,8 +331,6 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
-
-        cy.wait(1000)
 
         //run test cases
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('exist')

@@ -35,7 +35,6 @@ describe('Measure Sharing', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
     })
@@ -46,7 +45,6 @@ describe('Measure Sharing', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
@@ -54,7 +52,7 @@ describe('Measure Sharing', () => {
 
         //Share Measure with ALT User
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
-        
+
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
@@ -86,13 +84,13 @@ describe('Measure Sharing', () => {
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click()
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).wait(2000).click()
+        cy.get(EditMeasurePage.measureGroupsTab).click()
 
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
         Utilities.setMeasureGroupType()
@@ -125,7 +123,6 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.clearLocalStorage()
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
-        cy.wait(1000)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
@@ -157,11 +154,11 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(newMeasureName, versionNumber)
-        cy.log('Version Created Successfully').wait(2700)
+        cy.log('Version Created Successfully')
 
         //Draft the Versioned Measure
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
             cy.get('[data-testid="draft-action-btn"]').should('be.visible')
             cy.get('[data-testid="draft-action-btn"]').should('be.enabled')
             cy.get('[data-testid="draft-action-btn"]').click()
@@ -207,7 +204,6 @@ describe('Delete Test Case with Shared user', () => {
         cy.clearLocalStorage()
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
-        cy.wait(1000)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
@@ -224,7 +220,6 @@ describe('Delete Test Case with Shared user', () => {
         cy.clearLocalStorage()
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
-        cy.wait(1000)
 
         //Share Measure with ALT User
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)

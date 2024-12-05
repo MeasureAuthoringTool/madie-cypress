@@ -198,7 +198,7 @@ describe('Create Test Case Validations', () => {
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.newTestCaseButton).click()
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle).wait(3000)
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(twoFiftyTwoCharacters)
         cy.get(TestCasesPage.createTestCaseSaveButton).should('be.disabled')
     })
@@ -290,7 +290,6 @@ describe('Edit Test Case Validations', () => {
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.testCaseTitle).clear()
-        cy.wait(1000)
 
         //Update Test Case Title with more than 250 characters
         cy.get(TestCasesPage.testCaseTitle).type(twoFiftyTwoCharacters, { delay: 0 })
@@ -313,7 +312,7 @@ describe('Edit Test Case Validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //navigate to the details page
-        cy.get(TestCasesPage.detailsTab).click().wait(2000)
+        cy.get(TestCasesPage.detailsTab).click()
 
         cy.get(TestCasesPage.testCaseTitle).click().focus()
         cy.get(TestCasesPage.testCaseTitle).clear()
@@ -402,7 +401,7 @@ describe('Dirty Check Validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //navigate to the details page
-        cy.get(TestCasesPage.detailsTab).click().wait(2000)
+        cy.get(TestCasesPage.detailsTab).click()
 
         cy.get(TestCasesPage.testCaseTitle).click().focus()
         cy.get(TestCasesPage.testCaseTitle).clear().type('tc01')

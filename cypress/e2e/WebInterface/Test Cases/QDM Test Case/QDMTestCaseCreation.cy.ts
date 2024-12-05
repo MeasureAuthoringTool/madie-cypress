@@ -180,13 +180,13 @@ describe('Validating the creation of QDM Test Case', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob
-        cy.get(TestCasesPage.QDMDob).wait(2500).type('01/01/2020 12:00 PM').wait(2500)
+        cy.get(TestCasesPage.QDMDob).type('01/01/2020 12:00 PM')
 
         //save dob value
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
         //click on bread crumb to navigate back to the main test case list page
-        cy.get(TestCasesPage.testCasesBCLink).should('contain.text', 'Test Cases').wait(500).click()
+        cy.get(TestCasesPage.testCasesBCLink).should('contain.text', 'Test Cases').click()
 
         //verify that the user is, now, on the test case list page
         cy.readFile(measurePath).should('exist').then((measureId) => {
@@ -424,7 +424,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get('[data-testid="add-code-concept-button"]').click()
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(4000)
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
@@ -450,7 +450,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get('[data-testid="add-negation-rationale"]').click()
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(4000)
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)

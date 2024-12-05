@@ -71,7 +71,7 @@ describe('QDM Library Includes fields', () => {
 
         //Search for QDM Libraries
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('sdoh')
-        cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
+        cy.get(CQLEditorPage.librarySearchBtn).click()
         cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionSDOH3.0.000ltj7708SDOH2.0.000ltj7708SDOH1.0.000ltj7708')
     })
 
@@ -82,7 +82,7 @@ describe('QDM Library Includes fields', () => {
 
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
-        cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
+        cy.get(CQLEditorPage.librarySearchBtn).click()
         cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionUATVTEQDM0.1.000YaHu1257VTEQDM8.1.000YaHu1257VTEQDM8.0.000YaHu1257VTEQDM7.0.000YaHu1257VTEQDM6.0.000YaHu1257')
 
         //Apply Library to CQL
@@ -103,7 +103,7 @@ describe('QDM Library Includes fields', () => {
 
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('VTE')
-        cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
+        cy.get(CQLEditorPage.librarySearchBtn).click()
         cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionUATVTEQDM0.1.000YaHu1257VTEQDM8.1.000YaHu1257VTEQDM8.0.000YaHu1257VTEQDM7.0.000YaHu1257VTEQDM6.0.000YaHu1257')
 
         //Apply Library to CQL
@@ -120,7 +120,7 @@ describe('QDM Library Includes fields', () => {
 
         //Apply different Library with duplicate Alias
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('QDM')
-        cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
+        cy.get(CQLEditorPage.librarySearchBtn).click()
         cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionASNQDM0.2.000AlannahMarshASNQDM0.1.000AlannahMarshAdultOutpatientEncountersQDM4.0.000dlee38AdultOutpatientEncountersQDM3.0.000dlee38AdultOutpatientEncountersQDM2.0.000dlee38')
         cy.get('[data-testid="edit-button-0"]').click()
         cy.get('[data-testid="library-alias-input"]').type('VTE')
@@ -168,7 +168,7 @@ describe('QDM Library Includes fields', () => {
         cy.get(Global.keepWorkingCancel).click()
 
         //confirm contents in CQL editor still contains changes and save button is still available
-        cy.get('[data-testid="editor-search-button"]').click().wait(1000)
+        cy.get('[data-testid="editor-search-button"]').click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
         Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
@@ -192,7 +192,7 @@ describe('QDM Library Includes fields', () => {
         //confirm that CQL value is the same as it was prior to change and the save button is not available
         cy.reload()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get('[data-testid="editor-search-button"]').click().wait(1000)
+        cy.get('[data-testid="editor-search-button"]').click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
         Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
@@ -233,7 +233,7 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library MATGlobalCommonFunctionsQDM has been successfully removed from the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get('[data-testid="editor-search-button"]').click().wait(1000)
+        cy.get('[data-testid="editor-search-button"]').click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
 
@@ -282,7 +282,7 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library MATGlobalCommonFunctionsQDM has been successfully removed from the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get('[data-testid="SearchIcon"]').click().wait(1000)
+        cy.get('[data-testid="SearchIcon"]').click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
 
@@ -322,7 +322,7 @@ describe('QDM Library Includes fields', () => {
         cy.get(Global.keepWorkingCancel).click()
 
         //confirm contents in CQL editor still contains changes and save button is still available
-        cy.get('[data-testid="editor-search-button"]').click().wait(1000)
+        cy.get('[data-testid="editor-search-button"]').click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
         Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
@@ -347,7 +347,7 @@ describe('QDM Library Includes fields', () => {
         //confirm that CQL value is the same as it was prior to change and the save button is not available
         cy.reload()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get('[data-testid="editor-search-button"]').click().wait(1000)
+        cy.get('[data-testid="editor-search-button"]').click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
         Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
@@ -393,7 +393,7 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library MATGlobalCommonFunctionsQDM has been successfully edited in the CQL')
 
         //Confirm the Edits for the library include statement have been applied to the CQL
-        cy.get('[data-testid="editor-search-button"]').click().wait(1000)
+        cy.get('[data-testid="editor-search-button"]').click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
     })
@@ -438,7 +438,7 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library MATGlobalCommonFunctionsQDM has been successfully edited in the CQL')
 
         //Confirm the Edits for the library include statement have been applied to the CQL
-        cy.get('[data-testid="editor-search-button"]').click().wait(1000)
+        cy.get('[data-testid="editor-search-button"]').click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
 
@@ -461,7 +461,7 @@ describe('QDM Library Includes fields', () => {
         cy.get('[data-testid="library-version-container"] > .result-value').should('not.be.enabled')
     })
 
-    it('Verify all Qi Core Library versions are displayed while editing saved Libraries', () =>{
+    it('Verify all Qi Core Library versions are displayed while editing saved Libraries', () => {
 
         cy.get(CQLEditorPage.includesTab).click()
 

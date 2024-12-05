@@ -42,7 +42,7 @@ describe('QDM CQL Library Validations', () => {
 
         //Add CQL Library name with _
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(CQLLibraryNameWithUnderscore)
-        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).wait(1000).click()
+        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).click()
         cy.get(CQLLibraryPage.cqlLibraryModelQDM).click()
 
         //enter description detail
@@ -62,7 +62,7 @@ describe('QDM CQL Library Validations', () => {
 
     it('Verify _ is allowed while editing QDM CQL Library name', () => {
 
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
+        cy.get(Header.cqlLibraryTab).click()
 
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()

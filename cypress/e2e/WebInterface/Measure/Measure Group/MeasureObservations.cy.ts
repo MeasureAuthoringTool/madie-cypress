@@ -56,7 +56,7 @@ describe('Measure Observations', () => {
         cy.log('Adding Measure Observations')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('exist')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('be.visible')
-        cy.get(MeasureGroupPage.addDenominatorObservationLink).wait(1000).click()
+        cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'booleanFunction') // select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
@@ -187,7 +187,7 @@ describe('Measure Observations', () => {
         //Add Denominator Observation
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('exist')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('be.visible')
-        cy.get(MeasureGroupPage.addDenominatorObservationLink).wait(1000).click()
+        cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'booleanFunction') // select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
@@ -319,7 +319,7 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.log('Adding Measure Observations')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('exist')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('be.visible')
-        cy.get(MeasureGroupPage.addDenominatorObservationLink).wait(1000).click()
+        cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'booleanFunction') // select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
@@ -620,8 +620,8 @@ describe('Measure Observation - Expected Values', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).wait(1000).check()
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).wait(1000).should('be.checked')
+        cy.get(TestCasesPage.testCaseMSRPOPLExpected).check()
+        cy.get(TestCasesPage.testCaseMSRPOPLExpected).should('be.checked')
 
         //Verify Measure Observation row is added
         cy.get(TestCasesPage.measureObservationRow).should('exist')
@@ -658,7 +658,7 @@ describe('Measure Observation - Expected Values', () => {
         cy.log('Adding Measure Observations')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('exist')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('be.visible')
-        cy.get(MeasureGroupPage.addDenominatorObservationLink).wait(1000).click()
+        cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'booleanFunction') // select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
@@ -706,10 +706,10 @@ describe('Measure Observation - Expected Values', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseDENOMExpected).wait(1000).check()
-        cy.get(TestCasesPage.testCaseDENOMExpected).wait(1000).should('be.checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).wait(1000).check()
-        cy.get(TestCasesPage.testCaseNUMERExpected).wait(1000).should('be.checked')
+        cy.get(TestCasesPage.testCaseDENOMExpected).check()
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
+        cy.get(TestCasesPage.testCaseNUMERExpected).check()
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         //Verify Numerator and Denominator Observation rows are added
         cy.get(TestCasesPage.denominatorObservationRow).should('exist')

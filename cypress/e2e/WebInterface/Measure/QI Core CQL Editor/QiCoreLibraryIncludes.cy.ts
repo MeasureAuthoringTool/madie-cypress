@@ -48,7 +48,7 @@ describe('Qi-Core Library Includes fields', () => {
 
         //Search for QDM Libraries
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
-        cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
+        cy.get(CQLEditorPage.librarySearchBtn).click()
         cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionVTE8.9.000YaHu1257VTE8.8.000YaHu1257VTE8.7.000YaHu1257VTE8.6.000YaHu1257')
     })
 
@@ -59,7 +59,7 @@ describe('Qi-Core Library Includes fields', () => {
 
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
-        cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
+        cy.get(CQLEditorPage.librarySearchBtn).click()
         cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionVTE8.9.000YaHu1257VTE8.8.000YaHu1257VTE8.7.000YaHu1257VTE8.6.000YaHu1257')
 
         //Apply Library to CQL
@@ -80,7 +80,7 @@ describe('Qi-Core Library Includes fields', () => {
 
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
-        cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
+        cy.get(CQLEditorPage.librarySearchBtn).click()
         cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionVTE8.9.000YaHu1257VTE8.8.000YaHu1257VTE8.7.000YaHu1257VTE8.6.000YaHu1257')
 
         //Apply Library to CQL
@@ -97,7 +97,7 @@ describe('Qi-Core Library Includes fields', () => {
 
         //Apply different Library with duplicate Alias
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('fhir')
-        cy.get(CQLEditorPage.librarySearchBtn).click().wait(1000)
+        cy.get(CQLEditorPage.librarySearchBtn).click()
         cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionCDSConnectCommonsForFHIRv4010.1.000pauld@mitre.orgFHIRCommon4.3.000julietrubiniFHIRCommon4.2.000julietrubiniFHIRCommon4.1.000julietrubiniFHIRCommon4.0.000julietrubin')
         cy.get('[data-testid="edit-button-0"]').click()
         cy.get('[data-testid="library-alias-input"]').type('VTE')
@@ -146,7 +146,7 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(Global.keepWorkingCancel).click()
 
         //confirm contents in CQL editor still contains changes and save button is still available
-        cy.get('[data-testid="SearchIcon"]').click().wait(1000)
+        cy.get('[data-testid="SearchIcon"]').click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
         Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
@@ -437,7 +437,7 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get('[data-testid="library-version-container"] > .result-value').should('not.be.enabled')
     })
 
-    it('Verify all Qi Core Library versions are displayed while editing saved Libraries', () =>{
+    it('Verify all Qi Core Library versions are displayed while editing saved Libraries', () => {
 
         cy.get(CQLEditorPage.includesTab).click()
 

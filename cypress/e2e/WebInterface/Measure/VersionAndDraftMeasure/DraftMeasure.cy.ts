@@ -40,7 +40,6 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.wait(3000)
         OktaLogin.UILogout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
         OktaLogin.Login()
@@ -62,7 +61,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(5000)
+        cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
@@ -79,7 +78,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
 
         //navigate back to the main MADiE / measure list page
-        cy.get(Header.mainMadiePageButton).click().wait(2500)
+        cy.get(Header.mainMadiePageButton).click()
         cy.reload()
 
         MeasuresPage.actionCenter('draft')
@@ -114,7 +113,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(5000)
+        cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
@@ -189,7 +188,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(Header.mainMadiePageButton).click()
         //Search for the Measure using Measure name
         cy.log('Search Measure with measure name')
-        cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).wait(1000).type('{enter}')
+        cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
         MeasuresPage.actionCenter('edit')
 
@@ -254,7 +253,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(Header.mainMadiePageButton).click()
         //Search for the Measure using Measure name
         cy.log('Search Measure with measure name')
-        cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageNameSecond).wait(1000).type('{enter}')
+        cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageNameSecond).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageNameSecond)
         MeasuresPage.actionCenter('edit')
 
@@ -355,7 +354,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(Header.mainMadiePageButton).click()
         //Search for the Measure using Measure name
         cy.log('Search Measure with measure name')
-        cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).wait(1000).type('{enter}')
+        cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
         MeasuresPage.actionCenter('edit')
 
@@ -367,7 +366,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(7000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)
 

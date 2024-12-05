@@ -80,7 +80,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
 
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')
             cy.get('[data-testid="export-action-btn"]').click()
@@ -126,7 +126,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         cy.get(Header.measures).click()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')
             cy.get('[data-testid="export-action-btn"]').click()
@@ -151,7 +151,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         cy.get(Header.measures).click()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')
             cy.get('[data-testid="export-action-btn"]').click()
@@ -194,7 +194,7 @@ describe('Error Message on Measure Export when the Measure does not have Populat
         cy.get(Header.measures).click()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')
             cy.get('[data-testid="export-action-btn"]').click()
@@ -241,7 +241,7 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
         cy.get(Header.measures).click()
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')
             cy.get('[data-testid="export-action-btn"]').click()

@@ -169,7 +169,7 @@ describe('Remove Test case attribute', () => {
         //Delete the attribute from Elements table
         cy.get('[class="qpp-c-button view-with-dropdown-button"]').click({ force: true })
         cy.get('[class="btn-container"]').contains('Delete').click({ force: true })
-        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Commenting until feature flag for JSON tab is removed
         //Navigate to JSON tab and verify the attribute is deleted from tc Json

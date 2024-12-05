@@ -270,7 +270,7 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).wait(4000).click()
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
         TestCasesPage.testCaseAction('edit')
@@ -294,7 +294,7 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
                 '      union ["Encounter, Performed": "Dementia"]')
         })
 
-       
+
         // verify Results arrow is shown
         cy.contains('Results').should('have.descendants', 'svg')
         //Verify Test case Execution Results
@@ -397,7 +397,7 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).wait(4000).click()
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
         TestCasesPage.testCaseAction('edit')

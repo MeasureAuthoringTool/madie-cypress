@@ -79,7 +79,7 @@ describe('Measure Versioning validations', () => {
 
     it('User can not version Measure if there is no CQL', () => {
 
-        cy.get(Header.measures).click().wait(2000)
+        cy.get(Header.measures).click()
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -97,7 +97,7 @@ describe('Measure Versioning validations', () => {
 
     it('User can not Version if the Measure CQL has errors', () => {
 
-        cy.get(Header.measures).click().wait(2000)
+        cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
@@ -128,7 +128,7 @@ describe('Measure Versioning validations', () => {
 
     it('Error message on popup screen when the confirmed version number does not match new version number', () => {
 
-        cy.get(Header.measures).click().wait(2000)
+        cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
 
         //Add CQL
@@ -162,7 +162,7 @@ describe('Non Measure owner unable to create Version', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
+
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -172,7 +172,7 @@ describe('Non Measure owner unable to create Version', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
+
         OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.AltLogin()
@@ -195,7 +195,7 @@ describe('Non Measure owner unable to create Version', () => {
         cy.reload()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().wait(1500).click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
             cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
 

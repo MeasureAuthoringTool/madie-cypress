@@ -1,10 +1,10 @@
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {Utilities} from "../../../../Shared/Utilities"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {Global} from "../../../../Shared/Global"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { Utilities } from "../../../../Shared/Utilities"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Global } from "../../../../Shared/Global"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
@@ -13,7 +13,7 @@ let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
 describe('QDM Measure Definition', () => {
 
-       beforeEach('Create Measure, add Cohort group and Login', () => {
+    beforeEach('Create Measure, add Cohort group and Login', () => {
 
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
@@ -75,7 +75,7 @@ describe('QDM Measure Definition ownership validation', () => {
 
     it('Non Measure owner unable to add Measure Definition', () => {
 
-        cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
+        cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
         MeasuresPage.actionCenter('edit')
 

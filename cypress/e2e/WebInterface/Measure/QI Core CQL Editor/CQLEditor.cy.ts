@@ -271,7 +271,7 @@ describe('Measure: CQL Editor', () => {
         CQLEditorPage.clickCQLEditorTab()
 
         cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents).wait(1500)
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
 
         //save the value in the CQL Editor
@@ -288,7 +288,7 @@ describe('Measure: CQL Editor', () => {
         cy.get(EditMeasurePage.measureDetailsTab).click()
 
         cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear()
-        cy.get(EditMeasurePage.cqlLibraryNameTextBox).type(newCqlLibraryName + 'TEST').wait(1500)
+        cy.get(EditMeasurePage.cqlLibraryNameTextBox).type(newCqlLibraryName + 'TEST')
 
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
         cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
@@ -441,7 +441,7 @@ describe('Measure: CQL Editor: valueSet', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "VSAC: 0:102 | Request failed with status code 404 for oid = 2.16.840.1.113883.3.464.1003.110.12.1059999 " +
-             "location = 36:0-36:102")
+            "location = 36:0-36:102")
 
     })
 

@@ -70,8 +70,8 @@ describe('Sort by each of the test case list page\'s columns', () => {
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -157,7 +157,7 @@ describe('Sort by each of the test case list page\'s columns', () => {
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/AB Test Series 2Be Test Case 2 PassesB Description 2' + todaysDate + 'Select1N/AA Test Series 1A Test Case 1 FailsA Description 1' + todaysDate + 'Select')
 
         //run test case
-        cy.get(TestCasesPage.executeTestCaseButton).click().wait(1500)
+        cy.get(TestCasesPage.executeTestCaseButton).click()
 
         //click status to sort descending
         cy.get(TestCasesPage.tcColumnHeading).contains('Status').click()

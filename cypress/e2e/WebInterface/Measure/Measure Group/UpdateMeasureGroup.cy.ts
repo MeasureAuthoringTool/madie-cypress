@@ -91,7 +91,7 @@ describe('Validate Measure Group', () => {
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
         cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Procedure').wait(1000)
+        cy.get(MeasureGroupPage.popBasis).type('Procedure')
         cy.get(MeasureGroupPage.popBasisOption).click()
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')

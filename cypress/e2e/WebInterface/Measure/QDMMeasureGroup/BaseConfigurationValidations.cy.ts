@@ -365,10 +365,10 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
 
         //click on the "All Measures" tab
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 70000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').wait(1000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         Utilities.waitForElementEnabled(MeasuresPage.allMeasuresTab, 70000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.enabled').wait(1000)
-        cy.get(MeasuresPage.allMeasuresTab).wait(10000).click()
+        cy.get(MeasuresPage.allMeasuresTab).should('be.enabled')
+        cy.get(MeasuresPage.allMeasuresTab).click()
         MeasuresPage.actionCenter('edit', 1)
 
         //Click on Measure Group tab
@@ -462,7 +462,7 @@ describe('Updates on Base Configuration page', () => {
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully').wait(3000)
+        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
@@ -473,7 +473,7 @@ describe('Updates on Base Configuration page', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'd')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.').wait(3000)
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //navigate to the main measures page
         cy.get(Header.measures).click()
@@ -582,7 +582,7 @@ describe('Updates on Base Configuration page', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'ipp')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.').wait(3000)
+        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //click on / navigate to the Base Configuration sub-tab
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
@@ -596,7 +596,7 @@ describe('Updates on Base Configuration page', () => {
         //Assert the confirmation message
         //<div role="presentation" data-testid="update-measure-group-patient-basis-dialog" class="MuiDialog-root MuiModal-root css-126xj0f"><div aria-hidden="true" class="MuiBackdrop-root MuiModal-backdrop css-919eu4" style="opacity: 1; transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1);"></div><div tabindex="0" data-testid="sentinelStart"></div><div class="MuiDialog-container MuiDialog-scrollPaper css-ekeie0" role="presentation" tabindex="-1" style="opacity: 1; transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1);"><div class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-mbdu2s" role="dialog" aria-labelledby="mui-21"><div class="jss29"><h2 class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root jss30 css-ohyacs" id="mui-21">Change Patient Basis?</h2><div><button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-1yxmbwk" tabindex="0" type="button"><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium jss31 css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="CloseIcon"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg><span class="MuiTouchRipple-root css-w0pj6f"></span></button></div></div><hr class="MuiDivider-root MuiDivider-fullWidth jss35 css-39bbo6"><div class="MuiDialogContent-root css-1ty026z"><div><p class="MuiTypography-root MuiTypography-body1 jss32 css-9l3uo3">Your Measure Patient Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.</p><p class="MuiTypography-root MuiTypography-body1 jss33 css-9l3uo3">Are you sure you want to Save Changes?</p><p class="MuiTypography-root MuiTypography-body1 jss34 css-9l3uo3">This action cannot be undone.</p></div></div><hr class="MuiDivider-root MuiDivider-fullWidth jss35 css-39bbo6"><div class="MuiDialogActions-root jss36 MuiDialogActions-spacing css-1vskg8q"><button data-testid="update-measure-group-patient-basis-modal-cancel-btn" class="qpp-c-button qpp-c-button--secondary" type="button">No, Keep Working</button><button data-testid="update-measure-group-patient-basis-modal-agree-btn" class="qpp-c-button" type="button" style="background: rgb(66, 75, 90); margin-top: 0px;">Yes, Save changes</button></div></div></div><div tabindex="0" data-testid="sentinelEnd"></div></div>
         cy.get('[data-testid="update-measure-group-patient-basis-dialog"]').should('contain.text', 'Change Patient Basis?')
-        cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Patient Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.').wait(3000)
+        cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Patient Basis is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.')
 
         //Click on 'No, Keep Working' button
         cy.get(MeasureGroupPage.updatePatientBasisCancelBtn).click()
@@ -608,7 +608,7 @@ describe('Updates on Base Configuration page', () => {
         //Click on 'Yes, Save Changes' button
         cy.get(MeasureGroupPage.updatePatientBasisContinueBtn).click()
         //Verify that the radio button 'Yes' is enabled
-        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).should('be.enabled').wait(500)
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).should('be.enabled')
 
         //Navigate to Criteria page and verify the populations are cleared
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()

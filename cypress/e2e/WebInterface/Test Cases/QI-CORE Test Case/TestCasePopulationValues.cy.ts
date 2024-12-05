@@ -375,7 +375,6 @@ describe('Test Case Population dependencies', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(13500)
         OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial PopulationOne', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne', 'Boolean')
         OktaLogin.Login()
@@ -592,7 +591,7 @@ describe('Test Case Expected Measure Group population values based on initial me
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(14500)
+
         OktaLogin.Logout()
         MeasureGroupPage.CreateRatioMeasureGroupAPI(null, null, null, null, null, 'Procedure')
         OktaLogin.Login()

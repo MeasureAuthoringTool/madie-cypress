@@ -117,7 +117,6 @@ describe('Qi Core6 option available', () => {
 
         Utilities.waitForElementVisible(LandingPage.newMeasureButton, 30000)
         Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 30000)
-        cy.wait(2000)
         cy.get(LandingPage.newMeasureButton).click({ force: true })
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
         cy.get(CreateMeasurePage.measureModelDropdown).click()

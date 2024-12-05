@@ -171,8 +171,6 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
 
-        cy.wait(1000)
-
         //run test cases
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('exist')
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
@@ -343,7 +341,6 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
 
-        cy.wait(1000)
 
         //run test cases
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('exist')
