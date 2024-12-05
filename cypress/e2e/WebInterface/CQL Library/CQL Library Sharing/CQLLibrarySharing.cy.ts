@@ -3,6 +3,7 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
+import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
@@ -10,7 +11,6 @@ let randValue = (Math.floor((Math.random() * 1000) + 1))
 let updatedCQLLibraryName = CQLLibraryName + randValue + 'SomeUpdate' + 9
 let randomCQLLibraryName = 'TransferTestCQLLibrary' + randValue + 5
 let CQLLibraryPublisher = 'SemanticBits'
-let measureSharingAPIKey = Environment.credentials().deleteMeasureAdmin_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
 let versionNumber = '1.0.000'
 
@@ -42,32 +42,7 @@ describe('CQL Library Sharing', () => {
         cy.wait(1000)
 
         //Share Library with ALT User
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/cql-libraries/' + id + '/acls',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT',
-                    body: {
-                        "acls": [
-                            {
-                                "userId": harpUserALT,
-                                "roles": [
-                                    "SHARED_WITH"
-                                ]
-                            }
-                        ],
-                        "action": "GRANT"
-                    }
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                })
-            })
-        })
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -81,38 +56,13 @@ describe('CQL Library Sharing', () => {
 
     it('Verify CQL Library can be edited by the shared user', () => {
 
-        //Share Library with ALT User
         cy.clearCookies()
         cy.clearLocalStorage()
         //set local user that does not own the Library
         cy.setAccessTokenCookie()
         cy.wait(1000)
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/cql-libraries/' + id + '/acls',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT',
-                    body: {
-                        "acls": [
-                            {
-                                "userId": harpUserALT,
-                                "roles": [
-                                    "SHARED_WITH"
-                                ]
-                            }
-                        ],
-                        "action": "GRANT"
-                    }
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                })
-            })
-        })
+        //Share Library with ALT User
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -188,32 +138,7 @@ describe('CQL Library Sharing - Multiple instances', () => {
         //set local user that does not own the Library
         cy.setAccessTokenCookie()
         cy.wait(1000)
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/cql-libraries/' + id + '/acls',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT',
-                    body: {
-                        "acls": [
-                            {
-                                "userId": harpUserALT,
-                                "roles": [
-                                    "SHARED_WITH"
-                                ]
-                            }
-                        ],
-                        "action": "GRANT"
-                    }
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                })
-            })
-        })
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
         OktaLogin.AltLogin()

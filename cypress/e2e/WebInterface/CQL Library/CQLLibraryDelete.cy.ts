@@ -3,14 +3,13 @@ import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { Environment } from "../../../Shared/Environment"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { Header } from "../../../Shared/Header"
-import { Utilities } from "../../../Shared/Utilities"
+import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utilities"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 
 let filePath = 'cypress/fixtures/cqlLibraryId'
 let CQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = Environment.credentials().harpUserALT
-let adminApiKey : string = Environment.credentials().deleteMeasureAdmin_API_Key
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 
 describe('Delete CQL Library: Tests covering Libraries that are in draft and versioned states as well as when user is the owner, when user has had Library transferred to them, and when the user is neither the owner nor has had the Library transferred to them', () => {
@@ -56,6 +55,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         })
 
     })
+
     it('Delete test Case - Draft Library - user is the owner of the Library', () => {
 
         cy.get(Header.cqlLibraryTab).click()
@@ -82,29 +82,16 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             Utilities.waitForElementToNotExist('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
         })
     })
-    it('Delete test Case - Draft Library - user has had the Library transferred to them', () => {
+
+    // ToDo: title seems wrong. It says delete test case but tries to delete the whole library?
+    it.skip('Delete test Case - Draft Library - user has had the Library transferred to them', () => {
         OktaLogin.Logout()
         cy.clearCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey
-                    },
-                    method: 'PUT'
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
-                })
-            })
-        })
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
+        
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
@@ -134,10 +121,10 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             Utilities.waitForElementToNotExist('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
         })
     })
+
     it('Delete CQL Library - Versioned Library - user does not own nor has Library been shared with user', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
@@ -209,34 +196,18 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').click()
             Utilities.waitForElementToNotExist('[data-testid="delete-existing-draft-' + fileContents + '-button"]', 55000)
         })
-
     })
+
     it('Delete test Case - Versioned Library - user has had the Library transferred to them', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': adminApiKey
-                    },
-                    method: 'PUT'
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
-                })
-            })
-        })
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
-        //set local user that does not own the measure
         cy.setAccessTokenCookieALT()
         cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {

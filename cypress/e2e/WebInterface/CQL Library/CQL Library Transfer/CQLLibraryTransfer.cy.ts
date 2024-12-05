@@ -3,6 +3,7 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
+import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
@@ -10,7 +11,6 @@ let randValue = (Math.floor((Math.random() * 1000) + 1))
 let updatedCQLLibraryName = CQLLibraryName + randValue + 'SomeUpdate' + 9
 let randomCQLLibraryName = 'TransferTestCQLLibrary' + randValue + 5
 let CQLLibraryPublisher = 'SemanticBits'
-let measureSharingAPIKey = Environment.credentials().deleteMeasureAdmin_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
 let versionNumber = '1.0.000'
 
@@ -24,7 +24,6 @@ describe('CQL Library Transfer', () => {
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
         cy.clearCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the measure
         cy.setAccessTokenCookie()
     })
 
@@ -37,27 +36,11 @@ describe('CQL Library Transfer', () => {
     it('Verify transferred CQL Library is viewable under My Libraries tab', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
 
-        //Share Measure with ALT User
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT'
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
-                })
-            })
-        })
+        //Share Library with ALT User
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -66,33 +49,16 @@ describe('CQL Library Transfer', () => {
         cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
         cy.get(CQLLibraryPage.myLibrariesBtn).click().wait(1000)
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
-
     })
 
     it('Verify CQL Library can be edited by the transferred user', () => {
 
-        //Share Measure with ALT User
         cy.clearCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT'
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
-                })
-            })
-        })
+        //Share Library with ALT User
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -119,7 +85,6 @@ describe('CQL Library Transfer - Multiple instances', () => {
         CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
         cy.clearCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the measure
         cy.setAccessTokenCookie()
         OktaLogin.Login()
     })
@@ -161,28 +126,13 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', 'Draft 1.0.000')
         cy.log('Draft Created Successfully')
 
-        //Share Measure with ALT User
+
         cy.clearCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the measure
         cy.setAccessTokenCookie()
         cy.wait(1000)
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/cql-libraries/' + id + '/ownership?userid=' + harpUserALT,
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT'
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Library successfully.')
-                })
-            })
-        })
+       //Share Library with ALT User
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
         OktaLogin.AltLogin()

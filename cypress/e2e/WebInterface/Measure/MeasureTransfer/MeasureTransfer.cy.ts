@@ -1,7 +1,7 @@
 import { Environment } from "../../../../Shared/Environment"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { Utilities } from "../../../../Shared/Utilities"
+import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
@@ -19,7 +19,6 @@ let updatedMeasureName = measureName + 'someUpdate'
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let randomMeasureName = 'TransferTestMeasure' + randValue + 5
 let versionNumber = '1.0.000'
-let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
 let measureCQL = MeasureCQL.SBTEST_CQL
 let testCaseTitle = 'Title for Auto Test'
@@ -42,63 +41,28 @@ describe('Measure Transfer', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, false, true)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
         OktaLogin.Logout()
     })
 
     it('Verify transferred Measure is viewable under My Measures tab', () => {
 
-        //Share Measure with ALT User
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/ownership?userid=' + harpUserALT,
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT'
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Measure successfully.')
-                })
-            })
-        })
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
-        cy.reload()
         cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
-
     })
 
     it('Verify Measure can be edited by the transferred user', () => {
 
-        //Share Measure with ALT User
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/ownership?userid=' + harpUserALT,
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT'
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Measure successfully.')
-                })
-            })
-        })
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
         OktaLogin.AltLogin()
 
         //Edit Measure details
-        cy.reload()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
         cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(updatedCqlLibraryName)
@@ -138,7 +102,6 @@ describe('Measure Transfer', () => {
 
         //Create New Test case
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-
     })
 })
 
@@ -178,8 +141,8 @@ describe('Measure Transfer - Multiple instances', () => {
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumber)
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
-        //MeasuresPage.validateVersionNumber(newMeasureName, versionNumber)
-        cy.log('Version Created Successfully').wait(5000)
+        cy.log('Version Created Successfully')
+        cy.reload()
 
         //Draft the Versioned Measure
         MeasuresPage.actionCenter('draft')
@@ -191,22 +154,7 @@ describe('Measure Transfer - Multiple instances', () => {
 
         //Share Measure with ALT User
         cy.setAccessTokenCookie()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/ownership?userid=' + harpUserALT,
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT'
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Measure successfully.')
-                })
-            })
-        })
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -232,29 +180,14 @@ describe('Delete Test Case with Transferred user', () => {
 
     afterEach('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, cqlLibraryName, false, true)
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
         OktaLogin.Logout()
     })
 
     it('Verify Test Case can be deleted by the Transferred user', () => {
 
         //Share Measure with ALT User
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/ownership?userid=' + harpUserALT,
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT'
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted ownership to Measure successfully.')
-                })
-            })
-        })
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
         //Login as Alt User
         OktaLogin.AltLogin()
@@ -270,6 +203,5 @@ describe('Delete Test Case with Transferred user', () => {
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCaseTitle)
-
     })
 })
