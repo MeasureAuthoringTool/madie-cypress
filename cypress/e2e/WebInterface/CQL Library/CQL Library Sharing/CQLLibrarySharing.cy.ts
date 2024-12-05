@@ -151,3 +151,46 @@ describe('CQL Library Sharing - Multiple instances', () => {
     })
 })
 
+describe('Remove user\'s share access from a library', () => {
+
+    beforeEach('Create library and Set Access Token', () => {
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.wait(1000)
+
+        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
+
+        // initial share to harpUserAlt
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
+    })
+
+    afterEach('Log out and Clean up', () => {
+
+        OktaLogin.UILogout()
+    })
+
+    it('After removing access, user can no longer edit the library', () => {
+
+        OktaLogin.AltLogin()
+
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+
+        Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDesc, 8000)
+
+        // this update proves edit access
+        cy.get(CQLLibraryPage.cqlLibraryDesc).clear().type('input from alt user')
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
+
+        Utilities.setSharePermissions(MadieObject.Library, PermissionActions.REVOKE, harpUserALT)
+
+        // refresh to update permissions
+        cy.reload()
+
+        // proves that edit access was removed
+        //cy.get(TestCasesPage.newTestCaseButton).should('be.disabled')
+        cy.get('#content').should('have.text', 'You are not the owner of the CQL Library. Only owner can edit it.')
+    })
+})
+

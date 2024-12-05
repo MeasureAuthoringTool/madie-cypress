@@ -3,7 +3,7 @@ import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { Utilities } from "../../../../../Shared/Utilities"
+import { MadieObject, PermissionActions, Utilities } from "../../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
@@ -11,9 +11,7 @@ import { Global } from "../../../../../Shared/Global"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { Environment } from "../../../../../Shared/Environment"
 
-let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
-
 let measureName = 'TestMeasure' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
@@ -29,6 +27,8 @@ let updatedTestCaseSeries = 'CMSTestSeries'
 let TCJsonRace = TestCaseJson.TCJsonRaceOMBRaceDetailed
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 let cqlLibraryName = 'TestLibrary' + Date.now()
+
+// unverified after changes to measure sharing
 
 // skipping the below test until the feature flag controlling the element tab for QI Core Test Cases is removed
 describe.skip('QI Core Gender, Race, and Ethnicity data validations: Create test case with Gender, Race, and Ethnicity data in Json', () => {
@@ -300,7 +300,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
 
 // skipping the below test until the feature flag controlling the element tab for QI Core Test Cases is removed
 // edit test case race fields if user is someone whom the measure has been shared
-describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case to add another Race and include existing Gender, Race, and Ethnicity value by a user whom the measure has been shared', () => {
+describe.only('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case to add another Race and include existing Gender, Race, and Ethnicity value by a user whom the measure has been shared', () => {
 
     before('Create Measure', () => {
 
@@ -340,7 +340,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
 
     })
 
-    it('Edit current test case to add an additional race, when the user has had the measure shared with them. The edit contains Gender, Race, and Ethnicity data.', () => {
+    it.only('Edit current test case to add an additional race, when the user has had the measure shared with them. The edit contains Gender, Race, and Ethnicity data.', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -423,22 +423,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
         cy.setAccessTokenCookie()
 
         //share measure
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/grant?userid=' + harpUserALT,
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT'
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(harpUserALT + ' granted access to Measure successfully.')
-                })
-            })
-        })
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
         OktaLogin.AltLogin()
 

@@ -4,7 +4,7 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { Utilities } from "../../../../../Shared/Utilities"
+import { MadieObject, PermissionActions, Utilities } from "../../../../../Shared/Utilities"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
@@ -13,7 +13,6 @@ import { Environment } from "../../../../../Shared/Environment"
 
 const now = require('dayjs')
 let todaysDate = now().format('MM/DD/YYYY')
-let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
 let harpUserALT = Environment.credentials().harpUserALT
 let versionNumber = '1.0.000'
 const path = require('path')
@@ -125,34 +124,7 @@ describe('Test Case Import: functionality tests', () => {
 
         //Share Measure with ALT User
         cy.setAccessTokenCookie()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/acls',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT',
-                    body: {
-                        "acls": [
-                            {
-                                "userId": harpUserALT,
-                                "roles": [
-                                    "SHARED_WITH"
-                                ]
-                            }
-                        ],
-                        "action": "GRANT"
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body[0].roles).to.contain('SHARED_WITH')
-                    expect(response.body[0].userId).to.eql(harpUserALT)
-                })
-            })
-        })
-
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
         OktaLogin.AltLogin()
 
@@ -302,34 +274,7 @@ describe('Test Case Import validations for versioned Measures', () => {
 
         //Share Measure with ALT User
         cy.setAccessTokenCookie()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.request({
-                    url: '/api/measures/' + id + '/acls',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
-                    },
-                    method: 'PUT',
-                    body: {
-                        "acls": [
-                            {
-                                "userId": harpUserALT,
-                                "roles": [
-                                    "SHARED_WITH"
-                                ]
-                            }
-                        ],
-                        "action": "GRANT"
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body[0].roles).to.contain('SHARED_WITH')
-                    expect(response.body[0].userId).to.eql(harpUserALT)
-                })
-            })
-        })
-
+        Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
         OktaLogin.AltLogin()
 
