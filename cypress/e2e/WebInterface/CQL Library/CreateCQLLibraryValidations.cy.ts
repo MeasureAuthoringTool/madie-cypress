@@ -42,7 +42,7 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.newCQLLibName).click()
         cy.get(CQLLibraryPage.newCQLLibName).focused().type(newCQLLibraryName)
         //select a model value
-        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).wait(1000).click()
+        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).click()
         cy.get(CQLLibraryPage.cqlLibraryModelQICore).click()
 
         //enter description detail
@@ -92,7 +92,7 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.newCQLLibName).click()
         cy.get(CQLLibraryPage.newCQLLibName).focused().type(CQLLibraryName + randValue)
         //select a model value
-        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).wait(1000).click()
+        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).click()
         cy.get(CQLLibraryPage.cqlLibraryModelQICore).click()
 
         //enter description detail
@@ -137,7 +137,7 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
 
         //Verify error message when the CQL Library Name field is empty
-        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).wait(1000).click()
+        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).click()
         cy.get(CQLLibraryPage.cqlLibraryDesc).click()
         cy.get(CQLLibraryPage.cqlLibraryNameInvalidError).should('contain.text', 'Library name is required.')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
@@ -203,9 +203,9 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.newCQLLibName).should('be.visible')
         cy.get(CQLLibraryPage.newCQLLibName).should('be.enabled')
         cy.get(CQLLibraryPage.newCQLLibName).type(CQLLibraryName + randValue)
-        cy.get(CQLLibraryPage.cqlLibraryModalField).wait(2000).click()
+        cy.get(CQLLibraryPage.cqlLibraryModalField).click()
         cy.get(CQLLibraryPage.cqlLibraryCreateForm).click()
-        cy.get(CQLLibraryPage.cqlLibraryCreateFormSideClickArea).click().wait(2000).click().wait(2000).click()
+        cy.get(CQLLibraryPage.cqlLibraryCreateFormSideClickArea).click()
         cy.get(CQLLibraryPage.cqlLibraryModelErrorMsg).should('contain.text', 'A CQL library model is required.')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
     })
@@ -225,11 +225,11 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(LibraryName)
-        cy.get(CQLLibraryPage.cqlLibraryModalField).wait(1000).click()
+        cy.get(CQLLibraryPage.cqlLibraryModalField).click()
         cy.get(CQLLibraryPage.cqlLibraryModelQICore).click()
 
         //move to and then away from the description detail field
-        cy.get(CQLLibraryPage.cqlLibraryDesc).wait(1000).click()
+        cy.get(CQLLibraryPage.cqlLibraryDesc).click()
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).click()
         cy.get(CQLLibraryPage.cqlLibDescHelperText).should('contain.text', 'Description is required.')
         cy.get(CQLLibraryPage.cqlLibDescHelperText).should('have.color', '#AE1C1C')
@@ -253,7 +253,7 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(LibraryName)
-        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).wait(1000).click()
+        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).click()
         cy.get(CQLLibraryPage.cqlLibraryModelQICore).click()
 
         //enter description detail
@@ -283,7 +283,7 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(LibraryName)
-        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).wait(1000).click()
+        cy.get(CQLLibraryPage.cqlLibraryModelDropdown).click()
         cy.get(CQLLibraryPage.cqlLibraryModelQICore).click()
 
         //enter description detail

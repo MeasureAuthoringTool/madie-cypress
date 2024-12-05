@@ -287,10 +287,10 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
             .first() // select the first element
             .type('Initial Population Description')
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).eq(0).click()
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Num').click().wait(1000)
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Num').click()
 
         //save the Risk Adjustment data
-        cy.get(MeasureGroupPage.saveRiskAdjustments).click().wait(100).click()
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click().click()
         cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
         //navigate back to main measures page
@@ -307,7 +307,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).eq(0).click()
         cy.get(MeasureGroupPage.cancelIcon).first().click()
-        cy.get(MeasureGroupPage.saveRiskAdjustments).click().wait(100).click()
+        cy.get(MeasureGroupPage.saveRiskAdjustments).click().click()
         cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
         //navigate back to main measures page

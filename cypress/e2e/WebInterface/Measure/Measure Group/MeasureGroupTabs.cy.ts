@@ -362,7 +362,7 @@ describe('Validating Stratification tabs', () => {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
-                cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
+                cy.get(MeasureGroupPage.addStratButton).click()
             }
         })
 
@@ -440,7 +440,7 @@ describe('Validating Stratification tabs', () => {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
-                cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
+                cy.get(MeasureGroupPage.addStratButton).click()
             }
         })
 
@@ -453,18 +453,18 @@ describe('Validating Stratification tabs', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-        cy.get(MeasureGroupPage.stratificationTab).wait(500).click()
+        cy.get(MeasureGroupPage.stratificationTab).click()
         cy.get('body').then((body) => {
             if ((body.find(MeasureGroupPage.stratAssociationOne).length != 0)) {
                 Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 30700)
-                cy.get(MeasureGroupPage.stratificationTab).wait(500).click()
+                cy.get(MeasureGroupPage.stratificationTab).click()
                 cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
                 cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
             } else {
                 Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
                 cy.get(MeasureGroupPage.stratificationTab).should('exist')
                 cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-                cy.get(MeasureGroupPage.stratificationTab).wait(500).click()
+                cy.get(MeasureGroupPage.stratificationTab).click()
             }
         })
         //Association -- default value -- score type is Proportion
@@ -490,7 +490,7 @@ describe('Validating Stratification tabs', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 32000)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-        cy.get(MeasureGroupPage.stratificationTab).wait(500).click()
+        cy.get(MeasureGroupPage.stratificationTab).click()
 
         //create stratification fields if they do not already exist on page
         cy.get('body').then((body) => {
@@ -498,7 +498,7 @@ describe('Validating Stratification tabs', () => {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
-                cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
+                cy.get(MeasureGroupPage.addStratButton).click()
             }
         })
 
@@ -587,7 +587,7 @@ describe('Validating Stratification tabs', () => {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
-                cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
+                cy.get(MeasureGroupPage.addStratButton).click()
             }
         })
 
@@ -710,7 +710,7 @@ describe('Validating Stratification tabs', () => {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
-                cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
+                cy.get(MeasureGroupPage.addStratButton).click()
             }
         })
 
@@ -768,7 +768,7 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).wait(1000).click()
+        cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
@@ -825,7 +825,6 @@ describe('Validating Reporting tabs', () => {
         //change and save a new value to the Improvement Notation field
         cy.get(MeasureGroupPage.improvementNotationSelect).click()
         cy.get(MeasureGroupPage.improvementNotationValues)
-            .wait(500)
             .type('{downArrow}{enter}')
 
         //save selected IN value
@@ -847,7 +846,6 @@ describe('Validating Reporting tabs', () => {
         //change and save a new value to the Improvement Notation field
         cy.get(MeasureGroupPage.improvementNotationSelect).click()
         cy.get(MeasureGroupPage.improvementNotationValues)
-            .wait(500)
             .type('{upArrow}{upArrow}{enter}')
 
         //save selected IN value

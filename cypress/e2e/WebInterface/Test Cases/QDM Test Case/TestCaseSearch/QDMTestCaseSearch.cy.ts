@@ -78,7 +78,7 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
         cy.get('[data-testid="add-code-concept-button"]').click()
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(4000)
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
@@ -104,7 +104,7 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
         cy.get('[data-testid="add-negation-rationale"]').click()
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click().wait(4000)
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
@@ -241,7 +241,7 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
 
 
         //the filter by field
-        cy.get(TestCasesPage.tcFilterInput).scrollIntoView().wait(1500).click()
+        cy.get(TestCasesPage.tcFilterInput).scrollIntoView().click()
         cy.get(TestCasesPage.tcFilterByGroup).click()
         cy.get(TestCasesPage.tcSearchInput).type('NA')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()

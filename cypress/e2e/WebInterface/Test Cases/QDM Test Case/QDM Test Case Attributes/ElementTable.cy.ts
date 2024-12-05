@@ -198,7 +198,6 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         //Navigate back to Edit test case page and Edit Elements
         TestCasesPage.clickEditforCreatedTestCase()
-        cy.wait(1000)
 
         //click on Edit button from Elements table
         cy.get('tbody > tr > :nth-child(5)').contains('View').click()

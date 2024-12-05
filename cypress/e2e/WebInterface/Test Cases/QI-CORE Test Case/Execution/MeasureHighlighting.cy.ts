@@ -878,7 +878,7 @@ describe('Measure Highlighting', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).wait(4000).click()
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
         TestCasesPage.testCaseAction('edit')
@@ -991,7 +991,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).wait(4000).click()
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
         TestCasesPage.testCaseAction('edit')
@@ -1133,7 +1133,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         cy.readFile(measurePath).should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/measures/' + fileContents + '/groups').as('group')
         })
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).wait(4000).click()
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.wait('@group', { timeout: 60000 }).then((request) => {
             cy.writeFile(measureSecondGroupPath, request.response.body.id)
         })
@@ -1144,7 +1144,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         //
 
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).wait(4000).click()
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
         TestCasesPage.testCaseAction('edit')
@@ -1460,7 +1460,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
             Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
             cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
             Utilities.waitForElementToNotExist(TestCasesPage.tcHLResultsSection, 35000)
-            cy.get(TestCasesPage.tcIPHighlightingDetails).contains('Results').first().wait(2500).scrollIntoView().click()
+            cy.get(TestCasesPage.tcIPHighlightingDetails).contains('Results').first().scrollIntoView().click()
             Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
             cy.get(TestCasesPage.tcHLResultsSection).should('contain.text', 'FALSE (false)')
 
@@ -1472,7 +1472,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
             Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
             cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
             Utilities.waitForElementToNotExist(TestCasesPage.tcHLResultsSection, 35000)
-            cy.get(TestCasesPage.tcDENOMHighlightingDetails).contains('Results').first().wait(2500).scrollIntoView().click()
+            cy.get(TestCasesPage.tcDENOMHighlightingDetails).contains('Results').first().scrollIntoView().click()
             Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
             cy.get(TestCasesPage.tcHLResultsSection).should('contain.text', 'UNHIT')
 
@@ -1483,7 +1483,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
             Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
             cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
             Utilities.waitForElementToNotExist(TestCasesPage.tcHLResultsSection, 35000)
-            cy.get(TestCasesPage.tcNUMERHighlightingDetails).contains('Results').first().wait(2500).scrollIntoView().click()
+            cy.get(TestCasesPage.tcNUMERHighlightingDetails).contains('Results').first().scrollIntoView().click()
             Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
             cy.get(TestCasesPage.tcHLResultsSection).should('contain.text', 'UNHIT')
         })
@@ -1494,7 +1494,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         //
         // cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
         // cy.get(TestCasesPage.definitionsFristResultSection).first().scrollIntoView()
-        // cy.get(TestCasesPage.tcDEFINITIONSHighlightingDetails).contains('Results').first().wait(2500).scrollIntoView().click()
+        // cy.get(TestCasesPage.tcDEFINITIONSHighlightingDetails).contains('Results').first().scrollIntoView().click()
         // Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
         // cy.get(TestCasesPage.tcHLResultsSection).should('contain.text', 'FALSE ([])')
 
@@ -1508,7 +1508,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
 
         Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
         cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
-        cy.get(TestCasesPage.tcUNUSEDHightlightingDetails).contains('Results').first().scrollIntoView().wait(2500).click()
+        cy.get(TestCasesPage.tcUNUSEDHightlightingDetails).contains('Results').first().scrollIntoView().click()
         Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
         cy.get(TestCasesPage.tcHLResultsSection).should('contain.text', 'NA')
 
@@ -1556,7 +1556,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Navigate to Test Case page
-        cy.get(EditMeasurePage.testCasesTab).wait(4000).click().wait(2000)
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.reload()
         Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 55000)

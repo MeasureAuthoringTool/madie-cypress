@@ -1,6 +1,6 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage"
-import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 
 let CqlLibraryOne = ''
 let CqlLibraryOther = ''
@@ -92,7 +92,6 @@ describe('Draft and Version Validations', () => {
 
     it('User can not version CQL Library if there is no CQL', () => {
 
-        cy.wait(3000)
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         //Clear the text in CQL Library Editor

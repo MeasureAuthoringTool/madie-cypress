@@ -73,7 +73,7 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.codeText).should('not.be.enabled')
 
         //Assert when the Code is Active in VSAC
-        cy.get(CQLEditorPage.codeSystemDropdown).type('SNOMEDCT').wait(1000)
+        cy.get(CQLEditorPage.codeSystemDropdown).type('SNOMEDCT')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('SNOMEDCT').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
         cy.get('[data-testid="2024-03-option"]').click()
@@ -86,7 +86,7 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem Version258219007Stage 2 (qualifier value)SNOMEDCT2024-03')
 
         //Assert when the Code is not available in VSAC
-        cy.get(CQLEditorPage.codeText).clear().type('123').wait(1000)
+        cy.get(CQLEditorPage.codeText).clear().type('123')
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
         cy.get('.sc-fUnMCh').should('contain.text', 'No Results were found')
         //Clear the code search values
@@ -248,12 +248,12 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been successfully added to the CQL.')
 
         //Save CQL
-        cy.get(CQLEditorPage.saveCQLButton).click().wait(1000)
+        cy.get(CQLEditorPage.saveCQLButton).click()
 
         //Navigate to Saved Codes page
         cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
-        cy.get(CQLEditorPage.savedCodesTab).click().wait(4000)
+        cy.get(CQLEditorPage.savedCodesTab).click()
 
         //Edit code
         cy.get('[data-testid="edit-code-0"]').click()
@@ -298,17 +298,17 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been successfully added to the CQL.')
 
         //Save CQL
-        cy.get(CQLEditorPage.saveCQLButton).click().wait(1000)
+        cy.get(CQLEditorPage.saveCQLButton).click()
 
         //Navigate to Saved Codes page
         cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
-        cy.get(CQLEditorPage.savedCodesTab).click().wait(1000)
+        cy.get(CQLEditorPage.savedCodesTab).click()
 
         //Remove Code
         cy.get('[data-testid="delete-code-0"]').click()
         cy.get(CQLEditorPage.removeCodeConfirmationMsg).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
-        cy.get(CQLEditorPage.removeCodeContinueBtn).click().wait(2000)
+        cy.get(CQLEditorPage.removeCodeContinueBtn).click()
         cy.get('[class="toast success"]').should('contain.text', 'Code AMB and code system ActCode has been successfully removed from the CQL')
         cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
@@ -353,12 +353,12 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code ACUTE has been successfully added to the CQL.')
 
         //Save CQL
-        cy.get(CQLEditorPage.saveCQLButton).click().wait(1000)
+        cy.get(CQLEditorPage.saveCQLButton).click()
 
         //Navigate to Saved Codes page
         cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
-        cy.get(CQLEditorPage.savedCodesTab).click().wait(4000)
+        cy.get(CQLEditorPage.savedCodesTab).click()
 
         //Remove Code
         Utilities.waitForElementVisible('[data-testid="delete-code-0"]', 80000)

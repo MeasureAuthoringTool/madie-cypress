@@ -76,7 +76,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Create
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
@@ -107,7 +107,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Create
 
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(800)
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
 
         cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
 
@@ -197,7 +197,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
@@ -228,7 +228,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(800)
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
 
         cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
 
@@ -349,7 +349,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
@@ -380,7 +380,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(800)
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
 
         cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
 
@@ -535,7 +535,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
@@ -566,7 +566,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(800)
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
 
         cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
 

@@ -37,7 +37,6 @@ describe('CQL Library Transfer', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
 
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
@@ -47,7 +46,7 @@ describe('CQL Library Transfer', () => {
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
         cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click().wait(1000)
+        cy.get(CQLLibraryPage.myLibrariesBtn).click()
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
     })
 
@@ -62,7 +61,6 @@ describe('CQL Library Transfer', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
-        cy.wait(1000)
 
         //Edit CQL Library details
         CQLLibrariesPage.clickEditforCreatedLibrary()
@@ -115,12 +113,12 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('exist')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.visible')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
-        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).clear().type(randomCQLLibraryName).wait(1000)
+        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).clear().type(randomCQLLibraryName)
 
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('exist')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
-        cy.get(CQLLibrariesPage.createDraftContinueBtn).click().wait(1000)
+        cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', 'Draft 1.0.000')
@@ -131,7 +129,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         cy.wait(1000)
-       //Share Library with ALT User
+        //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User

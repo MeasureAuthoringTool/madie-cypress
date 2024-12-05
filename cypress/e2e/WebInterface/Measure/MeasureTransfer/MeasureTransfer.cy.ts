@@ -78,13 +78,13 @@ describe('Measure Transfer', () => {
         //save CQL on measure
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(2000).click()
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).wait(2000).click()
+        cy.get(EditMeasurePage.measureGroupsTab).click()
 
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
         Utilities.setMeasureGroupType()

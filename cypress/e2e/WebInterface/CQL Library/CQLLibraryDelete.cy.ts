@@ -48,7 +48,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             Utilities.waitForElementVisible('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
             cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled').wait(1000)
+            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled')
             cy.scrollTo('top')
             cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').click()
             Utilities.waitForElementToNotExist('[data-testid="delete-existing-draft-' + fileContents + '-button"]', 55000)
@@ -68,7 +68,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             Utilities.waitForElementVisible('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
             cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled').wait(1000)
+            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled')
         })
         CQLLibrariesPage.cqlLibraryAction("delete")
 
@@ -91,7 +91,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.setAccessTokenCookie()
         cy.wait(1000)
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
-        
+
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
@@ -107,7 +107,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             Utilities.waitForElementVisible('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
             cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled').wait(1000)
+            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled')
         })
         CQLLibrariesPage.cqlLibraryAction("delete")
 
@@ -126,7 +126,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
@@ -153,7 +152,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             Utilities.waitForElementVisible('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
             cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled').wait(1000)
+            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled')
             cy.scrollTo('top')
             cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').click()
             Utilities.waitForElementToNotExist('[data-testid="delete-existing-draft-' + fileContents + '-button"]', 55000)
@@ -165,7 +164,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearLocalStorage()
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
@@ -191,7 +189,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             Utilities.waitForElementVisible('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
             cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled').wait(1000)
+            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled')
             cy.scrollTo('top')
             cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').click()
             Utilities.waitForElementToNotExist('[data-testid="delete-existing-draft-' + fileContents + '-button"]', 55000)
@@ -209,7 +207,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
         cy.setAccessTokenCookieALT()
-        cy.wait(1000)
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
                 cy.request({
@@ -238,7 +235,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             Utilities.waitForElementVisible('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
             cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled').wait(1000)
+            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled')
             cy.scrollTo('top')
             cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').click()
             Utilities.waitForElementToNotExist('[data-testid="delete-existing-draft-' + fileContents + '-button"]', 55000)

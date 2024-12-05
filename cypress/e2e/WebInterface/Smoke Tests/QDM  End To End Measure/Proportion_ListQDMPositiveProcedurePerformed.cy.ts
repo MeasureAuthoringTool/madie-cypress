@@ -358,14 +358,14 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         cy.get('[data-testid="option-Code"]').click()
         cy.get('[id="value-set-selector"]').click()
         cy.get('[data-testid="custom-vs"]').click()
-        cy.wait(3000)
+
         cy.get('[data-testid=custom-code-system-input]').type('SNOMEDCT')
         cy.get('[data-testid=custom-code-input]').type('422497000')
         cy.get('[data-testid="add-attribute-button"]').click()
         cy.get('[data-testid=sub-navigation-tab-codes]').click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid=code-system-option-custom]').click()
-        cy.wait(3000)
+
         cy.get('[data-testid=custom-code-system-input]').type('SNOMEDCT')
         cy.get('[data-testid=custom-code-input]').type('419775003')
         cy.get('[data-testid=add-code-concept-button]').click()

@@ -208,7 +208,7 @@ describe('Validating Stratification tabs', () => {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
-                cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
+                cy.get(MeasureGroupPage.addStratButton).click()
             }
         })
 
@@ -274,7 +274,7 @@ describe('Validating Stratification tabs', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 32000)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-        cy.get(MeasureGroupPage.stratificationTab).wait(500).click()
+        cy.get(MeasureGroupPage.stratificationTab).click()
 
         //create stratification fields if they do not already exist on page
         cy.get('body').then((body) => {
@@ -282,7 +282,7 @@ describe('Validating Stratification tabs', () => {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
-                cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
+                cy.get(MeasureGroupPage.addStratButton).click()
             }
         })
 
@@ -435,7 +435,7 @@ describe('Validating Stratification tabs', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 32000)
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-        cy.get(MeasureGroupPage.stratificationTab).wait(500).click()
+        cy.get(MeasureGroupPage.stratificationTab).click()
 
         //create stratification fields if they do not already exist on page
         cy.get('body').then((body) => {
@@ -443,7 +443,7 @@ describe('Validating Stratification tabs', () => {
                 cy.get(MeasureGroupPage.addStratButton).should('exist')
                 cy.get(MeasureGroupPage.addStratButton).should('be.visible')
                 cy.get(MeasureGroupPage.addStratButton).should('be.enabled')
-                cy.get(MeasureGroupPage.addStratButton).wait(1000).click().wait(1000).click()
+                cy.get(MeasureGroupPage.addStratButton).click()
             }
         })
 

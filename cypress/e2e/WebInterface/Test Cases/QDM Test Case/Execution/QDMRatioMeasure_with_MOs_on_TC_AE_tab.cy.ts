@@ -9,7 +9,7 @@ import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { Header } from "../../../../../Shared/Header"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import {CQLLibraryPage} from "../../../../../Shared/CQLLibraryPage"
+import { CQLLibraryPage } from "../../../../../Shared/CQLLibraryPage"
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let measureCQL2RunObservations = MeasureCQL.CQLQDMObservationRun
@@ -448,7 +448,6 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
-        cy.wait(5000)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
 

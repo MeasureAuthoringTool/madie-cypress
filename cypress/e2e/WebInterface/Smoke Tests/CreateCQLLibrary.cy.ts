@@ -36,7 +36,7 @@ describe('Create CQL Library', () => {
         Utilities.waitForElementEnabled(CQLLibraryPage.createCQLLibraryBtn, 60000)
 
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
-        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled').wait(1500)
+        cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
 
         cy.get(CQLLibraryPage.newCQLLibName).should('be.visible')
@@ -49,7 +49,7 @@ describe('Create CQL Library', () => {
 
         CQLLibraryPage.clickCreateLibraryButton()
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
+        cy.get(Header.cqlLibraryTab).click()
 
         CQLLibraryPage.validateCQlLibraryName(CQLLibraryName)
         CQLLibraryPage.validateCQlLibraryModel('QDM v5.6')

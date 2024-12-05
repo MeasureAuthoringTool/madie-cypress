@@ -99,7 +99,6 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
     it('Verify success message on CQL editor component, on save and on tab / page load', () => {
 
-        cy.wait(3700)
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -196,7 +195,6 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //Clear the text in CQL Library Editor
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-        cy.wait(1000)
 
         //Update text in the CQL Library Editor
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_valid)
@@ -214,7 +212,6 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //Clear the text in CQL Library Editor
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-        cy.wait(1000)
 
         //Update text in the CQL Library Editor that will cause error
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithErrors)
@@ -239,7 +236,6 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //Clear the text in CQL Library Editor
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-        cy.wait(1000)
 
         //Update text in the CQL Library Editor that will cause warning
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithWarnings)

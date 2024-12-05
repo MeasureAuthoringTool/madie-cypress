@@ -7,7 +7,7 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import {TestCaseJson} from "../../../../../Shared/TestCaseJson"
+import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 
 let measureName = 'QiCoreTestMeasure' + Date.now()
 let CqlLibraryName = 'QiCoreLibrary' + Date.now()
@@ -59,7 +59,7 @@ describe('Shift Test Case Dates tests for Qi-Core Measure', () => {
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).wait(1700).click()
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to the page to utilize the shift *all* test case feature
         cy.get(TestCasesPage.testCaseDataSideLink).click()
@@ -140,7 +140,7 @@ describe('Shift Test Case Dates tests for Qi-Core Measure', () => {
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).wait(1700).click()
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         //open the shift modal for the first test case
         TestCasesPage.testCaseAction('shift', false)

@@ -447,11 +447,10 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.initialPopulationSelect).click().wait(2000)
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
 
         //select a value that will return the correct boolean type
         Utilities.waitForElementVisible(MeasureGroupPage.measurePopulationOption, 30000)
-        cy.wait(3000)
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'Initial Population')
 
         //no error should appear
@@ -462,9 +461,8 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.initialPopulationSelect).click().wait(2000)
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
         Utilities.waitForElementVisible(MeasureGroupPage.measurePopulationOption, 30000)
-        cy.wait(3000)
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'Bilateral Mastectomy Diagnosis')
 
         //helper text / error message should appear
@@ -513,11 +511,10 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.initialPopulationSelect).click().wait(2000)
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
 
         //select a value that will return the correct boolean type
         Utilities.waitForElementVisible(MeasureGroupPage.measurePopulationOption, 30000)
-        cy.wait(3000)
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'Numerator')
 
         //helper text / error message should appear
