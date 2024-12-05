@@ -339,7 +339,7 @@ describe('Create and update QDM Test case validations', () => {
 
         //create test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click().wait(3500)
+        cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
         cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.newTestCaseButton).click()
@@ -347,7 +347,7 @@ describe('Create and update QDM Test case validations', () => {
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitleWithSpecialChar.toString())
@@ -376,7 +376,7 @@ describe('Create and update QDM Test case validations', () => {
 
         //create test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click().wait(3500)
+        cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
         cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.newTestCaseButton).click()
@@ -384,7 +384,7 @@ describe('Create and update QDM Test case validations', () => {
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())

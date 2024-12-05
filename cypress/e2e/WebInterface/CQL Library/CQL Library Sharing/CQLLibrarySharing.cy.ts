@@ -39,7 +39,6 @@ describe('CQL Library Sharing', () => {
         cy.clearLocalStorage()
         //set local user that does not own the Library
         cy.setAccessTokenCookie()
-        cy.wait(1000)
 
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
@@ -49,7 +48,7 @@ describe('CQL Library Sharing', () => {
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
         cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click().wait(1000)
+        cy.get(CQLLibraryPage.myLibrariesBtn).click()
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
 
     })
@@ -66,7 +65,7 @@ describe('CQL Library Sharing', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
-        cy.wait(1000)
+
 
         //Edit CQL Library details
         CQLLibrariesPage.clickEditforCreatedLibrary()
@@ -120,13 +119,13 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('exist')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.visible')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
-        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).clear().type(randomCQLLibraryName).wait(1000)
+        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).clear().type(randomCQLLibraryName)
 
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('exist')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
 
-        cy.get(CQLLibrariesPage.createDraftContinueBtn).wait(1000).click()
+        cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', 'Draft 1.0.000')

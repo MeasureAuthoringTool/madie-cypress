@@ -119,10 +119,9 @@ describe('Test case Coverage tab', () => {
 
         //success message that appears after import
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', '(82) Test cases imported successfully')
-        cy.wait(4000)
 
         //run test cases
-        cy.get(TestCasesPage.executeTestCaseButton).click().wait(3000)
+        cy.get(TestCasesPage.executeTestCaseButton).click()
 
         //click on coverage tab
         cy.get(TestCasesPage.testCaseListCoveragePercTab).click()
@@ -139,7 +138,7 @@ describe('Test case Coverage tab', () => {
 
         //validate that contents are, initially, viewable of a section
         cy.get(TestCasesPage.tcCoverageContent).should('have.attr', 'style', 'max-height: 0px;')
-        cy.get(TestCasesPage.tcCoverageSections).wait(2500).first().wait(2500).find('[class="accordion-title"]').should('include.text', 'Initial Population').wait(2500).click()
+        cy.get(TestCasesPage.tcCoverageSections).first().find('[class="accordion-title"]').should('include.text', 'Initial Population').click()
         cy.get(TestCasesPage.tcCoverageContent).should('have.attr', 'style', 'max-height: 140px;')
     })
 })
@@ -208,7 +207,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(3000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(Header.mainMadiePageButton).click()
@@ -298,7 +297,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(7000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 30000)
 
@@ -337,7 +336,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).wait(7000).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 30000)
 
@@ -415,7 +414,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).wait(7000).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 30000)
 
@@ -491,7 +490,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click().wait(3000)
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -523,7 +522,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).wait(1000).click()
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
@@ -565,7 +564,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click().wait(3000)
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -730,7 +729,7 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
-        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled').wait(1000)
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
     })

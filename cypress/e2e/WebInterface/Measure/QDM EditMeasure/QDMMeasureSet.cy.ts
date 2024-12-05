@@ -1,10 +1,10 @@
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {Global} from "../../../../Shared/Global"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Global } from "../../../../Shared/Global"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
@@ -37,7 +37,7 @@ describe('QDM Measure Set', () => {
         cy.get(EditMeasurePage.measureSetText).type('Measure Set')
         cy.get(EditMeasurePage.measureSetSaveBtn).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Measure Set Information Saved Successfully')
-        cy.get(EditMeasurePage.measureSetText).should('contain.text','Measure Set')
+        cy.get(EditMeasurePage.measureSetText).should('contain.text', 'Measure Set')
 
     })
 
@@ -75,7 +75,7 @@ describe('QDM Measure Set - ownership validations', () => {
 
     it('Non Measure owner unable to add Measure Set', () => {
 
-        cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
+        cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
         MeasuresPage.actionCenter('edit')
 

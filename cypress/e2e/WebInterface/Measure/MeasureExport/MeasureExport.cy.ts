@@ -260,7 +260,6 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.wait(3000)
         OktaLogin.UILogout()
         sessionStorage.clear()
         cy.clearAllCookies()
@@ -465,7 +464,6 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.wait(3000)
         OktaLogin.UILogout()
         sessionStorage.clear()
         cy.clearAllCookies()
@@ -479,7 +477,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).wait(1500).type('1.0.000')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')

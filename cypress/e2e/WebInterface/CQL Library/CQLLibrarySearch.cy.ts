@@ -114,7 +114,7 @@ describe('CQL Library Search Validations', () => {
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
         cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesBtn).click().wait(5000)
+        cy.get(CQLLibraryPage.allLibrariesBtn).click()
 
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
@@ -222,7 +222,7 @@ describe('CQL Library Search Validations -- User ownership', () => {
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
         cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesBtn).click().wait(5000)
+        cy.get(CQLLibraryPage.allLibrariesBtn).click()
 
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
@@ -274,7 +274,7 @@ describe('CQL Library Search Validations -- User ownership', () => {
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
         cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesBtn).click().wait(5000)
+        cy.get(CQLLibraryPage.allLibrariesBtn).click()
 
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')

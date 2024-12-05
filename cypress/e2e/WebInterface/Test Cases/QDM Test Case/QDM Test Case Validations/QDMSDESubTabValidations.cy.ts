@@ -118,7 +118,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         //Execute test case
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
-        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled').wait(1000)
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
         //Navigate to Highlighting tab
@@ -172,7 +172,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         //Execute test case
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
-        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled').wait(1000)
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
         //Navigate to Highlighting tab
@@ -257,7 +257,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         //Execute test case
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled').wait(1000)
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
@@ -281,7 +281,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         //Execute test case
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled').wait(1000)
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')

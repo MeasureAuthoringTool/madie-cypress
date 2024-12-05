@@ -45,10 +45,9 @@ describe('Validating that the valueset version is removed and message appears, o
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click().wait(2000)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
         //add new value set and also specify a version
         cy.get(EditMeasurePage.cqlEditorTextBox)
-            .wait(500)
             .type('{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{upArrow}{moveToEnd}{enter}valueset \"Adolescent depression screening assessment with version\":  \'urn:oid:2.16.840.1.113762.1.4.1260.162\' version \'urn:hl7:version:20240307\'')
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()

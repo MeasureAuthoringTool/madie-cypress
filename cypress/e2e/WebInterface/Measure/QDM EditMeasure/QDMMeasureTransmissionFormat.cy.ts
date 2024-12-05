@@ -1,10 +1,10 @@
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
-import {Utilities} from "../../../../Shared/Utilities"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {Global} from "../../../../Shared/Global"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { Utilities } from "../../../../Shared/Utilities"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Global } from "../../../../Shared/Global"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
@@ -76,7 +76,7 @@ describe('QDM Measure: Transmission format ownership validation', () => {
 
     it('Non Measure owner unable to add Transmission format field', () => {
 
-        cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
+        cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
         MeasuresPage.actionCenter('edit')
 

@@ -302,7 +302,7 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(newMeasureName, versionNumber)
-        cy.log('Version Created Successfully').wait(5000)
+        cy.log('Version Created Successfully')
 
         //Draft the Versioned Measure
         MeasuresPage.actionCenter('draft')
@@ -325,7 +325,7 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle2nd.toString())

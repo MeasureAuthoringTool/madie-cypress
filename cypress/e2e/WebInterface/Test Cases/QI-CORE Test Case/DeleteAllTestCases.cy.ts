@@ -108,7 +108,7 @@ describe('QI-Core : Delete All Test Cases', () => {
         OktaLogin.AltLogin()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 20700)
-        cy.get(MeasuresPage.allMeasuresTab).wait(3000).click({ force: true })
+        cy.get(MeasuresPage.allMeasuresTab).click({ force: true })
         cy.reload()
 
         MeasuresPage.actionCenter('edit')
@@ -202,7 +202,7 @@ describe('QDM : Delete All Test Cases', () => {
         OktaLogin.AltLogin()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 20700)
-        cy.get(MeasuresPage.allMeasuresTab).wait(3000).click({ force: true })
+        cy.get(MeasuresPage.allMeasuresTab).click({ force: true })
         cy.reload()
 
         MeasuresPage.actionCenter('edit')

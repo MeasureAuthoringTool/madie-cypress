@@ -1,6 +1,6 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage"
-import {Header} from "../../../../Shared/Header"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { Header } from "../../../../Shared/Header"
 
 let CqlLibraryOne = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -34,9 +34,9 @@ describe('Verify non Library owner unable to create Version', () => {
 
             cy.intercept('GET', '/api/cql-libraries/' + fileContents).as('cqlLibrary')
 
-            cy.get('[data-testid="view/edit-cqlLibrary-button-'+ fileContents + '"]').click()
+            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').click()
             //Verify version button is not visible
-            cy.get('[data-testid="create-new-version-'+ fileContents +'-button"]').should('not.exist')
+            cy.get('[data-testid="create-new-version-' + fileContents + '-button"]').should('not.exist')
 
         })
     })
@@ -54,11 +54,11 @@ describe('Verify non Library owner unable to create Version', () => {
 
             cy.intercept('GET', '/api/cql-libraries/' + fileContents).as('cqlLibrary')
 
-            cy.get('[data-testid=cqlLibrary-button-'+ fileContents +']').should('exist')
-            cy.get('[data-testid=cqlLibrary-button-'+ fileContents +']').should('be.visible')
-            cy.get('[data-testid=cqlLibrary-button-'+ fileContents +']').wait(1000).click()
+            cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').should('exist')
+            cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').should('be.visible')
+            cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').click()
 
-            cy.wait('@cqlLibrary').then(({response}) => {
+            cy.wait('@cqlLibrary').then(({ response }) => {
                 expect(response.statusCode).to.eq(200)
             })
         })

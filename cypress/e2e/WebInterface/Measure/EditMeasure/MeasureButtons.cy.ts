@@ -7,7 +7,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../Shared/Header"
-import {Global} from "../../../../Shared/Global";
+import { Global } from "../../../../Shared/Global";
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
@@ -144,7 +144,7 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureVersionActionBtn, 5000)
         cy.get(EditMeasurePage.editMeasureVersionActionBtn).click()
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
+        cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
@@ -206,7 +206,7 @@ describe('Version and Draft Qi Core Measure on the Edit Measure page', () => {
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureVersionActionBtn, 5000)
         cy.get(EditMeasurePage.editMeasureVersionActionBtn).click()
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
+        cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
@@ -265,9 +265,9 @@ describe('Export measure on the Edit Measure page', () => {
         MeasuresPage.actionCenter("edit")
 
         Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
-    
+
         EditMeasurePage.actionCenter(EditMeasureActions.export)
-    
+
         cy.readFile(fullPathToExport, { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
     })
@@ -281,9 +281,9 @@ describe('Export measure on the Edit Measure page', () => {
         MeasuresPage.actionCenter("edit", 1)
 
         Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
-    
+
         EditMeasurePage.actionCenter(EditMeasureActions.export)
-    
+
         cy.readFile(fullPathToExport, { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
     })

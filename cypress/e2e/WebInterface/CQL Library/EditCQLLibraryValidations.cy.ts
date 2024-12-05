@@ -88,7 +88,7 @@ describe('Edit CQL Library validations', () => {
 
     it('CQL Library Edit page validation that the "Experimental" check box can be checked or unchecked -- not required', () => {
 
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
+        cy.get(Header.cqlLibraryTab).click()
 
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
@@ -100,7 +100,7 @@ describe('Edit CQL Library validations', () => {
 
         //experimental check box
         cy.get(CQLLibraryPage.cqlLibraryExperimentalChkBox).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryExperimentalChkBox).focus().wait(1000).check()
+        cy.get(CQLLibraryPage.cqlLibraryExperimentalChkBox).focus().check()
 
 
         //enter / select a publisher value
@@ -122,7 +122,7 @@ describe('Edit CQL Library validations', () => {
         //navigate back to the CQL Library page and navigate to the edit CQL Library page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
+        cy.get(Header.cqlLibraryTab).click()
 
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
@@ -133,7 +133,7 @@ describe('Edit CQL Library validations', () => {
 
         //uncheck the Experimental check box
         cy.get(CQLLibraryPage.cqlLibraryExperimentalChkBox).should('exist')
-        cy.get(CQLLibraryPage.cqlLibraryExperimentalChkBox).focus().wait(1000).uncheck()
+        cy.get(CQLLibraryPage.cqlLibraryExperimentalChkBox).focus().uncheck()
 
         //make sure the save button becomes available even when the check box is not checked
         cy.get(CQLLibraryPage.cqlLibraryStickySave).should('exist')

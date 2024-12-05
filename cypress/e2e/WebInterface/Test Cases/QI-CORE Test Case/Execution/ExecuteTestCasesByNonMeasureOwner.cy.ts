@@ -112,7 +112,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
             cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
-            cy.get(TestCasesPage.aceEditor).wait(500).type(validTestCaseJson, { parseSpecialCharSequences: false })
+            cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -253,7 +253,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
             cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
-            cy.get(TestCasesPage.aceEditor).wait(500).type(validTestCaseJson, { parseSpecialCharSequences: false })
+            cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')

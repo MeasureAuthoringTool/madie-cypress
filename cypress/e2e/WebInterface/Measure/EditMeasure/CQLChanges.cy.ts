@@ -92,7 +92,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(TestCasesPage.runTestButton).should('exist')
             cy.get(TestCasesPage.runTestButton).should('be.visible')
             cy.get(TestCasesPage.runTestButton).should('be.enabled')
-            cy.get(TestCasesPage.runTestButton).wait(1000).click({ force: true })
+            cy.get(TestCasesPage.runTestButton).click({ force: true })
             cy.get(TestCasesPage.cvMeasureObservationActualValue).should('have.value', '30')
 
             //navigate to the CQL Editor tab
@@ -239,7 +239,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(TestCasesPage.runTestButton).should('exist')
             cy.get(TestCasesPage.runTestButton).should('be.visible')
             cy.get(TestCasesPage.runTestButton).should('be.enabled')
-            cy.get(TestCasesPage.runTestButton).wait(1000).click({ force: true })
+            cy.get(TestCasesPage.runTestButton).click({ force: true })
             cy.get(TestCasesPage.cvMeasureObservationActualValue).should('have.value', '30')
 
             //navigate to the CQL Editor tab

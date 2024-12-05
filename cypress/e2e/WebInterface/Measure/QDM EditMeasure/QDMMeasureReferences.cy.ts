@@ -109,7 +109,7 @@ describe('Add Measure Reference - ownership validation', () => {
 
     it('Non Measure owner unable to add Measure References', () => {
 
-        cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
+        cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
         MeasuresPage.actionCenter('edit')
 
@@ -152,7 +152,7 @@ describe('Delete or Edit Measure Reference - Ownership validation', () => {
     it('Non Measure owner unable to delete or edit Measure reference', () => {
 
         OktaLogin.AltLogin()
-        cy.get(MeasuresPage.allMeasuresTab).wait(1000).click()
+        cy.get(MeasuresPage.allMeasuresTab).click()
         cy.reload()
         MeasuresPage.actionCenter('edit')
 

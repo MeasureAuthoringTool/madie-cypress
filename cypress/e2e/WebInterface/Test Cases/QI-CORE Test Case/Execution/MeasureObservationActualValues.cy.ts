@@ -127,7 +127,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).wait(1000).click({ force: true })
+        cy.get(TestCasesPage.runTestButton).click({ force: true })
         cy.get(TestCasesPage.cvMeasureObservationActualValue).should('have.value', '30')
 
     })
@@ -162,7 +162,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
 
         //Add Denominator Observation
         cy.log('Adding Measure Observations')
-        cy.get(MeasureGroupPage.addDenominatorObservationLink).wait(1000).click()
+        cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
@@ -200,7 +200,7 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).wait(1000).click({ force: true })
+        cy.get(TestCasesPage.runTestButton).click({ force: true })
         cy.get(TestCasesPage.denominatorMeasureObservationActualValue).should('have.value', '30')
         cy.get(TestCasesPage.numeratorMeasureObservationActualValue).should('have.value', '30')
 
@@ -274,7 +274,7 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.runTestButton).should('exist')
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
-        cy.get(TestCasesPage.runTestButton).wait(2000).click({ force: true })
+        cy.get(TestCasesPage.runTestButton).click({ force: true })
         cy.get(TestCasesPage.cvMeasureObservationActualValue).should('have.value', '1')
 
     })
@@ -303,7 +303,7 @@ describe('Boolean Measure Observation Actual values', () => {
 
         //Add Denominator Observation
         cy.log('Adding Measure Observations')
-        cy.get(MeasureGroupPage.addDenominatorObservationLink).wait(1000).click()
+        cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
