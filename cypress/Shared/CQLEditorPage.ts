@@ -17,10 +17,10 @@ export class CQLEditorPage {
     public static readonly measureErrorToast = '[class="toast danger"]'
 
     //error tooltip container
-    public static readonly errorContainer = '#ace-editor-wrapper > div.ace_tooltip'
+    public static readonly errorContainer = '[data-testid="generic-errors-text-list"]' //#ace-editor-wrapper > div.ace_tooltip'
 
     //success save message without errors
-    public static readonly successfulCQLSaveNoErrors = '[data-testid="generic-success-text-header"]'
+    public static readonly successfulCQLSaveNoErrors = '.madie-alert' //'[data-testid="generic-success-text-header"]'
 
     //Error/warning marker in side of the CQL Editor window
     public static readonly errorInCQLEditorWindow = '#ace-editor-wrapper > div.ace_gutter > div > div.ace_gutter-cell.ace_error'
@@ -162,9 +162,7 @@ export class CQLEditorPage {
 
     public static validateSuccessfulCQLUpdate(): void {
 
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each(successMsg => {
-            expect(successMsg.text()).to.be.oneOf(['CQL updated successfully but the following issues were found', 'CQL updated successfully'])
-        })
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).find('h3').should('contain.text', 'CQL updated successfully but the following issues were found')
     }
 
     public static applyDefinition(): void {
