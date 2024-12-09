@@ -33,6 +33,38 @@ let measureQICoreCQL_with_different_Lib_name =
     '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
     '		where NoCervixHysterectomy.status = \'completed\''
 
+let qdmUsingStatementCql = 'library TestCql1733741911531 version \'0.0.000\'\n' +
+                                '\n' +
+                                'using QDM version \'5.6\'\n\n' +
+                                '\n' +
+                                'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+                                '\n' +
+                                'parameter "Measurement Period" Interval<DateTime>\n' +
+                                '\n' +
+                                'context Patient'
+
+let fhirUsingStatement = 'library TestLibrary17337661869931379 version \'0.0.000\'\n' +
+    '\n' +
+    'using FHIR version \'4.0.1\'\n' +
+    '\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    '\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    '\n' +
+    'context Patient'
+
+let fhirandQicoreUsingStatements = 'library TestLibrary17337661869931379 version \'0.0.000\'\n' +
+    '\n' +
+    'using QICore version \'4.1.1\'\n' +
+    'using FHIR version \'4.0.1\'\n' +
+    '\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    '\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    '\n' +
+    'context Patient'
+
+
 describe('Validate CQL Editor tab sticky footer', () => {
 
     beforeEach('Create measure and login', () => {
@@ -167,37 +199,6 @@ describe('Measure: CQL Editor', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).click()
             cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
             Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "ELM: 1:55 | Library resource HospiceQICore4 version '2.0.000' is not found")
-    })
-
-    it('Graceful error msg if model is missing in CQL', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //Click on the CQL Editor tab
-        CQLEditorPage.clickCQLEditorTab()
-
-        cy.readFile('cypress/fixtures/EXM124v7QICore4Entry_FHIR_model_error.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-        })
-
-        //save the value in the CQL Editor
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        //Validate message on page
-        CQLEditorPage.validateSuccessfulCQLUpdate()
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Missing a using statement. Please add in a valid model and version.')
-
-        //Validate error(s) in CQL Editor after saving
-
-        cy.scrollTo('top')
-        cy.get(EditMeasurePage.cqlEditorTextBox).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'VSAC: 0:128 | Invalid Code system')
     })
 
     it('Verify Library name and version are replaced with the actual Library Name and Version for the Measure', () => {
@@ -592,6 +593,27 @@ describe('Measure: CQL Editor: using line : QI Core', () => {
         cy.get(CQLLibraryPage.libraryWarning).children().first().should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
         cy.get(CQLLibraryPage.libraryWarning).children().last().should('contain.text', 'Incorrect using statement(s) detected. MADiE has corrected it.')
     })
+
+    it('Verify QDM using statement is replaced by QI-CORE using statement', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(qdmUsingStatementCql)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        CQLEditorPage.validateSuccessfulCQLUpdate()
+
+        cy.get(EditMeasurePage.cqlEditorTextBox.valueOf().toString()).contains('QICore')
+
+        cy.get(CQLLibraryPage.libraryWarning).children().first().should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        cy.get(CQLLibraryPage.libraryWarning).children().last().should('contain.text', 'Incorrect using statement(s) detected. MADiE has corrected it.')
+    })
 })
 
 describe('Measure: CQL Editor: using line : FHIR', () => {
@@ -623,5 +645,48 @@ describe('Measure: CQL Editor: using line : FHIR', () => {
         CQLEditorPage.validateSuccessfulCQLUpdate()
         cy.get(CQLLibraryPage.libraryWarning).children().first().should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
         cy.get(CQLLibraryPage.libraryWarning).children().last().should('contain.text', 'Incorrect using statement(s) detected. MADiE has corrected it.')
+    })
+
+    it('Verify FHIR using statement can be used for QI-Core measure', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(fhirUsingStatement)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        CQLEditorPage.validateSuccessfulCQLUpdate()
+
+        cy.get(EditMeasurePage.cqlEditorTextBox.valueOf().toString()).contains('using FHIR version \'4.0.1\'')
+
+        cy.get(CQLLibraryPage.libraryWarning).children().first().should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        cy.get(CQLLibraryPage.libraryWarning).children().last().should('not.contain.text', 'Incorrect using statement(s) detected. MADiE has corrected it.')
+    })
+
+    it('Verify FHIR and QICORE using statements can be used at the same time', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(fhirandQicoreUsingStatements)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        CQLEditorPage.validateSuccessfulCQLUpdate()
+
+        cy.get(EditMeasurePage.cqlEditorTextBox.valueOf().toString()).contains('using QICore version \'4.1.1\'')
+        cy.get(EditMeasurePage.cqlEditorTextBox.valueOf().toString()).contains('using FHIR version \'4.0.1\'')
+
+        cy.get(CQLLibraryPage.libraryWarning).children().first().should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        cy.get(CQLLibraryPage.libraryWarning).children().last().should('not.contain.text', 'Incorrect using statement(s) detected. MADiE has corrected it.')
     })
 })
