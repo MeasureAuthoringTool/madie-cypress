@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import {CreateMeasurePage, SupportedModels} from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
@@ -21,7 +21,7 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
 
         OktaLogin.Login()
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasure(measureName, CqlLibraryName, '01/01/2012', '12/31/2012')
+        CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4, '01/01/2012', '12/31/2012')
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 

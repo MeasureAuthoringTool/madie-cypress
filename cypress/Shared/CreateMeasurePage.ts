@@ -85,7 +85,7 @@ export class CreateMeasurePage {
 
     }
 
-    public static CreateQICoreMeasure(measureName: string, CqlLibraryName: string, mpStartDate?: string, mpEndDate?: string): void {
+    public static CreateMeasure(measureName: string, CqlLibraryName: string, model: SupportedModels, mpStartDate?: string, mpEndDate?: string): void {
 
         const now = require('dayjs')
 
@@ -102,7 +102,7 @@ export class CreateMeasurePage {
         cy.get(LandingPage.newMeasureButton).click({ force: true })
         cy.get(this.measureNameTextbox).type(measureName)
         cy.get(this.measureModelDropdown).click()
-        cy.get(this.measureModelQICore).click()
+        cy.get('[id="mui-5"]').contains(model).click()
         cy.get(this.eCQMAbbreviatedTitleTextbox).type('eCQMTitle01')
         cy.get(this.cqlLibraryNameTextbox).type(CqlLibraryName)
 
@@ -114,39 +114,7 @@ export class CreateMeasurePage {
 
         cy.get(MeasuresPage.measureListTitles).should('be.visible')
 
-        cy.log('QICore Measure created successfully')
-    }
-
-    public static CreateQDMMeasure(measureName: string, CqlLibraryName: string, mpStartDate?: string, mpEndDate?: string): void {
-
-        const now = require('dayjs')
-
-        if (mpStartDate === undefined) {
-            mpStartDate = now().subtract('1', 'year').format('MM/DD/YYYY')
-        }
-
-        if (mpEndDate === undefined) {
-            mpEndDate = now().format('MM/DD/YYYY')
-        }
-        Utilities.waitForElementVisible(LandingPage.newMeasureButton, 30000)
-        Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 30000)
-        cy.wait(2000)
-        cy.get(LandingPage.newMeasureButton).click({ force: true })
-        cy.get(this.measureNameTextbox).type(measureName)
-        cy.get(this.measureModelDropdown).click()
-        cy.get(this.measureModelQDMv5_6).click()
-        cy.get(this.eCQMAbbreviatedTitleTextbox).type('eCQMTitle01')
-        cy.get(this.cqlLibraryNameTextbox).type(CqlLibraryName)
-
-        cy.get(CreateMeasurePage.measurementPeriodStartDate).type(mpStartDate)
-        cy.get(CreateMeasurePage.measurementPeriodEndDate).type(mpEndDate)
-
-        this.clickCreateMeasureButton()
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
-
-        cy.get(MeasuresPage.measureListTitles).should('be.visible')
-
-        cy.log('QDM Measure created successfully')
+        cy.log('Measure created successfully')
     }
 
     public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,

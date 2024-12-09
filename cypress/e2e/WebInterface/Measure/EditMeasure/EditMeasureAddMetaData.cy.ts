@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import {CreateMeasurePage, SupportedModels} from "../../../../Shared/CreateMeasurePage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { Header } from "../../../../Shared/Header"
@@ -203,7 +203,7 @@ describe('Verify Measure Id and Version Id', () => {
     it('Verify that the Measure Id and Version Id are auto generated for new Measures', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasure(measureName, CqlLibraryName)
+        CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4)
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
