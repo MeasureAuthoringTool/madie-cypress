@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import {CreateMeasurePage, SupportedModels} from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { LandingPage } from "../../../../Shared/LandingPage"
@@ -23,7 +23,7 @@ describe('Measure List Page Searching', () => {
     it('Measure search on My Measures and All Measures tab', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasure(measureName, CqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4)
 
         //Search for the Measure using Measure name
         cy.log('Search Measure with measure name')
