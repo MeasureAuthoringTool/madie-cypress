@@ -379,8 +379,26 @@ describe('Measure: CQL Editor', () => {
         cy.get('[data-testid="generic-errors-text-list"]').should('contain.text', 'ELM: 0:0 | Measure CQL must contain a Context.')
         cy.get('[data-testid="CancelIcon"]').should('be.visible')
 
+    })
 
+    it('FHIRHelpers alias name is defaulted, when CQL has incorrect alias name', () => {
 
+        MeasuresPage.actionCenter('edit')
+
+        CQLEditorPage.clickCQLEditorTab()
+
+        cy.readFile('cypress/fixtures/CQLWithInvalidFHIRHelpersAlias.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+        })
+
+        //save the value in the CQL Editor
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'FHIRHelpers was incorrectly aliased. MADiE has overwritten the alias with \'FHIRHelpers\'.')
     })
 })
 
