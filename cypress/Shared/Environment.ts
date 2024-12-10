@@ -3,7 +3,7 @@ export class Environment {
      * We set our environment variables here in this class
      */
 
-    public static credentials = (): { harpUser: string, password: string, harpUserALT: string, passwordALT: string, umls_API_KEY: string, measureSharing_API_Key: string, deleteMeasureAdmin_API_Key: string } => {
+    public static credentials = (): { harpUser: string, password: string, harpUserALT: string, passwordALT: string, umls_API_KEY: string, measureSharing_API_Key: string, deleteMeasureAdmin_API_Key: string, adminApiKey: string } => {
         switch (Cypress.env('environment')) {
             case 'dev': {
                 return {
@@ -13,7 +13,8 @@ export class Environment {
                     passwordALT: Cypress.env('DEV_ALT_PASSWORD'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
                     measureSharing_API_Key: Cypress.env('DEV_MEASURESHARING_API_KEY'),
-                    deleteMeasureAdmin_API_Key: Cypress.env('DEV_DELETEMEASUREADMIN_API_KEY')
+                    deleteMeasureAdmin_API_Key: Cypress.env('DEV_DELETEMEASUREADMIN_API_KEY'),
+                    adminApiKey: Cypress.env('DEV_ADMIN_API_KEY')
                 }
             }
             case 'test': {
@@ -24,7 +25,8 @@ export class Environment {
                     passwordALT: Cypress.env('TEST_ALT_PASSWORD'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
                     measureSharing_API_Key: Cypress.env('TEST_MEASURESHARING_API_KEY'),
-                    deleteMeasureAdmin_API_Key: Cypress.env('TEST_DELETEMEASUREADMIN_API_KEY')
+                    deleteMeasureAdmin_API_Key: Cypress.env('TEST_DELETEMEASUREADMIN_API_KEY'),
+                    adminApiKey: Cypress.env('TEST_ADMIN_API_KEY')
                 }
             }
             case 'impl': {
@@ -35,7 +37,8 @@ export class Environment {
                     passwordALT: Cypress.env('IMPL_ALT_PASSWORD'),
                     umls_API_KEY: Cypress.env('VSAC_API_KEY'),
                     measureSharing_API_Key: Cypress.env('IMPL_MEASURESHARING_API_KEY'),
-                    deleteMeasureAdmin_API_Key: Cypress.env('IMPL_DELETEMEASUREADMIN_API_KEY')
+                    deleteMeasureAdmin_API_Key: Cypress.env('IMPL_DELETEMEASUREADMIN_API_KEY'),
+                    adminApiKey: Cypress.env('IMPL_ADMIN_API_KEY')
                 }
             }
         }

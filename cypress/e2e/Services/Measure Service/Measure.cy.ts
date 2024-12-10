@@ -27,7 +27,7 @@ let measureCQL = MeasureCQL.SBTEST_CQL
 let eCQMTitle = 'eCQMTitle'
 let versionIdPath = 'cypress/fixtures/versionId'
 let randValue = (Math.floor((Math.random() * 1000) + 1))
-let deleteMeasureAdminAPIKey = Environment.credentials().deleteMeasureAdmin_API_Key
+const adminAPIKey = Environment.credentials().adminApiKey
 
 
 describe('Measure Service: QICore Measure', () => {
@@ -950,7 +950,7 @@ describe('Delete QI-Core Measure with admin API Key', () => {
                             method: 'DELETE',
                             headers: {
                                 Authorization: 'Bearer ' + accessToken.value,
-                                'api-key': deleteMeasureAdminAPIKey
+                                'api-key': adminAPIKey
                             },
                             body: {
                                 "id": id,
@@ -1003,7 +1003,7 @@ describe('Delete QI-Core Measure with admin API Key', () => {
                             method: 'DELETE',
                             headers: {
                                 Authorization: 'Bearer ' + accessToken.value,
-                                'api-key': deleteMeasureAdminAPIKey
+                                'api-key': adminAPIKey
                             },
                             body: {
                                 "id": id,
@@ -1112,7 +1112,7 @@ describe('Delete QDM Measure with admin API Key', () => {
                             method: 'DELETE',
                             headers: {
                                 Authorization: 'Bearer ' + accessToken.value,
-                                'api-key': deleteMeasureAdminAPIKey
+                                'api-key': adminAPIKey
                             },
                             body: {
                                 "id": id,
@@ -1165,7 +1165,7 @@ describe('Delete QDM Measure with admin API Key', () => {
                             method: 'DELETE',
                             headers: {
                                 Authorization: 'Bearer ' + accessToken.value,
-                                'api-key': deleteMeasureAdminAPIKey
+                                'api-key': adminAPIKey
                             },
                             body: {
                                 "id": id,

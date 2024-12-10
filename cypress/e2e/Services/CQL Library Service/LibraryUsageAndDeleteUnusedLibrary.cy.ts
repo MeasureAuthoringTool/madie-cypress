@@ -2,7 +2,7 @@ import {Environment} from "../../../Shared/Environment"
 import {CQLLibraryPage} from "../../../Shared/CQLLibraryPage"
 import {MeasureCQL} from "../../../Shared/MeasureCQL"
 
-let deleteMeasureAdminAPIKey = Environment.credentials().deleteMeasureAdmin_API_Key
+let adminApiKey = Environment.credentials().adminApiKey
 let CQLLibraryName = 'TestCqlLibrary' + Date.now()
 let CQLLibraryPublisher = 'SemanticBits'
 let libraryCQL = MeasureCQL.ICFCleanTestQICore
@@ -81,7 +81,7 @@ describe('Verify Library usage and Delete Library', () => {
                 method: 'DELETE',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
-                    'api-key': deleteMeasureAdminAPIKey
+                    'api-key': adminApiKey
                 }
             }).then((response) => {
                 expect(response.status).to.eql(409)
@@ -99,7 +99,7 @@ describe('Verify Library usage and Delete Library', () => {
                 method: 'DELETE',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
-                    'api-key': deleteMeasureAdminAPIKey
+                    'api-key': adminApiKey
                 }
             }).then((response) => {
                 expect(response.status).to.eql(200)

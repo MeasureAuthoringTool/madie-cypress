@@ -5,7 +5,7 @@ import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utili
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
-let measureSharingAPIKey = Environment.credentials().deleteMeasureAdmin_API_Key
+let adminApiKey = Environment.credentials().adminApiKey
 let harpUserALT = Environment.credentials().harpUserALT
 
 describe('CQL Library Sharing Service', () => {
@@ -73,7 +73,7 @@ describe('CQL Library sharing Validations', () => {
                     url: '/api/cql-libraries/' + id + 5 + 'z' + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
+                        'api-key': adminApiKey
                     },
                     method: 'PUT',
                     body: {
