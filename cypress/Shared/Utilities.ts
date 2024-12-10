@@ -5,8 +5,7 @@ import { CQLLibraryPage } from "./CQLLibraryPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Environment } from "./Environment"
 
-const deleteMeasureAdminAPIKey = Environment.credentials().deleteMeasureAdmin_API_Key
-const measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
+const adminApiKey = Environment.credentials().adminApiKey
 
 export enum PermissionActions {
     GRANT = 'GRANT',
@@ -180,7 +179,7 @@ export class Utilities {
                             method: 'DELETE',
                             headers: {
                                 Authorization: 'Bearer ' + accessToken.value,
-                                'api-key': deleteMeasureAdminAPIKey
+                                'api-key': adminApiKey
                             },
                             body: {
                                 "id": id,
@@ -663,7 +662,7 @@ export class Utilities {
                     url: '/api/' + urlPath + '/' + id + '/acls',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value,
-                        'api-key': measureSharingAPIKey
+                        'api-key': adminApiKey
                     },
                     method: 'PUT',
                     body: {
