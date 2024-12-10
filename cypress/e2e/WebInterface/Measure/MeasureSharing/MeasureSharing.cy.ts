@@ -179,7 +179,6 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.clearLocalStorage()
         //set local user that does not own the measure
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         //Share Measure with ALT User
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
@@ -248,7 +247,6 @@ describe('Remove user\'s share access from a measure', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
 

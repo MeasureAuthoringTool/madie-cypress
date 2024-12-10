@@ -84,7 +84,7 @@ describe('Test Case sorting by Test Case number', () => {
 
         // test for https://jira.cms.gov/browse/MAT-7893
         TestCasesPage.testCaseAction('edit')
-        cy.get(TestCasesPage.testCasesBCText).should('contain.text', 'Case #1:')    
+        cy.get(TestCasesPage.testCasesBCText).should('contain.text', 'Case #1:')
 
         TestCasesPage.createTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd, testCaseJson2nd)
 
@@ -111,9 +111,9 @@ describe('Test Case sorting by Test Case number', () => {
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/ATest Series 1Test Case 1' + testCaseDescription + todaysDate + 'Select2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select')
         Utilities.waitForElementVisible(TestCasesPage.testCaseAction0Btn, 5000)
-        cy.get(TestCasesPage.testCaseAction0Btn).find('[class="action-button"]').should('contain.text', 'Select').wait(2500).click()
+        cy.get(TestCasesPage.testCaseAction0Btn).find('[class="action-button"]').should('contain.text', 'Select').click()
         cy.get('[class="popover-content"]').find('[class="btn-container"]').find('[aria-label="edit-test-case-Test Case 1"]').contains('edit').click()
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().wait(2500).click()
+        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
         cy.get(TestCasesPage.testCaseTitle).click()
         cy.get(TestCasesPage.testCaseTitle).type('{moveToEnd}')
         cy.get(TestCasesPage.testCaseTitle).type('12')
@@ -223,27 +223,27 @@ describe('Import Test cases onto an existing Qi Core measure via file and ensure
         Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 5000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
-        
+
         /*
         Used these 2 articles to piece this together
         selector: https://www.geeksforgeeks.org/how-to-select-first-and-last-td-in-a-row-with-css/
         process: https://glebbahmutov.com/cypress-examples/recipes/get-text-list.html#collect-the-items-then-assert-the-list
         */
-        const ascCases = [] 
+        const ascCases = []
         cy.get('tr td:first-child').each(el => {
             ascCases.push(el.text())
         })
-        cy.wrap(ascCases).should('deep.equal', ['1','2','3','4'])
-     
+        cy.wrap(ascCases).should('deep.equal', ['1', '2', '3', '4'])
+
         //second click sorts in descending order
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
 
-        const descCases = [] 
+        const descCases = []
         cy.get('tr td:first-child').each(el => {
             descCases.push(el.text())
         })
-        cy.wrap(descCases).should('deep.equal', ['4','3','2','1'])
+        cy.wrap(descCases).should('deep.equal', ['4', '3', '2', '1'])
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -280,7 +280,7 @@ describe('Qi Core Measure - Test case number on a Draft Measure', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(newMeasureName, versionNumber)
-        cy.log('Version Created Successfully').wait(5000)
+        cy.log('Version Created Successfully')
 
         //Draft the Versioned Measure
         MeasuresPage.actionCenter('draft')
@@ -303,7 +303,7 @@ describe('Qi Core Measure - Test case number on a Draft Measure', () => {
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(secondTestCaseTitle.toString())

@@ -55,7 +55,6 @@ describe('CQL Library Transfer', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
@@ -128,7 +127,6 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 

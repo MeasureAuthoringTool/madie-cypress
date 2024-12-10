@@ -64,12 +64,12 @@ describe('MADIE Zip Test Case Import', () => {
     it('MADIE Zip Test Case Import', () => {
 
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
-        cy.get(Header.cqlLibraryTab).click().wait(3000)
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -125,7 +125,7 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
-        cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({ force: true })
+        cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
@@ -280,12 +280,12 @@ describe('MADIE Zip Test Case Import: error message should appear when the .madi
     it('MADIE Zip Test Case Import: error message appears when .madie file is missing from the .zip file', () => {
 
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
-        cy.get(Header.cqlLibraryTab).click().wait(3000)
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -301,7 +301,7 @@ describe('MADIE Zip Test Case Import: error message should appear when the .madi
         Utilities.waitForElementVisible(TestCasesPage.tcImportButton, 3750)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.tcFileDrop).find(TestCasesPage.tcFileDropInput).attachFile("TestCase7345TsteCQM-v0.0.000-FHIR4-TestCases.zip").wait(3000)
+        cy.get(TestCasesPage.tcFileDrop).find(TestCasesPage.tcFileDropInput).attachFile("TestCase7345TsteCQM-v0.0.000-FHIR4-TestCases.zip")
         cy.get(TestCasesPage.tcImportError).should('contain.text', 'Zip file is in an incorrect format. If this is an export prior to June 20, 2024 please reexport your test case and try again.')
 
         //close the test case import modal

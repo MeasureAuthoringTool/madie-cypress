@@ -87,12 +87,12 @@ describe('Test Case Import: functionality tests', () => {
 
         OktaLogin.Login()
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
-        cy.get(Header.cqlLibraryTab).click().wait(3000)
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -141,9 +141,9 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export test case
-        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().wait(1000).click({ force: true })
+        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
-        cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({ force: true })
+        cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
@@ -176,7 +176,7 @@ describe('Test Case Import: functionality tests', () => {
         //export test case
         cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
-        cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({ force: true })
+        cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
@@ -280,16 +280,16 @@ describe('Test Case Import validations for versioned Measures', () => {
 
         //navigating to the All Measures tab
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 45000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').wait(4000)
-        cy.get(MeasuresPage.allMeasuresTab).click().wait(4000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        cy.get(MeasuresPage.allMeasuresTab).click()
 
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 45000)
-        cy.get(Header.cqlLibraryTab).should('be.visible').wait(4000)
-        cy.get(Header.cqlLibraryTab).click().wait(4000)
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 45000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(4000)
-        cy.get(Header.mainMadiePageButton).click().wait(4000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 45000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
@@ -460,7 +460,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         MeasuresPage.actionCenter('edit', 2)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().wait(1000).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
@@ -481,8 +481,8 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit', 2)
@@ -493,7 +493,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         //export test case
         cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
-        cy.get(TestCasesPage.exportCollectionTypeOption).wait(2000).scrollIntoView().click({ force: true })
+        cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
@@ -502,8 +502,8 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.reload()
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -529,11 +529,11 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
-     
+
         // checks for details of tc1 and tc2, but does not care about order
         cy.get(TestCasesPage.testCaseListTable).contains(/SBTestSeriesFb2Failing Test Caseb2DENOMFailb2/).should('exist')
         cy.get(TestCasesPage.testCaseListTable).contains(/SBTestSeriesPb1Passing Test Caseb1DENOMPassb1/).should('exist')
-        
+
         //verify confirmation message
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessInfo, 35000)
 
@@ -601,7 +601,7 @@ describe('Test case uniqueness error validation', () => {
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle + 'b1')
@@ -620,8 +620,8 @@ describe('Test case uniqueness error validation', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -643,7 +643,7 @@ describe('Test case uniqueness error validation', () => {
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
-        cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1InvalidSBTestSeriesPb1Passing Test Caseb1' + testCaseDescription + 'b1' + todaysDate + 'Select')
 
@@ -708,8 +708,8 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         cy.get(EditMeasurePage.testCasesTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -736,7 +736,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         // checks for details of tc1 and tc2, but does not care about order
         cy.get(TestCasesPage.testCaseListTable).contains(/SBTestSeriesFb2Failing Test Caseb2DENOMFailb2/).should('exist')
         cy.get(TestCasesPage.testCaseListTable).contains(/SBTestSeriesPb1Passing Test Caseb1DENOMPassb1/).should('exist')
-        
+
         //verifies alert message at tope of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
         cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Following test case(s) were imported successfully, but the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been')

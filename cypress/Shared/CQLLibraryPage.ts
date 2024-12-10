@@ -79,7 +79,7 @@ export class CQLLibraryPage {
         Utilities.waitForElementEnabled(CQLLibraryPage.createCQLLibraryBtn, 60000)
 
         cy.get(this.createCQLLibraryBtn).should('be.visible')
-        cy.get(this.createCQLLibraryBtn).should('be.enabled').wait(1500)
+        cy.get(this.createCQLLibraryBtn).should('be.enabled')
         cy.get(this.createCQLLibraryBtn).click()
 
         cy.get(this.newCQLLibName).should('be.visible')
@@ -92,7 +92,7 @@ export class CQLLibraryPage {
 
         this.clickCreateLibraryButton()
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(1000).click()
+        cy.get(Header.cqlLibraryTab).click()
 
         this.validateCQlLibraryName(CQLLibraryName)
         this.validateCQlLibraryModel('QI-Core')
@@ -169,7 +169,7 @@ export class CQLLibraryPage {
         //setup for grabbing the measure create call
         cy.intercept('POST', '/api/cql-libraries').as(alias)
 
-        cy.get(this.saveCQLLibraryBtn).wait(1000).click()
+        cy.get(this.saveCQLLibraryBtn).click()
         //saving measureID to file to use later
         cy.wait('@' + alias).then(({ response }) => {
             expect(response.statusCode).to.eq(201)

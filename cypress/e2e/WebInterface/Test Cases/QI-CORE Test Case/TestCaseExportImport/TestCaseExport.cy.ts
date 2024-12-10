@@ -48,12 +48,12 @@ describe('QI-Core Single Test Case Export', () => {
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
-        cy.get(Header.cqlLibraryTab).click().wait(3000)
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit')
 
@@ -140,12 +140,12 @@ describe('QI-Core Test Case Export for all test cases', () => {
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
-        cy.get(Header.cqlLibraryTab).click().wait(3000)
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit')
 

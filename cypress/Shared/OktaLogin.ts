@@ -25,7 +25,6 @@ export class OktaLogin {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookieALT()
-        cy.wait(1000)
 
         cy.visit('/login', { onBeforeLoad: (win) => { win.sessionStorage.clear() } })
 
@@ -33,7 +32,6 @@ export class OktaLogin {
         cy.get(this.usernameInput, { timeout: 110000 }).should('be.visible')
         cy.get(this.passwordInput, { timeout: 110000 }).should('be.enabled')
         cy.get(this.passwordInput, { timeout: 110000 }).should('be.visible')
-        cy.wait(3000)
         cy.get(this.usernameInput).type(Environment.credentials().harpUserALT)
         cy.get(this.passwordInput).type(Environment.credentials().passwordALT)
         cy.get(this.signInButton, { timeout: 110000 }).should('be.enabled')
@@ -72,7 +70,6 @@ export class OktaLogin {
         cy.get(this.usernameInput, { timeout: 110000 }).should('be.visible')
         cy.get(this.passwordInput, { timeout: 110000 }).should('be.enabled')
         cy.get(this.passwordInput, { timeout: 110000 }).should('be.visible')
-        cy.wait(3000)
         cy.get(this.usernameInput).type(Environment.credentials().harpUser)
         cy.get(this.passwordInput).type(Environment.credentials().password)
         cy.get(this.signInButton, { timeout: 110000 }).should('be.enabled')
@@ -94,7 +91,6 @@ export class OktaLogin {
 
         })
         cy.get(LandingPage.newMeasureButton).should('be.visible')
-        cy.wait(2050)
         cy.log('Login Successful')
     }
 
@@ -128,7 +124,6 @@ export class OktaLogin {
 
     public static UILogout(): void {
 
-        //cy.wait(7000)
         Utilities.waitForElementVisible(Header.userProfileSelect, 500000)
         cy.get(Header.userProfileSelect).scrollIntoView()
         cy.get(Header.userProfileSelect).click()

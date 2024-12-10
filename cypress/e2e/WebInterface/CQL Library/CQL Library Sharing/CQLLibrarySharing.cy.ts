@@ -59,7 +59,6 @@ describe('CQL Library Sharing', () => {
         cy.clearLocalStorage()
         //set local user that does not own the Library
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
@@ -136,7 +135,6 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.clearLocalStorage()
         //set local user that does not own the Library
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
@@ -157,7 +155,6 @@ describe('Remove user\'s share access from a library', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
 
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
 

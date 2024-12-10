@@ -185,7 +185,6 @@ export class EditMeasurePage {
     public static actionCenter(action: EditMeasureActions): void {
 
         cy.get(this.editMeasureButtonActionBtn).click()
-        cy.wait(500)
 
         switch (action) {
 
@@ -215,7 +214,6 @@ export class EditMeasurePage {
                 cy.get(MeasuresPage.versionMeasuresSelectionButton).click()
                 cy.get(MeasuresPage.measureVersionMajor).click()
                 // need a short pause here for the modal to present new fields
-                cy.wait(1500)
 
                 cy.get('#new-version').invoke('val').then(value => {
                     cy.get(MeasuresPage.confirmMeasureVersionNumber).type(value.toString())
@@ -246,7 +244,6 @@ export class EditMeasurePage {
             }
             default: { }
 
-            cy.wait(1500)
         }
     }
 }

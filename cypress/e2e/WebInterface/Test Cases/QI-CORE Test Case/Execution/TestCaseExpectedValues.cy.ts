@@ -173,11 +173,11 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Delete Measure group
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        cy.get(EditMeasurePage.measureGroupsTab).wait(2000).click()
+        cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.deleteGroupbtn).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.deleteGroupbtn).click()
         cy.get(MeasureGroupPage.yesDeleteModalbtn).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.yesDeleteModalbtn).click().wait(1000)
+        cy.get(MeasureGroupPage.yesDeleteModalbtn).click()
         cy.get('[data-testid="save-measure-group-validation-message"]').should('contain.text', 'You must set all required Populations.')
 
         //Navigate to Edit Test Case page and assert Measure group after deletion
