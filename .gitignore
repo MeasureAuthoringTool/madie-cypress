@@ -25,6 +25,8 @@ cypress/fixtures/measureId
 cypress/fixtures/measureId*
 cypress/fixtures/measureSetId
 cypress/fixtures/measureSetId*
+cypress/fixtures/stratificationId
+cypress/fixtures/stratificationId*
 cypress/fixtures/testCaseId
 cypress/fixtures/testCaseId*
 cypress/fixtures/testCasePId
