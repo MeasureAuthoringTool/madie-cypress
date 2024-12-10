@@ -52,16 +52,16 @@ describe('QI-Core: Export Bundle options: Transaction or Collection', () => {
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').wait(3000)
-        cy.get(MeasuresPage.allMeasuresTab).click().wait(3000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        cy.get(MeasuresPage.allMeasuresTab).click()
 
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
-        cy.get(Header.cqlLibraryTab).click().wait(3000)
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
@@ -77,7 +77,7 @@ describe('QI-Core: Export Bundle options: Transaction or Collection', () => {
             Utilities.waitForElementVisible('[data-testid="select-action-' + fileContents + '"]', 50000)
             cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="select-action-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.enabled').wait(1000)
+            cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.enabled')
             cy.get('[data-testid="select-action-' + fileContents + '"]').click()
             cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
             Utilities.waitForElementVisible('[data-testid="export-transaction-bundle-' + fileContents + '"]', 55000)
@@ -94,16 +94,16 @@ describe('QI-Core: Export Bundle options: Transaction or Collection', () => {
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').wait(3000)
-        cy.get(MeasuresPage.allMeasuresTab).click().wait(3000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        cy.get(MeasuresPage.allMeasuresTab).click()
 
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
-        cy.get(Header.cqlLibraryTab).click().wait(3000)
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
@@ -119,7 +119,7 @@ describe('QI-Core: Export Bundle options: Transaction or Collection', () => {
             Utilities.waitForElementVisible('[data-testid="select-action-' + fileContents + '"]', 50000)
             cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="select-action-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.enabled').wait(1000)
+            cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.enabled')
             cy.get('[data-testid="select-action-' + fileContents + '"]').click()
             cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
             Utilities.waitForElementVisible('[data-testid="export-collection-bundle-' + fileContents + '"]', 55000)
@@ -155,16 +155,16 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').wait(3000)
-        cy.get(MeasuresPage.allMeasuresTab).click().wait(3000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        cy.get(MeasuresPage.allMeasuresTab).click()
 
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
-        cy.get(Header.cqlLibraryTab).click().wait(3000)
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
 
@@ -181,8 +181,8 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         cy.log('Successfully verified zip file export')
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -204,14 +204,14 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
-        cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/ASBTestSeriesTitle for Auto Test' + testCaseDescription + todaysDate + 'Select')
 
         //navigate to test case edit / detail page
         TestCasesPage.testCaseAction('edit')
 
-        cy.get(TestCasesPage.aceEditor).wait(3000).should('include.text', '"type": "transaction"')
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
 
     })
 })
@@ -242,16 +242,16 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').wait(3000)
-        cy.get(MeasuresPage.allMeasuresTab).click().wait(3000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        cy.get(MeasuresPage.allMeasuresTab).click()
 
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
-        cy.get(Header.cqlLibraryTab).click().wait(3000)
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
 
@@ -266,13 +266,13 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(TestCasesPage.exportTransactionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist').wait(1000)
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
         cy.reload()
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -294,14 +294,14 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
-        cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/A' + testCaseSeries + 'b' + 'Title for Auto Testb' + testCaseDescription + 'b' + todaysDate + 'Select1N/A' + testCaseSeries + 'a' + 'Title for Auto Testa' + testCaseDescription + 'a' + todaysDate + 'Select')
 
         //navigate to test case edit / detail page for the first test case
         TestCasesPage.testCaseAction('edit')
 
-        cy.get(TestCasesPage.aceEditor).wait(3000).should('include.text', '"type": "transaction"')
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -309,7 +309,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         //navigate to test case edit / detail page for the second test case
         TestCasesPage.testCaseAction('edit', true)
 
-        cy.get(TestCasesPage.aceEditor).wait(3000).should('include.text', '"type": "transaction"')
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
 
 
     })
@@ -341,16 +341,16 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').wait(3000)
-        cy.get(MeasuresPage.allMeasuresTab).click().wait(3000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        cy.get(MeasuresPage.allMeasuresTab).click()
 
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
-        cy.get(Header.cqlLibraryTab).click().wait(3000)
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
 
@@ -367,8 +367,8 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         cy.log('Successfully verified zip file export')
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -390,14 +390,14 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
-        cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/ASBTestSeriesTitle for Auto Test' + testCaseDescription + todaysDate + 'Select')
 
         //navigate to test case edit / detail page
         TestCasesPage.testCaseAction('edit')
 
-        cy.get(TestCasesPage.aceEditor).wait(3000).should('include.text', '"type": "collection"')
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
 
     })
 })
@@ -428,16 +428,16 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible').wait(3000)
-        cy.get(MeasuresPage.allMeasuresTab).click().wait(3000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        cy.get(MeasuresPage.allMeasuresTab).click()
 
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible').wait(3000)
-        cy.get(Header.cqlLibraryTab).click().wait(3000)
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
 
@@ -452,13 +452,13 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist').wait(1000)
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
         cy.reload()
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible').wait(3000)
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
+        cy.get(Header.mainMadiePageButton).should('be.visible')
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -480,14 +480,14 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
-        cy.get(TestCasesPage.importTestCaseBtnOnModal).click().wait(2000)
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASBTestSeriesbTitle for Auto Testb' + testCaseDescription + 'b' + todaysDate + 'Select1N/ASBTestSeriesaTitle for Auto Testa' + testCaseDescription + 'a' + todaysDate + 'Select')
 
         //navigate to test case edit / detail page for the first test case
         TestCasesPage.testCaseAction('edit')
 
-        cy.get(TestCasesPage.aceEditor).wait(3000).should('include.text', '"type": "collection"')
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -495,7 +495,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         //navigate to test case edit / detail page for the second test case
         TestCasesPage.testCaseAction('edit', true)
 
-        cy.get(TestCasesPage.aceEditor).wait(3000).should('include.text', '"type": "collection"')
+        cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
 
 
     })

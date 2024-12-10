@@ -29,8 +29,7 @@ export class CQLLibrariesPage {
         //Navigate to CQL Library Page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).wait(2000).click()
-        cy.wait(2000)
+        cy.get(Header.cqlLibraryTab).click()
         Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
         cy.readFile(filePath).should('exist').then((fileContents) => {
 
@@ -39,7 +38,7 @@ export class CQLLibrariesPage {
             cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').should('exist')
             cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid=cqlLibrary-button-' + fileContents + ']', 3500)
-            cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').wait(1000).click()
+            cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').click()
 
             cy.wait('@cqlLibrary').then(({ response }) => {
                 expect(response.statusCode).to.eq(200)
@@ -103,7 +102,7 @@ export class CQLLibrariesPage {
             Utilities.waitForElementVisible('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
             cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled').wait(1000)
+            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled')
             switch ((action.valueOf()).toString().toLowerCase()) {
                 case "edit": {
                     cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').click()

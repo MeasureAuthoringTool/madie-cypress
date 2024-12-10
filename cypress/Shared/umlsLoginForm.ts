@@ -23,8 +23,8 @@ export class umlsLoginForm {
         //umls login link appears and is available to click, at the top of the page
         cy.get(Header.umlsLoginButton).should('exist')
         cy.get(Header.umlsLoginButton).should('be.visible')
-        cy.get(Header.umlsLoginButton).should('be.enabled').wait(1000)
-        cy.get(Header.umlsLoginButton).click().wait(1000)
+        cy.get(Header.umlsLoginButton).should('be.enabled')
+        cy.get(Header.umlsLoginButton).click()
 
         //form to enter API and to actually log into UMLS appears and is available to read and enter API key
         cy.get(umlsLoginForm.umlsForm).should('exist')

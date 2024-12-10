@@ -99,7 +99,7 @@ describe('Non Boolean Population Basis Expected values', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
 
         //the filter by field
-        cy.get(TestCasesPage.tcFilterInput).scrollIntoView().wait(1500).click()
+        cy.get(TestCasesPage.tcFilterInput).scrollIntoView().click()
         cy.get(TestCasesPage.tcFilterByGroup).click()
         cy.get(TestCasesPage.tcSearchInput).type('NA')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()

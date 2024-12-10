@@ -89,7 +89,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         cy.clearAllCookies()
@@ -200,7 +199,6 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.wait(1000)
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         cy.clearCookies()

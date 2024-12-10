@@ -56,8 +56,8 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).wait(1000).check()
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).wait(1000).should('be.checked')
+        cy.get(TestCasesPage.testCaseMSRPOPLExpected).check()
+        cy.get(TestCasesPage.testCaseMSRPOPLExpected).should('be.checked')
 
         //Validate measure observation expected values
         cy.get(TestCasesPage.measureObservationRow).clear().type('@#')
@@ -89,7 +89,7 @@ describe('Measure Observation Expected values', () => {
 
         //Add Denominator Observation
         cy.log('Adding Measure Observations')
-        cy.get(MeasureGroupPage.addDenominatorObservationLink).wait(1000).click()
+        cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
         cy.get('[data-value="booleanFunction"]').click() //select booleanFunction
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
@@ -118,10 +118,10 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseDENOMExpected).wait(1000).check()
-        cy.get(TestCasesPage.testCaseDENOMExpected).wait(1000).should('be.checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).wait(1000).check()
-        cy.get(TestCasesPage.testCaseNUMERExpected).wait(1000).should('be.checked')
+        cy.get(TestCasesPage.testCaseDENOMExpected).check()
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
+        cy.get(TestCasesPage.testCaseNUMERExpected).check()
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         //Validate measure observation expected values
         cy.get(TestCasesPage.denominatorObservationRow).type('@#')
@@ -161,8 +161,8 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).wait(1000).check()
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).wait(1000).should('be.checked')
+        cy.get(TestCasesPage.testCaseMSRPOPLExpected).check()
+        cy.get(TestCasesPage.testCaseMSRPOPLExpected).should('be.checked')
 
         //Enter value in to Measure observation Expected values
         cy.get(TestCasesPage.measureObservationRow).type('1.3')
@@ -297,7 +297,7 @@ describe('Measure observation expected result', () => {
 
         //Add Denominator Observation
         cy.log('Adding Measure Observations')
-        cy.get(MeasureGroupPage.addDenominatorObservationLink).wait(1000).click()
+        cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
         cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
         cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')

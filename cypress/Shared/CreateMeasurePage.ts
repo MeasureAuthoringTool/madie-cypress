@@ -98,7 +98,6 @@ export class CreateMeasurePage {
         }
         Utilities.waitForElementVisible(LandingPage.newMeasureButton, 30000)
         Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 30000)
-        cy.wait(2000)
         cy.get(LandingPage.newMeasureButton).click({ force: true })
         cy.get(this.measureNameTextbox).type(measureName)
         cy.get(this.measureModelDropdown).click()
@@ -482,7 +481,7 @@ export class CreateMeasurePage {
         if (optionalParams && optionalParams.blankMetadata) {
             measureMetadata = {
                 "experimental": false,
-                "steward": undefined, 
+                "steward": undefined,
                 "developers": []
             }
         } else {
@@ -494,7 +493,7 @@ export class CreateMeasurePage {
                     "id": "64120f265de35122e68dac40",
                     "oid": "02c84f54-919b-4464-bf51-a1438f2710e2",
                     "url": "https://semanticbits.com/"
-                }, 
+                },
                 "developers": [
                     {
                         "id": "64120f265de35122e68dabf7",

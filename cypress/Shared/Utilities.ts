@@ -621,18 +621,16 @@ export class Utilities {
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').wait(500).type('{enter}')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
     }
 
     public static validateErrors(errorElementObject: string, errorContainer: string, errorMsg1: string, errorMsg2?: string): void {
 
         cy.get(errorElementObject).should('exist')
         cy.get(errorElementObject).should('be.visible')
-        cy.get(errorElementObject).invoke('show').wait(1000).click({ force: true, multiple: true })
-        // cy.wait(1000)
+        cy.get(errorElementObject).invoke('show').click({ force: true, multiple: true })
         // cy.get(errorContainer).invoke('show').should('contain.text', errorMsg1)
         if ((errorMsg1 != null) || (errorMsg1 != undefined)) {
-            cy.wait(1000)
             cy.get(errorContainer).invoke('show').should('contain', errorMsg1)
         }
 

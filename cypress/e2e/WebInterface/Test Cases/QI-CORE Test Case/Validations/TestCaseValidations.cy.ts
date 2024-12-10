@@ -92,7 +92,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Create test
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
@@ -123,7 +123,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Create test
 
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(800)
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
 
         cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
 
@@ -212,7 +212,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
@@ -243,7 +243,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
 
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(800)
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
 
         cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
 
@@ -361,7 +361,7 @@ describe.only('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
@@ -392,7 +392,7 @@ describe.only('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
 
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(800)
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
 
         cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
 
@@ -529,7 +529,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
@@ -560,7 +560,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
 
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(800)
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
 
         cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
 
@@ -723,7 +723,6 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.wait(4500)
         OktaLogin.Logout()
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
         OktaLogin.Login()
@@ -925,7 +924,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
@@ -959,10 +958,10 @@ describe('Duplicate Test Case Title and Group validations', () => {
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).wait(2000).type('SecondTestCase'.toString())
+        cy.get(TestCasesPage.createTestCaseTitleInput).type('SecondTestCase'.toString())
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
@@ -970,17 +969,17 @@ describe('Duplicate Test Case Title and Group validations', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).wait(1000).type('SecondTestCaseGroup').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('SecondTestCaseGroup').type('{enter}')
 
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
         //Edit First Test case
         TestCasesPage.clickEditforCreatedTestCase()
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseTitle).clear().wait(2000).type('{selectall}{backspace}{selectall}{backspace}').type('SecondTestCase'.toString())
+        cy.get(TestCasesPage.testCaseTitle).clear().type('{selectall}{backspace}{selectall}{backspace}').type('SecondTestCase'.toString())
         cy.get(TestCasesPage.testCaseSeriesTextBox).should('exist')
         cy.get(TestCasesPage.testCaseSeriesTextBox).should('be.visible')
-        cy.get(TestCasesPage.testCaseSeriesTextBox).clear().wait(1000).type('SecondTestCaseGroup').type('{enter}')
+        cy.get(TestCasesPage.testCaseSeriesTextBox).clear().type('SecondTestCaseGroup').type('{enter}')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get('[data-testid="error-toast"]').should('contain.text', 'The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')

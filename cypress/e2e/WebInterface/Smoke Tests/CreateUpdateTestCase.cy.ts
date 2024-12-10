@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import {CreateMeasurePage, SupportedModels} from "../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
@@ -132,7 +132,7 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
@@ -162,7 +162,7 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
         cy.get(TestCasesPage.detailsTab).click()
 
         //Save edited / updated to test case
-        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(1000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.log('JSON added to test case successfully')
 
         //Verify Last Saved Date on Test case list page

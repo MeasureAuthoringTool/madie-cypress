@@ -588,7 +588,6 @@ export class TestCasesPage {
         cy.readFile(elementIdPath).should('exist').then((fileContents) => {
             Utilities.waitForElementEnabled('[data-testid="view-element-btn-' + fileContents + '"]', 50000)
             cy.get('[data-testid="view-element-btn-' + fileContents + '"]').should('be.enabled')
-            cy.wait(6000)
             cy.get('[data-testid="view-element-btn-' + fileContents + '"]').scrollIntoView()
             cy.scrollTo(0, 500)
             Utilities.waitForElementVisible('[data-testid="view-element-btn-' + fileContents + '"]', 50000)
@@ -644,7 +643,7 @@ export class TestCasesPage {
             Utilities.waitForElementVisible('[data-testid="select-action-' + fileContents + '"]', 50000)
             cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.visible')
             Utilities.waitForElementEnabled('[data-testid="select-action-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.enabled').wait(1000)
+            cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.enabled')
             switch ((action.valueOf()).toString().toLowerCase()) {
                 case "edit": {
                     cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
@@ -716,7 +715,7 @@ export class TestCasesPage {
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click().wait(3500)
+        cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(this.newTestCaseButton).should('be.visible')
         cy.get(this.newTestCaseButton).should('be.enabled')
         cy.get(this.newTestCaseButton).click()
@@ -724,7 +723,7 @@ export class TestCasesPage {
         cy.get(this.createTestCaseDialog).should('exist')
         cy.get(this.createTestCaseDialog).should('be.visible')
 
-        cy.get(this.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(this.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(this.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(this.createTestCaseTitleInput, 30000)
         cy.get(this.createTestCaseTitleInput).type(testCaseTitle.toString())
@@ -755,7 +754,7 @@ export class TestCasesPage {
         cy.get(this.createTestCaseDialog).should('exist')
         cy.get(this.createTestCaseDialog).should('be.visible')
 
-        cy.get(this.createTestCaseTitleInput).should('exist').wait(500)
+        cy.get(this.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(this.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(this.createTestCaseTitleInput, 30000)
         cy.get(this.createTestCaseTitleInput).type(testCaseTitle.toString())
@@ -784,7 +783,7 @@ export class TestCasesPage {
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
-        cy.get(TestCasesPage.aceEditor).wait(500).type(err_TestCaseJson, { parseSpecialCharSequences: false })
+        cy.get(TestCasesPage.aceEditor).type(err_TestCaseJson, { parseSpecialCharSequences: false })
 
         cy.log('Erroneous JSON added to test case successfully')
     }
@@ -803,14 +802,14 @@ export class TestCasesPage {
         Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(800)
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
 
         cy.get(this.aceEditor).type(testCaseJson, { parseSpecialCharSequences: false })
 
         cy.get(this.detailsTab).click()
 
         //Save edited / updated to test case
-        cy.get(this.editTestCaseSaveButton).click().wait(1000)
+        cy.get(this.editTestCaseSaveButton).click()
         cy.log('JSON added to test case successfully')
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -1007,7 +1006,7 @@ export class TestCasesPage {
     public static ImportTestCaseFile(TestCaseFile: string | string[]): void {
 
         //Upload valid Json file
-        cy.get(this.testCaseFileImport).attachFile(TestCaseFile).wait(1000)
+        cy.get(this.testCaseFileImport).attachFile(TestCaseFile)
 
         cy.get(this.importTestCaseSuccessMsg).should('contain.text', 'Test Case JSON copied into editor. QI-Core Defaults have been added. Please review and save your Test Case.')
 
@@ -1018,7 +1017,7 @@ export class TestCasesPage {
     public static ValidateValueAddedToTestCaseJson(ValueToBeAdded: string | string[]): void {
 
         cy.get(this.aceEditor).should('exist')
-        cy.get(this.aceEditor).should('be.visible').wait(1000)
+        cy.get(this.aceEditor).should('be.visible')
         //cy.get(this.aceEditorJsonInput).should('exist')
         cy.get(this.aceEditor).invoke('text').then(
             (text) => {
@@ -1038,7 +1037,7 @@ export class TestCasesPage {
         cy.get(TestCasesPage.QDMGenderOption).contains(gender).click()
         cy.get(TestCasesPage.QDMEthnicity).click()
         cy.get('[data-value="' + ethnicity + '"]').click()
-        cy.get(TestCasesPage.QDMDob).clear().wait(1700).click().wait(1000)
+        cy.get(TestCasesPage.QDMDob).clear().click()
         cy.get(TestCasesPage.QDMDob).type(dob).click()
     }
 }
