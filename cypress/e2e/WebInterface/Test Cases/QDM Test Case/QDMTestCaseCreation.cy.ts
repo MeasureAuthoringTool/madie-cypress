@@ -190,7 +190,8 @@ describe('Validating the creation of QDM Test Case', () => {
 
         //verify that the user is, now, on the test case list page
         cy.readFile(measurePath).should('exist').then((measureId) => {
-            cy.url().should('contain', measureId + '/edit/test-cases')
+            Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 12500)
+            cy.url().should('contain', measureId + '/edit/test-cases/list-page?filter=&search=&page=1&limit=10')
         })
     })
 })
