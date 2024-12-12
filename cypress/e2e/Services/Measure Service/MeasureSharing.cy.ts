@@ -5,7 +5,7 @@ import {Environment} from "../../../Shared/Environment"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
-let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
+let measureSharingAPIKey = Environment.credentials().adminApiKey
 let harpUserALT = Environment.credentials().harpUserALT
 let measureCQL = MeasureCQL.SBTEST_CQL
 

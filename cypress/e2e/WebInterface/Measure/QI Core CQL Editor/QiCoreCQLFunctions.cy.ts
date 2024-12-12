@@ -57,7 +57,7 @@ let measureCQL = 'library CVEpisodeWithStratification version \'0.0.000\'\n' +
     ' where Enc.type in "Preventive Care Services - Established Office Visit, 18 and Up"'
 
 //Skipping until feature flag "CQLBuilderFunctions" is removed
-describe.skip('QDM CQL Functions', () => {
+describe.skip('Qi Core CQL Functions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -78,12 +78,65 @@ describe.skip('QDM CQL Functions', () => {
 
     })
 
-    it('Functions and Fluent Functions displayed under Saved Functions tab', () => {
+    it('Apply Function to the Qi Core CQL and verify under Saved Functions tab', () => {
 
+        //Apply Function to the CQL
         cy.get(CQLEditorPage.functionsTab).click()
-        cy.get(CQLEditorPage.savedFunctionsTab).click()
+        cy.get(CQLEditorPage.functionNameTextbox).type('Denominator Exclusions')
+        cy.get(CQLEditorPage.fluentFunctionCheckbox).click()
+        cy.get(CQLEditorPage.argumentNameTextbox).type('TheEncounterEncounter')
+        cy.get(CQLEditorPage.argumentTypeDropdown).click()
+        cy.get(CQLEditorPage.argumentTypeString).click()
+        cy.get(CQLEditorPage.addArgumentBtn).click()
+        cy.get(CQLEditorPage.expressionEditorType).click()
+        cy.get(CQLEditorPage.expressionEditorDefinitionOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        cy.get(CQLEditorPage.expressionEditorNameDenominatorOption).click()
+        cy.get(CQLEditorPage.expressionEditorInsertBtn).click()
+        cy.get(CQLEditorPage.applyFunctionBtn).click()
+        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Function Denominator Exclusions has been successfully added to the CQL.')
+        cy.get(CQLEditorPage.saveCQLButton).click()
 
-        cy.get('[data-testid="functions-row-0"] > :nth-child(1)').should('contain.text', 'isFinishedEncounter')
-        cy.get('[data-testid="functions-row-1"] > :nth-child(1)').should('contain.text', 'MeasureObservation')
+        //Navigate to Saved Functions tab
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.functionsTab).click()
+        cy.get(CQLEditorPage.savedFunctionsTab).click().wait(1000)
+        cy.get('[data-testid="functions-row-0"] > :nth-child(1)').should('contain.text', 'Denominator Exclusions')
+        cy.get('[data-testid="functions-row-1"] > :nth-child(1)').should('contain.text', 'isFinishedEncounter')
+        cy.get('[data-testid="functions-row-2"] > :nth-child(1)').should('contain.text', 'MeasureObservation')
+    })
+
+    it('Verify error message when duplicate Function is applied to the Qi Core CQL', () => {
+
+        //Apply Function to the CQL
+        cy.get(CQLEditorPage.functionsTab).click()
+        cy.get(CQLEditorPage.functionNameTextbox).type('Denominator Exclusions')
+        cy.get(CQLEditorPage.fluentFunctionCheckbox).click()
+        cy.get(CQLEditorPage.argumentNameTextbox).type('TheEncounterEncounter')
+        cy.get(CQLEditorPage.argumentTypeDropdown).click()
+        cy.get(CQLEditorPage.argumentTypeString).click()
+        cy.get(CQLEditorPage.addArgumentBtn).click()
+        cy.get(CQLEditorPage.expressionEditorType).click()
+        cy.get(CQLEditorPage.expressionEditorDefinitionOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        cy.get(CQLEditorPage.expressionEditorNameDenominatorOption).click()
+        cy.get(CQLEditorPage.expressionEditorInsertBtn).click()
+        cy.get(CQLEditorPage.applyFunctionBtn).click()
+        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Function Denominator Exclusions has been successfully added to the CQL.')
+
+        //Apply the same Function again
+        cy.get(CQLEditorPage.functionNameTextbox).type('Denominator Exclusions')
+        cy.get(CQLEditorPage.fluentFunctionCheckbox).click()
+        cy.get(CQLEditorPage.argumentNameTextbox).type('TheEncounterEncounter')
+        cy.get(CQLEditorPage.argumentTypeDropdown).click()
+        cy.get(CQLEditorPage.argumentTypeString).click()
+        cy.get(CQLEditorPage.addArgumentBtn).click()
+        cy.get(CQLEditorPage.expressionEditorType).click()
+        cy.get(CQLEditorPage.expressionEditorDefinitionOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        cy.get(CQLEditorPage.expressionEditorNameDenominatorOption).click()
+        cy.get(CQLEditorPage.expressionEditorInsertBtn).click()
+        cy.get(CQLEditorPage.applyFunctionBtn).click()
+        cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Function Denominator Exclusions has already been defined in CQL.')
     })
 })
