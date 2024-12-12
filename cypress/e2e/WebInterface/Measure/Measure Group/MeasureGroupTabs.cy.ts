@@ -14,16 +14,15 @@ let newCqlLibraryName = ''
 let measureCQL = MeasureCQL.SBTEST_CQL
 
 describe('Validating Population tabs', () => {
+
     beforeEach('Create measure and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -34,7 +33,6 @@ describe('Validating Population tabs', () => {
         let newCqlLibraryName = CqlLibraryName + randValue
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('Can successfully update / change score and population value and save on population tab', () => {
@@ -72,7 +70,6 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'num')
-
     })
 
     it('Changes are retained and saved while moving across different tabs', () => {
@@ -85,13 +82,11 @@ describe('Validating Population tabs', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-
         //Click on Reporting tab
         Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
         cy.get(MeasureGroupPage.reportingTab).click()
-
 
         //assert the two fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
@@ -254,10 +249,11 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
-        //assert the two fields that should appear in the Reporting tab
+        //assert the 3 fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).type('Extra description for Improvement Notation')
 
         //save measure group
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -287,11 +283,12 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
-        //assert that the two fields appear on the reporting tab and are blank / without a selected value
+        //assert that all fields appear on the reporting tab and are blank / without a selected value
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).should('be.empty')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Select Improvement Notation')
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('be.empty')
 
         cy.get(MeasureGroupPage.measureGroupOne).click()
         //Click on Populations tab
@@ -307,7 +304,6 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.denominatorExceptionSelect).should('exist')
         cy.get(MeasureGroupPage.numeratorSelect).should('exist')
         cy.get(MeasureGroupPage.numeratorExclusionSelect).should('exist')
-
     })
 })
 
@@ -318,12 +314,10 @@ describe('Validating Stratification tabs', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -334,8 +328,8 @@ describe('Validating Stratification tabs', () => {
         let newCqlLibraryName = CqlLibraryName + randValue
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
+
     it('Stratification tab includes new fields and those fields have expected values', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -411,7 +405,6 @@ describe('Validating Stratification tabs', () => {
         cy.get('[id="association-select-1-listbox"]').each(($ele) => {
             expect($ele.text()).to.be.equal('Select All')
         })
-
     })
 
     it('Stratification does not save, if association is the only field that has a value selected', () => {
@@ -432,7 +425,6 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
         cy.get(MeasureGroupPage.stratificationTab).click()
-
 
         //create stratification fields if they do not already exist on page
         cy.get('body').then((body) => {
@@ -658,7 +650,6 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratDescOne).should('contain.text', 'StratificationThree')
         cy.get(MeasureGroupPage.stratTwo).should('contain.text', 'denom')
         cy.get(MeasureGroupPage.stratDescTwo).should('contain.text', 'StratificationFour')
-
     })
 
     it('Stratification tab is not present / available when the Ratio scoring value is selected', () => {
@@ -676,7 +667,6 @@ describe('Validating Stratification tabs', () => {
 
         //assert that Stratification is no longer available
         cy.get(MeasureGroupPage.stratificationTab).should('not.exist')
-
     })
 
     it('Verify error message when the Stratification return type does not match with population basis', () => {
@@ -724,7 +714,6 @@ describe('Validating Stratification tabs', () => {
 
         //Verify save button is disabled
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
-
     })
 })
 
@@ -735,12 +724,10 @@ describe('Validating Reporting tabs', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -751,10 +738,9 @@ describe('Validating Reporting tabs', () => {
         let newCqlLibraryName = CqlLibraryName + randValue
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
-    it('Reporting tab contains Rate Aggregation text area and Improvement Notation drop-down box', () => {
+    it('Reporting tab contains Rate Aggregation and Improvement Notation info', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -770,15 +756,16 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
-        //assert the two fields that should appear in the Reporting tab
+        //assert expected fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).should('be.empty')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Select Improvement Notation')
-
-
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('be.visible')
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('be.empty')
     })
-    it('Changing and saving Improvement Notation values are allowed and retained properly', () => {
+
+    it('Changes to Reporting tab fields are saved & persisted', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -794,11 +781,13 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
-        //assert the two fields that should appear in the Reporting tab
+        //assert the three fields that should appear in the Reporting tab
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).should('be.empty')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Select Improvement Notation')
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('be.visible')
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('be.empty')
 
         //change and save a new value to the Improvement Notation field
         cy.get(MeasureGroupPage.improvementNotationSelect).click()
@@ -806,6 +795,8 @@ describe('Validating Reporting tabs', () => {
             //Increased score indicates improvement
             .should('contain.text', 'Increased score indicates improvement')
             .click()
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).type('Score doubling indicates great success.')
+
         //save selected IN value
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
@@ -821,11 +812,15 @@ describe('Validating Reporting tabs', () => {
         // IN should contain previously saved selected value
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('contain.text', 'Score doubling indicates great success.')
 
         //change and save a new value to the Improvement Notation field
         cy.get(MeasureGroupPage.improvementNotationSelect).click()
         cy.get(MeasureGroupPage.improvementNotationValues)
             .type('{downArrow}{enter}')
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore)
+            .clear()
+            .type('Loss of points is actually good.')
 
         //save selected IN value
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -842,6 +837,7 @@ describe('Validating Reporting tabs', () => {
         // IN should contain previously saved selected value
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Decreased score indicates improvement')
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('contain.text', 'Loss of points is actually good.')
 
         //change and save a new value to the Improvement Notation field
         cy.get(MeasureGroupPage.improvementNotationSelect).click()
@@ -863,44 +859,9 @@ describe('Validating Reporting tabs', () => {
         // IN should contain previously saved selected value
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Select Improvement Notation')
-    })
-
-    it('Can successfully update / change Reporting tab values and save on Reporting tab', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //Click on Reporting tab
-        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
-        cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
-
-        //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
-        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
-
-        //save measure group
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30700)
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        //validation message after attempting to save
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 30700)
-
-        //assert save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
-
+ 
+        // and here?
+ 
     })
 })
 
@@ -912,12 +873,10 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -928,8 +887,8 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         let newCqlLibraryName = CqlLibraryName + randValue
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
+
     it('Verify that description entered for each RA Definition is accurate', () => {
 
         MeasuresPage.actionCenter('edit')
@@ -967,8 +926,6 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
         cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
-
-
     })
 
     it('Verify that description entered for each SDE Definition is accurate', () => {
@@ -1032,7 +989,6 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         cy.get(MeasureGroupPage.discardChangesBtn).click()
         cy.get(MeasureGroupPage.discardChangesConfirmationMsg).should('contain.text', 'Are you sure you want to discard your changes?')
         cy.get(MeasureGroupPage.discardChangesContinueBtn).click()
-
     })
 
     it('Add Supplemental data elements to the Measure group', () => {
@@ -1063,7 +1019,6 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         //Save Supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
         cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
-
     })
 
     it('Clicking on Discard changes button on Supplemental data elements page will revert the changes made before save', () => {
