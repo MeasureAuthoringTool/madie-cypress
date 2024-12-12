@@ -139,6 +139,17 @@ export class CQLEditorPage {
     //Functions page
     public static readonly functionsTab = '[data-testid="functions-tab"]'
     public static readonly savedFunctionsTab = '[data-testid="saved-functions-tab"]'
+    public static readonly functionNameTextbox = '[data-testid="function-name-text-input"]'
+    public static readonly fluentFunctionCheckbox = '[data-testid="fluentFunction"]'
+    public static readonly argumentNameTextbox = '[data-testid="argument-name-input"]'
+    public static readonly argumentTypeDropdown = '[id="arg-type-selector"]'
+    public static readonly argumentTypeString = '[data-testid="String-option"]'
+    public static readonly addArgumentBtn = '[data-testid="function-argument-add-btn"]'
+    public static readonly expressionEditorType = '[id="type-selector"]'
+    public static readonly expressionEditorDefinitionOption = '[data-testid="Definitions-option"]'
+    public static readonly expressionEditorNameDenominatorOption = '#name-selector-option-0'
+    public static readonly expressionEditorInsertBtn = '[data-testid="expression-insert-btn"]'
+    public static readonly applyFunctionBtn = '[data-testid="function-apply-btn"]'
 
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'

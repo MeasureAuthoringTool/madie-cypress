@@ -7,7 +7,7 @@ import {Environment} from "../../../Shared/Environment"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
-let measureSharingAPIKey = Environment.credentials().measureSharing_API_Key
+let measureSharingAPIKey = Environment.credentials().adminApiKey
 
 describe('Delete CMS ID for QI-Core Measure', () => {
 
