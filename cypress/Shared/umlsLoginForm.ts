@@ -26,6 +26,8 @@ export class umlsLoginForm {
         cy.get(Header.umlsLoginButton).should('be.enabled')
         cy.get(Header.umlsLoginButton).click()
 
+        cy.get('[data-value="Connect to UMLS"]').find(Header.umlsConnectButtonCurrentStatus).click()
+
         //form to enter API and to actually log into UMLS appears and is available to read and enter API key
         cy.get(umlsLoginForm.umlsForm).should('exist')
         cy.get(umlsLoginForm.umlsForm).should('be.visible')
