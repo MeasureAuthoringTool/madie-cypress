@@ -49,7 +49,7 @@ describe('Qi-Core Library Includes fields', () => {
         //Search for QDM Libraries
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionVTE8.9.000YaHu1257VTE8.8.000YaHu1257VTE8.7.000YaHu1257VTE8.6.000YaHu1257')
+        cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionVTE8.8.000YaHu1257VTE8.7.000YaHu1257VTE8.6.000YaHu1257VTE8.5.000YaHu1257VTE8.4.000YaHu1257')
     })
 
     it('Apply Qi-Core Included library to the CQL and save', () => {
@@ -60,7 +60,7 @@ describe('Qi-Core Library Includes fields', () => {
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionVTE8.9.000YaHu1257VTE8.8.000YaHu1257VTE8.7.000YaHu1257VTE8.6.000YaHu1257')
+        cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionVTE8.8.000YaHu1257VTE8.7.000YaHu1257VTE8.6.000YaHu1257VTE8.5.000YaHu1257VTE8.4.000YaHu1257')
 
         //Apply Library to CQL
         cy.get('[data-testid="edit-button-0"]').click()
@@ -81,7 +81,7 @@ describe('Qi-Core Library Includes fields', () => {
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionVTE8.9.000YaHu1257VTE8.8.000YaHu1257VTE8.7.000YaHu1257VTE8.6.000YaHu1257')
+        cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionVTE8.8.000YaHu1257VTE8.7.000YaHu1257VTE8.6.000YaHu1257VTE8.5.000YaHu1257VTE8.4.000YaHu1257')
 
         //Apply Library to CQL
         cy.get('[data-testid="edit-button-0"]').click()
