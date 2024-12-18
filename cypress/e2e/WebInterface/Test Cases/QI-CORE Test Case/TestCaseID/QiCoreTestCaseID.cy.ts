@@ -82,9 +82,8 @@ describe('Test Case sorting by Test Case number', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        // test for https://jira.cms.gov/browse/MAT-7893
         TestCasesPage.testCaseAction('edit')
-        cy.get(TestCasesPage.testCasesBCText).should('contain.text', 'Case #1:')
+        cy.get(TestCasesPage.testCaseNameDropdown).should('contain.text', 'Case #1: Test Series 1 - Test Case 1')
 
         TestCasesPage.createTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd, testCaseJson2nd)
 

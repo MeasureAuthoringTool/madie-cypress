@@ -8,6 +8,7 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../../Shared/Header";
+import {Test} from "mocha";
 
 let singleTestCaseFile = 'patients_42BF391F-38A3-4C0F-9ECE-DCD47E9609D9_QDM_56_1712926664.json'
 let testCaseTitle = 'Test Case 1'
@@ -64,8 +65,7 @@ describe('QDM Test Case sorting by Test Case number', () => {
         TestCasesPage.createQDMTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd)
         TestCasesPage.clickEditforCreatedTestCase()
 
-        // test for https://jira.cms.gov/browse/MAT-7893
-        cy.get(TestCasesPage.testCasesBCText).should('contain.text', 'Case #2:')
+        cy.get(TestCasesPage.testCaseNameDropdown).should('contain.text', 'Case #2: SecondTC-SBTestSeries - Second TC - Title for Auto Test')
 
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('05/27/1981 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
