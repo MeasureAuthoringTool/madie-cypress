@@ -3,7 +3,6 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-import { Global } from "../../../../Shared/Global"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
@@ -16,16 +15,13 @@ describe('Validate CQL on CQL Library page', () => {
 
         apiCQLLibraryName = 'TestLibrary' + Date.now()
 
-        //Create CQL Library
         CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName, CQLLibraryPublisher)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
-
     })
 
     it('Add valid CQL on CQL Library Editor and verify no errors appear', () => {
@@ -54,7 +50,6 @@ describe('Validate CQL on CQL Library page', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).contains('version \'0.0.000\'')
 
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('not.exist')
-
     })
 
     it('Verify errors appear on CQL Library page and in the CQL Editor object, on save and on tab / page load', () => {
@@ -110,7 +105,6 @@ describe('Validate CQL on CQL Library page', () => {
         cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 1:3 | Could not resolve identifier SDE in the current library.")
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 5:13 | Member SDE Sex not found for type null.")
-
     })
 
     it('Verify errors appear on CQL Editor page and in the CQL Editor object, on save and on tab / page load, when included library is not found', () => {
@@ -150,6 +144,25 @@ describe('Validate CQL on CQL Library page', () => {
 
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "ELM: 1:55 | Library resource HospiceQICore4 version \'2.0.000\' is not found.")
     })
+
+    it('FHIRHelpers library alias is force corrected when changed by the user', () => {
+
+        cy.get(Header.cqlLibraryTab).click()
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+
+        //Clear the text in CQL Library Editor
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+
+        //Update text in the CQL Library Editor that will cause error
+        Utilities.typeFileContents('cypress/fixtures/CQLlibraryFHIRHelpersAliasWrong.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+
+        //save the value in the CQL Editor
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
+
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'FHIRHelpers was incorrectly aliased. MADiE has overwritten the alias with \'FHIRHelpers\'.')
+    })
 })
 
 describe('CQL Library: CQL Editor: valueSet', () => {
@@ -157,17 +170,14 @@ describe('CQL Library: CQL Editor: valueSet', () => {
     beforeEach('Create CQL library', () => {
 
         apiCQLLibraryName = 'TestLibrary' + Date.now()
-        //Create CQL Library
         CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName, CQLLibraryPublisher)
 
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-
     })
 
     it('Value Sets are valid', () => {
@@ -192,7 +202,6 @@ describe('CQL Library: CQL Editor: valueSet', () => {
 
         cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
         cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-
     })
 
     it('Value Set Invalid', () => {
