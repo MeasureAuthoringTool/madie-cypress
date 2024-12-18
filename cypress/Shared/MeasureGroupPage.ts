@@ -5,6 +5,40 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 import { v4 as uuidv4 } from 'uuid'
 
+export enum MeasureType  {
+    outcome = 'Outcome',
+    patientReportedOutcome = 'Patient Reported Outcome',
+    process = 'Process',
+    structure = 'Structure'
+}
+export enum PopulationBasis {
+    boolean = 'boolean',
+    encounter = 'Encounter',
+    episode = 'Episode'
+}
+export enum MeasureScoring {
+    Cohort = 'Cohort',
+    ContinousVariable = 'Continuous Variable',
+    Proportion = 'Proportion',
+    Ratio = 'Ratio'
+}
+export type MeasureGroups = {
+    initialPopulation: string,
+    denominator: string,
+    numerator: string,
+    denomExclusion?: string,
+    numExclusion?: string,
+    denomObservation?: string,
+    numObservation?: string
+
+}
+export type MeasureObservations = {
+    aggregateMethod: string,
+    criteriaReference?: uuidv4,
+    definition: string,
+    id?: uuidv4
+}
+
 export class MeasureGroupPage {
     public static readonly pcErrorAlertToast = '[data-testid="population-criteria-error"]'
 
@@ -674,6 +708,98 @@ export class MeasureGroupPage {
                         ],
                         "stratifications": [
                         ]
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    cy.writeFile(measureGroupPath, response.body.id)
+                })
+            })
+        })
+        return user
+    }
+
+    public static CreateMeasureGroupAPI(
+        measureType: MeasureType,
+        populationBasis: PopulationBasis,
+        scoring: MeasureScoring,
+        populations: MeasureGroups,
+        altUser?: boolean,
+        denominatorObservation?: MeasureObservations,
+        numeratorObservation?: MeasureObservations
+    ): string {
+        let user = ''
+        let observations = []
+        let measurePath = 'cypress/fixtures/measureId'
+        let measureGroupPath = 'cypress/fixtures/groupId'
+        const numUuid = uuidv4()
+        const denomUuid = uuidv4()
+
+        if (denominatorObservation) {
+            denominatorObservation.id = uuidv4()
+            denominatorObservation.criteriaReference = denomUuid
+            observations.push(denominatorObservation)
+        }
+        if (numeratorObservation) {
+            numeratorObservation.id = uuidv4()
+            numeratorObservation.criteriaReference = numUuid
+            observations.push(numeratorObservation)
+        }
+
+        if (altUser) {
+            cy.setAccessTokenCookieALT()
+            user = Environment.credentials().harpUserALT
+        }
+        else {
+            cy.setAccessTokenCookie()
+            user = Environment.credentials().harpUser
+        }
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(measurePath).should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": fileContents,
+                        "scoring": scoring,
+                        "populationBasis": populationBasis,
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": populations.initialPopulation
+                            },
+                            {
+                                "id": denomUuid,
+                                "name": "denominator",
+                                "definition": populations.denominator
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorExclusion",
+                                "definition": populations.denomExclusion ? populations.denomExclusion : null
+                            },
+                            {
+                                "id": numUuid,
+                                "name": "numerator",
+                                "definition": populations.numerator
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numeratorExclusion",
+                                "definition": populations.numExclusion ? populations.numExclusion : null
+                            }
+                        ],
+                        "measureGroupTypes": [
+                            measureType
+                        ],
+                        "stratifications": [
+                        ],
+                        "measureObservations": observations
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)
