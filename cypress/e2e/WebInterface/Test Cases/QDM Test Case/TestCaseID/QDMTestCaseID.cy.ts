@@ -7,8 +7,7 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { Header } from "../../../../../Shared/Header";
-import {Test} from "mocha";
+import { Header } from "../../../../../Shared/Header"
 
 let singleTestCaseFile = 'patients_42BF391F-38A3-4C0F-9ECE-DCD47E9609D9_QDM_56_1712926664.json'
 let testCaseTitle = 'Test Case 1'
