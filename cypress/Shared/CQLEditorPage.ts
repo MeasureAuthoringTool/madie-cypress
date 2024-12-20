@@ -1,4 +1,5 @@
 import { EditMeasurePage } from "./EditMeasurePage"
+import { Utilities } from "./Utilities"
 
 export class CQLEditorPage {
 
@@ -182,6 +183,14 @@ export class CQLEditorPage {
         cy.get('[data-testid="measure-editor-toast"]').should('be.visible')
         cy.get('[data-testid="measure-editor-toast"]').should('contain.text', 'successfully added to the CQL')
 
+    }
+
+    public static replaceCqlDocument(filePath: string) {
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+
+        Utilities.typeFileContents(filePath, EditMeasurePage.cqlEditorTextBox)
     }
 
 }
