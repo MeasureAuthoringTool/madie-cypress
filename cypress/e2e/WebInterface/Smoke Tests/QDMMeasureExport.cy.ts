@@ -1,6 +1,6 @@
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { EditMeasureActions, EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
@@ -88,7 +88,6 @@ describe('Successful QDM Measure Export', () => {
 
     beforeEach('Create New Measure and Login', () => {
 
-        //Create Measure and Measure group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter("edit")
@@ -98,7 +97,6 @@ describe('Successful QDM Measure Export', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
-
     })
 
     afterEach('Clean up and Logout', () => {
@@ -114,7 +112,6 @@ describe('Successful QDM Measure Export', () => {
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
-
     })
 })
 
@@ -124,7 +121,6 @@ describe('QDM Measure Export for CMS Measure with huge included Library', () => 
 
     beforeEach('Create New Measure and Login', () => {
 
-        //Create Measure and Measure group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Proportion', false, qdmCMSMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter("edit")
@@ -134,7 +130,6 @@ describe('QDM Measure Export for CMS Measure with huge included Library', () => 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', 'Denominator Exclusions', '', 'Encounter without Food Screening', '', 'Qualifying Encounters')
         OktaLogin.Login()
-
     })
 
     afterEach('Clean up and Logout', () => {
@@ -146,11 +141,22 @@ describe('QDM Measure Export for CMS Measure with huge included Library', () => 
 
     it('Validate the zip file Export is downloaded for QDM Measure', () => {
 
-        MeasuresPage.actionCenter('export')
+        MeasuresPage.actionCenter('edit')
+
+        // check for MAT-7961 - trim whitespace for export files
+        cy.get(EditMeasurePage.abbreviatedTitleTextBox).invoke('val').then(value => {
+            const whitespaceAddedName = '   ' + value + '   '
+            cy.get(EditMeasurePage.abbreviatedTitleTextBox)
+                .clear()
+                .type(whitespaceAddedName)
+        })
+
+        cy.get(EditMeasurePage.measurementInformationSaveButton).click()
+
+        EditMeasurePage.actionCenter(EditMeasureActions.export)
 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
-
     })
 })
 

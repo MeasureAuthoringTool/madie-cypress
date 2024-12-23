@@ -47,6 +47,7 @@ export class EditMeasurePage {
     public static readonly measureNameFieldLevelError = '[data-testid="measureName-helper-text"]'
     public static readonly measureId = '[data-testid="measure-id-input"]'
     public static readonly versionId = '[data-testid="version-id-input"]'
+    public static readonly abbreviatedTitleTextBox = '[data-testid="ecqm-input"]'
     public static readonly generateCmsIdButton = '[data-testid="generate-cms-id-button"]'
     public static readonly cmsIDDialogCancel = '[data-testid="cms-identifier-dialog-cancel-button"]'
     public static readonly cmsIDDialogContinue = '[data-testid="cms-identifier-dialog-continue-button"]'
