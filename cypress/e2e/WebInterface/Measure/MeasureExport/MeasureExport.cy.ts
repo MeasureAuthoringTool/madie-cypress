@@ -3,22 +3,23 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { closeSync } from "fs"
 
-//variables for Human Readable file detail file comparison
-let baseHTMLFileTerminologyDependenciesSection = 'cypress/fixtures/QICoreHumanReadableCompareFile_Terminology_and_Other_Dependencies_sections.html'
-let baseHTMLFileGroupscoringPCSection = 'cypress/fixtures/QICoreHumanReadableCompareFile_Group_scoring_and_PC_sections.html'
-let baseHTMLFileQualifyingEncountersSection = 'cypress/fixtures/QICoreHumanReadableCompareFile_Qualifying_Encounters_section.html'
-let baseHTMLFileVersionSection = 'cypress/fixtures/QICoreHumanReadableCompareFile_Version_section.html'
-let baseHTMLFileVersionSection_ver1 = 'cypress/fixtures/QICoreHumanReadableCompareFile_Version_section_ver1.html'
+// clean this up, add MAT-7961
 
+// variables for Human Readable file detail file comparison
+const groupScoringSection = 'cypress/fixtures/QiCoreHRCompare/GroupScoringAndPCSections.html'
+const qualifyingEncountersSection = 'cypress/fixtures/QiCoreHRCompare/QualifyingEncountersSection.html'
+const terminologySection = 'cypress/fixtures/QiCoreHRCompare/TerminologyAndOtherDependenciesSections.html'
+const versionSection = 'cypress/fixtures/QiCoreHRCompare/VersionSection.html'
+const versionSectionVer1 = 'cypress/fixtures/QiCoreHRCompare/VersionSection_ver1.html'
 
-
-//variables for HQMF file detail file comparison
+/*
+commenting all these out - and moved into folder /fixtures/QiCoreHQMFCompare
+names are preserved
+variables for HQMF file detail file comparison
 let baseXMLFileVersionSection = 'cypress/fixtures/QICoreHQMFCompareFile_VersionSection.xml'
 let baseXMLFileVersionSection_ver1 = 'cypress/fixtures/QICoreHQMFCompareFile_VersionSection_ver1.xml'
 let baseXMLFileShortNameIdentifierSection = 'cypress/fixtures/QICoreHQMFCompareFile_ShortNameIdentifierSection.xml'
@@ -35,13 +36,13 @@ let baseXMLFileAdditionalValuesetSection = 'cypress/fixtures/QICoreHQMFCompareFi
 let baseXMLFileAdditionalCQLSection = 'cypress/fixtures/QICoreHQMFCompareFile_AdditionalCQLSection.xml'
 let baseXMLFileResourceSection = 'cypress/fixtures/QICoreHQMFCompareFile_ResourceSection.xml'
 let baseXMLFileQualifyingEncountersSection = 'cypress/fixtures/QICoreHQMFCompareFile_Qualifying_Encounters.xml'
+*/
 
 let exported = ''
 let expected = ''
 
 let versionNumber = '1.0.000'
-let measureNameTimeStamp = 'TestMeasure' + Date.now()
-let measureName = measureNameTimeStamp
+let measureName = 'TestMeasure' + Date.now()
 let measureNameFC = ''
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let CqlLibraryNameFC = ''
@@ -57,13 +58,10 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     'include SupplementalDataElements version \'3.1.000\' called SDE\n' +
     'include CQMCommon version \'1.0.000\' called CQMCommon \n' +
     'include FHIRCommon version \'4.1.000\' called FHIRCommon\n' +
-    '\n' +
-    '\n' +
+    '\n' + '\n' +
     'codesystem "SNOMEDCT": \'http://snomed.info/sct\' \n' +
     'codesystem "ActCode": \'http://terminology.hl7.org/CodeSystem/v3-ActCode\'  \n' +
-    '\n' +
-    '\n' +
-    '\n' +
+    '\n' + '\n' + '\n' +
     'valueset "Care Services in Long-Term Residential Facility": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1014\' \n' +
     'valueset "Diabetic Retinopathy": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.327\' \n' +
     'valueset "Level of Severity of Retinopathy Findings": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1283\' \n' +
@@ -99,9 +97,7 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     '\n' +
     'define "SDE Sex":\n' +
     '  SDE."SDE Sex"\n' +
-    '\n' +
-    '\n' +
-    '\n' +
+    '\n' + '\n' + '\n' +
     'define "ipp":\n' +
     'true\n' +
     '\n' +
@@ -117,12 +113,10 @@ describe('QI-Core Measure Export', () => {
 
     before('Create New Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.Login()
-
     })
 
     it('Validate the zip file Export is downloaded for QI-Core Measure', () => {
@@ -212,33 +206,28 @@ describe('QI-Core Measure Export', () => {
             })
 
         //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR.html')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR.json'), null).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR.xml')).should('exist')
-
-        cy.readFile(path.join(downloadsFolder, 'cql/CQMCommon-1.0.000.cql')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'cql/FHIRCommon-4.1.000.cql')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'cql/FHIRHelpers-4.1.000.cql')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'cql/QICoreCommon-1.2.000.cql')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'cql/SupplementalDataElements-3.1.000.cql')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'cql/' + CqlLibraryName + '-1.0.000.cql')).should('exist')
-
-        cy.readFile(path.join(downloadsFolder, 'resources/library-CQMCommon-1.0.000.json'), null).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/library-CQMCommon-1.0.000.xml')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/library-FHIRCommon-4.1.000.json'), null).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/library-FHIRCommon-4.1.000.xml')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/library-FHIRHelpers-4.1.000.json'), null).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/library-FHIRHelpers-4.1.000.xml')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/library-QICoreCommon-1.2.000.json'), null).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/library-QICoreCommon-1.2.000.xml')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/library-SupplementalDataElements-3.1.000.json'), null).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/library-SupplementalDataElements-3.1.000.xml')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/measure-' + CqlLibraryName + '-1.0.000.json'), null).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/measure-' + CqlLibraryName + '-1.0.000.xml')).should('exist')
-
-
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR.html').should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR.json').should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR.xml').should('exist')
+        cy.readFile('cypress/downloads/cql/CQMCommon-1.0.000.cql').should('exist')
+        cy.readFile('cypress/downloads/cql/FHIRCommon-4.1.000.cql').should('exist')
+        cy.readFile('cypress/downloads/cql/FHIRHelpers-4.1.000.cql').should('exist')
+        cy.readFile('cypress/downloads/cql/QICoreCommon-1.2.000.cql').should('exist')
+        cy.readFile('cypress/downloads/cql/SupplementalDataElements-3.1.000.cql').should('exist')
+        cy.readFile('cypress/downloads/cql/' + CqlLibraryName + '-1.0.000.cql').should('exist')
+        cy.readFile('cypress/downloads/resources/library-CQMCommon-1.0.000.json').should('exist')
+        cy.readFile('cypress/downloads/resources/library-CQMCommon-1.0.000.xml').should('exist')
+        cy.readFile('cypress/downloads/resources/library-FHIRCommon-4.1.000.json').should('exist')
+        cy.readFile('cypress/downloads/resources/library-FHIRCommon-4.1.000.xml').should('exist')
+        cy.readFile('cypress/downloads/resources/library-FHIRHelpers-4.1.000.json').should('exist')
+        cy.readFile('cypress/downloads/resources/library-FHIRHelpers-4.1.000.xml').should('exist')
+        cy.readFile('cypress/downloads/resources/library-QICoreCommon-1.2.000.json').should('exist')
+        cy.readFile('cypress/downloads/resources/library-QICoreCommon-1.2.000.xml').should('exist')
+        cy.readFile('cypress/downloads/resources/library-SupplementalDataElements-3.1.000.json').should('exist')
+        cy.readFile('cypress/downloads/resources/library-SupplementalDataElements-3.1.000.xml').should('exist')
+        cy.readFile('cypress/downloads/resources/measure-' + CqlLibraryName + '-1.0.000.json').should('exist')
+        cy.readFile('cypress/downloads/resources/measure-' + CqlLibraryName + '-1.0.000.xml').should('exist')
     })
-
 })
 
 describe('QI-Core Measure Export: Validating contents of Human Readable file, before versioning', () => {
@@ -246,238 +235,224 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
-        measureNameFC = 'TestMeasure' + Date.now()
-        CqlLibraryNameFC = 'TestLibrary' + Date.now()
+        measureNameFC = 'HRExport1' + Date.now()
+        CqlLibraryNameFC = 'HRExport1Lib' + Date.now()
 
-        //Create New Measure
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureNameFC, CqlLibraryNameFC, measureCQLContent)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
 
         OktaLogin.Login()
 
-        //export measure
         MeasuresPage.actionCenter('export')
 
         //verify zip file exists
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
-
-        // unzipping the Measure Export
         cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR4.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
-
     })
+
     after('Clean up', () => {
 
         Utilities.deleteMeasure(measureNameFC, CqlLibraryNameFC)
     })
-    it('Verify exported files, their types and the content of the HR file, for a Qi Core Measure, before versioning', () => {
+
+    it('Verify content of a Qi Core measure HR file, before versioning', () => {
 
         //read contents of the html / human readable file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated HR file -to- the next)
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.html')).should('exist').then((exportedFile) => {
-            debugger
-            exported = exportedFile.toString(); //'exportedFile'
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR.html').then((exportedFile) => {
+            exported = exportedFile.toString()
             cy.log('exported file contents are: \n' + exported)
-            cy.readFile(baseHTMLFileTerminologyDependenciesSection).should('exist').then((dataComparedTerminologyDependencies) => {
-                debugger
-                expected = dataComparedTerminologyDependencies.toString() //'compareFile'
+
+            cy.readFile(terminologySection).then((dataComparedTerminologyDependencies) => {
+                expected = dataComparedTerminologyDependencies.toString()
                 cy.log('expected fifth section file contents are: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
+                expect(exported).to.includes(expected)
             })
 
-            cy.readFile(baseHTMLFileGroupscoringPCSection).should('exist').then((dataComparedGroupscoringPC) => {
-                debugger
-                expected = dataComparedGroupscoringPC.toString() //'compareFile'
+            cy.readFile(groupScoringSection).should('exist').then((dataComparedGroupscoringPC) => {
+                expected = dataComparedGroupscoringPC.toString()
                 cy.log('expected sixth section file contents are: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
+                expect(exported).to.includes(expected)
             })
 
-            cy.readFile(baseHTMLFileQualifyingEncountersSection).should('exist').then((dataComparedQualifyingEncounters) => {
-                debugger
-                expected = dataComparedQualifyingEncounters.toString() //'compareFile'
+            cy.readFile(qualifyingEncountersSection).then((dataComparedQualifyingEncounters) => {
+                expected = dataComparedQualifyingEncounters.toString()
                 cy.log('expected seventh section file contents are: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
+                expect(exported).to.includes(expected)
             })
 
-            cy.readFile(baseHTMLFileVersionSection).should('exist').then((dataComparedVersion) => {
-                debugger
-                expected = dataComparedVersion.toString() //'compareFile'
+            cy.readFile(versionSection).then((dataComparedVersion) => {
+                expected = dataComparedVersion.toString()
                 cy.log('expected seventh section file contents are: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
+                expect(exported).to.includes(expected)
             })
-
         })
 
-        //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.html')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.json'), null).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.xml')).should('exist')
+        // //Verify all files exist in exported zip file
+        // cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.html')).should('exist')
+        // cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.json')).should('exist')
+        // cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.xml')).should('exist')
 
-        cy.readFile(path.join(downloadsFolder, 'cql/FHIRHelpers-4.1.000.cql')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'cql/' + CqlLibraryNameFC + '-0.0.000.cql')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/library-FHIRHelpers-4.1.000.json'), null).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/library-FHIRHelpers-4.1.000.xml')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/library-' + CqlLibraryNameFC + '-0.0.000.json'), null).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/library-' + CqlLibraryNameFC + '-0.0.000.xml')).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/measure-' + CqlLibraryNameFC + '-Draft based on 0.0.000.json'), null).should('exist')
-        cy.readFile(path.join(downloadsFolder, 'resources/measure-' + CqlLibraryNameFC + '-Draft based on 0.0.000.xml')).should('exist')
+        // cy.readFile(path.join(downloadsFolder, 'cql/FHIRHelpers-4.1.000.cql')).should('exist')
+        // cy.readFile(path.join(downloadsFolder, 'cql/' + CqlLibraryNameFC + '-0.0.000.cql')).should('exist')
+        // cy.readFile(path.join(downloadsFolder, 'resources/library-FHIRHelpers-4.1.000.json')).should('exist')
+        // cy.readFile(path.join(downloadsFolder, 'resources/library-FHIRHelpers-4.1.000.xml')).should('exist')
+        // cy.readFile(path.join(downloadsFolder, 'resources/library-' + CqlLibraryNameFC + '-0.0.000.json')).should('exist')
+        // cy.readFile(path.join(downloadsFolder, 'resources/library-' + CqlLibraryNameFC + '-0.0.000.xml')).should('exist')
+        // cy.readFile(path.join(downloadsFolder, 'resources/measure-' + CqlLibraryNameFC + '-Draft based on 0.0.000.json')).should('exist')
+        // cy.readFile(path.join(downloadsFolder, 'resources/measure-' + CqlLibraryNameFC + '-Draft based on 0.0.000.xml')).should('exist')
     })
 
-    //skipping because it was determined that the Qi Core xml file is, basically, just a copy of the Qi Core HTML file
-    //keeping this segment of code along with the files associated with this test in case it ever comes up that we need to validate
-    //the contents of this file in addition to the Qi Core HTML file
-    it.skip('Verify content of the XML file, for a Qi Core Measure, before versioning', () => {
+    it('Verify contents of unzipped folder', () => {
+
+          //Verify all files exist in exported zip file
+          cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR.html').should('exist')
+          cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR.json').should('exist')
+          cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR.xml').should('exist')
+  
+          cy.readFile('cypress/downloads/cql/FHIRHelpers-4.1.000.cql').should('exist')
+          cy.readFile('cypress/downloads/cql/' + CqlLibraryNameFC + '-0.0.000.cql').should('exist')
+          cy.readFile('cypress/downloads/resources/library-FHIRHelpers-4.1.000.json').should('exist')
+          cy.readFile('cypress/downloads/resources/library-FHIRHelpers-4.1.000.xml').should('exist')
+          cy.readFile('cypress/downloads/resources/library-' + CqlLibraryNameFC + '-0.0.000.json').should('exist')
+          cy.readFile('cypress/downloads/resources/library-' + CqlLibraryNameFC + '-0.0.000.xml').should('exist')
+          cy.readFile('cypress/downloads/resources/measure-' + CqlLibraryNameFC + '-Draft based on 0.0.000.json').should('exist')
+          cy.readFile('cypress/downloads/resources/measure-' + CqlLibraryNameFC + '-Draft based on 0.0.000.xml').should('exist')
+    })
+
+    /* commenting this out because it was determined that the Qi Core xml file is, basically, just a copy of the Qi Core HTML file
+    keeping this segment of code along with the files associated with this test in case it ever comes up that we need to validate
+    the contents of this file in addition to the Qi Core HTML file
+    it('Verify content of the XML file, for a Qi Core Measure, before versioning', () => {
         //read contents of the xml file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated xml file -to- the next)
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.xml')).should('exist').then((exportedFile) => {
-            debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents are: \n' + exported)
             cy.readFile(baseXMLFileVersionSection).should('exist').then((dataComparedVersion) => {
-                debugger
                 expected = dataComparedVersion.toString() //'compareFile'
                 cy.log('expected first section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileShortNameIdentifierSection).should('exist').then((dataComparedShortNameIdentifier) => {
-                debugger
                 expected = dataComparedShortNameIdentifier.toString() //'compareFile'
                 cy.log('expected second section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileStatusMetaFieldsSection).should('exist').then((dataComparedStatusMetaFields) => {
-                debugger
                 expected = dataComparedStatusMetaFields.toString() //'compareFile'
                 cy.log('expected third section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileTerminologyDependenciesSection).should('exist').then((dataComparedTerminologyDependencies) => {
-                debugger
                 expected = dataComparedTerminologyDependencies.toString() //'compareFile'
                 cy.log('expected fourth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileMetaCQLSection).should('exist').then((dataComparedMetaCQL) => {
-                debugger
                 expected = dataComparedMetaCQL.toString() //'compareFile'
                 cy.log('expected Fifth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileGroup_scoring_and_PCSection).should('exist').then((dataComparedGroup_scoring_and_PC) => {
-                debugger
                 expected = dataComparedGroup_scoring_and_PC.toString() //'compareFile'
                 cy.log('expected Sixth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileQualifyingEncountersFirstSection).should('exist').then((dataComparedQualifyingEncountersFirst) => {
-                debugger
                 expected = dataComparedQualifyingEncountersFirst.toString() //'compareFile'
                 cy.log('expected Seventh section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileShortNameDetailsSection).should('exist').then((dataComparedShortNameDetails) => {
-                debugger
                 expected = dataComparedShortNameDetails.toString() //'compareFile'
                 cy.log('expected Eighth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileAdditionalMetaDetailsSection).should('exist').then((dataComparedAdditionalMetaDetails) => {
-                debugger
                 expected = dataComparedAdditionalMetaDetails.toString() //'compareFile'
                 cy.log('expected Ninth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileAdditionalPCDetailsSection).should('exist').then((dataComparedAdditionalPCDetails) => {
-                debugger
                 expected = dataComparedAdditionalPCDetails.toString() //'compareFile'
                 cy.log('expected Tenth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileRelatedArtifactsValuesetsSection).should('exist').then((dataComparedRelatedArtifactsValuesets) => {
-                debugger
                 expected = dataComparedRelatedArtifactsValuesets.toString() //'compareFile'
                 cy.log('expected Eleventh section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileAdditionalValuesetSection).should('exist').then((dataComparedAdditionalValueset) => {
-                debugger
                 expected = dataComparedAdditionalValueset.toString() //'compareFile'
                 cy.log('expected Twelfth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileAdditionalCQLSection).should('exist').then((dataComparedAdditionalCQL) => {
-                debugger
                 expected = dataComparedAdditionalCQL.toString() //'compareFile'
                 cy.log('expected Thirteenth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileResourceSection).should('exist').then((dataComparedResource) => {
-                debugger
                 expected = dataComparedResource.toString() //'compareFile'
                 cy.log('expected Fourteenth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileQualifyingEncountersSection).should('exist').then((dataComparedQualifyingEncounters) => {
-                debugger
                 expected = dataComparedQualifyingEncounters.toString() //'compareFile'
                 cy.log('expected Fifteenth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
-
         })
     })
-
+    */
 })
+
 describe('QI-Core Measure Export: Validating contents of Human Readable file, after versioning', () => {
 
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
-        measureNameFC = 'TestMeasure' + Date.now()
-        CqlLibraryNameFC = 'TestLibrary' + Date.now()
+        measureNameFC = 'HRExport2' + Date.now()
+        CqlLibraryNameFC = 'HRExport2Lib' + Date.now()
 
-        //Create New Measure
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureNameFC, CqlLibraryNameFC, measureCQLContent)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
 
         OktaLogin.Login()
 
-        //version measure
+        MeasuresPage.actionCenter('edit')
+
+         // check for MAT-7961 - trim whitespace for export files
+         cy.get(EditMeasurePage.abbreviatedTitleTextBox).invoke('val').then(value => {
+            const whitespaceAddedName = '   ' + value + '   '
+            cy.get(EditMeasurePage.abbreviatedTitleTextBox)
+                .clear()
+                .type(whitespaceAddedName)
+        })
+
+        cy.get(EditMeasurePage.measurementInformationSaveButton).click()
+        Utilities.waitForElementDisabled(EditMeasurePage.measurementInformationSaveButton, 12500)
+
+        cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        Utilities.waitForElementEnabled(MeasuresPage.confirmMeasureVersionNumber, 5500)
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumber)
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
@@ -493,157 +468,131 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
-        // unzipping the Measure Export
         cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v1.0.000-FHIR4.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
-
     })
 
     it('Verify the content of the HR file, for a Qi Core Measure, after the measure has been versioned', () => {
 
         //read contents of the html / human readable file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated HR file -to- the next)
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR.html')).should('exist').then((exportedFile) => {
-            debugger
-            exported = exportedFile.toString(); //'exportedFile'
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR.html')).then((exportedFile) => {
+            exported = exportedFile.toString()
             cy.log('exported file contents are: \n' + exported)
-            cy.readFile(baseHTMLFileTerminologyDependenciesSection).should('exist').then((dataComparedTerminologyDependencies) => {
-                debugger
-                expected = dataComparedTerminologyDependencies.toString() //'compareFile'
+            cy.readFile(terminologySection).then((dataComparedTerminologyDependencies) => {
+                expected = dataComparedTerminologyDependencies.toString()
                 cy.log('expected fifth section file contents are: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
+                expect(exported).to.includes(expected)
             })
 
-            cy.readFile(baseHTMLFileGroupscoringPCSection).should('exist').then((dataComparedGroupscoringPC) => {
-                debugger
-                expected = dataComparedGroupscoringPC.toString() //'compareFile'
+            cy.readFile(groupScoringSection).then((dataComparedGroupscoringPC) => {
+                expected = dataComparedGroupscoringPC.toString()
                 cy.log('expected sixth section file contents are: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
+                expect(exported).to.includes(expected)
             })
 
-            cy.readFile(baseHTMLFileQualifyingEncountersSection).should('exist').then((dataComparedQualifyingEncounters) => {
-                debugger
-                expected = dataComparedQualifyingEncounters.toString() //'compareFile'
+            cy.readFile(qualifyingEncountersSection).then((dataComparedQualifyingEncounters) => {
+                expected = dataComparedQualifyingEncounters.toString()
                 cy.log('expected seventh section file contents are: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
+                expect(exported).to.includes(expected)
             })
 
-            cy.readFile(baseHTMLFileVersionSection_ver1).should('exist').then((dataComparedVersion_ver1) => {
-                debugger
-                expected = dataComparedVersion_ver1.toString() //'compareFile'
+            cy.readFile(versionSectionVer1).then((dataComparedVersion_ver1) => {
+                expected = dataComparedVersion_ver1.toString()
                 cy.log('expected seventh section file contents are: \n' + expected)
-                expect((exported).toString()).to.includes((expected).toString())
+                expect(exported).to.includes(expected)
             })
-
         })
-
     })
-    //skipping because it was determined that the Qi Core xml file is, basically, just a copy of the Qi Core HTML file
-    //keeping this segment of code along with the files associated with this test in case it ever comes up that we need to validate
-    //the contents of this file in addition to the Qi Core HTML file
-    it.skip('Verify content of the XML file, for a Qi Core Measure, after the measure has been versioned', () => {
+    /* commenting out because it was determined that the Qi Core xml file is, basically, just a copy of the Qi Core HTML file
+    keeping this segment of code along with the files associated with this test in case it ever comes up that we need to validate
+    the contents of this file in addition to the Qi Core HTML file
+    it('Verify content of the XML file, for a Qi Core Measure, after the measure has been versioned', () => {
         //read contents of the xml file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated xml file -to- the next)
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR.xml')).should('exist').then((exportedFile) => {
-            debugger
             exported = exportedFile.toString(); //'exportedFile'
             cy.log('exported file contents are: \n' + exported)
             cy.readFile(baseXMLFileVersionSection_ver1).should('exist').then((dataComparedVersion_ver1) => {
-                debugger
                 expected = dataComparedVersion_ver1.toString() //'compareFile'
                 cy.log('expected first section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileShortNameIdentifierSection).should('exist').then((dataComparedShortNameIdentifier) => {
-                debugger
                 expected = dataComparedShortNameIdentifier.toString() //'compareFile'
                 cy.log('expected second section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileStatusMetaFieldsSection).should('exist').then((dataComparedStatusMetaFields) => {
-                debugger
                 expected = dataComparedStatusMetaFields.toString() //'compareFile'
                 cy.log('expected third section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileTerminologyDependenciesSection).should('exist').then((dataComparedTerminologyDependencies) => {
-                debugger
                 expected = dataComparedTerminologyDependencies.toString() //'compareFile'
                 cy.log('expected fourth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileMetaCQLSection).should('exist').then((dataComparedMetaCQL) => {
-                debugger
                 expected = dataComparedMetaCQL.toString() //'compareFile'
                 cy.log('expected Fifth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileGroup_scoring_and_PCSection).should('exist').then((dataComparedGroup_scoring_and_PC) => {
-                debugger
                 expected = dataComparedGroup_scoring_and_PC.toString() //'compareFile'
                 cy.log('expected Sixth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileQualifyingEncountersFirstSection).should('exist').then((dataComparedQualifyingEncountersFirst) => {
-                debugger
                 expected = dataComparedQualifyingEncountersFirst.toString() //'compareFile'
                 cy.log('expected Seventh section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileShortNameDetailsSection).should('exist').then((dataComparedShortNameDetails) => {
-                debugger
                 expected = dataComparedShortNameDetails.toString() //'compareFile'
                 cy.log('expected Eighth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileAdditionalMetaDetailsSection).should('exist').then((dataComparedAdditionalMetaDetails) => {
-                debugger
                 expected = dataComparedAdditionalMetaDetails.toString() //'compareFile'
                 cy.log('expected Ninth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileAdditionalPCDetailsSection).should('exist').then((dataComparedAdditionalPCDetails) => {
-                debugger
                 expected = dataComparedAdditionalPCDetails.toString() //'compareFile'
                 cy.log('expected Tenth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileRelatedArtifactsValuesetsSection).should('exist').then((dataComparedRelatedArtifactsValuesets) => {
-                debugger
                 expected = dataComparedRelatedArtifactsValuesets.toString() //'compareFile'
                 cy.log('expected Eleventh section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileAdditionalValuesetSection).should('exist').then((dataComparedAdditionalValueset) => {
-                debugger
                 expected = dataComparedAdditionalValueset.toString() //'compareFile'
                 cy.log('expected Twelfth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileAdditionalCQLSection).should('exist').then((dataComparedAdditionalCQL) => {
-                debugger
                 expected = dataComparedAdditionalCQL.toString() //'compareFile'
                 cy.log('expected Thirteenth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileResourceSection).should('exist').then((dataComparedResource) => {
-                debugger
                 expected = dataComparedResource.toString() //'compareFile'
                 cy.log('expected Fourteenth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
             cy.readFile(baseXMLFileQualifyingEncountersSection).should('exist').then((dataComparedQualifyingEncounters) => {
-                debugger
                 expected = dataComparedQualifyingEncounters.toString() //'compareFile'
                 cy.log('expected Fifteenth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
-
         })
     })
-
+    */
 })
 
 

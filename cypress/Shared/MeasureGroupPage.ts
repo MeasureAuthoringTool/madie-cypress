@@ -495,7 +495,8 @@ export class MeasureGroupPage {
                             "Outcome"
                         ],
                         "stratifications": [
-                        ]
+                        ],
+                        "improvementNotation": "Increased score indicates improvement"
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)
