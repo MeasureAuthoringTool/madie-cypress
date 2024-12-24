@@ -12,11 +12,9 @@ export class umlsLoginForm {
     public static readonly genericError = '[data-testid="UMLS-login-generic-error-text"]'
     public static readonly closeGenericError = '[data-testid="CloseIcon"]'
 
-    //retrieve API kiey
     public static retrieveAndEnterAPIKey(): void {
 
         cy.get(this.apiTextInput).type(Environment.credentials().umls_API_KEY)
-
     }
 
     public static UMLSLogin(): void {
@@ -41,16 +39,14 @@ export class umlsLoginForm {
 
         //click on 'Connect to UMLS' button
         cy.get(umlsLoginForm.connectToUMLSButton).should('exist')
-        Utilities.waitForElementVisible(umlsLoginForm.connectToUMLSButton, 3000)
-        cy.get(umlsLoginForm.connectToUMLSButton).should('be.visible')
         Utilities.waitForElementEnabled(umlsLoginForm.connectToUMLSButton, 3000)
         cy.get(umlsLoginForm.connectToUMLSButton).should('be.enabled')
         cy.get(umlsLoginForm.connectToUMLSButton).click()
+
 
         //confirmation appears indicating that user is, now, logged into UMLS
         cy.get(umlsLoginForm.umlsConnectSuccessMsg).should('exist')
         cy.get(umlsLoginForm.umlsConnectSuccessMsg).should('be.visible')
         cy.get(umlsLoginForm.umlsConnectSuccessMsg).should('contain.text', 'UMLS successfully authenticated')
-
     }
 }

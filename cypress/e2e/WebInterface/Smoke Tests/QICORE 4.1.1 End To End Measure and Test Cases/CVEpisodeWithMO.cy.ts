@@ -99,6 +99,10 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
         Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'Measure Observation')
         Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get(MeasureGroupPage.improvementNotationSelect).click()
+        cy.contains('Increased score indicates improvement').click()
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()

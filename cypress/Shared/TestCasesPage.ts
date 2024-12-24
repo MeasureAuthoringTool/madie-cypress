@@ -220,7 +220,7 @@ export class TestCasesPage {
     public static readonly tcDiscardChangesButton = '[data-testid="edit-test-case-discard-button"]'
     public static readonly errorToastMsg = '[data-testid="error-toast"]'
     public static readonly dangerToastMsg = '[class="toast danger"]'
-    public static readonly confirmationMsg = '[class="toast warning"]'
+    public static readonly confirmationMsg = '.toast'
     public static readonly confirmationMsgWithErrorOrWarning = '#content > div > h3'
     public static readonly testCaseSeriesList = 'tbody > tr > :nth-child(3)'
     public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
@@ -847,6 +847,8 @@ export class TestCasesPage {
 
         //Save edited / updated to test case
         cy.get(this.editTestCaseSaveButton).click()
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 6500)
+
         cy.get(this.confirmationMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
@@ -1020,7 +1022,11 @@ export class TestCasesPage {
 
         cy.get(this.aceEditor).should('exist')
         cy.get(this.aceEditor).should('be.visible')
-        //cy.get(this.aceEditorJsonInput).should('exist')
+        /*
+            this wait needs to be here so that CQL document can load
+            if we really need to optimize, need to find the URL for a cy.intercept()
+        */
+        cy.wait(1500)
         cy.get(this.aceEditor).invoke('text').then(
             (text) => {
                 expect(text).to.contain(ValueToBeAdded)

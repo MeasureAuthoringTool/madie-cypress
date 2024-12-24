@@ -9,19 +9,20 @@ import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let testCaseTitle = 'Title for Auto Test'
-let testCaseDescription = 'DENOMFail' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let updatedTestCaseTitle = testCaseTitle + " some update"
-let updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDescription'
-let updatedTestCaseSeries = 'CMSTestSeries'
-let testCaseJson = TestCaseJson.TestCaseJson_Valid
-let measureCQL = MeasureCQL.ICFCleanTest_CQL
+const timestamp = Date.now()
+const measureName = 'TestMeasure' + timestamp
+const CqlLibraryName = 'TestLibrary' + timestamp
+const testCaseTitle = 'Title for Auto Test'
+const testCaseDescription = 'DENOMFail' + timestamp
+const testCaseSeries = 'SBTestSeries'
+const updatedTestCaseTitle = testCaseTitle + " some update"
+const updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDescription'
+const updatedTestCaseSeries = 'CMSTestSeries'
+const testCaseJson = TestCaseJson.TestCaseJson_Valid
+const measureCQL = MeasureCQL.ICFCleanTest_CQL
 const now = require('dayjs')
-let todaysDate = now().format('MM/DD/YYYY')
-let qiCore6MeasureCQL = 'library QICoreTestLibrary1733500481375 version \'0.0.000\'\n' +
+const todaysDate = now().format('MM/DD/YYYY')
+const qiCore6MeasureCQL = 'library QICoreTestLibrary1733500481375 version \'0.0.000\'\n' +
     'using QICore version \'6.0.0\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'codesystem "SNOMEDCT:2017-09": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'\n' +
@@ -38,14 +39,13 @@ describe('Create and Update Test Case for Qi Core 4 Measure', () => {
 
     beforeEach('Create Measure and login', () => {
 
-        //Create New Measure
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
         OktaLogin.Login()
         MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -54,29 +54,14 @@ describe('Create and Update Test Case for Qi Core 4 Measure', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        OktaLogin.Login()
     })
 
     afterEach('Logout and delete measure', () => {
         OktaLogin.UILogout()
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Create and Update Test Case for Qi Core Version 4.1.1 Measure', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter("edit")
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
@@ -87,7 +72,6 @@ describe('Create and Update Test Case for Qi Core 4 Measure', () => {
         //Edit / update Test Case
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.updateTestCase(updatedTestCaseTitle, updatedTestCaseDescription, updatedTestCaseSeries)
-
     })
 })
 
@@ -95,7 +79,6 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
 
     beforeEach('Create Qi Core 6 Measure and login', () => {
 
-        //Create New Measure
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
@@ -109,12 +92,7 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
 
     afterEach('Logout and delete measure', () => {
         OktaLogin.UILogout()
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Create and Update Test Case for Qi Core Version 6.0.0 Measure', () => {
@@ -152,17 +130,18 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
 
         cy.log('Test Case created successfully')
 
+        //Add json to the test case
         TestCasesPage.clickEditforCreatedTestCase()
         cy.get(TestCasesPage.jsonTab).click()
-        //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-
+        
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 21500)
         cy.get(TestCasesPage.aceEditor).type(testCaseJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.detailsTab).click()
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 6500)
         cy.log('JSON added to test case successfully')
 
         //Verify Last Saved Date on Test case list page
@@ -172,6 +151,5 @@ describe('Create and Update Test Case for Qi Core 6 Measure', () => {
         //Edit / update Test Case
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.updateTestCase(updatedTestCaseTitle, updatedTestCaseDescription, updatedTestCaseSeries)
-
     })
 })

@@ -10,30 +10,18 @@ let CqlLibraryName = 'TestLibrary' + Date.now()
 
 describe('Save CQL on CQL Editor Page', () => {
 
-    before('Create Measure', () => {
-
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
-
-    })
-
     beforeEach('Login', () => {
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
     })
 
     afterEach('Logout', () => {
         OktaLogin.Logout()
-    })
-
-    after('Clean up', () => {
-
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Create New Measure and Add CQL to the Measure', () => {
 
-        //Click on Edit Button
         MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
@@ -44,10 +32,11 @@ describe('Save CQL on CQL Editor Page', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 6500)
+
         //Navigate to Measures page and verify the saved CQL
         cy.get(Header.measures).click()
 
-        //Click on Edit Button
         MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
 

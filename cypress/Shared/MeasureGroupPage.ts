@@ -319,6 +319,11 @@ export class MeasureGroupPage {
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'ipp')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'num')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'num')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get(MeasureGroupPage.improvementNotationSelect).click()
+        cy.contains('Increased score indicates improvement').click()
+
         cy.get(this.saveMeasureGroupDetails).click()
 
         //validation successful save message
@@ -353,6 +358,11 @@ export class MeasureGroupPage {
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'denom')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'num')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'num')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get(MeasureGroupPage.improvementNotationSelect).click()
+        cy.contains('Increased score indicates improvement').click()
+
         cy.get(this.saveMeasureGroupDetails).click()
 
         //validation successful save message
@@ -402,6 +412,11 @@ export class MeasureGroupPage {
         cy.get(MeasureGroupPage.MOBooleanFunctionValue).click()
         cy.get(MeasureGroupPage.cvAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get(MeasureGroupPage.improvementNotationSelect).click()
+        cy.contains('Increased score indicates improvement').click()
+        
         cy.get(this.saveMeasureGroupDetails).click()
 
         //validation successful save message
@@ -579,7 +594,8 @@ export class MeasureGroupPage {
                             "Outcome"
                         ],
                         "stratifications": [
-                        ]
+                        ],
+                        "improvementNotation": "Increased score indicates improvement"
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)
@@ -647,7 +663,8 @@ export class MeasureGroupPage {
                             "Outcome"
                         ],
                         "stratifications": [
-                        ]
+                        ],
+                        "improvementNotation": "Increased score indicates improvement"
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)
@@ -705,10 +722,10 @@ export class MeasureGroupPage {
                             }
                         ],
                         "measureGroupTypes": [
-                            //"Outcome"
                         ],
                         "stratifications": [
-                        ]
+                        ],
+                        "improvementNotation": "Increased score indicates improvement"
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)
@@ -800,6 +817,7 @@ export class MeasureGroupPage {
                         ],
                         "stratifications": [
                         ],
+                        "improvementNotation": "Increased score indicates improvement",
                         "measureObservations": observations
                     }
                 }).then((response) => {
