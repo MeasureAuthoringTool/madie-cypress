@@ -31,11 +31,9 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
 
     before('Create Measure and Test Case', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2012-01-02', '2013-01-01')
 
-        //create test case
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         OktaLogin.Login()
@@ -46,7 +44,6 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
         OktaLogin.Logout()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('End to End Cohort Episode Encounter, Pass Result', () => {
@@ -72,6 +69,9 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Cohort')
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -115,6 +115,5 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
-
     })
 })
