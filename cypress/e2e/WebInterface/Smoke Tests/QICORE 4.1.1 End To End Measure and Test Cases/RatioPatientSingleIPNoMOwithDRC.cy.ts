@@ -76,11 +76,9 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
 
     before('Create Measure and Test Case', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2022-01-01', '2022-12-31')
 
-        //create test case
         TestCasesPage.CreateTestCaseAPI(testCaseTitleIppPass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
 
         OktaLogin.Login()
@@ -91,7 +89,6 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
         OktaLogin.Logout()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('End to End Cohort Ratio Patient Single IP w/o MO w/ DRC, IPP Pass Result', () => {
@@ -121,6 +118,9 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Numerator Exclusions')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -165,7 +165,6 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
-
     })
 
     it('End to End Cohort Ratio Patient Single IP w/o MO w/ DRC, DRC Pass Result', () => {
@@ -231,6 +230,5 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
-
     })
 })

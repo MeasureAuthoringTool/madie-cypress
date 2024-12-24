@@ -9,13 +9,14 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QDMElements } from "../../../../Shared/QDMElements"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
 
-let measureName = 'ProportionListQDMPositiveProcedurePerformed' + Date.now()
-let CqlLibraryName = 'ProportionListQDMPositiveProcedurePerformed' + Date.now()
-let firstTestCaseTitle = 'DENEXFail UveitisOpticAtrophyAfterCatSurg'
-let testCaseDescription = 'DENOMFail' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let secondTestCaseTitle = 'DENEXPass DisorderVisualCortexAfterOneCatSurg'
-let measureCQL = 'library Cataracts2040BCVAwithin90Days version \'12.0.000\'\n' +
+const now = Date.now()
+const measureName = 'ProportionListQDMPositiveProcedurePerformed' + now
+const CqlLibraryName = 'ProportionListQDMPositiveProcedurePerformed' + now
+const firstTestCaseTitle = 'DENEXFail UveitisOpticAtrophyAfterCatSurg'
+const testCaseDescription = 'DENOMFail' + now
+const testCaseSeries = 'SBTestSeries'
+const secondTestCaseTitle = 'DENEXPass DisorderVisualCortexAfterOneCatSurg'
+const measureCQL = 'library Cataracts2040BCVAwithin90Days version \'12.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
     '\n' +
@@ -194,7 +195,6 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
 
     before('Create Measure', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2012-01-01', '2012-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
@@ -208,7 +208,6 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         OktaLogin.Logout()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('End to End Proportion ListQDMPositiveProcedurePerformed', () => {
@@ -290,6 +289,8 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //add Code
         QDMElements.addCode('SNOMEDCT', '9137006')
 
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
         //Element - Condition:Diagnosis: Optic Atrophy
         //add Element
         QDMElements.addElement('condition', 'Diagnosis: Optic Atrophy')
@@ -319,36 +320,25 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('07/28/1977 12:00 AM', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
 
-        //Element - Condition:Diagnosis: Disorders of Visual Cortex
-        //add Element
+        //Element - Condition:Diagnosis: Disorders of Visual Corte
         QDMElements.addElement('condition', 'Diagnosis: Disorders of Visual Cortex')
-        //add Timing Prevalence Period DateTime
         QDMElements.addTimingPrevalencePeriodDateTime('01/03/2012 01:15 PM', '03/01/2012 01:15 PM')
-        //add Code
         QDMElements.addCode('Icd10CM', 'H47.611')
 
         //Element - Procedure:Performed: Cataract Surgery
-        //add Element
         QDMElements.addElement('procedure', 'Performed: Cataract Surgery')
-        //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('01/02/2012 10:15 PM', '01/02/2012 01:15 PM')
-
-        //add Code
         QDMElements.addCode('SNOMEDCT', '10178000')
-        //Close the Element
         QDMElements.closeElement()
 
         //Element - Procedure:Performed: Cataract Surgery
-        //add Element
         QDMElements.addElement('procedure', 'Performed: Cataract Surgery')
-        //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('02/02/2012 01:15 PM', '02/02/2012 04:15 PM')
-
-        //add Code
         QDMElements.addCode('SNOMEDCT', '446548003')
 
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
         //Element - Physical Exam:Performed: Best Corrected Visual Acuity Exam Using Snellen Chart
-        //add Element
         QDMElements.addElement('physicalexam', 'Performed: Best Corrected Visual Acuity Exam Using Snellen Chart')
         cy.get(TestCasesPage.authorDateTime).type('02/02/2012 01:15 PM')
         cy.get(TestCasesPage.attributesTab).click()

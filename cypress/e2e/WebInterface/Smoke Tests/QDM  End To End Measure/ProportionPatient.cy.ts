@@ -9,13 +9,14 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QDMElements } from "../../../../Shared/QDMElements"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
 
-let measureName = 'ProportionPatient' + Date.now()
-let CqlLibraryName = 'ProportionPatient' + Date.now()
-let firstTestCaseTitle = 'DENEXStrat1Fail 2RUnilateralMxProc'
-let testCaseDescription = 'DENOMFail' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let secondTestCaseTitle = 'DENEXStrat2Pass RLMxDxOnsetsEndOfMP'
-let measureCQL = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
+const now = Date.now()
+const measureName = 'ProportionPatient' + now
+const CqlLibraryName = 'ProportionPatient' + now
+const firstTestCaseTitle = 'DENEXStrat1Fail 2RUnilateralMxProc'
+const testCaseDescription = 'DENOMFail' + now
+const testCaseSeries = 'SBTestSeries'
+const secondTestCaseTitle = 'DENEXStrat2Pass RLMxDxOnsetsEndOfMP'
+const measureCQL = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
     '\n' +
@@ -140,7 +141,6 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
     before('Create Measure', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2012-01-01', '2012-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
@@ -153,7 +153,6 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('End to End Proportion Patient Based', () => {
@@ -230,6 +229,8 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //add attribute to test case action
         QDMElements.addAttribute()
 
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
         //Element - Procedure:Performed: Unilateral Mastectomy Right
         //add Element
         QDMElements.addElement('procedure', 'Performed: Unilateral Mastectomy Right')
@@ -292,6 +293,8 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         //add Code
         QDMElements.addCode('SNOMEDCT', '137671000119105')
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')

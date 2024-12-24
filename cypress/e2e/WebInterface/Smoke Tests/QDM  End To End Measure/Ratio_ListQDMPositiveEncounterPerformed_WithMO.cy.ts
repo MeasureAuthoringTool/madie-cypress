@@ -8,13 +8,14 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QDMElements } from "../../../../Shared/QDMElements"
 
-let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
-let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
-let firstTestCaseTitle = '3Encounters1Exclusion'
-let testCaseDescription = 'DENEXPass' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let secondTestCaseTitle = '2EncBothGlucose1000inAndoutsideOfTimeframe'
-let measureCQL = 'library RatioListQDMPositiveEncounterPerformedWithMO1701801315767 version \'0.0.000\'\n' +
+const now = Date.now()
+const measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + now
+const CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + now
+const firstTestCaseTitle = '3Encounters1Exclusion'
+const testCaseDescription = 'DENEXPass' + now
+const testCaseSeries = 'SBTestSeries'
+const secondTestCaseTitle = '2EncBothGlucose1000inAndoutsideOfTimeframe'
+const measureCQL = 'library RatioListQDMPositiveEncounterPerformedWithMO1701801315767 version \'0.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
     '\n' +
@@ -232,7 +233,6 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
     before('Create Measure', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2023-01-01', '2023-12-31')
         OktaLogin.Login()
@@ -254,7 +254,6 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('End to End Ratio ListQDMPositiveEncounterPerformed with MO', () => {
@@ -402,6 +401,8 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         //add Code
         QDMElements.addCode('SNOMEDCT', '183452005')
 
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
@@ -509,6 +510,8 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         QDMElements.enterQuantity('1000', 'mg/dl')
         //add attribute to test case action
         QDMElements.addAttribute()
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()

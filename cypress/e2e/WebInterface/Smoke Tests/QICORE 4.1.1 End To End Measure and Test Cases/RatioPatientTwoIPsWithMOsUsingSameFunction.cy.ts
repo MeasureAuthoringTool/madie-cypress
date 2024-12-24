@@ -8,13 +8,14 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
-let measureName = 'RatioPatientTwoIPsWithMOsUsingSameFunction' + Date.now()
-let CqlLibraryName = 'RatioPatientTwoIPsWithMOsUsingSameFunction' + Date.now()
-let testCaseTitleIpp1Pass = 'IPP1 PASS'
-let testCaseDescription = 'PASS' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let testCaseJsonIppPass = TestCaseJson.RatioPatientTwoIPsWithMOs_PASS
-let measureCQL = 'library MultipleIPwithObs version \'0.0.000\'\n' +
+const now = Date.now()
+const measureName = 'RatioPatientTwoIPsWithMOsUsingSameFunction' + now
+const CqlLibraryName = 'RatioPatientTwoIPsWithMOsUsingSameFunction' + now
+const testCaseTitleIpp1Pass = 'IPP1 PASS'
+const testCaseDescription = 'PASS' + now
+const testCaseSeries = 'SBTestSeries'
+const testCaseJsonIppPass = TestCaseJson.RatioPatientTwoIPsWithMOs_PASS
+const measureCQL = 'library MultipleIPwithObs version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
@@ -62,11 +63,9 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
 
     before('Create Measure and Test Case', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2023-01-01', '2024-01-01')
 
-        //create test case
         TestCasesPage.CreateTestCaseAPI(testCaseTitleIpp1Pass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
 
         OktaLogin.Login()
@@ -107,6 +106,9 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
         Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'MObsAge')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorAggregateFunction, 'Average')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -122,7 +124,6 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
         OktaLogin.Logout()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('End to End Ratio Patient Two IPs w/ MOs Pass Result', () => {
@@ -196,6 +197,5 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs, using same
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
-
     })
 })

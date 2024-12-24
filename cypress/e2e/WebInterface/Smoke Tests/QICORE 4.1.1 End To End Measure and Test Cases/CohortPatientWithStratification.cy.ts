@@ -55,14 +55,10 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
 
     before('Create Measure, Test Case and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2022-01-01', '2023-01-01')
 
-        //create test case
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-
-
     })
 
     after('Clean up', () => {
@@ -70,7 +66,6 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         OktaLogin.Logout()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('End to End Cohort Patient w/ Stratification, Pass Result', () => {
@@ -96,8 +91,10 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         cy.get(MeasureGroupPage.stratificationTab).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.stratOne, 'Stratification 1')
-        //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationOne, 'initialPopulation')
         cy.get(MeasureGroupPage.stratDescOne).type('StratificationOne')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
