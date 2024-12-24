@@ -98,10 +98,10 @@ export class CreateMeasurePage {
         }
         Utilities.waitForElementVisible(LandingPage.newMeasureButton, 30000)
         Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 30000)
-        cy.get(LandingPage.newMeasureButton).click({ force: true })
+        cy.get(LandingPage.newMeasureButton).click()
         cy.get(this.measureNameTextbox).type(measureName)
         cy.get(this.measureModelDropdown).click()
-        cy.get('[id="mui-5"]').contains(model).click()
+        cy.contains(model).click()
         cy.get(this.eCQMAbbreviatedTitleTextbox).type('eCQMTitle01')
         cy.get(this.cqlLibraryNameTextbox).type(CqlLibraryName)
 

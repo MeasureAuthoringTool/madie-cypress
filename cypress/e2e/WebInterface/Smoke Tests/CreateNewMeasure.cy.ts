@@ -12,6 +12,8 @@ describe('Create New Measure', () => {
 
     beforeEach('Login', () => {
         OktaLogin.Login()
+
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 11500)
     })
 
     afterEach('Cleanup and Logout', () => {
@@ -40,13 +42,12 @@ describe('Create New Measure', () => {
 
     it('Create QI Core 4.1.1 Measure', () => {
 
-        measureName = 'QICoreTestMeasure' + Date.now()
-        CqlLibraryName = 'QICoreTestLibrary' + Date.now()
+        measureName = 'QICore4TestMeasure' + Date.now()
+        CqlLibraryName = 'QICore4TestLibrary' + Date.now()
 
-        //Create New Measure
         CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4)
         cy.get(Header.mainMadiePageButton).click()
-        //Click on Edit Measure
+
         MeasuresPage.actionCenter('edit')
 
         //Navigate to CQL Editor tab / page
@@ -54,7 +55,6 @@ describe('Create New Measure', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library libraryName version \'0.0.000\'using QICore version \'4.1.1\'include CQMCommon version \'2.2.000\' called CQMCommoninclude FHIRHelpers version \'4.4.000\' called FHIRHelpersinclude QICoreCommon version \'2.1.000\' called QICoreCommoninclude SupplementalDataElements version \'3.5.000\' called SDEparameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  SDE."SDE Ethnicity"define "SDE Payer":  SDE."SDE Payer"define "SDE Race":  SDE."SDE Race"define "SDE Sex":  SDE."SDE Sex"')
-
     })
 
     it('Create QDM Measure', () => {
@@ -62,10 +62,9 @@ describe('Create New Measure', () => {
         measureName = 'QDMTestMeasure' + Date.now()
         CqlLibraryName = 'QDMTestLibrary' + Date.now()
 
-        //Create New Measure
         CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.QDM)
         cy.get(Header.mainMadiePageButton).click()
-        //Click on Edit Measure
+
         MeasuresPage.actionCenter('edit')
 
         //Navigate to CQL Editor tab / page
@@ -73,27 +72,24 @@ describe('Create New Measure', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library libraryName version \'0.0.000\'using QDM version \'5.6\'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Globalvalueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'parameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  ["Patient Characteristic Ethnicity": "Ethnicity"]define "SDE Sex":  ["Patient Characteristic Sex": "ONC Administrative Sex"]define "SDE Payer":  ["Patient Characteristic Payer": "Payer Type"]  define "SDE Race":  ["Patient Characteristic Race": "Race"]')
-
     })
 
     it('Create QI Core 6.0.0 Measure', () => {
 
-        measureName = 'QICoreTestMeasure' + Date.now()
-        CqlLibraryName = 'QICoreTestLibrary' + Date.now()
+        measureName = 'QICore6TestMeasure' + Date.now()
+        CqlLibraryName = 'QICore6TestLibrary' + Date.now()
 
-        //Create New Measure
         CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore6)
 
         cy.get(Header.mainMadiePageButton).click()
 
-        //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
-        //
-        // //Navigate to CQL Editor tab / page
-        // cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        // cy.get(EditMeasurePage.cqlEditorTab).click()
-        //
-        // cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library libraryName version \'0.0.000\'using QICore version \'4.1.1\'include CQMCommon version \'2.2.000\' called CQMCommoninclude FHIRHelpers version \'4.4.000\' called FHIRHelpersinclude QICoreCommon version \'2.1.000\' called QICoreCommoninclude SupplementalDataElements version \'3.5.000\' called SDEparameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  SDE."SDE Ethnicity"define "SDE Payer":  SDE."SDE Payer"define "SDE Race":  SDE."SDE Race"define "SDE Sex":  SDE."SDE Sex"')
 
+        //Navigate to CQL Editor tab / page
+        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        // QiCore6 has no default Cql text
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('have.text', '')
     })
 })

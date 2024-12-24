@@ -8,23 +8,21 @@ let measureOne = ''
 let CqlLibraryOne = ''
 let measureTwo = ''
 let CqlLibraryTwo = ''
+const now = Date.now()
 
 describe('Delete Measure', () => {
 
     beforeEach('Create measure and Login', () => {
 
-        //Create Measure with Regular User
-        measureOne = 'TestMeasure1' + Date.now()
-        CqlLibraryOne = 'TestLibrary1' + Date.now()
+        measureOne = 'TestMeasure1' + now
+        CqlLibraryOne = 'TestLibrary1' + now
         CreateMeasurePage.CreateQICoreMeasureAPI(measureOne, CqlLibraryOne)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
-
     })
 
     it('Verify Measure Owner can Delete Measure through Action center', () => {
@@ -52,22 +50,26 @@ describe('Delete Measure ownership validation', () => {
     beforeEach('Create measure and Login as ALT User', () => {
 
         //Create Measure with Regular User
-        measureTwo = 'TestMeasure2' + Date.now()
-        CqlLibraryTwo = 'TestLibrary2' + Date.now()
+        measureTwo = 'TestMeasure2' + now
+        CqlLibraryTwo = 'TestLibrary2' + now
         CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, CqlLibraryTwo)
-        OktaLogin.AltLogin()
 
+        OktaLogin.AltLogin()
     })
 
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         Utilities.deleteMeasure(measureTwo, CqlLibraryTwo)
     })
 
     it('Verify Non Measure Owner can not Delete Measure through Action center', () => {
 
-        //Verify the Measure on My Measures Page List
+        //Verify the Measure is not on My Measures Page List
         cy.get(MeasuresPage.measureListTitles).should('not.contain', measureTwo)
 
         //Navigate to All Measures tab
@@ -78,6 +80,5 @@ describe('Delete Measure ownership validation', () => {
         })
 
         cy.get('[data-testid="delete-action-btn"]').should('not.be.enabled')
-
     })
 })
