@@ -9,13 +9,14 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
 import { QDMElements } from "../../../../Shared/QDMElements";
 
-let measureName = 'CVWithMOAndStratification' + Date.now()
-let CqlLibraryName = 'CVWithMOAndStratification' + Date.now()
-let firstTestCaseTitle = 'PDxNotPsych60MinsDepart'
-let testCaseDescription = 'IPPStrat1Pass' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let secondTestCaseTitle = 'Order50AndPriorityAssessment180'
-let measureCQL = 'library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedPatients version \'11.1.000\'\n' +
+const now = Date.now()
+const measureName = 'CVWithMOAndStratification' + now
+const CqlLibraryName = 'CVWithMOAndStratification' + now
+const firstTestCaseTitle = 'PDxNotPsych60MinsDepart'
+const testCaseDescription = 'IPPStrat1Pass' + now
+const testCaseSeries = 'SBTestSeries'
+const secondTestCaseTitle = 'Order50AndPriorityAssessment180'
+const measureCQL = 'library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedPatients version \'11.1.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
     '\n' +
@@ -139,7 +140,6 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
 
     before('Create Measure', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2025-01-01', '2025-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
@@ -153,7 +153,6 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         OktaLogin.Logout()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('End to End CV ListQDMPositiveEncounterPerformed With MO And Stratification', () => {
@@ -300,6 +299,8 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="code-option-10378005"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
 
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
@@ -312,7 +313,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="strat-test-population-initialPopulation-expected-0"]').eq(0).type('1')
         cy.get('[data-testid="strat-test-population-measurePopulation-expected-1"]').eq(0).type('1')
         //Commented until MAT-6608 is fixed
-        //cy.get('[data-testid="strat-test-population-measurePopulationObservation-expected-2"]').eq(0).clear().type('60')
+        cy.get('[data-testid="strat-test-population-measurePopulationObservation-expected-2"]').eq(0).clear().type('60')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -435,6 +436,8 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="option-434081000124108"]').click()
         cy.get('[data-testid="add-attribute-button"]').click()
 
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
@@ -446,8 +449,8 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="test-population-Strata-1 -expected-0"]').type('2')
         cy.get('[data-testid="strat-test-population-initialPopulation-expected-0"]').eq(0).type('2')
         cy.get('[data-testid="strat-test-population-measurePopulation-expected-1"]').eq(0).type('2')
-        //Commented until MAT-6608 is fixed
-        //cy.get('[data-testid="strat-test-population-measurePopulationObservation-expected-2"]').clear().type('45')
+        // uncommented, reference ticket was fixed a long time ago
+        cy.get('[data-testid="strat-test-population-measurePopulationObservation-expected-2"]').clear().type('45')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -463,7 +466,5 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
         cy.get(TestCasesPage.testCaseStatus).eq(1).should('contain.text', 'Pass')
-
-
     })
 })

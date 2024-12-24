@@ -62,11 +62,9 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
     before('Create Measure and Test Case', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2022-01-01', '2022-12-31')
 
-        //create test case
         TestCasesPage.CreateTestCaseAPI(testCaseTitlePass, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
 
         OktaLogin.Login()
@@ -107,6 +105,9 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
         Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'Numerator Observation')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorAggregateFunction, 'Sum')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -114,7 +115,6 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
-
     })
 
     after('Clean up', () => {
@@ -122,7 +122,6 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
         OktaLogin.Logout()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('End to End Ratio Episode Two IPs w/ MOs Pass Result', () => {
@@ -197,7 +196,5 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
-
     })
-
 })

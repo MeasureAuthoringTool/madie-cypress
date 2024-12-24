@@ -9,12 +9,13 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QDMElements } from "../../../../Shared/QDMElements"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
 
-let measureName = 'RatioEncounterPerformedMultipleCriteriasWithMO' + Date.now()
-let CqlLibraryName = 'RatioEncounterPerformedMultipleCriteriasWithMO' + Date.now()
-let firstTestCaseTitle = 'Test Case'
-let testCaseDescription = 'Test Case' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let measureCQL = 'library NonPatientBasedRatioMeasureWithMultipleGroupsandStratifications version \'0.0.000\'\n' +
+const now = Date.now()
+const measureName = 'RatioEncounterPerformedMultipleCriteriasWithMO' + now
+const CqlLibraryName = 'RatioEncounterPerformedMultipleCriteriasWithMO' + now
+const firstTestCaseTitle = 'Test Case'
+const testCaseDescription = 'Test Case' + now
+const testCaseSeries = 'SBTestSeries'
+const measureCQL = 'library NonPatientBasedRatioMeasureWithMultipleGroupsandStratifications version \'0.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
     '\n' +
@@ -82,7 +83,6 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
 
     before('Create Measure', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2024-01-01', '2024-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
@@ -94,7 +94,6 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('End to End Ratio EncounterPerformed, Multiple Criterias With MO', () => {
@@ -155,7 +154,6 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'Numerator Observation')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorAggregateFunction, 'Count')
 
-
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -181,7 +179,6 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(MeasureGroupPage.numeratorObservation).should('be.visible')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'Numerator Observation')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorAggregateFunction, 'Count')
-
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -278,6 +275,8 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         //add attribute to test case action
         QDMElements.addAttribute()
 
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
         //Add Expected values for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
@@ -322,6 +321,5 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get('button:contains("Population Criteria 2")').click()
 
         cy.get(TestCasesPage.testCaseStatus).eq(0).should('contain.text', 'Pass')
-
     })
 })

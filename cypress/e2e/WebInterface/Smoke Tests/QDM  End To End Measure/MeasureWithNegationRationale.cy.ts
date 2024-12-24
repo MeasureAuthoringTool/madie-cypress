@@ -9,12 +9,13 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QDMElements } from "../../../../Shared/QDMElements"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 
-let measureName = 'MeasureWithNegationRationale' + Date.now()
-let CqlLibraryName = 'MeasureWithNegationRationale' + Date.now()
-let testCaseTitle = 'BCGNotGivenNormalizeIntervalRelevantDateTimeForCaStaging'
-let testCaseDescription = 'DENEXCEPPass' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let measureCQL = 'library NewCMS646 version \'0.0.000\'\n' +
+const now = Date.now()
+const measureName = 'MeasureWithNegationRationale' + now
+const CqlLibraryName = 'MeasureWithNegationRationale' + now
+const testCaseTitle = 'BCGNotGivenNormalizeIntervalRelevantDateTimeForCaStaging'
+const testCaseDescription = 'DENEXCEPPass' + now
+const testCaseSeries = 'SBTestSeries'
+const measureCQL = 'library NewCMS646 version \'0.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
     '\n' +
@@ -170,7 +171,6 @@ describe('Measure with Negation Rationale', () => {
 
     before('Create Measure', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2012-01-01', '2012-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
@@ -181,8 +181,7 @@ describe('Measure with Negation Rationale', () => {
 
         OktaLogin.Logout()
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+       // Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('End to End Measure with Negation Rationale', () => {
@@ -260,27 +259,20 @@ describe('Measure with Negation Rationale', () => {
         TestCasesPage.enterPatientDemographics('04/10/1942 12:00 AM', 'Living', 'White', 'Female', 'Not Hispanic or Latino')
 
         //Element - Condition, Diagnosis: Bladder Cancer for Urology Care
-        //add Element
         QDMElements.addElement('condition', 'Diagnosis: Bladder Cancer for Urology Care')
-        //add Timing Relevant Period DateTime
         QDMElements.addTimingPrevalencePeriodDateTime('09/30/2011 08:00 AM', ' ')
-        //add Code
         QDMElements.addCode('Icd10CM', 'C67.3')
 
         //Element - Medication, Administered: BCG Bacillus Calmette Guerin for Urology Care
-        //add Element
         QDMElements.addElement('medication', 'Administered: BCG Bacillus Calmette Guerin for Urology Care')
-        //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('03/01/2012 08:00 AM', '03/01/2012 10:15 AM')
-        //add Code
         QDMElements.addCode('RxNORM', '1653579')
 
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
         //Element - Procedure, Performed: Tumor staging (tumor staging)
-        //add Element
         QDMElements.addElement('procedure', 'Performed: Tumor staging (tumor staging)')
-        //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('09/30/2011 08:00 AM', '09/30/2011 08:15 AM')
-        //add Code
         QDMElements.addCode('SNOMEDCT', '254292007')
         // Enter attribute and its type
         cy.get(TestCasesPage.attributesTab).click()
