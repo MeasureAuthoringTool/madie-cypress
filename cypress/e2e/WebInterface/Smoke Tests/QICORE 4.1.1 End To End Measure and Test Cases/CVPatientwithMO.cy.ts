@@ -20,13 +20,9 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
     before('Create Measure, Test Case and Login', () => {
 
         OktaLogin.Login()
-        //Create New Measure
         CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4, '01/01/2012', '12/31/2012')
-
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-
         OktaLogin.Login()
-
     })
 
     after('Clean up', () => {
@@ -34,7 +30,6 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
         OktaLogin.Logout()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('End to End CV Patient with MO, Pass Result', () => {
@@ -64,6 +59,9 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'Initial Population 1')
         Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'Measure Observation')
         Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')

@@ -82,7 +82,6 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
             { measureCql: measureCQL, mpStartDate: '2025-01-01', mpEndDate: '2025-12-31'})
 
         OktaLogin.Login()
-
     })
 
     after('Clean up', () => {
@@ -90,7 +89,6 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         OktaLogin.Logout()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('End to End Proportion Episode Measure, Pass Result', () => {
@@ -119,6 +117,9 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')

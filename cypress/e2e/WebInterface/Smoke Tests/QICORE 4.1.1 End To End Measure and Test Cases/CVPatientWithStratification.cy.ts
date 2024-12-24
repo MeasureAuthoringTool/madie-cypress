@@ -124,6 +124,9 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
         Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'Stratification 2')
         cy.get(MeasureGroupPage.stratDescTwo).type('StratificationTwo')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()

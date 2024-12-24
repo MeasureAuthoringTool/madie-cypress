@@ -20,13 +20,12 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
     before('Create Measure, Test Case and Login', () => {
 
         OktaLogin.Login()
-        //Create New Measure
+
         CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4, '01/01/2012', '12/31/2012')
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         OktaLogin.Login()
-
     })
 
     after('Clean up', () => {
@@ -34,7 +33,6 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
         OktaLogin.Logout()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('End to End Cohort Patient Boolean, Pass Result', () => {
@@ -61,6 +59,9 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Cohort')
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
