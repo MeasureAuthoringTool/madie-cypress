@@ -10,6 +10,11 @@ cypress.env.json
 .DS_Store
 **/.DS_Store
 
+# reports - don't need these in the repo
+mochawesome.json
+mochawesome-report/
+
+
 # files for local processing
 cypress/fixtures/cqlLibraryId
 cypress/fixtures/cqlLibraryId*
