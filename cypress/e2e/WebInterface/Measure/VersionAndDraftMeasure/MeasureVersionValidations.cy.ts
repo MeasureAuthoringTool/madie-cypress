@@ -8,8 +8,6 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { v4 as uuidv4 } from 'uuid'
-import { MeasureGroups } from "../../../../Shared/MeasureGroupPage"
 
 const now = Date.now()
 let MeasuresPageOne = ''
@@ -95,86 +93,6 @@ describe('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersioningErrorMsg).should('contain.text', 'Requested measure cannot be versioned')
         cy.get(MeasuresPage.measureVersionHelperText).should('contain.text', 'Please include valid CQL in the CQL editor to version before versioning this measure')
 
-    })
-})
-
-// this test is expected to fail until MAT-7992 is completed
-describe.skip('Cannot version the measure when group does not have declared Improvement Notation', () => {
-
-    beforeEach('Create Measure and Login', () => {
-
-        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, { measureCql: measureCQL })
-        const populations: MeasureGroups = {
-            initialPopulation: 'ipp',
-            denominator: 'denom',
-            numerator: 'num'
-        }
-        // API to set up population criteria without Improvement Notation
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-                cy.request({
-                    url: '/api/measures/' + fileContents + '/groups',
-                    method: 'POST',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    },
-                    body: {
-                        "id": fileContents,
-                        "scoring": 'Proportion',
-                        "populationBasis": 'boolean',
-                        "populations": [
-                            {
-                                "id": uuidv4(),
-                                "name": "initialPopulation",
-                                "definition": populations.initialPopulation
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "denominator",
-                                "definition": populations.denominator
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "numerator",
-                                "definition": populations.numerator
-                            }
-                        ],
-                        "measureGroupTypes": [
-                            'Outcome'
-                        ],
-                        "stratifications": [
-                        ]
-                    }
-                }).then((response) => {
-                    expect(response.status).to.eql(201)
-                    expect(response.body.id).to.be.exist
-                    cy.writeFile('cypress/fixtures/groupId', response.body.id)
-                })
-            })
-        })  
-        OktaLogin.Login()
-    })
-
-    afterEach('Logout and Clean up', () => {
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
-    })
-
-    it('User cannot Version when the PC does not include an Improvement Notation', () => {
-
-        MeasuresPage.actionCenter('version')
-
-        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
-        Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 7000)
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
-
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(MeasuresPage.measureVersioningErrorMsg).should('contain.text', 'Requested measure cannot be versioned')
-        cy.get(MeasuresPage.measureVersionHelperText).should('contain.text', 'At least one Population Criteria is missing Improvement Notation')
     })
 })
 
