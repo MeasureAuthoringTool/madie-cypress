@@ -9,11 +9,9 @@ import { Header } from "../../../../Shared/Header"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage";
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let randValue = (Math.floor((Math.random() * 1000) + 1))
-let newMeasureName = ''
-let newCqlLibraryName = ''
+const timestamp = Date.now()
+let measureName = 'QiCoreExportValidations' + timestamp
+let CqlLibraryName = 'QiCoreExportValidationsLib' + timestamp
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
 let mpEndDate = now().format('YYYY-MM-DD')
@@ -34,9 +32,6 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
 
     before('Create New Measure and Login', () => {
 
-        newMeasureName = measureName + 2 + randValue
-        newCqlLibraryName = CqlLibraryName + 2 + randValue
-
         cy.setAccessTokenCookie()
 
         //Create Measure with out Steward and Developer
@@ -48,8 +43,8 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
                     Authorization: 'Bearer ' + accessToken.value
                 },
                 body: {
-                    "measureName": newMeasureName,
-                    "cqlLibraryName": newCqlLibraryName,
+                    "measureName": measureName,
+                    "cqlLibraryName": CqlLibraryName,
                     "model": 'QI-Core v4.1.1',
                     "versionId": uuidv4(),
                     "measureSetId": uuidv4(),
@@ -73,7 +68,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
 
     after('Cleanup', () => {
 
-        //Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Verify error message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
@@ -89,7 +84,6 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
             cy.get('[data-testid="error-message"] > ul > :nth-child(1)').should('contain.text', 'Missing Measure Developers')
             cy.get('[data-testid="error-message"] > ul > :nth-child(2)').should('contain.text', 'Missing Steward')
             cy.get('[data-testid="error-message"] > ul > :nth-child(3)').should('contain.text', 'Missing Description')
-
         })
     })
 })
@@ -98,23 +92,19 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
 
     beforeEach('Create New Measure and Login', () => {
 
-        newMeasureName = measureName + 4 + randValue
-        newCqlLibraryName = CqlLibraryName + 4 + randValue
-
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.Login()
-
     })
 
     afterEach('Log out and Cleanup', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
+    // run this & check modal for messsage
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
 
         MeasuresPage.actionCenter('edit')
@@ -132,7 +122,6 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
             cy.get('[data-testid="export-action-btn"]').click()
 
             cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
-
         })
     })
 
@@ -157,7 +146,6 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
             cy.get('[data-testid="export-action-btn"]').click()
 
             cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
-
         })
     })
 })
@@ -166,11 +154,7 @@ describe('Error Message on Measure Export when the Measure does not have Populat
 
     before('Create New Measure and Login', () => {
 
-        newMeasureName = measureName + 1 + randValue
-        newCqlLibraryName = CqlLibraryName + 1 + randValue
-
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -179,14 +163,12 @@ describe('Error Message on Measure Export when the Measure does not have Populat
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
     })
 
     after('Log out and Cleanup', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Verify error message on Measure Export when the Measure does not have Population Criteria', () => {
@@ -209,22 +191,16 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
     before('Create New Measure and Login', () => {
 
-        newMeasureName = measureName + 1 + randValue
-        newCqlLibraryName = CqlLibraryName + 1 + randValue
-
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.Login()
-
     })
 
     after('Log out and Cleanup', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Verify Error Message on Measure Export when the Population Criteria does not match with CQL', () => {
@@ -250,5 +226,86 @@ describe('Error Message on Measure Export when the Population Criteria does not 
             cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'CQL Populations Return Types are invalid')
         })
     })
+})
 
+describe('Error Message on Measure Export when the PC does not have Improvement Notation set', () => {
+
+    before('Create New Measure and Login', () => {
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+    })
+
+    after('Log out and Cleanup', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+    })
+
+    it('Verify Error Message on Measure Export when Population Criteria does not have IN set', () => {
+
+        // based on CreateProportionMeasureGroupAPI, but hardcoded values for this test
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups',
+                    method: 'POST',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    body: {
+                        "id": fileContents,
+                        "scoring": 'Proportion',
+                        "populationBasis": 'boolean',
+                        "populations": [
+                            {
+                                "id": uuidv4(),
+                                "name": "initialPopulation",
+                                "definition": 'ipp'
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominator",
+                                "definition": 'denom'
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "numerator",
+                                "definition": 'num'
+                            }
+                        ],
+                        "scoringUnit": {
+                            "label": "ml milliLiters",
+                            "value": {
+                                "code": "ml",
+                                "name": "milliLiters",
+                                "guidance": "",
+                                "system": "https://clinicaltables.nlm.nih.gov/"
+                            }
+                        },
+                        "measureGroupTypes": [
+                            "Outcome"
+                        ],
+                        "stratifications": [
+                        ]
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(201)
+                    expect(response.body.id).to.be.exist
+                    cy.writeFile('cypress/fixtures/measureGroupId', response.body.id)
+                })
+            })
+        })
+
+        OktaLogin.Login()
+
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+            cy.get('[data-testid="export-action-btn"]').should('be.visible')
+            cy.get('[data-testid="export-action-btn"]').should('be.enabled')
+            cy.get('[data-testid="export-action-btn"]').click()
+
+            cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
+            cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'At least one Population Criteria is missing Improvement Notation')
+        })
+    })
 })

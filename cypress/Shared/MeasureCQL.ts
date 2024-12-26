@@ -1,44 +1,18 @@
 
 export class MeasureCQL {
     public static readonly ICF_FHIR_with_invalid_using = 'library SimpleFhirLibrary version \'0.0.004\'\n' +
-
-
-
         'using FHIR version \'4.0.10\'\n' +
-
-
-
         'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-
-
-
         'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-
-
-
         'parameter \"Measurement Period\" Interval<DateTime>\n' +
-
-
-
         'context Patient\n' +
-
-
-
         'define \"ipp\":\n' +
-
         'true\n' +
-
-
-
         'define \"denom\":\n' +
-
         '\"ipp\"\n' +
-
-
-
         'define \"num\":\n' +
-
         'exists [\"Encounter\": \"Office Visit\"] E where E.status ~ \'finished\'\n'
+
     public static readonly stndBasicQICoreCQL = 'library TestLibrary1709929148231865 version \'0.0.000\'\n' +
         'using QICore version \'4.1.1\'\n' +
         'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
@@ -64,85 +38,36 @@ export class MeasureCQL {
         'define "Initial PopulationOne":\n' +
         'true\n'
     public static readonly ICFCleanTestQICore_CQL_without_using = 'library SimpleFhirLibrary version \'0.0.004\'\n' +
-
-
-
-
-
         'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-
         'codesystem \"SNOMEDCT:2017-09\": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'\n' +
-
         'valueset \"Hysterectomy with No Residual Cervix\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
         'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-
-
-
         'parameter \"Measurement Period\" Interval<DateTime>\n' +
-
-
-
         'context Patient\n' +
-
-
-
         'define \"Surgical Absence of Cervix\":\n' +
         '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
         '		where NoCervixHysterectomy.status = \'completed\''
 
-
     public static readonly ICFCleanTestQICore_CQL_with_incorrect_using = 'library SimpleFhirLibrary version \'0.0.004\'\n' +
-
-
         'using QICore version \'4.1.00000\'\n' +
-
-
-
         'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-
         'codesystem \"SNOMEDCT:2017-09\": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'\n' +
-
         'valueset \"Hysterectomy with No Residual Cervix\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
         'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-
-
-
         'parameter \"Measurement Period\" Interval<DateTime>\n' +
-
-
-
         'context Patient\n' +
-
-
-
         'define \"Surgical Absence of Cervix\":\n' +
         '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
         '		where NoCervixHysterectomy.status = \'completed\''
 
     public static readonly ICFCleanTestQICore = 'library SimpleFhirLibrary version \'0.0.004\'\n' +
-
-
         'using QICore version \'4.1.1\'\n' +
-
-
-
         'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-
         'codesystem \"SNOMEDCT:2017-09\": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'\n' +
-
         'valueset \"Hysterectomy with No Residual Cervix\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
         'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-
-
-
         'parameter \"Measurement Period\" Interval<DateTime>\n' +
-
-
-
         'context Patient\n' +
-
-
-
         'define \"Surgical Absence of Cervix\":\n' +
         '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
         '		where NoCervixHysterectomy.status = \'completed\''
@@ -1836,71 +1761,28 @@ export class MeasureCQL {
         '\n'
 
     public static readonly ICFCleanTest_CQL = 'library SimpleFhirLibrary version \'0.0.004\'\n' +
-
-
         'using QICore version \'4.1.0\'\n' +
-
-
-
         'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-
         'codesystem \"SNOMEDCT:2017-09\": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'\n' +
-
         'valueset \"Hysterectomy with No Residual Cervix\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
         'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-
-
-
         'parameter \"Measurement Period\" Interval<DateTime>\n' +
-
-
-
         'context Patient\n' +
-
-
-
         'define \"Surgical Absence of Cervix\":\n' +
         '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
         '		where NoCervixHysterectomy.status = \'completed\''
 
     public static readonly SBTEST_CQL = 'library SimpleFhirLibrary version \'0.0.004\'\n' +
-
-
-
         'using FHIR version \'4.0.1\'\n' +
-
-
-
         'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-
-
-
         'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-
-
-
         'parameter \"Measurement Period\" Interval<DateTime>\n' +
-
-
-
         'context Patient\n' +
-
-
-
         'define \"ipp\":\n' +
-
         'true\n' +
-
-
-
         'define \"denom\":\n' +
-
         '\"ipp\"\n' +
-
-
-
         'define \"num\":\n' +
-
         'exists [\"Encounter\": \"Office Visit\"] E where E.status ~ \'finished\'\n'
 
     public static readonly CQL_Multiple_Populations = 'library TestLibrary4664 version \'0.0.000\'\n' +
