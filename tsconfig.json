@@ -10,7 +10,7 @@
         ],
         "downlevelIteration": true,
         "skipLibCheck": true, // do not check types in node_modules folder
-        "types": ["cypress", "node", "cypress-commands"]
+        "types": ["cypress", "node", "cypress-commands", "cy-verify-downloads"]
     },
     "include": [
         "node_modules/cypress",

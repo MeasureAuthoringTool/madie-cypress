@@ -22,6 +22,7 @@ import 'axe-core'
 import cypress = require("cypress");
 import "@cypress-audit/lighthouse/commands"
 const addContext = require('mochawesome/addContext')
+require('cy-verify-downloads').addCustomCommand()
 export { }
 
 require('cypress-commands')
