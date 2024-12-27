@@ -3,11 +3,9 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
-import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-
-// clean this up, add MAT-7961
 
 // variables for Human Readable file detail file comparison
 const groupScoringSection = 'cypress/fixtures/QiCoreHRCompare/GroupScoringAndPCSections.html'
@@ -129,6 +127,12 @@ describe('QI-Core Measure Export', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
+        // enter IN description
+        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).type('extra info for the measure')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 5500)
+
         //Click on Risk Adjustment tab
         cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
         //select a definition and enter a description for ipp
@@ -174,6 +178,7 @@ describe('QI-Core Measure Export', () => {
         cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Navigate to Measures page
+        cy.get('[data-testid="close-error-button"]').click()
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('version')
 
@@ -191,7 +196,7 @@ describe('QI-Core Measure Export', () => {
 
         MeasuresPage.actionCenter('export')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
+        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR4.zip', { timeout: 15000 })
         cy.log('Successfully verified zip file export')
 
         OktaLogin.Logout()
@@ -205,28 +210,33 @@ describe('QI-Core Measure Export', () => {
                 cy.log('unzipFile Task finished')
             })
 
-        //Verify all files exist in exported zip file
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR.html').should('exist')
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR.json').should('exist')
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR.xml').should('exist')
-        cy.readFile('cypress/downloads/cql/CQMCommon-1.0.000.cql').should('exist')
-        cy.readFile('cypress/downloads/cql/FHIRCommon-4.1.000.cql').should('exist')
-        cy.readFile('cypress/downloads/cql/FHIRHelpers-4.1.000.cql').should('exist')
-        cy.readFile('cypress/downloads/cql/QICoreCommon-1.2.000.cql').should('exist')
-        cy.readFile('cypress/downloads/cql/SupplementalDataElements-3.1.000.cql').should('exist')
-        cy.readFile('cypress/downloads/cql/' + CqlLibraryName + '-1.0.000.cql').should('exist')
-        cy.readFile('cypress/downloads/resources/library-CQMCommon-1.0.000.json').should('exist')
-        cy.readFile('cypress/downloads/resources/library-CQMCommon-1.0.000.xml').should('exist')
-        cy.readFile('cypress/downloads/resources/library-FHIRCommon-4.1.000.json').should('exist')
-        cy.readFile('cypress/downloads/resources/library-FHIRCommon-4.1.000.xml').should('exist')
-        cy.readFile('cypress/downloads/resources/library-FHIRHelpers-4.1.000.json').should('exist')
-        cy.readFile('cypress/downloads/resources/library-FHIRHelpers-4.1.000.xml').should('exist')
-        cy.readFile('cypress/downloads/resources/library-QICoreCommon-1.2.000.json').should('exist')
-        cy.readFile('cypress/downloads/resources/library-QICoreCommon-1.2.000.xml').should('exist')
-        cy.readFile('cypress/downloads/resources/library-SupplementalDataElements-3.1.000.json').should('exist')
-        cy.readFile('cypress/downloads/resources/library-SupplementalDataElements-3.1.000.xml').should('exist')
-        cy.readFile('cypress/downloads/resources/measure-' + CqlLibraryName + '-1.0.000.json').should('exist')
-        cy.readFile('cypress/downloads/resources/measure-' + CqlLibraryName + '-1.0.000.xml').should('exist')
+        /* 
+            Verify all files exist in exported zip file.
+            The previous usage of cy.readFile() for this caused me lots of problems with performance & 
+            taking a very long time to process and read all the files.
+            I added a plugin for cy.verifyDownload() which just checks the file name in the folder 
+            instead of opening the file - much better performance.
+            To check for the exact text enterred, I had to resort to a grep command - again for performance reasons.
+
+        */
+        cy.exec(`grep 'extra info for the measure' cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR.json`)
+            .its('stdout')
+            .should('contain', '"valueMarkdown": "extra info for the measure"')
+        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR.html', { timeout: 5500 })
+        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR.xml', { timeout: 5500 })
+        cy.verifyDownload('cql/CQMCommon-1.0.000.cql', { timeout: 5500 })
+        cy.verifyDownload('cql/FHIRCommon-4.1.000.cql', { timeout: 5500 })
+        cy.verifyDownload('cql/FHIRHelpers-4.1.000.cql', { timeout: 5500 })
+        cy.verifyDownload('cql/QICoreCommon-1.2.000.cql', { timeout: 5500 })
+        cy.verifyDownload('cql/SupplementalDataElements-3.1.000.cql', { timeout: 5500 })
+        cy.verifyDownload('cql/' + CqlLibraryName + '-1.0.000.cql', { timeout: 5500 })
+        cy.verifyDownload('resources/library-CQMCommon-1.0.000.json', { timeout: 5500 })
+        cy.verifyDownload('resources/library-FHIRCommon-4.1.000.json', { timeout: 5500 })
+        cy.verifyDownload('resources/library-FHIRHelpers-4.1.000.json', { timeout: 5500 })
+        cy.verifyDownload('resources/library-QICoreCommon-1.2.000.json', { timeout: 5500 })
+        cy.verifyDownload('resources/library-SupplementalDataElements-3.1.000.json', { timeout: 5500 })
+        cy.verifyDownload('resources/measure-' + CqlLibraryName + '-1.0.000.json', { timeout: 5500 })
+        cy.verifyDownload('resources/measure-' + CqlLibraryName + '-1.0.000.xml', { timeout: 5500 })
     })
 })
 
@@ -249,7 +259,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
         MeasuresPage.actionCenter('export')
 
         //verify zip file exists
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
+        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR4.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
         cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR4.zip', path: downloadsFolder })
@@ -295,37 +305,22 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 expect(exported).to.includes(expected)
             })
         })
-
-        // //Verify all files exist in exported zip file
-        // cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.html')).should('exist')
-        // cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.json')).should('exist')
-        // cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR.xml')).should('exist')
-
-        // cy.readFile(path.join(downloadsFolder, 'cql/FHIRHelpers-4.1.000.cql')).should('exist')
-        // cy.readFile(path.join(downloadsFolder, 'cql/' + CqlLibraryNameFC + '-0.0.000.cql')).should('exist')
-        // cy.readFile(path.join(downloadsFolder, 'resources/library-FHIRHelpers-4.1.000.json')).should('exist')
-        // cy.readFile(path.join(downloadsFolder, 'resources/library-FHIRHelpers-4.1.000.xml')).should('exist')
-        // cy.readFile(path.join(downloadsFolder, 'resources/library-' + CqlLibraryNameFC + '-0.0.000.json')).should('exist')
-        // cy.readFile(path.join(downloadsFolder, 'resources/library-' + CqlLibraryNameFC + '-0.0.000.xml')).should('exist')
-        // cy.readFile(path.join(downloadsFolder, 'resources/measure-' + CqlLibraryNameFC + '-Draft based on 0.0.000.json')).should('exist')
-        // cy.readFile(path.join(downloadsFolder, 'resources/measure-' + CqlLibraryNameFC + '-Draft based on 0.0.000.xml')).should('exist')
-    })
+   })
 
     it('Verify contents of unzipped folder', () => {
 
-          //Verify all files exist in exported zip file
-          cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR.html').should('exist')
-          cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR.json').should('exist')
-          cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR.xml').should('exist')
-  
-          cy.readFile('cypress/downloads/cql/FHIRHelpers-4.1.000.cql').should('exist')
-          cy.readFile('cypress/downloads/cql/' + CqlLibraryNameFC + '-0.0.000.cql').should('exist')
-          cy.readFile('cypress/downloads/resources/library-FHIRHelpers-4.1.000.json').should('exist')
-          cy.readFile('cypress/downloads/resources/library-FHIRHelpers-4.1.000.xml').should('exist')
-          cy.readFile('cypress/downloads/resources/library-' + CqlLibraryNameFC + '-0.0.000.json').should('exist')
-          cy.readFile('cypress/downloads/resources/library-' + CqlLibraryNameFC + '-0.0.000.xml').should('exist')
-          cy.readFile('cypress/downloads/resources/measure-' + CqlLibraryNameFC + '-Draft based on 0.0.000.json').should('exist')
-          cy.readFile('cypress/downloads/resources/measure-' + CqlLibraryNameFC + '-Draft based on 0.0.000.xml').should('exist')
+          //Verify all files exist in exported zip file       
+        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.html', { timeout: 5500 })
+        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.xml', { timeout: 5500 })
+        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR.json', { timeout: 5500 })
+        cy.verifyDownload('cql/FHIRHelpers-4.1.000.cql', { timeout: 5500 })
+        cy.verifyDownload('cql/' + CqlLibraryNameFC + '-0.0.000.cql', { timeout: 5500 })
+        cy.verifyDownload('resources/library-FHIRHelpers-4.1.000.json', { timeout: 5500 })
+        cy.verifyDownload('resources/library-FHIRHelpers-4.1.000.xml', { timeout: 5500 })
+        cy.verifyDownload('resources/measure-' + CqlLibraryNameFC + '-Draft based on 0.0.000.json', { timeout: 5500 })
+        cy.verifyDownload('resources/measure-' + CqlLibraryNameFC + '-Draft based on 0.0.000.xml', { timeout: 5500 })
+        cy.verifyDownload('resources/library-' + CqlLibraryNameFC + '-0.0.000.json', { timeout: 5500 })
+        cy.verifyDownload('resources/library-' + CqlLibraryNameFC + '-0.0.000.xml', { timeout: 5500 })
     })
 
     /* commenting this out because it was determined that the Qi Core xml file is, basically, just a copy of the Qi Core HTML file
@@ -465,7 +460,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         MeasuresPage.actionCenter('export')
 
         //verify zip file exists
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR4.zip', { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
         cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v1.0.000-FHIR4.zip', path: downloadsFolder })
@@ -478,7 +473,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
         //read contents of the html / human readable file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated HR file -to- the next)
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR.html')).then((exportedFile) => {
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR.html').then((exportedFile) => {
             exported = exportedFile.toString()
             cy.log('exported file contents are: \n' + exported)
             cy.readFile(terminologySection).then((dataComparedTerminologyDependencies) => {

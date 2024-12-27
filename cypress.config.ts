@@ -1,3 +1,4 @@
+import { verifyDownloadTasks } from 'cy-verify-downloads'
 import { defineConfig } from 'cypress'
 
 const { lighthouse, prepareAudit } = require("@cypress-audit/lighthouse")
@@ -36,6 +37,9 @@ export default defineConfig({
       on("before:browser:launch", (browser = Cypress.browser, launchOptions) => {
         prepareAudit(launchOptions);
       })
+
+      on('task', verifyDownloadTasks)
+      
       on('task', {
         readXlsx({file, sheet}) {
           const buf = fs.readFileSync(file);
