@@ -12,58 +12,81 @@ let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
 let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     'using QDM version \'5.6\'\n' +
-    '\n' +
-    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n' +
+    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n\n' +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
-    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
-    '\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
-    'context Patient\n' +
+    'context Patient\n\n' +
     '//Test Comments\n' +
     'define "SDE Ethnicity":\n' +
-    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n\n' +
     'define "SDE Payer":\n' +
-    '  ["Patient Characteristic Payer": "Payer"]\n' +
+    '  ["Patient Characteristic Payer": "Payer"]\n\n' +
     'define "SDE Race":\n' +
-    '  ["Patient Characteristic Race": "Race"]\n' +
+    '  ["Patient Characteristic Race": "Race"]\n\n' +
     'define "SDE Sex":\n' +
-    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n\n' +
     'define "ipp":\n' +
-    '\ttrue\n' +
+    '\ttrue\n\n' +
     'define "d":\n' +
-    '\t true\n' +
+    '\t true\n\n' +
     'define "n":\n' +
-    '\ttrue\n' +
+    '\ttrue\n\n' +
     'define fluent function "test"():\n' +
-    '\t true\n'
+    '\t true'
 
 let measureCQL_withError = 'library QDMLibrary1724174199255 version \'0.0.000\'\n' +
     'using QDM version \'5.6\'\n' +
-    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n' +
+    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n\n' +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
-    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
-    '\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
-    'context Patient\n' +
+    'context Patient\n\n' +
     'define "SDE Ethnicity":\n' +
-    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n\n' +
     'define "SDE Payer":\n' +
-    '  ["Patient Characteristic Payer": "Payer"]\n' +
+    '  ["Patient Characteristic Payer": "Payer"]\n\n' +
     'define "SDE Race":\n' +
-    '  ["Patient Characteristic Race": "Race"]\n' +
+    '  ["Patient Characteristic Race": "Race"]\n\n' +
     'define "SDE Sex":\n' +
-    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n\n' +
     'define "ipp":\n' +
-    '\ttrue\n' +
+    '\ttrue\n\n' +
     'define "d":\n' +
-    '\t true\n' +
-    '\t \n' +
+    '\ttrue\n\n' +
     'define "n":\n' +
     '\ttruetest'
+
+const cqlMissingDefinitionName = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
+    'using QDM version \'5.6\'\n' +
+    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n\n' +
+    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'context Patient\n\n' +
+    '//Test Comments\n' +
+    'define "SDE Ethnicity":\n' +
+    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n\n' +
+    'define :\n' +
+    '  ["Patient Characteristic Payer": "Payer"]\n\n' +
+    'define "SDE Race":\n' +
+    '  ["Patient Characteristic Race": "Race"]\n\n' +
+    'define "SDE Sex":\n' +
+    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n\n' +
+    'define "ipp":\n' +
+    '\ttrue\n\n' +
+    'define "d":\n' +
+    '\t true\n\n' +
+    'define "n":\n' +
+    '\ttrue\n\n' +
+    'define fluent function "test"():\n' +
+    '\t true'
 
 describe('QDM CQL Definitions', () => {
 
@@ -316,23 +339,6 @@ describe('QDM CQL Definitions', () => {
 
 describe('QDM CQL Definitions - Expression Editor Name Option Validations', () => {
 
-    beforeEach('Create Measure and Login', () => {
-
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL_withError)
-        OktaLogin.Login()
-
-        MeasuresPage.actionCenter('edit')
-
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
-    })
-
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
@@ -341,6 +347,13 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
 
     it('QDM CQL Definitions Expression editor Name options are not available when CQL has errors', () => {
 
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL_withError)
+        OktaLogin.Login()
+
+        MeasuresPage.actionCenter('edit')
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
         //Click on Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
@@ -351,6 +364,19 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
 
         //Expression editor name dropdown should be empty when there are CQL errors
         cy.get('.MuiAutocomplete-noOptions').should('contain.text', 'No options')
+    })
+
+    it('QDM CQL Definitions throws specific error when Definition has no name', () => {
+
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, cqlMissingDefinitionName)
+        OktaLogin.Login()
+
+        //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer,  "Row: 17, Col:7: Parse: 7:8 | Definition is missing a name.")
     })
 })
 
