@@ -4,76 +4,99 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage";
-import {Global} from "../../../../Shared/Global";
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
+import { Global } from "../../../../Shared/Global";
 
-let measureName = 'QiCoreTestMeasure' + Date.now()
-let CqlLibraryName = 'QiCoreTestLibrary' + Date.now()
-let measureCQL = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
+const now = Date.now()
+const measureName = 'QiCoreDefinitions' + now
+const CqlLibraryName = 'QiCoreDefinitionsLib' + now
+const measureCQL = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'include SupplementalDataElements version \'3.5.000\' called SupplementalData\n' +
-    'include CQMCommon version \'2.2.000\' called CQMCommon\n' +
+    'include CQMCommon version \'2.2.000\' called CQMCommon\n\n' +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
     'valueset "Preventive Care Services-Initial Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\'\n' +
-    'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
+    'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
-    ' default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
-    ' context Patient\n' +
+    'default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n\n' +
+    'context Patient\n\n' +
     '//Test Comments\n' +
-    ' define "Initial Population":\n' +
-    '   exists "Qualifying Encounters"\n' +
-    '   define "Qualifying Encounters":\n' +
-    '      (\n' +
-    '          [Encounter: "Office Visit"]\n' +
-    '                   union [Encounter: "Annual Wellness Visit"]\n' +
-    '                            union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
-    '                                     union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
-    '                                              union [Encounter: "Home Healthcare Services"]\n' +
-    '                                               ) ValidEncounter\n' +
-    '                                                       where ValidEncounter.period during "Measurement Period"\n' +
-    '                                                                 and ValidEncounter.isFinishedEncounter()\n' +
-    '          \n' +
-    '                                                                 \n' +
+    'define "Initial Population":\n' +
+    '   exists "Qualifying Encounters"\n\n' +
+    'define "Qualifying Encounters":\n' +
+    '   (\n[Encounter: "Office Visit"]\n' +
+    '   union [Encounter: "Annual Wellness Visit"]\n' +
+    '   union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
+    '   union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
+    '   union [Encounter: "Home Healthcare Services"]\n' +
+    '   ) ValidEncounter\n' +
+    'where ValidEncounter.period during "Measurement Period"\n' +
+    'and ValidEncounter.isFinishedEncounter()\n\n' +
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
-    '  (Enc E where E.status = \'finished\') is not null '
+    '   (Enc E where E.status = \'finished\') is not null '
 
-let measureCQL_withError = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
+const measureCQL_withError = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include SupplementalDataElements version \'3.5.000\' called SupplementalData\n' +
+    'include SupplementalDataElements version \'3.5.000\' called SupplementalData\n\n' +
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
     'valueset "Preventive Care Services-Initial Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\'\n' +
-    'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
+    'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
-    ' default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
-    ' context Patient\n' +
-    ' define "Initial Population":\n' +
-    '   exists "Qualifying Encounters"\n' +
-    '   define "Qualifying Encounters":\n' +
-    '      (\n' +
-    '          [Encounter: "Office Visit"]\n' +
-    '                   union [Encounter: "Annual Wellness Visit"]\n' +
-    '                            union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
-    '                                     union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
-    '                                              union [Encounter: "Home Healthcare Services"]\n' +
-    '                                               ) ValidEncounter\n' +
-    '                                                       where ValidEncounter.period during "Measurement Period"\n' +
-    '                                                                 and ValidEncounter.isFinishedEncounter()test\n' +
-    '          \n' +
-    '                                                                 \n' +
+    '   default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n\n' +
+    'context Patient\n' +
+    'define "Initial Population":\n' +
+    '   exists "Qualifying Encounters"\n\n' +
+    'define "Qualifying Encounters":\n' +
+    '   (\n[Encounter: "Office Visit"]\n' +
+    '   union [Encounter: "Annual Wellness Visit"]\n' +
+    '   union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
+    '   union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
+    '   union [Encounter: "Home Healthcare Services"]\n' +
+    '   ) ValidEncounter\n' +
+    'where ValidEncounter.period during "Measurement Period"\n' +
+    'and ValidEncounter.isFinishedEncounter()test\n\n' +
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
-    '  (Enc E where E.status = \'finished\') is not null'
+    '   (Enc E where E.status = \'finished\') is not null'
 
-describe('Qi-Core CQL Definitions', () => {
+const cqlMissingDefinitionName = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
+    'using QICore version \'4.1.1\'\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    'include SupplementalDataElements version \'3.5.000\' called SupplementalData\n' +
+    'include CQMCommon version \'2.2.000\' called CQMCommon\n\n' +
+    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+    'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
+    'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
+    'valueset "Preventive Care Services-Initial Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\'\n' +
+    'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n\n' +
+    'context Patient\n\n' +
+    'define :\n' +
+    '   true\n' +
+    'define "Initial Population":\n' +
+    '   exists "Qualifying Encounters"\n\n' +
+    'define "Qualifying Encounters":\n' +
+    '   (\n[Encounter: "Office Visit"]\n' +
+    '   union [Encounter: "Annual Wellness Visit"]\n' +
+    '   union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
+    '   union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
+    '   union [Encounter: "Home Healthcare Services"]\n' +
+    '   ) ValidEncounter\n' +
+    'where ValidEncounter.period during "Measurement Period"\n' +
+    'and ValidEncounter.isFinishedEncounter()\n\n' +
+    'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
+    '   (Enc E where E.status = \'finished\') is not null '
+
+describe('Qi-Core CQL Definitions Builder', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
     })
@@ -104,7 +127,6 @@ describe('Qi-Core CQL Definitions', () => {
 
         //Expression Editor Name dropdown should also contain Included Library name.Definition name
         cy.get(CQLEditorPage.expressionEditorNameList).should('contain.text', 'SupplementalData.SDE Ethnicity')
-
     })
 
     it('Search for Qi-Core CQL Definitions Expression Editor Fluent Function Options', () => {
@@ -127,7 +149,6 @@ describe('Qi-Core CQL Definitions', () => {
 
         //Expression Editor Name dropdown should also contain Fluent functions from Included Library
         cy.get(CQLEditorPage.expressionEditorNameList).should('contain.text', 'abatementInterval()')
-
     })
 
     it('Insert Qi-Core CQL Definitions through Expression Editor and Apply to CQL editor', () => {
@@ -213,7 +234,6 @@ describe('Qi-Core CQL Definitions', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', '"emergencyDepartmentArrivalTime"()')
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'after end')
         cy.get(EditMeasurePage.cqlEditorTextBox).eq(0).should('contain.text', 'AgeInDays()')
-
     })
 
     it('Verify Included Qi-Core CQL Definitions under Saved Definitions tab', () => {
@@ -261,7 +281,6 @@ describe('Qi-Core CQL Definitions', () => {
         cy.get('[class="ace_content"]').eq(1).should('contain', 'Initial Population')
         //Save
         cy.get(CQLEditorPage.saveDefinitionBtn).click()
-
     })
 
     it('Dirty check pops up when there are changes in CQL and Edit CQL definition button is clicked', () => {
@@ -346,28 +365,21 @@ describe('Qi-Core CQL Definitions', () => {
         //Navigate to Saved Definitions tab and verify comment
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'Updated Test Comment')
-
     })
 })
 
 describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', () => {
 
-    beforeEach('Create Measure and Login', () => {
-
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_withError)
-        OktaLogin.Login()
-    })
-
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Qi-Core CQL Definitions Expression editor Name options are not available when CQL has errors', () => {
 
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_withError)
+        OktaLogin.Login()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -385,23 +397,33 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
         //Expression editor name dropdown should be empty when there are CQL errors
         cy.get('.MuiAutocomplete-noOptions').should('contain.text', 'No options')
     })
+
+    it('Qi-Core CQL Definitions throws specific error when Definition has no name', () => {
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, cqlMissingDefinitionName)
+        OktaLogin.Login()
+
+        //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer,  "Row: 18, Col:7: Parse: 7:8 | Definition is missing a name.")
+    })
 })
 
 describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.AltLogin()
-
     })
 
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Verify Non Measure owner unable to Edit/Delete saved Definitions', () => {
@@ -422,6 +444,5 @@ describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
 
         //Delete button should not be visible
         cy.get(CQLEditorPage.deleteCQLDefinitions).should('not.exist')
-
     })
 })
