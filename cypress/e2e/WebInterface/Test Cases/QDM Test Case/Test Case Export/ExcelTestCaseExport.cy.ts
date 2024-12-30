@@ -152,7 +152,6 @@ describe('QDM Test Case Excel Export', () => {
 
     before('Create Measure', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2012-01-01', '2012-12-31')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
@@ -167,8 +166,8 @@ describe('QDM Test Case Excel Export', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    //skipping until more time can be devoted to validating the contents of the Excel file export
-    it.skip('Successful Excel Export for QDM Test Cases', () => {
+
+    it('Successful Excel Export for QDM Test Cases', () => {
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -261,94 +260,57 @@ describe('QDM Test Case Excel Export', () => {
 
 
         //Element - Encounter:Performed: Encounter Inpatient
-        //add Element
         QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
-        //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('06/21/2012 12:02 PM', '07/18/2012 12:15 PM')
-        //add Code
         QDMElements.addCode('SNOMEDCT', '183452005')
-        // Enter attribute and its type
         QDMElements.enterAttribute('Length Of Stay', 'Quantity')
-        //enter quantity type
         QDMElements.enterQuantity('27', 'd')
-        //add attribute to test case action
         QDMElements.addAttribute()
 
         //Element - Laboratory Test:Performed: Sodium lab test
-        //add Element
         QDMElements.addElement('laboratory', 'Performed: Sodium lab test')
         cy.get(TestCasesPage.relevantPeriodEndDate).type('06/20/2012 12:01 PM')
-        //add Code
         QDMElements.addCode('LOINC', '2947-0')
-        // Enter attribute and its type
         QDMElements.enterAttribute('Result', 'Quantity')
-        //enter quantity type
         QDMElements.enterQuantity('34', 'mmol/L')
-        //add attribute to test case action
         QDMElements.addAttribute()
-        //Close the Element
         QDMElements.closeElement()
 
         //Element - Laboratory Test:Performed: Sodium lab test
-        //add Element
         QDMElements.addElement('laboratory', 'Performed: Sodium lab test')
         cy.get(TestCasesPage.relevantPeriodEndDate).type('06/21/2012 12:03 PM')
-        //add Code
         QDMElements.addCode('LOINC', '2947-0')
-        // Enter attribute and its type
         QDMElements.enterAttribute('Result', 'Quantity')
-        //enter quantity type
         QDMElements.enterQuantity('120', 'mmol/L')
-        //add attribute to test case action
         QDMElements.addAttribute()
 
         //Element - Encounter:Performed: Encounter Inpatient
-        //add Element
         QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
-        //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('06/20/2012 12:00 PM', '06/20/2012 12:15 PM')
-        //add Code
         QDMElements.addCode('SNOMEDCT', '183452005')
-        // Enter attribute and its type
         QDMElements.enterAttribute('Length Of Stay', 'Quantity')
-        //enter quantity type
         QDMElements.enterQuantity('1', 'd')
-        //add attribute to test case action
         QDMElements.addAttribute()
-        //Close the Element
         QDMElements.closeElement()
 
         //Element - Encounter:Performed: Encounter Inpatient
-        //add Element
         QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
-        //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('06/19/2012 12:00 PM', '06/19/2012 12:15 PM')
-        //add Code
         QDMElements.addCode('SNOMEDCT', '8715000')
-        // Enter attribute and its type
         QDMElements.enterAttribute('Length Of Stay', 'Quantity')
-        //enter quantity type
         QDMElements.enterQuantity('1', 'd')
-        //add attribute to test case action
         QDMElements.addAttribute()
 
         //Element - Laboratory Test:Performed: Sodium lab test
-        //add Element
         QDMElements.addElement('laboratory', 'Performed: Sodium lab test')
         cy.get(TestCasesPage.relevantPeriodEndDate).type('06/19/2012 12:01 PM')
-        //add Code
         QDMElements.addCode('LOINC', '2947-0')
-        // Enter attribute and its type
         QDMElements.enterAttribute('Result', 'Quantity')
-        //enter quantity type
         QDMElements.enterQuantity('50', 'mmol/L')
-        //add attribute to test case action
         QDMElements.addAttribute()
 
         //Element - Patient Characteristic:Patient Characteristic Payer: Medicare FFS payer
-        //add Element
         QDMElements.addElement('patientcharacteristic', 'Payer: Medicare FFS payer')
-        //add Code
         QDMElements.addCode('SOP', '1')
 
         //Add Expected value for Test case
@@ -375,53 +337,32 @@ describe('QDM Test Case Excel Export', () => {
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //Element - Physical Exam:Performed: Systolic blood pressure
-        //add Element
         QDMElements.addElement('physicalexam', 'Performed: Systolic Blood Pressure')
-        //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('06/20/2012 12:01 PM', '06/20/2012 03:01 PM')
-        //add Code
         QDMElements.addCode('LOINC', '8480-6')
-        // Enter attribute and its type
         QDMElements.enterAttribute('Result', 'Quantity')
-        //enter quantity type
         QDMElements.enterQuantity('120', 'mm[Hg]')
-        //add attribute to test case action
         QDMElements.addAttribute()
-        //Close the Element
         QDMElements.closeElement()
 
         //Element - Physical Exam:Performed: Systolic blood pressure
-        //add Element
         QDMElements.addElement('physicalexam', 'Performed: Systolic Blood Pressure')
-        //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('06/20/2012 2:01 PM', '06/20/2012 03:01 PM')
-        //add Code
         QDMElements.addCode('LOINC', '8480-6')
-        // Enter attribute and its type
         QDMElements.enterAttribute('Result', 'Quantity')
-        //enter quantity type
         QDMElements.enterQuantity('115', 'mm[Hg]')
-        //add attribute to test case action
         QDMElements.addAttribute()
 
         //Element - Encounter:Performed: Encounter Inpatient
-        //add Element
         QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
-        //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('06/21/2012 12:00 PM', '06/22/2012 12:15 PM')
-        //add Code
         QDMElements.addCode('SNOMEDCT', '183452005')
-        // Enter attribute and its type
         QDMElements.enterAttribute('Length Of Stay', 'Quantity')
-        //enter quantity type
         QDMElements.enterQuantity('1', 'd')
-        //add attribute to test case action
         QDMElements.addAttribute()
 
         //Element -  Patient Characteristic:Patient Characteristic Payer: Medicare payer
-        //add Element
         QDMElements.addElement('patientcharacteristic', 'Payer: Payer')
-        //add Code
         QDMElements.addCode('SOP', '1')
 
         //Add Expected value for Test case
@@ -458,6 +399,7 @@ describe('QDM Test Case Excel Export', () => {
 
         cy.task('readXlsx', {file: file, sheet: '1 - Population Criteria Section'}).then(rows => {
             expect(rows[0]['__EMPTY_3']).to.equal('birthdate')
+            expect(rows[0]['__EMPTY_8']).to.equal('sex')
             expect(rows[1]['__EMPTY_1']).to.equal('SBTestSeries')
             expect(rows[2]['Actual']).to.equal(3)
         });

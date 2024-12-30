@@ -131,7 +131,9 @@ describe('Create and Update QDM Test Case', () => {
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        // check gender dropdown for all new options - MAT-7798
+        // check sex (formaly called gender) dropdown for all new options - MAT-7798
+        cy.contains('Sex').should('be.visible')
+
         cy.get(TestCasesPage.QDMGender).click()
         cy.get(TestCasesPage.QDMGenderOption).find('li').should('contain.text', 'Asked But DeclinedFemaleFemale (finding)MaleMale (finding)Patient sex unknown (finding)')
 
