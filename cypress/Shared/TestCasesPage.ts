@@ -37,6 +37,8 @@ export class TestCasesPage {
     public static readonly QDMLivingStatus = '[id="demographics-living-status-select-id"]'
     public static readonly QDMLivingStatusOPtion = '[data-value="Living"]'
     public static readonly QDMRace = '[id="demographics-race-select-id"]'
+
+    // changed label to "sex" - only label text changed, all these selectors are the same 12/30/24
     public static readonly QDMGender = '[id="demographics-gender-select-id"]'
     public static readonly QDMGenderOption = '.MuiList-root'
     public static readonly QDMEthnicity = '[id="demographics-ethnicity-select-id"]'
@@ -1041,6 +1043,10 @@ export class TestCasesPage {
         cy.get(TestCasesPage.QDMLivingStatusOPtion).contains(livingStatus).click()
         cy.get(TestCasesPage.QDMRace).click()
         cy.get('[data-value="' + race + '"]').click()
+
+         cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        // Utilities.waitForElementEnabled(TestCasesPage.runQDMTestCaseBtn, 7500)
+
         cy.get(TestCasesPage.QDMGender).click()
         cy.get(TestCasesPage.QDMGenderOption).contains(gender).click()
         cy.get(TestCasesPage.QDMEthnicity).click()
