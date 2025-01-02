@@ -249,8 +249,12 @@ describe('Qi-Core CQL Definitions Builder', () => {
         //Navigate to Saved Definitions tab
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         Utilities.waitForElementVisible('[data-testid="definitions-row-0"] > :nth-child(1)', 60000)
+        
         cy.get('[data-testid="definitions-row-0"] > :nth-child(1)').should('contain.text', 'Initial Population')
+        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'Boolean')
+        
         cy.get('[data-testid="definitions-row-1"] > :nth-child(1)').should('contain.text', 'Qualifying Encounters')
+        cy.get('[data-testid="definitions-row-1"] > :nth-child(2)').should('contain.text', 'Encounter')
     })
 
     it('Edit Saved Qi-Core CQL Definitions', () => {
@@ -270,15 +274,12 @@ describe('Qi-Core CQL Definitions Builder', () => {
         //Return type populated for Saved Definitions
         cy.get('[data-testid="return-type"]').should('contain.text', 'Return TypeBoolean')
 
-        //Edit Definition
-        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
-        cy.get(CQLEditorPage.definitionOption).click()
-        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
-        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
-        cy.get(CQLEditorPage.expressionEditorNameList).contains('Initial Population').click()
-        //Insert
-        cy.get(CQLEditorPage.expressionInsertBtn).click()
-        cy.get('[class="ace_content"]').should('contain', 'Initial Population')
+        //Edit Definition name
+        cy.get(CQLEditorPage.definitionNameTextBox).type(' updated')
+
+        cy.get(CQLEditorPage.saveDefinitionBtn).click()
+ 
+        cy.get('.ace_content').should('contain', 'Initial Population updated')
     })
 
     it('Dirty check pops up when there are changes in CQL and Edit CQL definition button is clicked', () => {
@@ -441,8 +442,11 @@ describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
         cy.get(CQLEditorPage.definitionsTab).click()
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
 
-        //Edit button should not be visible
         Utilities.waitForElementVisible('[data-testid="definitions-row-0"] > :nth-child(1)', 60000)
+        // "return type" is visible"
+        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'Boolean')
+
+        //Edit button should not be visible
         cy.get(CQLEditorPage.editCQLDefinitions).should('not.exist')
 
         //Delete button should not be visible
