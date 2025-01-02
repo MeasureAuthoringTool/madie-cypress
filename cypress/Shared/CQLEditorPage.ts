@@ -151,6 +151,8 @@ export class CQLEditorPage {
     public static readonly expressionEditorNameDenominatorOption = '#name-selector-option-0'
     public static readonly expressionEditorInsertBtn = '[data-testid="expression-insert-btn"]'
     public static readonly applyFunctionBtn = '[data-testid="function-apply-btn"]'
+    public static readonly editSavedFunctions = '[data-testid="edit-button-0"]'
+    public static readonly deleteSavedFunctions = '[data-testid="delete-button-0"]'
 
     //editor message
     public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'

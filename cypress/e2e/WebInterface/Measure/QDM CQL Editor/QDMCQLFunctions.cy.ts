@@ -4,6 +4,7 @@ import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 import {Utilities} from "../../../../Shared/Utilities"
+import {Global} from "../../../../Shared/Global";
 
 const date = Date.now()
 let measureName = 'QDMCQLFunctions' + date
@@ -75,7 +76,7 @@ let measureCQL = 'library NonPatientBasedRatioMeasureWithMultipleGroupsandStrati
     'true'
 
 //Skipping until feature flag "CQLBuilderFunctions" is removed
-describe.skip('QDM CQL Functions', () => {
+describe('QDM CQL Functions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -157,5 +158,107 @@ describe.skip('QDM CQL Functions', () => {
         cy.get(CQLEditorPage.expressionEditorInsertBtn).click()
         cy.get(CQLEditorPage.applyFunctionBtn).click()
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Function Denominator Exclusions has already been defined in CQL.')
+    })
+
+    it('Edit Saved QDM CQL Functions', () => {
+
+        //Click on Functions tab
+        cy.get(CQLEditorPage.functionsTab).click()
+
+        //Navigate to Saved Functions tab
+        cy.get(CQLEditorPage.savedFunctionsTab).click()
+        cy.get(CQLEditorPage.editSavedFunctions).click()
+
+        //Edit Saved Function
+        cy.get(CQLEditorPage.functionNameTextbox).clear().type('Numerator Exclusions')
+        cy.get(CQLEditorPage.fluentFunctionCheckbox).click()
+        cy.get(CQLEditorPage.argumentNameTextbox).type('TheEncounterEncounter')
+        cy.get(CQLEditorPage.argumentTypeDropdown).click()
+        cy.get(CQLEditorPage.argumentTypeString).click()
+        cy.get(CQLEditorPage.addArgumentBtn).click()
+        cy.get(CQLEditorPage.expressionEditorType).click()
+        cy.get(CQLEditorPage.expressionEditorDefinitionOption).click()
+        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
+        cy.get(CQLEditorPage.expressionEditorNameDenominatorOption).click()
+        cy.get(CQLEditorPage.expressionEditorInsertBtn).click()
+        cy.get(CQLEditorPage.applyFunctionBtn).click()
+        //cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Function Numerator Exclusions has been successfully added to the CQL.')
+
+    })
+
+    it('Dirty check pops up when there are changes in CQL and Edit/Delete Function button is clicked', () => {
+
+        //Make changes to CQL editor
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+
+        //Click on Functions tab
+        cy.get(CQLEditorPage.functionsTab).click()
+
+        //Navigate to Saved Functions tab and click on Edit button
+        cy.get(CQLEditorPage.savedFunctionsTab).click()
+        cy.get(CQLEditorPage.editSavedFunctions).click()
+
+        //Click on Discard changes
+        cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard changes?')
+        cy.get(CQLEditorPage.modalConfirmationText).should('contain.text', 'Are you sure you want to discard your changes in the CQL and edit the Function in the CQL?')
+        cy.get(Global.keepWorkingCancel).click()
+
+        //Click on Delete button
+        cy.get(CQLEditorPage.deleteSavedFunctions).click()
+        cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard changes?')
+        cy.get(CQLEditorPage.modalConfirmationText).should('contain.text', 'Are you sure you want to discard your changes in the CQL and delete the Function from the CQL?')
+        cy.get(Global.discardChangesContinue).click()
+        cy.get(CQLEditorPage.modalConfirmationText).should('contain.text', 'Are you sure you want to delete this Function?')
+    })
+
+    it('Delete Saved QDM CQL Functions', () => {
+
+        //Click on Functions tab
+        cy.get(CQLEditorPage.functionsTab).click()
+
+        //Navigate to Saved Functions tab
+        cy.get(CQLEditorPage.savedFunctionsTab).click()
+
+        //Delete saved Function
+        cy.get(CQLEditorPage.deleteSavedFunctions).click()
+        cy.get(CQLEditorPage.modalConfirmationText).should('contain.text', 'Are you sure you want to delete this Function?')
+        cy.get(CQLEditorPage.deleteContinueButton).should('be.enabled').click()
+        cy.get(CQLEditorPage.saveSuccessMsg, {timeout: 6500}).should('have.text', 'Function Denominator Observation has been successfully removed from the CQL.')
+    })
+})
+
+describe('QDM CQL Functions - Measure ownership Validations', () => {
+
+    beforeEach('Create Measure and Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        OktaLogin.AltLogin()
+    })
+
+    afterEach('Clean up and Logout', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+    })
+
+    it('Verify Non Measure owner unable to Edit/Delete saved QDM Functions', () => {
+
+        //Navigate to All Measures page
+        cy.get(MeasuresPage.allMeasuresTab).click()
+        MeasuresPage.actionCenter('view')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Navigate to Saved Functions tab
+        cy.get(CQLEditorPage.functionsTab).click()
+        cy.get(CQLEditorPage.savedFunctionsTab).click()
+
+        //Edit button should not be visible
+        Utilities.waitForElementVisible('[data-testid="functions-row-0"]', 60000)
+        cy.get(CQLEditorPage.editSavedFunctions).should('not.exist')
+
+        //Delete button should not be visible
+        cy.get(CQLEditorPage.deleteSavedFunctions).should('not.exist')
     })
 })
