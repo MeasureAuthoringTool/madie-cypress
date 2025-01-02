@@ -4,7 +4,7 @@ import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 import {Utilities} from "../../../../Shared/Utilities"
-import {Global} from "../../../../Shared/Global";
+import {Global} from "../../../../Shared/Global"
 
 const date = Date.now()
 let measureName = 'QDMCQLFunctions' + date
@@ -76,7 +76,7 @@ let measureCQL = 'library NonPatientBasedRatioMeasureWithMultipleGroupsandStrati
     'true'
 
 //Skipping until feature flag "CQLBuilderFunctions" is removed
-describe('QDM CQL Functions', () => {
+describe.skip('QDM CQL Functions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -227,7 +227,8 @@ describe('QDM CQL Functions', () => {
     })
 })
 
-describe('QDM CQL Functions - Measure ownership Validations', () => {
+//Skipping until feature flag "CQLBuilderFunctions" is removed
+describe.skip('QDM CQL Functions - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 

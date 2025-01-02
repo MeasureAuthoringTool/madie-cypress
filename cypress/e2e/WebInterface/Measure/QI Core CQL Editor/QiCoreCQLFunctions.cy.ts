@@ -4,7 +4,7 @@ import {MeasuresPage} from "../../../../Shared/MeasuresPage"
 import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 import {Utilities} from "../../../../Shared/Utilities"
-import {Global} from "../../../../Shared/Global";
+import {Global} from "../../../../Shared/Global"
 
 const date = Date.now()
 let measureName = 'QiCoreCQLFunctions' + date
@@ -58,7 +58,7 @@ let measureCQL = 'library CVEpisodeWithStratification version \'0.0.000\'\n' +
     ' where Enc.type in "Preventive Care Services - Established Office Visit, 18 and Up"'
 
 //Skipping until feature flag "CQLBuilderFunctions" is removed
-describe('Qi Core CQL Functions', () => {
+describe.skip('Qi Core CQL Functions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -208,7 +208,8 @@ describe('Qi Core CQL Functions', () => {
     })
 })
 
-describe('Qi-Core CQL Functions - Measure ownership Validations', () => {
+//Skipping until feature flag "CQLBuilderFunctions" is removed
+describe.skip('Qi-Core CQL Functions - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
