@@ -232,10 +232,15 @@ describe('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         Utilities.waitForElementVisible('[data-testid="definitions-row-0"] > :nth-child(1)', 60000)
         cy.get('[data-testid="definitions-row-0"] > :nth-child(1)').should('contain.text', 'SDE Ethnicity')
+        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'PatientCharacteristicEthnicity')
+
         cy.get('[data-testid="definitions-row-1"] > :nth-child(1)').should('contain.text', 'SDE Payer')
         cy.get('[data-testid="definitions-row-2"] > :nth-child(1)').should('contain.text', 'SDE Race')
+        cy.get('[data-testid="definitions-row-2"] > :nth-child(2)').should('contain.text', 'PatientCharacteristicRace')
+
         cy.get('[data-testid="definitions-row-3"] > :nth-child(1)').should('contain.text', 'SDE Sex')
         cy.get('[data-testid="definitions-row-4"] > :nth-child(1)').should('contain.text', 'ipp')
+        cy.get('[data-testid="definitions-row-4"] > :nth-child(2)').should('contain.text', 'Boolean')
     })
 
     it('Edit Saved QDM CQL Definitions', () => {
@@ -249,15 +254,12 @@ describe('QDM CQL Definitions', () => {
         //Return type populated for Saved Definitions
         cy.get('[data-testid="return-type"]').should('contain.text', 'Return TypePatientCharacteristicSex')
 
-        //Edit Definition
-        cy.get(CQLEditorPage.expressionEditorTypeDropdown).click()
-        cy.get(CQLEditorPage.definitionOption).click()
-        cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
-        Utilities.waitForElementVisible(CQLEditorPage.expressionEditorNameList, 60000)
-        cy.get(CQLEditorPage.expressionEditorNameList).contains('Common.Inpatient Encounter').click()
-        //Insert
-        cy.get(CQLEditorPage.expressionInsertBtn).click()
-        cy.get('[class="ace_content"]').eq(1).should('contain', 'Common."Inpatient Encounter"')
+        //Edit Definition name
+        cy.get(CQLEditorPage.definitionNameTextBox).type(' updated')
+
+        cy.get(CQLEditorPage.saveDefinitionBtn).click()
+
+        cy.get('.ace_content').should('contain', 'SDE Sex updated')
     })
 
     it('Dirty check pops up when there are changes in CQL and Edit CQL definition button is clicked', () => {
@@ -405,6 +407,10 @@ describe('QDM CQL Definitions - Measure ownership Validations', () => {
         //Navigate to Saved Definitions tab
         cy.get(CQLEditorPage.definitionsTab).click()
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
+
+        // return type is visible
+        cy.get('[data-testid="definitions-row-2"] > :nth-child(2)').should('contain.text', 'PatientCharacteristicRace')
+        cy.get('[data-testid="definitions-row-4"] > :nth-child(2)').should('contain.text', 'Boolean')
 
         //Edit button should not be visible
         cy.get(CQLEditorPage.editCQLDefinitions).should('not.exist')
