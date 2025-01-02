@@ -278,9 +278,7 @@ describe('Qi-Core CQL Definitions Builder', () => {
         cy.get(CQLEditorPage.expressionEditorNameList).contains('Initial Population').click()
         //Insert
         cy.get(CQLEditorPage.expressionInsertBtn).click()
-        cy.get('[class="ace_content"]').eq(1).should('contain', 'Initial Population')
-        //Save
-        cy.get(CQLEditorPage.saveDefinitionBtn).click()
+        cy.get('[class="ace_content"]').should('contain', 'Initial Population')
     })
 
     it('Dirty check pops up when there are changes in CQL and Edit CQL definition button is clicked', () => {
@@ -348,11 +346,14 @@ describe('Qi-Core CQL Definitions Builder', () => {
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
 
         //Verify Comment
-        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'Test Comments')
+        cy.get('[data-testid="definitions-row-0"] > :nth-child(3)').should('contain.text', 'Test Comments')
 
+        const longComment = 'Adding a comment that is needlessly long for no real reason, other than to' +
+        ' annoy any future users of this piece of functionality. It really should not have to be like' +
+        ' this but here we are anyway'
         //Edit Comment
         cy.get(CQLEditorPage.editCQLDefinitions).click()
-        cy.get(CQLEditorPage.commentTextBox).clear().type('Updated Test Comment')
+        cy.get(CQLEditorPage.commentTextBox).clear().type(longComment)
         //Save
         cy.get(CQLEditorPage.saveDefinitionBtn).click()
 
@@ -364,7 +365,9 @@ describe('Qi-Core CQL Definitions Builder', () => {
 
         //Navigate to Saved Definitions tab and verify comment
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
-        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'Updated Test Comment')
+        const shortenedComment= 'Adding a comment that is needlessly long for no real reason, other than to' +
+        ' annoy any future users of this piece of functShow more'
+        cy.get('[data-testid="definitions-row-0"] > :nth-child(3)').should('contain.text', shortenedComment)
     })
 })
 
