@@ -118,6 +118,33 @@ let measureCQL_withDifferentLibraryVersionAndDifferentAlias = 'library ' + newCq
     'define "n":\n' +
     '  true'
 
+let measureCQL_without_CodeSystem_Name = 'library QDMCQLFunctions1735670044066 version \'0.0.000\'\n' +
+    'using QDM version \'5.6\'\n' +
+    '\n' +
+    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+    '\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'code "Assessed Patient": \'2\' display \'Assessed Patient\'\n' +
+    '\n' +
+    'context Patient\n' +
+    'define "SDE Ethnicity":\n' +
+    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+    'define "SDE Payer":\n' +
+    '  ["Patient Characteristic Payer": "Payer"]\n' +
+    'define "SDE Race":\n' +
+    '  ["Patient Characteristic Race": "Race"]\n' +
+    'define "SDE Sex":\n' +
+    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+    'define "ipp":\n' +
+    '\ttrue\n' +
+    'define "d":\n' +
+    '\t true\n' +
+    'define "n":\n' +
+    '\ttrue'
+
 describe('Validate errors/warnings/success messages on CQL editor component on save', () => {
 
     beforeEach('Create measure and login', () => {
@@ -231,6 +258,24 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         Utilities.waitForElementVisible('[data-testid="generic-errors-text-list"] > li', 60000)
 
         cy.get('[data-testid="generic-errors-text-list"] > li').should('contain.text', 'Row: 4, Col:0: ELM: 0:0 | Library MATGlobalCommonFunctionsQDM is already in use in this library.')
+
+    })
+
+    it('Verify error message when Code System name is missing from Code declaration', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_without_CodeSystem_Name)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementVisible('[data-testid="generic-errors-text-list"] > li', 60000)
+
+        cy.get('[data-testid="generic-errors-text-list"] > li').should('contain.text', 'Row: 10, Col:29: Parse: 29:36 | code statement requires a codesystem reference. Please add a \'from\' clause to your statement.')
 
     })
 
