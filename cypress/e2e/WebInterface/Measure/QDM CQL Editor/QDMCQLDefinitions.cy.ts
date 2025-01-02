@@ -417,5 +417,14 @@ describe('QDM CQL Definitions - Measure ownership Validations', () => {
 
         //Delete button should not be visible
         cy.get(CQLEditorPage.deleteCQLDefinitions).should('not.exist')
+
+        // click into View screen
+        cy.get('[data-testid="view-button-0"]').click()
+
+        cy.get(CQLEditorPage.definitionNameTextBox).should('be.disabled')
+        // sub element of tyoe combo-box
+        cy.get('[data-testid="type-selector-input"]').should('be.disabled')
+        cy.get(CQLEditorPage.expressionInsertBtn).should('be.disabled')
+        cy.get('[data-testid="cancel-definition-btn"]').should('be.enabled')
     })
 })
