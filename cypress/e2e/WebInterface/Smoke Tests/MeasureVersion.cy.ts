@@ -5,7 +5,7 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
+import { MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from "../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { Utilities } from "../../../Shared/Utilities"
 
@@ -123,6 +123,7 @@ describe('QDM Measure Versioning', () => {
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.wait(1000)
 
         cy.get('.MuiDialogContent-root').click()
 
@@ -187,7 +188,6 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
 
         OktaLogin.Logout()
         Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
-
     })
 
     it('Add Major Version to the QDM Measure and verify that the versioned Measure is in read only', () => {
@@ -197,6 +197,7 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.wait(1000)
 
         cy.get('.MuiDialogContent-root').click()
 
@@ -242,16 +243,16 @@ describe('QI-Core Measure Versioning', () => {
     newMeasureName = measureName + randValue + 3
     newCQLLibraryName = cqlLibraryName + randValue + 3
 
+    const populations: MeasureGroups = {
+        initialPopulation: 'ipp',
+        denominator: 'denom',
+        numerator: 'num'
+    }
+
     before('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, QiCoreMeasureCQL)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.boolean, MeasureScoring.Proportion, populations)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QiCoreTestCaseJson)
         OktaLogin.Login()
     })
