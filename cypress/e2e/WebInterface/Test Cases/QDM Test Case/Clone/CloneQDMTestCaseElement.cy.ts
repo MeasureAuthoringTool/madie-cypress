@@ -15,8 +15,6 @@ let firstTestCaseTitle = '3Encounters1Exclusion'
 let testCaseDescription = 'DENEXPass' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let measureQDMNPBCQL = MeasureCQL.qdmCQLNonPatienBasedTest
-// let elementIdvalue = ''
-// let elementIdPath = 'cypress/fixtures/elementId'
 
 describe('Clone QDM Test Case', () => {
 
@@ -163,7 +161,7 @@ describe('Clone QDM Test Case', () => {
 
         // clone that element
         TestCasesPage.qdmTestCaseElementAction('clone')
-        cy.get("tr").eq(1).should('contain.text', 'Encounter, PerformedObservation ServicesSNOMEDCT: 448951000124107 relP:  03/07/2023 8:00 AM - 03/08/2023 8:15 AMView')
+        cy.get("tr").eq(1).should('contain', 'Encounter, PerformedObservation ServicesSNOMEDCT: 448951000124107 relP:  03/07/2023 8:00 AM - 03/08/2023 8:15 AM')
 
         // eidt the element
         TestCasesPage.qdmTestCaseElementAction('edit')
@@ -180,7 +178,7 @@ describe('Clone QDM Test Case', () => {
         Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 30000)
 
         //confirm changes was updated to the corrected element
-        cy.get("tr").eq(1).should('contain.text', 'Encounter, PerformedObservation ServicesSNOMEDCT: 448951000124107 relP:  03/07/2023 8:00 AM - 03/08/2023 8:15 AMView')
+        cy.get("tr").eq(1).should('contain', 'Encounter, PerformedObservation ServicesSNOMEDCT: 448951000124107 relP:  03/07/2023 8:00 AM - 03/08/2023 8:15 AM')
 
     })
     it('Clone QDM Test Case Element - Non Measure owner unable to clone', () => {
