@@ -70,9 +70,11 @@ describe('Measure Versioning', () => {
         newCQLLibraryName = cqlLibraryName + 1 + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
 
         //Create second Measure with Alt User
         CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, cqlLibraryTwo, measureCQL, 2, true)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean', 2)
 
     })
 
@@ -234,6 +236,7 @@ describe('Version Measure with invalid test case Json', () => {
         newCQLLibraryName = cqlLibraryName + 4 + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, invalidTestCaseJson)
     })
 
