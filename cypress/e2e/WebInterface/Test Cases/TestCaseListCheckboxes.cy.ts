@@ -4,7 +4,8 @@ import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
-import { TestCase } from "../../../Shared/types"
+import { TestCase } from "../../../Shared/TestCasesPage"
+import { MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from "../../../Shared/MeasureGroupPage"
 
 const timestamp = Date.now()
 let measureName = 'TestCaseCheckboxes' + timestamp
@@ -40,8 +41,14 @@ describe('Test Case List - Basic Behavior of Checkboxes', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+        const pops: MeasureGroups = {
+            initialPopulation: 'Initial Population',
+            numerator: 'Initial Population',
+            denominator: 'Initial Population'
+        }
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, libraryName, measureCQL)
+        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.encounter, MeasureScoring.Proportion, pops)
 
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description)
         TestCasesPage.CreateTestCaseAPI(testCase2.title, testCase2.group, testCase2.description)
