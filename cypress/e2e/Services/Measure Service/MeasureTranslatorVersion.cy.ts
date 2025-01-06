@@ -23,7 +23,11 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
 
     beforeEach('Create QI-Core Measure and Set Access Token', () => {
 
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(qicoreMeasureName, qicoreCqlLibraryName, qicoreMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
         cy.setAccessTokenCookie()
 
     })
@@ -80,7 +84,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
                 })
             })
         })
-        //Currently, there is a known issue that is making this secenario use version 3.14.0. See https://oncprojectracking.healthit.gov/support/browse/MADIE-2098.
+        //Currently, there is a known issue that is making this scenario use version 3.14.0. See https://oncprojectracking.healthit.gov/support/browse/MADIE-2098.
         //Once the above is fixed, this should be the same as when draft=true
         //Verify Translator version for Versioned Measure
         cy.getCookie('accessToken').then((accessToken) => {
