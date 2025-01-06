@@ -73,7 +73,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(1000)
 
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
@@ -117,6 +117,15 @@ describe('Validate Measure Group -- scoring and populations', () => {
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL')
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        //assert the two fields that should appear in the Reporting tab
+        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -172,6 +181,16 @@ describe('Validate Measure Group -- scoring and populations', () => {
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusion')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Numerator')
+
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        //assert the two fields that should appear in the Reporting tab
+        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -235,6 +254,16 @@ describe('Validate Measure Group -- scoring and populations', () => {
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusion')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Numerator')
+
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        //assert the two fields that should appear in the Reporting tab
+        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')

@@ -43,7 +43,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
-    it('Updating CQL to be errorneous, after initial CQL, PC, and Test Case has been setup, causes errors and the errors' +
+    it('Updating CQL to be erroneous, after initial CQL, PC, and Test Case has been setup, causes errors and the errors' +
         ' flag to be set to the mismatch flag. Correcting the CQL removes the errors flag', () => {
             //Click on Edit Measure
             MeasuresPage.actionCenter('edit')
@@ -71,6 +71,16 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'mpopEx')
             Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'daysObs')
             Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
+
+            Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
+            cy.get(MeasureGroupPage.reportingTab).should('exist')
+            cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+            cy.get(MeasureGroupPage.reportingTab).click()
+
+            //assert the two fields that should appear in the Reporting tab
+            cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+            cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+            Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
             //validation successful save message
@@ -119,7 +129,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             //navigate to the PC tab and verify mismatch message appears
             cy.get(EditMeasurePage.measureGroupsTab).click()
             cy.get(MeasureGroupPage.CQLPCMismatchError).should('contain.text', 'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.')
-            //navigate to the TC tab and verify mismatch message appears and the exectue test case button is disabled
+            //navigate to the TC tab and verify mismatch message appears and the execute test case button is disabled
             cy.get(EditMeasurePage.testCasesTab).click()
             cy.get(TestCasesPage.CQLPCTCMismatchError).should('contain.text', 'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.')
             cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
@@ -162,7 +172,9 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.cqlEditorTextBox).invoke('click')
 
             //remove the dayObs line(s) from CQL
-            cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToStart}{home}{ctrl+a}{del}{moveToStart}{home}' + measureCQL + '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{del}')
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL + '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{del}')
+
             //save changes to CQL
             cy.get(EditMeasurePage.cqlEditorSaveButton).click()
             cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -218,6 +230,16 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'mpopEx')
             Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'daysObs')
             Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
+
+            Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
+            cy.get(MeasureGroupPage.reportingTab).should('exist')
+            cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+            cy.get(MeasureGroupPage.reportingTab).click()
+
+            //assert the two fields that should appear in the Reporting tab
+            cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+            cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+            Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
             //validation successful save message
