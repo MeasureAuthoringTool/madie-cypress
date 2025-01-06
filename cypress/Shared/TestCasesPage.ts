@@ -3,6 +3,12 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 import dateTimeISO = CypressCommandLine.dateTimeISO;
 
+export type TestCase = {
+    title: string,
+    description: string,
+    group: string
+}
+
 export class TestCasesPage {
     //QI Core element tab enabled test case detail page elements
     public static readonly QiCoreEleEnabledJSONTab = '[data-testid="json-tab"]'
