@@ -23,7 +23,7 @@ describe('Measure List Page Searching', () => {
     it('Measure search on My Measures and All Measures tab', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
 
         //Search for the Measure using Measure name
         cy.log('Search Measure with measure name')
@@ -36,13 +36,13 @@ describe('Measure List Page Searching', () => {
         cy.get(MeasuresPage.searchInputBox).clear().type(measureName).type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', measureName)
 
-        //Search for the Measure using eCQMTitle
+        //Search for the Measure using eCQM Abbreviated title
         cy.log('Search Measure with eCQM Title')
         cy.get(LandingPage.myMeasuresTab).click()
-        cy.get(MeasuresPage.searchInputBox).clear().type('eCQMTitle01').type('{enter}')
+        cy.get(MeasuresPage.searchInputBox).clear().type('eCQMTitle4QICore').type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', measureName)
         MeasuresPage.actionCenter('edit')
-        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).should('have.value', 'eCQMTitle01')
+        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).should('have.value', 'eCQMTitle4QICore')
 
         //Delete the Measure & search for deleted Measure under My Measures tab
         cy.log('Delete Measure')

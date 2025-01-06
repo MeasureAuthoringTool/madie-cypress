@@ -142,17 +142,11 @@ export class CreateMeasurePage {
         }
 
         if (altUser) {
-            sessionStorage.clear()
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookieALT()
+
             user = Environment.credentials().harpUserALT
         }
         else {
-            sessionStorage.clear()
-            cy.clearAllCookies()
-            cy.clearLocalStorage()
-            cy.setAccessTokenCookie()
+
             user = Environment.credentials().harpUser
         }
 
