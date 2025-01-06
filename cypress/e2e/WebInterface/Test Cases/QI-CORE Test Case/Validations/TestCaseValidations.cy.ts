@@ -11,13 +11,14 @@ import { Global } from "../../../../../Shared/Global"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { Environment } from "../../../../../Shared/Environment"
 
-let harpUserALT = Environment.credentials().harpUserALT
-let measureName = 'TestMeasure' + Date.now()
+const harpUserALT = Environment.credentials().harpUserALT
+const now = Date.now()
+let measureName = 'TestMeasure' + now
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let CqlLibraryName = 'TestLibrary' + Date.now()
+let CqlLibraryName = 'TestLibrary' + now
 let testCaseTitle = 'test case title'
-let testCaseDescription = 'DENOMFail' + Date.now()
+let testCaseDescription = 'DENOMFail' + now
 let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
 let testCaseSeries = 'SBTestSeries'
@@ -26,7 +27,7 @@ let updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDes
 let updatedTestCaseSeries = 'CMSTestSeries'
 let TCJsonRace = TestCaseJson.TCJsonRaceOMBRaceDetailed
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
-let cqlLibraryName = 'TestLibrary' + Date.now()
+let cqlLibraryName = 'TestLibrary' + now
 
 /*
     These tests all need to be updated to use QiCore STU6.
@@ -306,7 +307,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
 
 // skipping the below test until the feature flag controlling the element tab for QI Core Test Cases is removed
 // edit test case race fields if user is someone whom the measure has been shared
-describe.only('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case to add another Race and include existing Gender, Race, and Ethnicity value by a user whom the measure has been shared', () => {
+describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test Case to add another Race and include existing Gender, Race, and Ethnicity value by a user whom the measure has been shared', () => {
 
     before('Create Measure', () => {
 
@@ -346,7 +347,7 @@ describe.only('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
 
     })
 
-    it.only('Edit current test case to add an additional race, when the user has had the measure shared with them. The edit contains Gender, Race, and Ethnicity data.', () => {
+    it('Edit current test case to add an additional race, when the user has had the measure shared with them. The edit contains Gender, Race, and Ethnicity data.', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -617,14 +618,13 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
 describe('Test Case Validations', () => {
 
     beforeEach('Login', () => {
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
     })
+
     afterEach('Logout', () => {
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Create Test Case: Description more than 250 characters', () => {
@@ -678,7 +678,6 @@ describe('Test Case Validations', () => {
         cy.get(TestCasesPage.createTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.createTestCaseTitleInlineError).contains('Test Case Title cannot be more ' +
             'than 250 characters.')
-
     })
 
     it('Edit Test Case: Title more than 250 characters', () => {
@@ -712,29 +711,18 @@ describe('Test Case Validations', () => {
 describe('Attempting to create a test case without a title', () => {
 
     beforeEach('Create measure and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        OktaLogin.Logout()
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
+
     it('Create Test Case without a title', () => {
 
         //Click on Edit Measure
@@ -749,9 +737,7 @@ describe('Attempting to create a test case without a title', () => {
 
         //save button to save the test case is not available
         cy.get(TestCasesPage.createTestCaseSaveButton).should('not.be.enabled')
-
     })
-
 
     it('Edit and update test case to have no title', () => {
 
@@ -782,14 +768,12 @@ describe('Attempting to create a test case without a title', () => {
 
         cy.get(TestCasesPage.testCaseTitle).type('{selectall}{backspace}{selectall}{backspace}')
 
-
         //Update Test Case Description
         cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
         cy.get(TestCasesPage.testCaseDescriptionTextBox).type(updatedTestCaseDescription)
         //Update Test Case Series
         cy.get(TestCasesPage.testCaseSeriesTextBox).clear()
         cy.get(TestCasesPage.testCaseSeriesTextBox).type(updatedTestCaseSeries).type('{enter}')
-
 
         //save button to save the test case is not available
         cy.get(TestCasesPage.editTestCaseSaveButton).should('not.be.enabled')
@@ -829,8 +813,8 @@ describe('Attempting to create a test case without a title', () => {
 
         //verify that the discard modal appears
         Global.clickOnDiscardChanges()
-
     })
+
     it('Validate dirty check on the test case description, in the test case details tab', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -860,6 +844,7 @@ describe('Attempting to create a test case without a title', () => {
         //verify that the discard modal appears
         Global.clickOnDiscardChanges()
     })
+
     it('Validate dirty check on the test case series, in the test case details tab', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -898,8 +883,8 @@ describe('Duplicate Test Case Title and Group validations', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
-
     })
+
     afterEach('Cleanup and Logout', () => {
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
