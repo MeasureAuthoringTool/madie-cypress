@@ -34,8 +34,6 @@ describe('Measure Transfer', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        cy.setAccessTokenCookie()
-
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
     })
 
@@ -112,8 +110,6 @@ describe('Measure Transfer - Multiple instances', () => {
     let newCqlLibraryName = cqlLibraryName + randValue
 
     beforeEach('Create Measure and Set Access Token', () => {
-
-        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()

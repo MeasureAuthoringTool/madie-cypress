@@ -22,8 +22,6 @@ describe('Measure Bundle end point returns cqlErrors as true', () => {
 
     beforeEach('Create Measure and login', () => {
 
-        cy.setAccessTokenCookie()
-
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
@@ -104,8 +102,6 @@ describe('Bundle returns elmXML', () => {
 
     beforeEach('Create Measure', () => {
 
-        cy.setAccessTokenCookie()
-
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
@@ -182,8 +178,6 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
     newCqlLibraryName = CqlLibraryName + randValue
 
     beforeEach('Create Measure', () => {
-
-        cy.setAccessTokenCookie()
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)

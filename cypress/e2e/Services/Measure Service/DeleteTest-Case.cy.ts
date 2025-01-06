@@ -20,7 +20,6 @@ describe('Delete test Case: Older end point / url that takes id and title in the
 
     beforeEach('Create Measure, Test Case and set access token', () => {
 
-        cy.setAccessTokenCookie()
         //Create Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         //Create Test case
@@ -90,9 +89,6 @@ describe('Delete test Case: Newer end point / url that takes an list array of te
     let newMeasureName = measureName + randValue
     let newCQLLibraryName = CqlLibraryName + randValue
     beforeEach('Create Measure, Group, Test Case and set access token', () => {
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         //Create Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQLPFTests)
         //Create Test case

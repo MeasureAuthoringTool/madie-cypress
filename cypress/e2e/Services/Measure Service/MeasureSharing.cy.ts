@@ -13,8 +13,6 @@ describe('Measure Sharing Service', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        cy.setAccessTokenCookie()
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
     })
 

@@ -47,8 +47,6 @@ describe('Validate Measure Group -- scoring and populations', () => {
 
     beforeEach('Create Measure and login', () => {
 
-        cy.setAccessTokenCookie()
-
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
@@ -304,8 +302,6 @@ describe('Validate Population Basis', () => {
     newCqlLibraryName = CqlLibraryName + randValue
 
     beforeEach('Create Measure and login', () => {
-
-        cy.setAccessTokenCookie()
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)

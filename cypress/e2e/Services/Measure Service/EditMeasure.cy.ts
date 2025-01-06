@@ -623,7 +623,7 @@ describe('Edit Measure Validations', () => {
     beforeEach('Create Measure ans Set Access token', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
-        cy.setAccessTokenCookie()
+
     })
 
     afterEach('Clean up', () => {
@@ -780,8 +780,6 @@ describe('Measurement Period Validations', () => {
     updatedCQLLibraryName = cqlLibraryName + 3 + randValue
 
     beforeEach('Create Measure', () => {
-
-        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
     })

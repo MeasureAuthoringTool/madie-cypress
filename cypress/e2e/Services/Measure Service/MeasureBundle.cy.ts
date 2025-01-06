@@ -100,8 +100,6 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        cy.setAccessTokenCookie()
-
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
 
@@ -367,8 +365,6 @@ describe('Measure Observation Validation', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        cy.setAccessTokenCookie()
-
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName,measureCQL)
     })
@@ -450,8 +446,6 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
 
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
-
-        cy.setAccessTokenCookie()
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, CVmeasureCQL)
@@ -635,8 +629,6 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        cy.setAccessTokenCookie()
-
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 1, measureCQL)
 
@@ -798,8 +790,6 @@ describe('Measure Bundle end point returns 409 when the measure is missing a gro
 
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
-
-        cy.setAccessTokenCookie()
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 3, measureCQL)

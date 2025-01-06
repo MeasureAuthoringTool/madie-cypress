@@ -32,10 +32,6 @@ describe('Measure Sharing', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
     })
 
@@ -119,11 +115,6 @@ describe('Measure Sharing - Multiple instances', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        //set local user that does not own the measure
-        cy.setAccessTokenCookie()
-
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -199,11 +190,6 @@ describe('Delete Test Case with Shared user', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        //set local user that does not own the measure
-        cy.setAccessTokenCookie()
-
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
     })
@@ -243,10 +229,6 @@ describe('Delete Test Case with Shared user', () => {
 describe('Remove user\'s share access from a measure', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
-
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
 
