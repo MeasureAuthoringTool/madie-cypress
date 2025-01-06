@@ -1,7 +1,7 @@
 import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from "../../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
@@ -68,7 +68,6 @@ describe('Test Case sorting by Test Case number', () => {
         let newCqlLibraryName = CqlLibraryName + randValue
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('Qi Core Test Case number and sorting behavior', () => {
@@ -129,7 +128,6 @@ describe('Test Case sorting by Test Case number', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select1N/ATest Series 1Test Case 1' + testCaseDescription + todaysDate + 'Select')
-
     })
 })
 
@@ -155,8 +153,6 @@ describe('Import Test cases onto an existing Qi Core measure via file and ensure
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         OktaLogin.Login()
-
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -168,9 +164,7 @@ describe('Import Test cases onto an existing Qi Core measure via file and ensure
 
         Utilities.deleteMeasure(measureName + 'firstMeasure', CqlLibraryName + 'firstMeasure')
         Utilities.deleteMeasure(measureName + 'secondMeasure', CqlLibraryName + 'secondMeasure', false, false, 2)
-
     })
-
 
     it('Qi Core Test Case number appears on test case import', () => {
         //Click on Edit Measure
@@ -247,7 +241,6 @@ describe('Import Test cases onto an existing Qi Core measure via file and ensure
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-
     })
 })
 
@@ -256,10 +249,14 @@ describe('Qi Core Measure - Test case number on a Draft Measure', () => {
     beforeEach('Create Measure, Test case & Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+
+        const pops: MeasureGroups = {
+            initialPopulation: 'Qualifying Encounters',
+            denominator: 'Qualifying Encounters',
+            numerator: 'Qualifying Encounters'
+        }
+        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.encounter, MeasureScoring.Ratio, pops)
         TestCasesPage.CreateTestCaseAPI(testCaseSeries, testCaseTitle, testCaseDescription, testCaseJson)
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         OktaLogin.Login()
     })
 
@@ -267,7 +264,6 @@ describe('Qi Core Measure - Test case number on a Draft Measure', () => {
 
         OktaLogin.UILogout
         Utilities.deleteVersionedMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Test case number assigned to a Draft Measure for Qi Core Measure', () => {

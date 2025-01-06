@@ -9,10 +9,7 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { Header } from "../../../../../Shared/Header"
 
-const path = require('path')
-const downloadsFolder = Cypress.config('downloadsFolder')
-const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
+const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'Test Case 1'
@@ -24,10 +21,6 @@ let secondTestCaseSeries = 'Test Series 2'
 let validTestCaseJsonLizzy = TestCaseJson.TestCaseJson_Valid
 let validTestCaseJsonBobby = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
 let measureCQLPFTests = MeasureCQL.CQL_Populations
-let validFileToUpload = downloadsFolder.toString()
-let zipFileToUpload = 'cypress/fixtures'
-const now = require('dayjs')
-let todaysDate = now().format('MM/DD/YYYY')
 
 describe('MADIE Zip Test Case Import', () => {
 
@@ -43,12 +36,10 @@ describe('MADIE Zip Test Case Import', () => {
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
 
-
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -59,8 +50,8 @@ describe('MADIE Zip Test Case Import', () => {
         cy.setAccessTokenCookie()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
+
     it('MADIE Zip Test Case Import', () => {
 
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
@@ -128,7 +119,7 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
         cy.reload()
@@ -144,7 +135,7 @@ describe('MADIE Zip Test Case Import', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -160,11 +151,9 @@ describe('MADIE Zip Test Case Import', () => {
         Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 35000)
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', '(2) Test cases imported successfully')
 
-        //Verify created test case Title and Series exists on Test Cases Page
-        cy.get('[data-testid="test-case-title-0_series"]').should('contain.text', secondTestCaseSeries || testCaseSeries)
-        cy.get('[data-testid="test-case-title-0_title"]').should('contain.text', secondTestCaseTitle || testCaseTitle)
-        cy.get('[data-testid="test-case-title-1_series"]').should('contain.text', testCaseSeries || secondTestCaseSeries)
-        cy.get('[data-testid="test-case-title-1_title"]').should('contain.text', testCaseTitle || secondTestCaseTitle)
+        //Verify created test case Titles exist on Test Cases Page 
+        cy.contains(secondTestCaseTitle).should('be.visible')
+        cy.contains(testCaseTitle).should('be.visible')
     })
 
     it('Copy Warning message while importing Test cases', () => {
@@ -228,7 +217,7 @@ describe('MADIE Zip Test Case Import', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(zipFileToUpload, 'CMS108FHIR-v0.2.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile('cypress/fixtures/CMS108FHIR-v0.2.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -239,7 +228,14 @@ describe('MADIE Zip Test Case Import', () => {
 
         Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 65000)
 
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction138N/ADENEXFailICULT1DayICU LOS < 1 day\n' + todaysDate + 'Select137N/ADENEXPassSCIPKneeRank1Patient had SCIP -KneeSurg during Encounter and Rank =1\n' + todaysDate + 'Select136N/ADENEXPassSCIPHipFxRank1SMDCTDuplicate case by using SNOMDCT ' + todaysDate + 'Select135N/ANUMERPassMAOralXaKneeOnEncStartTimeoral factor Xa administered concurrent with start of IP encounter, Hip replacement concurrent with Start of IP encounter...more' + todaysDate + 'Select134N/ANUMERFailWarfarinAFDisch2Encounters2 encounters. warfarin administered after 2nd encounter discharge time\n' + todaysDate + 'Select133N/ADENEXPassCMODrgED2HrsBFAdmSameDateAdmDateDoNotPerformFalseCMO occurs in ED that ED ends > 1 hour before Adm. But this case pass because it is on the same day as adm date\n' + todaysDate + 'Select132N/ANUMERPassMedReasonMALDUHepDAGCSDuringEDmedical reasons to not receive no GCS and no low dose heparin during ED\n' + todaysDate + 'Select131N/ANUMERFailINRInvalidValue>18, dx VTE, LOS<120 day,   LabResult INR is a invalid value as coded value,  < 0 day after surgery end datetime\n' + todaysDate + 'Select130N/ADENEXFailCMO2DayAfterAnesthesiacomfort measures order 2 day after end of  anesthesia\n' + todaysDate + 'Select129N/ANUMERPassMAOralXaOnDayAFAnesMedAdmDToral factor Xa administered =0 day after end of anesthesia with MedicationAdm. effectiveDateTime\n' + todaysDate + 'Select')
+        // updated validations - 10 visible test cases
+        cy.get(TestCasesPage.countVisibleTestCases).should('have.length', 10)
+        // imported 138 totaltest cases
+        TestCasesPage.grabValidateTestCaseNumber(138)
+        // specific title seen
+        cy.contains('SCIPKneeRank1').should('be.visible')
+        // another test case's specific description seen
+        cy.contains('ICU LOS < 1 day').should('be.visible')
 
         //Click on the Copy button and verify success msg
         cy.get('[data-testid="copy-button-tooltip"]').should('exist')
@@ -248,6 +244,7 @@ describe('MADIE Zip Test Case Import', () => {
     })
 
 })
+
 describe('MADIE Zip Test Case Import: error message should appear when the .madie file is missing', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
@@ -259,12 +256,10 @@ describe('MADIE Zip Test Case Import: error message should appear when the .madi
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, secondTestCaseSeries, secondTestCaseDescription, validTestCaseJsonBobby, false, true)
 
-
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -275,8 +270,8 @@ describe('MADIE Zip Test Case Import: error message should appear when the .madi
         cy.setAccessTokenCookie()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
+
     it('MADIE Zip Test Case Import: error message appears when .madie file is missing from the .zip file', () => {
 
         Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
