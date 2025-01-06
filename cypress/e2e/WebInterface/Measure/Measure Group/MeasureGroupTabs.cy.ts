@@ -760,7 +760,7 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).should('be.empty')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Select Improvement Notation')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
         cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('be.empty')
     })
@@ -785,7 +785,7 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).should('be.empty')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Select Improvement Notation')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
         cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('be.empty')
 
@@ -840,9 +840,7 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('contain.text', 'Loss of points is actually good.')
 
         //change and save a new value to the Improvement Notation field
-        cy.get(MeasureGroupPage.improvementNotationSelect).click()
-        cy.get(MeasureGroupPage.improvementNotationValues)
-            .type('{upArrow}{upArrow}{enter}')
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save selected IN value
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -858,7 +856,7 @@ describe('Validating Reporting tabs', () => {
 
         // IN should contain previously saved selected value
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Select Improvement Notation')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
  
         // and here?
  
