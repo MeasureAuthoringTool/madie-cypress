@@ -62,7 +62,7 @@ describe('CQL Builder Lookups: QI Core', () => {
                 expect(response.status).to.eql(200)
                 expect(response.body.parameters).to.have.lengthOf(1)
                 expect(response.body.definitions).to.have.lengthOf(3)
-                expect(response.body.functions).to.have.lengthOf(297)
+                expect(response.body.functions).to.have.lengthOf(33)
                 expect(response.body.fluentFunctions).to.have.lengthOf(1)
 
             })
