@@ -64,7 +64,11 @@ describe('Measure Service: QICore Measure', () => {
                     "measureSetId": uuidv4(),
                     "ecqmTitle": eCQMTitle,
                     "measurementPeriodStart": mpStartDate,
-                    "measurementPeriodEnd": mpEndDate
+                    "measurementPeriodEnd": mpEndDate,
+                    "testCaseConfiguration": {
+                        "id": null,
+                        "sdeIncluded": null
+                    },
                 }
             }).then((response) => {
                 expect(response.status).to.eql(201)
@@ -917,6 +921,7 @@ describe('Delete QI-Core Measure with admin API Key', () => {
             'exists [\"Encounter\": \"Office Visit\"] E where E.status ~ \'finished\'\n'
 
         defaultUser = CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, versionMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
 
     })
 

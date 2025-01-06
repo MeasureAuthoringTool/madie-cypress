@@ -126,7 +126,8 @@ describe('QI-Core Measure Export', () => {
                         },
                         "measureGroupTypes": [
                             "Outcome"
-                        ]
+                        ],
+                        "improvementNotation": "Increased score indicates improvement"
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)
