@@ -25,7 +25,7 @@ let measureName = 'TestMeasure' + Date.now()
 describe('Version and Draft CQL Library', () => {
 
     beforeEach('Create Measure, and add Cohort group', () => {
-        cy.setAccessTokenCookie()
+
         //Create Measure
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue

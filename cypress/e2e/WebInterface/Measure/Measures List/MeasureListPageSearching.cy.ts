@@ -12,6 +12,8 @@ describe('Measure List Page Searching', () => {
 
     beforeEach('Login', () => {
 
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
     })
 
@@ -22,8 +24,7 @@ describe('Measure List Page Searching', () => {
 
     it('Measure search on My Measures and All Measures tab', () => {
 
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+
 
         //Search for the Measure using Measure name
         cy.log('Search Measure with measure name')

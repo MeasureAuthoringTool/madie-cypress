@@ -44,10 +44,6 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
         cqlLibraryName = 'TestCql' + Date.now()
 
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
         OktaLogin.Login()
@@ -141,9 +137,6 @@ describe('QI Core DOB, Gender, Race, and Ethnicity data validations: Attempt to 
 describe('Test Case population values based on Measure Group population definitions', () => {
     before('Create Measure and measure group', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
 
@@ -561,9 +554,6 @@ describe('Measure Service: Test Case Endpoints', () => {
     let cqlLibraryNameDeux = cqlLibraryName + randValue + 2
     beforeEach('Create Measure, group, and test case', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
@@ -823,10 +813,6 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
 
     before('Create Measure', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         measureName = 'TestMeasure' + Date.now()
         cqlLibraryName = 'TestCql' + Date.now()
 
@@ -967,10 +953,6 @@ describe('Test Case Json Validations', () => {
 
     before('Create Measure', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         measureName = 'TestMeasure' + Date.now()
         cqlLibraryName = 'TestCql' + Date.now()
 
@@ -1108,10 +1090,6 @@ describe('Measure Service: Test Case Endpoint: Authentication', () => {
 
     before('Create Measure', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         measureName = 'TestMeasure' + Date.now()
         cqlLibraryName = 'TestCql' + Date.now()
 
@@ -1158,10 +1136,6 @@ describe('Measure Service: Test Case Endpoint: Authentication', () => {
 
 describe('Measure Service: Test Case Endpoint: User validation with test case import', () => {
     beforeEach('Create Measure and measure group', () => {
-
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
 
@@ -1277,10 +1251,6 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
 describe('Duplicate Test Case Title and Group validations', () => {
 
     beforeEach('Create Measure, Test case', () => {
-
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCSeries, TCDescription)

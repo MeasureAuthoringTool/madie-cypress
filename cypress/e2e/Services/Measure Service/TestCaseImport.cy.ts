@@ -51,10 +51,6 @@ describe('Test Case Import', () => {
         newMeasureName = measureName + randValue + 4
         newCQLLibraryName = cqlLibraryName + randValue + 4
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
 
@@ -189,10 +185,6 @@ describe('Test Case import for versioned Measure', () => {
         newMeasureName = measureName + randValue + 5
         newCQLLibraryName = cqlLibraryName + randValue + 5
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
@@ -251,10 +243,6 @@ describe('Multiple Test Case Import', () => {
 
         newMeasureName = measureName + randValue + 6
         newCQLLibraryName = cqlLibraryName + randValue + 6
-
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')

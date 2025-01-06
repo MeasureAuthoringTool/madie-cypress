@@ -8,8 +8,6 @@ describe('Measure List Page Searching', () => {
 
     beforeEach('Create Measure', () => {
 
-        cy.setAccessTokenCookie()
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName)
     })
 

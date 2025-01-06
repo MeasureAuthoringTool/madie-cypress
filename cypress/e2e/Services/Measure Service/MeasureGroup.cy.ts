@@ -1233,7 +1233,6 @@ describe('Creating a group / PC with description for various fields', () => {
 
     beforeEach('Set Access Token', () => {
 
-        cy.setAccessTokenCookie()
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue

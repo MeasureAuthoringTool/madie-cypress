@@ -68,14 +68,9 @@ describe('Measure Versioning', () => {
 
         newMeasureName = measureName + 1 + randValue
         newCQLLibraryName = cqlLibraryName + 1 + randValue
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
         //Create second Measure with Alt User
         CreateMeasurePage.CreateQICoreMeasureAPI(measureTwo, cqlLibraryTwo, measureCQL, 2, true)
 
@@ -131,9 +126,6 @@ describe('Version Measure without CQL', () => {
         newMeasureName = measureName + 2 + randValue
         newCQLLibraryName = cqlLibraryName + 2 + randValue
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName)
     })
     after('Clean up', () => {
@@ -241,9 +233,6 @@ describe('Version Measure with invalid test case Json', () => {
         newMeasureName = measureName + 4 + randValue
         newCQLLibraryName = cqlLibraryName + 4 + randValue
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, invalidTestCaseJson)
     })
@@ -275,9 +264,6 @@ describe('Edit validations for versioned Measure', () => {
         newMeasureName = measureName + 5 + randValue
         newCQLLibraryName = cqlLibraryName + 5 + randValue
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL_ProportionMeasure)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
         ////'','', 'Qualifying Encounters','',
@@ -412,9 +398,6 @@ describe('Delete validations for versioned Measure', () => {
         newMeasureName = measureName + 6 + randValue
         newCQLLibraryName = cqlLibraryName + 6 + randValue
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL_ProportionMeasure)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
