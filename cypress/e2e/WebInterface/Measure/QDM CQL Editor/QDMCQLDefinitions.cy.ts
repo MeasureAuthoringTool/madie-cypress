@@ -5,8 +5,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-import { Global } from "../../../../Shared/Global";
-
+import { Global } from "../../../../Shared/Global"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
@@ -308,7 +307,7 @@ describe('QDM CQL Definitions', () => {
 
         //Navigate to Saved Definitions tab
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
-        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'Test Comments')
+        cy.get('[data-testid="definition-comments-content"]').should('contain.text', 'Test Comments')
     })
 
     it('View and Edit QDM CQL Definition Comments from Saved Definitions tab', () => {
@@ -319,7 +318,7 @@ describe('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
 
         //Verify Comment
-        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'Test Comments')
+        cy.get('[data-testid="definition-comments-content"]').should('contain.text', 'Test Comments')
 
         //Edit Comment
         cy.get('[data-testid="edit-button-0"]').click()
@@ -335,7 +334,7 @@ describe('QDM CQL Definitions', () => {
 
         //Navigate to Saved Definitions tab and verify comment
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
-        cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'Updated Test Comment')
+        cy.get('[data-testid="definition-comments-content"]').should('contain.text', 'Updated Test Comment')
     })
 })
 
