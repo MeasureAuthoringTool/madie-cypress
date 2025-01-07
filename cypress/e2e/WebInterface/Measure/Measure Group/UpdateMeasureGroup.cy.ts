@@ -44,7 +44,7 @@ describe('Validate Measure Group', () => {
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file
-        cy.readFile('cypress/fixtures/EXM124v7QICore4Entry.txt').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/GenericCQLBoolean.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
@@ -54,7 +54,7 @@ describe('Validate Measure Group', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        //wait for alert / succesful save message to appear
+        //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -75,10 +75,21 @@ describe('Validate Measure Group', () => {
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
         cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Procedure')
+        cy.get(MeasureGroupPage.popBasis).type('boolean')
         cy.get(MeasureGroupPage.popBasisOption).click()
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        //assert the two fields that should appear in the Reporting tab
+        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
@@ -91,15 +102,15 @@ describe('Validate Measure Group', () => {
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
         cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Procedure')
+        cy.get(MeasureGroupPage.popBasis).type('boolean')
         cy.get(MeasureGroupPage.popBasisOption).click()
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Surgical Absence of Cervix')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Surgical Absence of Cervix')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'Surgical Absence of Cervix')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Surgical Absence of Cervix')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Surgical Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusion')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'Denominator')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Numerator')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
@@ -118,7 +129,7 @@ describe('Validate Measure Group', () => {
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file
-        cy.readFile('cypress/fixtures/EXM124v7QICore4Entry.txt').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/GenericCQLBoolean.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
@@ -128,7 +139,7 @@ describe('Validate Measure Group', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        //wait for alert / succesful save message to appear
+        //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -149,10 +160,21 @@ describe('Validate Measure Group', () => {
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
         cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Procedure')
+        cy.get(MeasureGroupPage.popBasis).type('boolean')
         cy.get(MeasureGroupPage.popBasisOption).click()
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        //assert the two fields that should appear in the Reporting tab
+        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
@@ -163,8 +185,8 @@ describe('Validate Measure Group', () => {
         //Update Measure Group without all required populations
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'Surgical Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'Initial Population')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
@@ -178,7 +200,7 @@ describe('Validate Measure Group', () => {
         //navigate to CQL Editor page / tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
         //read and write CQL from flat file
-        cy.readFile('cypress/fixtures/EXM124v7QICore4Entry.txt').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/GenericCQLBoolean.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
@@ -188,7 +210,7 @@ describe('Validate Measure Group', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        //wait for alert / succesful save message to appear
+        //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -209,10 +231,21 @@ describe('Validate Measure Group', () => {
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
         cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Procedure')
+        cy.get(MeasureGroupPage.popBasis).type('boolean')
         cy.get(MeasureGroupPage.popBasisOption).click()
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        //assert the two fields that should appear in the Reporting tab
+        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
@@ -225,12 +258,12 @@ describe('Validate Measure Group', () => {
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
         cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Procedure')
+        cy.get(MeasureGroupPage.popBasis).type('boolean')
         cy.get(MeasureGroupPage.popBasisOption).click()
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Surgical Absence of Cervix')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Surgical Absence of Cervix')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
