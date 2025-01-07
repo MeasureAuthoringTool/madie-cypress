@@ -9,6 +9,7 @@ import { Header } from "../../../../Shared/Header"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import {LandingPage} from "../../../../Shared/LandingPage";
 
 let MeasuresPageOne = ''
 let updatedMeasuresPageName = ''
@@ -32,17 +33,18 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         //Create New Measure and Measure Group
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
+        MeasureGroupPage.CreateCohortMeasureGroupAPI()
+
         OktaLogin.Login()
+
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        MeasureGroupPage.CreateCohortMeasureGroupAPI()
-        OktaLogin.Login()
+
+        cy.get(Header.mainMadiePageButton).click()
+        cy.get(LandingPage.newMeasureButton).should('be.visible')
 
     })
 
@@ -70,6 +72,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         //navigate back to the main MADiE / measure list page
         cy.get(Header.mainMadiePageButton).click()
+        cy.get(LandingPage.newMeasureButton).should('be.visible')
 
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
@@ -79,7 +82,6 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         //navigate back to the main MADiE / measure list page
         cy.get(Header.mainMadiePageButton).click()
-        cy.reload()
 
         MeasuresPage.actionCenter('draft')
 
@@ -104,7 +106,6 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
     })
 
-
     it('User cannot create a draft for a measure / version, whom already has been drafted', () => {
 
         let versionNumber = '1.0.000'
@@ -120,11 +121,14 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
         cy.log('Version Created Successfully')
 
+        //navigate back to the main MADiE / measure list page
+        cy.get(Header.mainMadiePageButton).click()
+        cy.get(LandingPage.newMeasureButton).should('be.visible')
+
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
-        cy.reload()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
@@ -136,7 +140,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
             //Verify version button is not visible
             cy.get('[data-testid=draft-measure-' + fileContents + ']').should('not.exist')
-            cy.reload()
+
         })
     })
 
@@ -164,6 +168,10 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumberFirst)
         cy.log('Major Version Created Successfully')
 
+        //navigate back to the main MADiE / measure list page
+        cy.get(Header.mainMadiePageButton).click()
+        cy.get(LandingPage.newMeasureButton).should('be.visible')
+
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.visible')
@@ -182,10 +190,13 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
+
         Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 100000)
 
-        //verify CQL after draft
+        //navigate back to the main MADiE / measure list page
         cy.get(Header.mainMadiePageButton).click()
+        cy.get(LandingPage.newMeasureButton).should('be.visible')
+
         //Search for the Measure using Measure name
         cy.log('Search Measure with measure name')
         cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).type('{enter}')
@@ -288,8 +299,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
         //Create Test case
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
+
         OktaLogin.Login()
         MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -318,7 +328,10 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
-        cy.get(Header.measures).click()
+        //navigate back to the main MADiE / measure list page
+        cy.get(Header.mainMadiePageButton).click()
+        cy.get(LandingPage.newMeasureButton).should('be.visible')
+
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -350,8 +363,10 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.log('Draft Created Successfully')
         Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 100000)
 
-        //verify CQL after draft
+        //navigate back to the main MADiE / measure list page
         cy.get(Header.mainMadiePageButton).click()
+        cy.get(LandingPage.newMeasureButton).should('be.visible')
+
         //Search for the Measure using Measure name
         cy.log('Search Measure with measure name')
         cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).type('{enter}')
@@ -369,6 +384,8 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('not.be.enabled')
 
         //verify group info after draft
         cy.get(EditMeasurePage.measureGroupsTab).click()
