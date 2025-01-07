@@ -22,7 +22,7 @@ export class TestCasesPage {
     public static readonly numer2Observation = '[id="numeratorObservation2-expected-cb"]'
 
     //QDM Bread Crumb
-    public static readonly testCasesBCLink = '[data-testid="qdm-test-cases"]'
+    public static readonly testCasesBCLink = '[id="edit-test-case-bread-crumbs"]'
     public static readonly testCasesBCText = '[data-testid="qdm-test-cases-testcase"]'
 
     //QDM Shift Test Case dates
@@ -1048,7 +1048,7 @@ export class TestCasesPage {
         cy.get(TestCasesPage.QDMRace).click()
         cy.get('[data-value="' + race + '"]').click()
 
-         cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.QDMTCSaveBtn).click()
         // Utilities.waitForElementEnabled(TestCasesPage.runQDMTestCaseBtn, 7500)
 
         cy.get(TestCasesPage.QDMGender).click()
