@@ -8,6 +8,8 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
+import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage";
+import {LandingPage} from "../../../../Shared/LandingPage";
 
 const now = Date.now()
 let MeasuresPageOne = ''
@@ -18,6 +20,7 @@ let testCaseTitle = 'TestcaseTitle'
 let testCaseDescription = 'Description' + now
 let testCaseSeries = 'SBTestSeries'
 let invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
+let cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
 
 let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
@@ -104,8 +107,21 @@ describe('Measure Versioning when the measure has test case with errors', () => 
 
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        newMeasureName = 'TestMeasure' + Date.now() + randValue
+        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+        //Create New Measure and Measure Group
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI()
         OktaLogin.Login()
+
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        cy.get(Header.mainMadiePageButton).click()
+        cy.get(LandingPage.newMeasureButton).should('be.visible')
     })
 
     afterEach('Logout', () => {
@@ -118,13 +134,7 @@ describe('Measure Versioning when the measure has test case with errors', () => 
 
         MeasuresPage.actionCenter('edit')
 
-        //Add CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL)
-
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, invalidTestCaseJson)
 
