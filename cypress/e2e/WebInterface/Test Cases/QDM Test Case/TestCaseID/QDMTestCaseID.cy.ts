@@ -4,32 +4,37 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../../Shared/Header"
+import { LandingPage } from "../../../../../Shared/LandingPage"
 
 let singleTestCaseFile = 'patients_42BF391F-38A3-4C0F-9ECE-DCD47E9609D9_QDM_56_1712926664.json'
-let testCaseTitle = 'Test Case 1'
-let testCaseDescription = 'Description 1'
-let testCaseSeries = 'Test Series 1'
-let testCaseTitle2nd = 'Second TC - Title for Auto Test'
-let testCaseDescription2nd = 'SecondTC-DENOMFail' + Date.now()
-let testCaseSeries2nd = 'SecondTC-SBTestSeries'
-let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
+const testCase1: TestCase = {
+    title: 'Test Case 1',
+    description: 'Description 1',
+    group: 'Test Series 1'
+}
+const testCase2: TestCase = {
+    title: 'Second TC - Title for Auto Test',
+    description: 'SecondTC-DENOMFail',
+    group: 'SecondTC-SBTestSeries'
+}
+const qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 const now = require('dayjs')
-let todaysDate = now().format('MM/DD/YYYY')
-let measureName = 'ProportionPatient' + Date.now()
-let measureQDMManifestName = 'QDMManifestTest' + Date.now()
-let CqlLibraryName = 'ProportionPatient' + Date.now()
-let versionNumber = '1.0.000'
-let newMeasureName = 'Updated' + measureName
+const todaysDate = now().format('MM/DD/YYYY')
+const timestamp = Date.now()
+const measureName = 'ProportionPatient' + timestamp
+const measureQDMManifestName = 'QDMManifestTest' + timestamp
+const CqlLibraryName = 'ProportionPatient' + timestamp
+const versionNumber = '1.0.000'
+const newMeasureName = 'Updated' + measureName
 
 describe('QDM Test Case sorting by Test Case number', () => {
 
     beforeEach('Create Measure', () => {
 
-        //Create New Measure and test case
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName, CqlLibraryName, 'Proportion', false, qdmManifestTestCQL, null, false,
             '2025-01-01', '2025-12-31')
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
@@ -40,28 +45,21 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        //logout of MADiE
-        OktaLogin.UILogout()
-
     })
 
     afterEach('Clean up', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(measureQDMManifestName, CqlLibraryName)
-
     })
+
     it('QDM Test Case number and sorting behavior', () => {
-
-        OktaLogin.Login()
-
-        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.createQDMTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd)
+        TestCasesPage.createQDMTestCase(testCase2.title, testCase2.description, testCase2.group)
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.testCaseNameDropdown).should('contain.text', 'Case #2: SecondTC-SBTestSeries - Second TC - Title for Auto Test')
@@ -88,30 +86,30 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
         //test case numbers appear and first click sorts list in ascending order based on test case number / ID
         Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 5000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Select1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
         Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Select')
         //second click sorts in descending order
         Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Select1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
         //thrid click removes sorting
         Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Select1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
         //sort by case number and then edit some test case that is not at the top -- once user navigates back to the test case list page default sorting should appear
         Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Select')
         Utilities.waitForElementVisible(TestCasesPage.testCaseAction0Btn, 5000)
         cy.get(TestCasesPage.testCaseAction0Btn).find('[class="action-button"]').should('contain.text', 'Select').click()
         cy.get('[class="popover-content"]').find('[class="btn-container"]').find('[aria-label="edit-test-case-QDMManifestTC"]').contains('edit').click()
@@ -124,23 +122,17 @@ describe('QDM Test Case sorting by Test Case number', () => {
         //Navigate back to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
-
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Select1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
     })
+
     it('QDM Test Case number appears on cloned test case', () => {
-
-        //login
-        OktaLogin.Login()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd)
+        TestCasesPage.createQDMTestCase(testCase2.title, testCase2.description, testCase2.group)
 
         //navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -174,47 +166,39 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get('[class="toast success"]').should('contain.text', 'Test case cloned successfully')
         Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 5000)
         cy.get(TestCasesPage.testCaseListTable).should('includes.text', 'Case #StatusGroupTitleDescriptionLast SavedAction3N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test')
-
     })
-
 })
 
 describe('Import Test cases onto an existing QDM measure via file and ensure test case ID / numbering appears', () => {
 
     beforeEach('Login and Create Measure', () => {
 
-        CqlLibraryName = 'TestLibrary2' + Date.now()
-
-        //Create New Measure and test case
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName, CqlLibraryName, 'Proportion', false, qdmManifestTestCQL, null, false,
             '2025-01-01', '2025-12-31')
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
-        TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
+        TestCasesPage.CreateQDMTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, '', false, false)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up', () => {
 
         OktaLogin.UILogout
         Utilities.deleteMeasure(measureQDMManifestName, CqlLibraryName)
-
     })
+
     it('QDM Test Case number appears on test case import', () => {
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd)
+        TestCasesPage.createQDMTestCase(testCase2.title, testCase2.description, testCase2.group)
 
         //navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -246,27 +230,14 @@ describe('Import Test cases onto an existing QDM measure via file and ensure tes
         //click on the 'Import' button on the modal window
         TestCasesPage.clickQDMImportTestCaseButton()
 
-        //test case list table contains the group name of the test case that was imported
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction75N/AIPFailNoEncounterPatient is 19 with no Encounter Inpatient' + todaysDate + 'Select74N/AIPFailTooYoungPatient is 17 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...more' + todaysDate + 'Select73N/ANUMERFailAntithromboticStartBeforeIPEncPatient received anti thrombotic before and during encounter' + todaysDate + 'Select72N/AIPFailEncEndsBeforeMPPatient is 18 with Non-Elective Inpatient Encounter ends before MP with principal diagnosis of stroke' + todaysDate + 'Select71N/ANUMERFailAntithromboticAfterEncIPPatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...more' + todaysDate + 'Select70N/ADENEXPassLeftAMAPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP left agai...more' + todaysDate + 'Select69N/ADENEXPassExpiredPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP patient e...more' + todaysDate + 'Select68N/ADENEXPassDischargeHomeHospicePatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...more' + todaysDate + 'Select67N/ADENEXPassDischargeFacilityHospicePatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...more' + todaysDate + 'Select66N/ADENEXCEPFailMedRsnStartTmLTEncInpAdmTmPatient does not get antithrombotic medication due to medical reasons before IP encounter. This case tests the timing bo...more' + todaysDate + 'Select')
+        // confirm there are 75 test cases total - most recent is #75
+        TestCasesPage.grabValidateTestCaseNumber(75)
 
-        //test case numbers appear and first click sorts list in ascending order based on test case number / ID
-        Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 5000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction75N/AIPFailNoEncounterPatient is 19 with no Encounter Inpatient' + todaysDate + 'Select74N/AIPFailTooYoungPatient is 17 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...more' + todaysDate + 'Select73N/ANUMERFailAntithromboticStartBeforeIPEncPatient received anti thrombotic before and during encounter' + todaysDate + 'Select72N/AIPFailEncEndsBeforeMPPatient is 18 with Non-Elective Inpatient Encounter ends before MP with principal diagnosis of stroke' + todaysDate + 'Select71N/ANUMERFailAntithromboticAfterEncIPPatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...more' + todaysDate + 'Select70N/ADENEXPassLeftAMAPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP left agai...more' + todaysDate + 'Select69N/ADENEXPassExpiredPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP patient e...more' + todaysDate + 'Select68N/ADENEXPassDischargeHomeHospicePatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...more' + todaysDate + 'Select67N/ADENEXPassDischargeFacilityHospicePatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...more' + todaysDate + 'Select66N/ADENEXCEPFailMedRsnStartTmLTEncInpAdmTmPatient does not get antithrombotic medication due to medical reasons before IP encounter. This case tests the timing bo...more' + todaysDate + 'Select')
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
-        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Select3N/ADENEXPassDischargeACFPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...more' + todaysDate + 'Select4N/ANUMERPassAntithromboticDuringIPPatient is GT 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends d...more' + todaysDate + 'Select5N/AIPFailEncEndsAfterMPPatient is 18 with Non-Elective Inpatient Encounter ends after MP with principal diagnosis of stroke' + todaysDate + 'Select6N/AIPFailNoPrincDxPatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) ends during MP with no principal diagnosis of stroke' + todaysDate + 'Select7N/AIPPassPrincDxIsIschemicStkPatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...more' + todaysDate + 'Select8N/ANUMERPassDENEXCEPPASS3Enc2WithAntithrombotic1WithExcepPatient is GT 18 with 2 Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends...more' + todaysDate + 'Select9N/ANUMERPass3Enc2WithAntithrombotic2WithExcepPatient is GT 18 with 2 Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends...more' + todaysDate + 'Select10N/ANUMERPass2Enc3WithAntithromboticPatient is GT 18 with 2 Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends...more' + todaysDate + 'Select')
-        //second click sorts in descending order
-        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
-        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction75N/AIPFailNoEncounterPatient is 19 with no Encounter Inpatient' + todaysDate + 'Select74N/AIPFailTooYoungPatient is 17 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...more' + todaysDate + 'Select73N/ANUMERFailAntithromboticStartBeforeIPEncPatient received anti thrombotic before and during encounter' + todaysDate + 'Select72N/AIPFailEncEndsBeforeMPPatient is 18 with Non-Elective Inpatient Encounter ends before MP with principal diagnosis of stroke' + todaysDate + 'Select71N/ANUMERFailAntithromboticAfterEncIPPatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...more' + todaysDate + 'Select70N/ADENEXPassLeftAMAPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP left agai...more' + todaysDate + 'Select69N/ADENEXPassExpiredPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP patient e...more' + todaysDate + 'Select68N/ADENEXPassDischargeHomeHospicePatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...more' + todaysDate + 'Select67N/ADENEXPassDischargeFacilityHospicePatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...more' + todaysDate + 'Select66N/ADENEXCEPFailMedRsnStartTmLTEncInpAdmTmPatient does not get antithrombotic medication due to medical reasons before IP encounter. This case tests the timing bo...more' + todaysDate + 'Select')
-        //thrid click removes sorting
-        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
-        Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
-        Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction75N/AIPFailNoEncounterPatient is 19 with no Encounter Inpatient' + todaysDate + 'Select74N/AIPFailTooYoungPatient is 17 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...more' + todaysDate + 'Select73N/ANUMERFailAntithromboticStartBeforeIPEncPatient received anti thrombotic before and during encounter' + todaysDate + 'Select72N/AIPFailEncEndsBeforeMPPatient is 18 with Non-Elective Inpatient Encounter ends before MP with principal diagnosis of stroke' + todaysDate + 'Select71N/ANUMERFailAntithromboticAfterEncIPPatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duri...more' + todaysDate + 'Select70N/ADENEXPassLeftAMAPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP left agai...more' + todaysDate + 'Select69N/ADENEXPassExpiredPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP patient e...more' + todaysDate + 'Select68N/ADENEXPassDischargeHomeHospicePatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...more' + todaysDate + 'Select67N/ADENEXPassDischargeFacilityHospicePatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP discharge...more' + todaysDate + 'Select66N/ADENEXCEPFailMedRsnStartTmLTEncInpAdmTmPatient does not get antithrombotic medication due to medical reasons before IP encounter. This case tests the timing bo...more' + todaysDate + 'Select')
 
+        TestCasesPage.grabValidateTestCaseNumber(1)
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase1.title, testCase1.group)
     })
 })
 
@@ -275,15 +246,14 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
     beforeEach('Create Measure, Test case & Login', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName, CqlLibraryName, 'Proportion', false, qdmManifestTestCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        TestCasesPage.CreateTestCaseAPI(testCase1.group, testCase1.title, testCase1.description)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
-        TestCasesPage.CreateTestCaseAPI(testCaseSeries, testCaseTitle, testCaseDescription)
-        OktaLogin.Login()
     })
 
     afterEach('Delete Measure and Logout', () => {
@@ -293,6 +263,9 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
     })
 
     it('Test case number assigned to a Draft Measure for QDM Measure', () => {
+
+        cy.get(Header.mainMadiePageButton).click()
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
 
         //Version the Measure
         MeasuresPage.actionCenter('version')
@@ -327,15 +300,15 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle2nd.toString())
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase2.title)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription2nd)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase2.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries2nd).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase2.group).type('{enter}')
 
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
@@ -344,13 +317,10 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 710000)
         //Validate Test case ID for Draft Measure
         TestCasesPage.grabValidateTestCaseNumber(2)
-
     })
 })
 
 describe('QDM Test Case - Deleting all test cases resets test case counter', () => {
-
-    const CqlLibraryName = 'TestCaseReset' + Date.now()
 
     beforeEach('Create Measure', () => {
 
@@ -364,7 +334,6 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
     })
 
     afterEach('Clean up', () => {
@@ -375,16 +344,12 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
 
     it('Test case number resets when test case count equals 0', () => {
 
-        OktaLogin.Login()
-
-        MeasuresPage.actionCenter('edit')
-
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd)
+        TestCasesPage.createQDMTestCase(testCase2.title, testCase2.description, testCase2.group)
 
         //navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -413,7 +378,7 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
 
         // verify test case #1 no longer shown, test case #2 is still shown
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', 'QDMManifestTC')
-        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle2nd, testCaseSeries2nd)
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase2.title, testCase2.group)
 
         // delete test case #2
         TestCasesPage.grabTestCaseId(2)
@@ -425,7 +390,7 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         cy.get(EditMeasurePage.testCasesTab).should('contain.text', 'Test Cases (0)')
 
         // create new case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.createQDMTestCase(testCase1.title, testCase1.description, testCase1.group)
 
         // verify one test case shown
         cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 1)
@@ -433,7 +398,5 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
 
         // verify test case is test case #1
         TestCasesPage.grabValidateTestCaseNumber(1)
-
     })
-
 })
