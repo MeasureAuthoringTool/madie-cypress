@@ -3,42 +3,36 @@ import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../../Shared/Header"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let testCaseTitle = 'Title for Auto Test'
-let testCaseDescription = 'DENOMFail' + Date.now()
-let testCaseSeries = 'SBTestSeries'
+const now = Date.now()
+let measureName = 'TestMeasure' + now
+let CqlLibraryName = 'TestLibrary' + now
+const testCase: TestCase = {
+    title: 'Title for Auto Test',
+    description: 'DENOMFail' + now,
+    group: 'SBTestSeries'
+}
 
 describe('Fluent Function Capability', () => {
 
     before('Create Measure and Test case', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
 
         cy.readFile('cypress/fixtures/FluentFunctionJSON.txt').should('exist').then((fileContents) => {
-            TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, fileContents)
+            TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.description, testCase.group, fileContents)
         })
-
-    })
-
-    beforeEach('Login', () => {
         OktaLogin.Login()
-    })
-
-    afterEach('Logout', () => {
-        OktaLogin.Logout()
     })
 
     after('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
+        OktaLogin.UILogout()
     })
 
     it('Verify Fluent function for the Measure', () => {
@@ -49,7 +43,6 @@ describe('Fluent Function Capability', () => {
 
         cy.readFile('cypress/fixtures/CQLForFluentFunction.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-
         })
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -68,6 +61,8 @@ describe('Fluent Function Capability', () => {
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Cohort')
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -108,6 +103,5 @@ describe('Fluent Function Capability', () => {
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
-
     })
 })
