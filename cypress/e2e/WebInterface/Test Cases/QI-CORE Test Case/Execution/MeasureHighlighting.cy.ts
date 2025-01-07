@@ -20,8 +20,6 @@ let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 let tcDFNJson = TestCaseJson.tcJson_value
 let tcResultJson = TestCaseJson.tcResultsJson
-let newMeasureName: string
-let newCqlLibraryName: string
 let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 version \'0.0.000\'\n' +
     '\n' +
     'using QICore version \'4.1.1\'\n' +
@@ -96,11 +94,8 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     'define "Initial Population":\n' +
     '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions"\n' +
     '\n' +
-    '\n' +
-    '\n' +
     'define "Denominator":\n' +
     '  "Initial Population"\n' +
-    '\n' +
     '\n' +
     'define "Denominator Exclusions":\n' +
     '  "Encounter Less Than 2 Days"\n' +
@@ -110,12 +105,9 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '      union "Encounter with Intervention Comfort Measures From Day of Start of Hospitalization To Day After Admission"\n' +
     '      union "Encounter with Intervention Comfort Measures on Day of or Day After Procedure"\n' +
     '\n' +
-    '\n' +
-    '\n' +
     'define "Encounter Less Than 2 Days":\n' +
     '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
     '        where QualifyingEncounter.period.lengthInDays () < 2\n' +
-    '\n' +
     '\n' +
     'define "Encounter with ICU Location Stay 1 Day or More":\n' +
     '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
@@ -126,16 +118,12 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '            and date from (start of Location.period) during (start of QualifyingEncounter.period).CalendarDayOfOrDayAfter()\n' +
     '      )\n' +
     '\n' +
-    '\n' +
-    '\n' +
     'define "Encounter with Principal Diagnosis of Mental Disorder or Stroke":\n' +
     '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
     '        where QualifyingEncounter.principalDiagnosis().code in "Mental Health Diagnoses"\n' +
     '          or QualifyingEncounter.principalDiagnosis().code in "Hemorrhagic Stroke"\n' +
     '            or QualifyingEncounter.principalDiagnosis().code in "Ischemic Stroke"\n' +
     '\n' +
-    '\n' +
-    '                \n' +
     'define "SCIP VTE Selected Surgery":\n' +
     '  (\t["Procedure": "General Surgery"]\n' +
     '        union ["Procedure": "Gynecological Surgery"]\n' +
@@ -146,7 +134,6 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '        union ["Procedure": "Urological Surgery"] ) Procedure\n' +
     '        where Procedure.status = \'completed\'\n' +
     '\n' +
-    '  \n' +
     'define "Encounter with Principal Procedure of SCIP VTE Selected Surgery":\n' +
     '    from\n' +
     '      VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter,\n' +
@@ -155,8 +142,6 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '      where EncounterProcedure.procedure.reference.getId() = SelectedProcedure.id\n' +
     '        and end of SelectedProcedure.performed.toInterval () during QualifyingEncounter.period\n' +
     '      return QualifyingEncounter\n' +
-    '\n' +
-    '\n' +
     '\n' +
     'define "Intervention Comfort Measures":\n' +
     '  ( ["ServiceRequest": "Comfort Measures"] InterventionRequest\n' +
@@ -167,8 +152,6 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '    union ( ["Procedure": "Comfort Measures"] InterventionPerformed\n' +
     '        where InterventionPerformed.status in { \'completed\', \'in-progress\' }\n' +
     '    )\n' +
-    '    \n' +
-    '    \n' +
     'define "Encounter with Intervention Comfort Measures on Day of or Day After Procedure":\n' +
     '  from\n' +
     '      VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter,\n' +
@@ -179,14 +162,10 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '        and Coalesce(start of ComfortMeasure.performed.toInterval(), ComfortMeasure.authoredOn)during day of (end of AnesthesiaProcedure.performed.toInterval()).CalendarDayOfOrDayAfter()\n' +
     '      return QualifyingEncounter\n' +
     '\n' +
-    '\n' +
     'define "Encounter with Intervention Comfort Measures From Day of Start of Hospitalization To Day After Admission":\n' +
     '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
     '      with "Intervention Comfort Measures" ComfortMeasure\n' +
     '        such that Coalesce(start of ComfortMeasure.performed.toInterval(), ComfortMeasure.authoredOn)during day of QualifyingEncounter.FromDayOfStartOfHospitalizationToDayAfterAdmission()\n' +
-    '\n' +
-    '\n' +
-    '                \n' +
     '\n' +
     'define "Numerator":\n' +
     '  "Encounter with VTE Prophylaxis Received From Day of Start of Hospitalization To Day After Admission or Procedure"\n' +
@@ -199,7 +178,6 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '      union "Encounter with No VTE Prophylaxis Due to Medical Reason"\n' +
     '      union "Encounter with No VTE Prophylaxis Due to Patient Refusal"\n' +
     '\n' +
-    '\n' +
     'define "Pharmacological or Mechanical VTE Prophylaxis Received":\n' +
     '  ( ["MedicationAdministration": "Low Dose Unfractionated Heparin for VTE Prophylaxis"] VTEMedication\n' +
     '           where VTEMedication.status =\'completed\'\n' +
@@ -209,14 +187,13 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '  union (["MedicationAdministration": "Injectable Factor Xa Inhibitor for VTE Prophylaxis"] FactorXa where FactorXa.status = \'completed\')\n' +
     '  union (["MedicationAdministration": "Warfarin"] Warfarin where Warfarin.status = \'completed\')\n' +
     '  union (["MedicationAdministration": "Rivaroxaban for VTE Prophylaxis"] Rivaroxaban where Rivaroxaban.status = \'completed\')\n' +
-    '   union (\n' +
+    '  union (\n' +
     '          (["Procedure": "Application of Intermittent Pneumatic Compression Devices"] \n' +
     '           union ["Procedure": "Application of Venous Foot Pumps"] \n' +
     '           union ["Procedure": "Application of Graduated Compression Stockings"] \n' +
     '           ) DeviceApplied\n' +
     '              where DeviceApplied.status = \'completed\'\n' +
     '         )\n' +
-    '\n' +
     '\n' +
     'define "Encounter with VTE Prophylaxis Received From Day of Start of Hospitalization To Day After Admission or Procedure":\n' +
     '  ( from\n' +
@@ -234,8 +211,6 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '            and Coalesce(VTEProphylaxis.effective.toInterval(), VTEProphylaxis.performed.toInterval()) starts during day of (end of AnesthesiaProcedure.performed.toInterval()).CalendarDayOfOrDayAfter()\n' +
     '          return QualifyingEncounter\n' +
     '      )\n' +
-    '\n' +
-    '\n' +
     '\n' +
     'define "Encounter with Medication Oral Factor Xa Inhibitor Administered on Day of or Day After Admission or Procedure":\n' +
     '  ( from\n' +
@@ -255,7 +230,6 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '            and FactorXaMedication.effective.toInterval() starts during day of (end of AnesthesiaProcedure.performed.toInterval()).CalendarDayOfOrDayAfter()\n' +
     '          return QualifyingEncounter\n' +
     '      )\n' +
-    '\n' +
     '\n' +
     'define "Encounter with Prior or Present Diagnosis of Atrial Fibrillation or Prior Diagnosis of VTE":\n' +
     '  ( VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
@@ -278,7 +252,6 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '              and VTEDiagnosis.onset.toInterval() before start of QualifyingEncounter.period\n' +
     '        )\n' +
     '\n' +
-    '\n' +
     'define "Encounter with Prior or Present Procedure of Hip or Knee Replacement Surgery":\n' +
     '    VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
     '    with ( ["Procedure": "Hip Replacement Surgery"]\n' +
@@ -286,12 +259,9 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '  such that HipKneeProcedure.status = \'completed\'\n' +
     '        and HipKneeProcedure.performed.toInterval() starts on or before end of QualifyingEncounter.period\n' +
     '\n' +
-    '\n' +
-    '\n' +
     'define "Encounter with Low Risk for VTE or Anticoagulant Administered":\n' +
     '  "Low Risk for VTE or Anticoagulant Administered From Day of Start of Hospitalization To Day After Admission"\n' +
     '      union "Low Risk for VTE or Anticoagulant Administered on Day of or Day After Procedure"\n' +
-    '\n' +
     '\n' +
     'define "Low Risk Indicator For VTE":\n' +
     '  ( ["Observation": "Risk for venous thromboembolism"] VTERiskAssessment\n' +
@@ -320,12 +290,10 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '          LowRiskDatetime: start of AnticoagulantMedication.effective.toInterval() }\n' +
     '    )\n' +
     '\n' +
-    '\n' +
     'define "Low Risk for VTE or Anticoagulant Administered From Day of Start of Hospitalization To Day After Admission":\n' +
     '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
     '    with "Low Risk Indicator For VTE" LowRiskForVTE\n' +
     '      such that LowRiskForVTE.LowRiskDatetime during day of QualifyingEncounter.FromDayOfStartOfHospitalizationToDayAfterAdmission()\n' +
-    '\n' +
     '\n' +
     'define "Low Risk for VTE or Anticoagulant Administered on Day of or Day After Procedure":\n' +
     '  from\n' +
@@ -337,26 +305,19 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '      and LowRiskForVTE.LowRiskDatetime during day of (end of AnesthesiaProcedure.performed.toInterval()).CalendarDayOfOrDayAfter()\n' +
     '    return QualifyingEncounter\n' +
     '\n' +
-    '\n' +
-    '\n' +
-    '\n' +
     'define "Encounter with No VTE Prophylaxis Due to Medical Reason":\n' +
     '  ( "No VTE Prophylaxis Medication Due to Medical Reason From Day of Start of Hospitalization To Day After Admission"\n' +
     '    intersect "No Mechanical VTE Prophylaxis Due to Medical Reason From Day of Start of Hospitalization To Day After Admission"\n' +
     ')\n' +
     '  union ( "No VTE Prophylaxis Medication Due to Medical Reason on Day of or Day After Procedure"\n' +
     '      intersect "No Mechanical VTE Prophylaxis Due to Medical Reason on Day of or Day After Procedure"\n' +
-    '  \n' +
     '  )\n' +
-    '\n' +
     '\n' +
     'define "No VTE Prophylaxis Medication Due to Medical Reason From Day of Start of Hospitalization To Day After Admission":\n' +
     '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
     '                with "No VTE Prophylaxis Medication Administered or Ordered" NoVTEMedication\n' +
     '                  such that NoVTEMedication.MedicationStatusReason in "Medical Reason For Not Providing Treatment"\n' +
     '                    and NoVTEMedication.authoredOn during day of QualifyingEncounter.FromDayOfStartOfHospitalizationToDayAfterAdmission()\n' +
-    '\n' +
-    '\n' +
     '\n' +
     'define "No VTE Prophylaxis Medication Administered or Ordered":\n' +
     '  ( ( [MedicationAdministrationNotDone: "Low Dose Unfractionated Heparin for VTE Prophylaxis"]\n' +
@@ -383,16 +344,11 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '          }\n' +
     '      )\n' +
     '\n' +
-    '\n' +
-    '\n' +
     'define "No Mechanical VTE Prophylaxis Due to Medical Reason From Day of Start of Hospitalization To Day After Admission":\n' +
     '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
     '      with "No Mechanical VTE Prophylaxis Performed or Ordered" NoVTEDevice\n' +
     '      such that NoVTEDevice.requestStatusReason in "Medical Reason For Not Providing Treatment"\n' +
     '             and  NoVTEDevice.authoredOn during day of QualifyingEncounter.FromDayOfStartOfHospitalizationToDayAfterAdmission()\n' +
-    '\n' +
-    '\n' +
-    '\n' +
     '\n' +
     'define "No Mechanical VTE Prophylaxis Performed or Ordered":\n' +
     '  ( ( [ServiceNotRequested: "Venous foot pumps"]\n' +
@@ -416,7 +372,6 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '        }\n' +
     '    )\n' +
     '\n' +
-    '\n' +
     'define "No VTE Prophylaxis Medication Due to Medical Reason on Day of or Day After Procedure":\n' +
     '  from\n' +
     '      VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter,\n' +
@@ -427,7 +382,6 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '        and  AnesthesiaProcedure.performed.toInterval() ends 1 day after day of start of QualifyingEncounter.period\n' +
     '        and NoVTEMedication.authoredOn during day of (end of AnesthesiaProcedure.performed.toInterval()).CalendarDayOfOrDayAfter()\n' +
     '      return QualifyingEncounter \n' +
-    '\n' +
     '\n' +
     ' define "No Mechanical VTE Prophylaxis Due to Medical Reason on Day of or Day After Procedure":\n' +
     '  from\n' +
@@ -440,13 +394,9 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '        and NoVTEDevice.authoredOn during day of (end of AnesthesiaProcedure.performed.toInterval()).CalendarDayOfOrDayAfter()\n' +
     '      return QualifyingEncounter      \n' +
     '\n' +
-    '\n' +
-    '\n' +
     'define "Encounter with No VTE Prophylaxis Due to Patient Refusal":\n' +
     '  "No VTE Prophylaxis Due to Patient Refusal From Day of Start of Hospitalization To Day After Admission"\n' +
     '     \tunion "No VTE Prophylaxis Due to Patient Refusal on Day of or Day After Procedure"\n' +
-    '\n' +
-    '\n' +
     '\n' +
     'define "No VTE Prophylaxis Due to Patient Refusal From Day of Start of Hospitalization To Day After Admission":\n' +
     '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter\n' +
@@ -461,7 +411,6 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '                    where NoVTEDevice.requestStatusReason in "Patient Refusal"\n' +
     '                )\n' +
     '\n' +
-    '\n' +
     'define "No VTE Prophylaxis Due to Patient Refusal on Day of or Day After Procedure":\n' +
     '  from\n' +
     '      VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions" QualifyingEncounter,\n' +
@@ -471,6 +420,7 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '        and QICoreCommon."ToInterval" ( AnesthesiaProcedure.performed ) ends 1 day after day of start of QualifyingEncounter.period\n' +
     '        and PatientRefusal.authoredOn during day of (end of AnesthesiaProcedure.performed.toInterval()).CalendarDayOfOrDayAfter()\n' +
     '      return QualifyingEncounter'
+    
 let tcJson = '{\n' +
     '  "resourceType": "Bundle",\n' +
     '  "id": "612e6f6e02c62a011f2f1d45",\n' +
@@ -802,9 +752,6 @@ let tcJson = '{\n' +
 describe('Measure Highlighting', () => {
 
     beforeEach('Create measure and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, null)
         OktaLogin.Login()
@@ -820,18 +767,12 @@ describe('Measure Highlighting', () => {
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Execute single Test Case and verify Measure highlighting', () => {
@@ -910,15 +851,11 @@ describe('Measure Highlighting', () => {
     })
 })
 
-
 describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a single PC measure', () => {
 
     deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create measure, measure group, test case and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         OktaLogin.Login()
@@ -933,18 +870,12 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with a single PC', () => {
@@ -1033,15 +964,11 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
     })
 })
 
-
 describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a multiple PC measure', () => {
 
     deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create measure, measure group, test case and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         OktaLogin.Login()
@@ -1055,19 +982,14 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
+
     it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measureSecondGroupPath = 'cypress/fixtures/groupId2'
@@ -1096,6 +1018,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Initial Population')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Initial PopulationOne')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         //intercept first group id once update to the measure group is saved
         cy.readFile(measurePath).should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/measures/' + fileContents + '/groups').as('group')
@@ -1109,7 +1034,6 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
-        //
         Utilities.waitForElementVisible(MeasureGroupPage.addMeasureGroupButton, 35000)
         cy.get(MeasureGroupPage.addMeasureGroupButton).scrollIntoView().click({ force: true })
 
@@ -1129,6 +1053,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Initial PopulationOne')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Initial Population')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         //intercept first group id once update to the measure group is saved
         cy.readFile(measurePath).should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/measures/' + fileContents + '/groups').as('group')
@@ -1141,14 +1068,12 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         //validation successful update message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
-        //
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
         TestCasesPage.testCaseAction('edit')
-
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
@@ -1178,7 +1103,6 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
             cy.get(TestCasesPage.tcDENOMHighlightingDetails).should('contain.text', '\ndefine "Initial Population":\nexists "Qualifying Encounters"\n')
             cy.get('[data-ref-id="244"]').should('have.color', '#A63B12')
             cy.get('[data-ref-id="245"]').should('have.color', '#A63B12')
-            //cy.get('[data-ref-id="33"]').should('have.color', '#A63B12')
 
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
             Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
@@ -1204,20 +1128,15 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
             cy.get('[data-testid="NUMER-highlighting"]').should('contain', '\ndefine "Initial Population":\nexists "Qualifying Encounters"\n')
             cy.get('[data-ref-id="244"]').should('have.color', '#A63B12')
             cy.get('[data-ref-id="245"]').should('have.color', '#A63B12')
-            //cy.get('[data-ref-id="33"]').should('have.color', '#A63B12')
         })
     })
 })
-
 
 describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
 
     deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create measure, measure group, test case and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 2))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLDFUTests)
         OktaLogin.Login()
@@ -1231,18 +1150,12 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcDFNJson)
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('QI Core Measure: New Highlighting Left Navigation panel is displayed & Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
@@ -1272,6 +1185,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         //intercept first group id once update to the measure group is saved
         cy.readFile(measurePath).should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/measures/' + fileContents + '/groups').as('group')
@@ -1290,7 +1206,6 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
 
         //Navigate to test case detail / edit page
         TestCasesPage.testCaseAction('edit')
-
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
@@ -1348,19 +1263,14 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Unused').click()
         Utilities.waitForElementVisible('[data-testid="unused-highlighting"]', 35000)
         cy.get('[data-testid="unused-highlighting"]').should('contain.text', 'define "Patient Reason for Not Performing Assessment of Cognition Using Standardized Tools or Alternate Methods": "unavailable"ResultsNA define "Denominator Exceptions": "unavailable"ResultsNA define "SDE Ethnicity": "unavailable"ResultsNA define "SDE Race": "unavailable"ResultsNA define "SDE Sex": "unavailable"ResultsNA define "SDE Payer": "unavailable"ResultsNA define "track1": "unavailable"ResultsNA define "SDE Ethnicity": "unavailable"ResultsNA define "SDE Payer": "unavailable"ResultsNA define "SDE Race": "unavailable"ResultsNA define "SDE Sex": "unavailable"ResultsNA ')
-
     })
 })
-
 
 describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
 
     deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create measure, measure group, test case and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 2))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLResults)
         OktaLogin.Login()
@@ -1374,18 +1284,12 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcResultJson)
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('QI Core Measure: New Highlighting Left Navigation panel sections includes auto-expanded Result section with content and Result section can be collapsed', () => {
@@ -1415,6 +1319,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         //intercept first group id once update to the measure group is saved
         cy.readFile(measurePath).should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/measures/' + fileContents + '/groups').as('group')
@@ -1433,7 +1340,6 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
 
         //Navigate to test case detail / edit page
         TestCasesPage.testCaseAction('edit')
-
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
@@ -1467,7 +1373,6 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('DENOM').click()
             Utilities.waitForElementVisible(TestCasesPage.tcDENOMHighlightingDetails, 35000)
             cy.get(TestCasesPage.tcDENOMHighlightingDetails).should('contain.text', '\ndefine "Denominator":\n"Initial Population"\nResultsUNHIT ')
-
 
             Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
             cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
@@ -1511,33 +1416,22 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         cy.get(TestCasesPage.tcUNUSEDHightlightingDetails).contains('Results').first().scrollIntoView().click()
         Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
         cy.get(TestCasesPage.tcHLResultsSection).should('contain.text', 'NA')
-
     })
 })
 
 describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting accurately appears for a measure with same Definition in the library', () => {
 
-
     beforeEach('Create measure, measure group, test case and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_withDuplicateLibraryDefinition, null, false, '2025-01-01', '2025-12-31')
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Numerator', '', 'Denominator', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, tcJson)
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with same Definition in the included library', () => {
@@ -1554,6 +1448,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 60000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 6500)
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
