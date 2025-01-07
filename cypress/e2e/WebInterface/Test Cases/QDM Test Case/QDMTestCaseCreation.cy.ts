@@ -145,8 +145,6 @@ describe('Validating the creation of QDM Test Case', () => {
     beforeEach('Create Measure', () => {
 
         //Create New Measure
-        //CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
-        //'2023-01-01', '2024-01-01')
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQL, 0, false, '2023-01-01', '2024-01-01')
         //create Measure Group

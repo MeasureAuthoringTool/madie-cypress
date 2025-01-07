@@ -22,8 +22,7 @@ export class TestCasesPage {
     public static readonly numer2Observation = '[id="numeratorObservation2-expected-cb"]'
 
     //QDM Bread Crumb
-    //<div id="edit-test-case-bread-crumbs"><a class="madie-link" href="/measures/677d9c4e8fb6844e27ac6104/edit/test-cases/list-page">Test Cases</a><div class="spacer">/</div><div class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary css-1kg008n"><div tabindex="0" role="combobox" aria-expanded="false" aria-haspopup="listbox" class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input css-qiwgdb" aria-controls="mui-15">Case #1: SBTestSeries - Title for Auto Test</div><input aria-invalid="false" aria-hidden="true" tabindex="-1" class="MuiSelect-nativeInput css-1k3x8v3" value="Case #1: SBTestSeries - Title for Auto Test"><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-1636szt" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ExpandMoreIcon"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"></path></svg><fieldset aria-hidden="true" class="MuiOutlinedInput-notchedOutline css-igs3ac"><legend class="css-ihdtdm"><span class="notranslate">​</span></legend></fieldset></div></div>
-    public static readonly testCasesBCLink = '[id="edit-test-case-bread-crumbs"]'//'[data-testid="qdm-test-cases"]'
+    public static readonly testCasesBCLink = '[id="edit-test-case-bread-crumbs"]'
     public static readonly testCasesBCText = '[data-testid="qdm-test-cases-testcase"]'
 
     //QDM Shift Test Case dates
