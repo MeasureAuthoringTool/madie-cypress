@@ -8,15 +8,13 @@ import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+const now = Date.now()
+let measureName = 'MOActualValues' + now
+let CqlLibraryName = 'TestLibrary' + now
 let testCaseTitle = 'Title for Auto Test'
-let testCaseDescription = 'DENOMFail' + Date.now()
+let testCaseDescription = 'DENOMFail' + now
 let testCaseSeries = 'SBTestSeries'
 let testCaseJsonIppPass = TestCaseJson.RatioEpisodeSingleIPNoMO_IPP_PASS
-let newMeasureName = measureName + randValue
-let newCqlLibraryName = CqlLibraryName + randValue
 let measureCQL = 'library Library4969 version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
@@ -58,24 +56,15 @@ describe('Non Boolean Measure Observation Actual values', () => {
 
     beforeEach('Create Measure, Test Case and login', () => {
 
-        randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Verify Actual values for Non Boolean CV Measure', () => {
@@ -107,6 +96,9 @@ describe('Non Boolean Measure Observation Actual values', () => {
         Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'daysObs')
         Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -129,7 +121,6 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click({ force: true })
         cy.get(TestCasesPage.cvMeasureObservationActualValue).should('have.value', '30')
-
     })
 
     it('Verify Actual values for Non Boolean Ratio Measure with MO', () => {
@@ -179,6 +170,9 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -203,7 +197,6 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.runTestButton).click({ force: true })
         cy.get(TestCasesPage.denominatorMeasureObservationActualValue).should('have.value', '30')
         cy.get(TestCasesPage.numeratorMeasureObservationActualValue).should('have.value', '30')
-
     })
 })
 
@@ -211,24 +204,15 @@ describe('Boolean Measure Observation Actual values', () => {
 
     beforeEach('Create Measure, Test Case and login', () => {
 
-        randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJsonIppPass)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Verify Actual values for Boolean CV Measure', () => {
@@ -254,6 +238,9 @@ describe('Boolean Measure Observation Actual values', () => {
         Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'boolFunc')
         Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -276,7 +263,6 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click({ force: true })
         cy.get(TestCasesPage.cvMeasureObservationActualValue).should('have.value', '1')
-
     })
 
     it('Verify Actual values for Boolean Ratio Measure with MO', () => {
@@ -320,6 +306,9 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -352,6 +341,5 @@ describe('Boolean Measure Observation Actual values', () => {
 
         cy.get(TestCasesPage.denominatorMeasureObservationActualValue).should('have.value', '1')
         cy.get(TestCasesPage.numeratorMeasureObservationActualValue).should('have.value', '14')
-
     })
 })
