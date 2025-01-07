@@ -146,6 +146,16 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.cvAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        //assert the two fields that should appear in the Reporting tab
+        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -197,6 +207,16 @@ describe('Measure Observations', () => {
         Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'booleanFunction') // select booleanFunction
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
+
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        //assert the two fields that should appear in the Reporting tab
+        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save Measure Group
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -444,6 +464,16 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.cvAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        //assert the two fields that should appear in the Reporting tab
+        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -582,6 +612,16 @@ describe('Measure Observation - Expected Values', () => {
         cy.get(MeasureGroupPage.cvAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        //assert the two fields that should appear in the Reporting tab
+        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -668,6 +708,16 @@ describe('Measure Observation - Expected Values', () => {
         Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'booleanFunction') // select booleanFunction
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
+
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
+        cy.get(MeasureGroupPage.reportingTab).should('exist')
+        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        //assert the two fields that should appear in the Reporting tab
+        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save Measure Group
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
