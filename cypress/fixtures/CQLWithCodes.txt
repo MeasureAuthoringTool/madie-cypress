@@ -4,26 +4,28 @@ include FHIRHelpers version '4.1.000' called FHIRHelpers
 codesystem "LOINC": 'http://loinc.org'
 valueset "Palliative Care Encounter": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1090'
 code "Functional Assessment of Chronic Illness Therapy - Palliative Care Questionnaire (FACIT-Pal)": '71007-9' from "LOINC" display 'Functional Assessment of Chronic Illness Therapy - Palliative Care Questionnaire (FACIT-Pal)'
-parameter "Measurement Period" Interval<DateTime>context Patient
+parameter "Measurement Period" Interval<DateTime>
+
+context Patient
 
 {home}define "Palliative Care in the Measurement Period":
   exists ( [Observation: "Functional Assessment of Chronic Illness Therapy - Palliative Care Questionnaire (FACIT-Pal)"] PalliativeAssessment
-              where PalliativeAssessment.status ~ 'final'
-          )
-            or exists ( [Encounter: "Palliative Care Encounter"] PalliativeEncounter
-            where PalliativeEncounter.period.start during "Measurement Period"
-                 and PalliativeEncounter.status ~ 'finished'
-            )
+    where PalliativeAssessment.status ~ 'final'
+    )
+    or exists ( [Encounter: "Palliative Care Encounter"] PalliativeEncounter
+    where PalliativeEncounter.period.start during "Measurement Period"
+    and PalliativeEncounter.status ~ 'finished'
+  )
 
 {home}define "Procedure DRC Example":
-  exists [Procedure] Px
+  exists [Procedure] Py
     //DRC is determined based on the code of the procedure in the data
-    return resultsForFirstProcedureOnDate(Px.code, date from Today())
+    return resultsForFirstProcedureOnDate(Py.code, date from Today())
 
 {home}define function resultsForFirstProcedureOnDate(procedureCode Concept, onDate Date):
   (First ( [Procedure: "procedureCode"] proc
-    where proc.status ~ 'completed' ) ) Px
-   return flatten ( Px.partOf po
-    where po.type = 'Observation'
-    return ([Observation] Obs where Obs.id = po.id).value )
-{del}{del}{del}{del}{del}{del}
+  where proc.status ~ 'completed' ) ) Px
+  return flatten ( Px.partOf po
+  where po.type = 'Observation'
+  return ([Observation] Obs where Obs.id = po.id).value )
+{del}{del}{del}{del}{del}

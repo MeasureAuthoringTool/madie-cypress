@@ -7,17 +7,17 @@ import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+const now = Date.now()
+let measureName = 'TestMeasure' + now
+let CqlLibraryName = 'TestLibrary' + now
 let testCaseTitle = 'Title for Auto Test'
-let testCaseDescription = 'DENOMFail' + Date.now()
+let testCaseDescription = 'DENOMFail' + now
 let testCaseSeries = 'SBTestSeries'
 
 describe('Test Case Execution with codes', () => {
 
     before('Create Measure and Test case', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
 
         cy.readFile('cypress/fixtures/JSONForCQLWithCodes.txt').should('exist').then((fileContents) => {
@@ -30,7 +30,6 @@ describe('Test Case Execution with codes', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Verify Test Case Execution for the CQL that uses codes', () => {
@@ -45,6 +44,7 @@ describe('Test Case Execution with codes', () => {
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.wait(2000)
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -53,6 +53,9 @@ describe('Test Case Execution with codes', () => {
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Cohort')
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Palliative Care in the Measurement Period')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -91,6 +94,5 @@ describe('Test Case Execution with codes', () => {
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
-
     })
 })
