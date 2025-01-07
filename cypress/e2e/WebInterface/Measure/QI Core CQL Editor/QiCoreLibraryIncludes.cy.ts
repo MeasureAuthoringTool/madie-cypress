@@ -170,7 +170,7 @@ describe('Qi-Core Library Includes fields', () => {
         //confirm that CQL value is the same as it was prior to change and the save button is not available
         cy.reload()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get('[data-testid="SearchIcon"]').eq(0).click()
+        cy.get('[data-testid="SearchIcon"]').first().click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
         Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
@@ -321,7 +321,7 @@ describe('Qi-Core Library Includes fields', () => {
         //confirm that CQL value is the same as it was prior to change and the save button is not available
         cy.reload()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get('[data-testid="SearchIcon"]').eq(0).click()
+        cy.get('[data-testid="SearchIcon"]').first().click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
         Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
