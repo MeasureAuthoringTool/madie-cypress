@@ -6,7 +6,6 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 
 let measureName = 'MeasureName ' + Date.now()
 let CqlLibraryName = 'CQLLibraryName' + Date.now()
@@ -229,6 +228,10 @@ describe('Measure bundle end point returns scoring type for multiple Measure gro
         cy.get(MeasureGroupPage.popBasisOption).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -338,6 +341,10 @@ describe('Measure bundle end point returns stratifications', () => {
         //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationTwo, 'initialPopulation')
         cy.get(MeasureGroupPage.stratDescTwo).type('StratificationTwo')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //validation successful save message
@@ -435,6 +442,10 @@ describe('Measure bundle end point returns stratifications', () => {
         cy.get('#association-select-3-option-2').click()
         cy.get(MeasureGroupPage.stratDescThree).type('StratificationThree')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -531,6 +542,10 @@ describe('Measure bundle end point returns stratifications', () => {
         cy.get('#association-select-3-option-0').click()
         cy.get('#association-select-3-option-4').click()
         cy.get(MeasureGroupPage.stratDescThree).type('StratificationThree')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
@@ -653,6 +668,10 @@ describe('Verify the criteria reference for measure observations', () => {
         //Utilities.dropdownSelect(MeasureGroupPage.stratAssociationThree, 'measurePopulation')
         cy.get(MeasureGroupPage.stratDescThree).type('StratificationThree')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -731,6 +750,10 @@ describe('Verify the criteria reference for measure observations', () => {
         Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'booleanFunction')
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save Measure Group
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
