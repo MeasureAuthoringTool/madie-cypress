@@ -630,7 +630,7 @@ export class Utilities {
         cy.get(errorElementObject).invoke('show').click({ force: true, multiple: true })
         // cy.get(errorContainer).invoke('show').should('contain.text', errorMsg1)
         if ((errorMsg1 != null) || (errorMsg1 != undefined)) {
-            cy.get(errorContainer).invoke('show').should('contain', errorMsg1)
+            cy.get(errorContainer).should('contain', errorMsg1)
         }
 
     }
