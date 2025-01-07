@@ -206,7 +206,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.Using statement was incorrect. MADiE has overwritten it.')
+        cy.get(EditMeasurePage.libWarningTopMsg).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.Incorrect using statement(s) detected. MADiE has corrected it.')
 
     })
     it('Verify error message when there is an using statement in the CQL, but it is not accurate, and the library name used is not correct', () => {
