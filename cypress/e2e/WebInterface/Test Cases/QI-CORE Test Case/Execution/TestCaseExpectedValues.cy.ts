@@ -8,21 +8,19 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+const now = Date.now()
+let measureName = 'MeasureForTCExpectedValues' + now
+let CqlLibraryName = 'TestLibrary' + now
 let testCaseTitle = 'Title for Auto Test'
-let testCaseDescription = 'DENOMFail' + Date.now()
+let testCaseDescription = 'DENOMFail' + now
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
-let newMeasureName = measureName + randValue
-let newCqlLibraryName = CqlLibraryName + randValue
 
 describe('Validate Test Case Expected value updates on Measure Group change', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
     })
@@ -30,12 +28,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Verify if the scoring type is changed, Test Case Expected values are cleared for that group', () => {
@@ -169,6 +162,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Group 1 - Ratio | boolean')
         cy.get(TestCasesPage.testCaseIPPExpected).check().should('be.checked')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
 
         //Delete Measure group
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -217,6 +211,10 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'denom')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'num')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'denom')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully')
@@ -262,7 +260,6 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.testCaseNUMEXExpected).click()
         cy.get(TestCasesPage.testCaseNUMEXExpected).check().should('be.checked')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-
     })
 
     it('Verify if Measure Observation is added/removed from Measure group, test case Expected values will be updated', () => {
