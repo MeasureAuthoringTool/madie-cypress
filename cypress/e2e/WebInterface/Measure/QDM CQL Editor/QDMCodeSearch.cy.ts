@@ -184,7 +184,7 @@ describe('QDM Code Search fields', () => {
 
         //Navigate to Saved Codes tab
         cy.get(CQLEditorPage.savedCodesTab).click()
-        cy.get('[class="CodesSection___StyledDiv-sc-1rldvun-0 HuXlU"]').should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02')
+        cy.get('[class="CodesSection___StyledDiv-sc-1rldvun-0 HuXlU"]').should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode9.0.0Items per page 5.Items per page5​1 - 1 of 11')
     })
 
     it('Edit Code with Suffix and Version from Results Grid', () => {
@@ -252,17 +252,20 @@ describe('QDM Code Search fields', () => {
 
         //Navigate to Saved Codes page
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.codesTab).click()
+        cy.get(CQLEditorPage.codesTab).click().wait(1000)
+        cy.get(CQLEditorPage.savedCodesTab).should('be.visible')
+        cy.get(CQLEditorPage.savedCodesTab).should('be.enabled')
         cy.get(CQLEditorPage.savedCodesTab).click()
 
         //Edit code
+        Utilities.waitForElementVisible('[data-testid="edit-code-0"]', 60000)
         cy.get('[data-testid="edit-code-0"]').click()
 
         //Code Details Pop up screen
         cy.get('[data-testid="code-info"]').should('contain.text', 'CodeAMB')
         cy.get('[data-testid="code-description-info"]').should('contain.text', 'Code Descriptionambulatory')
         cy.get('[data-testid="code-system-info"]').should('contain.text', 'Code SystemActCode')
-        cy.get('[data-testid="code-system-version-info"]').should('contain.text', 'Code System Version2023-02')
+        cy.get('[data-testid="code-system-version-info"]').should('contain.text', 'Code System Version9.0.0')
 
         //Update Code System with Suffix and Version
         cy.get('[data-testid="code-suffix-field-input"]').type('1234')
@@ -302,10 +305,11 @@ describe('QDM Code Search fields', () => {
 
         //Navigate to Saved Codes page
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.codesTab).click()
+        cy.get(CQLEditorPage.codesTab).click().wait(1000)
         cy.get(CQLEditorPage.savedCodesTab).click()
 
         //Remove Code
+        Utilities.waitForElementVisible('[data-testid="delete-code-0"]', 60000)
         cy.get('[data-testid="delete-code-0"]').click()
         cy.get(CQLEditorPage.removeCodeConfirmationMsg).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
         cy.get(CQLEditorPage.removeCodeContinueBtn).click()
@@ -357,7 +361,7 @@ describe('QDM Code Search fields', () => {
 
         //Navigate to Saved Codes page
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get(CQLEditorPage.codesTab).click()
+        cy.get(CQLEditorPage.codesTab).click().wait(1000)
         cy.get(CQLEditorPage.savedCodesTab).click()
 
         //Remove Code
