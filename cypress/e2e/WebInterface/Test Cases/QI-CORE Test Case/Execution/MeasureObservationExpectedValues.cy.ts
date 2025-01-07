@@ -9,38 +9,27 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { Global } from "../../../../../Shared/Global"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let randValue = (Math.floor((Math.random() * 1000) + 1))
+const now = Date.now()
+let measureName = 'MOExpectedValues' + now
+let CqlLibraryName = 'TestLibrary' + now
 let testCaseTitle = 'Title for Auto Test'
-let testCaseDescription = 'DENOMFail' + Date.now()
+let testCaseDescription = 'DENOMFail' + now
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
-let newMeasureName = measureName + randValue
-let newCqlLibraryName = CqlLibraryName + randValue
 
 describe('Measure Observation Expected values', () => {
 
     beforeEach('Create Measure, Test Case and login', () => {
 
-        randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Validate and save Measure observation for CV measure', () => {
@@ -174,7 +163,6 @@ describe('Measure Observation Expected values', () => {
 
         //verify that the discard modal appears
         Global.clickOnDiscardChanges()
-
     })
 })
 
@@ -182,24 +170,15 @@ describe('Measure observation expected result', () => {
 
     beforeEach('Create Measure, Test Case and login', () => {
 
-        randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
-        randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Verify Measure Observation expected result for CV measure', () => {
@@ -237,6 +216,9 @@ describe('Measure observation expected result', () => {
         Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'isFinishedEncounter')
         Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -258,7 +240,6 @@ describe('Measure observation expected result', () => {
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Observation 2')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Observation 3')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Observation 4')
-
     })
 
     it('Verify Measure Observation expected result for Ratio measure', () => {
@@ -313,6 +294,9 @@ describe('Measure observation expected result', () => {
         cy.get(MeasureGroupPage.measureObservationSelect).eq(0).click() //select isFinishedEncounter
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save Measure Group
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
