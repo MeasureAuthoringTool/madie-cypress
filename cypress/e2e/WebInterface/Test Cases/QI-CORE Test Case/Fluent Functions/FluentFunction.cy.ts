@@ -32,7 +32,7 @@ describe('Fluent Function Capability', () => {
     after('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     it('Verify Fluent function for the Measure', () => {

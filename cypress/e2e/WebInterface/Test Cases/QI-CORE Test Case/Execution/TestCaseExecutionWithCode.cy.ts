@@ -44,7 +44,7 @@ describe('Test Case Execution with codes', () => {
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.wait(2000)
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 5500)
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
