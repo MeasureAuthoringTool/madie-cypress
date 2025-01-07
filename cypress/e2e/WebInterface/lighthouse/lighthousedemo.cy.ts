@@ -34,6 +34,7 @@ describe('Login and initial "My Measures" page', () => {
     it('Log in and land on "My Measures" page Lighthouse test', () => {
 
         OktaLogin.Login()
+        cy.reload()
 
         const thresholds = {
             performance: 23, //This is an overall score given to the overall page performance based on the metrics.
@@ -73,6 +74,13 @@ describe('Login and initial "My Measures" page', () => {
         cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig)
         //adding closing line so the viewable Cypress logs will show that the report has been written
         cy.log("---- Lighthouse report has been written to disk ----")
+        //log out of UI
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
+
 
     })
 
@@ -83,6 +91,7 @@ describe('Navigate to the "All Measures" page', () => {
     it('Navigate to "All Measures"', () => {
 
         OktaLogin.Login()
+        cy.reload()
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 5000)
         cy.get(MeasuresPage.allMeasuresTab).click()
 
@@ -109,6 +118,12 @@ describe('Navigate to the "All Measures" page', () => {
         cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig)
         //adding closing line so the viewable Cypress logs will show that the report has been written
         cy.log("---- Lighthouse report has been written to disk ----")
+        //log out of UI
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
 
     })
 
@@ -133,13 +148,19 @@ describe('Navigate to the QDM "CQL Editor" page', () => {
 
         cy.get(Header.mainMadiePageButton).click()
 
+        //log out of UI
         OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
 
     })
 
     it('Navigate to QDM "CQL Editor" tab', () => {
 
         OktaLogin.Login()
+        cy.reload()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
@@ -165,6 +186,12 @@ describe('Navigate to the QDM "CQL Editor" page', () => {
         cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig)
         //adding closing line so the viewable Cypress logs will show that the report has been written
         cy.log("---- Lighthouse report has been written to disk ----")
+        //log out of UI
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
 
     })
 
@@ -178,6 +205,7 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
             '2012-01-01', '2012-12-31')
 
         OktaLogin.Login()
+        cy.reload()
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
@@ -254,12 +282,18 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
         Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 10000)
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', '(82) Test cases imported successfully')
         Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 50000)
+        //log out of UI
         OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
     })
 
     it('Navigate to the QDM "Test Cases" tab after test cases have already been loaded on measure', () => {
 
         OktaLogin.Login()
+        cy.reload()
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         //navigate to the test case list page
@@ -289,6 +323,12 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
 
         //adding closing line so the viewable Cypress logs will show that the report has been written
         cy.log("---- Lighthouse report has been written to disk ----")
+        //log out of UI
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
 
     })
 
@@ -313,13 +353,19 @@ describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test ca
 
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
+        //log out of UI
         OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
 
     })
 
     it('Navigate to the Qi Core "Test Cases" edit page, for a specific test case', () => {
 
         OktaLogin.Login()
+        cy.reload()
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
         //navigate to the test case list page
@@ -351,6 +397,12 @@ describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test ca
 
         //adding closing line so the viewable Cypress logs will show that the report has been written
         cy.log("---- Lighthouse report has been written to disk ----")
+        //log out of UI
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
 
     })
 
