@@ -132,6 +132,10 @@ describe('Test Case Expected Measure Group population values based on initial me
             Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Surgical Absence of Cervix')
             Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Surgical Absence of Cervix')
 
+            cy.get(MeasureGroupPage.reportingTab).click()
+            Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+            Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -189,6 +193,11 @@ describe('Test Case Expected Measure Group population values based on initial me
             Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Surgical Absence of Cervix')
             Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Surgical Absence of Cervix')
             Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Surgical Absence of Cervix')
+
+            cy.get(MeasureGroupPage.reportingTab).click()
+            Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+            Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
             //save measure group
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -324,6 +333,10 @@ describe('Test Case Expected Measure Group population values based on initial me
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'Surgical Absence of Cervix')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Surgical Absence of Cervix')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'Surgical Absence of Cervix')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
