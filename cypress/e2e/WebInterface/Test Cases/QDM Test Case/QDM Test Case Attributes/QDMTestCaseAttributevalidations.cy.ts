@@ -155,20 +155,14 @@ describe('Remove Test case attribute', () => {
         cy.get('[id="quantity-unit-input-high"]').type('m') //Select unit as m meter
         cy.get(TestCasesPage.addAttribute).click()
         cy.get(TestCasesPage.attributeChip).should('contain.text', 'Reference Range - referenceRange 2 \'m\' - 4 \'m\'')
-        //Verify added attribute on Elements page
-        cy.get('tbody > tr > :nth-child(3)').should('contain.text', 'Reference Range - referenceRange 2 \'m\' - 4 \'m\'')
-
-        //Skipping until MAT-7588 is fixed
-        //Delete attribute chip
-        // cy.get(TestCasesPage.deleteQDMTCAttribute).click()
-        // cy.get(TestCasesPage.attributeChip).should('not.exist')
-        // //Verify that the attribute chip is deleted on Elements page
-        // cy.get('tbody > tr > :nth-child(3)').should('not.contain.text', 'Reference Range - referenceRange 2 \'m\' - 4 \'m\'')
-
 
         //Delete the attribute from Elements table
-        cy.get('[class="qpp-c-button view-with-dropdown-button"]').click({ force: true })
-        cy.get('[class="btn-container"]').contains('Delete').click({ force: true })
+        // grab the element id of the first entry in the element table
+        TestCasesPage.grabElementId(1)
+
+        // delete that element
+        TestCasesPage.qdmTestCaseElementAction('delete')
+        cy.get(TestCasesPage.attributeChip).should('not.exist')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Commenting until feature flag for JSON tab is removed
