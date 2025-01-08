@@ -337,6 +337,8 @@ export class TestCasesPage {
     public static readonly lastSavedDate = '[data-testid="test-case-title-0_lastModifiedAt"]'
     public static readonly testCaseNameDropdown = '#edit-test-case-bread-crumbs > .MuiInputBase-root > .MuiSelect-select'
     public static readonly testCaseDropdownList = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
+    public static readonly testCaseListCheckBox = '.px-1 > input'
+    public static readonly cloneBtn = '[data-testid="clone-action-icon"]'
 
     //Stratifications
     public static readonly denominatorStratificationOneExpectedValue = '[data-testid="test-population-Strata-1 Denominator-expected"]'
