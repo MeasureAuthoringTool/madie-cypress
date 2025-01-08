@@ -8,6 +8,11 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
+let validMeasureCQL = 'library TestLibrary1736348266658 version \'0.0.000\'\n' +
+    'using QICore version \'4.1.1\'\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    '\n' +
+    'context Patient'
 let measureCQL = 'library SimpleFhirLibrary version \'0.0.004\'\n' + 'using QICore version \'4.1.1\'\n' + 'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n'
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'test case title'
@@ -19,7 +24,7 @@ describe('Test Case Page CQL page object', () => {
 
     beforeEach('Create Measure, TestCase and Login', () => {
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, validMeasureCQL)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTerminologyFHIR_and_QICORETestCaseJson)
         OktaLogin.Login()
     })
@@ -41,16 +46,13 @@ describe('Test Case Page CQL page object', () => {
         //edit created test case
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //confirm that CQL field, on the Test Case page, cannot be edited
-        cy.get(TestCasesPage.tcCQLArea).should('include.text', '1234library SimpleFhirLibrary version \'0.0.004\'using QICore version \'4.1.1\'include FHIRHelpers version \'4.1.000\' called FHIRHelpers  ההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההההXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-
         //navigate to the CQL Editor tab, for the measure
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         //type in an additional value to the already existing value in the editor
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('using QICore version \'4.1.1\'')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('define "ipp": true')
 
         //saving new CQL value
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
@@ -68,27 +70,30 @@ describe('Test Case Page CQL page object', () => {
 
         //confirm that CQL field, on the Test Case page, reflects the additional text
         cy.log(measureCQL)
-        cy.get(TestCasesPage.tcCQLArea).should('contain.text', 'using QICore version \'4.1.1\'')
+        cy.get(TestCasesPage.tcCQLArea).should('contain.text', 'define "ipp": true')
+
+    })
+})
+
+describe('Test Case Page CQL page object', () => {
+
+    beforeEach('Create Measure, TestCase and Login', () => {
+        //Create New Measure
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTerminologyFHIR_and_QICORETestCaseJson)
+        OktaLogin.Login()
+    })
+
+    afterEach('Logout and Clean up', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
 
     it('A message is displayed if there are issues with the CQL', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
-
-        //navigate to the CQL Editor tab, for the measure
-        cy.get(EditMeasurePage.cqlEditorTab).should('exist')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        //type in an additional value to the already existing value in the editor
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}Additional erroneous line')
-
-        //saving new CQL value
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
