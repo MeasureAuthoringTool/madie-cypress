@@ -955,6 +955,16 @@ describe('JSON Resource ID tests -- CV', () => {
         Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'booleanFunction')
         Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
 
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
+        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationDescQiCore, 5000)
+
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).type('some imporvement notation description')
+
         //save Population Criteria
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
