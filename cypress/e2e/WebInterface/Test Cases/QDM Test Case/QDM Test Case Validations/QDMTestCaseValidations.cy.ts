@@ -594,8 +594,10 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 50000)
 
         //Navigate to Test Case page
+        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 50000)
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //edit created test case
@@ -658,21 +660,8 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
     beforeEach('Create Measure, and Test Case', () => {
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringCohort, true, qdmMeasureCQLwInvalidValueset)
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
-
-
-    })
-
-    afterEach('Logout and Clean up', () => {
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
-    })
-    it("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
-
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
-
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
         //log into MADiE
         OktaLogin.Login()
 
@@ -694,6 +683,26 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //log out of UI
+        OktaLogin.UILogout()
+
+
+    })
+
+    afterEach('Logout and Clean up', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+    it("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
+
+        //log into MADiE
+        OktaLogin.Login()
+
+        //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -719,21 +728,8 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
     beforeEach('Create Measure, and Test Case', () => {
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringCohort, false, qdmMeasureCQLwNonVsacValueset)
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
-
-
-    })
-
-    afterEach('Logout and Clean up', () => {
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
-
-    })
-    it("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
-
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
         //log into MADiE
         OktaLogin.Login()
 
@@ -755,6 +751,48 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.reload()
+
+        //log out of UI
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+
+    })
+
+    afterEach('Logout and Clean up', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+    it("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
+
+        //log into MADiE
+        OktaLogin.Login()
+        cy.reload()
+
+        //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
+
+        //navigate to the CQL Editor tab, for the measure
+        cy.get(EditMeasurePage.cqlEditorTab).should('exist')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get('[data-testid="generic-warning-text-header"]').should('contain.text', 'CQL updated successfully but the following issues were found')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
