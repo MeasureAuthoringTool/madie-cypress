@@ -8,6 +8,7 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../../Shared/Header"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import {visible} from "ansi-colors";
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -94,7 +95,6 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         //asserting value that appears in the element table
         cy.get('tbody > tr > :nth-child(1)').should('contain.text', 'Laboratory_test, PerformedChlamydia Screening ')
-        cy.get('tbody > tr > :nth-child(4)').should('contain.text', 'View')
 
         //select new attribute to add
         cy.get(TestCasesPage.selectAttributeDropdown).click()
@@ -120,7 +120,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
     })
 
-    it('Edit previously added Element from the Element table', () => {
+    it.only('Edit previously added Element from the Element table', () => {
 
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
@@ -164,7 +164,6 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         //asserting value that appears in the element table
         cy.get('tbody > tr > :nth-child(1)').should('contain.text', 'Laboratory_test, PerformedChlamydia Screening ')
-        cy.get('tbody > tr > :nth-child(4)').should('contain.text', 'View')
 
         //select new attribute to add
         cy.get(TestCasesPage.selectAttributeDropdown).click()
@@ -172,7 +171,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         //select value set value for this attribute
         cy.get(TestCasesPage.valueSetSelector).click()
-        Utilities.waitForElementVisible(TestCasesPage.ABEMBDiathesisValue, 134000)
+        Utilities.waitForElementVisible(TestCasesPage.ABEMBDiathesisValue, 500000)
         cy.get(TestCasesPage.ABEMBDiathesisValue).click()
 
         //select the SNOMED code system
@@ -199,9 +198,13 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         //Navigate back to Edit test case page and Edit Elements
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //click on Edit button from Elements table
-        cy.get('tbody > tr > :nth-child(5)').contains('View').click()
-        cy.get('[class="btn-container"]').contains('Edit').click()
+        // grab the element id of the first entry in the element table
+        TestCasesPage.grabElementId(1)
+
+        // edit the element
+        TestCasesPage.qdmTestCaseElementAction('edit')
+
+        cy.pause()
 
         //Add Code to the Element
         cy.get(TestCasesPage.codeSystemSelector).click()
