@@ -605,6 +605,7 @@ export class TestCasesPage {
                     cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
                     cy.scrollTo(0, 500)
                     cy.get('[data-testid="action-center-' + fileContents + '"]').click({ force: true })
+                    cy.get('[data-testid="action-center-' + fileContents + '"]').click()
                     Utilities.waitForElementVisible('[data-testid="edit-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="edit-element-' + fileContents + '"]').scrollIntoView()
                     cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.visible')

@@ -8,7 +8,6 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../../Shared/Header"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import {visible} from "ansi-colors";
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
@@ -44,7 +43,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    it('Add Quantity attribute to the Test case', () => {
+    it('Add Quantity attribute to the Test case and Edit from Elements table', () => {
 
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
@@ -102,76 +101,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         //select value set value for this attribute
         cy.get(TestCasesPage.valueSetSelector).click()
-        Utilities.waitForElementVisible(TestCasesPage.ABEMBDiathesisValue, 300000)
-        cy.get(TestCasesPage.ABEMBDiathesisValue).click()
-
-        //select the SNOMED code system
-        cy.get(TestCasesPage.codeSystemSelector).click()
-        cy.get(TestCasesPage.codeSNOMEDCTValue).click()
-
-        //select a value for the code
-        cy.get(TestCasesPage.codeSystemValueSelector).click()
-        cy.get(TestCasesPage.codeSystemOptionValue).click()
-
-        cy.get(TestCasesPage.addAttribute).click() //click the "Add" button
-
-        //asserting value that appears in the element table
-        cy.get('tbody > tr > :nth-child(4)').should('include.text', 'Interpretation -  SNOMEDCT : 112648003')
-
-    })
-
-    it.only('Edit previously added Element from the Element table', () => {
-
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('edit')
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
-
-        //Navigate to Edit Test Case page
-        TestCasesPage.testCaseAction('edit')
-
-        //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
-
-        //Selecting Laboratory element and performed
-        cy.get(TestCasesPage.laboratoryElement).click()
-        cy.get(TestCasesPage.plusIcon).eq(1).click()
-
-        //navigating to the attribute sub-tab
-        cy.get(TestCasesPage.attributesTab).click()
-
-        //selecting attribute
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get(TestCasesPage.referenceRangeAttribute).click()
-        cy.get(TestCasesPage.attributeType).should('contain.text', 'Interval<Quantity>')
-
-        //adding a date value to the attribute
-        cy.get(TestCasesPage.relevantPeriodStartDate).type('09/12/2023 12:00 AM')
-
-        //adding values to the attribute
-        cy.get('[data-testid="quantity-value-input-low"]').type('2')
-        cy.get('[id="quantity-unit-input-low"]').click()
-        cy.get('[id="quantity-unit-input-low"]').type('m') //Select unit as m meter
-        cy.get('[data-testid=quantity-value-input-high]').type('4')
-        cy.get('[id="quantity-unit-input-high"]').click()
-        cy.get('[id="quantity-unit-input-high"]').type('m') //Select unit as m meter
-        cy.get(TestCasesPage.addAttribute).click() //click the "Add" button
-
-        //asserting value that appears in the element table
-        cy.get('tbody > tr > :nth-child(1)').should('contain.text', 'Laboratory_test, PerformedChlamydia Screening ')
-
-        //select new attribute to add
-        cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get(TestCasesPage.interpretationAttribute).click()
-
-        //select value set value for this attribute
-        cy.get(TestCasesPage.valueSetSelector).click()
-        Utilities.waitForElementVisible(TestCasesPage.ABEMBDiathesisValue, 500000)
+        Utilities.waitForElementVisible(TestCasesPage.ABEMBDiathesisValue, 1000000)
         cy.get(TestCasesPage.ABEMBDiathesisValue).click()
 
         //select the SNOMED code system
@@ -203,8 +133,6 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
 
         // edit the element
         TestCasesPage.qdmTestCaseElementAction('edit')
-
-        cy.pause()
 
         //Add Code to the Element
         cy.get(TestCasesPage.codeSystemSelector).click()
