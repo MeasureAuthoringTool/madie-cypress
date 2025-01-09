@@ -183,6 +183,25 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "Parse: 7:8 | Definition is missing a name.")
     })
 
+    it('Verify that adding a definition named a reserved keyword will throw an exact error for that issue', () => {
+
+        cy.get(Header.cqlLibraryTab).click()
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+        Utilities.typeFileContents('cypress/fixtures/CQLWithDefReservedKeyword.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+        
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
+
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+
+        //Validate error(s) in CQL Editor window
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
+        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', " Parse: 7:15 | Definition names must not be a reserved word.")
+    })
+
     it('Verify error message when Code System name is missing from Code declaration', () => {
 
         cy.get(Header.cqlLibraryTab).click()
