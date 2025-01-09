@@ -87,6 +87,33 @@ const cqlMissingDefinitionName = 'library TestLibrary1685544523170534 version \'
     'define fluent function "test"():\n' +
     '\t true'
 
+    const cqlDefinitionNameAsKeyword = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
+    'using QDM version \'5.6\'\n' +
+    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n\n' +
+    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'context Patient\n\n' +
+    '//Test Comments\n' +
+    'define duration:\n' +
+    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n\n' +
+    'define :\n' +
+    '  ["Patient Characteristic Payer": "Payer"]\n\n' +
+    'define "SDE Race":\n' +
+    '  ["Patient Characteristic Race": "Race"]\n\n' +
+    'define "SDE Sex":\n' +
+    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n\n' +
+    'define "ipp":\n' +
+    '\ttrue\n\n' +
+    'define "d":\n' +
+    '\t true\n\n' +
+    'define "n":\n' +
+    '\ttrue\n\n' +
+    'define fluent function "test"():\n' +
+    '\t true'
+
 describe('QDM CQL Definitions', () => {
 
     beforeEach('Create Measure and Login', () => {
@@ -368,6 +395,19 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
     })
 
     it('QDM CQL Definitions throws specific error when Definition has no name', () => {
+
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, cqlMissingDefinitionName)
+        OktaLogin.Login()
+
+        //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer,  "Row: 17, Col:7: Parse: 7:8 | Definition is missing a name.")
+    })
+
+    it('QDM CQL Definitions throws specific error when Definition name is a reserved keyyword', () => {
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, cqlMissingDefinitionName)
         OktaLogin.Login()

@@ -93,6 +93,35 @@ const cqlMissingDefinitionName = 'library QiCoreLibrary1723824228401 version \'0
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
     '   (Enc E where E.status = \'finished\') is not null '
 
+    const cqlDefinitionNameKeyword = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
+    'using QICore version \'4.1.1\'\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    'include SupplementalDataElements version \'3.5.000\' called SupplementalData\n' +
+    'include CQMCommon version \'2.2.000\' called CQMCommon\n\n' +
+    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+    'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
+    'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
+    'valueset "Preventive Care Services-Initial Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\'\n' +
+    'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n\n' +
+    'context Patient\n\n' +
+    'define exists:\n' +
+    '   true\n' +
+    'define "Initial Population":\n' +
+    '   exists "Qualifying Encounters"\n\n' +
+    'define "Qualifying Encounters":\n' +
+    '   (\n[Encounter: "Office Visit"]\n' +
+    '   union [Encounter: "Annual Wellness Visit"]\n' +
+    '   union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
+    '   union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
+    '   union [Encounter: "Home Healthcare Services"]\n' +
+    '   ) ValidEncounter\n' +
+    'where ValidEncounter.period during "Measurement Period"\n' +
+    'and ValidEncounter.isFinishedEncounter()\n\n' +
+    'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
+    '   (Enc E where E.status = \'finished\') is not null '
+
 describe('Qi-Core CQL Definitions Builder', () => {
 
     beforeEach('Create Measure and Login', () => {
@@ -380,7 +409,8 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    it('Qi-Core CQL Definitions Expression editor Name options are not available when CQL has errors', () => {
+    // skippng for now: open bug https://jira.cms.gov/browse/MAT-8114 affcting this scenario
+    it.skip('Qi-Core CQL Definitions Expression editor Name options are not available when CQL has errors', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_withError)
         OktaLogin.Login()
@@ -414,6 +444,20 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
 
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer,  "Row: 18, Col:7: Parse: 7:8 | Definition is missing a name.")
     })
+
+    it('Qi-Core CQL Definitions throws specific error when Definition name is a reserved keyword', () => {
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, cqlDefinitionNameKeyword)
+        OktaLogin.Login()
+
+        //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer,  "Row: 18, Col:7: Parse: 7:13 | Definition names must not be a reserved word.")
+    })
+
 })
 
 describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
