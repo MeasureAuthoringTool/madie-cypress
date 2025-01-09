@@ -22,7 +22,7 @@ describe('Create Test Case with a very long name', () => {
 
     beforeEach('Create Measure and login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: measureCQL } )
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: measureCQL })
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
@@ -43,10 +43,8 @@ describe('Create Test Case with a very long name', () => {
         const shortTitle = 'Title for Automation test case number one  - Very very long Show more'
         TestCasesPage.grabValidateTestCaseTitleAndSeries(shortTitle, testCaseSeries)
 
-        cy.wait(5500)
-        
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then(fileContents => {
-
+            Utilities.waitForElementVisible('[data-testid="test-case-title-' + fileContents + '-toggle-button"]', 55000)
             const showMoreToggle = '[data-testid="test-case-title-' + fileContents + '-toggle-button"]'
             cy.get(showMoreToggle).click()
 

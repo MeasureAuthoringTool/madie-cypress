@@ -1035,7 +1035,8 @@ export class TestCasesPage {
             this wait needs to be here so that CQL document can load
             if we really need to optimize, need to find the URL for a cy.intercept()
         */
-        cy.wait(1500)
+        Utilities.waitForElementVisible(this.aceEditor, 50000)
+
         cy.get(this.aceEditor).invoke('text').then(
             (text) => {
                 expect(text).to.contain(ValueToBeAdded)
