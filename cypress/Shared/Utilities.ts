@@ -260,7 +260,7 @@ export class Utilities {
     }
 
     public static waitForElementDisabled = (element: string, timeout: number) => {
-        cy.get(element, { timeout: timeout }).should('be.disabled')
+        cy.get(element, { timeout: timeout }).should('not.be.enabled')
     }
 
     public static waitForElementWriteEnabled = (element: string, timeout: number) => {

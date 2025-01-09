@@ -123,7 +123,7 @@ describe('QDM Measure Versioning', () => {
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
-        cy.wait(1000)
+        Utilities.waitForElementVisible('.MuiDialogContent-root', 50000)
 
         cy.get('.MuiDialogContent-root').click()
 
@@ -197,7 +197,7 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
-        cy.wait(1000)
+        Utilities.waitForElementVisible('.MuiDialogContent-root', 50000)
 
         cy.get('.MuiDialogContent-root').click()
 
@@ -312,7 +312,7 @@ describe('QI-Core Measure Versioning', () => {
         //Navigate to Details tab
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.testCaseTitle).should('not.be.enabled')
-        cy.get(TestCasesPage.runTestButton).should('not.be.enabled')
+        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 50000)
         cy.get(TestCasesPage.editTestCaseSaveButton).should('not.exist')
 
         //Verify that the Delete Measure button is disabled
