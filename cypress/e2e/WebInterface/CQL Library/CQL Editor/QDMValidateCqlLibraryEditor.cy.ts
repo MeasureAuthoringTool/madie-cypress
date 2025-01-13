@@ -122,6 +122,25 @@ describe('Validate QDM CQL on CQL Library page', () => {
         cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "Parse: 7:11 | Definition names must not be a reserved word.")
     })
+
+    it('Verify error message on CQL Library page when the CQL has a retrieve without filter', () => {
+
+        cy.get(Header.cqlLibraryTab).click()
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+        Utilities.typeFileContents('cypress/fixtures/QDMCQLRetrieve_WithoutFilter.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
+
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+
+        //Validate error(s) in CQL Editor window
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
+        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 2:25 | Retrieves must contain a code or value set filter")
+    })
 })
 
 describe('CQL Library: CQL Editor: QDM valueSet', () => {
