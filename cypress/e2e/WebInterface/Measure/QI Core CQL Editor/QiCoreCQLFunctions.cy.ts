@@ -57,8 +57,8 @@ let measureCQL = 'library CVEpisodeWithStratification version \'0.0.000\'\n' +
     '  "Qualifying Encounters" Enc\n' +
     ' where Enc.type in "Preventive Care Services - Established Office Visit, 18 and Up"'
 
-//Skipping until feature flag "CQLBuilderFunctions" is removed
-describe.skip('Qi Core CQL Functions', () => {
+
+describe('Qi Core CQL Functions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -113,10 +113,6 @@ describe.skip('Qi Core CQL Functions', () => {
         cy.get(CQLEditorPage.functionsTab).click()
         cy.get(CQLEditorPage.functionNameTextbox).type('Denominator Exclusions')
         cy.get(CQLEditorPage.fluentFunctionCheckbox).click()
-        cy.get(CQLEditorPage.argumentNameTextbox).type('TheEncounterEncounter')
-        cy.get(CQLEditorPage.argumentTypeDropdown).click()
-        cy.get(CQLEditorPage.argumentTypeString).click()
-        cy.get(CQLEditorPage.addArgumentBtn).click()
         cy.get(CQLEditorPage.expressionEditorType).click()
         cy.get(CQLEditorPage.expressionEditorDefinitionOption).click()
         cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
@@ -128,10 +124,6 @@ describe.skip('Qi Core CQL Functions', () => {
         //Apply the same Function again
         cy.get(CQLEditorPage.functionNameTextbox).type('Denominator Exclusions')
         cy.get(CQLEditorPage.fluentFunctionCheckbox).click()
-        cy.get(CQLEditorPage.argumentNameTextbox).type('TheEncounterEncounter')
-        cy.get(CQLEditorPage.argumentTypeDropdown).click()
-        cy.get(CQLEditorPage.argumentTypeString).click()
-        cy.get(CQLEditorPage.addArgumentBtn).click()
         cy.get(CQLEditorPage.expressionEditorType).click()
         cy.get(CQLEditorPage.expressionEditorDefinitionOption).click()
         cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
@@ -209,7 +201,7 @@ describe.skip('Qi Core CQL Functions', () => {
 })
 
 //Skipping until feature flag "CQLBuilderFunctions" is removed
-describe.skip('Qi-Core CQL Functions - Measure ownership Validations', () => {
+describe('Qi-Core CQL Functions - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
