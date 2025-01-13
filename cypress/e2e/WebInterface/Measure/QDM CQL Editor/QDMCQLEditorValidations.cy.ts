@@ -239,7 +239,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.get('[data-testid="generic-errors-text-list"] > li').should('contain.text', 'Row: 4, Col:0: ELM: 0:0 | Library MATGlobalCommonFunctionsQDM Version 8.0.000 is already in use in this library.')
+        cy.get(CQLEditorPage.errorContainer).should('contain.text', 'Row: 4, Col:0: ELM: 0:0 | Library MATGlobalCommonFunctionsQDM Version 8.0.000 is already in use in this library.')
 
     })
 
@@ -255,9 +255,9 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_withDifferentLibraryVersionAndDifferentAlias)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible('[data-testid="generic-errors-text-list"] > li', 60000)
+        Utilities.waitForElementVisible(CQLEditorPage.errorContainer, 60000)
 
-        cy.get('[data-testid="generic-errors-text-list"] > li').should('contain.text', 'Row: 4, Col:0: ELM: 0:0 | Library MATGlobalCommonFunctionsQDM is already in use in this library.')
+        cy.get(CQLEditorPage.errorContainer).should('contain.text', 'Row: 4, Col:0: ELM: 0:0 | Library MATGlobalCommonFunctionsQDM is already in use in this library.')
 
     })
 
@@ -273,11 +273,27 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_without_CodeSystem_Name)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible('[data-testid="generic-errors-text-list"] > li', 60000)
+        Utilities.waitForElementVisible(CQLEditorPage.errorContainer, 60000)
 
-        cy.get('[data-testid="generic-errors-text-list"] > li').should('contain.text', 'Row: 10, Col:29: Parse: 29:36 | code statement requires a codesystem reference. Please add a \'from\' clause to your statement.')
+        cy.get(CQLEditorPage.errorContainer).should('contain.text', 'Row: 10, Col:29: Parse: 29:36 | code statement requires a codesystem reference. Please add a \'from\' clause to your statement.')
 
     })
 
+    it('Verify error message on CQL Editor when the CQL has a retrieve without filter', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
+        Utilities.typeFileContents('cypress/fixtures/QDMCQLRetrieve_WithoutFilter.txt', EditMeasurePage.cqlEditorTextBox)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementVisible(CQLEditorPage.errorContainer, 60000)
+
+        cy.get(CQLEditorPage.errorContainer).should('contain.text', 'Row: 20, Col:2: ELM: 2:25 | Retrieves must contain a code or value set filter')
+    })
 })
 
