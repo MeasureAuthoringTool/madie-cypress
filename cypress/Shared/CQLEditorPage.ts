@@ -46,6 +46,7 @@ export class CQLEditorPage {
     public static readonly toolTipMsg = '.MuiTooltip-tooltip'
     public static readonly clearCodeBtn = '[data-testid="clear-codes-btn"]'
     public static readonly editCodeBtn = '[data-testid="edit-code-0"]'
+    public static readonly deleteCodeBtn = '[data-testid="delete-code-0"]'
     public static readonly applyCodeBtn = '[data-testid="apply-code-0"]'
     public static readonly removeCodeBtn = '[data-testid="remove-code-0"]'
     public static readonly selectDropdownBtn = '[data-testid="select-action-0_apply"]'
