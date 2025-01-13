@@ -75,8 +75,8 @@ let measureCQL = 'library NonPatientBasedRatioMeasureWithMultipleGroupsandStrati
     'define fluent function "Test"(): \n' +
     'true'
 
-//Skipping until feature flag "CQLBuilderFunctions" is removed
-describe.skip('QDM CQL Functions', () => {
+
+describe('QDM CQL Functions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -102,6 +102,7 @@ describe.skip('QDM CQL Functions', () => {
         //Apply Function to the CQL
         cy.get(CQLEditorPage.functionsTab).click()
         cy.get(CQLEditorPage.functionNameTextbox).type('Denominator Exclusions')
+
         cy.get(CQLEditorPage.fluentFunctionCheckbox).click()
         cy.get(CQLEditorPage.argumentNameTextbox).type('TheEncounterEncounter')
         cy.get(CQLEditorPage.argumentTypeDropdown).click()
@@ -112,6 +113,7 @@ describe.skip('QDM CQL Functions', () => {
         cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
         cy.get(CQLEditorPage.expressionEditorNameDenominatorOption).click()
         cy.get(CQLEditorPage.expressionEditorInsertBtn).click()
+
         cy.get(CQLEditorPage.applyFunctionBtn).click()
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Function Denominator Exclusions has been successfully added to the CQL.')
         cy.get(CQLEditorPage.saveCQLButton).click()
@@ -132,10 +134,6 @@ describe.skip('QDM CQL Functions', () => {
         cy.get(CQLEditorPage.functionsTab).click()
         cy.get(CQLEditorPage.functionNameTextbox).type('Denominator Exclusions')
         cy.get(CQLEditorPage.fluentFunctionCheckbox).click()
-        cy.get(CQLEditorPage.argumentNameTextbox).type('TheEncounterEncounter')
-        cy.get(CQLEditorPage.argumentTypeDropdown).click()
-        cy.get(CQLEditorPage.argumentTypeString).click()
-        cy.get(CQLEditorPage.addArgumentBtn).click()
         cy.get(CQLEditorPage.expressionEditorType).click()
         cy.get(CQLEditorPage.expressionEditorDefinitionOption).click()
         cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
@@ -147,10 +145,6 @@ describe.skip('QDM CQL Functions', () => {
         //Apply the same Function again
         cy.get(CQLEditorPage.functionNameTextbox).type('Denominator Exclusions')
         cy.get(CQLEditorPage.fluentFunctionCheckbox).click()
-        cy.get(CQLEditorPage.argumentNameTextbox).type('TheEncounterEncounter')
-        cy.get(CQLEditorPage.argumentTypeDropdown).click()
-        cy.get(CQLEditorPage.argumentTypeString).click()
-        cy.get(CQLEditorPage.addArgumentBtn).click()
         cy.get(CQLEditorPage.expressionEditorType).click()
         cy.get(CQLEditorPage.expressionEditorDefinitionOption).click()
         cy.get(CQLEditorPage.expressionEditorNameDropdown).click()
@@ -228,7 +222,7 @@ describe.skip('QDM CQL Functions', () => {
 })
 
 //Skipping until feature flag "CQLBuilderFunctions" is removed
-describe.skip('QDM CQL Functions - Measure ownership Validations', () => {
+describe('QDM CQL Functions - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
