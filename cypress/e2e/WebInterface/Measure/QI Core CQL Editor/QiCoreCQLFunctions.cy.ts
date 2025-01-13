@@ -62,7 +62,6 @@ describe('Qi Core CQL Functions', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
 
@@ -76,10 +75,9 @@ describe('Qi Core CQL Functions', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
-    it('Apply Function to the Qi Core CQL and verify under Saved Functions tab', () => {
+    it('Apply Function to the Qi Core CQL. Verify under Saved Functions tab that all functions show in order of CQL document', () => {
 
         //Apply Function to the CQL
         cy.get(CQLEditorPage.functionsTab).click()
@@ -102,9 +100,12 @@ describe('Qi Core CQL Functions', () => {
         cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.functionsTab).click()
         cy.get(CQLEditorPage.savedFunctionsTab).click().wait(1000)
-        cy.get('[data-testid="functions-row-0"] > :nth-child(1)').should('contain.text', 'Denominator Exclusions')
-        cy.get('[data-testid="functions-row-1"] > :nth-child(1)').should('contain.text', 'isFinishedEncounter')
-        cy.get('[data-testid="functions-row-2"] > :nth-child(1)').should('contain.text', 'MeasureObservation')
+
+        // Note: this enforces https://jira.cms.gov/browse/MAT-8005
+      
+        cy.get('[data-testid="functions-row-0"] > :nth-child(1)').should('contain.text', 'isFinishedEncounter')
+        cy.get('[data-testid="functions-row-1"] > :nth-child(1)').should('contain.text', 'MeasureObservation')
+        cy.get('[data-testid="functions-row-2"] > :nth-child(1)').should('contain.text', 'Denominator Exclusions')
     })
 
     it('Verify error message when duplicate Function is applied to the Qi Core CQL', () => {
@@ -200,7 +201,6 @@ describe('Qi Core CQL Functions', () => {
     })
 })
 
-//Skipping until feature flag "CQLBuilderFunctions" is removed
 describe('Qi-Core CQL Functions - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
