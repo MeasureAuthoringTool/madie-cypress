@@ -36,7 +36,8 @@ let qiCoreMeasureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.
     'define "Initial Population":\n' +
     '   Global."Inpatient Encounter"'
 
-describe('Test Case List - Basic Behavior of Checkboxes', () => {
+//Skipping until Feature flag 'TestCaseListActionCenter' is removed    
+describe.skip('Test Case List - Basic Behavior of Checkboxes', () => {
 
     beforeEach('Create Measure, Test Cases, and Login', () => {
 
