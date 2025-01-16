@@ -442,7 +442,7 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer,  "Row: 18, Col:7: Parse: 7:8 | Definition is missing a name.")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer,  "Parse: 7:8 | Definition is missing a name.")
     })
 
     it('Qi-Core CQL Definitions throws specific error when Definition name is a reserved keyword', () => {
@@ -455,7 +455,7 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer,  "Row: 18, Col:7: Parse: 7:13 | Definition names must not be a reserved word.")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer,  "Parse: 7:13 | Definition names must not be a reserved word.")
     })
 
 })
