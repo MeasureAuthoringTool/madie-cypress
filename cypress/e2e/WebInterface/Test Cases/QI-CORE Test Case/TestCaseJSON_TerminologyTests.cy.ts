@@ -355,9 +355,12 @@ describe('JSON Resource ID tests', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTab, 27700)
         cy.get(EditMeasurePage.cqlEditorTab).click()
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTextBox, 27700)
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 27700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
@@ -730,6 +733,8 @@ describe('JSON Resource ID tests', () => {
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
+        cy.get(TestCasesPage.aceEditor).click()
         cy.get(TestCasesPage.aceEditor).type(dupResourceIDTCJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -751,9 +756,11 @@ describe('JSON Resource ID tests', () => {
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page and add Test Case details
+        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 27700)
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
         cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+        Utilities.waitForElementVisible(TestCasesPage.newTestCaseButton, 27700)
         cy.get(TestCasesPage.newTestCaseButton).click()
 
         cy.get(TestCasesPage.createTestCaseDialog).should('exist')
@@ -787,14 +794,19 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        Utilities.waitForElementVisible(TestCasesPage.editTestCaseSaveButton, 27700)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
-        cy.get(TestCasesPage.confirmationMsg).should('exist')
-        cy.get(TestCasesPage.confirmationMsg).should('be.visible')
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get('[data-testid="success-toast"]').should('exist')
+        cy.get('[data-testid="success-toast"]').should('be.visible')
+        cy.get('[data-testid="success-toast"]').should('have.text', 'Test case updated successfully with warnings in JSON')
 
+        cy.get(TestCasesPage.detailsTab).scrollIntoView()
+        Utilities.waitForElementVisible(TestCasesPage.detailsTab, 27700)
+        cy.get(TestCasesPage.detailsTab).click()
+        Utilities.waitForElementVisible(TestCasesPage.testCaseJsonValidationErrorBtn, 27700)
+
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Resource of type [Encounter] is missing the Meta.profile. Resource Id: [5c6c61ceb84846536a9a98f9]. Resources missing Meta.profile may cause incorrect results while executing this test case.')
@@ -901,6 +913,8 @@ describe('JSON Resource ID tests - Proportion Score Type', () => {
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
+        cy.get(TestCasesPage.aceEditor).click()
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
