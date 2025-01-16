@@ -9,16 +9,7 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { Header } from "../../../../Shared/Header"
 import { LandingPage } from "../../../../Shared/LandingPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
-let QiCoreMeasureName0: string
-let QiCoreCqlLibraryName0: string
-let QiCoreMeasureName1: string
-let QiCoreCqlLibraryName1: string
-let measureQDMManifestName0: string
-let QDMCqlLibraryName0: string
-let measureQDMManifestName1: string
-let QDMCqlLibraryName1: string
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let testCaseTitle = 'test case title'
@@ -117,9 +108,11 @@ describe('Qi Core6 option available', () => {
 
         Utilities.waitForElementVisible(LandingPage.newMeasureButton, 30000)
         Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 30000)
-        cy.get(LandingPage.newMeasureButton).click({ force: true })
+        cy.get(LandingPage.newMeasureButton).click()
         cy.get(CreateMeasurePage.measureNameTextbox).type(measureName)
+        Utilities.waitForElementVisible(CreateMeasurePage.measureModelDropdown, 30000)
         cy.get(CreateMeasurePage.measureModelDropdown).click()
+        Utilities.waitForElementVisible(CreateMeasurePage.measureModelQICorev6, 30000)
         cy.get(CreateMeasurePage.measureModelQICorev6).click()
         cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).type('eCQMTitle01')
         cy.get(CreateMeasurePage.cqlLibraryNameTextbox).type(CqlLibraryName)
@@ -129,42 +122,6 @@ describe('Qi Core6 option available', () => {
 
         cy.get(CreateMeasurePage.createMeasureButton).should('be.enabled')
     })
-})
-
-//"CQLBuilderFunctions": false
-describe('QI Core: CQL Builder Functions tab is not present', () => {
-
-    before('Create Measure and Login', () => {
-
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
-        measureName = 'TestMeasure' + Date.now() + 5
-        cqlLibraryName = 'TestCql' + Date.now() + 5
-
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQLAlt)
-        OktaLogin.Login()
-    })
-
-    after('Log out and Clean up', () => {
-
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
-
-    })
-
-    it('Functions tab not present under CQL builder tabs', () => {
-
-        //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(CQLEditorPage.expandCQLBuilder).click()
-
-        cy.get(CQLEditorPage.functionsTab).should('not.exist')
-    })
-
 })
 
 //"qiCoreElementsTab": false
@@ -188,6 +145,7 @@ describe('QI Core v6: UI Elements Builder tab is not shown', () => {
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('edit')
+        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 30000)
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.testCaseAction('edit')
