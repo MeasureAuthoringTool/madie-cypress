@@ -6,7 +6,8 @@ import dateTimeISO = CypressCommandLine.dateTimeISO;
 export type TestCase = {
     title: string,
     description: string,
-    group: string
+    group: string,
+    json?: string
 }
 
 export class TestCasesPage {
@@ -418,8 +419,6 @@ export class TestCasesPage {
     //Export Test Cases
     public static readonly exportTestCasesBtn = '[data-testid="export-test-cases-button"]'
     public static readonly exportExcelBtn = '[data-testid="export-excel"]'
-    public static readonly exportTransactionBundleBtn = '[data-testid="export-transaction-bundle"]'
-    public static readonly exportCollectionBundleBtn = '[data-testid="export-collection-bundle"]'
     public static readonly exportTransactionTypeOption = '[data-testid="export-transaction-bundle"]'
     public static readonly exportCollectionTypeOption = '[data-testid="export-collection-bundle"]'
 
@@ -458,6 +457,12 @@ export class TestCasesPage {
     public static readonly valueSetDirectRefCode = '[id="value-set-selector"]'
     public static readonly valueSetOptionValue = '[data-testid="option-2.16.840.1.113883.3.117.1.7.1.93"]'
 
+    // test case list Action Center
+    public static readonly actionCenterDelete = '[data-testid="delete-action-btn"]'
+    public static readonly actionCenterClone = '[data-testid="clone-action-btn"]'
+    public static readonly actionCenterCopyToMeasure = '[data-testid="copy-action-btn"]'
+    public static readonly actionCenterExport = '[data-testid="export-action-btn"]'
+
     //This function grabs the data-testid value off of the view button and extracts the id out of it.
     //Then, it puts that id in a file. For added control, the optional "eleTableEntry" parameter can be
     //used to specify which entry we are wanting to grab the id off of. For example, if you have two entries
@@ -492,7 +497,7 @@ export class TestCasesPage {
         this is functionally similar to the above grabElementId, but works with testCaseId
         the primary use-case for grabTestCaseId would be to prep for using testCaseAction()
     */
-    public static grabTestCaseId(testCaseNumber?: number): void {
+    public static grabTestCaseId(testCaseNumber: number): void {
         // ToDo: expand to allow option for testCaseId2
 
         let testCaseId: string
@@ -506,8 +511,6 @@ export class TestCasesPage {
                 testCaseId = idValue.split('-')[2].toString().valueOf()
                 cy.writeFile(testCaseIdPath, testCaseId)
             })
-
-
     }
 
     public static clickCreateTestCaseButton(): void {
@@ -753,7 +756,7 @@ export class TestCasesPage {
 
     }
 
-    public static createTestCase(testCaseTitle: string, testCaseDescription: string, testCaseSeries: string, testCaseJson: string): void {
+    public static createTestCase(testCaseTitle: string, testCaseDescription: string, testCaseSeries: string, testCaseJson?: string): void {
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -785,8 +788,11 @@ export class TestCasesPage {
 
         cy.log('Test Case created successfully')
 
-        this.editTestCaseAddJSON(testCaseJson)
+        if (testCaseJson) {
+            this.editTestCaseAddJSON(testCaseJson)
+        }
     }
+
     public static enterErroneousJson(err_TestCaseJson: string): void {
 
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
@@ -877,6 +883,7 @@ export class TestCasesPage {
         else {
             testCasePIdPath = 'cypress/fixtures/testCaseId'
         }
+
         cy.readFile(testCasePIdPath).should('exist').then((tcId) => {
             cy.get('[data-testid=select-action-' + tcId + ']').click()
             cy.get('[data-testid=view-edit-test-case-' + tcId + ']').should('be.visible')
@@ -884,7 +891,6 @@ export class TestCasesPage {
             cy.get('[data-testid=view-edit-test-case-' + tcId + ']').scrollIntoView()
             cy.get('[data-testid=view-edit-test-case-' + tcId + ']').click()
         })
-
     }
 
     public static clickDeleteTestCaseButton(): void {
@@ -1043,8 +1049,6 @@ export class TestCasesPage {
             })
     }
 
-
-
     public static enterPatientDemographics(dob?: dateTimeISO, livingStatus?: string, race?: string, gender?: string, ethnicity?: string): void {
 
         cy.get(TestCasesPage.QDMLivingStatus).click()
@@ -1061,5 +1065,14 @@ export class TestCasesPage {
         cy.get('[data-value="' + ethnicity + '"]').click()
         cy.get(TestCasesPage.QDMDob).clear().click()
         cy.get(TestCasesPage.QDMDob).type(dob).click()
+    }
+
+    // input the visible "Case #" value to have that test case's checkbox toggled from its current status
+    public static checkTestCase(testCaseNumber: number): void {
+
+        cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
+            .parent('tr')
+            .find('input[type="checkbox"]')
+            .check()
     }
 }
