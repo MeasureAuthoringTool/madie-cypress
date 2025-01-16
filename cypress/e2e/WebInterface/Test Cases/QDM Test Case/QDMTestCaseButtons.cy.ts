@@ -33,7 +33,8 @@ const populations: MeasureGroups = {
     numerator: 'Numerator'
 }
 
-describe('Test case list page - Action Center icons for measure owner', () => {
+// leaving all tests skipped until feature flag TestCaseListActionCenter is active
+describe.skip('Test case list page - Action Center icons for measure owner', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -126,7 +127,7 @@ describe('Test case list page - Action Center icons for measure owner', () => {
     })
 })
 
-describe('Test case list page - Action Center icons for versioned measure', () => {
+describe.skip('Test case list page - Action Center icons for versioned measure', () => {
     
     beforeEach('Create measure and login', () => {
 
@@ -197,7 +198,7 @@ describe('Test case list page - Action Center icons for versioned measure', () =
     })
 })
 
-describe('Test case list page - Action Center icons for non-owner', () => {
+describe.skip('Test case list page - Action Center icons for non-owner', () => {
     
     beforeEach('Create measure and login', () => {
 
