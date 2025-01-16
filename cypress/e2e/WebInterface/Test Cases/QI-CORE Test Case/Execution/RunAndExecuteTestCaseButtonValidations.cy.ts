@@ -523,8 +523,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
 
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-
+        Utilities.waitForElementVisible(TestCasesPage.confirmationMsg, 60000)
         cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
 
