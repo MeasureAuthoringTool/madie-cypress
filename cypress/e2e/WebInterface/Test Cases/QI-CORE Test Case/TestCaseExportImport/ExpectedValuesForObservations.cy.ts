@@ -74,6 +74,7 @@ describe('Ratio based measure with measure observations', () => {
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         TestCasesPage.clickEditforCreatedTestCase()
+        cy.get(TestCasesPage.runTestButton).should('be.enabled')
 
         // validate JSON - this value need to be in the initial load, cannot scroll down
         TestCasesPage.ValidateValueAddedToTestCaseJson('http://local/Encounter')
@@ -167,6 +168,7 @@ describe('Proportion based measure with no observations', () => {
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         TestCasesPage.clickEditforCreatedTestCase()
+        cy.get(TestCasesPage.runTestButton).should('be.enabled')
 
         // validate JSON - this value need to be in the initial load, cannot scroll down
         TestCasesPage.ValidateValueAddedToTestCaseJson('http://local/Encounter')
