@@ -342,11 +342,7 @@ describe('QICore Test Case - Deleting all test cases resets test case counter', 
 
     afterEach('Logout and Clean up Measures', () => {
 
-        OktaLogin.UILogout()
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
+        OktaLogin.Logout()
         Utilities.deleteMeasure(measureName + '1Measure', CqlLibraryName + '1Measure')
     })
 
