@@ -258,7 +258,7 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
 
     afterEach('Delete Measure and Logout', () => {
 
-        Utilities.deleteVersionedMeasure(newMeasureName, CqlLibraryName)
+        Utilities.deleteVersionedMeasure(measureQDMManifestName, CqlLibraryName)
         OktaLogin.UILogout()
     })
 
@@ -322,9 +322,12 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
 
 describe('QDM Test Case - Deleting all test cases resets test case counter', () => {
 
+    let qdmMeasureName = measureName + timestamp
+    let qdmCqlLibraryName = CqlLibraryName + timestamp
+
     beforeEach('Create Measure', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName, CqlLibraryName, 'Proportion', false, qdmManifestTestCQL, null, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Proportion', false, qdmManifestTestCQL, null, false,
             '2025-01-01', '2025-12-31')
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
@@ -339,7 +342,7 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
     afterEach('Clean up', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
     })
 
     it('Test case number resets when test case count equals 0', () => {
