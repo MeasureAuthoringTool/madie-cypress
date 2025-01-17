@@ -626,7 +626,7 @@ export class Utilities {
     public static validateErrors(errorElementObject: string, errorContainer: string, errorMsg1: string, errorMsg2?: string): void {
 
         cy.get(errorElementObject).should('exist')
-        cy.get(errorElementObject).should('be.visible').scrollIntoView()
+        cy.get(errorElementObject).should('be.visible')
         cy.get(errorElementObject).invoke('show').click({ force: true, multiple: true })
         // cy.get(errorContainer).invoke('show').should('contain.text', errorMsg1)
         if ((errorMsg1 != null) || (errorMsg1 != undefined)) {
