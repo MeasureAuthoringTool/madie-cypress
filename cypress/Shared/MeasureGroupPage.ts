@@ -14,7 +14,8 @@ export enum MeasureType  {
 export enum PopulationBasis {
     boolean = 'boolean',
     encounter = 'Encounter',
-    episode = 'Episode'
+    episode = 'Episode',
+    procedure = 'Procedure'
 }
 export enum MeasureScoring {
     Cohort = 'Cohort',

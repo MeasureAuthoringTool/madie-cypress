@@ -214,7 +214,8 @@ export class EditMeasurePage {
 
                 cy.get(MeasuresPage.versionMeasuresSelectionButton).click()
                 cy.get(MeasuresPage.measureVersionMajor).click()
-                // need a short pause here for the modal to present new fields
+                // please leave this in place. it needs a short pause here for the modal to present new fields
+                cy.wait(500)
 
                 cy.get('#new-version').invoke('val').then(value => {
                     cy.get(MeasuresPage.confirmMeasureVersionNumber).type(value.toString())
