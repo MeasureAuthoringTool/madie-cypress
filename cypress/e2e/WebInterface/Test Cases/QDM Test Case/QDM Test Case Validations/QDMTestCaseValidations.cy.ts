@@ -22,7 +22,6 @@ let testCaseSeries = 'SBTestSeries'
 let twoFiftyTwoCharacters = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr'
 let altMeasureName = ''
 let altCqlLibraryName = ''
-let measureCQL = MeasureCQL.QDMHighlightingTab_CQL
 let measureScoringCohort = 'Cohort'
 let qdmMeasureCQL = MeasureCQL.simpleQDM_CQL
 let qdmMeasureCQLwInvalidValueset = MeasureCQL.simpleQDM_CQL_invalid_valueset
@@ -118,8 +117,8 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
         altCqlLibraryName = CqlLibraryName + altRandValue
 
         //Create QDM Measure, PC and Test Case with ALT user
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoringCohort, true, measureCQL, null, true)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'IP2')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, 'Ratio', false, measureQDMCQL, null, true)
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, true)
         OktaLogin.Login()
 
