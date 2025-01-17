@@ -13,6 +13,7 @@ const qualifyingEncountersSection = 'cypress/fixtures/QiCoreHRCompare/Qualifying
 const terminologySection = 'cypress/fixtures/QiCoreHRCompare/TerminologyAndOtherDependenciesSections.html'
 const versionSection = 'cypress/fixtures/QiCoreHRCompare/VersionSection.html'
 const versionSectionVer1 = 'cypress/fixtures/QiCoreHRCompare/VersionSection_ver1.html'
+const stylesSection = 'cypress/fixtures/QiCoreHRCompare/LiquidStyleSection.html'
 
 /*
 commenting all these out - and moved into folder /fixtures/QiCoreHQMFCompare
@@ -490,7 +491,13 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
             cy.readFile(versionSectionVer1).then((dataComparedVersion_ver1) => {
                 expected = dataComparedVersion_ver1.toString()
-                cy.log('expected seventh section file contents are: \n' + expected)
+                cy.log('expected version section file contents are: \n' + expected)
+                expect(exported).to.includes(expected)
+            })
+            
+            cy.readFile(stylesSection).then(dataComparedStyles => {
+                expected = dataComparedStyles.toString()
+                cy.log('expected styles section file contents are: \n' + expected)
                 expect(exported).to.includes(expected)
             })
         })
