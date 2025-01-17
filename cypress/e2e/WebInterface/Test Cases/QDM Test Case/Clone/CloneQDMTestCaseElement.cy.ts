@@ -163,7 +163,8 @@ describe('Clone QDM Test Case', () => {
         TestCasesPage.qdmTestCaseElementAction('clone')
         cy.get("tr").eq(1).should('contain', 'Encounter, PerformedObservation ServicesSNOMEDCT: 448951000124107 relP:  03/07/2023 8:00 AM - 03/08/2023 8:15 AM')
 
-        // eidt the element
+
+        // edit the element
         TestCasesPage.qdmTestCaseElementAction('edit')
         QDMElements.addTimingRelevantPeriodDateTime('03/09/2023 08:00 AM', '03/10/2023 08:15 AM')
 

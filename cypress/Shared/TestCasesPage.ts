@@ -482,8 +482,10 @@ export class TestCasesPage {
             return attrData
         }).then((attrData) => {
             elementId = attrData.split('-', 4)
+            cy.log('The data-testid value is ' + attrData)
             console.log('The data-testid value is ' + attrData)
             cy.log(attrData)
+            cy.log('The data-testid value is ' + attrData)
             console.log('The element id value is ' + elementId[2])
             cy.log(elementId[2])
             elemid = (elementId[2]).toString().valueOf()
@@ -609,10 +611,12 @@ export class TestCasesPage {
                 case "edit": {
                     cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
                     cy.scrollTo(0, 500)
-                    cy.get('[data-testid="action-center-' + fileContents + '"]').click({ force: true })
+                    cy.get('[data-testid="action-center-' + fileContents + '"]').scrollIntoView()
+                    Utilities.waitForElementVisible('[data-testid="action-center-' + fileContents + '"]', 50000)
+                    cy.get('[data-testid="action-center-' + fileContents + '"]').should('be.visible')
                     cy.get('[data-testid="action-center-' + fileContents + '"]').click()
-                    Utilities.waitForElementVisible('[data-testid="edit-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="edit-element-' + fileContents + '"]').scrollIntoView()
+                    Utilities.waitForElementVisible('[data-testid="edit-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="edit-element-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="edit-element-' + fileContents + '"]').should('be.enabled')
