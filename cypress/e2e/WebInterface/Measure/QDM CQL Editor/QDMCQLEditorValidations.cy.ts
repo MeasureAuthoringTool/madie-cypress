@@ -239,7 +239,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.get(CQLEditorPage.errorContainer).should('contain.text', 'Row: 4, Col:0: ELM: 0:0 | Library MATGlobalCommonFunctionsQDM Version 8.0.000 is already in use in this library.')
+        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Row: 4, Col:0: ELM: 0:0 | Library MATGlobalCommonFunctionsQDM Version 8.0.000 is already in use in this library.')
 
     })
 
@@ -255,9 +255,9 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_withDifferentLibraryVersionAndDifferentAlias)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.errorContainer, 60000)
+        Utilities.waitForElementVisible(CQLEditorPage.errorMsg, 60000)
 
-        cy.get(CQLEditorPage.errorContainer).should('contain.text', 'Row: 4, Col:0: ELM: 0:0 | Library MATGlobalCommonFunctionsQDM is already in use in this library.')
+        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Row: 4, Col:0: ELM: 0:0 | Library MATGlobalCommonFunctionsQDM is already in use in this library.')
 
     })
 
@@ -273,9 +273,9 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_without_CodeSystem_Name)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.errorContainer, 60000)
+        Utilities.waitForElementVisible(CQLEditorPage.errorMsg, 60000)
 
-        cy.get(CQLEditorPage.errorContainer).should('contain.text', 'Row: 10, Col:29: Parse: 29:36 | code statement requires a codesystem reference. Please add a \'from\' clause to your statement.')
+        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Row: 10, Col:29: Parse: 29:36 | code statement requires a codesystem reference. Please add a \'from\' clause to your statement.')
 
     })
 
@@ -291,9 +291,26 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         Utilities.typeFileContents('cypress/fixtures/QDMCQLRetrieve_WithoutFilter.txt', EditMeasurePage.cqlEditorTextBox)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        Utilities.waitForElementVisible(CQLEditorPage.errorContainer, 60000)
+        Utilities.waitForElementVisible(CQLEditorPage.errorMsg, 60000)
 
-        cy.get(CQLEditorPage.errorContainer).should('contain.text', 'Row: 20, Col:2: ELM: 2:25 | Retrieves must contain a code or value set filter')
+        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Row: 20, Col:2: ELM: 2:25 | Retrieves must contain a code or value set filter')
+    })
+
+    it('Verify error message on CQL Editor page when an include statement is missing the version', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
+        Utilities.typeFileContents('cypress/fixtures/QDMCQLWithoutIncludedLibraryVersion.txt', EditMeasurePage.cqlEditorTextBox)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementVisible(CQLEditorPage.errorMsg, 60000)
+
+        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Row: 4, Col:1: ELM: 1:46 | include MATGlobalCommonFunctions statement is missing version. Please add a version to the include.')
     })
 })
 

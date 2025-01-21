@@ -224,6 +224,25 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text',
             'Parse: 29:36 | code statement requires a codesystem reference. Please add a \'from\' clause to your statement.')
     })
+
+    it('Verify error message on CQL Editor page when an include statement is missing the version', () => {
+
+        cy.get(Header.cqlLibraryTab).click()
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+        Utilities.typeFileContents('cypress/fixtures/QiCoreCQLWithoutIncludedLibraryVersion.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
+
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+
+        //Validate error(s) in CQL Editor window
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
+        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 1:49 | include MATGlobalCommonFunctions statement is missing version. Please add a version to the include.")
+    })
 })
 
 describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {

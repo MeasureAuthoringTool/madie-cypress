@@ -19,6 +19,7 @@ export class CQLEditorPage {
 
     //error tooltip container
     public static readonly errorContainer = '#ace-editor-wrapper > div.ace_tooltip' //'[data-testid="generic-errors-text-list"]'
+    public static readonly errorMsg = '[data-testid="generic-errors-text-list"]'
 
     //success save message without errors
     public static readonly successfulCQLSaveNoErrors = '.madie-alert' //'[data-testid="generic-success-text-header"]'

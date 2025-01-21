@@ -1,0 +1,12 @@
+library TestCaseCheckboxesLibrary1737477767066 version '0.0.000'
+
+using QICore version '4.1.1'
+
+include FHIRHelpers version '4.1.000' called FHIRHelpers
+include CQMCommon version '1.0.000' called Global
+include MATGlobalCommonFunctions called GlobalOne
+
+context Patient
+
+define "Initial Population":
+   Global."Inpatient Encounter"
