@@ -1,0 +1,12 @@
+library TestCaseCheckboxesLibrary1737474478933 version '0.0.000'
+using QDM version '5.6'
+
+include MATGlobalCommonFunctions called Global
+valueset "Encounter Inpatient": 'urn:oid:2.16.840.1.113883.3.666.5.307'
+
+parameter "Measurement Period" Interval<DateTime>
+context Patient
+
+define "Patient16To23":
+  AgeInYearsAt(start of "Measurement Period") >= 16
+    and AgeInYearsAt(start of "Measurement Period") < 24

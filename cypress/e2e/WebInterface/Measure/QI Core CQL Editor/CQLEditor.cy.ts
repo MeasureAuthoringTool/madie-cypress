@@ -538,6 +538,35 @@ describe('CQL errors with included libraries', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{pageUp}')
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 0:0 | Library FHIRHelpers is already in use in this library.')
     })
+
+    it('Verify error message on CQL Editor page when an include statement is missing the version', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Click on the CQL Editor tab
+        CQLEditorPage.clickCQLEditorTab()
+
+        cy.readFile('cypress/fixtures/QiCoreCQLWithoutIncludedLibraryVersion.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+        })
+
+        //save the value in the CQL Editor
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        //Validate message on page -- fails here?
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+
+        //Validate error(s) in CQL Editor after saving
+
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('exist')
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
+        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', 'ELM: 1:49 | include MATGlobalCommonFunctions statement is missing version. Please add a version to the include.')
+    })
 })
 
 describe('Measure: CQL Editor: using line : QI Core', () => {
