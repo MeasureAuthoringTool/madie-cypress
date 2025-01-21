@@ -339,6 +339,7 @@ export class TestCasesPage {
     public static readonly testCaseDropdownList = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
     public static readonly testCaseListCheckBox = '.px-1 > input'
     public static readonly cloneBtn = '[data-testid="clone-action-icon"]'
+    public static readonly exportBtn = '[data-testid="export-action-btn"]'
 
     //Stratifications
     public static readonly denominatorStratificationOneExpectedValue = '[data-testid="test-population-Strata-1 Denominator-expected"]'
