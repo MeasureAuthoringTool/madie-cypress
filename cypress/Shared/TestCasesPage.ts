@@ -337,7 +337,6 @@ export class TestCasesPage {
     public static readonly qdmTestCaseViewBtn = '.action'
     public static readonly lastSavedDate = '[data-testid="test-case-title-0_lastModifiedAt"]'
     public static readonly testCaseNameDropdown = '#edit-test-case-bread-crumbs > .MuiInputBase-root > .MuiSelect-select'
-    public static readonly testCaseDropdownList = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
     public static readonly testCaseListCheckBox = '.px-1 > input'
     public static readonly cloneBtn = '[data-testid="clone-action-icon"]'
     public static readonly exportBtn = '[data-testid="export-action-btn"]'
@@ -880,9 +879,10 @@ export class TestCasesPage {
 
         cy.log('Test Case updated successfully')
     }
+    
     public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
         let testCasePIdPath = ''
-        if (secondTestCase === true) {
+        if (secondTestCase) {
             testCasePIdPath = 'cypress/fixtures/testCaseId2'
         }
         else {
@@ -890,11 +890,10 @@ export class TestCasesPage {
         }
 
         cy.readFile(testCasePIdPath).should('exist').then((tcId) => {
-            cy.get('[data-testid=select-action-' + tcId + ']').click()
-            cy.get('[data-testid=view-edit-test-case-' + tcId + ']').should('be.visible')
-            cy.get('[data-testid=view-edit-test-case-' + tcId + ']').should('be.enabled')
-            cy.get('[data-testid=view-edit-test-case-' + tcId + ']').scrollIntoView()
-            cy.get('[data-testid=view-edit-test-case-' + tcId + ']').click()
+            cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').should('be.visible')
+            cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').should('be.enabled')
+            cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').scrollIntoView()
+            cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').click()
         })
     }
 

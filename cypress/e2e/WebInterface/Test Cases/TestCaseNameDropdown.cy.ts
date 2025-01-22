@@ -53,12 +53,12 @@ describe('Test Case name dropdown on Edit Test case screen', () => {
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
+        Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 6500)
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //edit test case
-        TestCasesPage.testCaseAction('edit')
-        cy.get(TestCasesPage.testCaseNameDropdown).click()
-        cy.get(TestCasesPage.testCaseDropdownList).should('contain.text', 'Case #2: ICFTestSeries - Second Test Case', 'Case #1: SBTestSeries - First Test Case')
+        TestCasesPage.clickEditforCreatedTestCase(true)
+        cy.get(TestCasesPage.testCaseNameDropdown).should('contain.text', 'Case #2: ICFTestSeries - Second Test Case', 'Case #1: SBTestSeries - First Test Case')
 
     })
 })
