@@ -53,14 +53,13 @@ describe('Delete Test Case', () => {
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
 
-        //cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCase1.title + '?')
         cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ?')
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase1.title)
     })
 
-    it.only('Delete multiple Test Cases - Success scenario', () => {
+    it('Delete multiple Test Cases - Success scenario', () => {
 
         MeasuresPage.actionCenter("edit")
 
