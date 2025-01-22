@@ -23,7 +23,7 @@ let secondLibraryName = 'SecondLibrary' + Date.now()
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 
 //Skipping until Feature flag 'CopyTestCases' is removed
-describe('Copy QDM Test Cases', () => {
+describe.skip('Copy QDM Test Cases', () => {
 
     before('Create measure and login', () => {
 
@@ -77,7 +77,7 @@ describe('Copy QDM Test Cases', () => {
 })
 
 //Skipping until Feature flag 'CopyTestCases' is removed
-describe('Copy Qi Core Test Cases', () => {
+describe.skip('Copy Qi Core Test Cases', () => {
 
     before('Create measure and login', () => {
 
