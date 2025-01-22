@@ -372,7 +372,7 @@ describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test ca
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         const thresholds = {
             performance: 3,

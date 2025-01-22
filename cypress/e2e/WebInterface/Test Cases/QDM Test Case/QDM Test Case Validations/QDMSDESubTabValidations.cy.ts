@@ -82,7 +82,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         //Navigate to Edit Test Case page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
@@ -168,7 +168,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to Edit Test Case page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //Execute test case
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
@@ -217,7 +217,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to Edit Test Case page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')

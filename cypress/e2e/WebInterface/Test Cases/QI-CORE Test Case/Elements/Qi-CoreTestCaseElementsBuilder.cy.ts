@@ -35,7 +35,7 @@ describe.skip('Check for UI Elements Builder on QiCore 6.0.0 measures only', () 
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         // these only show for STU6
         cy.get(TestCasesPage.jsonTab).should('be.visible').and('be.enabled')
@@ -64,7 +64,7 @@ describe.skip('Check for UI Elements Builder on QiCore 6.0.0 measures only', () 
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         // these should not show, since with is QiCore 4.1.1
         cy.get(TestCasesPage.jsonTab).should('not.exist')

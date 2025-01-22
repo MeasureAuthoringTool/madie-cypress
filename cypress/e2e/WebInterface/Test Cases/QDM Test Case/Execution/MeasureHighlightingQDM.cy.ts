@@ -91,7 +91,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes validate /
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //navigate to the highlighting sub tab
         Utilities.waitForElementVisible(TestCasesPage.tcHighlightingTab, 60000)
@@ -175,7 +175,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //navigate to the highlighting sub tab
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
@@ -273,7 +273,7 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //run test case
         cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('be.visible')
@@ -400,7 +400,7 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //run test case
         cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('be.visible')

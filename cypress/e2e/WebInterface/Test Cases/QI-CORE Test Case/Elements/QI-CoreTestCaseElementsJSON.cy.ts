@@ -101,7 +101,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Create
         //Verify created test case Title and Series exists on Test Cases Page
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //add json value to measure's test case
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
@@ -128,7 +128,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Create
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
         cy.get(TestCasesPage.elementsTab).click()
@@ -222,7 +222,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         //Verify created test case Title and Series exists on Test Cases Page
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //add json value to measure's test case
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
@@ -249,7 +249,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
         cy.get(TestCasesPage.elementsTab).click()
@@ -278,7 +278,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         //verify updated list of values
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
         cy.get(TestCasesPage.elementsTab).click()
@@ -374,7 +374,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         //Verify created test case Title and Series exists on Test Cases Page
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //add json value to measure's test case
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
@@ -401,7 +401,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
         cy.get(TestCasesPage.elementsTab).click()
@@ -432,7 +432,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
         cy.get(TestCasesPage.elementsTab).click()
@@ -449,7 +449,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         //verify updated list of values
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
         cy.get(TestCasesPage.elementsTab).click()
@@ -545,7 +545,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         //Verify created test case Title and Series exists on Test Cases Page
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //add json value to measure's test case
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
@@ -572,7 +572,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
         cy.get(TestCasesPage.elementsTab).click()
@@ -602,7 +602,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         Utilities.waitForElementVisible(TestCasesPage.elementsTab, 20000)
         cy.get(TestCasesPage.elementsTab).click()

@@ -209,7 +209,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/ASBTestSeriesTitle for Auto Test' + testCaseDescription + todaysDate + 'Select')
 
         //navigate to test case edit / detail page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
 
@@ -299,7 +299,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/A' + testCaseSeries + 'b' + 'Title for Auto Testb' + testCaseDescription + 'b' + todaysDate + 'Select1N/A' + testCaseSeries + 'a' + 'Title for Auto Testa' + testCaseDescription + 'a' + todaysDate + 'Select')
 
         //navigate to test case edit / detail page for the first test case
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
 
@@ -307,7 +307,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to test case edit / detail page for the second test case
-        TestCasesPage.testCaseAction('edit', true)
+        TestCasesPage.clickEditforCreatedTestCase(true)
 
         cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "transaction"')
 
@@ -395,7 +395,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/ASBTestSeriesTitle for Auto Test' + testCaseDescription + todaysDate + 'Select')
 
         //navigate to test case edit / detail page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
 
@@ -485,7 +485,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASBTestSeriesbTitle for Auto Testb' + testCaseDescription + 'b' + todaysDate + 'Select1N/ASBTestSeriesaTitle for Auto Testa' + testCaseDescription + 'a' + todaysDate + 'Select')
 
         //navigate to test case edit / detail page for the first test case
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
 
@@ -493,7 +493,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to test case edit / detail page for the second test case
-        TestCasesPage.testCaseAction('edit', true)
+        TestCasesPage.clickEditforCreatedTestCase(true)
 
         cy.get(TestCasesPage.aceEditor).should('include.text', '"type": "collection"')
 

@@ -101,7 +101,7 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to the edit page for the second test case
-        TestCasesPage.testCaseAction('edit', true)
+        TestCasesPage.clickEditforCreatedTestCase(true)
 
         //edit second test case so that it will fail
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')

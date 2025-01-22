@@ -80,7 +80,7 @@ describe('Sort by each of the test case list page\'s columns', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //edit test case to cause it to fail
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
