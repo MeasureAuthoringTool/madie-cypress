@@ -7,38 +7,32 @@ import {Utilities} from "../../../../../Shared/Utilities"
 import {MeasuresPage} from "../../../../../Shared/MeasuresPage"
 import {EditMeasurePage} from "../../../../../Shared/EditMeasurePage"
 
-let testCaseDescription = 'DENOMFail' + Date.now()
-let measureName = 'QDMTestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+const now = Date.now()
+let testCaseDescription = 'DENOMFail test case'
+let measureName = 'QDMTestMeasure' + now
+let CqlLibraryName = 'TestLibrary' + now
 let testCaseTitle = 'test case title'
 let testCaseSeries = 'SBTestSeries'
 let measureCQL = MeasureCQL.SBTEST_CQL
 let measureScoring = 'Cohort'
-let newMeasureName = ''
-let newCqlLibraryName = ''
 
 describe('Clone QDM Test Case', () => {
 
     before('Create measure and login', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 2))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
-
         //Create QDM Measure, PC and Test Case with ALT user
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, true, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, true, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
-
     })
 
     after('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
+
     it('Clone QDM Test Case - Success scenario', () => {
 
         //click on Edit button to edit measure
@@ -48,12 +42,8 @@ describe('Clone QDM Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((tcId) => {
-            cy.get('[data-testid=select-action-' + tcId + ']').click()
-            cy.get('[data-testid=clone-test-case-btn-' + tcId + ']').should('be.visible')
-            cy.get('[data-testid=clone-test-case-btn-' + tcId + ']').should('be.enabled')
-            cy.get('[data-testid=clone-test-case-btn-' + tcId + ']').click({force: true})
-        })
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterClone).click()
 
         cy.get('[class="toast success"]').should('contain.text', 'Test case cloned successfully')
     })
@@ -73,11 +63,6 @@ describe('Clone QDM Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((tcId) => {
-            cy.get('[data-testid=select-action-' + tcId + ']').click()
-            cy.get('[data-testid=clone-test-case-btn-' + tcId + ']').should('not.exist')
-            cy.get('[data-testid=view-edit-test-case-' + tcId + ']').click()
-        })
-
+        cy.get(TestCasesPage.actionCenterClone).should('not.exist')
     })
 })

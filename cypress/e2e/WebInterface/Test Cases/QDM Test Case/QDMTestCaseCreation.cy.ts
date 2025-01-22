@@ -414,7 +414,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2000 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
         //add element - code system to TC
@@ -436,7 +436,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.grabElementId()
         TestCasesPage.qdmTestCaseElementAction('edit')
         //add negation
@@ -464,7 +464,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
         //Element - Encounter:Performed: Nonelective Inpatient Encounter
         cy.get('[data-testid="elements-tab-encounter"]').scrollIntoView().click()
         cy.get('[data-testid="data-type-Encounter, Performed: Nonelective Inpatient Encounter"]').click()

@@ -822,7 +822,7 @@ describe('Measure Highlighting', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
@@ -925,7 +925,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
@@ -1073,7 +1073,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
@@ -1205,7 +1205,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
@@ -1339,7 +1339,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
@@ -1459,7 +1459,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 55000)
 
         //Navigate to test case detail / edit page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //run test case
         cy.get(TestCasesPage.runTestButton).should('be.visible')

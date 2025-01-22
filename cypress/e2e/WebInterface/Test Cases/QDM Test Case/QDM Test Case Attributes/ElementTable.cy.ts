@@ -56,7 +56,7 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
         //Navigate to Edit Test Case page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')

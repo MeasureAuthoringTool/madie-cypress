@@ -1920,7 +1920,7 @@ describe('Verify multiple IPs on the highlighting tab', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Navigate to test case detail / edit page
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //navigate to the highlighting sub tab
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')

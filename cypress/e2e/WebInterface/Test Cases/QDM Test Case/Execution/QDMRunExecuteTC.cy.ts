@@ -193,7 +193,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('07/01/2002 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 

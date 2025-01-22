@@ -89,7 +89,7 @@ describe('QI Core: Elements tab is not present', () => {
         MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.testCasesTab).click()
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         //Elements tab should not be visible
         Utilities.waitForElementToNotExist(TestCasesPage.elementsTab, 20000)
@@ -148,7 +148,7 @@ describe('QI Core v6: UI Elements Builder tab is not shown', () => {
         Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 30000)
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('edit')
+        TestCasesPage.clickEditforCreatedTestCase()
 
         // no options show, only default editor
         cy.get(TestCasesPage.jsonTab).should('not.exist')

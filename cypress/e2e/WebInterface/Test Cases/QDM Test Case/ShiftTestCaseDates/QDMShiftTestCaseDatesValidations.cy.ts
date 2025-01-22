@@ -37,7 +37,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-        TestCasesPage.testCaseAction('edit', false)
+        TestCasesPage.clickEditforCreatedTestCase()
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2000 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
         //add element - code system to TC
@@ -107,7 +107,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
-        TestCasesPage.testCaseAction('edit', true)
+        TestCasesPage.clickEditforCreatedTestCase(true)
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('02/29/1980 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
         //add element - code system to TC
@@ -233,7 +233,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to the edit page for the first test case
-        TestCasesPage.testCaseAction('edit', false)
+        TestCasesPage.clickEditforCreatedTestCase()
         //confirm that the test case DOB field is visible and enabled
         Utilities.waitForElementVisible(TestCasesPage.QDMDob, 3500)
         Utilities.waitForElementEnabled(TestCasesPage.QDMDob, 3500)
@@ -254,7 +254,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to the edit page for the first test case
-        TestCasesPage.testCaseAction('edit', true)
+        TestCasesPage.clickEditforCreatedTestCase(true)
 
         //confirm value that is in test case
         cy.get(TestCasesPage.QDMDob).should('contain.value', '02/28/1983')
@@ -291,7 +291,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to the edit page for the first test case
-        TestCasesPage.testCaseAction('edit', false)
+        TestCasesPage.clickEditforCreatedTestCase()
         //confirm that the test case DOB field is visible and enabled
         Utilities.waitForElementVisible(TestCasesPage.QDMDob, 3500)
         Utilities.waitForElementEnabled(TestCasesPage.QDMDob, 3500)
@@ -312,7 +312,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to the edit page for the first test case
-        TestCasesPage.testCaseAction('edit', true)
+        TestCasesPage.clickEditforCreatedTestCase(true)
 
         //confirm value that is in test case
         cy.get(TestCasesPage.QDMDob).should('contain.value', '02/28/1980')
@@ -365,7 +365,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to the edit page for the first test case
-        TestCasesPage.testCaseAction('edit', false)
+        TestCasesPage.clickEditforCreatedTestCase()
         //confirm that the test case DOB field is visible and enabled
         Utilities.waitForElementVisible(TestCasesPage.QDMDob, 3500)
         Utilities.waitForElementEnabled(TestCasesPage.QDMDob, 3500)
@@ -400,7 +400,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.shiftSpecificTestCasesSuccessMsg).should('contain.text', 'Test Case Shift Dates for QDMManifestTCGroup2 - QDMManifestTC2 successful.')
 
         //navigate to the edit page for the first test case
-        TestCasesPage.testCaseAction('edit', true)
+        TestCasesPage.clickEditforCreatedTestCase(true)
 
         //confirm value that is in test case
         cy.get(TestCasesPage.QDMDob).should('contain.value', '02/28/1983')
@@ -436,7 +436,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to the edit page for the first test case
-        TestCasesPage.testCaseAction('edit', false)
+        TestCasesPage.clickEditforCreatedTestCase()
         //confirm that the test case DOB field is visible and enabled
         Utilities.waitForElementVisible(TestCasesPage.QDMDob, 3500)
         Utilities.waitForElementEnabled(TestCasesPage.QDMDob, 3500)
@@ -472,7 +472,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.shiftSpecificTestCasesSuccessMsg).should('contain.text', 'Test Case Shift Dates for QDMManifestTCGroup2 - QDMManifestTC2 successful.')
 
         //navigate to the edit page for the first test case
-        TestCasesPage.testCaseAction('edit', true)
+        TestCasesPage.clickEditforCreatedTestCase(true)
 
         //confirm value that is in test case
         cy.get(TestCasesPage.QDMDob).should('contain.value', '02/28/1980')
