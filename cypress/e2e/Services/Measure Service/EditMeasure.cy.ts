@@ -602,7 +602,50 @@ describe('Measure Service: Edit Measure', () => {
             })
         })
     })
+
+    it('Add Intended Venue to the Measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            "id": id,
+                            "measureName": updatedMeasureName,
+                            "cqlLibraryName": updatedCQLLibraryName,
+                            "model": model,
+                            "version": "0.0.000",
+                            "measureScoring": "Ratio",
+                            "versionId": vId,
+                            "measureMetaData": { "experimental": false,
+                                "draft": true,
+                                "intendedVenue": {
+                                    "code": "eh",
+                                    "codeSystem": "http://hl7.org/fhir/us/cqfmeasures/CodeSystem/intended-venue-codes",
+                                    "display": "EH"
+                            }
+                                },
+                            "measureSetId": uuidv4(),
+                            "ecqmTitle": "ecqmTitle",
+                            "measurementPeriodStart": mpStartDate + "T00:00:00.000Z",
+                            "measurementPeriodEnd": mpEndDate + "T00:00:00.000Z",
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body.measureMetaData.intendedVenue.code).to.eql('eh')
+                        cy.log('Measure updated successfully')
+                    })
+                })
+            })
+        })
+    })
 })
+
 describe('Measure Service: Attempt to add RA when user is not owner of measure', () => {
 
     updatedMeasureName = measureName + 1 + randValue
