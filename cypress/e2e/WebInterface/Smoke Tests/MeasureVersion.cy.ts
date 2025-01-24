@@ -267,9 +267,14 @@ describe('QI-Core Measure Versioning', () => {
     it('Add Major Version to the Qi-Core Measure and verify that the versioned Measure is in read only', () => {
 
         MeasuresPage.actionCenter('version')
-
+        Utilities.waitForElementVisible(MeasuresPage.measureVersionTypeDropdown, 50000)
+        cy.get(MeasuresPage.measureVersionTypeDropdown).should('be.visible')
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureVersionMajor, 50000)
+        cy.get(MeasuresPage.measureVersionMajor).should('be.visible')
         cy.get(MeasuresPage.measureVersionMajor).click()
+        Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 50000)
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).should('be.visible')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get('.MuiDialogContent-root').click()
