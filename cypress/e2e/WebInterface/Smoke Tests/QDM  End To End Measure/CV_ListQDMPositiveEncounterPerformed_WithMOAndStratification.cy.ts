@@ -313,7 +313,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="strat-test-population-initialPopulation-expected-0"]').eq(0).type('1')
         cy.get('[data-testid="strat-test-population-measurePopulation-expected-1"]').eq(0).type('1')
         //Commented until MAT-6608 is fixed
-        cy.get('[data-testid="strat-test-population-measurePopulationObservation-expected-2"]').eq(0).clear().type('60')
+        cy.get('[data-testid="strat-test-population-measurePopulationObservation-expected-3"]').eq(0).clear().type('60')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -450,7 +450,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="strat-test-population-initialPopulation-expected-0"]').eq(0).type('2')
         cy.get('[data-testid="strat-test-population-measurePopulation-expected-1"]').eq(0).type('2')
         // uncommented, reference ticket was fixed a long time ago
-        cy.get('[data-testid="strat-test-population-measurePopulationObservation-expected-2"]').clear().type('45')
+        cy.get('[data-testid="strat-test-population-measurePopulationObservation-expected-3"]').clear().type('45')
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

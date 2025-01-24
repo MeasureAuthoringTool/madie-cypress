@@ -53,7 +53,7 @@ describe('Delete Test Case', () => {
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
 
-        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ?')
+        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCase1.title + '?')
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase1.title)
@@ -70,7 +70,7 @@ describe('Delete Test Case', () => {
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterDelete).click()
 
-        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ?')
+        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCase2.title + ', ' + testCase1.title + '?')
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase1.title)

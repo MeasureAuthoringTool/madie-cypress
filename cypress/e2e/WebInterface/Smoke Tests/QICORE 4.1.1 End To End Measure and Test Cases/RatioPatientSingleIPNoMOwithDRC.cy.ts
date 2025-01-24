@@ -168,8 +168,10 @@ describe('Measure Creation and Testing: Ratio Patient Single IP w/o MO w/ DRC', 
     })
 
     it('End to End Cohort Ratio Patient Single IP w/o MO w/ DRC, DRC Pass Result', () => {
+        let randValueTitle = (Math.floor((Math.random() * 1000) + 1))
+        let randValueSeries = (Math.floor((Math.random() * 2000) + 1))
 
-        TestCasesPage.CreateTestCaseAPI(testCaseTitleDrcPass, testCaseDescription, testCaseSeries, testCaseJsonDrcPass)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitleDrcPass + randValueTitle, testCaseDescription, testCaseSeries + randValueSeries, testCaseJsonDrcPass)
 
         OktaLogin.Login()
 
