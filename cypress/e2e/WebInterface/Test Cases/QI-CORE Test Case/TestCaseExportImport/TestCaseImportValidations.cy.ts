@@ -80,7 +80,7 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //confirm that the import button is disabled / not available
-        Utilities.waitForElementDisabled(TestCasesPage.importNonBonnieTestCasesBtn, 35000)
+        Utilities.waitForElementToNotExist(TestCasesPage.importNonBonnieTestCasesBtn, 35000)
     })
 
     it('Measure is in DRAFT status: measure has been shared with user: import button is available, import can occur, import can be cancelled and modal will close, upon cancelling', () => {
@@ -141,7 +141,8 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export test case
-        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        cy.get('[data-testid="export-action-icon"]').click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
@@ -167,14 +168,16 @@ describe('Test Case Import: functionality tests', () => {
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASBTestSeriesFFailing Test Case' + secondTestCaseDescription + todaysDate + 'Select1N/ASBTestSeriesPPassing Test Case' + testCaseDescription + todaysDate + 'Select')
+        //Case #StatusGroupTitleDescriptionLast Saved2N/ASBTestSeriesFFailing Test CaseDENOMFail01/24/2025Edit1N/ASBTestSeriesPPassing Test CaseDENOMPass01/24/2025Edit
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/ASBTestSeriesFFailing Test Case' + secondTestCaseDescription + todaysDate + 'Edit1N/ASBTestSeriesPPassing Test Case' + testCaseDescription + todaysDate + 'Edit')
 
         //verify confirmation message
         Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 35000)
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', '(2) Test cases imported successfully')
 
         //export test case
-        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        cy.get('[data-testid="export-action-icon"]').click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
@@ -245,7 +248,7 @@ describe('Test Case Import validations for versioned Measures', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //confirm that the import button is disabled / not available
-        Utilities.waitForElementDisabled(TestCasesPage.importNonBonnieTestCasesBtn, 35000)
+        Utilities.waitForElementToNotExist(TestCasesPage.importNonBonnieTestCasesBtn, 35000)
     })
 
     it('Measure is in VERSIONED status: measure has been shared with user: import button is not available', () => {
@@ -302,7 +305,7 @@ describe('Test Case Import validations for versioned Measures', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //confirm that the import button is disabled / not available
-        Utilities.waitForElementDisabled(TestCasesPage.importNonBonnieTestCasesBtn, 35000)
+        Utilities.waitForElementToNotExist(TestCasesPage.importNonBonnieTestCasesBtn, 35000)
     })
 })
 
@@ -491,7 +494,8 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export test case
-        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        cy.get('[data-testid="export-action-icon"]').click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
@@ -580,7 +584,8 @@ describe('Test case uniqueness error validation', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export test case
-        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        cy.get('[data-testid="export-action-icon"]').click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
@@ -645,7 +650,7 @@ describe('Test case uniqueness error validation', () => {
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1InvalidSBTestSeriesPb1Passing Test Caseb1' + testCaseDescription + 'b1' + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved1InvalidSBTestSeriesPb1Passing Test Caseb1' + testCaseDescription + 'b1' + todaysDate + 'Edit')
 
         //verifies alert message at top of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
@@ -696,7 +701,8 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export test case
-        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        cy.get('[data-testid="export-action-icon"]').click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
