@@ -83,7 +83,7 @@ describe('Measure Versioning validations', () => {
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
@@ -114,7 +114,7 @@ describe('Measure Versioning validations', () => {
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
@@ -143,7 +143,7 @@ describe('Measure Versioning validations', () => {
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('3.0.000')
         cy.get('[id="current-version"]').eq(0).click()
         cy.get('[data-testid="confirm-version-helper-text"]').should('contain.text', 'Confirmed Version number must match new version number.')
