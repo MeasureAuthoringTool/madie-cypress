@@ -64,7 +64,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql('3.18.0')
+                    expect(response.body).to.eql('3.20.0')
                 })
             })
         })
@@ -84,8 +84,6 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
                 })
             })
         })
-        //Currently, there is a known issue that is making this scenario use version 3.14.0. See https://oncprojectracking.healthit.gov/support/browse/MADIE-2098.
-        //Once the above is fixed, this should be the same as when draft=true
         //Verify Translator version for Versioned Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -110,7 +108,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql('3.14.0')
+                    expect(response.body).to.eql('3.18.0')
                 })
             })
         })
