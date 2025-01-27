@@ -2,7 +2,7 @@ const standardSdeBlock =
     'define \"SDE Ethnicity\":\n' +
     '  [\"Patient Characteristic Ethnicity\": \"Ethnicity\"]\n\n' +
     'define \"SDE Payer\":\n' +
-    '  [\"Patient Characteristic Payer\": \"Payer Type\"]\n\n' +
+    '  [\"Patient Characteristic Payer\": \"Payer\"]\n\n' +
     'define \"SDE Race\":\n' +
     '  [\"Patient Characteristic Race\": \"Race\"]\n\n' +
     'define \"SDE Sex\":\n' +
