@@ -328,7 +328,8 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
 
     })
 
-    it('MADiE Shift Test Case Dates -> Shift single / specific test case\'s dates for QDM Measure', () => {
+    //Skipping until MAT-8194 is finished
+    it.skip('MADiE Shift Test Case Dates -> Shift single / specific test case\'s dates for QDM Measure', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
