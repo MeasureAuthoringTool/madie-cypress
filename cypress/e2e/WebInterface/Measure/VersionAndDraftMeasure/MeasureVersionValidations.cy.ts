@@ -56,7 +56,7 @@ describe('Measure Versioning validations', () => {
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
         Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 7000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
@@ -86,7 +86,7 @@ describe('Measure Versioning validations', () => {
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
         Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 7000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
@@ -144,7 +144,7 @@ describe('Measure Versioning when the measure has test case with errors', () => 
         MeasuresPage.actionCenter('version', 0)
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
         Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 7000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
@@ -166,7 +166,7 @@ describe('Measure Versioning when the measure has test case with errors', () => 
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
         Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 7000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
 
