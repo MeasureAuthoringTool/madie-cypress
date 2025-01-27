@@ -7,11 +7,11 @@ import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { LandingPage } from "../../../../../Shared/LandingPage"
-import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { Global } from "../../../../../Shared/Global"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { CQLLibrariesPage } from "../../../../../Shared/CQLLibrariesPage"
+import { QdmCql } from "../../../../../Shared/QDMMeasuresCQL"
 
 let testCaseDescription = 'DENOMFail' + Date.now()
 let QDMTCJson = TestCaseJson.QDMTestCaseJson
@@ -23,90 +23,10 @@ let twoFiftyTwoCharacters = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxy
 let altMeasureName = ''
 let altCqlLibraryName = ''
 let measureScoringCohort = 'Cohort'
-let qdmMeasureCQL = MeasureCQL.simpleQDM_CQL
-let qdmMeasureCQLwInvalidValueset = MeasureCQL.simpleQDM_CQL_invalid_valueset
-let qdmMeasureCQLwNonVsacValueset = MeasureCQL.QDMTestCaseCQLNonVsacValueset
-let measureQDMCQL = 'library Library5749 version \'0.0.000\'\n' +
-    'using QDM version \'5.6\'\n' +
-    'codesystem "Test": \'urn:oid:2.16.840.1.113883.6.1\'\n' +
-    'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\'\n' +
-    'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\'\n' +
-    'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
-    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
-    'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\'\n' +
-    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
-    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
-    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
-    'valueset "Active Bleeding or Bleeding Diathesis (Excluding Menses)": \'urn:oid:2.16.840.1.113883.3.3157.4036\'\n' +
-    'valueset "Active Peptic Ulcer": \'urn:oid:2.16.840.1.113883.3.3157.4031\'\n' +
-    'valueset "Adverse reaction to thrombolytics": \'urn:oid:2.16.840.1.113762.1.4.1170.6\'\n' +
-    'valueset "Allergy to thrombolytics": \'urn:oid:2.16.840.1.113762.1.4.1170.5\'\n' +
-    'valueset "Anticoagulant Medications, Oral": \'urn:oid:2.16.840.1.113883.3.3157.4045\'\n' +
-    'valueset "Aortic Dissection and Rupture": \'urn:oid:2.16.840.1.113883.3.3157.4028\'\n' +
-    'valueset "birth date": \'urn:oid:2.16.840.1.113883.3.560.100.4\'\n' +
-    'valueset "Cardiopulmonary Arrest": \'urn:oid:2.16.840.1.113883.3.3157.4048\'\n' +
-    'valueset "Cerebral Vascular Lesion": \'urn:oid:2.16.840.1.113883.3.3157.4025\'\n' +
-    'valueset "Closed Head and Facial Trauma": \'urn:oid:2.16.840.1.113883.3.3157.4026\'\n' +
-    'valueset "Dementia": \'urn:oid:2.16.840.1.113883.3.3157.4043\'\n' +
-    'valueset "Discharge To Acute Care Facility": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.87\'\n' +
-    'valueset "ED": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1085\'\n' +
-    'valueset "Endotracheal Intubation": \'urn:oid:2.16.840.1.113762.1.4.1045.69\'\n' +
-    'valueset "Fibrinolytic Therapy": \'urn:oid:2.16.840.1.113883.3.3157.4020\'\n' +
-    'valueset "Intracranial or Intraspinal surgery": \'urn:oid:2.16.840.1.113762.1.4.1170.2\'\n' +
-    'valueset "Ischemic Stroke": \'urn:oid:2.16.840.1.113883.3.464.1003.104.12.1024\'\n' +
-    'valueset "Major Surgical Procedure": \'urn:oid:2.16.840.1.113883.3.3157.4056\'  \n' +
-    'valueset "Malignant Intracranial Neoplasm Group": \'urn:oid:2.16.840.1.113762.1.4.1170.3\'\n' +
-    'valueset "Mechanical Circulatory Assist Device": \'urn:oid:2.16.840.1.113883.3.3157.4052\'\n' +
-    'valueset "Neurologic impairment": \'urn:oid:2.16.840.1.113883.3.464.1003.114.12.1012\'\n' +
-    'valueset "Patient Expired": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.309\'\n' +
-    'valueset "Percutaneous Coronary Intervention": \'urn:oid:2.16.840.1.113883.3.3157.2000.5\'\n' +
-    'valueset "Pregnancy": \'urn:oid:2.16.840.1.113883.3.3157.4055\'\n' +
-    'valueset "STEMI": \'urn:oid:2.16.840.1.113883.3.3157.4017\'\n' +
-    'valueset "Thrombolytic medications": \'urn:oid:2.16.840.1.113762.1.4.1170.4\'\n' +
-    'valueset "Chlamydia Screening": \'urn:oid:2.16.840.1.113883.3.464.1003.110.12.1052\'\n' +
-    'valueset "Falls Screening": \'urn:oid:2.16.840.1.113883.3.464.1003.118.12.1028\'\n' +
-    'code "Birth date": \'21112-8\' from "LOINC" display \'Birth date\'\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    'context Patient\n' +
-    'define "SDE Ethnicity":\n' +
-    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
-    'define "SDE Payer":\n' +
-    '  ["Patient Characteristic Payer": "Payer"]\n' +
-    'define "SDE Race":\n' +
-    '  ["Patient Characteristic Race": "Race"]\n' +
-    'define "SDE Sex":\n' +
-    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
-    'define "Initial Population":\n' +
-    '  ["Adverse Event": "Encounter Inpatient"] //Adverse Event\n' +
-    '      union ["Allergy/Intolerance": "Observation Services"] //Allergy\n' +
-    '      union ["Assessment, Order": "Active Bleeding or Bleeding Diathesis (Excluding Menses)"] //Assessment\n' +
-    '      union ["Patient Care Experience": "Active Peptic Ulcer"] //Care Experience\n' +
-    '      union ["Care Goal": "Adverse reaction to thrombolytics"] //Care Goal - missing from current list\n' +
-    '      union ["Patient Characteristic Payer": "Payer"] //Characteristic\n' +
-    '      //threw in a patient demographic - should not show up\n' +
-    '      union ["Patient Characteristic Race": "Race"]\n' +
-    '      union ["Diagnosis": "Allergy to thrombolytics"] //Condition\n' +
-    '      union ["Communication, Performed": "Anticoagulant Medications, Oral"] //Communication\n' +
-    '      //threw a negation element in to see if it maps correctly\n' +
-    '    //   union ["Communication, Not Performed": "Aortic Dissection and Rupture"] //Communication\n' +
-    '      union ["Device, Order": "Cardiopulmonary Arrest"] //Device\n' +
-    '      union ["Diagnostic Study, Order": "Cerebral Vascular Lesion"] //Diagnostic Study\n' +
-    '      union ["Encounter, Performed": "Emergency Department Visit"] //Encounter\n' +
-    '      union ["Family History": "Closed Head and Facial Trauma"] //Family History\n' +
-    '      union ["Immunization, Order": "Dementia"] //Immunization\n' +
-    '      union ["Intervention, Order": "ED"] //Intervention\n' +
-    '      union ["Laboratory Test, Order": "Endotracheal Intubation"] //Laboratory\n' +
-    '      union ["Laboratory Test, Performed": "Chlamydia Screening"]\n' +
-    '      union ["Medication, Active": "Fibrinolytic Therapy"] //Medication\n' +
-    '      union ["Participation": "Intracranial or Intraspinal surgery"] //Participation\n' +
-    '      union ["Physical Exam, Order": "Ischemic Stroke"] //Physical Exam\n' +
-    '      union ["Procedure, Order": "Major Surgical Procedure"] //Procedure\n' +
-    '      union ["Related Person": "Malignant Intracranial Neoplasm Group"] //Related Person - mssing from curent list\n' +
-    '      union ["Substance, Administered": "Mechanical Circulatory Assist Device"] //Substance\n' +
-    '      union ["Symptom": "Neurologic impairment"] //Symptom\n' +
-    '      union ["Assessment, Performed": "Falls Screening"] //Assessment '
-
-
+const qdmMeasureCQL = QdmCql.simpleQDM_CQL
+const qdmMeasureCQLwInvalidValueset = QdmCql.simpleQDM_CQL_invalid_valueset
+const qdmMeasureCQLwNonVsacValueset = QdmCql.QDMTestCaseCQLNonVsacValueset
+const measureQDMCQL = QdmCql.QDM4TestCaseElementsAttributes
 
 describe('Test Case Ownership Validations for QDM Measures', () => {
 
@@ -554,22 +474,20 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
     })
 })
 
-
 describe('QDM CQM-Execution failure error validations: CQL Errors and missing group', () => {
 
     beforeEach('Create Measure, and Test Case', () => {
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringCohort, true, qdmMeasureCQL)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
-
     })
 
     afterEach('Logout and Clean up', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
+
     it('A message is displayed if there are issues with the CQL', () => {
 
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
@@ -593,7 +511,8 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 50000)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20000)
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 21000)
 
         //Navigate to Test Case page
         Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 50000)
@@ -611,6 +530,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         //confirm that the Run Test button is disabled
         cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('not.be.enabled')
     })
+
     it('A message is displayed if the measure is missing a group', () => {
 
         //log into MADiE
@@ -650,9 +570,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('not.be.enabled')
 
     })
-
 })
-
 
 describe('QDM CQM-Execution failure error validations: Valueset not found in Vsac', () => {
 
@@ -685,16 +603,14 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
 
         //log out of UI
         OktaLogin.UILogout()
-
-
     })
 
     afterEach('Logout and Clean up', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
+
     it("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
 
         //log into MADiE
@@ -713,14 +629,12 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
         Utilities.waitForElementVisible(TestCasesPage.qdmCQLFailureErrorList, 105000)
         cy.get(TestCasesPage.qdmCQLFailureErrorList).should('exist')
         cy.get(TestCasesPage.qdmCQLFailureErrorList).should('be.visible')
-        cy.get(TestCasesPage.qdmCQLFailureErrorList).should('contain.text', 'An error exists with the measure CQL, please review the CQL Editor tab')
+        cy.get(TestCasesPage.qdmCQLFailureErrorList).should('contain.text', 'An error exists with the measure CQL, please review the CQL Editor tab.')
 
         //confirm that the Run Test button is disabled
         cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('not.be.enabled')
-
     })
 })
-
 
 describe('QDM CQM-Execution failure error validations: Data transformation- MADiE Measure to CQMMeasure', () => {
 
