@@ -629,7 +629,7 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
         Utilities.waitForElementVisible(TestCasesPage.qdmCQLFailureErrorList, 105000)
         cy.get(TestCasesPage.qdmCQLFailureErrorList).should('exist')
         cy.get(TestCasesPage.qdmCQLFailureErrorList).should('be.visible')
-        cy.get(TestCasesPage.qdmCQLFailureErrorList).should('contain.text', 'An error occurred, please try again. If the error persists, please contact the help desk')
+        cy.get(TestCasesPage.qdmCQLFailureErrorList).should('contain.text', 'An error exists with the measure CQL, please review the CQL Editor tab.')
 
         //confirm that the Run Test button is disabled
         cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('not.be.enabled')
