@@ -325,6 +325,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
     })
 
     it('Verify Draft measure CQL, Group and Test case', () => {
+
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
 
@@ -395,8 +396,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.testCaseListTable).should('exist')
         cy.get(TestCasesPage.testCaseListTable).click()
-        cy.get('.action').click()
-        cy.get('[class="btn-container"]').contains('edit').click()
+        cy.get(TestCasesPage.testCaseAction0Btn).click()
         cy.get(TestCasesPage.aceEditor).should('not.be.empty')
         cy.get(TestCasesPage.aceEditor).should('contain.text', 'Bundle')
         cy.log('Test case details verified successfully')
