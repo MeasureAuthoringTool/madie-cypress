@@ -21,8 +21,8 @@ describe('Measure List Page Searching', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
-                url: '/api/measures/search?query=TestMeasure',
-                method: 'GET',
+                url: '/api/measures/searches?query=' + measureName,
+                method: 'PUT',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value
                 }

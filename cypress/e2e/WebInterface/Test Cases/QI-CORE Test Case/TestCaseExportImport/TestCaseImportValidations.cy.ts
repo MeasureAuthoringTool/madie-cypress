@@ -594,7 +594,8 @@ describe('Test case uniqueness error validation', () => {
         cy.log('Successfully verified zip file export')
 
         //delete test case
-        TestCasesPage.testCaseAction('delete')
+        cy.get('[data-testid="delete-action-icon"]').click()
+        Utilities.waitForElementVisible(TestCasesPage.deleteTestCaseContinueBtn, 35000)
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
 
         //Create test case
