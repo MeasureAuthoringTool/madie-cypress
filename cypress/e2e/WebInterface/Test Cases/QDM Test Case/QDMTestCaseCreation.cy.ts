@@ -474,7 +474,6 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
 
         //verify the results row
         cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '1FailQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
-
     })
 
 })
