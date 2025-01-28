@@ -155,7 +155,7 @@ export class TestCasesPage {
     public static readonly saveSDEOption = '[data-testid="sde-save"]'
 
     //Test case QRDA Export
-    public static readonly testcaseQRDAExportBtn = '[data-testid="show-export-test-cases-button"]'
+    public static readonly testcaseQRDAExportBtn = '[data-testid="export-action-icon"]'
     public static readonly successMsg = '.toast'
 
     //TC error concerning CQL and PC mismatch
