@@ -442,9 +442,6 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export both text cases
-        // cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
-        // Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
-        // cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
         TestCasesPage.checkTestCase(1)
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterExport).click()

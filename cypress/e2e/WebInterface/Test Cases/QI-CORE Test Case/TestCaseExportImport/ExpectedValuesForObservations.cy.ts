@@ -93,19 +93,19 @@ describe('Ratio based measure with measure observations', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         // export tc
-        cy.get(TestCasesPage.exportTestCasesBtn).click({force: true})
-        Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 2000)
-        cy.get(TestCasesPage.exportCollectionTypeOption).click({force: true})
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
         const exportPath ='cypress/downloads/AutoTestTitle-v0.0.000-FHIR4-TestCases.zip'
         cy.readFile(exportPath).should('exist')
 
         // need this for now? - clicks below won't work with invisible elements overlapping screen
         cy.reload()
-        Utilities.waitForElementVisible(TestCasesPage.deleteAllTestCasesBtn, 20000)
 
         // delete all tc
-        cy.get(TestCasesPage.deleteAllTestCasesBtn).click()
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterDelete).click()
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
 
         // re-import immediately
@@ -116,11 +116,11 @@ describe('Ratio based measure with measure observations', () => {
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseBtnOnModal, 15000)
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
  
-        Utilities.waitForElementVisible(TestCasesPage.exportTestCasesBtn, 10000)
+        //Utilities.waitForElementVisible(TestCasesPage.exportTestCasesBtn, 10000)
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         TestCasesPage.grabTestCaseId(1)
-        TestCasesPage.clickEditforCreatedTestCase()
+        cy.get(TestCasesPage.testCaseAction0Btn).click()
 
         // check expected values
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -185,19 +185,19 @@ describe('Proportion based measure with no observations', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         // export tc
-        cy.get(TestCasesPage.exportTestCasesBtn).click({force: true})
-        Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 2000)
-        cy.get(TestCasesPage.exportCollectionTypeOption).click({force: true})
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
         const exportPath ='cypress/downloads/AutoTestTitle-v0.0.000-FHIR4-TestCases.zip'
         cy.readFile(exportPath).should('exist')
 
         // need this for now? - clicks below won't work with invisible elements overlapping screen
         cy.reload()
-        Utilities.waitForElementVisible(TestCasesPage.deleteAllTestCasesBtn, 20000)
 
         // delete all tc
-        cy.get(TestCasesPage.deleteAllTestCasesBtn).click()
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterDelete).click()
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
 
         // re-import immediately
@@ -207,12 +207,11 @@ describe('Proportion based measure with no observations', () => {
         cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(exportPath, {force: true})
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseBtnOnModal, 15000)
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
- 
-        Utilities.waitForElementVisible(TestCasesPage.exportTestCasesBtn, 10000)
+
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         TestCasesPage.grabTestCaseId(1)
-        TestCasesPage.clickEditforCreatedTestCase()
+        cy.get(TestCasesPage.testCaseAction0Btn).click()
 
         // check expected values
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
