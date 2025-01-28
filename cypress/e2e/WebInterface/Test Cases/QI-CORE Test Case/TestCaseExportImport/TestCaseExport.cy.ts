@@ -4,19 +4,17 @@ import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../../Shared/Utilities"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { Header } from "../../../../../Shared/Header"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let randValue = (Math.floor((Math.random() * 1000) + 1))
-let testCaseTitle = 'Title for Auto Test'
-let testCaseDescription = 'DENOMFail' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
-let newMeasureName = measureName + randValue
-let newCqlLibraryName = CqlLibraryName + randValue
-const path = require('path')
+let measureName = 'TCExport' + Date.now()
+let CqlLibraryName = 'TCExportLib' + Date.now()
+const testCase: TestCase = {
+    title: 'Title for Auto Test',
+    description: 'DENOMFail',
+    group: 'SBTestSeries',
+    json: TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
+}
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
@@ -26,20 +24,14 @@ describe('QI-Core Single Test Case Export', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
-
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Export single QI-Core Test case', () => {
@@ -60,9 +52,12 @@ describe('QI-Core Single Test Case Export', () => {
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('exportcollection')
+        // export
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
         // unzipping the Test Case Export
@@ -72,10 +67,9 @@ describe('QI-Core Single Test Case Export', () => {
             })
         cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
             //Verify all files exist in exported zip file
-            cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json' &&
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json' &&
                 patientId, 'README.txt')
         })
-
     })
 
     it('Non-owner of Measure: Export single QI-Core Test case', () => {
@@ -91,9 +85,12 @@ describe('QI-Core Single Test Case Export', () => {
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.testCaseAction('exportcollection')
+        // export
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
         // unzipping the Test Case Export
@@ -103,10 +100,9 @@ describe('QI-Core Single Test Case Export', () => {
             })
         cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
             //Verify all files exist in exported zip file
-            cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json' &&
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json' &&
                 patientId, 'README.txt')
         })
-
     })
 })
 
@@ -116,21 +112,15 @@ describe('QI-Core Test Case Export for all test cases', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle + '2', testCaseSeries + '2', testCaseDescription + '2', testCaseJson, false, true)
-
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
+        TestCasesPage.CreateTestCaseAPI(testCase.title + '2', testCase.group + '2', testCase.description + '2', testCase.json, false, true)
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Export All QI-Core Test cases', () => {
@@ -152,11 +142,13 @@ describe('QI-Core Test Case Export for all test cases', () => {
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
-        Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
-        cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
+        // export
+        TestCasesPage.checkTestCase(1)
+        TestCasesPage.checkTestCase(2)
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
         // unzipping the Test Case Export
@@ -166,12 +158,12 @@ describe('QI-Core Test Case Export for all test cases', () => {
             })
         cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
             //Verify all files exist in exported zip file
-            cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json' &&
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json' &&
                 patientId, 'README.txt')
         })
         cy.readFile(testCasePIdPathSecnD).should('exist').then((patientId2) => {
             //Verify all files exist in exported zip file
-            cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries2-Title for Auto Test2.json' &&
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries2-Title for Auto Test2.json' &&
                 patientId2)
         })
     })
@@ -192,11 +184,13 @@ describe('QI-Core Test Case Export for all test cases', () => {
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
-        Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
-        cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
+        // export
+        TestCasesPage.checkTestCase(1)
+        TestCasesPage.checkTestCase(2)
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
         // unzipping the Test Case Export
@@ -206,12 +200,12 @@ describe('QI-Core Test Case Export for all test cases', () => {
             })
         cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
             //Verify all files exist in exported zip file
-            cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-Title for Auto Test.json' &&
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-Title for Auto Test.json' &&
                 patientId, 'README.txt')
         })
         cy.readFile(testCasePIdPathSecnD).should('exist').then((patientId2) => {
             //Verify all files exist in exported zip file
-            cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries2-Title for Auto Test2.json' &&
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries2-Title for Auto Test2.json' &&
                 patientId2)
         })
         cy.reload()
