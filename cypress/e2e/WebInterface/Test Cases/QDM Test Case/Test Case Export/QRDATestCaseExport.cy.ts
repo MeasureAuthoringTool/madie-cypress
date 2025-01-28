@@ -8,7 +8,6 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
-
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMCQLLibrary' + Date.now()
@@ -120,13 +119,14 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //Export test case button should be disabled
-        cy.get(TestCasesPage.testcaseQRDAExportBtn).should('be.disabled')
+        cy.get('[data-testid="export-tooltip"]').should('not.be.enabled')
 
         //Run the Test cases
         cy.get(TestCasesPage.executeTestCaseButton).click()
+        Utilities.waitForElementEnabled('[data-testid="export-action-btn"]', 60000)
 
         //Export test case button should be enabled
-        cy.get(TestCasesPage.testcaseQRDAExportBtn).should('be.enabled')
+        cy.get('[data-testid="export-action-btn"]').should('be.enabled')
     })
 })
 
