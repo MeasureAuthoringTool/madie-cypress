@@ -247,8 +247,8 @@ describe('Delete Test Case with Shared user', () => {
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.selectTestCaseDropdownBtn).click()
-        TestCasesPage.clickDeleteTestCaseButton()
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterDelete).click()
 
         cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCaseTitle + '?')
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
@@ -293,6 +293,6 @@ describe('Remove user\'s share access from a measure', () => {
         cy.reload()
 
         // proves that edit access was removed
-        cy.get(TestCasesPage.newTestCaseButton).should('be.disabled')
+        Utilities.waitForElementToNotExist(TestCasesPage.newTestCaseButton, 35000)
     })
 })
