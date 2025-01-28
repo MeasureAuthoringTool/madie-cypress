@@ -241,13 +241,11 @@ describe('Validate Measure Group deletion functionality', () => {
         cy.get(EditMeasurePage.testCasesTab).should('exist').should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
+        TestCasesPage.checkTestCase(1)
         //confirm test case is still present on measure
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="test-case-row-0"]', { timeout: 80000 }).should('exist')
-            cy.get('[data-testid="test-case-title-0_action"]', { timeout: 80000 }).should('be.visible')
-            cy.get('[data-testid="test-case-title-0_action"]', { timeout: 80000 }).click()
-            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']', { timeout: 80000 }).should('be.visible')
-            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']', { timeout: 80000 }).click()
+            cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']', { timeout: 80000 }).should('be.visible')
+            cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']', { timeout: 80000 }).click()
         })
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((mId) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((tId) => {
