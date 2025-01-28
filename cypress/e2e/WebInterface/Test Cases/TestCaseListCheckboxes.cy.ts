@@ -43,8 +43,8 @@ let qiCoreMeasureCQL = 'library CohortEpisodeEncounter1699460161402 version \'0.
     'define "Initial Population":\n' +
     '   Global."Inpatient Encounter"'
 
-//Skipping until Feature flag 'TestCaseListActionCenter' is removed    
-describe.skip('Test Case List - Basic Behavior of Checkboxes', () => {
+
+describe('Test Case List - Basic Behavior of Checkboxes', () => {
 
     beforeEach('Create Measure, Test Cases, and Login', () => {
 
@@ -102,8 +102,8 @@ describe.skip('Test Case List - Basic Behavior of Checkboxes', () => {
     })
 })
 
-//Skipping until Feature flag 'TestCaseListActionCenter' is removed
-describe.skip('QDM - Test case list Check box Actions', () => {
+
+describe('QDM - Test case list Check box Actions', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -210,8 +210,8 @@ describe.skip('QDM - Test case list Check box Actions', () => {
     })
 })
 
-//Skipping until Feature flag 'TestCaseListActionCenter' is removed
-describe.skip('Qi Core - Test case list Check box Actions', () => {
+
+describe('Qi Core - Test case list Check box Actions', () => {
 
     const pops: MeasureGroups = {
         initialPopulation: 'Initial Population',

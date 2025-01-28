@@ -221,7 +221,7 @@ describe('QDM CQL Functions', () => {
     })
 })
 
-//Skipping until feature flag "CQLBuilderFunctions" is removed
+
 describe('QDM CQL Functions - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {

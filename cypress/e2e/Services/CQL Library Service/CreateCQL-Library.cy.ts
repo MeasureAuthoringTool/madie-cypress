@@ -8,7 +8,7 @@ let CQLLibraryPublisher = 'SemanticBits'
 let harpUser = Environment.credentials().harpUser
 
 
-// still seeing issues with these tests locking up; skipping until we can investigate further
+
 describe('CQL Library Service: Create CQL Library', () => {
 
     beforeEach('Set Access Token', () => {
@@ -153,7 +153,7 @@ describe('CQL Library Service: Create CQL Library', () => {
     })
 })
 
-// still seeing issues with these tests locking up; skipping until we can investigate further
+
 describe('CQL Library Name validations', () => {
 
     let apiCQLLibraryName = 'TestLibrary' + Date.now()

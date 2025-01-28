@@ -52,7 +52,7 @@ describe('Mismatch between measure model and library model -- error state', () =
         Utilities.waitForElementVisible(CQLEditorPage.errorInCQLEditorWindow, 35000)
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, expectedError)
     })
-    // could add QDM 5.6 measure, add QiCore 6.0.0 library - skipping for now
+
 
     it('QiCore 4.1.1 measure, add QDM 5.6 library', () => {
         const cqlFile = 'cypress/fixtures/MismatchCql/Qicore4MeasureQdmLib.txt'
@@ -76,7 +76,7 @@ describe('Mismatch between measure model and library model -- error state', () =
         })
         Utilities.waitForElementVisible(CQLEditorPage.errorInCQLEditorWindow, 35000)
     })
-    // could add QiCore 6.0.0 measure, add QDM 5.6 library - skipping for now
+
 
     it('QiCore 4.1.1 measure, add QiCore 6.0.0 library', () => {
         const cqlFile = 'cypress/fixtures/MismatchCql/Qicore4MeasureQicore6Lib.txt'
