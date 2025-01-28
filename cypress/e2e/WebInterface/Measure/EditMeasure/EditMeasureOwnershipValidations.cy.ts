@@ -136,15 +136,14 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
+        TestCasesPage.checkTestCase(1)
         cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
 
-            cy.get('[data-testid=select-action-' + fileContents + ']').click()
-
             //confirm that view button for test case is available and click on the view button
-            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('have.text', 'view')
-            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.visible')
-            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=view-edit-test-case-' + fileContents + ']').click()
+            cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']').should('have.text', 'View')
+            cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']').should('be.visible')
+            cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']').should('be.enabled')
+            cy.get('[data-testid=view-edit-test-case-button-' + fileContents + ']').click()
         })
 
         //confirm that the text boxes, for the test case fields are not visible
