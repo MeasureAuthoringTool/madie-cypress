@@ -1,7 +1,7 @@
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { Utilities } from "../../../../../Shared/Utilities"
@@ -12,14 +12,21 @@ import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 const now = Date.now()
 let measureName = 'RunExecuteTCButtonValidations' + now
 let CqlLibraryName = 'TestLibrary' + now
-let testCaseTitle = 'test case title'
-let testCaseDescription = 'DENOMFail' + now
+const testCase: TestCase = {
+    title: 'test case title',
+    description: 'DENOMFail' + now,
+    group: 'SBTestSeries'
+}
+const failingTestCase: TestCase = {
+    title: 'Test Case with errors',
+    description: 'TCwE',
+    group: 'ICFTCwESeries'
+}
 let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 let invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
 let warningTestCaseJson = TestCaseJson.TestCaseJson_with_warnings
 let errorTestCaseJSON_no_ResourceID = TestCaseJson.TestCaseJson_missingResourceIDs
 let err_and_warningTestCaseJson = TestCaseJson.TestCaseJson_with_warning_and_error
-let testCaseSeries = 'SBTestSeries'
 let measureCQL = MeasureCQL.CQL_Multiple_Populations
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 
@@ -87,7 +94,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
+        TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, validTestCaseJson)
 
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
 
@@ -117,7 +124,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
+        TestCasesPage.createTestCase(testCase.title, testCase.description, testCase.group, validTestCaseJson)
 
         cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
 
@@ -191,20 +198,20 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase.title)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         cy.log('Test Case created successfully')
 
@@ -298,20 +305,20 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase.title)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         cy.log('Test Case created successfully')
 
@@ -384,20 +391,20 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase.title)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -432,7 +439,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJson)
+        TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, validTestCaseJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit', null)
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -493,20 +500,20 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type((testCaseTitle.toString()) + '2')
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase.title + '2')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription + ' 2')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description + ' 2')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries + '2').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group + '2').type('{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -621,7 +628,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
 
-
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
@@ -638,20 +644,20 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase.title)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -714,7 +720,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
-
     })
 
     it('Run / Execute one passing and one failing Test Cases', () => {
@@ -1045,7 +1050,6 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
 
-
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
@@ -1062,20 +1066,20 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase.title)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -1147,7 +1151,6 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.runTestButton).click()
 
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Warning: The Coding provided (http://clinfhir.com/fhir/NamingSystem/identifier#IMP) was not found in the value set \'V3 Value SetActEncounterCode\' (http://terminology.hl7.org/ValueSet/v3-ActEncounterCode|2014-03-26), and a code should come from this value set unless it has no suitable code (note that the validator cannot judge what is suitable).  (error message = Unknown code \'http://clinfhir.com/fhir/NamingSystem/identifier#IMP\' for in-memory expansion of ValueSet \'http://terminology.hl7.org/ValueSet/v3-ActEncounterCode\')Warning: No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
-
     })
 
     it('Cannot "Run Test Case" or "Execute Test Case" when a test case has multiple errors and a warning', () => {
@@ -1199,20 +1202,20 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type('Test Case with errors')
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(failingTestCase.title)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type('TCwE')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(failingTestCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type('ICFTCwESeries').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(failingTestCase.group).type('{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries('Test Case with errors', 'ICFTCwESeries')
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(failingTestCase.title, failingTestCase.group)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -1326,20 +1329,20 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type('Test Case with errors')
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(failingTestCase.title)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type('TCwE')
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(failingTestCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type('ICFTCwESeries').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(failingTestCase.group).type('{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries('Test Case with errors', 'ICFTCwESeries')
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(failingTestCase.title, failingTestCase.group)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -1469,20 +1472,20 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase.title)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -1587,20 +1590,20 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
             Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
             Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-            cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+            cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase.title)
             cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
             cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
             cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
             cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-            cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+            cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
             cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
             cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-            cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+            cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
 
             TestCasesPage.clickCreateTestCaseButton()
 
             //Verify created test case Title and Series exists on Test Cases Page
-            TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
+            TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
             TestCasesPage.clickEditforCreatedTestCase()
 
@@ -1886,20 +1889,20 @@ describe('Verify multiple IPs on the highlighting tab', () => {
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase.title)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
+        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         TestCasesPage.clickEditforCreatedTestCase()
 
