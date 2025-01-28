@@ -7,20 +7,16 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Header } from "../../../../Shared/Header"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let newMeasureName = ''
-let newCqlLibraryName = ''
-let measureCQL = MeasureCQL.SBTEST_CQL
+const now = Date.now()
+let measureName = 'MeasureGroupTabs' + now
+let CqlLibraryName = 'MeasureGroupTabsLib' + now
+let measureCQL = MeasureCQL.SBTEST_CQL.replace('SimpleFhirLibrary', measureName)
 
 describe('Validating Population tabs', () => {
 
     beforeEach('Create measure and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
         OktaLogin.Login()
     })
@@ -28,11 +24,7 @@ describe('Validating Population tabs', () => {
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Can successfully update / change score and population value and save on population tab', () => {
@@ -310,24 +302,16 @@ describe('Validating Population tabs', () => {
 describe('Validating Stratification tabs', () => {
 
     beforeEach('Create measure and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
-
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Stratification tab includes new fields and those fields have expected values', () => {
@@ -720,24 +704,16 @@ describe('Validating Stratification tabs', () => {
 describe('Validating Reporting tabs', () => {
 
     beforeEach('Create measure and login', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
-
         OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Reporting tab contains Rate Aggregation and Improvement Notation info', () => {
@@ -867,11 +843,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
     beforeEach('Create measure, Measure Group and login', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.Login()
@@ -880,11 +852,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Verify that description entered for each RA Definition is accurate', () => {
@@ -913,13 +881,19 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         //'Include in Report Type' field added for Initial Population when Risk adjustment variable is added
         cy.get(MeasureGroupPage.ippIncludeInReportTypeField).should('exist')
         cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
-        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Individual' && 'Subject List' && 'Summary' && 'Data Collection')
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Individual')
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Subject List')
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Summary')
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Data Collection')
         cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
 
         //'Include in Report Type' field added for Denominator when Risk adjustment variable is added
         cy.get(MeasureGroupPage.denomIncludeInReportTypeField).should('exist')
         cy.get('[data-testid=ArrowDropDownIcon]').eq(2).click()
-        cy.get(MeasureGroupPage.denomIncludeInReportTypeDropdownList).should('contain.text', 'Individual' && 'Subject List' && 'Summary' && 'Data Collection')
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Individual')
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Subject List')
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Summary')
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Data Collection')
         cy.get('[data-testid=ArrowDropDownIcon]').eq(2).click()
 
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
@@ -1011,7 +985,10 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         //'Include in Report Type' field added when Supplemental data element is added
         cy.get(MeasureGroupPage.ippIncludeInReportTypeField).should('exist')
         cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
-        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Individual' && 'Subject List' && 'Summary' && 'Data Collection')
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Individual')
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Subject List')
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Summary')
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Data Collection')
         cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
 
         //Save Supplemental data
