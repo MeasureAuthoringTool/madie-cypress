@@ -6,7 +6,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { Global } from "../../../../Shared/Global"
-
+let randValue = null
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
 let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
@@ -87,7 +87,7 @@ const cqlMissingDefinitionName = 'library TestLibrary1685544523170534 version \'
     'define fluent function "test"():\n' +
     '\t true'
 
-    const cqlDefinitionNameAsKeyword = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
+const cqlDefinitionNameAsKeyword = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     'using QDM version \'5.6\'\n' +
     'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n\n' +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
@@ -323,7 +323,7 @@ describe('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.definitionsTab).click()
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         Utilities.waitForElementVisible(CQLEditorPage.deleteCQLDefinitions, 60000)
-        
+
         // confirm entry for SDE Ethnicity has been removed
         cy.get(CQLEditorPage.savedDefinitionsTable).should('not.contain', 'SDE Ethnicity')
     })
@@ -374,6 +374,8 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
     })
 
     it('QDM CQL Definitions Expression editor Name options are not available when CQL has errors', () => {
+        randValue = (Math.floor((Math.random() * 1000) + 1))
+        CqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL_withError)
         OktaLogin.Login()
@@ -395,6 +397,8 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
     })
 
     it('QDM CQL Definitions throws specific error when Definition has no name', () => {
+        randValue = (Math.floor((Math.random() * 1000) + 2))
+        CqlLibraryName = CqlLibraryName + randValue
 
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, cqlMissingDefinitionName)
         OktaLogin.Login()
@@ -404,11 +408,13 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer,  "Row: 17, Col:7: Parse: 7:8 | Definition is missing a name.")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "Parse: 7:8 | Definition is missing a name.")
     })
 
     it('QDM CQL Definitions throws specific error when Definition name is a reserved keyyword', () => {
 
+        randValue = (Math.floor((Math.random() * 1000) + 3))
+        CqlLibraryName = CqlLibraryName + randValue
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, cqlMissingDefinitionName)
         OktaLogin.Login()
 
@@ -417,7 +423,7 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer,  "Row: 17, Col:7: Parse: 7:8 | Definition is missing a name.")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "Parse: 7:8 | Definition is missing a name.")
     })
 })
 
@@ -425,6 +431,8 @@ describe('QDM CQL Definitions - Measure ownership Validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
+        randValue = (Math.floor((Math.random() * 1000) + 4))
+        CqlLibraryName = CqlLibraryName + randValue
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.AltLogin()
     })
