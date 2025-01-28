@@ -5,7 +5,7 @@ import {OktaLogin} from "../../../../../Shared/OktaLogin"
 import {Utilities} from "../../../../../Shared/Utilities"
 import {MeasuresPage} from "../../../../../Shared/MeasuresPage"
 import {EditMeasurePage} from "../../../../../Shared/EditMeasurePage"
-import {TestCaseJson} from "../../../../../Shared/TestCaseJson";
+import {TestCaseJson} from "../../../../../Shared/TestCaseJson"
 
 let testCaseDescription = 'DENOMFail' + Date.now()
 let measureName = 'QiCoreTestMeasure' + Date.now()
@@ -52,13 +52,8 @@ describe('Clone Qi Core Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((tcId) => {
-            cy.get('[data-testid=select-action-' + tcId + ']').click()
-            cy.get('[data-testid=clone-test-case-btn-' + tcId + ']').should('be.visible')
-            cy.get('[data-testid=clone-test-case-btn-' + tcId + ']').should('be.enabled')
-            cy.get('[data-testid=clone-test-case-btn-' + tcId + ']').click({force: true})
-        })
-
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterClone).click()
         cy.get('[class="toast success"]').should('contain.text', 'Test case cloned successfully')
     })
 
@@ -77,11 +72,8 @@ describe('Clone Qi Core Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((tcId) => {
-            cy.get('[data-testid=select-action-' + tcId + ']').click()
-            cy.get('[data-testid=clone-test-case-btn-' + tcId + ']').should('not.exist')
-            cy.get('[data-testid=view-edit-test-case-' + tcId + ']').click()
-        })
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterClone).should('not.exist')
 
     })
 })
@@ -113,10 +105,8 @@ describe('Clone Invalid Qi Core Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((tcId) => {
-            cy.get('[data-testid=select-action-' + tcId + ']').click()
-            cy.get('[data-testid=clone-test-case-btn-' + tcId + ']').should('not.exist')
-            cy.get('[data-testid=view-edit-test-case-' + tcId + ']').click()
-        })
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterClone).should('be.disabled')
+
     })
 })
