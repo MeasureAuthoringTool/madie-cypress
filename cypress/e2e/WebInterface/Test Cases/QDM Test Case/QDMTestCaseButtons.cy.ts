@@ -33,8 +33,8 @@ const populations: MeasureGroups = {
     numerator: 'Numerator'
 }
 
-// leaving all tests skipped until feature flag TestCaseListActionCenter is active
-describe.skip('Test case list page - Action Center icons for measure owner', () => {
+
+describe('Test case list page - Action Center icons for measure owner', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -71,8 +71,8 @@ describe.skip('Test case list page - Action Center icons for measure owner', () 
         Utilities.deleteMeasure(measure.name, measure.cqlLibraryName)
     })
 
-    // temporary skip until https://jira.cms.gov/browse/MAT-7104 is finished
-    it.skip('Delete icon is present and enables correctly', () => {
+
+    it('Delete icon is present and enables correctly', () => {
 
         cy.get(TestCasesPage.actionCenterDelete).should('be.disabled')
         TestCasesPage.checkTestCase(2)
@@ -127,7 +127,7 @@ describe.skip('Test case list page - Action Center icons for measure owner', () 
     })
 })
 
-describe.skip('Test case list page - Action Center icons for versioned measure', () => {
+describe('Test case list page - Action Center icons for versioned measure', () => {
     
     beforeEach('Create measure and login', () => {
 
@@ -198,7 +198,7 @@ describe.skip('Test case list page - Action Center icons for versioned measure',
     })
 })
 
-describe.skip('Test case list page - Action Center icons for non-owner', () => {
+describe('Test case list page - Action Center icons for non-owner', () => {
     
     beforeEach('Create measure and login', () => {
 
