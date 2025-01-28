@@ -21,13 +21,12 @@ let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 let newMeasureName = measureName + randValue
 let newCqlLibraryName = CqlLibraryName + randValue
-let filePath = 'cypress/fixtures/testCaseId'
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 let validFileToUpload = downloadsFolder.toString()
 
-describe('QI-Core: Export Bundle options: Transaction or Collection', () => {
+describe('QI-Core: Export Bundle options for Non Measure Owner: Transaction or Collection', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -48,7 +47,8 @@ describe('QI-Core: Export Bundle options: Transaction or Collection', () => {
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
-    it('Export single QI-Core Test case : Transaction', () => {
+    it('Export single QI-Core Test case by Non Measure Owner: Transaction', () => {
+
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
@@ -66,31 +66,25 @@ describe('QI-Core: Export Bundle options: Transaction or Collection', () => {
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
+        //cy.reload()
 
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="select-action-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="select-action-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.enabled')
-            cy.get('[data-testid="select-action-' + fileContents + '"]').click()
-            cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
-            Utilities.waitForElementVisible('[data-testid="export-transaction-bundle-' + fileContents + '"]', 55000)
-            cy.get('[data-testid="export-transaction-bundle-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="export-transaction-bundle-' + fileContents + '"]', 55000)
-            cy.get('[data-testid="export-transaction-bundle-' + fileContents + '"]').should('be.enabled')
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.get(TestCasesPage.exportTransactionTypeOption).click()
 
-        })
-
+        //verify that the export occurred
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.log('Successfully verified zip file export')
 
     })
 
-    it('Export single QI-Core Test case : Collection', () => {
+    it('Export single QI-Core Test case by Non Measure Owner: Collection', () => {
+
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
@@ -115,20 +109,13 @@ describe('QI-Core: Export Bundle options: Transaction or Collection', () => {
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="select-action-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="select-action-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.enabled')
-            cy.get('[data-testid="select-action-' + fileContents + '"]').click()
-            cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
-            Utilities.waitForElementVisible('[data-testid="export-collection-bundle-' + fileContents + '"]', 55000)
-            cy.get('[data-testid="export-collection-bundle-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="export-collection-bundle-' + fileContents + '"]', 55000)
-            cy.get('[data-testid="export-collection-bundle-' + fileContents + '"]').should('be.enabled')
-        })
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.get(TestCasesPage.exportCollectionTypeOption).click()
+
     })
 })
+
 describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: Transaction', () => {
 
     deleteDownloadsFolderBeforeAll()
@@ -151,7 +138,8 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
-    it('Import single QI-Core Test case : Transaction', () => {
+    it('Export single QI-Core Test case Transaction bundle and Import to the same Measure', () => {
+
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
@@ -173,10 +161,12 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //export transaction 
-        TestCasesPage.testCaseAction('exportTransaction')
+        //export transaction
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.get(TestCasesPage.exportTransactionTypeOption).click()
 
-        //verify that the export occurred 
+        //verify that the export occurred
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
@@ -206,7 +196,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/ASBTestSeriesTitle for Auto Test' + testCaseDescription + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved1N/ASBTestSeriesTitle for Auto Test' + testCaseDescription + todaysDate + 'Edit')
 
         //navigate to test case edit / detail page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -238,7 +228,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
-    it('Import multiple QI-Core Test cases : Transaction', () => {
+    it('Export multiple QI-Core Test cases Transaction bundle and Import to the same Measure', () => {
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
@@ -261,11 +251,12 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export both text cases
-        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
-        Utilities.waitForElementVisible(TestCasesPage.exportTransactionTypeOption, 35000)
-        cy.get(TestCasesPage.exportTransactionTypeOption).scrollIntoView().click({ force: true })
+        TestCasesPage.checkTestCase(1)
+        TestCasesPage.checkTestCase(2)
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.get(TestCasesPage.exportTransactionTypeOption).click()
 
-        //verify that the export occurred 
+        //verify that the export occurred
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
@@ -296,7 +287,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/A' + testCaseSeries + 'b' + 'Title for Auto Testb' + testCaseDescription + 'b' + todaysDate + 'Select1N/A' + testCaseSeries + 'a' + 'Title for Auto Testa' + testCaseDescription + 'a' + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/A' + testCaseSeries + 'b' + 'Title for Auto Testb' + testCaseDescription + 'b' + todaysDate + 'Edit1N/A' + testCaseSeries + 'a' + 'Title for Auto Testa' + testCaseDescription + 'a' + todaysDate + 'Edit')
 
         //navigate to test case edit / detail page for the first test case
         TestCasesPage.clickEditforCreatedTestCase()
@@ -337,7 +328,8 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
-    it('Import single QI-Core Test case : Collection', () => {
+    it('Export single QI-Core Test case Collection bundle and Import to the same Measure', () => {
+
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
@@ -359,10 +351,12 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //export transaction 
-        TestCasesPage.testCaseAction('exportCollection')
+        //export transaction
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
-        //verify that the export occurred 
+        //verify that the export occurred
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
@@ -392,7 +386,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/ASBTestSeriesTitle for Auto Test' + testCaseDescription + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved1N/ASBTestSeriesTitle for Auto Test' + testCaseDescription + todaysDate + 'Edit')
 
         //navigate to test case edit / detail page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -424,7 +418,8 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
-    it('Import multiple QI-Core Test cases : Collection', () => {
+    it('Export multiple QI-Core Test cases Collection bundle and Import to the same Measure', () => {
+
         OktaLogin.Login()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
@@ -447,9 +442,13 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export both text cases
-        cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
-        Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
-        cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
+        // cy.get(TestCasesPage.exportTestCasesBtn).scrollIntoView().click({ force: true })
+        // Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
+        // cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
+        TestCasesPage.checkTestCase(1)
+        TestCasesPage.checkTestCase(2)
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
         //verify that the export occurred 
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
@@ -482,7 +481,7 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASBTestSeriesbTitle for Auto Testb' + testCaseDescription + 'b' + todaysDate + 'Select1N/ASBTestSeriesaTitle for Auto Testa' + testCaseDescription + 'a' + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/ASBTestSeriesbTitle for Auto Testb' + testCaseDescription + 'b' + todaysDate + 'Edit1N/ASBTestSeriesaTitle for Auto Testa' + testCaseDescription + 'a' + todaysDate + 'Edit')
 
         //navigate to test case edit / detail page for the first test case
         TestCasesPage.clickEditforCreatedTestCase()
