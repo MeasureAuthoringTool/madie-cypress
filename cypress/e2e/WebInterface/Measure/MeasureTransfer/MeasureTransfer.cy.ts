@@ -223,8 +223,8 @@ describe('Delete Test Case with Transferred user', () => {
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.selectTestCaseDropdownBtn).click()
-        TestCasesPage.clickDeleteTestCaseButton()
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterDelete).click()
 
         cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCaseTitle + '?')
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
