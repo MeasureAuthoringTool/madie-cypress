@@ -86,33 +86,34 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
         //test case numbers appear and first click sorts list in ascending order based on test case number / ID
         Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 5000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Select1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Edit1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
         Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Edit')
         //second click sorts in descending order
         Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Select1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
-        //thrid click removes sorting
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Edit1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
+        //thrid click removes sorting                                                 Case #StatusGroupTitleDescriptionLast Saved2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto TestSecondTC-DENOMFail01/28/2025Edit1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC01/28/2025Edit
         Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Select1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Edit1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
         //sort by case number and then edit some test case that is not at the top -- once user navigates back to the test case list page default sorting should appear
         Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Select')
-        Utilities.waitForElementVisible(TestCasesPage.testCaseAction0Btn, 5000)
-        cy.get(TestCasesPage.testCaseAction0Btn).find('[class="action-button"]').should('contain.text', 'Select').click()
-        cy.get('[class="popover-content"]').find('[class="btn-container"]').find('[aria-label="edit-test-case-QDMManifestTC"]').contains('edit').click()
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Edit')
+
+        //navigate to the test case's edit page
+        TestCasesPage.clickEditforCreatedTestCase()
+
         cy.get(TestCasesPage.QDMRace).scrollIntoView().click()
         cy.get('[data-value="Other Race"]').click()
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
@@ -122,7 +123,7 @@ describe('QDM Test Case sorting by Test Case number', () => {
         //Navigate back to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Select1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Select')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Edit1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
     })
 
     it('QDM Test Case number appears on cloned test case', () => {
@@ -156,16 +157,12 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 710000)
 
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((tcId) => {
-            cy.get('[data-testid=select-action-' + tcId + ']').click()
-            cy.get('[data-testid=clone-test-case-btn-' + tcId + ']').should('be.visible')
-            cy.get('[data-testid=clone-test-case-btn-' + tcId + ']').should('be.enabled')
-            cy.get('[data-testid=clone-test-case-btn-' + tcId + ']').click({ force: true })
-        })
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterClone).click()
 
         cy.get('[class="toast success"]').should('contain.text', 'Test case cloned successfully')
         Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 5000)
-        cy.get(TestCasesPage.testCaseListTable).should('includes.text', 'Case #StatusGroupTitleDescriptionLast SavedAction3N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test')
+        cy.get(TestCasesPage.testCaseListTable).should('includes.text', 'Case #StatusGroupTitleDescriptionLast Saved3N/AQDMManifestTCGroupQDMManifestTC')
     })
 })
 
@@ -317,6 +314,7 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 710000)
         //Validate Test case ID for Draft Measure
         TestCasesPage.grabValidateTestCaseNumber(2)
+
     })
 })
 
@@ -374,8 +372,8 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 2)
 
         // delete test case #1
-        TestCasesPage.grabTestCaseId(1)
-        TestCasesPage.testCaseAction("delete")
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterDelete).click()
         cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete QDMManifestTC?')
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
 
@@ -384,8 +382,8 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase2.title, testCase2.group)
 
         // delete test case #2
-        TestCasesPage.grabTestCaseId(2)
-        TestCasesPage.testCaseAction("delete")
+        TestCasesPage.checkTestCase(2)
+        cy.get(TestCasesPage.actionCenterDelete).click()
         cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
 
         // verify no test cases associated with this measure
