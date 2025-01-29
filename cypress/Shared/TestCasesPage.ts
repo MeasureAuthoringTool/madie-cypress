@@ -1055,6 +1055,7 @@ export class TestCasesPage {
 
     public static enterPatientDemographics(dob?: dateTimeISO, livingStatus?: string, race?: string, gender?: string, ethnicity?: string): void {
 
+        Utilities.waitForElementVisible(TestCasesPage.QDMLivingStatus, 50000)
         cy.get(TestCasesPage.QDMLivingStatus).click()
         cy.get(TestCasesPage.QDMLivingStatusOPtion).contains(livingStatus).click()
         cy.get(TestCasesPage.QDMRace).click()
