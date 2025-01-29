@@ -97,7 +97,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
             cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
             cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-            cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+            cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries, {delay:50}).type('{enter}')
 
             TestCasesPage.clickCreateTestCaseButton()
 
