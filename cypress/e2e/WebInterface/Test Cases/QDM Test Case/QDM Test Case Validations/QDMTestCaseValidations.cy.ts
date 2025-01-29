@@ -413,7 +413,7 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()

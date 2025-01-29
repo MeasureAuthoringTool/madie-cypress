@@ -61,7 +61,7 @@ describe('Validating the creation of QDM Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
         //navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -112,7 +112,7 @@ describe('Validating the Elements section on Test Cases', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
         //navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -151,7 +151,7 @@ describe('Validating the Elements section on Test Cases', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
         //navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -241,7 +241,7 @@ describe('Run QDM Test Case ', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
         //navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()

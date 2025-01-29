@@ -59,7 +59,7 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        TestCasesPage.createQDMTestCase(testCase2.title, testCase2.description, testCase2.group)
+        TestCasesPage.createTestCase(testCase2.title, testCase2.description, testCase2.group)
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.testCaseNameDropdown).should('contain.text', 'Case #2: SecondTC-SBTestSeries - Second TC - Title for Auto Test')
@@ -133,7 +133,7 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCase2.title, testCase2.description, testCase2.group)
+        TestCasesPage.createTestCase(testCase2.title, testCase2.description, testCase2.group)
 
         //navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -195,7 +195,7 @@ describe('Import Test cases onto an existing QDM measure via file and ensure tes
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCase2.title, testCase2.description, testCase2.group)
+        TestCasesPage.createTestCase(testCase2.title, testCase2.description, testCase2.group)
 
         //navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -350,7 +350,7 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCase2.title, testCase2.description, testCase2.group)
+        TestCasesPage.createTestCase(testCase2.title, testCase2.description, testCase2.group)
 
         //navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -391,7 +391,7 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         cy.get(EditMeasurePage.testCasesTab).should('contain.text', 'Test Cases (0)')
 
         // create new case
-        TestCasesPage.createQDMTestCase(testCase1.title, testCase1.description, testCase1.group)
+        TestCasesPage.createTestCase(testCase1.title, testCase1.description, testCase1.group)
 
         // verify one test case shown
         cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 1)

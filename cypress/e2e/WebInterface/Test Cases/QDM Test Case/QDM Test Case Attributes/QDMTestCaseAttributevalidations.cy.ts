@@ -133,7 +133,7 @@ describe('Remove Test case attribute', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()

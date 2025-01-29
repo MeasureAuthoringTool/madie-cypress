@@ -53,7 +53,7 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd)
+        TestCasesPage.createTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd)
 
         //navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()

@@ -350,7 +350,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(invalidFileToUpload, 'CQLCsNoVersionVSACExists.txt'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
-        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportErrorOnImport, 35000)
+        Utilities.waitForElementVisible(TestCasesPage.tcImportError, 35000)
         cy.get('[data-testid="test-case-import-error-div"] > small').should('contain.text', 'The import file must be a zip file. No Test Cases can be imported.')
     })
 
@@ -425,7 +425,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases (5).zip')
 
-        cy.get(TestCasesPage.testCaseImportErrorAtValidating).should('include.text', 'Zip file is in an incorrect format. If this is an export prior to June 20, 2024 please reexport your test case and try again.')
+        cy.get(TestCasesPage.tcImportError).should('include.text', 'Zip file is in an incorrect format. If this is an export prior to June 20, 2024 please reexport your test case and try again.')
     })
 })
 
