@@ -9,7 +9,7 @@ let cqlLibraryName = 'TestCql' + Date.now() + randValue
 let measureCQL = MeasureCQL.SBTEST_CQL
 let qdmMeasureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
-describe('Measure Service: View Human Readable for Draft Measure', () => {
+describe('Measure Service: View Human Readable for Qi Core Draft Measure', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
@@ -43,7 +43,7 @@ describe('Measure Service: View Human Readable for Draft Measure', () => {
     })
 })
 
-describe('Measure Service: View Human Readable for Versioned Measure', () => {
+describe('Measure Service: View Human Readable for Versioned Qi Core Measure', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
@@ -93,7 +93,41 @@ describe('Measure Service: View Human Readable for Versioned Measure', () => {
     })
 })
 
-describe('Measure Service: Error message for QDM Measure', () => {
+describe('Measure Service: View Human Readable for Draft QDM Measure', () => {
+
+    beforeEach('Create Measure and Set Access Token', () => {
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, 'Cohort', true, qdmMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        cy.setAccessTokenCookie()
+    })
+
+    afterEach('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+
+    })
+
+    it('View Measure Human Readable for QDM Draft Measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/humanreadable/' + id,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'GET'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body).not.empty
+                })
+            })
+        })
+    })
+})
+
+describe('Measure Service: Verify error message when there is no Population Criteria for QDM Measure', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
@@ -107,7 +141,7 @@ describe('Measure Service: Error message for QDM Measure', () => {
 
     })
 
-    it('Verify error message while viewing Human Readable for QDM Measure', () => {
+    it('Verify error message when there is no Population Criteria for QDM Measure', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -120,7 +154,7 @@ describe('Measure Service: Error message for QDM Measure', () => {
                     method: 'GET'
                 }).then((response) => {
                     expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('Factory cms.gov.madie.measure.services.HumanReadableService unable to create the requested instance as the following are not yet support: [QDM v5.6]')
+                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + id + ', since there is no population criteria on the measure.')
                 })
             })
         })
