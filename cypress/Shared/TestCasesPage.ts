@@ -879,7 +879,7 @@ export class TestCasesPage {
 
         cy.log('Test Case updated successfully')
     }
-    
+
     public static clickEditforCreatedTestCase(secondTestCase?: boolean): void {
         let testCasePIdPath = ''
         if (secondTestCase) {
@@ -892,9 +892,11 @@ export class TestCasesPage {
         cy.readFile(testCasePIdPath).should('exist').then((tcId) => {
             cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').should('be.visible')
             cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').should('be.enabled')
+            Utilities.waitForElementVisible('[data-testid=view-edit-test-case-button-' + tcId + ']', 35000)
             cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').scrollIntoView()
             cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').click()
         })
+
     }
 
     public static clickDeleteTestCaseButton(): void {

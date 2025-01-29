@@ -22,6 +22,7 @@ export class umlsLoginForm {
         cy.get(Header.umlsLoginButton).should('exist')
         cy.get(Header.umlsLoginButton).should('be.visible')
         cy.get(Header.umlsLoginButton).should('be.enabled')
+        Utilities.waitForElementVisible(Header.umlsLoginButton, 35000)
         cy.get(Header.umlsLoginButton).click()
 
         cy.get('[data-value="Connect to UMLS"]').find(Header.umlsConnectButtonCurrentStatus).click()

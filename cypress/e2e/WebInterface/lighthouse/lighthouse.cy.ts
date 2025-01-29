@@ -34,7 +34,6 @@ describe('Login and initial "My Measures" page', () => {
     it('Log in and land on "My Measures" page Lighthouse test', () => {
 
         OktaLogin.Login()
-        cy.reload()
 
         const thresholds = {
             performance: 23, //This is an overall score given to the overall page performance based on the metrics.
@@ -160,7 +159,6 @@ describe('Navigate to the QDM "CQL Editor" page', () => {
     it('Navigate to QDM "CQL Editor" tab', () => {
 
         OktaLogin.Login()
-        cy.reload()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
@@ -373,7 +371,6 @@ describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test ca
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
-
         const thresholds = {
             performance: 3,
             accessibility: 75,
