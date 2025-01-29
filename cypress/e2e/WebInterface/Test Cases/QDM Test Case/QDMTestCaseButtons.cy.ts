@@ -63,6 +63,9 @@ describe('Test case list page - Action Center icons for measure owner', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 9500)
 
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30500)
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -84,10 +87,6 @@ describe('Test case list page - Action Center icons for measure owner', () => {
 
     it('Clone icon is present and enables correctly', () => {
 
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30500)
-
         cy.get(TestCasesPage.actionCenterClone).should('be.disabled')
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterClone).should('be.enabled')
@@ -96,10 +95,6 @@ describe('Test case list page - Action Center icons for measure owner', () => {
     })
 
     it('Export icon is present and enables correctly', () => {
-
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30500)
 
         cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
         cy.get('[data-testid="export-tooltip"]').should('have.attr', 'aria-label', 'Test cases must be executed prior to exporting.')
