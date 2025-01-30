@@ -32,8 +32,6 @@ export class TestCasesPage {
     public static readonly shiftAllTestCasesDiscardBtn = '[data-testid="cancel-button"]'
     public static readonly shftAllTestCasesSaveBtn = '[data-testid="test-case-data-save"]'
     public static readonly shiftAllTestCasesSuccessMsg = '[data-testid="shift-all-test-case-dates-success-text"]'
-    public static readonly incrementDatesOnSpecificTCModal = '[data-testid="dialog-form"]'
-    public static readonly incrementDatesOnSpecificTCModalText = '[data-testid="shift-dates-dialog"]'
     public static readonly shiftSpecificTestCaseDates = '[data-testid="shift-dates-input"]'
     public static readonly shiftSpecificTestCasesCancelBtn = '[data-testid="shift-dates-cancel-button"]'
     public static readonly shiftSpecificTestCasesSaveBtn = '[data-testid="shift-dates-save-button"]'
@@ -72,7 +70,6 @@ export class TestCasesPage {
     public static readonly ParticipationElementTab = '[data-testid="elements-tab-participation"]'
     public static readonly ProcedureElementTab = '[data-testid="elements-tab-procedure"]'
     public static readonly EncounterElementTab = '[data-testid="elements-tab-encounter"]'
-    public static readonly LaboratoryElementTab = '[data-testid="elements-tab-laboratory_test"]'
     public static readonly CharacteristicElementTab = '[data-testid="elements-tab-patient_characteristic"]'
     public static readonly PhysicalExamElementTab = '[data-testid="elements-tab-physical_exam"]'
     public static readonly RelatedPersonElementTab = '[data-testid="elements-tab-related_person"]'
@@ -80,20 +77,6 @@ export class TestCasesPage {
     public static readonly SymptomElementTab = '[data-testid="elements-tab-symptom"]'
     public static readonly TimingCellContainer = '[class="timing-cell-container"]'
     public static readonly qdmTCElementTable = '[class="data-elements-table"]'
-    public static readonly relPStartEnd = '[class="MuiFormControl-root MuiTextField-root css-13t88rf"]'
-    public static readonly reldT = '[class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1bn53lx"]'
-    public static readonly authdT = '[class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1bn53lx"]'
-    public static readonly resdT = '[class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1bn53lx"]'
-    public static readonly prevPStart = '[]'
-    public static readonly prevPEnd = '[]'
-    public static readonly sentdT = '[]'
-    public static readonly recdT = '[]'
-    public static readonly actdT = '[]'
-    public static readonly partPStart = '[]'
-    public static readonly partPEnd = '[]'
-    public static readonly locPStart = '[]'
-    public static readonly locPEnd = '[]'
-    public static readonly statD = '[]'
 
     //QDM Test Case Elements elements / objects -- Encounter
     public static readonly EncounterOSSCard = '[data-testid="data-type-Encounter, Performed: Outpatient Surgery Service"]'
@@ -170,7 +153,6 @@ export class TestCasesPage {
     //tabs on the test case page
     public static readonly cqlHasErrorsMsg = '[data-testid="test-case-cql-has-errors-message"]'
     public static readonly detailsTab = '[data-testid="details-tab"]'
-    public static readonly tctMeasureCQLSubTab = '[data-testid="measurecql-tab"]'
     public static readonly tctExpectedActualSubTab = '[data-testid="expectoractual-tab"]'
     public static readonly tcJsonTab = '[data-testid=json-tab]'
 
@@ -253,13 +235,11 @@ export class TestCasesPage {
     public static readonly editTestCaseTitleInlineError = '[data-testid="test-case-title-helper-text"]'
     public static readonly testCaseJsonValidationErrorBtn = '[data-testid="show-json-validation-errors-button"]'
     public static readonly testCaseJsonValidationDisplayList = '[data-testid="json-validation-errors-list"]'
-    public static readonly testCaseJsonValidationErrorList = '[data-testid="json-validation-errors-list"]'
     public static readonly testCasePopulationList = '[data-testid="create-test-case-populations"]'
     public static readonly testCaseExecutionError = '[data-testid="execution_context_loading_errors"]'
     public static readonly runTestButton = '[data-testid="run-test-case-button"]'
     public static readonly runTestAlertMsg = '[data-testid="calculation-info-alert"]'
     public static readonly testCalculationResults = '[data-testid=calculation-results]'
-    public static readonly testCaseExpected_Actual_table_tbl = '[data-testid="create-test-case-populations"]'
     public static readonly testCalculationResultsLineTwo = '[data-testid="calculation-results"] > div > :nth-child(2)'
     public static readonly testCalculationResultsLineThree = '[data-testid="calculation-results"] > div > :nth-child(3)'
     public static readonly testCalculationResultsLineFour = '[data-testid="calculation-results"] > div > :nth-child(4)'
@@ -320,7 +300,6 @@ export class TestCasesPage {
     public static readonly highlightingTab = '[data-testid=highlighting-tab]'
     public static readonly expectedOrActualTab = '[data-testid=expectoractual-tab]'
     public static readonly runQDMTestCaseBtn = '[data-testid=qdm-test-case-run-button]'
-    public static readonly qdmComingSoonMsg = '[data-testid="coming-soon"]'
 
     //Test Case Page
     public static readonly dobSelectValueElementTab = '[class="MuiFormControl-root MuiTextField-root css-1uwaluo"]'
@@ -376,9 +355,7 @@ export class TestCasesPage {
     //import test case
     public static readonly importTestCasesBtn = '[data-testid="show-import-test-cases-button"]'
     public static readonly filAttachDropBox = '[data-testid="file-drop-input"]'
-    public static readonly importTestCaseModalBtn = '[data-testid="test-case-import-import-btn"]'
     public static readonly importInProgress = '[data-testid = "testcase-list-loading-spinner"]'
-    public static readonly testCaseImportErrorAtValidating = '[data-testid="test-case-import-error-div"]'
     public static readonly importTestCaseModalList = '[data-testid="test-case-preview-list"]'
     public static readonly importTestCaseModalHeader = '[data-testid="test-case-preview-header"]'
     public static readonly importWarningMessages = '[data-testid="import-warning-messages"]'
@@ -397,7 +374,6 @@ export class TestCasesPage {
     //Import Test cases
     public static readonly importTestCaseBtnOnModal = '[data-testid="test-case-import-import-btn"]'
     public static readonly importTestCaseCancelBtnOnModal = '[data-testid="test-case-import-cancel-btn"]'
-    public static readonly importTestCaseSuccessMessage = '[data-testid="population-criteria-success"]'
     public static readonly importTestCaseAlertMessage = '[class="madie-alert warning"]'
     public static readonly importTestCaseDetailedAlertMessage = '[class="StatusHandler___StyledSpan-sc-1tujbo9-0 dBOLeU"]'
     public static readonly importTestCaseBtn = '[data-testid="import-test-case-btn"]'
@@ -410,7 +386,6 @@ export class TestCasesPage {
     public static readonly testCasesNonBonnieFileImport = '[data-testid="file-drop-input"]'
     public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile = '[data-testid="test-case-preview-header"]'
     public static readonly testCasesNonBonnieFileImportFileUploadStatusDetails = '[class="TestCaseImportDialog___StyledSmall2-sc-v92oci-6 gpyrWs"]'
-    public static readonly testCasesNonBonnieFileImportErrorOnImport = '[data-testid="test-case-import-error-div"]'
     public static readonly importTestCaseSuccessMsg = '[data-testid=success-toast]'
     public static readonly importTestCaseErrorMsg = '[data-testid=error-toast]'
     public static readonly importTestCaseSuccessInfo = '[id="content"]'
@@ -418,7 +393,6 @@ export class TestCasesPage {
 
     //Export Test Cases
     public static readonly exportTestCasesBtn = '[data-testid="export-test-cases-button"]'
-    public static readonly exportExcelBtn = '[data-testid="export-excel"]'
     public static readonly exportTransactionTypeOption = '[data-testid="export-transaction-bundle"]'
     public static readonly exportCollectionTypeOption = '[data-testid="export-collection-bundle"]'
 
@@ -533,30 +507,13 @@ export class TestCasesPage {
         })
     }
 
-    public static clickImportTestCaseButton(): void {
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((measureID) => {
-            cy.intercept('POST', '/api/measures/' + measureID + '/test-cases/list').as('testCaseList')
-            //click import button on modal window
-            cy.get(this.importTestCaseModalBtn).click()
-            //spinner indicating that import progress is busy is shown / is visible
-            cy.get(this.importInProgress).should('be.visible')
-            //wait until the import buttong appears on the page, again
-            Utilities.waitForElementVisible(this.importTestCasesBtn, 50000)
-
-            //list is returned
-            cy.wait('@testCaseList').then(({ response }) => {
-                expect(response.statusCode).to.eq(201)
-            })
-        })
-    }
-
     public static clickQDMImportTestCaseButton(): void {
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((measureID) => {
             cy.intercept('PUT', '/api/measures/' + measureID + '/test-cases/imports/qdm').as('testCaseList')
             //click import button on modal window
 
-            cy.get(this.importTestCaseModalBtn).click()
+            cy.get(this.importTestCaseBtnOnModal).click()
             //spinner indicating that import progress is busy is shown / is visible
             cy.get(this.importInProgress).should('be.visible')
 
@@ -729,37 +686,6 @@ export class TestCasesPage {
         })
     }
 
-    public static createQDMTestCase(testCaseTitle: string, testCaseDescription: string, testCaseSeries: string): void {
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(this.newTestCaseButton).should('be.visible')
-        cy.get(this.newTestCaseButton).should('be.enabled')
-        cy.get(this.newTestCaseButton).click()
-
-        cy.get(this.createTestCaseDialog).should('exist')
-        cy.get(this.createTestCaseDialog).should('be.visible')
-
-        cy.get(this.createTestCaseTitleInput).should('exist')
-        Utilities.waitForElementVisible(this.createTestCaseTitleInput, 30000)
-        Utilities.waitForElementEnabled(this.createTestCaseTitleInput, 30000)
-        cy.get(this.createTestCaseTitleInput).type(testCaseTitle.toString())
-        cy.get(this.createTestCaseDescriptionInput).should('exist')
-        cy.get(this.createTestCaseDescriptionInput).should('be.visible')
-        cy.get(this.createTestCaseDescriptionInput).should('be.enabled')
-        cy.get(this.createTestCaseDescriptionInput).focus()
-        cy.get(this.createTestCaseDescriptionInput).type(testCaseDescription)
-        cy.get(this.createTestCaseGroupInput).should('exist')
-        cy.get(this.createTestCaseGroupInput).should('be.visible')
-        cy.get(this.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
-
-        this.clickCreateTestCaseButton()
-
-        cy.log('Test Case created successfully')
-
-    }
-
     public static createTestCase(testCaseTitle: string, testCaseDescription: string, testCaseSeries: string, testCaseJson?: string): void {
 
         //Navigate to Test Cases page and add Test Case details
@@ -793,7 +719,25 @@ export class TestCasesPage {
         cy.log('Test Case created successfully')
 
         if (testCaseJson) {
-            this.editTestCaseAddJSON(testCaseJson)
+            //edit test test case
+            this.clickEditforCreatedTestCase()
+            //Add json to the test case
+            Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+            Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
+            cy.get(TestCasesPage.aceEditor).should('exist')
+            cy.get(TestCasesPage.aceEditor).should('be.visible')
+            cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+
+            cy.get(this.aceEditor).type(testCaseJson, { parseSpecialCharSequences: false })
+
+            cy.get(this.detailsTab).click()
+
+            //Save edited / updated to test case
+            cy.get(this.editTestCaseSaveButton).click().wait(1500)
+            cy.log('JSON added to test case successfully')
+
+            cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+            cy.get(EditMeasurePage.testCasesTab).click()
         }
     }
 
@@ -807,35 +751,6 @@ export class TestCasesPage {
         cy.get(TestCasesPage.aceEditor).type(err_TestCaseJson, { parseSpecialCharSequences: false })
 
         cy.log('Erroneous JSON added to test case successfully')
-    }
-
-    public static editTestCaseAddJSON(testCaseJson: string): void {
-        //the below commented out block of code will need to be un-commented and used once MAT-6437 is moved into PROD
-        /*         this.clickEditforCreatedTestCase()
-                Utilities.waitForElementVisible(this.tcJsonTab, 5000)
-                cy.get(this.tcJsonTab).click() */
-
-        //edit test test case
-        this.clickEditforCreatedTestCase()
-        //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
-
-        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
-
-        cy.get(this.aceEditor).type(testCaseJson, { parseSpecialCharSequences: false })
-
-        cy.get(this.detailsTab).click()
-
-        //Save edited / updated to test case
-        cy.get(this.editTestCaseSaveButton).click().wait(1500)
-        cy.log('JSON added to test case successfully')
-
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
     }
 
     public static updateTestCase(updatedTestCaseTitle: string, updatedTestCaseDescription: string, updatedTestCaseSeries: string): void {
@@ -899,14 +814,6 @@ export class TestCasesPage {
 
     }
 
-    public static clickDeleteTestCaseButton(): void {
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=delete-test-case-btn-' + fileContents + ']').should('be.visible')
-            cy.get('[data-testid=delete-test-case-btn-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=delete-test-case-btn-' + fileContents + ']').click()
-        })
-
-    }
     public static CreateTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, secondMeasure?: boolean, twoTestCases?: boolean, altUser?: boolean, measureNumber?: number): string {
         let user = ''
         let measurePath = 'cypress/fixtures/measureId'

@@ -126,7 +126,7 @@ describe('Create and Update QDM Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -189,7 +189,7 @@ describe('Create and Update QDM Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -239,7 +239,7 @@ describe('Non Boolean Test case Expected Values', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -290,7 +290,7 @@ describe('QDM element tabs', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -414,7 +414,7 @@ describe('Create and update QDM Test case validations', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
@@ -438,7 +438,7 @@ describe('Create and update QDM Test case validations', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //create test case
-        TestCasesPage.createQDMTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
 
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()

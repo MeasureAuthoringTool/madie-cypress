@@ -415,7 +415,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.runTestButton).click()
 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
-        cy.get(TestCasesPage.testCaseJsonValidationErrorList).should('contain.text', 'HAPI-1814: Incorrect resource type found, expected "Bundle" but found "Account"')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'HAPI-1814: Incorrect resource type found, expected "Bundle" but found "Account"')
 
         //Save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()

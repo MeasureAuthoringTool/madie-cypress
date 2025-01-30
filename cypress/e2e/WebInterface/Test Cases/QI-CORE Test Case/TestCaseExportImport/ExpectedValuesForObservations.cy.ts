@@ -116,7 +116,6 @@ describe('Ratio based measure with measure observations', () => {
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseBtnOnModal, 15000)
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
  
-        //Utilities.waitForElementVisible(TestCasesPage.exportTestCasesBtn, 10000)
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         TestCasesPage.grabTestCaseId(1)

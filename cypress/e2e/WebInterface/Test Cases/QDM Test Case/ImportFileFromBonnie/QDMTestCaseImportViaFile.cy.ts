@@ -96,7 +96,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         cy.get('[class="toast danger"]').should('contain.text', 'An error occurred while validating the import file. Please try again or reach out to the Help Desk.')
 
         //import button becomes unavailable
-        cy.get(TestCasesPage.importTestCaseModalBtn).should('be.disabled')
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).should('be.disabled')
     })
 
     it('Verify error message when an invalid / empty Json file is imported', () => {
@@ -119,7 +119,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         cy.get('[class="toast danger"]').should('contain.text', 'No patients were found in the selected import file!')
 
         //import button becomes unavailable
-        cy.get(TestCasesPage.importTestCaseModalBtn).should('be.disabled')
+        cy.get(TestCasesPage.importTestCaseBtnOnModal).should('be.disabled')
     })
 })
 
@@ -178,7 +178,7 @@ describe('Import Test cases onto an existing QDM measure via file -- Message tha
         cy.readFile('cypress/fixtures/measureId').should('exist').then((measureID) => {
             cy.intercept('POST', '/api/measures/' + measureID + '/test-cases/list').as('testCaseList')
             //click import button on modal window
-            cy.get(TestCasesPage.importTestCaseModalBtn).click()
+            cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
             //spinner indicating that import progress is busy is shown / is visible
             cy.get(TestCasesPage.importInProgress).should('be.visible')
             //wait until the import buttong appears on the page, again
@@ -211,7 +211,7 @@ describe('Import Test cases onto an existing QDM measure via file -- Message tha
         cy.readFile('cypress/fixtures/measureId').should('exist').then((measureID) => {
             cy.intercept('POST', '/api/measures/' + measureID + '/test-cases/list').as('testCaseList')
             //click import button on modal window
-            cy.get(TestCasesPage.importTestCaseModalBtn).click()
+            cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
             //spinner indicating that import progress is busy is shown / is visible
             cy.get(TestCasesPage.importInProgress).should('be.visible')
             //wait until the import buttong appears on the page, again
