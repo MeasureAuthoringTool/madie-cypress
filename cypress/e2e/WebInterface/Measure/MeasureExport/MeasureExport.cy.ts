@@ -192,7 +192,7 @@ describe('QI-Core Measure Export', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
 
-        MeasuresPage.validateVersionNumber(measureName, '1.0.000')
+        MeasuresPage.validateVersionNumber('1.0.000')
         cy.log('Version Created Successfully')
 
         MeasuresPage.actionCenter('export')
@@ -449,7 +449,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(measureNameFC, versionNumber)
+        MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Major Version Created Successfully')
 
         MeasuresPage.actionCenter('export')

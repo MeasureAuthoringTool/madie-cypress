@@ -355,7 +355,7 @@ describe('Successful QDM Measure Export with versioned measure', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(measureName, versionNumber)
+        MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Major Version Created Successfully')
 
         MeasuresPage.actionCenter('export')
