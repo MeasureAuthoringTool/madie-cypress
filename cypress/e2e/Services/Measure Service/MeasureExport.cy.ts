@@ -427,4 +427,43 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
     })
 })
 
+describe('QDM Measure Export', () => {
 
+    beforeEach('Create Measure and set access token', () => {
+
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = CqlLibraryName + randValue
+
+        cy.setAccessTokenCookie()
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+
+    })
+
+    afterEach('Clean up', () => {
+
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+
+    })
+
+    it('Successful QDM Measure Export', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/measures/' + id + '/exports',
+                    method: 'GET',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    }
+                }).then((response) => {
+                    console.log(response)
+                    expect(response.status).to.eql(201)
+                    expect(response.body).is.not.null
+                })
+            })
+        })
+    })
+})
