@@ -7,7 +7,6 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 
-
 let measureName = 'QiCoreParamsMeasure' + Date.now()
 let CqlLibraryName = 'QiCoreParamsLibrary' + Date.now()
 let measureCQL = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
@@ -66,13 +65,13 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
         Utilities.waitForElementEnabled(CQLEditorPage.valueSetSearchSrchBtn, 30000)
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVESelect' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect' +
-            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIREDSelect')
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••' +
+            'Office VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001RETIRED•••')
 
         //click on the filter tab to access filter field(s)
         cy.get(CQLEditorPage.valueSetSearchFilterSubTab).click()
@@ -85,11 +84,10 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
         cy.get(CQLEditorPage.valueSetSearchFilterApplyBtn).click()
 
         //results grid is updated to only show one entry, now, after filter
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVESelect')
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••')
 
         //Apply Value Set to the Measure
-        cy.get(CQLEditorPage.selectDropdownBtn).click()
-        cy.get(CQLEditorPage.selectOptionListBox).contains('Apply').click()
+        cy.get(CQLEditorPage.applyValueSet).click()
         cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Value Set Office Visit has been successfully added to the CQL.')
 
         //Save and Discard changes button should be enabled after applying the Value Set
@@ -133,7 +131,7 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
         Utilities.waitForElementEnabled(CQLEditorPage.valueSetSearchSrchBtn, 30000)
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
-        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVESelect')
+        cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••')
 
     })
 
@@ -158,14 +156,14 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatus' +
             'Cancer Stage IAmerican Society of Clinical Oncology Stewardurn:oid:2.16.840.1.113883.3.1444.3.217ACTIVE' +
-            'Select')
+            '•••')
 
         //click on the filter tab to access filter field(s)
         cy.get(CQLEditorPage.valueSetSearchFilterSubTab).click()
 
         //Click on Value Set Details
-        cy.get(CQLEditorPage.selectDropdownBtn).click()
-        cy.get(CQLEditorPage.selectOptionListBox).contains('Details').click()
+        cy.get(CQLEditorPage.valueSetActionCentreBtn).click()
+        cy.get(CQLEditorPage.viewValueSetDetails).click()
 
         cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"url": "http://cts.nlm.nih.gov' +
             '/fhir/ValueSet/2.16.840.1.113883.3.1444.3.217"')
@@ -194,14 +192,14 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatus' +
             'Cancer Stage IAmerican Society of Clinical Oncology Stewardurn:oid:2.16.840.1.113883.3.1444.3.217ACTIVE' +
-            'Select')
+            '•••')
 
         //click on the filter tab to access filter field(s)
         cy.get(CQLEditorPage.valueSetSearchFilterSubTab).click()
 
         //Click on Edit Value Set
-        cy.get(CQLEditorPage.selectDropdownBtn).click()
-        cy.get(CQLEditorPage.selectOptionListBox).contains('Edit').click()
+        cy.get(CQLEditorPage.valueSetActionCentreBtn).click()
+        cy.get(CQLEditorPage.editValueSet).click()
 
         //Add suffix
         cy.get(CQLEditorPage.valueSetSuffixInput).type('1234')
