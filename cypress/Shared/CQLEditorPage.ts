@@ -73,6 +73,10 @@ export class CQLEditorPage {
     public static readonly valueSetDetailsScreen = '.MuiPaper-rounded'
     public static readonly valueSetSuffixInput = '[data-testid="suffix-max-length-input"]'
     public static readonly applyValueSetSuffix = '[data-testid="apply-suffix-continue-button"]'
+    public static readonly applyValueSet = '[data-testid="apply-valueset-0"]'
+    public static readonly valueSetActionCentreBtn = '[data-testid="action-center-button-0"]'
+    public static readonly viewValueSetDetails = '[data-testid="action-center-0_View"]'
+    public static readonly editValueSet = '[data-testid="action-center-0_Edit"]'
 
     //CQL Builder Sub tabs
     public static readonly cqlEditorPageDefinitionSubTab = '[data-testid="definitions-tab"]'
