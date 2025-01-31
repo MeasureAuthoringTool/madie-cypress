@@ -52,8 +52,7 @@ export class MeasuresPage {
         })
     }
 
-    // ToDo: refactor out expectedValue & update all usages
-    public static validateVersionNumber(expectedValue: string, versionNumber: string): void {
+    public static validateVersionNumber(versionNumber: string): void {
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 100000)
             cy.get('[data-testid=measure-action-' + fileContents + ']').parent()

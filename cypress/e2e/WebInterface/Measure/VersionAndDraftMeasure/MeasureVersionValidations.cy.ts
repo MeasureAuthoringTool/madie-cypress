@@ -179,7 +179,7 @@ describe('Measure Versioning when the measure has test case with errors', () => 
         cy.get(TestCasesPage.versionMeasurewithTCErrorsContinue).click()
         Utilities.waitForElementToNotExist(TestCasesPage.versionMeasurewithTCErrorsModalBody, 20000)
 
-        MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
+        MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
     })
 })
