@@ -238,7 +238,7 @@ describe('Test Case Import validations for versioned Measures', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.enabled')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(measureName, versionNumber)
+        MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
         //Click on Edit Measure
@@ -267,7 +267,7 @@ describe('Test Case Import validations for versioned Measures', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.enabled')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(measureName, versionNumber)
+        MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
         OktaLogin.UILogout()

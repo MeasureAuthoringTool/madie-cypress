@@ -240,8 +240,14 @@ export class EditMeasurePage {
                 break
             }
             case EditMeasureActions.delete: {
-                // ToDo
 
+                cy.get(this.editMeasureDeleteActionBtn).should('be.visible')
+                cy.get(this.editMeasureDeleteActionBtn).should('be.enabled')
+                cy.get(this.editMeasureDeleteActionBtn).click()
+
+                cy.get(this.deleteMeasureConfirmationButton).click()
+                
+                Utilities.validateToastMessage('Measure successfully deleted')
                 break
             }
             default: { }

@@ -260,7 +260,7 @@ describe('Qi Core Measure - Test case number on a Draft Measure', () => {
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumber)
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(measureName, versionNumber)
+        MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
         //Draft the Versioned Measure

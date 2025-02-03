@@ -61,7 +61,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
+        MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
         MeasuresPage.actionCenter('draft')
@@ -85,7 +85,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
+        MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
         MeasuresPage.actionCenter('draft')
@@ -167,7 +167,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         Utilities.waitForElementVisible(MeasuresPage.VersionDraftMsgs, 100000)
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
 
-        MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
+        MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
         MeasuresPage.actionCenter('draft')

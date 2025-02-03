@@ -67,7 +67,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
+        MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
         //navigate back to the main MADiE / measure list page
@@ -118,7 +118,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
         cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
+        MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
         //navigate back to the main MADiE / measure list page
@@ -165,7 +165,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumberFirst)
+        MeasuresPage.validateVersionNumber(versionNumberFirst)
         cy.log('Major Version Created Successfully')
 
         //navigate back to the main MADiE / measure list page
@@ -237,7 +237,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumberSecond)
+        MeasuresPage.validateVersionNumber(versionNumberSecond)
         cy.log('Major Version Created Successfully')
 
         MeasuresPage.actionCenter('draft')
@@ -346,7 +346,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
         cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(MeasuresPageOne, versionNumber)
+        MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Major Version Created Successfully')
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
