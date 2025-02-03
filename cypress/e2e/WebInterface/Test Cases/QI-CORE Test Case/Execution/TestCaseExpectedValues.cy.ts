@@ -364,4 +364,69 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get('[data-testid="strat-row-population-id-measurePopulation"] > :nth-child(2)').should('exist')
     })
+
+    it('Verify if the correct Population check boxes are checked on test case expected values for Ratio measure with two IPs', () => {
+
+        //Create Ratio Measure group with 2 IP's
+        MeasuresPage.actionCenter('edit')
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.readFile('cypress/fixtures/CQLForTestCaseExecution.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+        })
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //Create Measure Group
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        Utilities.setMeasureGroupType()
+
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
+
+        cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
+
+        Utilities.dropdownSelect(MeasureGroupPage.firstInitialPopulationSelect, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.secondInitialPopulationSelect, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'denom')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'num')
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'num')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get(MeasureGroupPage.improvementNotationSelect).click()
+        cy.contains('Increased score indicates improvement').click()
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+
+        //Add Expected values for Test Case
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.clickEditforCreatedTestCase()
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
+        cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
+        Utilities.waitForElementVisible(TestCasesPage.testCaseDENOMExpected, 60000)
+
+        //Check first IP Expected value and assert Denominator Expected value is checked
+        cy.get(TestCasesPage.testCaseIPPExpected).eq(0).check().should('be.checked')
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
+
+        //Check second IP Expected value and assert Denominator Expected value is checked
+        cy.get(TestCasesPage.testCaseIPPExpected).eq(1).check().should('be.checked')
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
+
+        //Save edited / updated to test case
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON'])
+        })
+    })
 })
