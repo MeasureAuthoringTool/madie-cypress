@@ -323,6 +323,49 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Initial Population')
 
     })
+
+    it('Add Scoring Precision to the Measure Group', () => {
+
+        //click on Edit button to edit measure
+        MeasuresPage.actionCenter('edit')
+
+        //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //fill in a description value
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+
+        Utilities.setMeasureGroupType()
+
+        cy.get(MeasureGroupPage.popBasis).should('exist')
+        cy.get(MeasureGroupPage.popBasis).should('be.visible')
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('Boolean')
+        cy.get(MeasureGroupPage.popBasisOption).click()
+
+        //select scoring unit on measure
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL')
+
+        //Add Scoring Precision
+        cy.get('[data-testid="scoring-precision-input"]').type('2')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get(MeasureGroupPage.improvementNotationSelect).click()
+        cy.contains('Increased score indicates improvement').click()
+
+        //save population definition with scoring unit
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+    })
 })
 
 describe('Validate Population Basis', () => {
@@ -375,6 +418,48 @@ describe('Validate Population Basis', () => {
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL millil')
         //Select mL milliliters from the dropdown
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('{downArrow}').type('{enter}')
+
+        //save population definition with scoring unit
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
+
+    })
+
+    it('Verify error message if Negative Integer is Added to the Scoring Precision on a Measure Group', () => {
+
+        //click on Edit button to edit measure
+        MeasuresPage.actionCenter('edit')
+
+        //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //fill in a description value
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+
+        Utilities.setMeasureGroupType()
+
+        cy.get(MeasureGroupPage.popBasis).should('exist')
+        cy.get(MeasureGroupPage.popBasis).should('be.visible')
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('Boolean')
+        cy.get(MeasureGroupPage.popBasisOption).click()
+
+        //select scoring unit on measure
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+
+        //Add Scoring Precision
+        cy.get('[data-testid="scoring-precision-input"]').type('-2')
+
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL')
+        cy.get('[data-testid="integer-field-scoring-precision-helper-text"]').should('contain.text', 'Scoring Precision must be a positive integer')
+
+        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get(MeasureGroupPage.improvementNotationSelect).click()
+        cy.contains('Increased score indicates improvement').click()
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
