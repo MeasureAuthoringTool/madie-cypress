@@ -163,9 +163,8 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.deleteSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
-        cy.get(Global.keepWorkingCancel).click()
+
+        Global.clickOnKeepWorking()
 
         //confirm contents in CQL editor still contains changes and save button is still available
         cy.get('[data-testid="editor-search-button"]').click()
@@ -317,9 +316,8 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
         cy.get(CQLEditorPage.editSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
-        cy.get(Global.keepWorkingCancel).click()
+
+        Global.clickOnKeepWorking()
 
         //confirm contents in CQL editor still contains changes and save button is still available
         cy.get('[data-testid="editor-search-button"]').click()

@@ -224,15 +224,8 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        //confirm dirty check window
-        cy.get(EditMeasurePage.dirtCheckModal).should('exist')
-        cy.get(EditMeasurePage.dirtCheckModal).should('be.visible')
-
-        //select continue working on page
-        cy.get(Global.keepWorkingCancel).should('exist')
-        cy.get(Global.keepWorkingCancel).should('be.visible')
-        cy.get(Global.keepWorkingCancel).should('be.enabled')
-        cy.get(Global.keepWorkingCancel).click()
+        // confirm dirty check window
+        Global.clickOnKeepWorking()
 
         //discard previous entry
         cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
@@ -1098,15 +1091,8 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         //attempt to navigate away from the test cases tab / page
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        //confirm dirty check window
-        cy.get(EditMeasurePage.dirtCheckModal).should('exist')
-        cy.get(EditMeasurePage.dirtCheckModal).should('be.visible')
-
-        //select continue working on page
-        cy.get(Global.keepWorkingCancel).should('exist')
-        cy.get(Global.keepWorkingCancel).should('be.visible')
-        cy.get(Global.keepWorkingCancel).should('be.enabled')
-        cy.get(Global.keepWorkingCancel).click()
+        // confirm dirty check window
+        Global.clickOnKeepWorking()
 
         //confirm that previous edit is still present
         cy.get(MeasureGroupPage.qdmSDERadioButtons)

@@ -301,16 +301,12 @@ describe('Validate Measure Group -- scoring and populations', () => {
         //Warning Modal displayed when user navigated to another Measure Group without saving changes
         cy.log('Navigate to another Measure Group')
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
-        cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
-        cy.get(Global.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
-        cy.get(Global.keepWorkingCancel).click()
+        Global.clickOnKeepWorking()
 
         //Warning Modal displayed when user navigated to a different tab without saving changes
         cy.log('Navigating to CQL Editor tab')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
-        cy.get(Global.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
-        cy.get(Global.keepWorkingCancel).click()
+        Global.clickOnKeepWorking()
 
         //Warning Modal displayed when user clicks Discard Changes for that measure group
         cy.log('Click on Discard Changes button')
