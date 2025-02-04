@@ -16,6 +16,7 @@ let CQLLibraryName = ''
 let newCQLLibraryName = ''
 let model = 'QI-Core v4.1.1'
 let harpUser = Environment.credentials().harpUser
+let harpUserALT = Environment.credentials().harpUserALT
 let measureNameU = 'TestMeasure' + Date.now() + 1
 let CqlLibraryNameU = 'TestLibrary' + Date.now() + 1
 let measureScoringU = MeasureGroupPage.measureScoringUnit
@@ -28,7 +29,6 @@ let eCQMTitle = 'eCQMTitle'
 let versionIdPath = 'cypress/fixtures/versionId'
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 const adminAPIKey = Environment.credentials().adminApiKey
-
 
 describe('Measure Service: QICore Measure', () => {
 
@@ -948,33 +948,17 @@ describe('Delete QI-Core Measure with admin API Key', () => {
         //Delete Versioned Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
-                    cy.readFile(versionIdPath).should('exist').then((vId) => {
-                        cy.request({
-                            url: '/api/admin/measures/' + id,
-                            method: 'DELETE',
-                            headers: {
-                                Authorization: 'Bearer ' + accessToken.value,
-                                'api-key': adminAPIKey
-                            },
-                            body: {
-                                "id": id,
-                                "measureName": newMeasureName,
-                                "cqlLibraryName": newCQLLibraryName,
-                                "model": 'QI-Core v4.1.1',
-                                "versionId": vId,
-                                "measureSetId": measureSetId,
-                                "ecqmTitle": eCQMTitle,
-                                "measurementPeriodStart": mpStartDate,
-                                "measurementPeriodEnd": mpEndDate,
-                                "active": true,
-                                "createdBy": defaultUser
-                            }
-                        }).then((response) => {
-                            expect(response.status).to.eql(200)
-                            cy.log("Measure Deleted successfully")
-                        })
-                    })
+                cy.request({
+                    url: '/api/admin/measures/' + id,
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: 'Bearer ' + accessToken.value,
+                        'api-key': adminAPIKey,
+                        'harpId': harpUser
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    cy.log("Measure Deleted successfully")
                 })
             })
         })
@@ -1001,33 +985,17 @@ describe('Delete QI-Core Measure with admin API Key', () => {
         //Delete Draft Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
-                    cy.readFile(versionIdPath).should('exist').then((vId) => {
-                        cy.request({
-                            url: '/api/admin/measures/' + id,
-                            method: 'DELETE',
-                            headers: {
-                                Authorization: 'Bearer ' + accessToken.value,
-                                'api-key': adminAPIKey
-                            },
-                            body: {
-                                "id": id,
-                                "measureName": newMeasureName,
-                                "cqlLibraryName": newCQLLibraryName,
-                                "model": 'QI-Core v4.1.1',
-                                "versionId": vId,
-                                "measureSetId": measureSetId,
-                                "ecqmTitle": eCQMTitle,
-                                "measurementPeriodStart": mpStartDate,
-                                "measurementPeriodEnd": mpEndDate,
-                                "active": false,
-                                "createdBy": defaultUser
-                            }
-                        }).then((response) => {
-                            expect(response.status).to.eql(200)
-                            cy.log("Measure Deleted successfully")
-                        })
-                    })
+                cy.request({
+                    url: '/api/admin/measures/' + id,
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: 'Bearer ' + accessToken.value,
+                        'api-key': adminAPIKey,
+                        'harpId': harpUser
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    cy.log("Measure Deleted successfully")
                 })
             })
         })
@@ -1045,6 +1013,27 @@ describe('Delete QI-Core Measure with admin API Key', () => {
                     expect(response.status).to.eql(404)
                 })
 
+            })
+        })
+    })
+
+    it('Verify Error Message when Non Measure owner try to Delete Qi Core Measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/admin/measures/' + id,
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: 'Bearer ' + accessToken.value,
+                        'api-key': adminAPIKey,
+                        'harpId': harpUserALT
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(409)
+                    expect(response.body.message).to.eql('Response could not be completed because the HARP id of ' + harpUserALT + ' passed in does not match the owner of the measure with the measure id of ' + id + '. The owner of the measure is ' +harpUser)
+                })
             })
         })
     })
@@ -1072,71 +1061,39 @@ describe('Delete QDM Measure with admin API Key', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'd')
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout
-
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        cy.clearAllSessionStorage({ log: true })
-
     })
+
     it('Delete versioned QDM Measure with admin API key', () => {
 
         //Version Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
-                cy.readFile('cypress/fixtures/versionId').should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + measureId + '/version?versionType=major',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        },
-                        method: 'PUT'
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.version).to.include('1.0.000')
-                    })
+                cy.request({
+                    url: '/api/measures/' + measureId + '/version?versionType=major',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'PUT'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.version).to.include('1.0.000')
                 })
             })
         })
-
         //Delete Versioned Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
-                    cy.readFile(versionIdPath).should('exist').then((vId) => {
-                        cy.request({
-                            url: '/api/admin/measures/' + id,
-                            method: 'DELETE',
-                            headers: {
-                                Authorization: 'Bearer ' + accessToken.value,
-                                'api-key': adminAPIKey
-                            },
-                            body: {
-                                "id": id,
-                                "measureName": newMeasureName,
-                                "cqlLibraryName": newCQLLibraryName,
-                                "model": 'QI-Core v4.1.1',
-                                "versionId": vId,
-                                "measureSetId": measureSetId,
-                                "ecqmTitle": eCQMTitle,
-                                "measurementPeriodStart": mpStartDate,
-                                "measurementPeriodEnd": mpEndDate,
-                                "active": true,
-                                "createdBy": defaultUser
-                            }
-                        }).then((response) => {
-                            expect(response.status).to.eql(200)
-                            cy.log("Measure Deleted successfully")
-                        })
-                    })
+                cy.request({
+                    url: '/api/admin/measures/' + id,
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: 'Bearer ' + accessToken.value,
+                        'api-key': adminAPIKey,
+                        'harpId': harpUser
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    cy.log("Measure Deleted successfully")
                 })
             })
         })
@@ -1163,33 +1120,17 @@ describe('Delete QDM Measure with admin API Key', () => {
         //Delete Draft Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((measureSetId) => {
-                    cy.readFile(versionIdPath).should('exist').then((vId) => {
-                        cy.request({
-                            url: '/api/admin/measures/' + id,
-                            method: 'DELETE',
-                            headers: {
-                                Authorization: 'Bearer ' + accessToken.value,
-                                'api-key': adminAPIKey
-                            },
-                            body: {
-                                "id": id,
-                                "measureName": newMeasureName,
-                                "cqlLibraryName": newCQLLibraryName,
-                                "model": 'QI-Core v4.1.1',
-                                "versionId": vId,
-                                "measureSetId": measureSetId,
-                                "ecqmTitle": eCQMTitle,
-                                "measurementPeriodStart": mpStartDate,
-                                "measurementPeriodEnd": mpEndDate,
-                                "active": false,
-                                "createdBy": defaultUser
-                            }
-                        }).then((response) => {
-                            expect(response.status).to.eql(200)
-                            cy.log("Measure Deleted successfully")
-                        })
-                    })
+                cy.request({
+                    url: '/api/admin/measures/' + id,
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: 'Bearer ' + accessToken.value,
+                        'api-key': adminAPIKey,
+                        'harpId': harpUser
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    cy.log("Measure Deleted successfully")
                 })
             })
         })
@@ -1202,11 +1143,30 @@ describe('Delete QDM Measure with admin API Key', () => {
                         authorization: 'Bearer ' + accessToken.value
                     },
                     method: 'GET',
-
                 }).then((response) => {
                     expect(response.status).to.eql(404)
                 })
+            })
+        })
+    })
 
+    it('Verify Error Message when Non Measure owner try to Delete QDM Measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/admin/measures/' + id,
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: 'Bearer ' + accessToken.value,
+                        'api-key': adminAPIKey,
+                        'harpId': harpUserALT
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(409)
+                    expect(response.body.message).to.eql('Response could not be completed because the HARP id of ' + harpUserALT + ' passed in does not match the owner of the measure with the measure id of ' + id + '. The owner of the measure is ' +harpUser)
+                })
             })
         })
     })
