@@ -41,15 +41,14 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, true)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(altMeasureName, altCqlLibraryName, false, true)
-
     })
+
     it('Fields on Test Case page are not editable by Non Measure Owner', () => {
 
         //navigate to the all measures tab
@@ -84,7 +83,6 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
         //Navigate to Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.enabled')
-
     })
 })
 
@@ -98,15 +96,14 @@ describe('Create Test Case Validations', () => {
     beforeEach('Login', () => {
         OktaLogin.Login()
     })
+
     afterEach('Logout', () => {
         OktaLogin.Logout()
-
     })
 
     after('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Description more than 250 characters', () => {
@@ -167,9 +164,9 @@ describe('Edit Test Case Validations', () => {
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
     })
+
     afterEach('Logout', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Description more than 250 characters', () => {
@@ -268,7 +265,7 @@ describe('Edit Test Case Validations', () => {
         Utilities.waitForElementVisible(CQLLibrariesPage.cqlLibraryDirtyCheck, 37000)
 
         //verify that the discard modal appears
-        Global.clickOnDirtyCheckCancelChanges()
+        Global.clickOnKeepWorking()
 
         //attempt to navigate away from the test case page
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -276,8 +273,7 @@ describe('Edit Test Case Validations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementVisible(CQLLibrariesPage.cqlLibraryDirtyCheck, 37000)
         //verify that the discard modal appears
-        Global.clickOnDirtyCheckDiscardChanges()
-
+        Global.clickOnDiscardChanges()
     })
 })
 
@@ -304,7 +300,6 @@ describe('Dirty Check Validations', () => {
     afterEach('Logout and cleanup', () => {
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Validate dirty check on the test case title, in the test case details tab', () => {
@@ -333,7 +328,7 @@ describe('Dirty Check Validations', () => {
         Utilities.waitForElementVisible(CQLLibrariesPage.cqlLibraryDirtyCheck, 37000)
 
         //verify that the discard modal appears
-        Global.clickOnDirtyCheckCancelChanges()
+        Global.clickOnKeepWorking()
 
         //attempt to navigate away from the test case page
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -341,8 +336,7 @@ describe('Dirty Check Validations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementVisible(CQLLibrariesPage.cqlLibraryDirtyCheck, 37000)
         //verify that the discard modal appears
-        Global.clickOnDirtyCheckDiscardChanges()
-
+        Global.clickOnDiscardChanges()
     })
 
     it('Validate dirty check on Testcase Expected/Actual tab', () => {
@@ -369,7 +363,7 @@ describe('Dirty Check Validations', () => {
         cy.get(TestCasesPage.QDMTcDiscardChangesButton).click()
 
         //verify discard modal and click on keep working
-        Global.clickDiscardAndKeepWorking()
+        Global.clickOnDiscardChanges()
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.empty')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.empty')
@@ -402,8 +396,8 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
+
     it('Validate dirty check on the test case attributes', () => {
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
@@ -437,7 +431,7 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
         //attempt to navigate away without clicking on the add button (for the attribute)
         cy.get(Header.measures).click()
         Utilities.waitForElementVisible(TestCasesPage.QDMDiscardChangesDialog, 35000)
-        Global.clickOnDirtyCheckCancelChanges()
+        Global.clickOnKeepWorking()
         //user stays on current page
         cy.readFile('cypress/fixtures/measureId').should('exist').then((measureid) => {
             cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
@@ -453,7 +447,7 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
         //another attempt to navigate away from current page after clicking on the add button
         cy.get(Header.measures).click()
         Utilities.waitForElementVisible(TestCasesPage.QDMDiscardChangesDialog, 35000)
-        Global.clickOnDirtyCheckDiscardChanges()
+        Global.clickOnDiscardChanges()
 
         //user is navigated away from test case page
         cy.location('pathname', { timeout: 60000 }).should('include', '/measures')
@@ -568,7 +562,6 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
 
         //confirm that the Run Test button is disabled
         cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('not.be.enabled')
-
     })
 })
 
@@ -671,16 +664,14 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-
-
     })
 
     afterEach('Logout and Clean up', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
+
     it("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
 
         //log into MADiE
@@ -721,7 +712,6 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
 
         //confirm that the Run Test button is disabled
         cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('not.be.enabled')
-
     })
 })
 
@@ -739,7 +729,6 @@ describe('Non Boolean Population basis Expected values', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Validate Non Boolean Expected values', () => {
@@ -785,7 +774,6 @@ describe('Non Boolean Population basis Expected values', () => {
         cy.get(TestCasesPage.testCaseNUMERExpected).clear().type('1.9')
         cy.get(TestCasesPage.nonBooleanExpectedValueError).should('contain.text', 'Decimals values cannot be entered in the population expected values')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
-
     })
 })
 

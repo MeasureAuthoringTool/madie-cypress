@@ -196,6 +196,12 @@ describe('QDM CQL Functions', () => {
         cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard changes?')
         cy.get(CQLEditorPage.modalConfirmationText).should('contain.text', 'Are you sure you want to discard your changes in the CQL and edit the Function in the CQL?')
         cy.get(Global.keepWorkingCancel).click()
+         /*
+        Note: should be
+        Global.clickOnKeepWorking()
+        but this modal title has Discard changes? instead of Discard Changes?
+        */
+
 
         //Click on Delete button
         cy.get(CQLEditorPage.deleteSavedFunctions).click()
