@@ -7,6 +7,7 @@ let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let measureSharingAPIKey = Environment.credentials().adminApiKey
 let harpUserALT = Environment.credentials().harpUserALT
+let harpUser = Environment.credentials().harpUser
 let measureCQL = MeasureCQL.SBTEST_CQL
 
 describe('Measure Sharing Service', () => {
@@ -110,6 +111,50 @@ describe('Measure Sharing Service', () => {
                 }).then((response) => {
                     expect(response.status).to.eql(404)
                     expect(response.body.message).to.eql('Measure does not exist: ' + id + '5')
+                })
+            })
+        })
+    })
+
+    it('Get details of Measure shared with', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/admin/measures/sharedWith?measureids=' + id,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        'api-key': measureSharingAPIKey,
+                        'harpId': harpUser
+                    },
+                    method: 'GET'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body[0].measureName).to.eql(measureName)
+                    expect(response.body[0].measureId).to.eql(id)
+                    expect(response.body[0].measureOwner).to.eql(harpUser)
+                    expect(response.body[0].sharedWith).to.eql(null)
+                })
+            })
+        })
+    })
+
+    it('Verify error Message when Non Measure owner tried to get details of Measure Shared with', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/admin/measures/sharedWith?measureids=' + id,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        'api-key': measureSharingAPIKey,
+                        'harpId': harpUserALT
+                    },
+                    method: 'GET'
+                }).then((response) => {
+                    expect(response.status).to.eql(409)
+                    expect(response.body.message).to.eql('Response could not be completed because the HARP id of ' + harpUserALT + ' passed in does not match the owner of the measure with the measure id of ' + id + '. The owner of the measure is ' + harpUser)
                 })
             })
         })
