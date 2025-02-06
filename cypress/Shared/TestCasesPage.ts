@@ -10,6 +10,15 @@ export type TestCase = {
     json?: string
 }
 
+export enum TestCaseAction {
+    clone,
+    copyToMeasure,
+    delete,
+    exportCollection,
+    exportTransaction,
+    shiftDates
+}
+
 export class TestCasesPage {
     //QI Core element tab enabled test case detail page elements
     public static readonly QiCoreEleEnabledJSONTab = '[data-testid="json-tab"]'
@@ -988,5 +997,63 @@ export class TestCasesPage {
             .parent('tr')
             .find('input[type="checkbox"]')
             .check()
+    }
+
+    /*
+        actionCenter() assumes that you have already applied the correct 
+        set of checkmarks for your test scenario
+    */
+    public static actionCenter(action: TestCaseAction) {
+
+        switch(action) {
+
+            case TestCaseAction.clone:
+                let originalCount: number
+
+                cy.get('[data-testid="test-case-title-0_caseNumber"]')
+                    .invoke('text').then(maxCaseNumber => {
+                        originalCount = Number(maxCaseNumber)
+                })
+
+                cy.get(TestCasesPage.actionCenterClone).should('be.enabled').click()
+                Utilities.waitForElementVisible(this.tcSaveSuccessMsg, 2500)
+
+                cy.get('[data-testid="test-case-title-0_caseNumber"]')
+                    .invoke('text').then(newMaxNumber => {
+                        expect(originalCount + 1).eq(Number(newMaxNumber))
+                })
+                break
+            
+            case TestCaseAction.copyToMeasure:
+                // still coming, tbd
+                break
+            
+            case TestCaseAction.delete:
+
+                cy.get(TestCasesPage.actionCenterDelete).should('be.enabled').click()
+                cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+                Utilities.waitForElementVisible(this.tcSaveSuccessMsg, 2500)
+                break
+            
+            case TestCaseAction.exportCollection:
+
+                cy.get(TestCasesPage.actionCenterExport).should('be.enabled').click()
+                cy.get(TestCasesPage.exportCollectionTypeOption).should('be.visible').click()
+                Utilities.waitForElementVisible(this.tcSaveSuccessMsg, 7500)
+                break
+                
+            case TestCaseAction.exportTransaction:
+
+                cy.get(TestCasesPage.actionCenterExport).should('be.enabled').click()
+                cy.get(TestCasesPage.exportTransactionTypeOption).should('be.visible').click()
+                Utilities.waitForElementVisible(this.tcSaveSuccessMsg, 7500)
+                break
+            
+            case TestCaseAction.shiftDates:
+                // still coming, tbd
+                break
+
+        }
+
     }
 }
