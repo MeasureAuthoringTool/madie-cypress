@@ -402,6 +402,25 @@ describe('Measure: CQL Editor', () => {
 
         cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'FHIRHelpers was incorrectly aliased. MADiE has overwritten the alias with \'FHIRHelpers\'.')
     })
+
+    it('Verify error message if CQL contains access modifiers like private or public', () => {
+
+        MeasuresPage.actionCenter('edit')
+
+        CQLEditorPage.clickCQLEditorTab()
+
+        cy.readFile('cypress/fixtures/CQLWithPrivateAccessModifier.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+        })
+
+        //save the value in the CQL Editor
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Access modifiers like Public and Private can not be used in MADiE.')
+    })
 })
 
 describe('Measure: CQL Editor: valueSet', () => {

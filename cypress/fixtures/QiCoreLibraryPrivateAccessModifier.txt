@@ -1,0 +1,18 @@
+library ICFTESTLIBRARY009 version '1.0.000'
+
+using QICore version '4.1.1'
+
+include FHIRHelpers version '4.1.000' called FHIRHelpers
+include QICoreCommon version '1.2.000' called QICoreCommon
+
+context Patient
+
+define private function "Diagnosis on or before Latest Possible Vaccination Date"(Diagnosis List<Condition>, LastVaccineDate System.Date):
+  Diagnosis ExclusionDiagnosis
+    where ( start of QICoreCommon."ToPrevalenceInterval" ( ExclusionDiagnosis ) ) on or before LastVaccineDate
+
+define function "Administered Date"(Vaccination Choice<Immunization, Procedure>):
+  case
+    when Vaccination is Immunization then start of ( QICoreCommon."ToInterval" ( ( Vaccination as Immunization ).occurrence ) )
+    when Vaccination is Procedure then end of ( QICoreCommon."ToInterval" ( ( Vaccination as Procedure ).performed ) ) 
+    else null end
