@@ -7,6 +7,7 @@ let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
 let adminApiKey = Environment.credentials().adminApiKey
 let harpUserALT = Environment.credentials().harpUserALT
+let harpUser = Environment.credentials().harpUser
 
 describe('CQL Library Sharing Service', () => {
 
@@ -21,6 +22,29 @@ describe('CQL Library Sharing Service', () => {
     it('Successful CQL Library sharing', () => {
 
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
+    })
+
+    it('Get details of CQL Library shared with', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+                cy.request({
+                    url: '/api/cql-libraries/sharedWith?measureids=' + id,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        'api-key': adminApiKey,
+                        'harpId': harpUser
+                    },
+                    method: 'GET'
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body[0].libraryName).to.eql(newCQLLibraryName)
+                    expect(response.body[0].libraryId).to.eql(id)
+                    expect(response.body[0].libraryOwner).to.eql(harpUser)
+                    expect(response.body[0].sharedWith).to.eql(null)
+                })
+            })
+        })
     })
 })
 
@@ -90,6 +114,28 @@ describe('CQL Library sharing Validations', () => {
                 }).then((response) => {
                     expect(response.status).to.eql(404)
                     expect(response.body.message).to.eql('Library does not exist: ' + id + 5 + 'z')
+                })
+            })
+        })
+    })
+
+
+    it('Verify error Message when Non Measure owner tried to get details of CQL Library Shared with', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((id) => {
+                cy.request({
+                    failOnStatusCode: false,
+                    url: '/api/cql-libraries/sharedWith?measureids=' + id,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value,
+                        'api-key': adminApiKey,
+                        'harpId': harpUserALT
+                    },
+                    method: 'GET'
+                }).then((response) => {
+                    expect(response.status).to.eql(409)
+                    expect(response.body.message).to.eql('Response could not be completed because the HARP id of ' + harpUserALT + ' passed in does not match the owner of the library with the library id of ' + id + '. The owner of the library is ' + harpUser)
                 })
             })
         })
