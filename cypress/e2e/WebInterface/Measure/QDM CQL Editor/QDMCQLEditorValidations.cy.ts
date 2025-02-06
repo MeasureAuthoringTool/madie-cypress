@@ -312,5 +312,22 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
         cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Row: 4, Col:1: ELM: 1:46 | include MATGlobalCommonFunctions statement is missing version. Please add a version to the include.')
     })
+
+    it('Verify error message if CQL contains access modifiers like private or public', () => {
+    
+        MeasuresPage.actionCenter('edit')
+    
+        CQLEditorPage.clickCQLEditorTab()
+    
+        cy.readFile('cypress/fixtures/QCMCQLWithPrivateAccessModifier.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+        })
+    
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Access modifiers like Public and Private can not be used in MADiE.')
+        })
 })
 
