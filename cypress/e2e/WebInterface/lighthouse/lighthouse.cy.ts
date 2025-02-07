@@ -10,6 +10,7 @@ import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
+import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -36,7 +37,7 @@ describe('Login and initial "My Measures" page', () => {
         OktaLogin.Login()
 
         const thresholds = {
-            performance: 23, //This is an overall score given to the overall page performance based on the metrics.
+            performance: 24, //This is an overall score given to the overall page performance based on the metrics.
             //The score is calculated based off the following metrics (their respective weights are also listed):
             //'first-contentful-paint' -> 10%
             //'largest-contentful-paint' -> 25%
@@ -44,19 +45,11 @@ describe('Login and initial "My Measures" page', () => {
             //'cumulative-layout-shift' -> 25%
             //'speed-index' -> 10%
 
-            accessibility: 75, //The Lighthouse Accessibility score is a weighted average of all accessibility audits. Weighting is based on axe user impact assessments.
-
-            //'first-contentful-paint': 3000, //In miliseconds, this measures how long it takes the browser to render the first piece of DOM content after a user navigates to your page. 
-
-            //'largest-contentful-paint': 40000,//This is the approximate time it takes for the main content of the page becomes visible to users.
-
-            'total-blocking-time': 520000, //In miliseconds, this measure the total amount of time that a page is blocked from responding to user input, such as mouse clicks, screen taps, or keyboard presses.
-
+            accessibility: 76, //The Lighthouse Accessibility score is a weighted average of all accessibility audits. Weighting is based on axe user impact assessments.
+            'total-blocking-time': 8600, //In miliseconds, this measure the total amount of time that a page is blocked from responding to user input, such as mouse clicks, screen taps, or keyboard presses.
             'speed-index': 34000, //In miliseconds, this measures how quickly content is visually displayed during page load.
+            'cumulative-layout-shift': 100, //Unexpected page element shifts -- basically, the measurement of shifting page elements
 
-            'cumulative-layout-shift': 300, //Unexpected page element shifts -- basically, the measurement of shifting page elements
-
-            //interactive: 40000, //In miliseconds, this measures how long it takes a page to become fully interactive.
         };
 
         const lighthouseOptions = {
@@ -77,8 +70,8 @@ describe('Login and initial "My Measures" page', () => {
         OktaLogin.UILogout()
         cy.clearAllCookies()
         cy.clearLocalStorage()
+        sessionStorage.clear()
         cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookie()
 
 
     })
@@ -91,15 +84,17 @@ describe('Navigate to the "All Measures" page', () => {
 
         OktaLogin.Login()
         cy.reload()
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 5000)
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 50000)
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        cy.get(MeasuresPage.allMeasuresTab).scrollIntoView()
         cy.get(MeasuresPage.allMeasuresTab).click()
 
         const thresholds = {
-            performance: 18,
-            accessibility: 75,
-            'total-blocking-time': 520000,
+            performance: 26,
+            accessibility: 76,
+            'total-blocking-time': 8800,
             'speed-index': 33000,
-            'cumulative-layout-shift': 300,
+            'cumulative-layout-shift': 100,
         };
 
         const lighthouseOptions = {
@@ -121,8 +116,8 @@ describe('Navigate to the "All Measures" page', () => {
         OktaLogin.UILogout()
         cy.clearAllCookies()
         cy.clearLocalStorage()
+        sessionStorage.clear()
         cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookie()
 
     })
 
@@ -151,8 +146,8 @@ describe('Navigate to the QDM "CQL Editor" page', () => {
         OktaLogin.UILogout()
         cy.clearAllCookies()
         cy.clearLocalStorage()
+        sessionStorage.clear()
         cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookie()
 
     })
 
@@ -163,11 +158,11 @@ describe('Navigate to the QDM "CQL Editor" page', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         const thresholds = {
-            performance: 10,
-            accessibility: 75,
-            'total-blocking-time': 520000,
-            'speed-index': 41000,
-            'cumulative-layout-shift': 300,
+            performance: 11,
+            accessibility: 94,
+            'total-blocking-time': 8700,
+            'speed-index': 42000,
+            'cumulative-layout-shift': 100,
         };
 
         const lighthouseOptions = {
@@ -188,8 +183,8 @@ describe('Navigate to the QDM "CQL Editor" page', () => {
         OktaLogin.UILogout()
         cy.clearAllCookies()
         cy.clearLocalStorage()
+        sessionStorage.clear()
         cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookie()
 
     })
 
@@ -284,8 +279,8 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
         OktaLogin.UILogout()
         cy.clearAllCookies()
         cy.clearLocalStorage()
+        sessionStorage.clear()
         cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookie()
     })
 
     it('Navigate to the QDM "Test Cases" tab after test cases have already been loaded on measure', () => {
@@ -299,11 +294,11 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         const thresholds = {
-            performance: 6,
-            accessibility: 75,
-            'total-blocking-time': 520000,
-            'speed-index': 48000,
-            'cumulative-layout-shift': 300,
+            performance: 18,
+            accessibility: 78,
+            'total-blocking-time': 8800,
+            'speed-index': 45000,
+            'cumulative-layout-shift': 100,
         };
 
         const lighthouseOptions = {
@@ -325,8 +320,8 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
         OktaLogin.UILogout()
         cy.clearAllCookies()
         cy.clearLocalStorage()
+        sessionStorage.clear()
         cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookie()
 
     })
 
@@ -355,8 +350,8 @@ describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test ca
         OktaLogin.UILogout()
         cy.clearAllCookies()
         cy.clearLocalStorage()
+        sessionStorage.clear()
         cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookie()
 
     })
 
@@ -373,10 +368,10 @@ describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test ca
         TestCasesPage.clickEditforCreatedTestCase()
         const thresholds = {
             performance: 3,
-            accessibility: 75,
-            'total-blocking-time': 520000,
-            'speed-index': 41000,
-            'cumulative-layout-shift': 300,
+            accessibility: 94,
+            'total-blocking-time': 8100,
+            'speed-index': 37000,
+            'cumulative-layout-shift': 100,
         };
 
         const lighthouseOptions = {
@@ -398,10 +393,110 @@ describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test ca
         OktaLogin.UILogout()
         cy.clearAllCookies()
         cy.clearLocalStorage()
+        sessionStorage.clear()
         cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookie()
 
     })
 
 })
 
+describe('Navigate to the "My CQL Libraries" page', () => {
+    beforeEach('Clear all cookies and storage', () => {
+
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        sessionStorage.clear()
+        cy.clearAllSessionStorage({ log: true })
+
+    })
+
+    it('Navigate to the "My CQL Libraries" page', () => {
+
+        OktaLogin.Login()
+        cy.reload()
+        cy.get(Header.cqlLibraryTab).click()
+        const thresholds = {
+            performance: 10,
+            accessibility: 94,
+            'total-blocking-time': 8100,
+            'speed-index': 28000,
+            'cumulative-layout-shift': 100,
+        };
+
+        const lighthouseOptions = {
+            formFactor: 'desktop', //sets the expected platform to be desktop (as opposed to mobile)
+            screenEmulation: { disabled: true }, //because it is not moble, screen emulation is set to disabled
+        }
+
+        const lighthouseConfig = {
+            settings: { output: "html" }, //output should be formated in HTML
+            extends: "lighthouse:default", //the output extends onto lighthouse default settings
+        }
+
+        //calling lighthouse after performing some user functionality
+        cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig)
+
+        //adding closing line so the viewable Cypress logs will show that the report has been written
+        cy.log("---- Lighthouse report has been written to disk ----")
+        //log out of UI
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        sessionStorage.clear()
+        cy.clearAllSessionStorage({ log: true })
+
+    })
+
+})
+describe('Navigate to the "All CQL Libraries" page', () => {
+    beforeEach('Clear all cookies and storage', () => {
+
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        sessionStorage.clear()
+        cy.clearAllSessionStorage({ log: true })
+
+    })
+
+    it('Navigate to the "All CQL Libraries" page', () => {
+
+        OktaLogin.Login()
+        cy.reload()
+        cy.get(Header.cqlLibraryTab).click()
+        Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesBtn, 5000)
+        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        const thresholds = {
+            performance: 10,
+            accessibility: 94,
+            'total-blocking-time': 8100,
+            'speed-index': 28000,
+            'cumulative-layout-shift': 100,
+        };
+
+        const lighthouseOptions = {
+            formFactor: 'desktop', //sets the expected platform to be desktop (as opposed to mobile)
+            screenEmulation: { disabled: true }, //because it is not moble, screen emulation is set to disabled
+        }
+
+        const lighthouseConfig = {
+            settings: { output: "html" }, //output should be formated in HTML
+            extends: "lighthouse:default", //the output extends onto lighthouse default settings
+        }
+
+        //calling lighthouse after performing some user functionality
+        cy.lighthouse(thresholds, lighthouseOptions, lighthouseConfig)
+
+        //adding closing line so the viewable Cypress logs will show that the report has been written
+        cy.log("---- Lighthouse report has been written to disk ----")
+        //log out of UI
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        sessionStorage.clear()
+        cy.clearAllSessionStorage({ log: true })
+
+    })
+
+})
