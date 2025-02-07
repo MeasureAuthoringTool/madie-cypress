@@ -124,7 +124,7 @@ export class OktaLogin {
 
     public static UILogout(): void {
 
-        cy.wait(3500)
+        cy.wait(4500)
         cy.reload()
         Utilities.waitForElementVisible(Header.userProfileSelect, 500000)
         cy.get(Header.userProfileSelect).scrollIntoView()
