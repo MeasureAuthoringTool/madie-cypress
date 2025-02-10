@@ -121,7 +121,7 @@ describe('QDM Measure Versioning', () => {
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         Utilities.waitForElementVisible('.MuiDialogContent-root', 50000)
 
@@ -194,7 +194,7 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         Utilities.waitForElementVisible('.MuiDialogContent-root', 50000)
 
@@ -270,7 +270,7 @@ describe('QI-Core Measure Versioning', () => {
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         Utilities.waitForElementVisible(MeasuresPage.measureVersionMajor, 50000)
         cy.get(MeasuresPage.measureVersionMajor).should('be.visible')
-        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
         Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 50000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).should('be.visible')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
