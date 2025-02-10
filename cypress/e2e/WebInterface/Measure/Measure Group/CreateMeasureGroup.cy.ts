@@ -73,7 +73,7 @@ describe('Validate Measure Group -- scoring and populations', () => {
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(1000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(1500)
 
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
