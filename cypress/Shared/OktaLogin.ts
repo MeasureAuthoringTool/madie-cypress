@@ -126,12 +126,18 @@ export class OktaLogin {
 
         cy.wait(4500)
         cy.reload()
-        Utilities.waitForElementVisible(Header.userProfileSelect, 500000)
-        cy.get(Header.userProfileSelect).scrollIntoView()
-        cy.get(Header.userProfileSelect).click()
-        Utilities.waitForElementVisible(Header.userProfileSelectSignOutOption, 60000)
-        cy.get(Header.userProfileSelectSignOutOption).click({ force: true })
-        Utilities.waitForElementVisible(this.usernameInput, 500000)
-        cy.log('Log out successful')
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 50000)
+        cy.wait(3000)
+        cy.url().then((url) => {
+            if (url != 'https://impl-madie.hcqis.org/login') {
+                Utilities.waitForElementVisible(Header.userProfileSelect, 500000)
+                cy.get(Header.userProfileSelect).scrollIntoView()
+                cy.get(Header.userProfileSelect).click()
+                Utilities.waitForElementVisible(Header.userProfileSelectSignOutOption, 60000)
+                cy.get(Header.userProfileSelectSignOutOption).click({ force: true })
+                Utilities.waitForElementVisible(this.usernameInput, 500000)
+                cy.log('Log out successful')
+            }
+        })
     }
 }
