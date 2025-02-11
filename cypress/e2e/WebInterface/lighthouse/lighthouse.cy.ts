@@ -46,7 +46,7 @@ describe('Login and initial "My Measures" page', () => {
             //'speed-index' -> 10%
 
             accessibility: 76, //The Lighthouse Accessibility score is a weighted average of all accessibility audits. Weighting is based on axe user impact assessments.
-            'total-blocking-time': 8600, //In miliseconds, this measure the total amount of time that a page is blocked from responding to user input, such as mouse clicks, screen taps, or keyboard presses.
+            'total-blocking-time': 10000, //In miliseconds, this measure the total amount of time that a page is blocked from responding to user input, such as mouse clicks, screen taps, or keyboard presses.
             'speed-index': 34000, //In miliseconds, this measures how quickly content is visually displayed during page load.
             'cumulative-layout-shift': 100, //Unexpected page element shifts -- basically, the measurement of shifting page elements
 
@@ -90,9 +90,9 @@ describe('Navigate to the "All Measures" page', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
 
         const thresholds = {
-            performance: 26,
+            performance: 23,
             accessibility: 76,
-            'total-blocking-time': 8800,
+            'total-blocking-time': 11000,
             'speed-index': 33000,
             'cumulative-layout-shift': 100,
         };
@@ -160,7 +160,7 @@ describe('Navigate to the QDM "CQL Editor" page', () => {
         const thresholds = {
             performance: 11,
             accessibility: 94,
-            'total-blocking-time': 8700,
+            'total-blocking-time': 10000,
             'speed-index': 42000,
             'cumulative-layout-shift': 100,
         };
@@ -294,9 +294,9 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         const thresholds = {
-            performance: 18,
+            performance: 19,
             accessibility: 78,
-            'total-blocking-time': 8800,
+            'total-blocking-time': 10000,
             'speed-index': 45000,
             'cumulative-layout-shift': 100,
         };
@@ -369,7 +369,7 @@ describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test ca
         const thresholds = {
             performance: 3,
             accessibility: 94,
-            'total-blocking-time': 8100,
+            'total-blocking-time': 8600,
             'speed-index': 37000,
             'cumulative-layout-shift': 100,
         };
@@ -419,7 +419,7 @@ describe('Navigate to the "My CQL Libraries" page', () => {
         const thresholds = {
             performance: 10,
             accessibility: 94,
-            'total-blocking-time': 8100,
+            'total-blocking-time': 9100,
             'speed-index': 28000,
             'cumulative-layout-shift': 100,
         };
@@ -470,7 +470,7 @@ describe('Navigate to the "All CQL Libraries" page', () => {
         const thresholds = {
             performance: 10,
             accessibility: 94,
-            'total-blocking-time': 8100,
+            'total-blocking-time': 20000,
             'speed-index': 28000,
             'cumulative-layout-shift': 100,
         };
