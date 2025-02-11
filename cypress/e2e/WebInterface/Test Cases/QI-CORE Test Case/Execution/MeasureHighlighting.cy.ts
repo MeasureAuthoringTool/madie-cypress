@@ -797,6 +797,9 @@ describe('Measure Highlighting', () => {
             }
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
+       
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc).click()
+
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Initial Population')
@@ -900,6 +903,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
             }
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
+     
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc).click()
+
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Initial Population')
@@ -1013,6 +1019,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
             }
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
+       
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc).click()
+       
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Initial Population')
@@ -1180,6 +1189,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
             }
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
+        
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc).click()
+        
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
@@ -1314,6 +1326,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
             }
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
+        
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc).click()
+        
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
