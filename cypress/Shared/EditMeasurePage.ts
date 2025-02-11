@@ -6,7 +6,8 @@ export enum EditMeasureActions {
     export = 'export',
     delete = 'delete',
     version = 'version',
-    draft = 'draft'
+    draft = 'draft',
+    viewHR = 'viewHR'
 
 }
 
@@ -26,7 +27,9 @@ export class EditMeasurePage {
     public static readonly editMeasureVersionActionBtn = '[data-testid="VersionMeasure"]'
     public static readonly editMeasureDraftActionBtn = '[data-testid="DraftMeasure"]'
     public static readonly editMeasureExportActionBtn = '[data-testid="ExportMeasure"]'
+    public static readonly viewHRActionBtn = '[data-testid="Viewhumanreadable"]'
     public static readonly editPageVersionDraftMsg = '[data-testid="edit-measure-information-success-text"]'
+    public static readonly humanReadablePopup = '.qpp-c-modal__header'
 
     //Associate QDM and QI Core measures:
     public static readonly associateCmsIdDialog = '[data-testid="associate-cms-id-dialog-tbl"]'
@@ -215,7 +218,7 @@ export class EditMeasurePage {
                 cy.get(MeasuresPage.versionMeasuresSelectionButton).click()
                 cy.get(MeasuresPage.measureVersionMajor).click()
                 // please leave this in place. it needs a short pause here for the modal to present new fields
-                cy.wait(500)
+                cy.wait(1000)
 
                 cy.get('#new-version').invoke('val').then(value => {
                     cy.get(MeasuresPage.confirmMeasureVersionNumber).type(value.toString())
@@ -250,8 +253,16 @@ export class EditMeasurePage {
                 Utilities.validateToastMessage('Measure successfully deleted')
                 break
             }
-            default: { }
+            case EditMeasureActions.viewHR: {
 
+                cy.get(this.viewHRActionBtn).should('be.visible')
+                cy.get(this.viewHRActionBtn).should('be.enabled')
+                cy.get(this.viewHRActionBtn).click()
+
+                break
+            }
+
+            default: { }
         }
     }
 }
