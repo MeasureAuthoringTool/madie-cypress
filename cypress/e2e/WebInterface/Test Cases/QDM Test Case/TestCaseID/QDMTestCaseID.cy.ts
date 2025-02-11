@@ -255,8 +255,9 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
 
     afterEach('Delete Measure and Logout', () => {
 
-        Utilities.deleteVersionedMeasure(measureQDMManifestName, CqlLibraryName)
+
         OktaLogin.UILogout()
+        Utilities.deleteVersionedMeasure(measureQDMManifestName, CqlLibraryName)
     })
 
     it('Test case number assigned to a Draft Measure for QDM Measure', () => {
