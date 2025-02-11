@@ -122,7 +122,7 @@ describe('Qi Core Code Search fields', () => {
         //Assert when the Code is not available in VSAC
         cy.get(CQLEditorPage.codeText).clear().type('123')
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
-        cy.get('.sc-bXCLTC').should('contain.text', 'No Results were found')
+        cy.get('[data-testid="codes-results-tbl"]').find('[class="sc-hmdomO xIUoS"]').should('contain.text', 'No Results were found')
         //Clear the code search values
         cy.get(CQLEditorPage.clearCodeBtn).click()
 
@@ -420,8 +420,8 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
         cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
         cy.get(CQLEditorPage.savedCodesTab).click()
-        Utilities.waitForElementVisible('.sc-cPiKLX', 30000)
-        cy.get('.sc-cPiKLX').should('contain.text', 'No Results were found')
+        Utilities.waitForElementVisible('.sc-jEACwC', 30000)
+        cy.get('[data-testid="saved-codes-tbl"]').find('.sc-jEACwC').should('contain.text', 'No Results were found')
     })
 })
 
