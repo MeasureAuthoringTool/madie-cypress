@@ -6,6 +6,7 @@ let adminApiKey = Environment.credentials().adminApiKey
 let CQLLibraryName = 'TestCqlLibrary' + Date.now()
 let CQLLibraryPublisher = 'SemanticBits'
 let libraryCQL = MeasureCQL.ICFCleanTestQICore
+let harpUser = Environment.credentials().harpUser
 
 describe('Verify Library usage and Delete Library', () => {
 
@@ -81,7 +82,8 @@ describe('Verify Library usage and Delete Library', () => {
                 method: 'DELETE',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
-                    'api-key': adminApiKey
+                    'api-key': adminApiKey,
+                    'harpId': harpUser
                 }
             }).then((response) => {
                 expect(response.status).to.eql(409)
@@ -99,7 +101,8 @@ describe('Verify Library usage and Delete Library', () => {
                 method: 'DELETE',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value,
-                    'api-key': adminApiKey
+                    'api-key': adminApiKey,
+                    'harpId': harpUser
                 }
             }).then((response) => {
                 expect(response.status).to.eql(200)
