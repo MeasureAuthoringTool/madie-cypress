@@ -446,6 +446,10 @@ export class TestCasesPage {
     public static readonly actionCenterCopyToMeasure = '[data-testid="copy-action-btn"]'
     public static readonly actionCenterExport = '[data-testid="export-action-btn"]'
 
+    // copy to modal
+    public static readonly copyToCancel = '[data-testid="copy-test-cases-cancel-button"]'
+    public static readonly copyToSave = '[data-testid="copy-test-cases-continue-button"]'
+
     //This function grabs the data-testid value off of the view button and extracts the id out of it.
     //Then, it puts that id in a file. For added control, the optional "eleTableEntry" parameter can be
     //used to specify which entry we are wanting to grab the id off of. For example, if you have two entries
@@ -493,7 +497,7 @@ export class TestCasesPage {
             .find('button')
             .invoke('attr', 'data-testid')
             .then(idValue => {
-                testCaseId = idValue.split('-')[2].toString().valueOf()
+                testCaseId = idValue.split('-')[5].toString().valueOf()
                 cy.writeFile(testCaseIdPath, testCaseId)
             })
     }
@@ -1025,7 +1029,13 @@ export class TestCasesPage {
                 break
             
             case TestCaseAction.copyToMeasure:
-                // still coming, tbd
+                
+                cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled').click()
+
+                cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                    cy.get('[data-testid="measure-name-' + id + '_select"]').find('input').check()
+                })
+                cy.get(TestCasesPage.copyToSave).scrollIntoView().click()
                 break
             
             case TestCaseAction.delete:
