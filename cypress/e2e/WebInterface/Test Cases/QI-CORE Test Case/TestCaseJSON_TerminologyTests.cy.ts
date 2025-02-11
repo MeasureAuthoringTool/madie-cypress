@@ -48,6 +48,7 @@ let CQLForCVMeasure = 'library SimpleFhirMeasure version \'0.0.001\'\n' +
     'define function "booleanFunction"():\n' +
     '  true'
 
+    // same as zipfileExportQICore
 let measureCQLCardTests = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     '\n' +
     'using QICore version \'4.1.1\'\n' +
@@ -391,18 +392,6 @@ describe('JSON Resource ID tests', () => {
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
-        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
-
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
@@ -484,17 +473,17 @@ describe('JSON Resource ID tests', () => {
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
-        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
+        // cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
+        // cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
+        // cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+        // cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
+        //     if ($ele.text() == "Text") {
+        //         cy.wrap($ele).should('exist')
+        //         cy.wrap($ele).focus()
+        //         cy.wrap($ele).click()
+        //     }
+        // })
+        // cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
         cy.get(MeasureGroupPage.popBasis).should('exist')
@@ -577,18 +566,6 @@ describe('JSON Resource ID tests', () => {
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
-        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
-
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
@@ -664,18 +641,6 @@ describe('JSON Resource ID tests', () => {
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
-        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
-            if ($ele.text() == "Text") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
         cy.get(MeasureGroupPage.popBasis).should('exist')
