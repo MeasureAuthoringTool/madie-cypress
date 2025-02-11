@@ -313,6 +313,9 @@ export class MeasureGroupPage {
             }
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
+       // this clears the previous step's dropdown
+        cy.get(this.QDMPopCriteria1Desc).click()
+       
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'denom')
