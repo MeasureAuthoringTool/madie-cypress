@@ -88,7 +88,7 @@ describe('QDM Code Search fields', () => {
         //Assert when the Code is not available in VSAC
         cy.get(CQLEditorPage.codeText).clear().type('123')
         cy.get(CQLEditorPage.codeSystemSearchBtn).click()
-        cy.get('[data-testid="codes-results-tbl"]').find('[class="sc-bXCLTC caKsJU"]').should('contain.text', 'No Results were found')
+        cy.get('[data-testid="codes-results-tbl"]').find('[class="sc-hmdomO xIUoS"]').should('contain.text', 'No Results were found')
         //Clear the code search values
         cy.get(CQLEditorPage.clearCodeBtn).click()
 
@@ -318,7 +318,7 @@ describe('QDM Code Search fields', () => {
         cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
         cy.get(CQLEditorPage.savedCodesTab).click()
-        cy.get('[data-testid="saved-codes-tbl"]').find('[class="sc-cPiKLX ceJlST"]').should('contain.text', 'No Results were found')
+        cy.get('[data-testid="saved-codes-tbl"]').find('.sc-jEACwC').should('contain.text', 'No Results were found')
     })
 
     it('Code system not removed from CQL when there are multiple codes associated with Code system and one of them removed', () => {
