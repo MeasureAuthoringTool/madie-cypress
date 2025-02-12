@@ -289,6 +289,61 @@ describe('Export measure on the Edit Measure page', () => {
     })
 })
 
+//Skipping until feature flag 'ShareMeasure' is removed
+describe.skip('Share measure from the Edit Measure page', () => {
+
+    before(() => {
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        const date = Date.now()
+        measureQDM = 'QDMShareMeasure' + date
+        qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 3 + randValue
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, qdmCQLLibrary, 'Proportion', false, qdmManifestTestCQL, null, false,
+            '2025-01-01', '2025-12-31')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
+            'Numerator', '', 'Denominator')
+
+        measureQICore = 'QICoreShareMeasure' + date
+        qiCoreCQLLibrary = 'QiCoreTestLibrary' + Date.now() + randValue + 3 + randValue
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests, 1)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Initial Population', '', '',
+            'Initial Population', '', 'Initial Population', 'boolean')
+    })
+
+    after(() => {
+
+        Utilities.deleteMeasure(measureQDM, measureQDM)
+        Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
+    })
+
+    it('Share QDM 5.6 measure', () => {
+
+        OktaLogin.Login()
+
+        MeasuresPage.actionCenter("edit")
+
+        Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
+
+        EditMeasurePage.actionCenter(EditMeasureActions.share)
+
+    })
+
+    it('Share QiCore 4.1.1 measure', () => {
+
+        OktaLogin.Login()
+
+        MeasuresPage.actionCenter("edit", 1)
+
+        Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
+
+        EditMeasurePage.actionCenter(EditMeasureActions.share)
+
+    })
+})
+
 describe('Dirty Check Validations', () => {
 
     beforeEach('Create Measure', () => {

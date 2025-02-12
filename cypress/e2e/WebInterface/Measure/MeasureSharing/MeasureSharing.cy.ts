@@ -111,6 +111,32 @@ describe('Measure Sharing', () => {
         //Create New Test case
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
     })
+
+    //Skipping until feature flag 'ShareMeasure' is removed
+    it.skip('Measure owner can share Measure from Action centre share button', () => {
+
+        //Login
+        OktaLogin.Login()
+
+        MeasuresPage.actionCenter('share')
+    })
+
+    //Skipping until feature flag 'ShareMeasure' is removed
+    it.only('Action centre share button disabled for Non Measure Owner', () => {
+
+        //Login
+        OktaLogin.AltLogin()
+
+        //Navigate to All Measures tab
+        cy.get(MeasuresPage.allMeasuresTab).click()
+
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        })
+        cy.get('[data-testid="share-action-btn"]').should('be.visible')
+        cy.get('[data-testid="share-action-btn"]').should('be.disabled')
+    })
 })
 
 describe('Measure Sharing - Multiple instances', () => {
