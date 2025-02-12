@@ -163,6 +163,14 @@ export class MeasuresPage {
 
                 break
             }
+            case 'share': {
+
+                cy.get('[data-testid="share-action-btn"]').should('be.visible')
+                cy.get('[data-testid="share-action-btn"]').should('be.enabled')
+                cy.get('[data-testid="share-action-btn"]').click()
+
+                break
+            }
             default: { }
         }
     }

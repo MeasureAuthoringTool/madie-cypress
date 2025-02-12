@@ -7,8 +7,8 @@ export enum EditMeasureActions {
     delete = 'delete',
     version = 'version',
     draft = 'draft',
-    viewHR = 'viewHR'
-
+    viewHR = 'viewHR',
+    share = 'share'
 }
 
 export class EditMeasurePage {
@@ -28,6 +28,7 @@ export class EditMeasurePage {
     public static readonly editMeasureDraftActionBtn = '[data-testid="DraftMeasure"]'
     public static readonly editMeasureExportActionBtn = '[data-testid="ExportMeasure"]'
     public static readonly viewHRActionBtn = '[data-testid="Viewhumanreadable"]'
+    public static readonly shareMeasureActionBtn = '[data-testid="ShareMeasure"]'
     public static readonly editPageVersionDraftMsg = '[data-testid="edit-measure-information-success-text"]'
     public static readonly humanReadablePopup = '.qpp-c-modal__header'
 
@@ -258,6 +259,15 @@ export class EditMeasurePage {
                 cy.get(this.viewHRActionBtn).should('be.visible')
                 cy.get(this.viewHRActionBtn).should('be.enabled')
                 cy.get(this.viewHRActionBtn).click()
+
+                break
+            }
+
+            case EditMeasureActions.share: {
+
+                cy.get(this.shareMeasureActionBtn).should('be.visible')
+                cy.get(this.shareMeasureActionBtn).should('be.enabled')
+                cy.get(this.shareMeasureActionBtn).click()
 
                 break
             }
