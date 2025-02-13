@@ -62,7 +62,6 @@ export class MeasureGroupPage {
     public static readonly QDMRiskAdjustmentDescriptionTextBox = '[data-testid=riskAdjustmentDescription]'
     public static readonly QDMRiskAdjustmentDefinitionTextBox = '[id="risk-adjustment"]'
 
-
     //mismatch CQL error
     public static readonly CQLPCMismatchError = '[class="madie-alert error"]'
 
@@ -124,7 +123,6 @@ export class MeasureGroupPage {
     public static readonly measureGroupTypeSelect = '[data-testid="measure-group-type-dropdown"]'
     public static readonly measureGroupTypeCheckbox = '[id="measure-group-type"]'
     public static readonly measureGroupTypeDropdownBtn = '[class="MuiBackdrop-root MuiBackdrop-invisible css-esi9ax"]'
-    public static readonly measureGroupTypeListBox = '[id="mui-component-select-measureGroupTypes"]'
 
     //Scoring drop-down box
     public static readonly measureScoringSelect = '[data-testid="scoring-select"]'
@@ -133,9 +131,6 @@ export class MeasureGroupPage {
     public static readonly measureScoringRatio = '[data-testid="group-scoring-option-RATIO"]'
     public static readonly measureScoringCV = '[data-testid="group-scoring-option-CONTINUOUS_VARIABLE"]'
     public static readonly saveMeasureGroupDetails = '[data-testid="group-form-submit-btn"]'
-
-    //Scoring unit
-    public static readonly measureScoringUnitField = '[data-testid="measure-group-scoring-unit" ]'
 
     //Populations
     public static readonly initialPopulationSelect = '[id="population-select-initial-population-select"]'
@@ -155,11 +150,6 @@ export class MeasureGroupPage {
 
     //UCUM scoring unit
     public static readonly ucumScoringUnitSelect = '[data-testid="scoring-unit-text-input"]'
-
-
-    public static readonly ucumScoringUnitfullName = '[aria-activedescendant="scoring-unit-dropdown-option-0"]'
-    public static readonly ucumScoringUnitDropdownList = '[data-testid="measure-scoring-unit-text-input"]'
-    public static readonly ucumScoringUnitCurrentValue = '[id="scoring-unit-dropdown"]'
 
     //Measure Observations
     public static readonly addDenominatorObservationLink = '[data-testid="add-measure-observation-denominator"]'
@@ -190,7 +180,6 @@ export class MeasureGroupPage {
     public static readonly popUpConfirmationModal = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-mbdu2s"]'
     public static readonly scoreUpdateConfirmModal = '[data-testid="update-measure-group-scoring-dialog"]'
     public static readonly scoreUpdateMGConfirmMsg = '[class="MuiDialogContent-root css-1ty026z"]'
-    public static readonly updateMeasureGroupConfirmationUndoWarning = '[class="MuiTypography-root MuiTypography-body1 jss8 css-9l3uo3"]'
     public static readonly updateMeasureGroupConfirmationBtn = '[data-testid="update-measure-group-scoring-modal-agree-btn"]'
     public static readonly updatePopulationBasisConfirmationBtn = '[data-testid="update-measure-group-pop-basis-modal-agree-btn"]'
 
@@ -208,14 +197,8 @@ export class MeasureGroupPage {
     //Measure group description
     public static readonly measureGroupDescriptionBox = '[name="groupDescription"]'
 
-    //Measure score Details
-    public static readonly measureScoringUnit = "Ratio"
-
     //saved message
     public static readonly successfulSaveMeasureGroupMsg = '[data-testid="population-criteria-success"]'
-
-    //update button
-    public static readonly confirmScoreUnitValueUpdateBtn = '[data-testid="group-form-update-btn"]'
 
     //left panel
     public static readonly leftPanelRiskAdjustmentTab = '#sideNavMeasurePopulationsRiskAdjustment'
@@ -230,7 +213,6 @@ export class MeasureGroupPage {
     public static readonly qdmScoringCV = '[data-testid="scoring-option-CONTINUOUS_VARIABLE"]'
     public static readonly qdmScoringProportion = '[data-testid="scoring-option-PROPORTION"]'
     public static readonly qdmType = '[id="base-configuration-types"]'
-    public static readonly patientBasisRadioBtn = '[name="mui-6"]'
     public static readonly qdmPatientBasis = '[class="PrivateSwitchBase-input css-1m9pwf3"]'
     public static readonly qdmSDERadioButtons = '[data-testid="sde-option-radio-buttons-group"]'
     public static readonly qdmTypeOptionZero = '[id="base-configuration-types-option-0"]'
@@ -254,8 +236,6 @@ export class MeasureGroupPage {
     public static readonly qdmBCCriteriaReqAlertMsg = '[data-testid="error-alerts"]'
 
     //Risk Adjustment variables
-    public static readonly RAPage = '[data-testid="risk-adjustment"]'
-    public static readonly RAPageContainer = '[class="risk-container"]'
     public static readonly riskAdjustmentDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
     public static readonly riskAdjustmentDefinitionDropdown = '[id="risk-adjustment-listbox"]'
     public static readonly riskAdjustmentTextBox = '[class="risk-description"]'
@@ -266,9 +246,6 @@ export class MeasureGroupPage {
     public static readonly riskAdjDropDown = '[data-testid="risk-adjustment-dropdown"]'
 
     //Supplemental data elements
-    public static readonly SDELeftNav = '[datatestid="leftPanelMeasurePopulationsSupplementalDataTab"]'
-    public static readonly SDEPageContent = '[class="content"]'
-    public static readonly SDEContainer = '[class="sc-fEOsli hQkopF"]'
     public static readonly supplementalDataDefinitionSelect = '#supplemental-data'
     public static readonly supplementalDataDefinitionDropdown = '#supplemental-data-listbox'
     public static readonly supplementalDataDefinitionDescriptionTextBox = '[data-testid="supplementalDataDescription"]'
@@ -282,7 +259,6 @@ export class MeasureGroupPage {
     public static readonly ippIncludeInReportTypeField = '[data-testid="includeInReportType-container"] > :nth-child(1)'
     public static readonly ippIncludeInReportTypeDropdownList = '[class="MuiAutocomplete-listbox css-ue1yok"]'
     public static readonly denomIncludeInReportTypeField = '[data-testid="includeInReportType-container"] > :nth-child(2)'
-    public static readonly denomIncludeInReportTypeDropdownList = '#denom-include-in-report-type-listbox'
 
     public static createMeasureGroupforProportionMeasure(): void {
 

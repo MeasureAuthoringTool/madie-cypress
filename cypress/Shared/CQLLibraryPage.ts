@@ -14,7 +14,6 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryDeleteDialog = '[data-testid="delete-dialog"]'
     public static readonly cqlLibSaveSuccessMessage = '[class="madie-alert success"]'
     public static readonly cqlLibSearchResultsTable = '[data-testid="table-body"]'
-    public static readonly cqlLibraryProgramUseContext = '[id="programUseContext"]'
     public static readonly createCQLLibraryBtn = '[data-testid="create-new-cql-library-button"]'
     public static readonly cqlLibraryNameTextbox = '[data-testid="cql-library-name-text-field-input"]'
     public static readonly cqlLibraryModelDropdown = '[data-testid="cql-library-model-select"]'
@@ -29,14 +28,10 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryModelQICore = '[data-testid="cql-library-model-option-QI-Core v4.1.1"]'
     public static readonly saveCQLLibraryBtn = '[data-testid="continue-button"]'
     public static readonly updateCQLLibraryBtn = '[data-testid="cql-library-save-button"]'
-    public static readonly cqlLibraryNameList = ':nth-child(1) > .CqlLibraryList___StyledTd-sc-1rv02q7-10'
-    public static readonly cqlLibraryModelList = ':nth-child(1) > .CqlLibraryList___StyledTd2-sc-1rv02q7-11'
     public static readonly cqlLibraryNameInvalidError = '[data-testid="cqlLibraryName-helper-text"]'
     public static readonly duplicateCQLLibraryNameError = '[data-testid="create-cql-library-error-text"]'
     public static readonly cqlLibraryModelErrorMsg = '.MuiFormHelperText-root'
-    public static readonly successfulCQLSaveNoErrors = '[data-testid=cql-library-success-alert]'
     public static readonly genericSuccessMessage = '[data-testid="generic-success-text-header"]'
-    public static readonly warningAlert = '[data-testid="cql-library-warning-alert"]'
     public static readonly libraryWarning = '[data-testid="library-warning"]'
     public static readonly newCQLLibName = '[data-testid="cql-library-name-text-field-input"]'
     public static readonly currentCQLLibName = '[id="cql-library-name-text-field-input"]'
@@ -50,8 +45,6 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryCreateFormSideClickArea = '[class="MuiBox-root css-0"]'
     public static readonly cqlLibraryEditPublisher = '[data-testid="publisher"]'
     public static readonly cqlLibraryEditPublisherCloseIcon = '[data-testid="CloseIcon"]'
-    public static readonly cqlLibraryCreatePublisherDrpDwn = '[aria-activedescendant="mui-3-option-0"]'
-    public static readonly cqlLibraryEditPublisherDrpDwn = '#mui-4-option-0'
     public static readonly cqlLibDescHelperText = '[data-testid="cql-library-description-helper-text"]'
     public static readonly cqlLibPubHelperText = '[data-testid="publisher-helper-text"]'
     public static readonly cqlLibraryExperimentalChkBox = '[id="experimental"]'
@@ -62,7 +55,7 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryEditorTextBox = '.ace_content'
     //UMLS Not Logged in Error
     public static readonly umlsErrorMessage = '[data-testid="valueset-error"]'
-    public static readonly umlsSuccessMessage = '[data-testid="valueset-success"]'
+
     //Error marker inside of the CQL Editor window
     public static readonly errorInCQLEditorWindow = 'div.ace_gutter-cell.ace_error'
 
@@ -380,7 +373,6 @@ export class CQLLibraryPage {
         })
         return user
     }
-
 
     public static createAPICQLLibraryWithInvalidCQL(CqlLibraryName: string, CQLLibraryPublisher: string): void {
 

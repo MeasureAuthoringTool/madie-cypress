@@ -10,9 +10,6 @@ export class MeasuresPage {
     public static readonly exportingDialog = '[class="MuiBox-root css-1c2c0mn"]'
     public static readonly exportingSpinner = '[class="MuiCircularProgress-svg css-13o7eu2"]'
     public static readonly exportFinishedCheck = '[data-testid="CheckCircleOutlineIcon"]'
-    public static readonly exportFinishedContinueBtn = '[data-testid="ds-btn"]'
-    public static readonly exportingDialogContent = '[id="export-dialog-content"]'
-    public static readonly exportingDialogXIcon = '[data-testid="CancelOutlinedIcon"]'
 
     //Pagination
     public static readonly paginationNextButton = '[data-testid="NavigateNextIcon"]'
@@ -23,7 +20,6 @@ export class MeasuresPage {
     //Measure Version
     public static readonly versionMeasuresSelectionButton = '[data-testid="version-type"]'
     public static readonly VersionDraftMsgs = '[data-testid="success-toast"]'
-    public static readonly VersionDraftErrMsgs = '[data-testid="error-toast"]'
     public static readonly updateDraftedMeasuresTextBox = '[data-testid="measure-name-input"]'
     public static readonly createDraftContinueBtn = '[data-testid="create-draft-continue-button"]'
     public static readonly draftModalSelectionBox = '[data-testid="measure-model-select"]'

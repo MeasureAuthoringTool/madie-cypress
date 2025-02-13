@@ -18,11 +18,11 @@ export class CQLEditorPage {
     public static readonly measureErrorToast = '[class="toast danger"]'
 
     //error tooltip container
-    public static readonly errorContainer = '#ace-editor-wrapper > div.ace_tooltip' //'[data-testid="generic-errors-text-list"]'
+    public static readonly errorContainer = '#ace-editor-wrapper > div.ace_tooltip'
     public static readonly errorMsg = '[data-testid="generic-errors-text-list"]'
 
     //success save message without errors
-    public static readonly successfulCQLSaveNoErrors = '.madie-alert' //'[data-testid="generic-success-text-header"]'
+    public static readonly successfulCQLSaveNoErrors = '.madie-alert'
 
     //Error/warning marker in side of the CQL Editor window
     public static readonly errorInCQLEditorWindow = '#ace-editor-wrapper > div.ace_gutter > div > div.ace_gutter-cell.ace_error'
@@ -79,8 +79,6 @@ export class CQLEditorPage {
     public static readonly editValueSet = '[data-testid="action-center-0_Edit"]'
 
     //CQL Builder Sub tabs
-    public static readonly cqlEditorPageDefinitionSubTab = '[data-testid="definitions-tab"]'
-    public static readonly cqlEditorPageIncludesSubTab = '[data-testid="includes-tab"]'
     public static readonly expandCQLBuilder = '[data-testid="KeyboardTabOutlinedIcon"]'
 
     //Includes page
@@ -160,9 +158,6 @@ export class CQLEditorPage {
     public static readonly editSavedFunctions = '[data-testid="edit-button-0"]'
     public static readonly deleteSavedFunctions = '[data-testid="delete-button-0"]'
 
-    //editor message
-    public static readonly editorMessage = '.sc-gsDKAQ.cYvjud'
-
     //click action on the tab to get to the CQL Editor
     public static clickCQLEditorTab(): void {
 
@@ -171,13 +166,6 @@ export class CQLEditorPage {
             .invoke('removeAttr', 'target')
             .click()
 
-    }
-
-    public static validateSuccessfulCQLSave(): void {
-
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each(successMsg => {
-            expect(successMsg.text()).to.be.oneOf(['Changes saved successfully but the following errors were found', 'CQL saved successfully'])
-        })
     }
 
     public static validateSuccessfulCQLUpdate(): void {
