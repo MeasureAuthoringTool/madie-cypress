@@ -20,23 +20,24 @@ const testCase: TestCase = {
     description: 'invalid on purpose',
     group: 'NUMERFail'
 }
-const populations: MeasureGroups = {
-    initialPopulation: 'Initial Population',
-    denominator: 'Denominator',
-    numerator: 'Numerator',
-    denomException: 'Denominator Exception'
-}
 const existingMeasureCql = QiCore4Cql.BoneDensityEvalProstateCancer.replace('BoneDensityProstateCancerAndrogenDeprivationTherapyFHIR', measureName)
+const basicCql = QiCore4Cql.stndBasicQICoreCQL.replace('TestLibrary1709929148231865', measureName)
 
 describe('Copy test cases from existing measure into new measure', () => {
     /*
-        Using the static measure as our basis - assuming this will alwys be in MADiE
+        Using the static measure as our basis - assuming this will always be in MADiE
         Bone Density Evaluation for Patients with Prostate Cancer and Receiving Androgen Deprivation TherapyFHIR 
         CMS id: 645FHIR
     */
 
     const measureOptions: CreateMeasureOptions = {
         measureCql: existingMeasureCql,
+    }
+    const populations: MeasureGroups = {
+        initialPopulation: 'Initial Population',
+        denominator: 'Denominator',
+        numerator: 'Numerator',
+        denomException: 'Denominator Exception'
     }
     beforeEach('Create measure, measure group, test case and login', () => {
     
@@ -77,7 +78,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         TestCasesPage.actionCenter(TestCaseAction.copyToMeasure)
 
         // check toast for success, check stay on original measure test cases
-        cy.get('[data-testid="test-case-list-success"]').should('be.visible')
+        Utilities.waitForElementVisible('[data-testid="test-case-list-success"]', 18500)
         cy.get('[data-testid="test-case-list-success"]').should('have.text', 'Test Cases have been successfully copied.')
 
         // go to new measure, test case tab
@@ -109,11 +110,23 @@ describe('Copy test cases from existing measure into new measure', () => {
 
     it('Measures do not match population criteria - test cases copy but expected values do not', () => {
         
-        // change new measure's group config to not match original measure
+        // change new measure's group config to not match original measure - switch to cohort
         MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+
+        // set IP
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+
+        // confirm change to scoring
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
+
+        cy.get(Header.mainMadiePageButton).click()        
 
         // switch to all measure tab, search for original measure, view
         cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
@@ -138,8 +151,8 @@ describe('Copy test cases from existing measure into new measure', () => {
         TestCasesPage.actionCenter(TestCaseAction.copyToMeasure)
 
         // check toast for success, check stay on original measure test cases
-        cy.get('[data-testid="test-case-list-success"]').should('be.visible')
-        cy.get('[data-testid="test-case-list-success"]').should('have.text', 'Test Cases have been successfully copied.')
+        Utilities.waitForElementVisible('[data-testid="test-case-list-success"]', 18500)
+        cy.get('[data-testid="test-case-list-success"]').should('have.text', 'Test Cases successfully copied without expected values due to differing Population Criteria on target Measure.')
 
         // go to new measure, test case tab
         cy.get(Header.mainMadiePageButton).click()
@@ -161,24 +174,68 @@ describe('Copy test cases from existing measure into new measure', () => {
 
         cy.get(TestCasesPage.expectedOrActualTab).click()
 
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('not.be.checked')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).should('not.exist')
+        /// these differ from previous test since it's a cohort measure now
+        cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.checked')
     })
 })
 
-// describe('Copy to new measure - partial success case', () => {
+describe('Copy to new measure - partial success case', () => {
 
-//     it('Valid test cases copy, invalid ones do not', () => {
+    const measureOptions: CreateMeasureOptions = {
+        measureCql: basicCql,
+        measureNumber: 2
+    }
 
-//     })
-// })
+    beforeEach('Create measure, measure group, test case and login', () => {
+    
+        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, { measureCql: basicCql })
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
 
-// describe('Copy to new measure - failure case', () => {
+        CreateMeasurePage.CreateMeasureAPI('M2' + measureName, 'M2' + cqlLibraryName, SupportedModels.qiCore4, measureOptions)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(2, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, null, false, false, false, 2)
+        TestCasesPage.CreateTestCaseAPI('valid test case', testCase.group, testCase.description, null, false, true, false, 2)
 
-//     it('When no valid test cases are present, copy to fails', () => {
+        OktaLogin.Login()
+    })
+    
+    afterEach('Logout and Clean up Measures', () => {
+    
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, cqlLibraryName)
+        Utilities.deleteMeasure('M2' + measureName, 'M2' + cqlLibraryName, false, false, 2)
+    })
 
-//     })
-// })
+
+    it('All test cases copy - even new, "empty", or "invalid"', () => {
+
+        // go to measure 2, test cases tab
+        MeasuresPage.actionCenter('edit', 2)
+
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        // select both tc
+        TestCasesPage.checkTestCase(1)
+        TestCasesPage.checkTestCase(2)
+
+        // copy to, select measure 1
+        TestCasesPage.actionCenter(TestCaseAction.copyToMeasure)
+
+        // verify toast
+        Utilities.waitForElementVisible('[data-testid="test-case-list-success"]', 18500)
+        cy.get('[data-testid="test-case-list-success"]').should('have.text', 'Test Cases successfully copied without expected values due to differing Population Criteria on target Measure.')
+        
+        // go to measure 1, test cases tab
+        cy.get(Header.mainMadiePageButton).click()
+
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        // verify valid tc was copied, invalid was not
+        TestCasesPage.grabValidateTestCaseNumber(1)
+        TestCasesPage.grabValidateTestCaseTitleAndSeries('valid test case', testCase.group)
+
+        cy.contains(testCase.title).should('not.exist')
+
+    })
+})
