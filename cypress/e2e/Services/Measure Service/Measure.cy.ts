@@ -19,7 +19,6 @@ let harpUser = Environment.credentials().harpUser
 let harpUserALT = Environment.credentials().harpUserALT
 let measureNameU = 'TestMeasure' + Date.now() + 1
 let CqlLibraryNameU = 'TestLibrary' + Date.now() + 1
-let measureScoringU = MeasureGroupPage.measureScoringUnit
 let defaultUser = ''
 const now = require('dayjs')
 let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
@@ -760,7 +759,7 @@ describe('Measure Service: Update Delete Flag', () => {
                             "versionId": vId,
                             "measureSetId": uuidv4(),
                             "ecqmTitle": "eCQMTitle",
-                            "measureScoring": measureScoringU,
+                            "measureScoring": 'Ratio',
                             "active": false,
                             //"createdBy": user
                         }
