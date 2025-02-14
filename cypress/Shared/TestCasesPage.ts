@@ -445,6 +445,7 @@ export class TestCasesPage {
     public static readonly actionCenterClone = '[data-testid="clone-action-btn"]'
     public static readonly actionCenterCopyToMeasure = '[data-testid="copy-action-btn"]'
     public static readonly actionCenterExport = '[data-testid="export-action-btn"]'
+    public static readonly actionCenterShiftDates = '[data-testid="shift-test-case-dates-action-btn"]'
 
     //This function grabs the data-testid value off of the view button and extracts the id out of it.
     //Then, it puts that id in a file. For added control, the optional "eleTableEntry" parameter can be
