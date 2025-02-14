@@ -1005,7 +1005,7 @@ export class TestCasesPage {
     */
     public static actionCenter(action: TestCaseAction) {
 
-        switch(action) {
+        switch (action) {
 
             case TestCaseAction.clone:
                 let originalCount: number
@@ -1013,7 +1013,7 @@ export class TestCasesPage {
                 cy.get('[data-testid="test-case-title-0_caseNumber"]')
                     .invoke('text').then(maxCaseNumber => {
                         originalCount = Number(maxCaseNumber)
-                })
+                    })
 
                 cy.get(TestCasesPage.actionCenterClone).should('be.enabled').click()
                 Utilities.waitForElementVisible(this.tcSaveSuccessMsg, 2500)
@@ -1021,34 +1021,34 @@ export class TestCasesPage {
                 cy.get('[data-testid="test-case-title-0_caseNumber"]')
                     .invoke('text').then(newMaxNumber => {
                         expect(originalCount + 1).eq(Number(newMaxNumber))
-                })
+                    })
                 break
-            
+
             case TestCaseAction.copyToMeasure:
                 // still coming, tbd
                 break
-            
+
             case TestCaseAction.delete:
 
                 cy.get(TestCasesPage.actionCenterDelete).should('be.enabled').click()
                 cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
                 Utilities.waitForElementVisible(this.tcSaveSuccessMsg, 2500)
                 break
-            
+
             case TestCaseAction.exportCollection:
 
                 cy.get(TestCasesPage.actionCenterExport).should('be.enabled').click()
                 cy.get(TestCasesPage.exportCollectionTypeOption).should('be.visible').click()
                 Utilities.waitForElementVisible(this.tcSaveSuccessMsg, 7500)
                 break
-                
+
             case TestCaseAction.exportTransaction:
 
                 cy.get(TestCasesPage.actionCenterExport).should('be.enabled').click()
                 cy.get(TestCasesPage.exportTransactionTypeOption).should('be.visible').click()
                 Utilities.waitForElementVisible(this.tcSaveSuccessMsg, 7500)
                 break
-            
+
             case TestCaseAction.shiftDates:
                 // still coming, tbd
                 break
