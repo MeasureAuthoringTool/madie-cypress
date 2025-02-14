@@ -12,17 +12,16 @@ import { Header } from "../../../../../Shared/Header"
 import { LandingPage } from "../../../../../Shared/LandingPage"
 
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
-let measureName = 'ProportionPatient' + Date.now()
-let measureQDMManifestName = 'QDMManifestTest' + Date.now()
-let CqlLibraryName = 'ProportionPatient' + Date.now()
+const now = Date.now()
+let measureName = 'ProportionPatient' + now
+let CqlLibraryName = 'ProportionPatient' + now
 
 
 describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
 
     beforeEach('Create Measure, test cases and Login', () => {
 
-        //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName, CqlLibraryName, 'Proportion', false, qdmManifestTestCQL, null, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Proportion', false, qdmManifestTestCQL, null, false,
             '2025-01-01', '2025-12-31')
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
@@ -188,11 +187,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
     afterEach('Clean up', () => {
 
         OktaLogin.UILogout()
-
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
-    it('MADiE Shift Test Case Dates -> Shift All Test Cases\' dates for QDM Measure', () => {
+
+    it('Shift all Test Case dates using the tab in left menu', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -328,8 +326,12 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
 
     })
 
-    //Skipping until MAT-8194 is finished
-    it.skip('MADiE Shift Test Case Dates -> Shift single / specific test case\'s dates for QDM Measure', () => {
+    it('Shift single Test Case date using action center option', () => {
+        /*
+            Note: this title is a little misleading. This test will shift dates
+            on a single test case multiple times during the test, always
+            using the action center option to initiate the changes.
+        */
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -338,8 +340,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //open the shift modal for the first test case
-        TestCasesPage.testCaseAction('shift', false)
+        // check 1st tc & initiate shift
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterShiftDates).click()
+        Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
 
         //enter a value to shift test case's dates by
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
@@ -348,8 +352,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         //shiftSpecificTestCasesCancelBtn
         cy.get(TestCasesPage.shiftSpecificTestCasesCancelBtn).click()
 
-        //open the shift modal for the first test case
-        TestCasesPage.testCaseAction('shift', false)
+        // initiate shift on 1st tc again
+        cy.get(TestCasesPage.actionCenterShiftDates).click()
+        Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
+
         //enter a value to shift test case's dates by
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
         cy.get(TestCasesPage.shiftSpecificTestCaseDates).clear().type('3')
@@ -357,10 +363,9 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shiftSpecificTestCasesSaveBtn, 3500)
         cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
-        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 3500)
 
         //confirm success message
-        cy.get(TestCasesPage.shiftSpecificTestCasesSuccessMsg).should('contain.text', 'Test Case Shift Dates for QDMManifestTCGroup1 - QDMManifestTC1 successful.')
+        cy.get(TestCasesPage.tcSaveSuccessMsg, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
 
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -386,8 +391,11 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //open the shift modal for the first test case
-        TestCasesPage.testCaseAction('shift', true)
+        // check 2nd tc & initiate shift
+        TestCasesPage.checkTestCase(2)
+        cy.get(TestCasesPage.actionCenterShiftDates).click()
+        Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
+
         //enter a value to shift test case's dates by
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
         cy.get(TestCasesPage.shiftSpecificTestCaseDates).clear().type('3')
@@ -395,12 +403,11 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shiftSpecificTestCasesSaveBtn, 3500)
         cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
-        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 3500)
 
         //confirm success message
-        cy.get(TestCasesPage.shiftSpecificTestCasesSuccessMsg).should('contain.text', 'Test Case Shift Dates for QDMManifestTCGroup2 - QDMManifestTC2 successful.')
-
-        //navigate to the edit page for the first test case
+        cy.get(TestCasesPage.tcSaveSuccessMsg, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
+ 
+        //navigate to the edit page for the 2nd test case
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //confirm value that is in test case
@@ -419,8 +426,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //open the shift modal for the first test case
-        TestCasesPage.testCaseAction('shift', false)
+        // check 1st tc & initiate shift
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterShiftDates).click()
+
         //enter a value to shift test case's dates by
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
         cy.get(TestCasesPage.shiftSpecificTestCaseDates).clear().type('-3')
@@ -428,15 +437,14 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shiftSpecificTestCasesSaveBtn, 3500)
         cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
-        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 3500)
 
         //confirm success message
-        cy.get(TestCasesPage.shiftSpecificTestCasesSuccessMsg).should('contain.text', 'Test Case Shift Dates for QDMManifestTCGroup1 - QDMManifestTC1 successful.')
-
+        cy.get(TestCasesPage.tcSaveSuccessMsg, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
+ 
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //navigate to the edit page for the first test case
+        //navigate to the edit page for the 1st test case
         TestCasesPage.clickEditforCreatedTestCase()
         //confirm that the test case DOB field is visible and enabled
         Utilities.waitForElementVisible(TestCasesPage.QDMDob, 3500)
@@ -457,8 +465,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //open the shift modal for the first test case
-        TestCasesPage.testCaseAction('shift', true)
+        // check 2nd tc & initiate shift
+        TestCasesPage.checkTestCase(2)
+        cy.get(TestCasesPage.actionCenterShiftDates).click()
+
         //enter a value to shift test case's dates by
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
         cy.get(TestCasesPage.shiftSpecificTestCaseDates).clear().type('-3')
@@ -466,12 +476,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shiftSpecificTestCasesSaveBtn, 3500)
         cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
-        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 3500)
 
         //confirm success message
-        Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCasesSuccessMsg, 3500)
-        cy.get(TestCasesPage.shiftSpecificTestCasesSuccessMsg).should('contain.text', 'Test Case Shift Dates for QDMManifestTCGroup2 - QDMManifestTC2 successful.')
-
+        cy.get(TestCasesPage.tcSaveSuccessMsg, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
+ 
         //navigate to the edit page for the first test case
         TestCasesPage.clickEditforCreatedTestCase(true)
 
