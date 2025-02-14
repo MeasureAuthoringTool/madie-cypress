@@ -406,4 +406,13 @@ export class CQLLibraryPage {
         })
 
     }
+
+    //input the library that is on page to check it's checkbos (ie: if it is the first library that we want checked, enter 0)
+    public static checkLibrary(libraryOnPage: number): void {
+
+        cy.get('[data-testid*="cqlLibrary-button-' + libraryOnPage + '_select"]')
+            .parent('tr')
+            .find('input[type="checkbox"]')
+            .check()
+    }
 }
