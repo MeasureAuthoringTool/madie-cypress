@@ -17,7 +17,7 @@ export type CreateMeasureOptions = {
     elmJson?: string,
     measureNumber?: number,
     measureScoring?: string,
-    patientBasis?: string,
+    patientBasis?: boolean,
     altUser?: boolean,
     mpStartDate?: string,
     mpEndDate?: string,
@@ -442,7 +442,7 @@ export class CreateMeasurePage {
             ecqmTitle = 'AutoTestTitle',
             measureCql,
             elmJson,
-            patientBasis: string,
+            patientBasis: boolean,
             measureScoring,
             measureMetadata
 

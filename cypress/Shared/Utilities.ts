@@ -662,4 +662,9 @@ export class Utilities {
 
 
     }
+
+    public static checkAll() {
+
+        cy.get('thead th').find('input[type="checkbox"]').check()
+    }
 }

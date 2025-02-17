@@ -29,6 +29,7 @@ export type MeasureGroups = {
     numerator: string,
     denomExclusion?: string,
     numExclusion?: string,
+    denomException?: string,
     denomObservation?: string,
     numObservation?: string
 
@@ -780,6 +781,11 @@ export class MeasureGroupPage {
                                 "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": populations.numExclusion ? populations.numExclusion : null
+                            },
+                            {
+                                "id": uuidv4(),
+                                "name": "denominatorException",
+                                "definition": populations.denomException ? populations.denomException : null
                             }
                         ],
                         "measureGroupTypes": [
