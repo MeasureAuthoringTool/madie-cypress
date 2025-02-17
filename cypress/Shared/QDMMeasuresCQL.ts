@@ -2,7 +2,7 @@ const standardSdeBlock =
     'define \"SDE Ethnicity\":\n' +
     '  [\"Patient Characteristic Ethnicity\": \"Ethnicity\"]\n\n' +
     'define \"SDE Payer\":\n' +
-    '  [\"Patient Characteristic Payer\": \"Payer\"]\n\n' +
+    '  [\"Patient Characteristic Payer\": \"Payer Type\"]\n\n' +
     'define \"SDE Race\":\n' +
     '  [\"Patient Characteristic Race\": \"Race\"]\n\n' +
     'define \"SDE Sex\":\n' +
@@ -1388,4 +1388,70 @@ export class QdmCql {
         '        and Global."NormalizeInterval"(EDEvaluation.relevantDatetime, EDEvaluation.relevantPeriod)starts before or on "EDDepartureTime"(LastEDVisit)\n' +
         '      sort by start of Global."NormalizeInterval"(relevantDatetime, relevantPeriod)\n' +
         '  )'
+
+    public static readonly stiForPeopleWithHIV = 'library HIVSTITesting version \'2.0.000\'\n' +
+        'using QDM version \'5.6\'\n\n' +
+        'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Global\n' +
+        'codesystem "CPT": \'urn:oid:2.16.840.1.113883.6.12\'\n\n' + 
+        'valueset "Annual Wellness Visit": \'urn:oid:2.16.840.1.113883.3.526.3.1240\'\n' +
+        'valueset "Chlamydia Screening": \'urn:oid:2.16.840.1.113883.3.464.1003.110.12.1052\'\n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "Face-to-Face Interaction": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1048\'\n' +
+        'valueset "Gonorrhea Screening": \'urn:oid:2.16.840.1.113762.1.4.1258.1\'\n' +
+        'valueset "HIV": \'urn:oid:2.16.840.1.113883.3.464.1003.120.12.1003\'\n' +
+        'valueset "Home Healthcare Services": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
+        'valueset "Office Visit": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+        'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+        'valueset "Outpatient Consultation": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1008\'\n' +
+        'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Preventive Care Services Established Office Visit, 18 and Up": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
+        'valueset "Preventive Care Services Initial Office Visit, 18 and Up": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1023\'\n' +
+        'valueset "Preventive Care Services, Initial Office Visit, 0 to 17": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1022\'\n' +
+        'valueset "Preventive Care, Established Office Visit, 0 to 17": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1024\'\n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+        'valueset "Syphilis Tests": \'urn:oid:2.16.840.1.113762.1.4.1166.117\'\n' +
+        'valueset "Telephone Visits": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1080\'\n' +
+        'code "Unlisted preventive medicine service": \'99429\' from "CPT" display \'Unlisted preventive medicine service\'\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n\n' +
+        'context Patient\n\n' +
+        'define "Denominator":\n' +
+        '\t"Initial Population"\n' +
+        'define "Initial Population":\n' +
+        '\tAgeInYearsAt(date from start of "Measurement Period") >= 13\n' +
+        'and "Has Qualifying Encounter During Measurement Period"\n' +
+        'and "Has HIV Diagnosis Before End of Measurement Period"\n\n' +
+        standardSdeBlock +
+        'define "Numerator":\n' +
+        '\t"Has Chlamydia Testing"\n' +
+        'and "Has Gonorrhea Testing"\n' +
+        'and "Has Syphilis Testing"\n\n' + 
+        'define "Has HIV Diagnosis Before End of Measurement Period":\n' +
+        '\texists ["Diagnosis": "HIV"] HIVDx\n' +
+        'where HIVDx.prevalencePeriod starts on or before day of end of "Measurement Period"\n\n' +
+        'define "Has Qualifying Encounter During Measurement Period":\n' +
+        '\texists ( ( ["Encounter, Performed": "Office Visit"]\n' +
+        'union ["Encounter, Performed": "Outpatient Consultation"]\n' +
+        'union ["Encounter, Performed": "Annual Wellness Visit"]\n' +
+        'union ["Encounter, Performed": "Face-to-Face Interaction"]\n' +
+        'union ["Encounter, Performed": "Home Healthcare Services"]\n' +
+        'union ["Encounter, Performed": "Preventive Care Services Established Office Visit, 18 and Up"]\n' +
+        'union ["Encounter, Performed": "Preventive Care Services Initial Office Visit, 18 and Up"]\n' +
+        'union ["Encounter, Performed": "Preventive Care Services, Initial Office Visit, 0 to 17"]\n' +
+        'union ["Encounter, Performed": "Preventive Care, Established Office Visit, 0 to 17"]\n' +
+        'union ["Encounter, Performed": "Telephone Visits"]\n' +
+        'union ["Encounter, Performed": "Unlisted preventive medicine service"] ) QualifyingEncounter\n' +
+        'where QualifyingEncounter.relevantPeriod during day of "Measurement Period"\n' +
+        ')\n\n' +
+        'define "Has Chlamydia Testing":\n' +
+        '\texists ["Laboratory Test, Performed": "Chlamydia Screening"] ChlamydiaTest\n' +
+        'where ChlamydiaTest.result is not null\n' +
+        'and Global."LatestOf" ( ChlamydiaTest.relevantDatetime, ChlamydiaTest.relevantPeriod ) during day of "Measurement Period"\n\n' +
+        'define "Has Gonorrhea Testing":\n' +
+        '\texists ["Laboratory Test, Performed": "Gonorrhea Screening"] GonorrheaTest\n' +
+        'where GonorrheaTest.result is not null\n' +
+        'and Global."LatestOf" ( GonorrheaTest.relevantDatetime, GonorrheaTest.relevantPeriod ) during day of "Measurement Period"\n\n' +
+        'define "Has Syphilis Testing":\n' +
+        '\texists ["Laboratory Test, Performed": "Syphilis Tests"] SyphilisTest\n' +
+        'where SyphilisTest.result is not null\n' +
+        'and Global."LatestOf" ( SyphilisTest.relevantDatetime, SyphilisTest.relevantPeriod ) during day of "Measurement Period"'
 }

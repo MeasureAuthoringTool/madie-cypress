@@ -5,43 +5,44 @@ import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { QiCore4Cql } from "../../../../../Shared/FHIRMeasuresCQL"
+import { QdmCql } from "../../../../../Shared/QDMMeasuresCQL"
 import { Header } from "../../../../../Shared/Header"
 
 const now = Date.now()
 const originalMeasure = {
-    CMSid: '645FHIR',
-    title: 'Bone Density Evaluation for Patients with Prostate Cancer and Receiving Androgen Deprivation TherapyFHIR'
+    CMSid: '1188',
+    title: 'Sexually Transmitted Infection (STI) Testing for People with HIV'
 }
-const measureName = 'CopyTo' + now
-const cqlLibraryName = 'CopyToLib' + now
+const measureName = 'QDMCopyTo' + now
+const cqlLibraryName = 'QDMCopyToLib' + now
 const testCase: TestCase = {
-    title: 'DexaDoNotPerformTrue',
-    description: 'invalid on purpose',
-    group: 'NUMERFail'
+    title: 'AllLabTestsAfterEncReleventDateTime',
+    description: 'any value',
+    group: 'NumPass'
 }
-const existingMeasureCql = QiCore4Cql.BoneDensityEvalProstateCancer.replace('BoneDensityProstateCancerAndrogenDeprivationTherapyFHIR', measureName)
-const basicCql = QiCore4Cql.stndBasicQICoreCQL.replace('TestLibrary1709929148231865', measureName)
+const existingMeasureCql = QdmCql.stiForPeopleWithHIV.replace('HIVSTITesting', measureName)
+const basicCql = QdmCql.QDMSimpleCQL.replace('ProportionPatient1689182327602', measureName)
 
 describe('Copy test cases from existing measure into new measure', () => {
     /*
         Using the static measure as our basis - assuming this will always be in MADiE
-        Bone Density Evaluation for Patients with Prostate Cancer and Receiving Androgen Deprivation TherapyFHIR 
-        CMS id: 645FHIR
+        Sexually Transmitted Infection (STI) Testing for People with HIV
+        CMS id: 1188
     */
 
     const measureOptions: CreateMeasureOptions = {
         measureCql: existingMeasureCql,
+        measureScoring: 'Proportion',
+        patientBasis: true
     }
     const populations: MeasureGroups = {
         initialPopulation: 'Initial Population',
-        denominator: 'Denominator',
-        numerator: 'Numerator',
-        denomException: 'Denominator Exception'
+        denominator: 'Initial Population',
+        numerator: 'Numerator'
     }
     beforeEach('Create measure, measure group, test case and login', () => {
-    
-        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
+
+        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.QDM, measureOptions)
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.boolean, MeasureScoring.Proportion, populations)
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description)
         OktaLogin.Login()
@@ -62,7 +63,9 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         cy.wait('@searchDone')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
-        cy.get('[data-testid="row-item"]').contains('View').click()
+        
+        // need to select correct version of the measure with .eq(1)
+        cy.get('[data-testid="row-item"]').eq(1).contains('View').click()
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -90,21 +93,21 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         // check tc count is correct (original measure +1)
-        TestCasesPage.grabValidateTestCaseNumber(50)
+        TestCasesPage.grabValidateTestCaseNumber(32)
 
         // check title of dup named tc - testCase.title + uuid 
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
        
         // check a copied tc for expected values
-        TestCasesPage.grabTestCaseId(49)
+        TestCasesPage.grabTestCaseId(31)
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.expectedOrActualTab).click()
 
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('not.be.checked')
+        cy.get(TestCasesPage.testCaseIPPExpected).should('have.attr', 'value', '1')
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('have.attr', 'value', '1')
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('have.attr', 'value', '1')
+        cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('not.exist')
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('not.exist')
     })
 
@@ -115,17 +118,29 @@ describe('Copy test cases from existing measure into new measure', () => {
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+        cy.get(MeasureGroupPage.qdmType).click().type('Outcome').click()
+        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
 
-        // set IP
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCohort)
 
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
 
         // confirm change to scoring
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
 
+        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
+        Utilities.waitForElementDisabled(MeasureGroupPage.qdmBCSaveButton, 12500)
+
+        // set IP
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 12500)
+
+        // start switch to existing measure
         cy.get(Header.mainMadiePageButton).click()        
 
         // switch to all measure tab, search for original measure, view
@@ -135,7 +150,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         cy.wait('@searchDone')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
-        cy.get('[data-testid="row-item"]').contains('View').click()
+        cy.get('[data-testid="row-item"]').eq(1).contains('View').click()
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -163,37 +178,46 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         // check tc count is correct (original measure +1)
-        TestCasesPage.grabValidateTestCaseNumber(50)
+        TestCasesPage.grabValidateTestCaseNumber(32)
 
         // check title of dup named tc - testCase.title + uuid 
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
        
         // check a copied tc for expected values
-        TestCasesPage.grabTestCaseId(49)
+        TestCasesPage.grabTestCaseId(31)
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.expectedOrActualTab).click()
 
         /// these differ from previous test since it's a cohort measure now
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.checked')
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('not.exist')
+        cy.get(TestCasesPage.testCaseNUMEXExpected).should('not.exist')
     })
 })
 
 describe('Copy to new measure - partial success case', () => {
 
-    const measureOptions: CreateMeasureOptions = {
+    const measure1Options: CreateMeasureOptions = {
         measureCql: basicCql,
-        measureNumber: 2
+        measureScoring: 'Cohort',
+        patientBasis: true
+    }
+    const measure2Options: CreateMeasureOptions = {
+        measureCql: basicCql,
+        measureNumber: 2,
+        measureScoring: 'Cohort',
+        patientBasis: true
     }
     const secondTestCaseTitle = 'valid test case'
 
     beforeEach('Create measure, measure group, test case and login', () => {
     
-        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, { measureCql: basicCql })
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.QDM, measure1Options)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23', 'boolean')
 
-        CreateMeasurePage.CreateMeasureAPI('M2' + measureName, 'M2' + cqlLibraryName, SupportedModels.qiCore4, measureOptions)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(2, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        CreateMeasurePage.CreateMeasureAPI('M2' + measureName, 'M2' + cqlLibraryName, SupportedModels.QDM, measure2Options)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23', 'boolean', 2)
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, null, false, false, false, 2)
         TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCase.group, testCase.description, null, false, true, false, 2)
 

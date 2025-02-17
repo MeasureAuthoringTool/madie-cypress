@@ -492,9 +492,9 @@ export class TestCasesPage {
         let testCaseId: string
         const testCaseIdPath = 'cypress/fixtures/testCaseId'
 
-        cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
+       cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
             .parent('tr')
-            .find('button')
+            .find('button.qpp-c-button')
             .invoke('attr', 'data-testid')
             .then(idValue => {
                 testCaseId = idValue.split('-')[5].toString().valueOf()
