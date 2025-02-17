@@ -30,7 +30,7 @@ export class EditMeasurePage {
     public static readonly viewHRActionBtn = '[data-testid="Viewhumanreadable"]'
     public static readonly shareMeasureActionBtn = '[data-testid="ShareMeasure"]'
     public static readonly editPageVersionDraftMsg = '[data-testid="edit-measure-information-success-text"]'
-    public static readonly humanReadablePopup = '.qpp-c-modal__header'
+    public static readonly humanReadablePopup = '#draggable-dialog-title'
 
     //Associate QDM and QI Core measures:
     public static readonly associateCmsIdDialog = '[data-testid="associate-cms-id-dialog-tbl"]'
