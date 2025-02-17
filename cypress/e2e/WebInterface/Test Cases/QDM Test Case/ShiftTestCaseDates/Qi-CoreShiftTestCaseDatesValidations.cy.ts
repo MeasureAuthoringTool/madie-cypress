@@ -3,56 +3,51 @@ import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../../Shared/Utilities"
-import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 
-let measureName = 'QiCoreTestMeasure' + Date.now()
-let CqlLibraryName = 'QiCoreLibrary' + Date.now()
-let measureCQL = MeasureCQL.CQL_Multiple_Populations
-let testCaseTitle = 'First Test case'
-let secondTestCaseTitle = 'Second Test case'
-let testCaseDescription = 'First Test Group'
-let testCaseSeries = 'SBTestSeries'
-let validTestCaseJson = TestCaseJson.TestCaseJson_ShiftTCDates
-let secondTestCaseJson = TestCaseJson.TestCaseJson_Valid
+const now = Date.now()
+const measureName = 'QiCoreShiftDates' + now
+const CqlLibraryName = 'QiCoreShiftDatesLib' + now
+const measureCQL = MeasureCQL.CQL_Multiple_Populations.replace('TestLibrary4664', measureName)
+const testCase1: TestCase = {
+    title: 'First Test case',
+    description: 'First Test Group',
+    group: 'SBTestSeries',
+    json: TestCaseJson.TestCaseJson_ShiftTCDates
+}
+const testCase2: TestCase = {
+    title: 'Second Test case',
+    description: 'Second Test Group',
+    group: 'SBTestSeries',
+    json: TestCaseJson.TestCaseJson_Valid
+}
 
-describe('Shift Test Case Dates tests for Qi-Core Measure', () => {
+describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-        cy.get(EditMeasurePage.cqlEditorTab).should('exist')
-        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('exist')
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false,
             'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'Boolean')
 
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
-        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCaseDescription, testCaseSeries, secondTestCaseJson, false, true)
+        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
+        TestCasesPage.CreateTestCaseAPI(testCase2.title, testCase2.group, testCase2.description, testCase2.json, false, true)
         OktaLogin.Login()
     })
 
     afterEach('Clean up', () => {
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
-    it('MADiE Shift Test Case Dates -> Shift All Test Case\'s dates for Qi-Core Measure', () => {
+
+    /* 2/14/25 - did not change any steps to this test
+        only updated the title for clarity compared to
+        the new action center workflow for the same operation
+    */
+    it('Shift all Test Case dates to the future using the tab in left menu', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -65,30 +60,30 @@ describe('Shift Test Case Dates tests for Qi-Core Measure', () => {
         cy.get(TestCasesPage.testCaseDataSideLink).click()
         Utilities.waitForElementVisible(TestCasesPage.shiftAllTestCaseDates, 3500)
         cy.get(TestCasesPage.shiftAllTestCaseDates).type('4')
-
+   
         //confirm buttons that appear on page to either discard or save the shift dates
         Utilities.waitForElementEnabled(TestCasesPage.shiftAllTestCasesDiscardBtn, 3500)
         Utilities.waitForElementEnabled(TestCasesPage.shftAllTestCasesSaveBtn, 3500)
-
+   
         //discard shifting dates
         cy.get(TestCasesPage.shiftAllTestCasesDiscardBtn).click()
-
+   
         //confirm discarding change on page
         cy.get(TestCasesPage.continueDiscardChangesBtn).click()
         //confirm that shift test case text box is empty
         cy.get(TestCasesPage.shiftAllTestCaseDates).should('be.empty')
-
+   
         //enter new value in the shift test case text box
         cy.get(TestCasesPage.shiftAllTestCaseDates).type('3')
-
+   
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shftAllTestCasesSaveBtn, 3500)
         cy.get(TestCasesPage.shftAllTestCasesSaveBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 3500)
-
+   
         //confirm success message
         cy.get(TestCasesPage.shiftAllTestCasesSuccessMsg).should('contain.text', 'All Test Case dates successfully shifted.')
-
+   
         //Validate if the Measurement period start date is updated for first Test case
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -103,9 +98,8 @@ describe('Shift Test Case Dates tests for Qi-Core Measure', () => {
                     }).then((response) => {
                         expect(response.status).to.eql(200)
                         expect(response.body.id).to.eql(testCaseId)
-                        expect(response.body.title).to.eql('First Test case')
+                        expect(response.body.title).to.eql(testCase1.title)
                         expect(response.body.json).to.contain('"start" : "2027-01-01T03:34:10.054Z"')
-
                     })
                 })
             })
@@ -125,7 +119,7 @@ describe('Shift Test Case Dates tests for Qi-Core Measure', () => {
                     }).then((response) => {
                         expect(response.status).to.eql(200)
                         expect(response.body.id).to.eql(testCaseId2)
-                        expect(response.body.title).to.eql('Second Test case')
+                        expect(response.body.title).to.eql(testCase2.title)
                         expect(response.body.json).to.contain('"start" : "2025-05-13T03:34:10.054Z"')
                     })
                 })
@@ -133,8 +127,7 @@ describe('Shift Test Case Dates tests for Qi-Core Measure', () => {
         })
     })
 
-    //Skipping until MAT-8194 is finished
-    it.skip('MADiE Shift Test Case Dates -> Shift single / specific test case\'s dates for Qi-Core Measure', () => {
+    it('Shift single test case dates to the past using the acion center option', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -143,8 +136,9 @@ describe('Shift Test Case Dates tests for Qi-Core Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //open the shift modal for the first test case
-        TestCasesPage.testCaseAction('shift', false)
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterShiftDates).click()
+        Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
 
         //enter a value to shift test case's dates by
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
@@ -153,8 +147,9 @@ describe('Shift Test Case Dates tests for Qi-Core Measure', () => {
         //shiftSpecificTestCasesCancelBtn
         cy.get(TestCasesPage.shiftSpecificTestCasesCancelBtn).click()
 
-        //open the shift modal for the first test case
-        TestCasesPage.testCaseAction('shift', false)
+        // re-activate action center
+        cy.get(TestCasesPage.actionCenterShiftDates).click()
+        Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
         //enter a value to shift test case's dates by
         Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
         cy.get(TestCasesPage.shiftSpecificTestCaseDates).clear().type('-3')
@@ -165,7 +160,7 @@ describe('Shift Test Case Dates tests for Qi-Core Measure', () => {
         Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 3500)
 
         //confirm success message
-        cy.get('[class="toast success"]').should('contain.text', 'Test Case Shift Dates for First Test Group - First Test case successful.')
+        cy.get(TestCasesPage.shiftSpecificTestCasesSuccessMsg).should('contain.text', 'All Test Case dates successfully shifted.')
 
         //Validate if the Measurement period start date is updated for first Test case
         cy.getCookie('accessToken').then((accessToken) => {
@@ -181,9 +176,8 @@ describe('Shift Test Case Dates tests for Qi-Core Measure', () => {
                     }).then((response) => {
                         expect(response.status).to.eql(200)
                         expect(response.body.id).to.eql(testCaseId)
-                        expect(response.body.title).to.eql('First Test case')
+                        expect(response.body.title).to.eql(testCase1.title)
                         expect(response.body.json).to.contain('"start" : "2021-01-01T03:34:10.054Z"')
-
                     })
                 })
             })
