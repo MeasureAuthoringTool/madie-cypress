@@ -685,6 +685,113 @@ public static readonly ICFCleanTestQICore = 'library SimpleFhirLibrary version \
         'define "Stratificaction 1":\n' +
         ' "Qualifying Encounters" Enc\n' +
         ' where Enc.type in "Annual Wellness Visit"'
+
+    // this is from CMS id: 645FHIR    
+    public static readonly BoneDensityEvalProstateCancer = 'library BoneDensityProstateCancerAndrogenDeprivationTherapyFHIR version \'0.0.000\'\n\n' +
+        'using QICore version \'4.1.1\'\n\n' +
+        'include FHIRHelpers version \'4.4.000\' called FHIRHelpers\n' +
+        'include SupplementalDataElements version \'3.5.000\' called SDE\n' +
+        'include QICoreCommon version \'2.1.000\' called QICoreCommon\n' +
+        'codesystem "SNOMEDCT": \'http://snomed.info/sct\'\n\n' + 
+        'valueset "Androgen deprivation therapy for Urology Care": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1151.48\'\n' + 
+        'valueset "DEXA Dual Energy Xray Absorptiometry, Bone Density for Urology Care": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1151.38\'\n' + 
+        'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' + 
+        'valueset "Patient Declined": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1582\'\n' +  
+        'valueset "Prostate Cancer": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.319\'\n' + 
+        'code "Injection of leuprolide acetate for twelve month period (regime/therapy)": \'456381000124102\' from "SNOMEDCT" display \'Injection of leuprolide acetate for twelve month period (regime/therapy)\'\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n\n' +
+        'context Patient\n\n' +
+        'define "Initial Population":\n' +
+        '"Has Qualifying Encounter" and exists\n' +
+        '"Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period"\n\n' +
+        'define "Denominator":\n' +
+        '"Initial Population"\n\n' +
+        'define "Numerator":\n' +
+        '"Has Baseline DEXA Scan Two Years Prior to the Start of or Less than Three Months After the Start of ADT"\n\n' +
+        'define "Denominator Exception":\n' +
+        'false\n\n' +
+        standardSdeBlock +
+        'define "Has Baseline DEXA Scan Two Years Prior to the Start of or Less than Three Months After the Start of ADT":\n' +
+        'exists ( ( [ServiceRequest: "DEXA Dual Energy Xray Absorptiometry, Bone Density for Urology Care"] DEXAOrdered\n' +
+        ' with "Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period" OrderTwelveMonthsADT\n' +
+        '\tsuch that DEXAOrdered.authoredOn 3 months or less on or after day of OrderTwelveMonthsADT.authoredOn\n' +
+        'or DEXAOrdered.authoredOn 2 years or less before day of OrderTwelveMonthsADT.authoredOn\n' +
+        ' where DEXAOrdered.status in {\'active\', \'completed\'}\n' +
+        '\tand DEXAOrdered.intent = \'order\'\n' +
+        'and DEXAOrdered.doNotPerform is not true\n' +
+        ')\n' +
+        'union ( [Observation: "DEXA Dual Energy Xray Absorptiometry, Bone Density for Urology Care"] DEXAPerformed\n' +
+        ' with "Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period" OrderTwelveMonthsADT\n' +
+        '\tsuch that DEXAPerformed.effective.toInterval() 3 months or less on or after day of OrderTwelveMonthsADT.authoredOn\n' +
+        'or DEXAPerformed.effective.toInterval() 2 years or less before day of OrderTwelveMonthsADT.authoredOn\n' +
+        ' where DEXAPerformed.status in {\'final\', \'amended\', \'corrected\'}\n' +
+        ' )\n' +
+        ')\n\n' +
+        'define "No Bone Density Scan Ordered Due to Patient Refusal":\n' +
+        '[ServiceNotRequested: "DEXA Dual Energy Xray Absorptiometry, Bone Density for Urology Care"] DEXANotOrdered\n' +
+        ' with "Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period" OrderTwelveMonthsADT\n' +
+        ' such that DEXANotOrdered.authoredOn 3 months or less on or after day of OrderTwelveMonthsADT.authoredOn\n' +
+        ' and DEXANotOrdered.reasonRefused in "Patient Declined"\n\n' +
+        'define "No Bone Density Scan Performed Due to Patient Refusal":\n' +
+        '[ObservationNotDone: "DEXA Dual Energy Xray Absorptiometry, Bone Density for Urology Care"] DEXANotPerformed\n' +
+        ' with "Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period" OrderTwelveMonthsADT\n' +
+        ' such that DEXANotPerformed.issued 3 months or less on or after day of OrderTwelveMonthsADT.authoredOn\n' +
+        ' and DEXANotPerformed.notDoneReason in "Patient Declined"\n\n' +
+        'define "First ADT in 3 Months Before to 9 Months After Start of Measurement Period":\n' +
+        '\tFirst(\n' +
+        '("Androgen Deprivation Therapy for Urology Care Medication Active Start Dates"\n' +
+        '\tunion "Androgen Deprivation Therapy for Urology Care Medication Order Start Dates") ADTDateTime\n' +
+        ' with "Prostate Cancer Diagnosis" ProstateCancer\n' +
+        ' such that ADTDateTime during day of ProstateCancer.prevalenceInterval()\n' +
+        ' and ADTDateTime during day of Interval[start of "Measurement Period" - 3 months, start of "Measurement Period" + 9 months]\n' +
+        'sort ascending\n' + 
+        ')\n\n' +
+        'define "Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period":\n' +
+        '[ServiceRequest: "Injection of leuprolide acetate for twelve month period (regime/therapy)"] OrderTwelveMonthADT\n' +
+        ' with "First ADT in 3 Months Before to 9 Months After Start of Measurement Period" FirstADTMP\n' +
+        ' such that OrderTwelveMonthADT.authoredOn on or after day of FirstADTMP\n' +
+        'and OrderTwelveMonthADT.authoredOn during day of Interval[start of "Measurement Period" - 3 months, start of "Measurement Period" + 9 months]\n' +
+        'and OrderTwelveMonthADT.status in {\'active\', \'completed\'}\n' +
+        'and OrderTwelveMonthADT.intent = \'order\'\n' +
+        'and OrderTwelveMonthADT.doNotPerform is not true\n\n' +
+        'define "Androgen Deprivation Therapy for Urology Care Medication Active Start Dates":\n' +
+        '[MedicationRequest: "Androgen deprivation therapy for Urology Care"] ADTActive\n' +
+        'let firstMedicationPeriod: First( ( collapse (ADTActive.dosageInstruction.timing.repeat.bounds DoseTime\n' +
+        '\treturn DoseTime.toInterval()) ) DrugPeriods\n' +
+        'sort by start of $this\n' +
+        '),\n' +
+        'firstMedicationEvent: First( ( ADTActive.dosageInstruction.timing dosageTiming\n' +
+        '\treturn First(dosageTiming.event dosageTimingEvents sort ascending) ) firstEvents\n' +
+        'sort ascending\n' +  
+        '),\n' + 
+        'medicationDateTime: NormalizeInterval(firstMedicationEvent, firstMedicationPeriod).earliest()\n' +
+        'where ADTActive.status in { \'active\', \'completed\' }\n' +
+        'and ADTActive.intent in { \'order\', \'original-order\', \'reflex-order\', \'filler-order\', \'instance-order\' }\n' +
+        'return medicationDateTime\n\n' + 
+        'define "Androgen Deprivation Therapy for Urology Care Medication Order Start Dates":\n' +
+        '[MedicationRequest: "Androgen deprivation therapy for Urology Care"] ADTOrder\n' +
+        'let firstMedicationPeriod: First( ( collapse (ADTOrder.dosageInstruction.timing.repeat.bounds DoseTime\n' +
+        '\treturn DoseTime.toInterval()) ) DrugPeriods\n' +
+        'sort by start of $this\n' +
+        '),\n' + 
+        'medicationDateTime: NormalizeInterval(ADTOrder.authoredOn, firstMedicationPeriod).earliest()\n' +
+        'where ADTOrder.status in {\'active\', \'completed\'}\n' +
+        'and ADTOrder.intent in { \'order\', \'original-order\', \'reflex-order\', \'filler-order\', \'instance-order\' }\n' +
+        'return medicationDateTime\n\n' +
+        'define "Has Qualifying Encounter":\n' +
+        'exists ( ["Encounter": "Office Visit"] OfficeVisit\n' +
+        ' where OfficeVisit.period during "Measurement Period"\n' +
+        ' and OfficeVisit.status = \'finished\'\n' +
+        ')\n\n' +
+        'define "Prostate Cancer Diagnosis":\n' +
+        '[Condition: "Prostate Cancer"] ProstateCancer\n' +
+        ' where ProstateCancer.prevalenceInterval() overlaps "Measurement Period"\n' +
+        'and ProstateCancer.clinicalStatus ~ QICoreCommon."active"\n' +
+        'and ProstateCancer.verificationStatus ~ QICoreCommon."confirmed"\n\n' +
+        'define function NormalizeInterval(pointInTime DateTime, dateTimeInterval Interval<DateTime>):\n' +
+        'if pointInTime is not null then Interval[pointInTime, pointInTime]\n' +
+        'else if dateTimeInterval is not null then dateTimeInterval\n' +
+        'else null as Interval<DateTime>\n'
 }
 
 export class QiCore6Cql {
