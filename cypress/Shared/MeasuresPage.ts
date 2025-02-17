@@ -167,6 +167,14 @@ export class MeasuresPage {
 
                 break
             }
+            case 'viewhr': {
+
+                cy.get('[data-testid="view-hr-action-btn"]').should('be.visible')
+                cy.get('[data-testid="view-hr-action-btn"]').should('be.enabled')
+                cy.get('[data-testid="view-hr-action-btn"]').click()
+
+                break
+            }
             default: { }
         }
     }
