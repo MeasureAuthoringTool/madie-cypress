@@ -273,4 +273,18 @@ export class EditMeasurePage {
             default: { }
         }
     }
+
+    public static addMeasureDefinition(term: string, definitionText: string) {
+
+        cy.get(this.createDefinitionBtn).click()
+
+        cy.get(this.definitionTermInput).clear().type(term)
+
+        cy.get(this.definitionInput).clear().type(definitionText)
+        
+        cy.get(this.saveButton).click()
+
+        cy.contains('td', term).should('be.visible')
+    }
+
 }

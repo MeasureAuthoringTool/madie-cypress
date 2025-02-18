@@ -42,7 +42,6 @@ describe('Read only for measure, measure group, and test cases that user does no
         OktaLogin.UILogout()
 
         Utilities.deleteMeasure(measureName, cqlLibraryName, false, true)
-
     })
 
     it('Measure fields on detail page are not editable', () => {
@@ -95,6 +94,10 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(EditMeasurePage.leftPanelGuidance).click()
         cy.get(EditMeasurePage.measureGuidanceTextBox).should('have.attr', 'readonly', 'readonly')
 
+        cy.get(EditMeasurePage.leftPanelQiCoreDefinition).should('be.visible')
+        cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
+        cy.get(EditMeasurePage.emptyDefinitionVal).should('be.visible')
+        cy.get(EditMeasurePage.createDefinitionBtn).should('be.disabled')
     })
 
     it('CQL value on the measure CQL Editor tab cannot be changed', () => {
@@ -116,7 +119,6 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(EditMeasurePage.cqlEditorTextBox).type('Test for ownership')
 
         cy.get(EditMeasurePage.cqlEditorTextBox.valueOf().toString()).eq(null)
-
     })
 
     it('Test Cases are read / view only', () => {
@@ -151,7 +153,6 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(TestCasesPage.testCaseTitle).should('have.attr', 'disabled', 'disabled')
         cy.get(TestCasesPage.testCaseDescriptionTextBox).should('have.attr', 'disabled', 'disabled')
         cy.get('[id="test-case-series"]').should('have.attr', 'disabled', 'disabled')
-
     })
 
     it('Fields on Measure Group page are not editable', () => {
@@ -205,6 +206,5 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(MeasureGroupPage.reportingTab).click()
         cy.get(MeasureGroupPage.rateAggregation).should('not.be.enabled')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('not.be.enabled')
-
     })
 })
