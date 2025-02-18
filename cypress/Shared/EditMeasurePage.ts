@@ -79,6 +79,7 @@ export class EditMeasurePage {
     public static readonly leftPanelDefinition = '[data-testid="leftPanelQDMMeasureDefinition"]'
     public static readonly leftPanelTransmissionFormat = '[data-testid="leftPanelMeasureTransmissionFormat"]'
     public static readonly leftPanelMeasureSet = '[data-testid="leftPanelMeasureSet"]'
+    public static readonly leftPanelQiCoreDefinition = '[data-testid="leftPanelQiCoreMeasureDefinition"]'
 
     //Measure Set
     public static readonly measureSetText = '[data-testid="measureMeasure SetInput"]'
@@ -106,6 +107,13 @@ export class EditMeasurePage {
     //Definition(Terms) page
     public static readonly definitionInputTextbox = '[data-testid="measureDefinitionInput"]'
     public static readonly saveMeasureDefinition = '[data-testid="measureDefinitionSave"]'
+    public static readonly createDefinitionBtn = '[data-testid="create-definition-button"]'
+    public static readonly definitionTermInput = '[data-testid="measure-definition-term-input"]'
+    public static readonly definitionInput = '[data-testid="measure-definition"]'
+    public static readonly definitionMetaTable = '[id="measure-meta-data-table"]'
+    public static readonly definitionMetaTableBody = '[data-testid="measure-definitions-table-body"]'
+    public static readonly emptyDefinitionVal = '[data-testid="empty-definitions"]'
+    public static readonly defDeleteContinueButton = '[data-testid="delete-dialog-continue-button"]'
 
     //Transmission Format page
     public static readonly transmissionFormatDescription = '[data-testid="measure-transmission-format"]'
@@ -240,7 +248,7 @@ export class EditMeasurePage {
                 cy.get(this.editMeasureDeleteActionBtn).click()
 
                 cy.get(this.deleteMeasureConfirmationButton).click()
-                
+
                 Utilities.validateToastMessage('Measure successfully deleted')
                 break
             }
