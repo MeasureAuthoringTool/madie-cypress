@@ -1,10 +1,11 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage, SupportedModels} from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { Header } from "../../../../Shared/Header"
 import { Utilities } from "../../../../Shared/Utilities"
 import { LandingPage } from "../../../../Shared/LandingPage"
+import { util } from "chai"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -113,6 +114,17 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
 
+        //Definition
+        cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
+        cy.get(EditMeasurePage.createDefinitionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.editReferenceModal, 50000)
+        cy.get(EditMeasurePage.definitionTermInput).type('DefinitionTerm')
+        cy.get(EditMeasurePage.definitionInput).type('Definition details for DefinitionTerm')
+        Utilities.waitForElementEnabled(EditMeasurePage.saveButton, 50000)
+        cy.get(EditMeasurePage.saveButton).click()
+        cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).should('include.text', 'DefinitionTermDefinition details for DefinitionTerm')
+        cy.log('Measure Definition added successfully')
+
         cy.get(Header.mainMadiePageButton).click()
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
@@ -181,6 +193,26 @@ describe('Edit Measure: Add Meta Data', () => {
             expect(val).to.eql(clinicalRecommendation)
         })
         cy.log('Measure Clinical Recommendation added successfully')
+
+        //definition
+        cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
+        cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find('[class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1ns8gjm"]').should('have.attr', 'aria-label', 'Edit').click()
+        Utilities.waitForElementVisible(EditMeasurePage.editReferenceModal, 50000)
+        cy.get(EditMeasurePage.definitionTermInput).clear().type('DefinitionTermUpdate')
+        cy.get(EditMeasurePage.definitionInput).clear().type('Definition details for DefinitionTerm')
+        Utilities.waitForElementEnabled(EditMeasurePage.saveButton, 50000)
+        cy.get(EditMeasurePage.saveButton).click()
+        cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).should('include.text', 'DefinitionTermUpdateDefinition details for DefinitionTerm')
+        cy.log('Measure Definition updated successfully')
+
+        //delete definition
+        cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
+        cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find('[class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1tb4h4m"]').should('have.attr', 'aria-label', 'Delete').click()
+        Utilities.waitForElementVisible(EditMeasurePage.defDeleteContinueButton, 50000)
+        cy.get(EditMeasurePage.defDeleteContinueButton).click()
+        Utilities.waitForElementToNotExist
+        cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find(EditMeasurePage.emptyDefinitionVal).should('include.text', 'There are currently no definitions. Click the (Add Term) button above to add one.')
+        cy.log('Measure Definition deleted successfully')
 
 
     })
