@@ -1,12 +1,12 @@
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
-import {TestCasesPage} from "../../../Shared/TestCasesPage"
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
-import {Utilities} from "../../../Shared/Utilities"
-import {TestCaseJson} from "../../../Shared/TestCaseJson"
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { Utilities } from "../../../Shared/Utilities"
+import { TestCaseJson } from "../../../Shared/TestCaseJson"
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -58,7 +58,18 @@ describe('Test Case name dropdown on Edit Test case screen', () => {
 
         //edit test case
         TestCasesPage.clickEditforCreatedTestCase(true)
+
+        // verify we are on test case 2
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.testCaseTitle).should('have.attr', 'value', 'Second Test Case')
+
         cy.get(TestCasesPage.testCaseNameDropdown).should('contain.text', 'Case #2: ICFTestSeries - Second Test Case', 'Case #1: SBTestSeries - First Test Case')
 
+        // use name dropdrop to switch test cases
+        Utilities.dropdownSelect(TestCasesPage.testCaseNameDropdown, 'Case #1: SBTestSeries - First Test Case')
+
+        // verify we are on test case 1
+        cy.get(TestCasesPage.detailsTab).click()
+        cy.get(TestCasesPage.testCaseTitle).should('have.attr', 'value', 'First Test Case')
     })
 })
