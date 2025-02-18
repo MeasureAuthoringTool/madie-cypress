@@ -100,6 +100,17 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).click({ force: true })
         cy.get(EditMeasurePage.measureStewardDevelopersSuccessMessage).should('be.visible')
 
+        //Purpose
+        cy.get(EditMeasurePage.leftPanelPurpose).click()
+        Utilities.waitForElementVisible(EditMeasurePage.measurePurposeTextBox, 50000)
+        cy.get(EditMeasurePage.measurePurposeTextBox).type('This is a purpose.')
+        cy.get(EditMeasurePage.measurePurposeSaveBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.measurePurposeSavedMsg, 50000)
+        cy.get(EditMeasurePage.measurePurposeSavedMsg).should('contain.text', 'Measure Purpose Information Saved Successfully')
+        Utilities.waitForElementToNotExist(EditMeasurePage.measurePurposeSavedMsg, 50000)
+        cy.log('Purpose was added successfully')
+
+
         //Guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
         cy.get(EditMeasurePage.measureGuidanceTextBox).clear().type(guidance)
@@ -178,6 +189,20 @@ describe('Edit Measure: Add Meta Data', () => {
         })
         cy.log('Measure Rationale added successfully')
 
+        //Purpose
+        cy.get(EditMeasurePage.leftPanelPurpose).click()
+        cy.get(EditMeasurePage.measurePurposeTextBox).should('contain.text', 'This is a purpose.')
+        cy.get(EditMeasurePage.measurePurposeTextBox).clear().type('This is a purpose updated.')
+        cy.get(EditMeasurePage.measurePurposeSaveBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.measurePurposeSavedMsg, 50000)
+        cy.get(EditMeasurePage.measurePurposeSavedMsg).should('contain.text', 'Measure Purpose Information Saved Successfully')
+        Utilities.waitForElementToNotExist(EditMeasurePage.measurePurposeSavedMsg, 50000)
+        cy.reload()
+        Utilities.waitForElementVisible(EditMeasurePage.measurePurposeTextBox, 50000)
+        cy.get(EditMeasurePage.measurePurposeTextBox).should('contain.text', 'This is a purpose updated.')
+        cy.log('Measure Purpose updated successfully')
+
+
         //guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
         cy.get(EditMeasurePage.measureGuidanceTextBox).invoke('val').then(val => {
@@ -241,9 +266,9 @@ describe('Edit Measure: Add Meta Data', () => {
         const pageTwoOrder = ['twelve', 'two']
 
         cy.get(EditMeasurePage.definitionMetaTableBody).find('tr > td:first-child').each((el, index) => {
-          cy.wrap(el).invoke('text').then(textValue => {
-            expect(expectedOrder[index]).to.equal(textValue)
-          })
+            cy.wrap(el).invoke('text').then(textValue => {
+                expect(expectedOrder[index]).to.equal(textValue)
+            })
         })
 
         // checking pagination - using existing selector instead of adding duplicate
@@ -251,9 +276,9 @@ describe('Edit Measure: Add Meta Data', () => {
 
         cy.get(EditMeasurePage.definitionMetaTableBody).find('tr > td:first-child').each((el, index) => {
             cy.wrap(el).invoke('text').then(textValue => {
-              expect(pageTwoOrder[index]).to.equal(textValue)
+                expect(pageTwoOrder[index]).to.equal(textValue)
             })
-          })
+        })
     })
 })
 

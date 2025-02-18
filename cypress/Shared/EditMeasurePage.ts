@@ -80,6 +80,7 @@ export class EditMeasurePage {
     public static readonly leftPanelTransmissionFormat = '[data-testid="leftPanelMeasureTransmissionFormat"]'
     public static readonly leftPanelMeasureSet = '[data-testid="leftPanelMeasureSet"]'
     public static readonly leftPanelQiCoreDefinition = '[data-testid="leftPanelQiCoreMeasureDefinition"]'
+    public static readonly leftPanelPurpose = '[data-testid="leftPanelMeasurePurpose"]'
 
     //Measure Set
     public static readonly measureSetText = '[data-testid="measureMeasure SetInput"]'
@@ -174,6 +175,12 @@ export class EditMeasurePage {
     public static readonly measureRationaleTextBox = '[data-testid="measureRationaleInput"]'
     public static readonly measureRationaleSaveButton = '[data-testid="measureRationaleSave"]'
     public static readonly measureRationaleSuccessMessage = '[data-testid="measureRationaleSuccess"]'
+
+    //Purpose
+    public static readonly measurePurposeTextBox = '[data-testid="measurePurposeInput"]'
+    public static readonly measurePurposeSaveBtn = '[data-testid="measurePurposeSave"]'
+    //<div id="message" data-testid="measurePurposeSuccess">Measure Purpose Information Saved Successfully</div>
+    public static readonly measurePurposeSavedMsg = '[data-testid="measurePurposeSuccess"]'
 
     //Guidance Page
     public static readonly measureGuidanceTextBox = '[data-testid="measureGuidance (Usage)Input"]'
