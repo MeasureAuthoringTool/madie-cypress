@@ -179,7 +179,6 @@ export class EditMeasurePage {
     //Purpose
     public static readonly measurePurposeTextBox = '[data-testid="measurePurposeInput"]'
     public static readonly measurePurposeSaveBtn = '[data-testid="measurePurposeSave"]'
-    //<div id="message" data-testid="measurePurposeSuccess">Measure Purpose Information Saved Successfully</div>
     public static readonly measurePurposeSavedMsg = '[data-testid="measurePurposeSuccess"]'
 
     //Guidance Page
@@ -288,7 +287,7 @@ export class EditMeasurePage {
         cy.get(this.definitionTermInput).clear().type(term)
 
         cy.get(this.definitionInput).clear().type(definitionText)
-        
+
         cy.get(this.saveButton).click()
 
         cy.contains('td', term).should('be.visible')
