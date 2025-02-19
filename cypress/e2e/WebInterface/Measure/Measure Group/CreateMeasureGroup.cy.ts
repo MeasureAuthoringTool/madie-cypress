@@ -362,6 +362,46 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
     })
+
+    it('Verify Qi Core Cohort Measure Group can be created without Improvement Notation', () => {
+
+        //click on Edit button to edit measure
+        MeasuresPage.actionCenter('edit')
+
+        //Click on the measure group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //fill in a description value
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
+
+        Utilities.setMeasureGroupType()
+
+        cy.get(MeasureGroupPage.popBasis).should('exist')
+        cy.get(MeasureGroupPage.popBasis).should('be.visible')
+        cy.get(MeasureGroupPage.popBasis).click()
+        cy.get(MeasureGroupPage.popBasis).type('Boolean')
+        cy.get(MeasureGroupPage.popBasisOption).click()
+
+        //select scoring unit on measure
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL')
+
+        //Navigate to Reporting tab and verify the error message doesn't appear for missing Improvement Notation
+        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get('[data-testid="improvement-notation-select-helper-text"]').should('not.exist')
+
+        //save population criteria
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
+    })
 })
 
 describe('Validate Population Basis', () => {
