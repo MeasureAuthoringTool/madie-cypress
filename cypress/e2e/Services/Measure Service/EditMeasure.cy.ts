@@ -6,14 +6,14 @@ import { v4 as uuidv4 } from 'uuid'
 import { OktaLogin } from "../../../Shared/OktaLogin"
 
 let measureName = 'TestMeasure' + Date.now()
-let harpUser = Environment.credentials().harpUserALT
 let cqlLibraryName = 'TestCql' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let updatedMeasureName = ''
 let updatedCQLLibraryName = ''
-let measureCQL = MeasureCQL.SBTEST_CQL
-let model = 'QI-Core v4.1.1'
-let versionIdPath = 'cypress/fixtures/versionId'
+const harpUser = Environment.credentials().harpUserALT
+const measureCQL = MeasureCQL.SBTEST_CQL
+const model = 'QI-Core v4.1.1'
+const versionIdPath = 'cypress/fixtures/versionId'
 
 const now = require('dayjs')
 let mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
@@ -513,7 +513,7 @@ describe('Measure Service: Edit Measure', () => {
         })
     })
 
-    it('Add Meta Data Endorser Fields to the Measure', () => {
+    it('Add Meta Data Endorser Fields to the measure', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -603,7 +603,7 @@ describe('Measure Service: Edit Measure', () => {
         })
     })
 
-    it('Add Intended Venue to the Measure', () => {
+    it('Add Intended Venue to the measure', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -639,6 +639,41 @@ describe('Measure Service: Edit Measure', () => {
                         expect(response.status).to.eql(200)
                         expect(response.body.measureMetaData.intendedVenue.code).to.eql('eh')
                         cy.log('Measure updated successfully')
+                    })
+                })
+            })
+        })
+    })
+
+    it('Add Purpose to the measure', () => {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
+                cy.readFile(versionIdPath).should('exist').then((vId) => {
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        method: 'PUT',
+                        body: {
+                            'id': id,
+                            'measureName': updatedMeasureName,
+                            'cql': "library xyz version '1.5.000'\n\nusing FHIR version '4.0.1'\n\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\n\nparameter \"Measurement Period\" Interval<DateTime>\n\ncontext Patient\n\ndefine \"SDE Ethnicity\":\n  SDE.\"SDE Ethnicity\"\n\ndefine \"SDE Payer\":\n  SDE.\"SDE Payer\"\n\ndefine \"SDE Race\":\n  SDE.\"SDE Race\"\n\ndefine \"SDE Sex\":\n  SDE.\"SDE Sex\"",
+                            'cqlLibraryName': updatedCQLLibraryName,
+                            'model': model,
+                            "version": "0.0.000",
+                            'measureScoring': 'Ratio',
+                            'versionId': vId,
+                            'measureSetId': uuidv4(),
+                            "ecqmTitle": "eCQMTitle",
+                            "measurementPeriodStart": mpStartDate,
+                            "measurementPeriodEnd": mpEndDate,
+                            'measureMetaData': { "experimental": false, "purpose": "reason for the measure to be made", "draft": true }
+                        }
+                    }).then((response) => {
+                        expect(response.status).to.eql(200)
+                        expect(response.body.measureMetaData.purpose).to.eql('reason for the measure to be made')
                     })
                 })
             })
