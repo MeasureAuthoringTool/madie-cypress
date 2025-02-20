@@ -177,6 +177,9 @@ describe('Confirm that check boxes for CQL Libraries do not appear', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
 
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
         cy.clearAllCookies()
         cy.clearLocalStorage()
@@ -187,7 +190,6 @@ describe('Confirm that check boxes for CQL Libraries do not appear', () => {
     after('Log out and Clean up', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, cqlLibraryName)
 
     })
 
@@ -195,7 +197,6 @@ describe('Confirm that check boxes for CQL Libraries do not appear', () => {
 
         cy.clearAllCookies()
         cy.clearLocalStorage()
-        //set local user that does not own the Library
         cy.setAccessTokenCookie()
 
         //Share Library with ALT User
@@ -242,6 +243,10 @@ describe('Qi Core Test Case Include SDE sub-tab / feature', () => {
 
     it('Verify that SDE sub-tab is not available', () => {
 
+        //navigate to the measures list page
+        cy.get(Header.measures).click()
+
+        //navigate to measure's detail page
         MeasuresPage.actionCenter("edit")
 
         //Navigate to Test Case page
