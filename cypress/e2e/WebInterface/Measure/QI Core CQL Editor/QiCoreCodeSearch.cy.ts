@@ -304,6 +304,53 @@ describe('Qi Core Code Search fields', () => {
     })
 })
 
+describe('Error Message on Codes tab', () => {
+
+    beforeEach('Create Measure and Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQLWithCode)
+        OktaLogin.Login()
+
+        //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
+
+        //Navigate to CQL builder
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+    })
+
+    afterEach('Clean up and Logout', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+
+    it('Verify error message appears on Codes tab when there is an error in the Measure CQL', () => {
+
+        //Navigate to Codes tab and verify no error message appears
+        cy.get(CQLEditorPage.codesTab).click()
+        cy.get('[data-testid="cql-builder-errors"]').should('not.exist').wait(1000)
+        //Navigate to Codes tab and verify saved codes appear
+        cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(1)')
+
+        //Add errors to CQL
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        //Navigate to Codes tab
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.codesTab).click()
+        cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
+
+        //Navigate to Saved Codes tab
+        cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(0)').click()
+        cy.get('[data-testid="saved-codes-tbl"]').find('.sc-jEACwC').should('contain.text', 'No Results were found')
+    })
+})
+
 describe('Edit and Delete Codes from Saved Codes grid', () => {
 
     beforeEach('Create Measure and Login', () => {

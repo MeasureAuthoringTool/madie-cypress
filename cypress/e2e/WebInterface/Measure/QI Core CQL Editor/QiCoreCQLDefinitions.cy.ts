@@ -399,6 +399,33 @@ describe('Qi-Core CQL Definitions Builder', () => {
         ' annoy any future users of this piece of functShow more'
         cy.get('[data-testid="definitions-row-0"] > :nth-child(3)').should('contain.text', shortenedComment)
     })
+
+    it('Verify error message appears on Definitions tab when there is an error in the Measure CQL', () => {
+
+        MeasuresPage.actionCenter('edit')
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Navigate to Definitions tab and verify no error message appears
+        cy.get(CQLEditorPage.definitionsTab).click()
+        cy.get('[data-testid="cql-builder-errors"]').should('not.exist').wait(1000)
+        //Navigate to Definitions tab and verify saved definitions appear
+        cy.get(CQLEditorPage.savedDefinitionsTab).should('contain.text', 'Saved Definitions (2)')
+
+        //Add errors to CQL
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        //Navigate to Definitions tab
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.definitionsTab).click()
+        cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
+
+        //Navigate to Saved Definitions tab
+        cy.get(CQLEditorPage.savedDefinitionsTab).should('contain.text', 'Saved Definitions (0)').click()
+        cy.get('[class="Definitions___StyledTd-sc-cj02bv-0 kITigf"]').should('contain.text', 'No Results were found')
+    })
 })
 
 describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', () => {
@@ -409,7 +436,7 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    // skippng for now: open bug https://jira.cms.gov/browse/MAT-8114 affcting this scenario
+    // skipping for now: open bug https://jira.cms.gov/browse/MAT-8114 affcting this scenario
     it.skip('Qi-Core CQL Definitions Expression editor Name options are not available when CQL has errors', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL_withError)

@@ -396,6 +396,39 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         cy.get('.MuiAutocomplete-noOptions').should('contain.text', 'No options')
     })
 
+    it('Verify error message appears on Definitions tab when there is an error in the Measure CQL', () => {
+
+        randValue = (Math.floor((Math.random() * 1000) + 1))
+        CqlLibraryName = CqlLibraryName + randValue
+
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        OktaLogin.Login()
+
+        MeasuresPage.actionCenter('edit')
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+        //Navigate to Definitions tab and verify no error message appears
+        cy.get(CQLEditorPage.definitionsTab).click()
+        cy.get('[data-testid="cql-builder-errors"]').should('not.exist').wait(1000)
+        //Navigate to Definitions tab and verify saved definitions appear
+        cy.get(CQLEditorPage.savedDefinitionsTab).should('contain.text', 'Saved Definitions (7)')
+
+        //Add errors to CQL
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        //Navigate to Definitions tab
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.definitionsTab).click()
+        cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
+
+        //Navigate to Saved Definitions tab
+        cy.get(CQLEditorPage.savedDefinitionsTab).should('contain.text', 'Saved Definitions (0)').click()
+        cy.get('[class="Definitions___StyledTd-sc-cj02bv-0 kITigf"]').should('contain.text', 'No Results were found')
+    })
+
     it('QDM CQL Definitions throws specific error when Definition has no name', () => {
         randValue = (Math.floor((Math.random() * 1000) + 2))
         CqlLibraryName = CqlLibraryName + randValue
@@ -411,7 +444,7 @@ describe('QDM CQL Definitions - Expression Editor Name Option Validations', () =
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "Parse: 7:8 | Definition is missing a name.")
     })
 
-    it('QDM CQL Definitions throws specific error when Definition name is a reserved keyyword', () => {
+    it('QDM CQL Definitions throws specific error when Definition name is a reserved keyword', () => {
 
         randValue = (Math.floor((Math.random() * 1000) + 3))
         CqlLibraryName = CqlLibraryName + randValue
