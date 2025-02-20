@@ -247,7 +247,7 @@ describe('Qi Core Test Case Include SDE sub-tab / feature', () => {
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //confirm that the import button is disabled / not available
+        //confirm that the SDE sub-tab is disabled / not available
         Utilities.waitForElementToNotExist(TestCasesPage.qdmSDESubTab, 35000)
 
 
