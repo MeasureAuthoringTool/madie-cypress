@@ -273,6 +273,28 @@ describe('Qi-Core CQL Parameters', () => {
         //cy.get(Global.discardChangesContinue).click()
         cy.get(CQLEditorPage.editParameterNameTextBox).should('be.visible')
     })
+
+    it('Verify error message appears on Parameters tab when there is an error in the Measure CQL', () => {
+
+        //Navigate to Parameters tab and verify no error message appears
+        cy.get(CQLEditorPage.parametersTab).click()
+        cy.get('[data-testid="cql-builder-errors"]').should('not.exist').wait(1000)
+        //Navigate to Parameters tab and verify saved parameters appear
+        cy.get(CQLEditorPage.savedParametersTab).should('contain.text', 'Saved Parameters (1)')
+
+        //Add errors to CQL
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        //Navigate to Parameters tab
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.parametersTab).click()
+        cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
+
+        //Navigate to Saved Parameters tab
+        cy.get(CQLEditorPage.savedParametersTab).should('contain.text', 'Saved Parameters (0)').click()
+        cy.get('[class="SavedParameters___StyledTd-sc-j0j2pa-0 gTsIka"]').should('contain.text', 'No Results were found')
+    })
 })
 
 describe('Delete Saved Parameters', () => {

@@ -204,6 +204,28 @@ describe('Qi Core CQL Functions', () => {
         cy.get(CQLEditorPage.deleteContinueButton).should('be.enabled').click()
         cy.get(CQLEditorPage.saveSuccessMsg, {timeout: 6500}).should('have.text', 'Function isFinishedEncounter has been successfully removed from the CQL.')
     })
+
+    it('Verify error message appears on Functions tab when there is an error in the Measure CQL', () => {
+
+        //Navigate to Functions tab and verify no error message appears
+        cy.get(CQLEditorPage.functionsTab).click()
+        cy.get('[data-testid="cql-builder-errors"]').should('not.exist').wait(1000)
+        //Navigate to Functions tab and verify saved functions appear
+        cy.get(CQLEditorPage.savedFunctionsTab).should('contain.text', 'Saved Functions (2)')
+
+        //Add errors to CQL
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        //Navigate to Functions tab
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.functionsTab).click()
+        cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
+
+        //Navigate to Saved Functions tab
+        cy.get(CQLEditorPage.savedFunctionsTab).should('contain.text', 'Saved Functions (0)').click()
+        cy.get('[class="Functions___StyledTd-sc-z5k5r-0 jVcgFQ"]').should('contain.text', 'No Results were found')
+    })
 })
 
 describe('Qi-Core CQL Functions - Measure ownership Validations', () => {

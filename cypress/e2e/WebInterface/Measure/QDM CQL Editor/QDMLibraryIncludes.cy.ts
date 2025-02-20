@@ -459,7 +459,7 @@ describe('QDM Library Includes fields', () => {
         cy.get('[data-testid="library-version-container"] > .result-value').should('not.be.enabled')
     })
 
-    it('Verify all Qi Core Library versions are displayed while editing saved Libraries', () => {
+    it('Verify all QDM Library versions are displayed while editing saved Libraries', () => {
 
         cy.get(CQLEditorPage.includesTab).click()
 
@@ -479,6 +479,28 @@ describe('QDM Library Includes fields', () => {
         //Confirm Library versions
         cy.get(CQLEditorPage.versionDropdownBtn).click()
         cy.get(CQLEditorPage.versionNumberList).should('contain.text', '8.0.0007.0.0006.0.0005.0.0004.0.0003.0.0002.0.0001.0.000')
+    })
+
+    it('Verify error message appears on Includes tab when there is an error in the Measure CQL', () => {
+
+        //Navigate to Includes tab and verify no error message appears
+        cy.get(CQLEditorPage.includesTab).click()
+        cy.get('[data-testid="cql-builder-errors"]').should('not.exist').wait(1000)
+        //Navigate to Includes tab and verify saved Libraries appear
+        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
+
+        //Add errors to CQL
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        //Navigate to Parameters tab
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.includesTab).click()
+        cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
+
+        //Navigate to Saved Parameters tab
+        cy.get(CQLEditorPage.savedLibrariesTab).click().should('contain.text', 'Saved Libraries (0)')
+        cy.get('[class="Results___StyledTd-sc-18pioce-0 cBTZQp"]').should('contain.text', 'No Results were found')
     })
 
 })

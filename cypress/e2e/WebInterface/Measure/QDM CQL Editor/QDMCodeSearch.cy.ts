@@ -33,6 +33,31 @@ let measureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'\n' +
     '\t true\n' +
     'define "n":\n' +
     '\ttrue'
+let measureCQL_withCode = 'library QDMLibrary1724174199255 version \'0.0.000\'\n' +
+    'using QDM version \'5.6\'\n' +
+    'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Common\n\n' +
+    'codesystem "CPT": \'urn:oid:2.16.840.1.113883.6.12\'\n' +
+    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n\n' +
+    'code "Unlisted preventive medicine service": \'99429\' from "CPT" display \'Unlisted preventive medicine service\'\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'context Patient\n\n' +
+    'define "SDE Ethnicity":\n' +
+    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n\n' +
+    'define "SDE Payer":\n' +
+    '  ["Patient Characteristic Payer": "Payer"]\n\n' +
+    'define "SDE Race":\n' +
+    '  ["Patient Characteristic Race": "Race"]\n\n' +
+    'define "SDE Sex":\n' +
+    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n\n' +
+    'define "ipp":\n' +
+    '\ttrue\n\n' +
+    'define "d":\n' +
+    '\ttrue\n\n' +
+    'define "n":\n' +
+    '\ttrue'
 
 describe('QDM Code Search fields', () => {
 
@@ -372,5 +397,52 @@ describe('QDM Code Search fields', () => {
 
         //Verify the Code System is still available in the CQL Editor
         cy.get('[class="ace_content"]').should('contain.text', 'codesystem "ActCode": \'urn:oid:2.16.840.1.113883.5.4\'')
+    })
+})
+
+describe('Error Message on Codes tab', () => {
+
+    beforeEach('Create Measure and Login', () => {
+
+        //Create New Measure
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL_withCode)
+        OktaLogin.Login()
+
+        //Click on Edit Button
+        MeasuresPage.actionCenter('edit')
+
+        //Navigate to CQL builder
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+
+    })
+
+    afterEach('Clean up and Logout', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+
+    it('Verify error message appears on Codes tab when there is an error in the Measure CQL', () => {
+
+        //Navigate to Codes tab and verify no error message appears
+        cy.get(CQLEditorPage.codesTab).click()
+        cy.get('[data-testid="cql-builder-errors"]').should('not.exist').wait(1000)
+        //Navigate to Codes tab and verify saved codes appear
+        cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(1)')
+
+        //Add errors to CQL
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}define "test":')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+
+        //Navigate to Codes tab
+        cy.get(CQLEditorPage.expandCQLBuilder).click()
+        cy.get(CQLEditorPage.codesTab).click()
+        cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
+
+        //Navigate to Saved Codes tab
+        cy.get(CQLEditorPage.savedCodesTab).should('contain.text', 'Saved Codes(0)').click()
+        cy.get('[data-testid="saved-codes-tbl"]').find('.sc-jEACwC').should('contain.text', 'No Results were found')
     })
 })
