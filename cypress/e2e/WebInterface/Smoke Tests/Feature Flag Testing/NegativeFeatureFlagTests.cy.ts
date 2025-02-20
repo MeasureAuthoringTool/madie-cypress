@@ -1,4 +1,5 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
@@ -167,6 +168,7 @@ describe('QI Core v6: UI Elements Builder tab is not shown', () => {
     })
 
 })
+
 //"LibraryListCheckboxes": false
 describe('Confirm that check boxes for CQL Libraries do not appear', () => {
 
@@ -206,4 +208,48 @@ describe('Confirm that check boxes for CQL Libraries do not appear', () => {
     })
 })
 
+// "QICoreIncludeSDEValues": false
+describe('Qi Core Test Case Include SDE sub-tab / feature', () => {
 
+    beforeEach('Create measure, create group, create test case, login and update CQL', () => {
+
+        CqlLibraryName = 'TestLibrary5' + Date.now()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, validTestCaseJsonLizzy)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+
+    it('Verify that SDE sub-tab is not available', () => {
+
+        MeasuresPage.actionCenter("edit")
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //confirm that the SDE sub-tab is disabled / not available
+        Utilities.waitForElementToNotExist(TestCasesPage.qdmSDESubTab, 35000)
+
+
+    })
+})
