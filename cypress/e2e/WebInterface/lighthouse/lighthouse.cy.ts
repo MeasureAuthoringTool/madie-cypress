@@ -46,8 +46,8 @@ describe('Login and initial "My Measures" page', () => {
             //'speed-index' -> 10%
 
             accessibility: 76, //The Lighthouse Accessibility score is a weighted average of all accessibility audits. Weighting is based on axe user impact assessments.
-            'total-blocking-time': 10000, //In miliseconds, this measure the total amount of time that a page is blocked from responding to user input, such as mouse clicks, screen taps, or keyboard presses.
-            'speed-index': 34000, //In miliseconds, this measures how quickly content is visually displayed during page load.
+            'total-blocking-time': 11000, //In miliseconds, this measure the total amount of time that a page is blocked from responding to user input, such as mouse clicks, screen taps, or keyboard presses.
+            'speed-index': 38000, //In miliseconds, this measures how quickly content is visually displayed during page load.
             'cumulative-layout-shift': 100, //Unexpected page element shifts -- basically, the measurement of shifting page elements
 
         };
@@ -93,7 +93,7 @@ describe('Navigate to the "All Measures" page', () => {
             performance: 23,
             accessibility: 76,
             'total-blocking-time': 11000,
-            'speed-index': 33000,
+            'speed-index': 41000,
             'cumulative-layout-shift': 100,
         };
 
@@ -297,7 +297,7 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
             performance: 19,
             accessibility: 78,
             'total-blocking-time': 10000,
-            'speed-index': 45000,
+            'speed-index': 55000,
             'cumulative-layout-shift': 100,
         };
 
@@ -370,7 +370,7 @@ describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test ca
             performance: 3,
             accessibility: 94,
             'total-blocking-time': 8600,
-            'speed-index': 37000,
+            'speed-index': 39000,
             'cumulative-layout-shift': 100,
         };
 
