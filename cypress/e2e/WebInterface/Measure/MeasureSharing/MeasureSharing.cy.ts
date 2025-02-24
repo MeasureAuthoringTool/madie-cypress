@@ -122,7 +122,7 @@ describe('Measure Sharing', () => {
     })
 
     //Skipping until feature flag 'ShareMeasure' is removed
-    it.only('Action centre share button disabled for Non Measure Owner', () => {
+    it.skip('Action centre share button disabled for Non Measure Owner', () => {
 
         //Login
         OktaLogin.AltLogin()
