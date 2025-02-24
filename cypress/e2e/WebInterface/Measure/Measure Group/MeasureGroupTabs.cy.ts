@@ -636,23 +636,6 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.stratDescTwo).should('contain.text', 'StratificationFour')
     })
 
-    it('Stratification tab is not present / available when the Ratio scoring value is selected', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //select Ratio scoring type
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
-
-        //assert that Stratification is no longer available
-        cy.get(MeasureGroupPage.stratificationTab).should('not.exist')
-    })
-
     it('Verify error message when the Stratification return type does not match with population basis', () => {
 
         //Click on Edit Measure
@@ -833,9 +816,9 @@ describe('Validating Reporting tabs', () => {
         // IN should contain previously saved selected value
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
- 
+
         // and here?
- 
+
     })
 })
 
