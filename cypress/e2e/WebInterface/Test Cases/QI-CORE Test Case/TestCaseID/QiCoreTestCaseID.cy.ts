@@ -235,13 +235,7 @@ describe('Qi Core Measure - Test case number on a Draft Measure', () => {
     beforeEach('Create Measure, Test case & Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-
-        const pops: MeasureGroups = {
-            initialPopulation: 'Qualifying Encounters',
-            denominator: 'Qualifying Encounters',
-            numerator: 'Qualifying Encounters'
-        }
-        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.encounter, MeasureScoring.Ratio, pops)
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Qualifying Encounters','Qualifying Encounters', 'Encounter') 
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
         OktaLogin.Login()
     })
