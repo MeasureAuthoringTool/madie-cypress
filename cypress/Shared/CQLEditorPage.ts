@@ -85,7 +85,7 @@ export class CQLEditorPage {
     public static readonly includesTab = '[data-testid="includes-tab"]'
     public static readonly librarySearchTextBox = '[data-testid="searchTerm-text-input"]'
     public static readonly librarySearchBtn = '[data-testid="search-btn"]'
-    public static readonly librarySearchTable = '[data-testid="terminology-section-Library Results-sub-heading"]'
+    public static readonly librarySearchTable = '[data-testid="terminology-section-sub-header-content-Library Results"]'//'[data-testid="terminology-section-Library Results-sub-heading"]'
     public static readonly savedLibrariesTab = '[data-testid="saved-libraries-tab"]'
     public static readonly toastMeasureMessage = '[data-testid="measure-editor-toast"]'
     public static readonly savedLibrariesTable = '[data-testid="includes-panel"]'
