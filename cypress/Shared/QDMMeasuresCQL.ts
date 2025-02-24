@@ -588,7 +588,14 @@ export class QdmCql {
         '\t  "Inpatient Encounters"\n\n' +
         'define "Numerator":\n' +
         '\t  "Initial Population"\n\n' +
-        standardSdeBlock +
+        'define \"SDE Ethnicity\":\n' +
+        '  [\"Patient Characteristic Ethnicity\": \"Ethnicity\"]\n\n' +
+        'define \"SDE Payer\":\n' +
+        '  [\"Patient Characteristic Payer\": \"Payer\"]\n\n' +
+        'define \"SDE Race\":\n' +
+        '  [\"Patient Characteristic Race\": \"Race\"]\n\n' +
+        'define \"SDE Sex\":\n' +
+        '  [\"Patient Characteristic Sex\": \"ONC Administrative Sex\"]\n\n' +
         'define "SDE Results":\n' +
         '  {\n' +
         '  // First physical exams\n' +
