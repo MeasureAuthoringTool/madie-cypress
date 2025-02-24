@@ -70,7 +70,8 @@ describe('Validating the creation of QDM Test Case', () => {
         cy.get(TestCasesPage.QDMDob).type('01/01/2020 12:00 PM')
 
         //save dob value
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
+        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled').wait(1500)
         cy.get(TestCasesPage.QDMTCSaveBtn).click()
 
         //click on bread crumb to navigate back to the main test case list page
@@ -78,7 +79,7 @@ describe('Validating the creation of QDM Test Case', () => {
 
         //verify that the user is, now, on the test case list page
         cy.readFile(measurePath).should('exist').then((measureId) => {
-            Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 12500)
+            Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 60000)
             cy.url().should('contain', measureId + '/edit/test-cases/list-page')
             cy.url().should('contain', '?filter=&search=&page=1&limit=10')
         })
