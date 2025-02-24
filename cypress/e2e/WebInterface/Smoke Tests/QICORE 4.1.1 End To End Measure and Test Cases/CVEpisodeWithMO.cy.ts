@@ -7,6 +7,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import {Header} from "../../../../Shared/Header";
 
 let measureName = 'CVEpisodeWithMO' + Date.now()
 let CqlLibraryName = 'CVEpisodeWithMO' + Date.now()
@@ -115,6 +116,9 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')

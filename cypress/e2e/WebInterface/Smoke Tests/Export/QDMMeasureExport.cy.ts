@@ -1,11 +1,11 @@
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
-import { EditMeasureActions, EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
-import { MeasuresPage } from "../../../Shared/MeasuresPage"
-import { OktaLogin } from "../../../Shared/OktaLogin"
-import { Utilities } from "../../../Shared/Utilities"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../Shared/Utilities"
 
 let qdmMeasureName = 'QDMTestMeasure' + Date.now()
 let qdmCqlLibraryName = 'QDMLibrary' + Date.now()
