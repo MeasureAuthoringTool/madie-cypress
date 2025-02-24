@@ -742,6 +742,7 @@ export class TestCasesPage {
             cy.get(TestCasesPage.aceEditor).should('be.visible')
             cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
 
+            cy.wait(1500)
             cy.get(this.aceEditor).type(testCaseJson, { parseSpecialCharSequences: false })
 
             cy.get(this.detailsTab).click()
