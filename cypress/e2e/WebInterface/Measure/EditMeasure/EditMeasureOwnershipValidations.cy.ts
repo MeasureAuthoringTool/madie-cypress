@@ -94,10 +94,11 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(EditMeasurePage.leftPanelGuidance).click()
         cy.get(EditMeasurePage.measureGuidanceTextBox).should('have.attr', 'readonly', 'readonly')
 
-        cy.get(EditMeasurePage.leftPanelQiCoreDefinition).should('be.visible')
-        cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
-        cy.get(EditMeasurePage.emptyDefinitionVal).should('be.visible')
-        cy.get(EditMeasurePage.createDefinitionBtn).should('be.disabled')
+        //commenting out until definition flag is removed
+        /*         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).should('be.visible')
+                cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
+                cy.get(EditMeasurePage.emptyDefinitionVal).should('be.visible')
+                cy.get(EditMeasurePage.createDefinitionBtn).should('be.disabled') */
     })
 
     it('CQL value on the measure CQL Editor tab cannot be changed', () => {
