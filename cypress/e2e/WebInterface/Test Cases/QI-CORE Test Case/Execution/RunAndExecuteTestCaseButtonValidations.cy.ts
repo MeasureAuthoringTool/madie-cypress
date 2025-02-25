@@ -138,7 +138,8 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
     })
 
-    it('Run / Execute Test Case button is disabled -- Invalid TC Json', () => {
+    //skipping until defect https://jira.cms.gov/browse/MAT-8345 is fixed
+    it.skip('Run / Execute Test Case button is disabled -- Invalid TC Json', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 

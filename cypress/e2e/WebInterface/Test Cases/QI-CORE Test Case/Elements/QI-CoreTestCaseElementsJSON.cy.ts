@@ -341,7 +341,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
     })
 
-    it.only('Edit current test case to add an additional race, when the user has had the measure shared with them. The edit contains DOB, Gender, Race, and Ethnicity data.', () => {
+    it('Edit current test case to add an additional race, when the user has had the measure shared with them. The edit contains DOB, Gender, Race, and Ethnicity data.', () => {
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
