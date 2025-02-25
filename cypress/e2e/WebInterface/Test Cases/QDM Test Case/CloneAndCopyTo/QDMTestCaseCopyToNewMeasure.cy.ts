@@ -16,9 +16,9 @@ const originalMeasure = {
 const measureName = 'QDMCopyTo' + now
 const cqlLibraryName = 'QDMCopyToLib' + now
 const testCase: TestCase = {
-    title: 'AllLabTestsAfterEncReleventDateTime',
+    title: '1LabAfterMP2LabDuringMP',
     description: 'any value',
-    group: 'NumPass'
+    group: 'NUMFail'
 }
 const existingMeasureCql = QdmCql.stiForPeopleWithHIV.replace('HIVSTITesting', measureName)
 const basicCql = QdmCql.QDMSimpleCQL.replace('ProportionPatient1689182327602', measureName)
@@ -205,7 +205,7 @@ describe('Copy to new measure - partial success case', () => {
     }
     const measure2Options: CreateMeasureOptions = {
         measureCql: basicCql,
-        measureNumber: 2,
+        measureNumber: 1,
         measureScoring: 'Cohort',
         patientBasis: true
     }
@@ -217,9 +217,9 @@ describe('Copy to new measure - partial success case', () => {
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23', 'boolean')
 
         CreateMeasurePage.CreateMeasureAPI('M2' + measureName, 'M2' + cqlLibraryName, SupportedModels.QDM, measure2Options)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23', 'boolean', 2)
-        TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, null, false, false, false, 2)
-        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCase.group, testCase.description, null, false, true, false, 2)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23', 'boolean', 1)
+        TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, null, false, false, false, 1)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCase.group, testCase.description, null, false, true, false, 1)
 
         OktaLogin.Login()
     })
@@ -228,7 +228,7 @@ describe('Copy to new measure - partial success case', () => {
     
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
-        Utilities.deleteMeasure('M2' + measureName, 'M2' + cqlLibraryName, false, false, 2)
+        Utilities.deleteMeasure('M2' + measureName, 'M2' + cqlLibraryName, false, false, 1)
     })
 
 
