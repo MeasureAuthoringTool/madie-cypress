@@ -951,7 +951,7 @@ export class TestCasesPage {
         return user
     }
 
-    public static ImportTestCaseFile(TestCaseFile: string | string[]): void {
+    public static ImportTestCaseFile(TestCaseFile: string): void {
 
         //Upload valid Json file
         cy.get(this.testCaseFileImport).attachFile(TestCaseFile)
@@ -960,17 +960,13 @@ export class TestCasesPage {
 
         //Save uploaded Test case
         cy.get(this.editTestCaseSaveButton).click({ force: true })
+        Utilities.waitForElementDisabled(this.editTestCaseSaveButton, 6500)
     }
 
-    public static ValidateValueAddedToTestCaseJson(ValueToBeAdded: string | string[]): void {
+    public static ValidateValueAddedToTestCaseJson(ValueToBeAdded: string): void {
 
-        cy.get(this.aceEditor).should('exist')
-        cy.get(this.aceEditor).should('be.visible')
-        /*
-            this wait needs to be here so that CQL document can load
-            if we really need to optimize, need to find the URL for a cy.intercept()
-        */
-        Utilities.waitForElementVisible(this.aceEditor, 50000)
+        cy.get(this.aceEditor).type('{command}f')
+        cy.get('input.ace_search_field').first().type(ValueToBeAdded)
 
         cy.get(this.aceEditor).invoke('text').then(
             (text) => {
