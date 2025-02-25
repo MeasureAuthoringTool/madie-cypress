@@ -38,7 +38,7 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
 
         //Create QDM Measure, PC and Test Case with ALT user
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, 'Ratio', false, measureQDMCQL, null, true)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population')
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, true, 'Initial Population', 'Initial Population', 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, true)
         OktaLogin.Login()
     })
