@@ -13,9 +13,9 @@ const now = Date.now()
 const measure = {
     name: 'ObsExpValuesMeasure' + now,
     libName: 'ObsExpValuesLib' + now,
-    model: SupportedModels.qiCore4,
-    cql: MeasureCQL.measureCQL_5138_test
+    model: SupportedModels.qiCore4
 }
+const cql = MeasureCQL.measureCQL_5138_test.replace('Library4969', measure.name)
 const testCase = {
     title: 'Title for Auto Test',
     description: 'tc1',
@@ -35,7 +35,7 @@ describe('Ratio based measure with measure observations', () => {
 
     beforeEach('Create Measure, Test Case and login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measure.name, measure.libName, measure.model, { measureCql: measure.cql })
+        CreateMeasurePage.CreateMeasureAPI(measure.name, measure.libName, measure.model, { measureCql: cql })
        
         // all these declared values need to match your CQL definitions and functions
         const obs1: MeasureObservations = {
@@ -136,7 +136,7 @@ describe('Proportion based measure with no observations', () => {
 
     beforeEach('Create Measure, Test Case and login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measure.name, measure.libName, measure.model, { measureCql: measure.cql })
+        CreateMeasurePage.CreateMeasureAPI(measure.name, measure.libName, measure.model, { measureCql: cql })
        
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.encounter, MeasureScoring.Proportion, pops)
 

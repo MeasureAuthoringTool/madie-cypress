@@ -734,6 +734,44 @@ export class MeasureGroupPage {
             numeratorObservation.criteriaReference = numUuid
             observations.push(numeratorObservation)
         }
+        let popsArray = [
+            {
+                "id": uuidv4(),
+                "name": "initialPopulation",
+                "definition": populations.initialPopulation
+            },
+            {
+                "id": denomUuid,
+                "name": "denominator",
+                "definition": populations.denominator
+            },
+            {
+                "id": numUuid,
+                "name": "numerator",
+                "definition": populations.numerator
+            },
+        ]
+        if (populations.denomExclusion) {
+            popsArray.push({
+                "id": uuidv4(),
+                "name": "denominatorExclusion",
+                "definition": populations.denomExclusion
+            })
+        }
+        if (populations.numExclusion) {
+            popsArray.push({
+                "id": uuidv4(),
+                "name": "numeratorExclusion",
+                "definition": populations.numExclusion
+            })
+        }
+        if (populations.denomException) {
+            popsArray.push({
+                "id": uuidv4(),
+                "name": "denominatorException",
+                "definition": populations.denomException
+            })
+        }
 
         if (altUser) {
             cy.setAccessTokenCookieALT()
@@ -756,38 +794,8 @@ export class MeasureGroupPage {
                         "id": fileContents,
                         "scoring": scoring,
                         "populationBasis": populationBasis,
-                        "populations": [
-                            {
-                                "id": uuidv4(),
-                                "name": "initialPopulation",
-                                "definition": populations.initialPopulation
-                            },
-                            {
-                                "id": denomUuid,
-                                "name": "denominator",
-                                "definition": populations.denominator
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "denominatorExclusion",
-                                "definition": populations.denomExclusion ? populations.denomExclusion : null
-                            },
-                            {
-                                "id": numUuid,
-                                "name": "numerator",
-                                "definition": populations.numerator
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "numeratorExclusion",
-                                "definition": populations.numExclusion ? populations.numExclusion : null
-                            },
-                            {
-                                "id": uuidv4(),
-                                "name": "denominatorException",
-                                "definition": populations.denomException ? populations.denomException : null
-                            }
-                        ],
+                        "populations": popsArray
+                          ,
                         "measureGroupTypes": [
                             measureType
                         ],
