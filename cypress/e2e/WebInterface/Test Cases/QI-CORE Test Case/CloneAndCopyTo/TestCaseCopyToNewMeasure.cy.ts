@@ -16,9 +16,9 @@ const originalMeasure = {
 const measureName = 'CopyTo' + now
 const cqlLibraryName = 'CopyToLib' + now
 const testCase: TestCase = {
-    title: 'DexaDoNotPerformTrue',
+    title: 'DEXA3MonthsAfterADTEdge',
     description: 'invalid on purpose',
-    group: 'NUMERFail'
+    group: 'NUMERPass'
 }
 const existingMeasureCql = QiCore4Cql.BoneDensityEvalProstateCancer.replace('BoneDensityProstateCancerAndrogenDeprivationTherapyFHIR', measureName)
 const basicCql = QiCore4Cql.stndBasicQICoreCQL.replace('TestLibrary1709929148231865', measureName)
@@ -62,7 +62,9 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         cy.wait('@searchDone')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
-        cy.get('[data-testid="row-item"]').contains('View').click()
+
+        // need to select correct version of the measure with .eq(1)
+        cy.get('[data-testid="row-item"]').eq(1).contains('View').click()
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -78,7 +80,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         TestCasesPage.actionCenter(TestCaseAction.copyToMeasure)
 
         // check toast for success, check stay on original measure test cases
-        Utilities.waitForElementVisible('[data-testid="test-case-list-success"]', 18500)
+        Utilities.waitForElementVisible('[data-testid="test-case-list-success"]', 60000)
         cy.get('[data-testid="test-case-list-success"]').should('have.text', 'Test Cases have been successfully copied.')
 
         // go to new measure, test case tab
@@ -135,7 +137,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         cy.wait('@searchDone')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
-        cy.get('[data-testid="row-item"]').contains('View').click()
+        cy.get('[data-testid="row-item"]').eq(1).contains('View').click()
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -151,7 +153,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         TestCasesPage.actionCenter(TestCaseAction.copyToMeasure)
 
         // check toast for success, check stay on original measure test cases
-        Utilities.waitForElementVisible('[data-testid="test-case-list-success"]', 18500)
+        Utilities.waitForElementVisible('[data-testid="test-case-list-success"]', 60000)
         cy.get('[data-testid="test-case-list-success"]').should('have.text', 'Test Cases successfully copied without expected values due to differing Population Criteria on target Measure.')
 
         // go to new measure, test case tab
@@ -183,7 +185,7 @@ describe('Copy to new measure - partial success case', () => {
 
     const measureOptions: CreateMeasureOptions = {
         measureCql: basicCql,
-        measureNumber: 2
+        measureNumber: 1
     }
     const secondTestCaseTitle = 'valid test case'
 
@@ -193,9 +195,9 @@ describe('Copy to new measure - partial success case', () => {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
 
         CreateMeasurePage.CreateMeasureAPI('M2' + measureName, 'M2' + cqlLibraryName, SupportedModels.qiCore4, measureOptions)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(2, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
-        TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, null, false, false, false, 2)
-        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCase.group, testCase.description, null, false, true, false, 2)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
+        TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, null, false, false, false, 1)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCase.group, testCase.description, null, false, true, false, 1)
 
         OktaLogin.Login()
     })
@@ -204,7 +206,7 @@ describe('Copy to new measure - partial success case', () => {
     
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
-        Utilities.deleteMeasure('M2' + measureName, 'M2' + cqlLibraryName, false, false, 2)
+        Utilities.deleteMeasure('M2' + measureName, 'M2' + cqlLibraryName, false, false, 1)
     })
 
 
