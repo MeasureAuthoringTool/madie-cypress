@@ -498,7 +498,6 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.includesTab).click()
         cy.get('[data-testid="cql-builder-errors"]').should('contain.text', 'Unable to retrieve CQL builder lookups. Please verify CQL has no errors. If CQL is valid, please contact the help desk.')
 
-        cy.pause()
         //Navigate to Saved Parameters tab
         cy.get(CQLEditorPage.savedLibrariesTab).click().should('contain.text', 'Saved Libraries (0)')
         cy.get('[class="Results___StyledTd-sc-18pioce-0 cBTZQp"]').should('contain.text', 'No Results were found')
