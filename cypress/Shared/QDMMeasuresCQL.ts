@@ -321,7 +321,14 @@ export class QdmCql {
         'code "Birth date": \'21112-8\' from "LOINC" display \'Birth date\'\n' +
         'parameter "Measurement Period" Interval<DateTime>\n' +
         'context Patient\n' +
-        standardSdeBlock +
+        'define \"SDE Ethnicity\":\n' +
+        '  [\"Patient Characteristic Ethnicity\": \"Ethnicity\"]\n\n' +
+        'define \"SDE Payer\":\n' +
+        '  [\"Patient Characteristic Payer\": \"Payer\"]\n\n' +
+        'define \"SDE Race\":\n' +
+        '  [\"Patient Characteristic Race\": \"Race\"]\n\n' +
+        'define \"SDE Sex\":\n' +
+        '  [\"Patient Characteristic Sex\": \"ONC Administrative Sex\"]\n\n' +
         'define "Initial Population":\n' +
         '  ["Adverse Event": "Encounter Inpatient"] //Adverse Event\n' +
         '      union ["Allergy/Intolerance": "Observation Services"] //Allergy\n' +
@@ -695,7 +702,14 @@ export class QdmCql {
         '\t  "Inpatient Encounters"\n\n' +
         'define "Numerator":\n' +
         '\t  "Initial Population"\n\n' +
-        standardSdeBlock +
+        'define \"SDE Ethnicity\":\n' +
+        '  [\"Patient Characteristic Ethnicity\": \"Ethnicity\"]\n\n' +
+        'define \"SDE Payer\":\n' +
+        '  [\"Patient Characteristic Payer\": \"Payer\"]\n\n' +
+        'define \"SDE Race\":\n' +
+        '  [\"Patient Characteristic Race\": \"Race\"]\n\n' +
+        'define \"SDE Sex\":\n' +
+        '  [\"Patient Characteristic Sex\": \"ONC Administrative Sex\"]\n\n' +
         'define "SDE Results":\n' +
         '  {\n' +
         '  // First physical exams\n' +
@@ -776,7 +790,14 @@ export class QdmCql {
         'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n\n' +
         'parameter "Measurement Period" Interval<DateTime>\n' +
         'context Patient\n' +
-        standardSdeBlock +
+        'define \"SDE Ethnicity\":\n' +
+        '  [\"Patient Characteristic Ethnicity\": \"Ethnicity\"]\n\n' +
+        'define \"SDE Payer\":\n' +
+        '  [\"Patient Characteristic Payer\": \"Payer\"]\n\n' +
+        'define \"SDE Race\":\n' +
+        '  [\"Patient Characteristic Race\": \"Race\"]\n\n' +
+        'define \"SDE Sex\":\n' +
+        '  [\"Patient Characteristic Sex\": \"ONC Administrative Sex\"]\n\n' +
         'define "ipp":\n' +
         '\ttrue\n' +
         'define "d":\n' +

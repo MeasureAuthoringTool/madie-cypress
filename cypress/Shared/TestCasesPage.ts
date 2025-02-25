@@ -173,6 +173,7 @@ export class TestCasesPage {
     public static readonly qdmManifestSelectDropDownBox = '[id="manifest-select"]'
     public static readonly qdmManifestFirstOption = '[data-value="ecqm-update-4q2017-eh"]'
     public static readonly qdmManifestMaySecondOption = '[data-value="ecqm-update-2024-05-02"]'
+    public static readonly qdmMantifestMayFailTestOption = '[data-testid="manifest-option-ecqm-update-2022-05-05"]'
     public static readonly qdmManifestSaveBtn = '[data-testid="manifest-expansion-save-button"]'
     public static readonly qdmManifestDiscardBtn = '[data-testid="manifest-expansion-discard-changes-button"]'
     public static readonly qdmManifestSuccess = '[data-testid="manifest-expansion-success-text"]'
@@ -493,7 +494,7 @@ export class TestCasesPage {
         let testCaseId: string
         const testCaseIdPath = 'cypress/fixtures/testCaseId'
 
-       cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
+        cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
             .parent('tr')
             .find('button.qpp-c-button')
             .invoke('attr', 'data-testid')
@@ -1031,7 +1032,7 @@ export class TestCasesPage {
                 break
 
             case TestCaseAction.copyToMeasure:
-                
+
                 cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled').click()
 
                 cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {

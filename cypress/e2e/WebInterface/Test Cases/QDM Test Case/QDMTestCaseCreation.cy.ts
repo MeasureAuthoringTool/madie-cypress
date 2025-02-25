@@ -282,18 +282,16 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
             .find('[type="radio"]')
             .then((radio) => {
-                //check / select radio button for manifest
-                cy.wrap(radio).eq(1).check({ force: true }).should('be.checked');
-                cy.contains('[id="manifest-select-label"]', 'Manifest');
 
-                cy.get(TestCasesPage.qdmManifestSelectDropDownBox).click()
-                cy.get(TestCasesPage.qdmManifestMaySecondOption).click()
-                cy.get(TestCasesPage.qdmManifestSaveBtn).click()
-                cy.get(TestCasesPage.qdmManifestSuccess).should('contain.text', 'Expansion details Updated Successfully')
+                //check / select radio button for the value of 'Latest'
+                cy.wrap(radio).eq(0).check({ force: true }).should('be.checked');
+                cy.contains('[data-testid="manifest-expansion-radio-buttons-group"] > :nth-child(1) > .MuiTypography-root', 'Latest');
 
+                cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('not.exist')
+
+                // Verify that first radio button is no longer checked
+                cy.wrap(radio).eq(1).should('not.be.checked');
             })
-        //confirm that manifest drop down has selected value
-        cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('contain.text', 'ecqm-update-2024-05-02')
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -447,22 +445,20 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
             .find('[type="radio"]')
             .then((radio) => {
-                //confirm that initial value is set to 'Manifest'
-                cy.wrap(radio).eq(1).should('be.checked');
+                //check / select radio button for manifest
+                cy.wrap(radio).eq(1).check({ force: true }).should('be.checked');
                 cy.contains('[id="manifest-select-label"]', 'Manifest');
 
-                //check / select radio button for the value of 'Latest'
-                cy.wrap(radio).eq(0).check({ force: true }).should('be.checked');
-                cy.contains('[data-testid="manifest-expansion-radio-buttons-group"] > :nth-child(1) > .MuiTypography-root', 'Latest');
+                cy.get(TestCasesPage.qdmManifestSelectDropDownBox).click()
+                cy.get(TestCasesPage.qdmMantifestMayFailTestOption).click()
+                cy.get(TestCasesPage.qdmManifestSaveBtn).click()
+                cy.get(TestCasesPage.qdmManifestSuccess).should('contain.text', 'Expansion details Updated Successfully')
 
-                cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('not.exist')
-
-                // Verify that first radio button is no longer checked
-                cy.wrap(radio).eq(1).should('not.be.checked');
             })
-        cy.get(TestCasesPage.qdmManifestSaveBtn).click()
-        cy.get(TestCasesPage.qdmManifestSuccess).should('contain.text', 'Expansion details Updated Successfully')
+
         Utilities.waitForElementToNotExist(TestCasesPage.qdmManifestSuccess, 25000)
+        //confirm that manifest drop down has selected value
+        cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('contain.text', 'ecqm-update-2022-05-05')
         cy.reload()
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
