@@ -3,6 +3,11 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 import { v4 as uuidv4 } from 'uuid'
 
+export enum EditLibraryActions {
+
+    delete
+}
+
 
 export class CQLLibraryPage {
     public static readonly measureCQLGenericErrorsList = '[data-testid="generic-errors-text-list"]'
@@ -18,6 +23,7 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryNameTextbox = '[data-testid="cql-library-name-text-field-input"]'
     public static readonly cqlLibraryModelDropdown = '[data-testid="cql-library-model-select"]'
     public static readonly cqlLibraryStickySave = '[data-testid="cql-library-save-button"]'
+    public static readonly libraryListTitles = '[data-testid="cqlLibrary-list"]'
     public static readonly allLibrariesBtn = '[data-testid="all-cql-libraries-tab"]'
     public static readonly myLibrariesBtn = '[data-testid="my-cql-libraries-tab"]'
     public static readonly LibFilterTextField = '[data-testid="library-filter-input"]'
@@ -51,8 +57,13 @@ export class CQLLibraryPage {
     public static readonly editLibraryOwnershipError = '[id="content"]'
     public static readonly editSavedLibraryAlias = '[data-testid="library-alias-input"]'
 
+    // action center
+    public static readonly actionCenterButton = '[data-testid="action-center-actual-icon"]'
+    public static readonly actionCenterDelete = '[data-testid="DeleteLibrary"]'
+
     //CQL Editor
     public static readonly cqlLibraryEditorTextBox = '.ace_content'
+
     //UMLS Not Logged in Error
     public static readonly umlsErrorMessage = '[data-testid="valueset-error"]'
 
@@ -415,4 +426,30 @@ export class CQLLibraryPage {
             .find('input[type="checkbox"]')
             .check()
     }
+
+    public static actionCenter(action: EditLibraryActions): void {
+
+        cy.get(this.actionCenterButton).click()
+
+        switch (action) {
+
+            case EditLibraryActions.delete: {
+
+                cy.get(this.actionCenterDelete).should('be.visible')
+                cy.get(this.actionCenterDelete).should('be.enabled')
+                cy.get(this.actionCenterDelete).click()
+
+                // confirm we are on deletion modal
+                cy.get('.dialog-warning-action').should('have.text', 'This Action cannot be undone.')
+
+                // click "yes delete"
+                cy.get(this.cqlLibraryDeleteDialogContinueBtn).should('be.visible')
+                cy.get(this.cqlLibraryDeleteDialogContinueBtn).should('be.enabled')
+                cy.get(this.cqlLibraryDeleteDialogContinueBtn).click()
+                break
+            }
+            default: {}
+        }
+    }
+    
 }

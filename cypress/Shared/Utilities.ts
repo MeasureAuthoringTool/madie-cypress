@@ -577,4 +577,42 @@ export class Utilities {
 
         cy.get('thead th').find('input[type="checkbox"]').check()
     }
+
+    public static deleteLibrary(altUser?: boolean, libraryNumber?: number) {
+
+        let libraryPath = 'cypress/fixtures/cqlLibraryId'
+
+        if (altUser) {
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
+            cy.setAccessTokenCookieALT()
+        }
+        else {
+            cy.clearAllCookies()
+            cy.clearLocalStorage()
+            cy.setAccessTokenCookie()
+        }
+
+        if (libraryNumber > 0) {
+            libraryPath = 'cypress/fixtures/cqlLibraryId' + libraryNumber
+        }
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(libraryPath).should('exist').then((id) => {
+                cy.request({
+                    url: '/api/cql-libraries/' + id,
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: 'Bearer ' + accessToken.value
+                    }
+                }).then((response) => {
+                    console.log(response)
+
+                    expect(response.status).to.eql(200)
+                    cy.log('Library Deleted Successfully')
+                })
+            })
+
+        })
+    }
 }
