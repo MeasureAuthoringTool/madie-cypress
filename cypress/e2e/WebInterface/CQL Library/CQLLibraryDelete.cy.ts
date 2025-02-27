@@ -241,7 +241,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
     })
 })
 
-//Skiing until Feature flags 'LibraryListButtons' and 'LibraryListCheckboxes' are removed
+//Skipping until Feature flags 'LibraryListButtons' and 'LibraryListCheckboxes' are removed
 describe.skip('Action Center Buttons - Delete CQL Library', () => {
 
     beforeEach('Set Access Token and Create CQL Library', () => {

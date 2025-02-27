@@ -44,7 +44,7 @@ describe('Add Version to CQL Library', () => {
     })
 })
 
-//Skiing until Feature flags 'LibraryListButtons' and 'LibraryListCheckboxes' are removed
+//Skipping until Feature flags 'LibraryListButtons' and 'LibraryListCheckboxes' are removed
 describe.skip('Action Center Buttons - Add Version to CQL Library', () => {
 
     beforeEach('Create CQL Library and Login', () => {
