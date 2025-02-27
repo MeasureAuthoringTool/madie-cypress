@@ -58,7 +58,7 @@ describe('Delete Library ownership validation', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        Utilities.deleteLibrary()
+        Utilities.deleteLibrary(libraryName)
     })
 
     it('Verify Non Owner can not Delete Library through Action center', () => {

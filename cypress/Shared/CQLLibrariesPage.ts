@@ -17,6 +17,10 @@ export class CQLLibrariesPage {
     public static readonly editCQLLibraryAlertMessage = '.madie-alert'
     public static readonly cqlLibraryDirtyCheck = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-aa4ov7 react-draggable"]'
 
+    //Action Center buttons
+    public static readonly actionCenterDeleteBtn = '[data-testid="delete-action-btn"]'
+    public static readonly actionCenterVersionBtn = '[data-testid="version-action-btn"]'
+    public static readonly actionCenterDraftBtn = '[data-testid="draft-action-btn"]'
 
     public static clickEditforCreatedLibrary(secondLibrary?: boolean): void {
         let filePath = 'cypress/fixtures/cqlLibraryId'
@@ -134,5 +138,46 @@ export class CQLLibrariesPage {
                 default: { }
             }
         })
+    }
+
+    public static cqlLibraryActionCenter(action: string, libraryNumber?: number): void {
+
+        if ((libraryNumber === undefined) || (libraryNumber === null)) {
+
+            Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
+            cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        }
+
+        if ((libraryNumber > 0)) {
+
+            Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-' + libraryNumber + '_select"]', 500000)
+            cy.get('[data-testid="cqlLibrary-button-' + libraryNumber + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        }
+
+        switch ((action.valueOf()).toString().toLowerCase()) {
+
+            case 'delete': {
+                cy.get(this.actionCenterDeleteBtn).should('be.visible')
+                cy.get(this.actionCenterDeleteBtn).should('be.enabled')
+                cy.get(this.actionCenterDeleteBtn).click()
+
+                break
+            }
+            case 'version': {
+                cy.get(this.actionCenterVersionBtn).should('be.visible')
+                cy.get(this.actionCenterVersionBtn).should('be.enabled')
+                cy.get(this.actionCenterVersionBtn).click()
+
+                break
+            }
+            case 'draft': {
+                cy.get(this.actionCenterDraftBtn).should('be.visible')
+                cy.get(this.actionCenterDraftBtn).should('be.enabled')
+                cy.get(this.actionCenterDraftBtn).click()
+
+                break
+            }
+            default: { }
+        }
     }
 }
