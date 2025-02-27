@@ -240,3 +240,90 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         })
     })
 })
+
+//Skipping until Feature flags 'LibraryListButtons' and 'LibraryListCheckboxes' are removed
+describe.skip('Action Center Buttons - Delete CQL Library', () => {
+
+    beforeEach('Set Access Token and Create CQL Library', () => {
+
+        CQLLibraryName = 'TestCqlLibrary' + Date.now()
+        cy.setAccessTokenCookie()
+
+        //Create CQL Library
+        CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher, false, false, measureCQLAlt)
+
+    })
+
+    it('Delete CQL Library using Action Centre buttons', () => {
+
+        OktaLogin.Login()
+
+        cy.get(Header.cqlLibraryTab).click()
+        CQLLibrariesPage.cqlLibraryActionCenter('delete')
+
+        Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialog, 50000)
+        cy.get(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn).click()
+
+        Utilities.waitForElementVisible(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox, 50000)
+        cy.get(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox).should('contain.text', 'The Draft CQL Library has been deleted.')
+
+        //verify deleting Library removes it from library list
+        cy.get('.measure-table').should('not.contain', CQLLibraryName)
+
+    })
+
+    it('Non Measure owner unable to Delete CQL Library using Action Center buttons', () => {
+
+        OktaLogin.AltLogin()
+
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+
+        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 600000)
+        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+
+        //Verify that the Delete button is disabled for Non Measure owner
+        cy.get(CQLLibrariesPage.actionCenterDeleteBtn).should('be.visible')
+        cy.get(CQLLibrariesPage.actionCenterDeleteBtn).should('be.disabled')
+
+        Utilities.deleteLibrary(CQLLibraryName)
+
+    })
+
+    it('Unable to Delete Versioned CQL Library using Action Centre buttons', () => {
+
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        //Version CQL Library
+        cy.setAccessTokenCookie()
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
+                cy.request({
+                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
+                    method: 'PUT',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    }
+
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.version).to.eql("1.0.000")
+
+                })
+
+            })
+        })
+
+        OktaLogin.Login()
+        cy.get(Header.cqlLibraryTab).click()
+        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 600000)
+        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+
+        //Verify that the Delete button is disabled for Versioned Measures
+        cy.get(CQLLibrariesPage.actionCenterDeleteBtn).should('be.visible')
+        cy.get(CQLLibrariesPage.actionCenterDeleteBtn).should('be.disabled')
+
+        //Draft button should be enabled for Versioned Measures
+        cy.get(CQLLibrariesPage.actionCenterDraftBtn).should('be.enabled')
+    })
+})
