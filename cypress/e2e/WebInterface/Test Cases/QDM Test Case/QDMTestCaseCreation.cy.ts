@@ -7,7 +7,8 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { QDMElements } from "../../../../Shared/QDMElements";
+import { QDMElements } from "../../../../Shared/QDMElements"
+import { umlsLoginForm } from "../../../../Shared/umlsLoginForm"
 
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
@@ -189,7 +190,7 @@ describe('Validating the Elements section on Test Cases', () => {
         cy.get(TestCasesPage.ExpandedOSSDetailCard).find(TestCasesPage.ExpandedOSSDetailCardTabAttributes).should('exist')
 
         //close the detail card
-        cy.get('[data-testid="CloseIcon"]').click()
+        cy.get(umlsLoginForm.closeGenericError).click()
         //cards under Encounter appear
         cy.get(TestCasesPage.EncounterOSCard).should('be.visible')
         cy.get(TestCasesPage.EncounterEDVCard).should('be.visible')
@@ -371,10 +372,10 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get('[data-testid="integer-input-field-Rank"]').type('1')
         cy.get(TestCasesPage.addAttribute).click()
         //Close the Element
-        cy.get('[data-testid="CloseIcon"]').scrollIntoView()
+        cy.get(umlsLoginForm.closeGenericError).scrollIntoView()
         cy.scrollTo(100, 0)
-        Utilities.waitForElementVisible('[data-testid="CloseIcon"]', 35000)
-        cy.get('[data-testid="CloseIcon"]').click()
+        Utilities.waitForElementVisible(umlsLoginForm.closeGenericError, 35000)
+        cy.get(umlsLoginForm.closeGenericError).click()
         //save changes
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')

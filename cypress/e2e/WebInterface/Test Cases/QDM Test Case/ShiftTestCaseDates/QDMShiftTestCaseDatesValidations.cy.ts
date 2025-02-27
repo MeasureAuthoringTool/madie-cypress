@@ -10,6 +10,7 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { QDMElements } from "../../../../../Shared/QDMElements"
 import { Header } from "../../../../../Shared/Header"
 import { LandingPage } from "../../../../../Shared/LandingPage"
+import { umlsLoginForm } from "../../../../../Shared/umlsLoginForm"
 
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 const now = Date.now()
@@ -69,10 +70,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         Utilities.waitForElementVisible('[data-testid="add-negation-rationale"]', 35000)
         cy.get('[data-testid="add-negation-rationale"]').click()
         //Close the Element
-        cy.get('[data-testid="CloseIcon"]').scrollIntoView()
+        cy.get(umlsLoginForm.closeGenericError).scrollIntoView()
         cy.scrollTo(100, 0)
-        Utilities.waitForElementVisible('[data-testid="CloseIcon"]', 35000)
-        cy.get('[data-testid="CloseIcon"]').click()
+        Utilities.waitForElementVisible(umlsLoginForm.closeGenericError, 35000)
+        cy.get(umlsLoginForm.closeGenericError).click()
 
         //Element - Encounter:Performed: Nonelective Inpatient Encounter
         cy.get('[data-testid="elements-tab-encounter"]').scrollIntoView().click()
@@ -139,10 +140,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         Utilities.waitForElementVisible('[data-testid="add-negation-rationale"]', 35000)
         cy.get('[data-testid="add-negation-rationale"]').click()
         //Close the Element
-        cy.get('[data-testid="CloseIcon"]').scrollIntoView()
+        cy.get(umlsLoginForm.closeGenericError).scrollIntoView()
         cy.scrollTo(100, 0)
-        Utilities.waitForElementVisible('[data-testid="CloseIcon"]', 35000)
-        cy.get('[data-testid="CloseIcon"]').click()
+        Utilities.waitForElementVisible(umlsLoginForm.closeGenericError, 35000)
+        cy.get(umlsLoginForm.closeGenericError).click()
 
         //Element - Encounter:Performed: Nonelective Inpatient Encounter
         cy.get('[data-testid="elements-tab-encounter"]').scrollIntoView().click()
@@ -406,7 +407,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
 
         //confirm success message
         cy.get(TestCasesPage.tcSaveSuccessMsg, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
- 
+
         //navigate to the edit page for the 2nd test case
         TestCasesPage.clickEditforCreatedTestCase(true)
 
@@ -440,7 +441,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
 
         //confirm success message
         cy.get(TestCasesPage.tcSaveSuccessMsg, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
- 
+
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -479,7 +480,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
 
         //confirm success message
         cy.get(TestCasesPage.tcSaveSuccessMsg, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
- 
+
         //navigate to the edit page for the first test case
         TestCasesPage.clickEditforCreatedTestCase(true)
 
