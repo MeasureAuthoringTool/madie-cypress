@@ -7,7 +7,8 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { QDMElements } from "../../../../../Shared/QDMElements";
+import { QDMElements } from "../../../../../Shared/QDMElements"
+import { umlsLoginForm } from "../../../../../Shared/umlsLoginForm"
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -148,7 +149,7 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         cy.get('[data-testid="add-code-concept-button"]').click()
 
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        cy.get(umlsLoginForm.closeGenericError).click()
 
         //save changes
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
@@ -315,7 +316,7 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         cy.get('[data-testid="add-code-concept-button"]').click()
 
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        cy.get(umlsLoginForm.closeGenericError).click()
 
         //save changes
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')

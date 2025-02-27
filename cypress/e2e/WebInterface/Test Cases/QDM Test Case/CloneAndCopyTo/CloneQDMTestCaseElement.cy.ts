@@ -7,7 +7,8 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { QDMElements } from "../../../../../Shared/QDMElements";
+import { QDMElements } from "../../../../../Shared/QDMElements"
+import { umlsLoginForm } from "../../../../../Shared/umlsLoginForm"
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -147,7 +148,7 @@ describe('Clone QDM Test Case', () => {
         cy.get('[data-testid="add-code-concept-button"]').click()
 
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        cy.get(umlsLoginForm.closeGenericError).click()
 
         //save changes
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
@@ -169,7 +170,7 @@ describe('Clone QDM Test Case', () => {
         QDMElements.addTimingRelevantPeriodDateTime('03/09/2023 08:00 AM', '03/10/2023 08:15 AM')
 
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        cy.get(umlsLoginForm.closeGenericError).click()
 
         //save changes
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
@@ -286,7 +287,7 @@ describe('Clone QDM Test Case', () => {
         cy.get('[data-testid="add-code-concept-button"]').click()
 
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        cy.get(umlsLoginForm.closeGenericError).click()
 
         //save changes
         cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')

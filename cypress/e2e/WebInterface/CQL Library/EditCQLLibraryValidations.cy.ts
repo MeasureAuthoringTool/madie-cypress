@@ -3,6 +3,7 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../Shared/Header"
 import { Utilities } from "../../../Shared/Utilities"
+import { umlsLoginForm } from "../../../Shared/umlsLoginForm"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
@@ -78,7 +79,7 @@ describe('Edit CQL Library validations', () => {
 
         //Assert validation on Publisher field
         cy.get(CQLLibraryPage.cqlLibraryEditPublisher).click()
-        cy.get(CQLLibraryPage.cqlLibraryEditPublisherCloseIcon).eq(0).click()
+        cy.get(umlsLoginForm.closeGenericError).eq(0).click()
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).dblclick()
         cy.get(CQLLibraryPage.cqlLibraryDesc).click()
         cy.get(CQLLibraryPage.cqlLibPubHelperText).should('contain.text', 'Publisher is required.')

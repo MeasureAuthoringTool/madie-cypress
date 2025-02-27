@@ -1,5 +1,6 @@
-import { TestCasesPage } from "./TestCasesPage";
-import { Utilities } from "./Utilities";
+import { TestCasesPage } from "./TestCasesPage"
+import { Utilities } from "./Utilities"
+import { umlsLoginForm } from "./umlsLoginForm"
 
 export class QDMElements {
 
@@ -88,7 +89,7 @@ export class QDMElements {
     public static addTimingPrevalencePeriodDateTime(startDateAndTime: string, endDateAndTime?: string): void {
 
         cy.get(TestCasesPage.prevalencePeriodStartDate).type(startDateAndTime)
-        if (endDateAndTime != null){
+        if (endDateAndTime != null) {
             cy.get(TestCasesPage.prevalencePeriodEndDate).type(endDateAndTime)
         }
 
@@ -135,7 +136,7 @@ export class QDMElements {
 
     public static closeElement(): void {
 
-        cy.get('[data-testid="CloseIcon"]').click()
+        cy.get(umlsLoginForm.closeGenericError).click()
 
     }
 

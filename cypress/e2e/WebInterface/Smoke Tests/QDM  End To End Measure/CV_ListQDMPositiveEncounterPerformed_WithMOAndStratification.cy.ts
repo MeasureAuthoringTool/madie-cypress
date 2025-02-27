@@ -6,8 +6,9 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
-import { QDMElements } from "../../../../Shared/QDMElements";
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { QDMElements } from "../../../../Shared/QDMElements"
+import { umlsLoginForm } from "../../../../Shared/umlsLoginForm"
 
 const now = Date.now()
 const measureName = 'CVWithMOAndStratification' + now
@@ -267,7 +268,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('#quantity-unit-input-quantity').type('d')
         cy.get('[data-testid="add-attribute-button"]').click()
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        cy.get(umlsLoginForm.closeGenericError).click()
 
         //Element - Encounter:Performed:Encounter Inpatient
         cy.get('[data-testid="elements-tab-encounter"]').click()
@@ -286,7 +287,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('#quantity-unit-input-quantity').type('d')
         cy.get('[data-testid="add-attribute-button"]').click()
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        cy.get(umlsLoginForm.closeGenericError).click()
 
         //Element - Encounter, Order Decision to Admit to Hospital Inpatient
         cy.get('[data-testid="elements-tab-encounter"]').click()
@@ -349,7 +350,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         QDMElements.addTimingLocationPeriodDateTime(' ', '01/29/2025 06:15 PM')
         cy.get('[data-testid="add-attribute-button"]').click()
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        cy.get(umlsLoginForm.closeGenericError).click()
 
         //Element - Encounter:Performed:Encounter Inpatient
         cy.get('[data-testid="elements-tab-encounter"]').click()
@@ -362,7 +363,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="code-option-183452005"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        cy.get(umlsLoginForm.closeGenericError).click()
 
         //Element - Encounter: Order: Decision to Admit to Hospital Inpatient
         cy.get('[data-testid="elements-tab-encounter"]').click()
@@ -375,7 +376,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="code-option-10378005"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        cy.get(umlsLoginForm.closeGenericError).click()
 
         //Element - Encounter:Performed:Emergency Department Visit
         cy.get('[data-testid="elements-tab-encounter"]').click()
@@ -399,7 +400,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         QDMElements.addTimingLocationPeriodDateTime(' ', '02/06/2025 08:15 PM')
         cy.get('[data-testid="add-attribute-button"]').click()
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        cy.get(umlsLoginForm.closeGenericError).click()
 
         //Element - Encounter:Performed:Encounter Inpatient
         cy.get('[data-testid="elements-tab-encounter"]').click()
@@ -412,7 +413,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="code-option-183452005"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
         //Close the Element
-        cy.get('[data-testid=CloseIcon]').click()
+        cy.get(umlsLoginForm.closeGenericError).click()
 
         //Element - Assessment: Performed: Emergency Department Evaluation
         cy.get('[data-testid="elements-tab-assessment"]').click()
