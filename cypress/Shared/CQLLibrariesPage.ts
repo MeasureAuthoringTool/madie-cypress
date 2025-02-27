@@ -37,10 +37,37 @@ export class CQLLibrariesPage {
 
             cy.intercept('GET', '/api/cql-libraries/' + fileContents).as('cqlLibrary')
 
-            cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').should('exist')
-            cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=cqlLibrary-button-' + fileContents + ']', 3500)
-            cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').click()
+            cy.get('[data-testid=edit-cql-library-button-' + fileContents + ']').should('exist')
+            cy.get('[data-testid=edit-cql-library-button-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=edit-cql-library-button-' + fileContents + ']', 3500)
+            cy.get('[data-testid=edit-cql-library-button-' + fileContents + ']').click()
+
+            cy.wait('@cqlLibrary').then(({ response }) => {
+                expect(response.statusCode).to.eq(200)
+            })
+
+        })
+    }
+
+    public static clickViewforCreatedLibrary(secondLibrary?: boolean): void {
+        let filePath = 'cypress/fixtures/cqlLibraryId'
+
+        if (secondLibrary === true) {
+            filePath = 'cypress/fixtures/cqlLibraryId2'
+        }
+        //Navigate to CQL Library Page
+        cy.get(Header.cqlLibraryTab).should('exist')
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+
+            cy.intercept('GET', '/api/cql-libraries/' + fileContents).as('cqlLibrary')
+
+            cy.get('[data-testid=view-cql-library-button-' + fileContents + ']').should('exist')
+            cy.get('[data-testid=view-cql-library-button-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=view-cql-library-button-' + fileContents + ']', 3500)
+            cy.get('[data-testid=view-cql-library-button-' + fileContents + ']').click()
 
             cy.wait('@cqlLibrary').then(({ response }) => {
                 expect(response.statusCode).to.eq(200)
