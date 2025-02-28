@@ -118,7 +118,7 @@ describe('Validate CQL Editor tab sticky footer', () => {
 
 })
 
-describe('Measure: CQL Editor', () => {
+describe.only('Measure: CQL Editor', () => {
 
     beforeEach('Create measure and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -354,6 +354,25 @@ describe('Measure: CQL Editor', () => {
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 0:0 | FHIRHelpers is required as an included library for QI-Core. Please add the appropriate version of FHIRHelpers to your CQL.')
     })
 
+    it('FHIRHelpers alias name is defaulted, when CQL has incorrect alias name', () => {
+
+        MeasuresPage.actionCenter('edit')
+
+        CQLEditorPage.clickCQLEditorTab()
+
+        cy.readFile('cypress/fixtures/CQLWithInvalidFHIRHelpersAlias.txt').should('exist').then((fileContents) => {
+            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
+        })
+
+        //save the value in the CQL Editor
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'FHIRHelpers was incorrectly aliased. MADiE has overwritten the alias with \'FHIRHelpers\'.')
+    })
+
     it('Verify error message when CQL is missing keyword "Context"', () => {
 
         MeasuresPage.actionCenter('edit')
@@ -384,13 +403,13 @@ describe('Measure: CQL Editor', () => {
 
     })
 
-    it('FHIRHelpers alias name is defaulted, when CQL has incorrect alias name', () => {
+    it.only('Verify error message when Context is anything except Patient', () => {
 
         MeasuresPage.actionCenter('edit')
 
         CQLEditorPage.clickCQLEditorTab()
 
-        cy.readFile('cypress/fixtures/CQLWithInvalidFHIRHelpersAlias.txt').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/CQLWithPrivateAccessModifier.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
 
@@ -400,7 +419,7 @@ describe('Measure: CQL Editor', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'FHIRHelpers was incorrectly aliased. MADiE has overwritten the alias with \'FHIRHelpers\'.')
+        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Access modifiers like Public and Private can not be used in MADiE.')
     })
 
     it('Verify error message if CQL contains access modifiers like private or public', () => {
