@@ -182,4 +182,28 @@ describe('CQL Library Validations -- User ownership', () => {
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
 
     })
+    it('Owner is not the user and the library details are viewed via a View button and Library cannot be edited', () => {
+        //log in as user that does not own the Library
+        OktaLogin.Login()
+
+        //navigate to the main CQL Library list page
+        cy.get(Header.cqlLibraryTab).should('exist')
+        cy.get(Header.cqlLibraryTab).should('be.visible')
+        cy.get(Header.cqlLibraryTab).click()
+
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
+
+        //ensure we are on the All Libraries tab
+        cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
+        cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
+        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+
+        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
+
+        CQLLibrariesPage.clickViewforCreatedLibrary()
+
+        cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.disabled')
+
+    })
+
 })
