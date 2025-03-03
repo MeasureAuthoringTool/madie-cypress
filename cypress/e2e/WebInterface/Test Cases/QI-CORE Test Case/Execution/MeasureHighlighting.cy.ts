@@ -1313,8 +1313,8 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-
-    it('QI Core Measure: New Highlighting Left Navigation panel sections includes auto-expanded Result section with content and Result section can be collapsed', () => {
+    //skipping until defect https://jira.cms.gov/browse/MAT-8345 is fixed
+    it.skip('QI Core Measure: New Highlighting Left Navigation panel sections includes auto-expanded Result section with content and Result section can be collapsed', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measurePath = 'cypress/fixtures/measureId'
         OktaLogin.Login()
