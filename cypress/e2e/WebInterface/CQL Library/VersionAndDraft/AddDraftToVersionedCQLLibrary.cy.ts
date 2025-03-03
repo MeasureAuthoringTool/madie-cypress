@@ -127,9 +127,29 @@ describe.skip('Action Center Buttons - Add Draft to CQL Library', () => {
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.cqlLibraryActionCenter('draft')
+        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('exist')
+        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.visible')
+        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
+        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).clear().type(updatedCqlLibraryName)
 
-        //Will be un commented once Action center Draft button is functional
-        //Utilities.deleteLibrary(CqlLibraryOne)
+        cy.get(CQLLibrariesPage.createDraftContinueBtn).should('exist')
+        cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
+        cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
+
+        //intercept draft id once library is drafted
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
+        })
+        cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
+        cy.wait('@draft', { timeout: 60000 }).then((request) => {
+            cy.writeFile(filePath, request.response.body.id)
+        })
+        cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
+        cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', 'Draft 1.0.000')
+        cy.log('Draft Created Successfully')
+
+        //Delete Draft Library
+        Utilities.deleteLibrary(updatedCqlLibraryName)
     })
 
     it('Non Measure Owner unable to add Draft to the versioned Library using Action Center Buttons', () => {
@@ -169,5 +189,12 @@ describe.skip('Action Center Buttons - Add Draft to CQL Library', () => {
 
         cy.get(CQLLibrariesPage.actionCenterDraftBtn).should('be.visible')
         cy.get(CQLLibrariesPage.actionCenterDraftBtn).should('be.disabled')
+
+        //Verify that Non Measure owner unable to edit Library
+        CQLLibrariesPage.clickViewforCreatedLibrary()
+        cy.get(CQLLibraryPage.editLibraryOwnershipError).should('contain.text', 'You are not the owner of the CQL Library. Only owner can edit it.')
+        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).should('have.attr', 'disabled', 'disabled')
+        cy.get(CQLLibraryPage.cqlLibraryDesc).should('have.attr', 'disabled', 'disabled')
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.disabled')
     })
 })

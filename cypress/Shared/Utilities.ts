@@ -578,7 +578,7 @@ export class Utilities {
         cy.get('thead th').find('input[type="checkbox"]').check()
     }
 
-    public static deleteLibrary(libraryName: string,altUser?: boolean, libraryNumber?: number) {
+    public static deleteLibrary(libraryName: string, altUser?: boolean, libraryNumber?: number) {
 
         let libraryPath = 'cypress/fixtures/cqlLibraryId'
 
