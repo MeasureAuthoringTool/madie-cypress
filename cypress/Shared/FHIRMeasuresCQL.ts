@@ -809,41 +809,4 @@ export class QiCore6Cql {
     'context Patient\n' +
     'define \"Initial PopulationOne\":\n' +
     '  true\n'
-
-    public static readonly CQL_Dental_Example_Six = 'library ChildrenWhoHaveDentalDecayOrCavitiesFHIR version \'0.0.002\'\n' +
-        'using QICore version \'6.0.0\'\n\n' +
-        'include QICoreCommon version \'3.0.000\' called QICoreCommon\n' +
-        'include FHIRHelpers version \'4.4.000\' called FHIRHelpers\n' +
-        'include SupplementalDataElements version \'4.1.000\' called SDE\n' +
-        'include Hospice version \'7.0.000\' called Hospice\n' +
-        'include Status version \'2.0.000\' called Status\n\n' +
-        'codesystem "LOINC": \'http://loinc.org\'\n' +
-        'codesystem "SNOMEDCT": \'http://snomed.info/sct\'\n\n' +
-        'valueset "Clinical Oral Evaluation": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.125.12.1003\' \n' +
-        'valueset "Dental Caries": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.125.12.1004\' \n' +
-        'valueset "Discharged to Health Care Facility for Hospice Care": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.207\' \n' +
-        'valueset "Discharged to Home for Hospice Care": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.209\' \n' +
-        'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n\n' +
-        'code "Discharge to healthcare facility for hospice care (procedure)": \'428371000124100\' from "SNOMEDCT" display \'Discharge to healthcare facility for hospice care (procedure)\'\n' +
-        'code "Discharge to home for hospice care (procedure)": \'428361000124107\' from "SNOMEDCT" display \'Discharge to home for hospice care (procedure)\'\n' +
-        'code "Hospice care [Minimum Data Set]": \'45755-6\' from "LOINC" display \'Hospice care [Minimum Data Set]\'\n' +
-        'code "Yes (qualifier value)": \'373066001\' from "SNOMEDCT" display \'Yes (qualifier value)\'\n\n' +
-        'parameter "Measurement Period" Interval<DateTime>\n\n' +
-        'context Patient\n\n' +
-        'define "Initial Population":\n' +
-        '    AgeInYearsAt(date from start of "Measurement Period")in Interval[1, 20]\n' +
-        '        and exists ( "Qualifying Encounters" )\n\n' +
-        'define "Qualifying Encounters": \n' +
-        '    (([Encounter: "Clinical Oral Evaluation"]).isEncounterPerformed()) ValidEncounter\n' +
-        '        where ValidEncounter.period.toInterval() during day of "Measurement Period"\n\n' +
-        'define "Denominator":\n' +
-        '  "Initial Population"\n\n' +
-        'define "Denominator Exclusions":\n' +
-        '    Hospice."Has Hospice Services"\n\n' +
-        'define "Numerator":\n' +
-        '   exists ["QICore Condition Problems Health Concerns": "Dental Caries"] DentalCaries\n' +
-        '        where DentalCaries.prevalenceInterval() overlaps "Measurement Period"\n\n' +
-        standardSdeBlock +
-        'define "SDE Eth": \n' +
-        '  SDE."SDE Eth"\n'
 }
