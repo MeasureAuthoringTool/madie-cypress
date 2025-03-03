@@ -1171,8 +1171,8 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    //skipping until defect https://jira.cms.gov/browse/MAT-8345 is fixed
-    it.skip('QI Core Measure: New Highlighting Left Navigation panel is displayed & Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
+
+    it('QI Core Measure: New Highlighting Left Navigation panel is displayed & Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measurePath = 'cypress/fixtures/measureId'
         OktaLogin.Login()
@@ -1313,8 +1313,8 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    //skipping until defect https://jira.cms.gov/browse/MAT-8345 is fixed
-    it.skip('QI Core Measure: New Highlighting Left Navigation panel sections includes auto-expanded Result section with content and Result section can be collapsed', () => {
+
+    it('QI Core Measure: New Highlighting Left Navigation panel sections includes auto-expanded Result section with content and Result section can be collapsed', () => {
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measurePath = 'cypress/fixtures/measureId'
         OktaLogin.Login()
