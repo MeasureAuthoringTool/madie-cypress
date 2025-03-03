@@ -9,7 +9,7 @@ export class CQLLibrariesPage {
     public static readonly versionLibraryRadioButton = '[name="type"]'
     public static readonly createVersionContinueButton = '[data-testid="create-version-continue-button"] > :nth-child(1)'
     public static readonly VersionDraftMsgs = '.MuiAlert-message'
-    public static readonly cqlLibraryVersionList = ':nth-child(1) > :nth-child(3) > p'
+    public static readonly cqlLibraryVersionList = '[data-testid="cqlLibrary-button-0_version"]' //':nth-child(1) > :nth-child(3) > p'
     public static readonly updateDraftedLibraryTextBox = '[data-testid="cql-library-name-input"]'
     public static readonly createDraftContinueBtn = '[data-testid="create-draft-continue-button"]'
     public static readonly versionErrorMsg = '[data-testid=create-version-error-message]'
@@ -105,7 +105,7 @@ export class CQLLibrariesPage {
         cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
 
             let element = cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').parent()
-            element.parent().should('contain', expectedValue).children().eq(2).should('contain', versionNumber)
+            element.parent().should('contain', expectedValue).children().eq(3).should('contain', versionNumber)
         })
     }
 

@@ -68,6 +68,18 @@ describe.skip('Action Center Buttons - Add Version to CQL Library', () => {
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.cqlLibraryActionCenter('version')
 
+        cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('exist')
+        cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('be.enabled')
+        cy.get(CQLLibrariesPage.versionLibraryRadioButton).eq(0).click()
+
+        cy.get(CQLLibrariesPage.createVersionContinueButton).should('exist')
+        cy.get(CQLLibrariesPage.createVersionContinueButton).should('be.visible')
+        cy.get(CQLLibrariesPage.createVersionContinueButton).click()
+        cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New version of CQL Library is Successfully created')
+        CQLLibrariesPage.validateVersionNumber(CqlLibraryOne, versionNumber)
+        cy.log('Version Created Successfully')
+
+
     })
 
     it('Non Measure owner unable to Version CQL Library using Action Center buttons', () => {

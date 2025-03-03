@@ -3,6 +3,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
+import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 
 let CqlLibraryOther = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -22,6 +23,7 @@ describe('Version CQL Library with errors', () => {
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
+        Utilities.deleteLibrary(CqlLibraryOther)
 
     })
 
@@ -37,12 +39,14 @@ describe('Version CQL Library with errors', () => {
         cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', " ELM: 1:3 | Could not resolve identifier SDE in the current library. ELM: 5:13 | Member SDE Sex not found for type null.")
 
-        CQLLibrariesPage.clickVersionforCreatedLibrary()
+        cy.get(Header.cqlLibraryTab).click()
+        CQLLibrariesPage.cqlLibraryActionCenter('version')
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).eq(0).click()
         cy.get(CQLLibrariesPage.versionErrorMsg).should('contain.text', 'Versioning cannot be done as the Cql has errors in it')
 
         //Click on cancel version button
         cy.get(CQLLibrariesPage.versionCancelBtn).click()
+
     })
 
     it('User can not version the CQL library if the CQL has parsing errors', () => {
@@ -52,15 +56,8 @@ describe('Version CQL Library with errors', () => {
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
-        //Clear the text in CQL Library Editor
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-
-        //Add valid CQL
-        Utilities.typeFileContents('cypress/fixtures/EXM124v7QICore4Entry_FHIR.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{home}')
-
         //Add parsing error to the valid CQL
-        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).focused().type('tdysfdfjch')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}').focused().type('tdysfdfjch')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
@@ -78,7 +75,9 @@ describe('Version CQL Library with errors', () => {
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('not.be.empty')
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('not.be.null')
 
-        CQLLibrariesPage.clickVersionforCreatedLibrary()
+        //Navigate to CQL Library tab
+        cy.get(Header.cqlLibraryTab).click()
+        CQLLibrariesPage.cqlLibraryActionCenter('version')
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).eq(0).click()
         cy.get(CQLLibrariesPage.versionErrorMsg).should('contain.text', 'Versioning cannot be done as the Cql has errors in it')
 
