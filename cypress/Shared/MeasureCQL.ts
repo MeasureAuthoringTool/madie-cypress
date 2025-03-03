@@ -43,7 +43,7 @@ export class MeasureCQL {
         'using QICore version \'4.1.1\'\n' +
         '\n' +
         'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-        'include SupplementalDataElements version \'3.1.000\' called SDE\n' +
+        'include SupplementalDataElements version \'3.5.000\' called SDE\n' +
         'include CQMCommon version \'1.0.000\' called CQMCommon \n' +
         'include FHIRCommon version \'4.1.000\' called FHIRCommon\n' +
         '\n' + '\n' +
@@ -2256,7 +2256,7 @@ export class MeasureCQL {
         '/*Note ws 1. 8/09.2023: Negation issue as outlined in BonnieMat-1455 and ticket https://github.com/cqframework/cql-execution/issues/296 */\n' +
 
         'include FHIRHelpers version \'4.2.000\' called FHIRHelpers\n' +
-        'include SupplementalDataElements  version \'3.2.000\' called SDE\n' +
+        'include SupplementalDataElements  version \'3.5.000\' called SDE\n' +
         'include QICoreCommon version \'1.3.000\' called QICoreCommon\n' +
 
         'codesystem "ActCode": \'http://terminology.hl7.org/CodeSystem/v3-ActCode\'  \n' +
@@ -2591,7 +2591,7 @@ export class MeasureCQL {
         '/*Note ws 1. 8/09.2023: Negation issue as outlined in BonnieMat-1455 and ticket https://github.com/cqframework/cql-execution/issues/296 */\n' +
 
         'include FHIRHelpers version \'4.2.000\' called FHIRHelpers\n' +
-        'include SupplementalDataElements  version \'3.2.000\' called SDE\n' +
+        'include SupplementalDataElements  version \'3.5.000\' called SDE\n' +
         'include QICoreCommon version \'1.3.000\' called QICoreCommon\n' +
 
         'codesystem "ActCode": \'http://terminology.hl7.org/CodeSystem/v3-ActCode\'\n' +
