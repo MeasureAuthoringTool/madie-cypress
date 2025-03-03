@@ -96,7 +96,7 @@ export class CQLLibrariesPage {
         //Navigate to CQL Library Page
         cy.get(Header.cqlLibraryTab).click()
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').click()
+            cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').click()
             cy.get('[data-testid="create-new-version-' + fileContents + '-button"]').click()
         })
     }
@@ -116,7 +116,7 @@ export class CQLLibrariesPage {
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
         cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').click()
+            cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').click()
             cy.get('[data-testid="create-new-draft-' + fileContents + '-button"]').click()
         })
     }
@@ -127,24 +127,25 @@ export class CQLLibrariesPage {
         if (secondTestCase === true) {
             filePath = 'cypress/fixtures/cqlLibraryId2'
         }
+        cy.get(Header.cqlLibraryTab).click()
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled')
+            Utilities.waitForElementVisible('[data-testid="edit-cql-library-button-' + fileContents + '"]', 50000)
+            cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid="edit-cql-library-button-' + fileContents + '"]', 50000)
+            cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').should('be.enabled')
             switch ((action.valueOf()).toString().toLowerCase()) {
                 case "edit": {
-                    cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').click()
-                    Utilities.waitForElementVisible('[data-testid="edit-cql-library-button-' + fileContents + '-edit"]', 55000)
-                    cy.get('[data-testid="edit-cql-library-button-' + fileContents + '-edit"]').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid="edit-cql-library-button-' + fileContents + '-edit"]', 55000)
-                    cy.get('[data-testid="edit-cql-library-button-' + fileContents + '-edit"]').should('be.enabled')
-                    cy.get('[data-testid="edit-cql-library-button-' + fileContents + '-edit"]').click()
+                    cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').click()
+                    Utilities.waitForElementVisible('[data-testid="edit-cql-library-button-' + fileContents + '"]', 55000)
+                    cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').should('be.visible')
+                    Utilities.waitForElementEnabled('[data-testid="edit-cql-library-button-' + fileContents + '"]', 55000)
+                    cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').should('be.enabled')
+                    cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').click()
 
                     break
                 }
                 case 'version': {
-                    cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').click()
+                    cy.get('[data-testid="edit-cqlLibrary-button-' + fileContents + '"]').click()
                     Utilities.waitForElementVisible('[data-testid="create-new-version-' + fileContents + '-button"]', 105000)
                     cy.get('[data-testid="create-new-version-' + fileContents + '-button"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="create-new-version-' + fileContents + '-button"]', 105000)
@@ -154,7 +155,7 @@ export class CQLLibrariesPage {
                 }
                 case 'delete': {
                     cy.scrollTo('top')
-                    cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').click()
+                    cy.get('[data-testid="edit-cqlLibrary-button-' + fileContents + '"]').click()
                     Utilities.waitForElementVisible('[data-testid="delete-existing-draft-' + fileContents + '-button"]', 55000)
                     cy.get('[data-testid="delete-existing-draft-' + fileContents + '-button"]').should('be.visible')
                     Utilities.waitForElementEnabled('[data-testid="delete-existing-draft-' + fileContents + '-button"]', 55000)
