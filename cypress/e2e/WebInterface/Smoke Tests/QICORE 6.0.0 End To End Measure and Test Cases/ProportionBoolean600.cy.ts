@@ -12,7 +12,7 @@ const path = require('path')
 
 let measureName = 'ProportionBoolean600' + Date.now()
 let CqlLibraryName = 'ProportionBoolean600' + Date.now()
-const measureCQL = MeasureCQL.CQL_Dental_Example_Six
+const measureCQL = MeasureCQL.CQL_BoneDensity_Proportion_Boolean
 
 describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
@@ -56,7 +56,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Proportion')
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'Denominator Exception')
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
 
         cy.get(MeasureGroupPage.reportingTab).click()
@@ -81,11 +81,11 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join('cypress/fixtures', 'CMS75FHIR-v0.0.002-FHIR6-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join('cypress/fixtures', 'CMS645FHIR-v1.4.000-FHIR6-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
-        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'CMS75FHIR-v0.0.002-FHIR6-TestCases.zip')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'CMS645FHIR-v1.4.000-FHIR6-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
@@ -97,12 +97,12 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '100%')
-        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(20/20)')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(49/49)')
 
         //Verify Coverage percentage
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100%')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '99%')
 
     })
 })
