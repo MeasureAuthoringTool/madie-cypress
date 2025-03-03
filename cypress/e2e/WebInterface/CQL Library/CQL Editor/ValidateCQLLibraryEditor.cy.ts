@@ -261,6 +261,23 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('contain.text', "Access modifiers like Public and Private can not be used in MADiE.")
     })
 
+    it('Verify error message when context is set to anything except Patient', () => {
+        
+        cy.get(Header.cqlLibraryTab).click()
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+        Utilities.typeFileContents('cypress/fixtures/CQLWithPractitionerContext.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
+
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
+
+        //Validate error(s) in CQL Editor window
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
+        cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
+        cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('contain.text', "Parse: 7:20 | Measure Context must be 'Patient'.")
+    })
+
 })
 
 describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {
