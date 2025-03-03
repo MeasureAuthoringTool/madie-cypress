@@ -118,7 +118,7 @@ describe('Validate CQL Editor tab sticky footer', () => {
 
 })
 
-describe.only('Measure: CQL Editor', () => {
+describe('Measure: CQL Editor', () => {
 
     beforeEach('Create measure and login', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -403,13 +403,13 @@ describe.only('Measure: CQL Editor', () => {
 
     })
 
-    it.only('Verify error message when Context is anything except Patient', () => {
+    it('Verify error message when Context is anything except Patient', () => {
 
         MeasuresPage.actionCenter('edit')
 
         CQLEditorPage.clickCQLEditorTab()
 
-        cy.readFile('cypress/fixtures/CQLWithPrivateAccessModifier.txt').should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/CQLWithPractitionerContext.txt').should('exist').then((fileContents) => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
 
@@ -419,7 +419,7 @@ describe.only('Measure: CQL Editor', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Access modifiers like Public and Private can not be used in MADiE.')
+        cy.get(CQLEditorPage.errorMsg).should('contain.text', "Parse: 7:20 | Measure Context must be 'Patient'.")
     })
 
     it('Verify error message if CQL contains access modifiers like private or public', () => {

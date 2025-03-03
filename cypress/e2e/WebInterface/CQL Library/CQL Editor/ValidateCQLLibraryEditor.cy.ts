@@ -261,7 +261,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('contain.text', "Access modifiers like Public and Private can not be used in MADiE.")
     })
 
-    it.only('Verify error message when context is set to anything except Patient', () => {
+    it('Verify error message when context is set to anything except Patient', () => {
         
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
@@ -275,7 +275,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
-        cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('contain.text', "Access modifiers like Public and Private can not be used in MADiE.")
+        cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('contain.text', "Parse: 7:20 | Measure Context must be 'Patient'.")
     })
 
 })

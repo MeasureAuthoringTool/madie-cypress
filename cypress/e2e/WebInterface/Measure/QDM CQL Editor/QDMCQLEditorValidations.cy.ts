@@ -330,7 +330,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Access modifiers like Public and Private can not be used in MADiE.')
     })
 
-    it.only('Verify error message when Context is anything except Patient', () => {
+    it('Verify error message when Context is anything except Patient', () => {
 
         MeasuresPage.actionCenter('edit')
     
@@ -344,7 +344,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.errorMsg).should('contain.text', 'Access modifiers like Public and Private can not be used in MADiE.')
+        cy.get(CQLEditorPage.errorMsg).should('contain.text', "Parse: 0:19 | Measure Context must be 'Patient'.")
     })
 })
 
