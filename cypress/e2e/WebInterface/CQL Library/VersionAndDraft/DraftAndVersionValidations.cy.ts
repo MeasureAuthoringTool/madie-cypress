@@ -88,7 +88,6 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
         CQLLibrariesPage.validateVersionNumber(CqlLibraryOne, versionNumber)
         cy.log('Version Created Successfully')
 
-        //cy.reload()
         CQLLibrariesPage.cqlLibraryActionCenter('draft')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).clear().type(CqlLibraryOther)
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
