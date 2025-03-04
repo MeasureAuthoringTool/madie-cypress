@@ -167,7 +167,7 @@ describe('Remove Test case attribute', () => {
 
         //Commenting until feature flag for JSON tab is removed
         //Navigate to JSON tab and verify the attribute is deleted from tc Json
-        // cy.get(TestCasesPage.tcJsonTab).click()
+        // cy.get(TestCasesPage.jsonTab).click()
         // cy.get(TestCasesPage.qdmTCJson).should('not.contain.text', '"referenceRange"')
         // cy.get(TestCasesPage.qdmTCJson).should('not.contain.text', '"description": "Laboratory Test, Performed: Chlamydia Screening"')
     })

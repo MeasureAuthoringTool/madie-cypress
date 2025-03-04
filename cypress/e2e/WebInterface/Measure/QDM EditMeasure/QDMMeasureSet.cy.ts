@@ -48,7 +48,7 @@ describe('QDM Measure Set', () => {
         //Navigate to Measure set page
         cy.get(EditMeasurePage.leftPanelMeasureSet).click()
         cy.get(EditMeasurePage.measureSetText).type('Measure Set')
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
+        cy.get(Global.DiscardCancelBtn).click()
         Global.clickOnDiscardChanges()
         cy.get(EditMeasurePage.measureSetText).should('be.empty')
     })

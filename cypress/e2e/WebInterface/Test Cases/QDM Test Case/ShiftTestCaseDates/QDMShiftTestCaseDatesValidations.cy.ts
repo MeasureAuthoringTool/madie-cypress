@@ -11,6 +11,7 @@ import { QDMElements } from "../../../../../Shared/QDMElements"
 import { Header } from "../../../../../Shared/Header"
 import { LandingPage } from "../../../../../Shared/LandingPage"
 import { umlsLoginForm } from "../../../../../Shared/umlsLoginForm"
+import { Global } from "../../../../../Shared/Global"
 
 let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 const now = Date.now()
@@ -206,11 +207,11 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.shiftAllTestCaseDates).type('4')
 
         //confirm buttons that appear on page to either discard or save the shift dates
-        Utilities.waitForElementEnabled(TestCasesPage.shiftAllTestCasesDiscardBtn, 3500)
+        Utilities.waitForElementEnabled(Global.DiscardCancelBtn, 3500)
         Utilities.waitForElementEnabled(TestCasesPage.shftAllTestCasesSaveBtn, 3500)
 
         //discard shifting dates
-        cy.get(TestCasesPage.shiftAllTestCasesDiscardBtn).click()
+        cy.get(Global.DiscardCancelBtn).click()
 
         //confirm discarding change on page
         cy.get(TestCasesPage.continueDiscardChangesBtn).click()

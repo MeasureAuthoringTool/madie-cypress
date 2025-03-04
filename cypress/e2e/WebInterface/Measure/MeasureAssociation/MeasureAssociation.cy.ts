@@ -7,6 +7,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../Shared/Header"
+import { Global } from "../../../../Shared/Global"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let measureCQLPFTests = MeasureCQL.CQL_Populations
@@ -440,7 +441,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         MeasuresPage.actionCenter('associatemeasure')
 
         cy.get(EditMeasurePage.associateCmsIdDialog).should('include.text', '0.0.000QI-Core v4.1.1Copy QDM Metadata to QI-Core measure')
-        Utilities.waitForElementVisible(EditMeasurePage.associateCmsCancel, 35000)
+        Utilities.waitForElementVisible(Global.DiscardCancelBtn, 35000)
         Utilities.waitForElementVisible(EditMeasurePage.associateCmsAssociateBtn, 37000)
         cy.get(EditMeasurePage.associateCmsAssociateBtn).click()
         Utilities.waitForElementVisible(EditMeasurePage.sureDialog, 35000)

@@ -48,7 +48,7 @@ describe('QDM Measure Definition', () => {
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelDefinition).click()
         cy.get(EditMeasurePage.definitionInputTextbox).type('Measure Definition')
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
+        cy.get(Global.DiscardCancelBtn).click()
         Global.clickOnDiscardChanges()
 
     })

@@ -5,7 +5,7 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 import { v4 as uuidv4 } from 'uuid'
 
-export enum MeasureType  {
+export enum MeasureType {
     outcome = 'Outcome',
     patientReportedOutcome = 'Patient Reported Outcome',
     process = 'Process',
@@ -219,7 +219,6 @@ export class MeasureGroupPage {
     public static readonly qdmSDERadioButtons = '[data-testid="sde-option-radio-buttons-group"]'
     public static readonly qdmTypeOptionZero = '[id="base-configuration-types-option-0"]'
     public static readonly qdmTypeValuePill = '[class="MuiChip-label MuiChip-labelSmall css-1pjtbja"]'
-    public static readonly qdmDiscardButton = '[data-testid="cancel-button"]'
     public static readonly qdmDirtyCheckDiscardModal = '[data-testid="discard-dialog"]'
     public static readonly qdmDiscardModalContinueButton = '[data-testid="discard-dialog-continue-button"]'
     public static readonly qdmDiscardModalCancelButton = '[data-testid="discard-dialog-cancel-button"]'
@@ -291,9 +290,9 @@ export class MeasureGroupPage {
             }
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
-       // this clears the previous step's dropdown
+        // this clears the previous step's dropdown
         cy.get(this.QDMPopCriteria1Desc).click()
-       
+
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'denom')
@@ -388,7 +387,7 @@ export class MeasureGroupPage {
         cy.get(MeasureGroupPage.reportingTab).click()
         cy.get(MeasureGroupPage.improvementNotationSelect).click()
         cy.contains('Increased score indicates improvement').click()
-        
+
         cy.get(this.saveMeasureGroupDetails).click()
 
         //validation successful save message
@@ -796,7 +795,7 @@ export class MeasureGroupPage {
                         "scoring": scoring,
                         "populationBasis": populationBasis,
                         "populations": popsArray
-                          ,
+                        ,
                         "measureGroupTypes": [
                             measureType
                         ],
