@@ -1,8 +1,8 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
-import {Header} from "../../../../Shared/Header"
-import {Utilities} from "../../../../Shared/Utilities"
+import { Header } from "../../../../Shared/Header"
+import { Utilities } from "../../../../Shared/Utilities"
 
 let CqlLibraryOne = ''
 let updatedCqlLibraryName = ''
@@ -31,7 +31,8 @@ describe('Add Draft to CQL Library', () => {
         updatedCqlLibraryName = 'UpdatedTestLibrary1' + Date.now()
         let filePath = 'cypress/fixtures/cqlLibraryId'
 
-        CQLLibrariesPage.clickVersionforCreatedLibrary()
+        cy.get(Header.cqlLibraryTab).click()
+        CQLLibrariesPage.cqlLibraryActionCenter("version")
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('exist')
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('be.enabled')
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).eq(0).click()
@@ -43,7 +44,7 @@ describe('Add Draft to CQL Library', () => {
         CQLLibrariesPage.validateVersionNumber(CqlLibraryOne, versionNumber)
         cy.log('Version Created Successfully')
 
-        CQLLibrariesPage.clickDraftforCreatedLibrary()
+        CQLLibrariesPage.cqlLibraryActionCenter("draft")
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('exist')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.visible')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
@@ -66,8 +67,9 @@ describe('Add Draft to CQL Library', () => {
         cy.log('Draft Created Successfully')
 
         //navigate into the Library's detail / edit page
-        CQLLibrariesPage.cqlLibraryAction('edit')
-
+        cy.get(Header.cqlLibraryTab).click()
+        //<a tabindex="0" role="tab" aria-selected="true" name="cql-libraries" aria-label="CQL Library" id="cql-library-main-nav-bar-tab" data-testid="main-nav-bar-cql-library" class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary Mui-selected css-1q7l0ib active" href="/cql-libraries" aria-current="page" data-cypress-el="true">Libraries<span class="MuiTouchRipple-root css-w0pj6f"></span></a>
+        CQLLibrariesPage.clickEditforCreatedLibrary()
 
         //confirm that CQL Editor window is not empty
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox)
@@ -80,8 +82,8 @@ describe('Add Draft to CQL Library', () => {
 
 })
 
-//Skipping until Feature flags 'LibraryListButtons' and 'LibraryListCheckboxes' are removed
-describe.skip('Action Center Buttons - Add Draft to CQL Library', () => {
+
+describe('Action Center Buttons - Add Draft to CQL Library', () => {
 
     beforeEach('Create CQL Library and Login', () => {
         //Create CQL Library with Regular User

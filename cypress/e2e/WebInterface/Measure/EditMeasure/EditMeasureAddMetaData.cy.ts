@@ -123,17 +123,17 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
 
-        //commenting out until definition flag is removed
+
         //Definition
-        /*         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
-                cy.get(EditMeasurePage.createDefinitionBtn).click()
-                Utilities.waitForElementVisible(EditMeasurePage.editReferenceModal, 50000)
-                cy.get(EditMeasurePage.definitionTermInput).type('DefinitionTerm')
-                cy.get(EditMeasurePage.definitionInput).type('Definition details for DefinitionTerm')
-                Utilities.waitForElementEnabled(EditMeasurePage.saveButton, 50000)
-                cy.get(EditMeasurePage.saveButton).click()
-                cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).should('include.text', 'DefinitionTermDefinition details for DefinitionTerm')
-                cy.log('Measure Definition added successfully') */
+        cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
+        cy.get(EditMeasurePage.createDefinitionBtn).click()
+        Utilities.waitForElementVisible(EditMeasurePage.editReferenceModal, 50000)
+        cy.get(EditMeasurePage.definitionTermInput).type('DefinitionTerm')
+        cy.get(EditMeasurePage.definitionInput).type('Definition details for DefinitionTerm')
+        Utilities.waitForElementEnabled(EditMeasurePage.saveButton, 50000)
+        cy.get(EditMeasurePage.saveButton).click()
+        cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).should('include.text', 'DefinitionTermDefinition details for DefinitionTerm')
+        cy.log('Measure Definition added successfully')
 
         cy.get(Header.mainMadiePageButton).click()
         //wait until page / tabs loads
@@ -218,29 +218,28 @@ describe('Edit Measure: Add Meta Data', () => {
         })
         cy.log('Measure Clinical Recommendation added successfully')
 
-        //commenting out until definition flag is removed
         //definition
-        /*         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
-                cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find('[class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1ns8gjm"]').should('have.attr', 'aria-label', 'Edit').click()
-                Utilities.waitForElementVisible(EditMeasurePage.editReferenceModal, 50000)
-                cy.get(EditMeasurePage.definitionTermInput).clear().type('DefinitionTermUpdate')
-                cy.get(EditMeasurePage.definitionInput).clear().type('Definition details for DefinitionTerm')
-                Utilities.waitForElementEnabled(EditMeasurePage.saveButton, 50000)
-                cy.get(EditMeasurePage.saveButton).click()
-                cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).should('include.text', 'DefinitionTermUpdateDefinition details for DefinitionTerm')
-                cy.log('Measure Definition updated successfully')
-        
-                //delete definition
-                cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
-                cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find('[class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1tb4h4m"]').should('have.attr', 'aria-label', 'Delete').click()
-                Utilities.waitForElementVisible(EditMeasurePage.defDeleteContinueButton, 50000)
-                cy.get(EditMeasurePage.defDeleteContinueButton).click()
-                Utilities.waitForElementToNotExist
-                cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find(EditMeasurePage.emptyDefinitionVal).should('include.text', 'There are currently no definitions. Click the (Add Term) button above to add one.')
-                cy.log('Measure Definition deleted successfully') */
+        cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
+        cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find('[class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1ns8gjm"]').should('have.attr', 'aria-label', 'Edit').click()
+        Utilities.waitForElementVisible(EditMeasurePage.editReferenceModal, 50000)
+        cy.get(EditMeasurePage.definitionTermInput).clear().type('DefinitionTermUpdate')
+        cy.get(EditMeasurePage.definitionInput).clear().type('Definition details for DefinitionTerm')
+        Utilities.waitForElementEnabled(EditMeasurePage.saveButton, 50000)
+        cy.get(EditMeasurePage.saveButton).click()
+        cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).should('include.text', 'DefinitionTermUpdateDefinition details for DefinitionTerm')
+        cy.log('Measure Definition updated successfully')
+
+        //delete definition
+        cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
+        cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find('[class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1tb4h4m"]').should('have.attr', 'aria-label', 'Delete').click()
+        Utilities.waitForElementVisible(EditMeasurePage.defDeleteContinueButton, 50000)
+        cy.get(EditMeasurePage.defDeleteContinueButton).click()
+        Utilities.waitForElementToNotExist
+        cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find(EditMeasurePage.emptyDefinitionVal).should('include.text', 'There are currently no definitions. Click the (Add Term) button above to add one.')
+        cy.log('Measure Definition deleted successfully')
     })
-    //skipping until definition flag is removed
-    it.skip('Verify alphabetical order and pagination of Measure Definitions', () => {
+
+    it('Verify alphabetical order and pagination of Measure Definitions', () => {
 
         MeasuresPage.actionCenter('edit')
 
@@ -300,6 +299,9 @@ describe('Verify Measure Id and Version Id', () => {
     })
 
     it('Verify that the Measure Id and Version Id are auto generated for new Measures', () => {
+
+        //ensure pages loads all the way
+        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 50000)
 
         //Create New Measure
         CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4)

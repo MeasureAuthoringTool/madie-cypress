@@ -26,7 +26,8 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         //Create New Measure
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
-        CQLLibrariesPage.cqlLibraryAction("edit")
+
+        CQLLibrariesPage.clickEditforCreatedLibrary()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click().type('{moveToEnd}{enter}')
@@ -44,33 +45,23 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled')
-            cy.scrollTo('top')
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').click()
-            Utilities.waitForElementToNotExist('[data-testid="delete-existing-draft-' + fileContents + '-button"]', 55000)
-        })
 
+        Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
+        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+
+        Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
     })
 
     it('Delete test Case - Draft Library - user is the owner of the Library', () => {
 
         cy.get(Header.cqlLibraryTab).click()
-        CQLLibrariesPage.cqlLibraryAction("delete")
+        CQLLibrariesPage.cqlLibraryActionCenter("delete")
 
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialog, 50000)
         //verify cancel and Library remains
         cy.get(CQLLibraryPage.cqlLibraryDeleteDialogCancelBtn).click()
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled')
-        })
-        CQLLibrariesPage.cqlLibraryAction("delete")
+        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        CQLLibrariesPage.cqlLibraryActionCenter("delete")
 
         //verify deleting Library removes it from library list
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialog, 50000)
@@ -79,7 +70,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox, 50000)
         cy.get(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox).should('contain.text', 'The Draft CQL Library has been deleted.')
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementToNotExist('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
+            Utilities.waitForElementToNotExist('[data-testid="edit-cql-library-button-' + fileContents + '"]', 50000)
         })
     })
 
@@ -103,10 +94,10 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         //verify cancel and Library remains
         cy.get(CQLLibraryPage.cqlLibraryDeleteDialogCancelBtn).click()
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled')
+            Utilities.waitForElementVisible('[data-testid="edit-cql-library-button-' + fileContents + '"]', 50000)
+            cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid="edit-cql-library-button-' + fileContents + '"]', 50000)
+            cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').should('be.enabled')
         })
         CQLLibrariesPage.cqlLibraryAction("delete")
 
@@ -117,7 +108,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox, 50000)
         cy.get(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox).should('contain.text', 'The Draft CQL Library has been deleted.')
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementToNotExist('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
+            Utilities.waitForElementToNotExist('[data-testid="edit-cql-library-button-' + fileContents + '"]', 50000)
         })
     })
 
@@ -147,17 +138,10 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').should('be.enabled')
-            cy.scrollTo('top')
-            cy.get('[data-testid="view/edit-cqlLibrary-button-' + fileContents + '"]').click()
-            Utilities.waitForElementToNotExist('[data-testid="delete-existing-draft-' + fileContents + '-button"]', 55000)
-        })
+        Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
 
     })
+
     it('Delete CQL Library - Versioned Library - user is the owner of the Library', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
@@ -241,8 +225,8 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
     })
 })
 
-//Skipping until Feature flags 'LibraryListButtons' and 'LibraryListCheckboxes' are removed
-describe.skip('Action Center Buttons - Delete CQL Library', () => {
+
+describe('Action Center Buttons - Delete CQL Library', () => {
 
     beforeEach('Set Access Token and Create CQL Library', () => {
 

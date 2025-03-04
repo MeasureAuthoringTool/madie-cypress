@@ -1,8 +1,8 @@
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage"
-import {CQLLibrariesPage} from "../../../../Shared/CQLLibrariesPage"
-import {Header} from "../../../../Shared/Header"
-import {Utilities} from "../../../../Shared/Utilities"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
+import { Header } from "../../../../Shared/Header"
+import { Utilities } from "../../../../Shared/Utilities"
 
 let CqlLibraryOne = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -27,8 +27,8 @@ describe('Add Version to CQL Library', () => {
     it('Add Version to the CQL Library', () => {
 
         let versionNumber = '1.0.000'
-
-        CQLLibrariesPage.clickVersionforCreatedLibrary()
+        cy.get(Header.cqlLibraryTab).click()
+        CQLLibrariesPage.cqlLibraryActionCenter("version")
 
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('exist')
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('be.enabled')
@@ -44,8 +44,8 @@ describe('Add Version to CQL Library', () => {
     })
 })
 
-//Skipping until Feature flags 'LibraryListButtons' and 'LibraryListCheckboxes' are removed
-describe.skip('Action Center Buttons - Add Version to CQL Library', () => {
+
+describe('Action Center Buttons - Add Version to CQL Library', () => {
 
     beforeEach('Create CQL Library and Login', () => {
 
