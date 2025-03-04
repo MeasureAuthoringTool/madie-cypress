@@ -79,6 +79,7 @@ export class MeasureGroupPage {
     public static readonly stratTwo = '[id="Stratification-select-2"]'
     public static readonly stratThree = '[id="Stratification-select-3"]'
     public static readonly stratFour = '[id="Stratification-select-4"]'
+    public static readonly stratificationErrorMsg = '[data-testid="association-select-1-helper-text"]'
 
     public static readonly stratAssociationOne = '[id="association-select-1"]'
     public static readonly stratAssociationTwo = '[id="association-select-2"]'
