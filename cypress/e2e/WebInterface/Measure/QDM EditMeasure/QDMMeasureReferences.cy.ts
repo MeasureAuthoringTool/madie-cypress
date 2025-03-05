@@ -4,6 +4,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { Global } from "../../../../Shared/Global"
 
 let randValue = Cypress._.random(100)
 let newMeasureName = ''
@@ -63,7 +64,7 @@ describe('QDM Measure Reference', () => {
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.documentationOption).click()
         cy.get(EditMeasurePage.measureReferenceText).type('Measure Reference')
-        cy.get(EditMeasurePage.measureReferenceDiscardChanges).click()
+        cy.get(Global.DiscardCancelBtn).click()
         cy.get('[data-testid="dialog-form"]').should('not.exist')
     })
 

@@ -7,6 +7,7 @@ import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
+import { Global } from "../../../../../Shared/Global"
 
 const now = Date.now()
 const measureName = 'QiCoreShiftDates' + now
@@ -60,30 +61,30 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
         cy.get(TestCasesPage.testCaseDataSideLink).click()
         Utilities.waitForElementVisible(TestCasesPage.shiftAllTestCaseDates, 3500)
         cy.get(TestCasesPage.shiftAllTestCaseDates).type('4')
-   
+
         //confirm buttons that appear on page to either discard or save the shift dates
-        Utilities.waitForElementEnabled(TestCasesPage.shiftAllTestCasesDiscardBtn, 3500)
+        Utilities.waitForElementEnabled(Global.DiscardCancelBtn, 3500)
         Utilities.waitForElementEnabled(TestCasesPage.shftAllTestCasesSaveBtn, 3500)
-   
+
         //discard shifting dates
-        cy.get(TestCasesPage.shiftAllTestCasesDiscardBtn).click()
-   
+        cy.get(Global.DiscardCancelBtn).click()
+
         //confirm discarding change on page
         cy.get(TestCasesPage.continueDiscardChangesBtn).click()
         //confirm that shift test case text box is empty
         cy.get(TestCasesPage.shiftAllTestCaseDates).should('be.empty')
-   
+
         //enter new value in the shift test case text box
         cy.get(TestCasesPage.shiftAllTestCaseDates).type('3')
-   
+
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shftAllTestCasesSaveBtn, 3500)
         cy.get(TestCasesPage.shftAllTestCasesSaveBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 3500)
-   
+
         //confirm success message
         cy.get(TestCasesPage.shiftAllTestCasesSuccessMsg).should('contain.text', 'All Test Case dates successfully shifted.')
-   
+
         //Validate if the Measurement period start date is updated for first Test case
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {

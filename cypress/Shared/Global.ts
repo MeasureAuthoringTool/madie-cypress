@@ -6,6 +6,7 @@ export class Global {
     public static readonly discardChangesConfirmationModal = '.MuiBox-root'
     public static readonly discardChangesConfirmationText = '.strong'
     public static readonly keepWorkingCancel = '[data-testid="discard-dialog-cancel-button"]'
+    public static readonly DiscardCancelBtn = '[data-testid="cancel-button"]'
 
     public static clickOnDiscardChanges(): void {
 

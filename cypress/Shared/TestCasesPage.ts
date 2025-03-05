@@ -20,9 +20,6 @@ export enum TestCaseAction {
 }
 
 export class TestCasesPage {
-    //QI Core element tab enabled test case detail page elements
-    public static readonly QiCoreEleEnabledJSONTab = '[data-testid="json-tab"]'
-
     //observation fields
     public static readonly denom0Observation = '[id="denominatorObservation0-expected-cb"]'
     public static readonly denom1Observation = '[id="denominatorObservation1-expected-cb"]'
@@ -38,7 +35,6 @@ export class TestCasesPage {
     //QDM Shift Test Case dates
     public static readonly testCaseDataSideLink = '[data-testid="test-case-data"]'
     public static readonly shiftAllTestCaseDates = '[data-testid="shift-test-case-dates-input"]'
-    public static readonly shiftAllTestCasesDiscardBtn = '[data-testid="cancel-button"]'
     public static readonly shftAllTestCasesSaveBtn = '[data-testid="test-case-data-save"]'
     public static readonly shiftAllTestCasesSuccessMsg = '[data-testid="shift-all-test-case-dates-success-text"]'
     public static readonly shiftSpecificTestCaseDates = '[data-testid="shift-dates-input"]'
@@ -163,7 +159,6 @@ export class TestCasesPage {
     public static readonly cqlHasErrorsMsg = '[data-testid="test-case-cql-has-errors-message"]'
     public static readonly detailsTab = '[data-testid="details-tab"]'
     public static readonly tctExpectedActualSubTab = '[data-testid="expectoractual-tab"]'
-    public static readonly tcJsonTab = '[data-testid=json-tab]'
 
     //QDM Test Case
     public static readonly qdmCQLFailureErrorList = '[data-testid="execution_context_loading_errors"]'

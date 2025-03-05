@@ -170,12 +170,12 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.disabled')
 
         //discard button becomes available
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('exist')
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('be.visible')
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('be.enabled')
+        cy.get(Global.DiscardCancelBtn).should('exist')
+        cy.get(Global.DiscardCancelBtn).should('be.visible')
+        cy.get(Global.DiscardCancelBtn).should('be.enabled')
 
         //discard previous entry
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
+        cy.get(Global.DiscardCancelBtn).click()
         cy.get(Global.discardChangesContinue).click()
 
         //verify that empty fields
@@ -194,9 +194,9 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.disabled')
 
         //discard button becomes available
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('exist')
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('be.visible')
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('be.enabled')
+        cy.get(Global.DiscardCancelBtn).should('exist')
+        cy.get(Global.DiscardCancelBtn).should('be.visible')
+        cy.get(Global.DiscardCancelBtn).should('be.enabled')
     })
 
     it('Validate dirty check on Steward & Developers section of Measure Details page', () => {
@@ -228,7 +228,7 @@ describe('Validations on Measure Details page', () => {
         Global.clickOnKeepWorking()
 
         //discard previous entry
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
+        cy.get(Global.DiscardCancelBtn).click()
         cy.get(Global.discardChangesContinue).click()
 
         //verify that empty fields
@@ -331,7 +331,7 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('be.visible')
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).type('Some test value')
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
+        cy.get(Global.DiscardCancelBtn).click()
         Global.clickOnDiscardChanges()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('be.empty')
 
@@ -343,12 +343,12 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('exist')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('be.visible')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('exist')
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('be.visible')
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('be.enabled')
+        cy.get(Global.DiscardCancelBtn).should('exist')
+        cy.get(Global.DiscardCancelBtn).should('be.visible')
+        cy.get(Global.DiscardCancelBtn).should('be.enabled')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('be.disabled')
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).should('be.disabled')
+        cy.get(Global.DiscardCancelBtn).should('be.disabled')
 
         //verify save success message
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('exist')
@@ -395,7 +395,7 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('be.visible')
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).type('Some new test value')
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
+        cy.get(Global.DiscardCancelBtn).click()
         Global.clickOnDiscardChanges()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.text', 'Some test value')
     })
