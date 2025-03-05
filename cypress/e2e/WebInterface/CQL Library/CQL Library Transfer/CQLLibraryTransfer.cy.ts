@@ -84,6 +84,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         OktaLogin.Login()
+        cy.get(Header.cqlLibraryTab).click()
     })
 
     afterEach('LogOut', () => {
@@ -94,7 +95,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
     it('Verify all instances in the Library set (Version and Draft) are Transferred to the new owner', () => {
 
         //Version the CQL Library
-        CQLLibrariesPage.clickVersionforCreatedLibrary()
+        CQLLibrariesPage.cqlLibraryActionCenter("version")
 
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('exist')
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('be.enabled')
