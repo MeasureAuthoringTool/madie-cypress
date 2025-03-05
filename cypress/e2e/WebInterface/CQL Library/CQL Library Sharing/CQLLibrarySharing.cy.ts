@@ -90,6 +90,7 @@ describe('CQL Library Sharing - Multiple instances', () => {
         //set local user that does not own the Library
         cy.setAccessTokenCookie()
         OktaLogin.Login()
+        cy.get(Header.cqlLibraryTab).click()
     })
 
     afterEach('LogOut', () => {
@@ -100,7 +101,7 @@ describe('CQL Library Sharing - Multiple instances', () => {
     it('Verify all instances in the Library set (Version and Draft) are Shared to the new owner', () => {
 
         //Version the CQL Library
-        CQLLibrariesPage.clickVersionforCreatedLibrary()
+        CQLLibrariesPage.cqlLibraryActionCenter("version")
 
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('exist')
         cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('be.enabled')
@@ -114,7 +115,7 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.log('Version Created Successfully')
 
         //Draft the Versioned CQL Library
-        CQLLibrariesPage.clickDraftforCreatedLibrary()
+        CQLLibrariesPage.cqlLibraryActionCenter('draft')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('exist')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.visible')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
