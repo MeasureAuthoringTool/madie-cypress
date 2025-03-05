@@ -109,7 +109,8 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.log('Version Created Successfully')
 
         //Draft the Versioned CQL Library
-        CQLLibrariesPage.clickDraftforCreatedLibrary()
+        CQLLibrariesPage.cqlLibraryActionCenter('draft')
+
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('exist')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.visible')
         cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
