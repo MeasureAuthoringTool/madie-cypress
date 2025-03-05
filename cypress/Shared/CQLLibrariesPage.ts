@@ -92,18 +92,6 @@ export class CQLLibrariesPage {
         })
     }
 
-    public static clickDraftforCreatedLibrary(): void {
-
-        //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').click()
-            cy.get('[data-testid="create-new-draft-' + fileContents + '-button"]').click()
-        })
-    }
-
     public static cqlLibraryAction(action: string, secondTestCase?: boolean): void {
         let filePath = 'cypress/fixtures/cqlLibraryId'
 
