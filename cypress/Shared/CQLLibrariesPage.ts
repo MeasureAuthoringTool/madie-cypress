@@ -9,7 +9,7 @@ export class CQLLibrariesPage {
     public static readonly versionLibraryRadioButton = '[name="type"]'
     public static readonly createVersionContinueButton = '[data-testid="create-version-continue-button"] > :nth-child(1)'
     public static readonly VersionDraftMsgs = '.MuiAlert-message'
-    public static readonly cqlLibraryVersionList = '[data-testid="cqlLibrary-button-0_version"]' //':nth-child(1) > :nth-child(3) > p'
+    public static readonly cqlLibraryVersionList = '[data-testid="cqlLibrary-button-0_version"]'
     public static readonly updateDraftedLibraryTextBox = '[data-testid="cql-library-name-input"]'
     public static readonly createDraftContinueBtn = '[data-testid="create-draft-continue-button"]'
     public static readonly versionErrorMsg = '[data-testid=create-version-error-message]'
@@ -79,25 +79,8 @@ export class CQLLibrariesPage {
     public static validateCQLLibraryName(expectedValue: string): void {
 
         cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
-            let element = cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').parent()
-            element.parent().should('contain', expectedValue)
+            cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').should('contain', expectedValue)
 
-        })
-    }
-
-    public static clickVersionforCreatedLibrary(secondLibrary?: boolean): void {
-
-        let filePath = 'cypress/fixtures/cqlLibraryId'
-
-        if (secondLibrary === true) {
-            filePath = 'cypress/fixtures/cqlLibraryId2'
-        }
-
-        //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).click()
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').click()
-            cy.get('[data-testid="create-new-version-' + fileContents + '-button"]').click()
         })
     }
 
@@ -106,18 +89,6 @@ export class CQLLibrariesPage {
 
             let element = cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').parent()
             element.parent().should('contain', expectedValue).children().eq(3).should('contain', versionNumber)
-        })
-    }
-
-    public static clickDraftforCreatedLibrary(): void {
-
-        //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="edit-cql-library-button-' + fileContents + '"]').click()
-            cy.get('[data-testid="create-new-draft-' + fileContents + '-button"]').click()
         })
     }
 

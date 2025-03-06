@@ -312,9 +312,9 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Details')
 
         //choose cancel
-        cy.get(CQLLibraryPage.savedLibrariesEditDetailsCancelBtn).scrollIntoView()
-        Utilities.waitForElementVisible(CQLLibraryPage.savedLibrariesEditDetailsCancelBtn, 5000)
-        cy.get(CQLLibraryPage.savedLibrariesEditDetailsCancelBtn).click()
+        cy.get(Global.DiscardCancelBtn).scrollIntoView()
+        Utilities.waitForElementVisible(Global.DiscardCancelBtn, 5000)
+        cy.get(Global.DiscardCancelBtn).click()
 
         //confirm that CQL value is the same as it was prior to change and the save button is not available
         cy.reload()

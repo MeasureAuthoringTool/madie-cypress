@@ -15,7 +15,6 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryDeleteDialogContinueBtn = '[data-testid="delete-dialog-continue-button"]'
     public static readonly applyEditsSavedLibraryBtn = '[data-testid="apply-button"]'
     public static readonly cqlLibraryDeleteDialogCancelBtn = '[data-testid="delete-dialog-cancel-button"]'
-    public static readonly savedLibrariesEditDetailsCancelBtn = '[data-testid="cancel-button"]'
     public static readonly cqlLibraryDeleteDialog = '[data-testid="delete-dialog"]'
     public static readonly cqlLibSaveSuccessMessage = '[class="madie-alert success"]'
     public static readonly cqlLibSearchResultsTable = '[data-testid="table-body"]'
@@ -447,8 +446,8 @@ export class CQLLibraryPage {
                 cy.get(this.cqlLibraryDeleteDialogContinueBtn).click()
                 break
             }
-            default: {}
+            default: { }
         }
     }
-    
+
 }

@@ -35,7 +35,6 @@ export class EditMeasurePage {
     //Associate QDM and QI Core measures:
     public static readonly associateCmsIdDialog = '[data-testid="associate-cms-id-dialog-tbl"]'
     public static readonly cpyMetaDataCheckBox = '[data-testid="copy-cms-id-checkbox"]'
-    public static readonly associateCmsCancel = '[data-testid="cancel-button"]'
     public static readonly sureDialog = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-aa4ov7 react-draggable"]'
     public static readonly sureDialogCancelBtn = '[data-testid="associate-cms-identifier-confirmation-dialog-cancel-button"]'
     public static readonly sureDialogContinueBtn = '[data-testid="associate-cms-identifier-confirmation-dialog-continue-button"]'
@@ -101,7 +100,6 @@ export class EditMeasurePage {
     public static readonly saveButton = '[data-testid="save-button"]'
     public static readonly successMessage = '[class="toast success"]'
     public static readonly measureReferenceTable = '[data-testid="measure-references-table-body"]'
-    public static readonly measureReferenceDiscardChanges = '[data-testid="cancel-button"]'
     public static readonly deleteReference = '[data-testid*="delete-measure-reference"]'
     public static readonly editReference = '[data-testid*="edit-measure-reference"]'
 
@@ -130,7 +128,6 @@ export class EditMeasurePage {
     public static readonly cqlEditorSaveButton = '[data-testid="save-cql-btn"]'
     //discard changes
     public static readonly cqlEditorDiscardButton = '[data-testid="reset-cql-btn"]'
-    public static readonly measureDetailsDiscardChangesBtn = '[data-testid="cancel-button"]'
 
     //Delete Measure
     public static readonly deleteMeasureButton = '[data-testid=delete-measure-button]'

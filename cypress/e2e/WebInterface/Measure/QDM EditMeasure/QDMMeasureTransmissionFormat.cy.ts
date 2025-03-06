@@ -49,7 +49,7 @@ describe('QDM Measure: Transmission Format', () => {
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelTransmissionFormat).click()
         cy.get(EditMeasurePage.transmissionFormatDescription).type('Test Transmission format')
-        cy.get(EditMeasurePage.measureDetailsDiscardChangesBtn).click()
+        cy.get(Global.DiscardCancelBtn).click()
         Global.clickOnDiscardChanges()
         cy.get(EditMeasurePage.transmissionFormatDescription).should('be.empty')
     })
