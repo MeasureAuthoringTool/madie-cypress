@@ -89,7 +89,6 @@ describe('Create New Measure', () => {
         cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        // QiCore6 has no default Cql text
-        cy.get(EditMeasurePage.cqlEditorTextBox).should('have.text', '')
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + CqlLibraryName + ' version \'0.0.000\'using QICore version \'6.0.0\'include CQMCommon version \'3.0.000\' called CQMCommoninclude FHIRHelpers version \'4.4.000\' called FHIRHelpersinclude QICoreCommon version \'3.0.000\' called QICoreCommoninclude SupplementalDataElements version \'4.0.000\' called SDEinclude CumulativeMedicationDuration version \'5.0.000\' called CumulativeMedicationDurationparameter "Measurement Period" Interval<DateTime>context Patientdefine "SDE Ethnicity":  SDE."SDE Ethnicity"define "SDE Payer":  SDE."SDE Payer"define "SDE Race":  SDE."SDE Race"define "SDE Sex":  SDE."SDE Sex"')
     })
 })
