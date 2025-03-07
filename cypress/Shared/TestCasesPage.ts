@@ -740,7 +740,8 @@ export class TestCasesPage {
             cy.get(this.detailsTab).click()
 
             //Save edited / updated to test case
-            cy.get(this.editTestCaseSaveButton).click().wait(1500)
+            cy.get(this.editTestCaseSaveButton).click()
+            Utilities.waitForElementDisabled(this.editTestCaseSaveButton, 9500)
             cy.log('JSON added to test case successfully')
 
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')

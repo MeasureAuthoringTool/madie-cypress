@@ -9,41 +9,27 @@ import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
-let measureName = 'TestMeasure' + (Date.now())
-let CqlLibraryName = 'TestLibrary' + (Date.now())
-let measureScoringArray = ['Select', 'Ratio', 'Cohort', 'Continuous Variable', 'Proportion']
-let randValue = null
-
-let testCaseTitle = 'test case title'
-let testCaseDescription = 'DENOMFail' + Date.now()
-let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
-let testCaseSeries = 'SBTestSeries'
-let newMeasureName = ''
-let newCqlLibraryName = ''
-let measureCQL = MeasureCQL.ICFCleanTest_CQL
-let proportionMeasureCQL = MeasureCQL.CQL_Multiple_Populations
+const now = Date.now()
+const measureName = 'TCPopValues' + now
+const CqlLibraryName = 'TCPopValuesLib' + now
+const testCaseTitle = 'test case title'
+const testCaseDescription = 'example'
+const testCaseSeries = 'SBTestSeries'
+const validTestCaseJson = TestCaseJson.TestCaseJson_Valid
+const measureCQL = MeasureCQL.ICFCleanTest_CQL
+const proportionMeasureCQL = MeasureCQL.CQL_Multiple_Populations
 
 describe('Test Case Expected Measure Group population values based on initial measure scoring', () => {
 
     beforeEach('Create measure and login', () => {
-        randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
-
-        randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCqlLibraryName = CqlLibraryName + randValue
-
         OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Verify the Test Case Populations when Measure group is not added', () => {
@@ -59,7 +45,7 @@ describe('Test Case Expected Measure Group population values based on initial me
     it('Validate Population Values check boxes are correct based on measure scoring value that is applied, ' +
         'when the measure is initially created (default measure group)', () => {
 
-            cy.log((measureScoringArray[3].valueOf()).toString())
+            cy.log('Continuous Variable')
 
             //Add Measure Group
             MeasureGroupPage.createMeasureGroupforProportionMeasure()
@@ -93,8 +79,7 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
             cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
             cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
-
-        })
+    })
 
     it('Validate notification that a reset of population values, on test cases, will occur once the completed ' +
         'save / update of the scoring value is executed', () => {
@@ -157,7 +142,7 @@ describe('Test Case Expected Measure Group population values based on initial me
 
             cy.get(MeasureGroupPage.scoreUpdateConfirmModal).should('not.exist')
 
-        })
+    })
 
     it('Validate Population Values are reset on all test cases that exist under a measure group, after the score ' +
         'unit value is saved / updated', () => {
@@ -245,11 +230,11 @@ describe('Test Case Expected Measure Group population values based on initial me
             //change score unit value and save / update measure with new value
             cy.get(EditMeasurePage.measureGroupsTab).click()
             //log, in cypress, the measure score value
-            cy.log((measureScoringArray[2].valueOf()).toString())
+            cy.log('Cohort')
             //select scoring unit on measure
             Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
             //based on the scoring unit value, select a value for all population fields
-            Utilities.validationMeasureGroupSaveAll((measureScoringArray[2].valueOf()).toString())
+            Utilities.validationMeasureGroupSaveAll('Cohort')
             //save measure group
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
             //validation message after attempting to save
@@ -288,7 +273,7 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
             cy.get(TestCasesPage.testCaseIPPExpected).should('be.empty')
 
-        })
+    })
 
     it('Test Case Population value options are limited to those that are defined from Measure Group -- required populations', () => {
 
@@ -312,7 +297,7 @@ describe('Test Case Expected Measure Group population values based on initial me
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        cy.log((measureScoringArray[4].valueOf()).toString())
+        cy.log('Proportion')
         Utilities.setMeasureGroupType()
 
         //select scoring on measure
@@ -378,11 +363,7 @@ describe('Test Case Population dependencies', () => {
 
     before('Create measure and login', () => {
 
-        randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, proportionMeasureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, proportionMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -395,12 +376,8 @@ describe('Test Case Population dependencies', () => {
 
     after('Logout and Clean up Measures', () => {
 
-        randValue = (Math.floor((Math.random() * 1000) + 1))
-        newCqlLibraryName = CqlLibraryName + randValue
-
         OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Verify Test Case population dependencies for Proportion Measures', () => {
@@ -418,7 +395,6 @@ describe('Test Case Population dependencies', () => {
 
         //validation message after attempting to save
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text',
             'Population details for this group updated successfully.')
 
@@ -440,165 +416,85 @@ describe('Test Case Population dependencies', () => {
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-
         cy.get(TestCasesPage.testCaseDENOMExpected).check()
-
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
+
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
 
         cy.log('Uncheck IPP and verify DENOM is unchecked')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-
         cy.get(TestCasesPage.testCaseIPPExpected).uncheck()
-
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.checked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
+
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.be.checked')
 
         //Select DENOM again
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-
         cy.get(TestCasesPage.testCaseDENOMExpected).check()
-
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
+
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
 
         cy.log('Uncheck DENOM and verify IPP is not unchecked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-
         cy.get(TestCasesPage.testCaseDENOMExpected).uncheck()
-
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.be.checked')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
+
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
 
         cy.log('Select Numerator and verify if DENOM and IPP are checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-
         cy.get(TestCasesPage.testCaseNUMERExpected).check()
-
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
+
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
+
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
 
         cy.log('Uncheck DENOM and verify if Numerator is unchecked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
-
         cy.get(TestCasesPage.testCaseDENOMExpected).uncheck()
-
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.be.checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
+
         cy.get(TestCasesPage.testCaseNUMERExpected).should('not.be.checked')
 
         //Check Numerator again
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-
         cy.get(TestCasesPage.testCaseNUMERExpected).check()
-
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         cy.log('Uncheck Numerator and verify if Denom is not unchecked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-
         cy.get(TestCasesPage.testCaseNUMERExpected).uncheck()
-
         cy.get(TestCasesPage.testCaseNUMERExpected).should('not.be.checked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
+
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
 
         //Check Numerator again
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
-
         cy.get(TestCasesPage.testCaseNUMERExpected).check()
-
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         cy.log('Uncheck IPP and verify if DENOM and Numerator are unchecked')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
-
         cy.get(TestCasesPage.testCaseIPPExpected).uncheck()
-
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.be.checked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
+
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.be.checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
+
         cy.get(TestCasesPage.testCaseNUMERExpected).should('not.be.checked')
 
         cy.log('Select Numerator Exclusion and verify IPP, Numerator and Denominator are selected')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.enabled')
-
         cy.get(TestCasesPage.testCaseNUMEXExpected).check()
-
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).should('be.enabled')
+
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('exist')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('be.enabled')
+
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
+
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
     })
-
 })
 
 describe('Test Case Expected Measure Group population values based on initial measure scoring', () => {
 
     beforeEach('Create measure and login', () => {
-        randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -608,15 +504,14 @@ describe('Test Case Expected Measure Group population values based on initial me
         OktaLogin.Logout()
         MeasureGroupPage.CreateRatioMeasureGroupAPI(null, null, null, null, null, 'Procedure')
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
+
     it('Test Case Population value options are limited to those that are defined from Measure Group', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -637,12 +532,11 @@ describe('Test Case Expected Measure Group population values based on initial me
         cy.get(MeasureGroupPage.popBasis).type('Procedure')
         cy.get(MeasureGroupPage.popBasisOption).click()
         //setup measure group so that only the required fields / populations are defined / has values
-        Utilities.validateMeasureGroup(measureScoringArray[1].valueOf().toString(), 'all')
+        Utilities.validationMeasureGroupSaveAll('Ratio')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
 
         //confirm change to Population Criteria
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
