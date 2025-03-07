@@ -138,10 +138,10 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
 
         //add element - code system to TC
         //Element - Encounter:Performed: Observation Services
-        cy.get('[data-testid="elements-tab-encounter"]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Observation Services"]').click()
+        cy.get(TestCasesPage.EncounterElementTab).click()
+        cy.get(TestCasesPage.EncounterOSCard).click()
         QDMElements.addTimingRelevantPeriodDateTime('03/07/2023 08:00 AM', '03/08/2023 08:15 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
         cy.get('[id="code-selector"]').click()
@@ -152,9 +152,9 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         cy.get(umlsLoginForm.closeGenericError).click()
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -168,9 +168,9 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         cy.get(TestCasesPage.testCaseNUMERExpected).check()
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //run test cases
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('exist')
@@ -305,10 +305,10 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
 
         //add element - code system to TC
         //Element - Encounter:Performed: Observation Services
-        cy.get('[data-testid="elements-tab-encounter"]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Observation Services"]').click()
+        cy.get(TestCasesPage.EncounterElementTab).click()
+        cy.get(TestCasesPage.EncounterOSCard).click()
         QDMElements.addTimingRelevantPeriodDateTime('03/07/2023 08:00 AM', '03/08/2023 08:15 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
         cy.get('[id="code-selector"]').click()
@@ -319,9 +319,9 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         cy.get(umlsLoginForm.closeGenericError).click()
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //Add Expected value for Test case
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -338,9 +338,9 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         cy.get(TestCasesPage.testCaseNUMERExpected).eq(1).clear().type('1')
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
 
         //run test cases

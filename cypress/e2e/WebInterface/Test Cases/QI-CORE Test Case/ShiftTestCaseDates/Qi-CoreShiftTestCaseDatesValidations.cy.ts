@@ -161,7 +161,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
         Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 3500)
 
         //confirm success message
-        cy.get(TestCasesPage.shiftSpecificTestCasesSuccessMsg).should('contain.text', 'All Test Case dates successfully shifted.')
+        cy.get(TestCasesPage.TestCasesSuccessMsg).should('contain.text', 'All Test Case dates successfully shifted.')
 
         //Validate if the Measurement period start date is updated for first Test case
         cy.getCookie('accessToken').then((accessToken) => {

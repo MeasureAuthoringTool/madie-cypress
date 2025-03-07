@@ -92,7 +92,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(TestCasesPage.plusIcon).eq(0).click()
 
         //navigating to the attribute sub-tab
-        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
 
         //selecting attribute
         cy.get(TestCasesPage.selectAttributeDropdown).click()
@@ -112,8 +112,8 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(TestCasesPage.addAttribute).click() //click the "Add" button
 
         //save the Test Case
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //Execute test case
@@ -227,7 +227,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(TestCasesPage.plusIcon).eq(0).click()
 
         //navigating to the attribute sub-tab
-        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
 
         //selecting attribute
         cy.get(TestCasesPage.selectAttributeDropdown).click()
@@ -247,8 +247,8 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(TestCasesPage.addAttribute).click() //click the "Add" button
 
         //save the Test Case
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //Navigate to test case page

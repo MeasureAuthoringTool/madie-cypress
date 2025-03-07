@@ -89,7 +89,7 @@ describe('QDM Library Includes fields', () => {
         cy.get('[data-testid="edit-button-0"]').click()
         cy.get('[data-testid="library-alias-input"]').type('VTE')
         cy.get('[data-testid="apply-button"]').click()
-        cy.get('[class="toast success"]').should('contain.text', 'Library UATVTEQDM has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Library UATVTEQDM has been successfully added to the CQL.')
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
@@ -110,7 +110,7 @@ describe('QDM Library Includes fields', () => {
         cy.get('[data-testid="edit-button-0"]').click()
         cy.get('[data-testid="library-alias-input"]').type('VTE')
         cy.get('[data-testid="apply-button"]').click()
-        cy.get('[class="toast success"]').should('contain.text', 'Library UATVTEQDM has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Library UATVTEQDM has been successfully added to the CQL.')
 
         //Apply same Library again
         cy.get('[data-testid="edit-button-0"]').click()

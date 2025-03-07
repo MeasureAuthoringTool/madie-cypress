@@ -639,8 +639,8 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.expectedOrActualTab).click()
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).click()
         //save dob value
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 60000)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 60000)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
         cy.get(TestCasesPage.measureGroup1Label).should('have.color', '#ae1c1c')
@@ -707,8 +707,8 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         cy.get(TestCasesPage.QDMDob).type('01/01/2020 12:00 AM')
 
         //save dob value
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         OktaLogin.Logout()
 

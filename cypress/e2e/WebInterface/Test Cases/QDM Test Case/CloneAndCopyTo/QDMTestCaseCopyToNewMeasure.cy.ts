@@ -47,9 +47,9 @@ describe('Copy test cases from existing measure into new measure', () => {
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description)
         OktaLogin.Login()
     })
-    
+
     afterEach('Logout and Clean up Measures', () => {
-    
+
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
     })
@@ -63,7 +63,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         cy.wait('@searchDone')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
-        
+
         // need to select correct version of the measure with .eq(1)
         cy.get('[data-testid="row-item"]').eq(1).contains('View').click()
 
@@ -81,8 +81,8 @@ describe('Copy test cases from existing measure into new measure', () => {
         TestCasesPage.actionCenter(TestCaseAction.copyToMeasure)
 
         // check toast for success, check stay on original measure test cases
-        Utilities.waitForElementVisible('[data-testid="test-case-list-success"]', 18500)
-        cy.get('[data-testid="test-case-list-success"]').should('have.text', 'Test Cases have been successfully copied.')
+        Utilities.waitForElementVisible(TestCasesPage.TestCasesSuccessMsg, 18500)
+        cy.get(TestCasesPage.TestCasesSuccessMsg).should('have.text', 'Test Cases have been successfully copied.')
 
         // go to new measure, test case tab
         cy.get(Header.mainMadiePageButton).click()
@@ -97,7 +97,7 @@ describe('Copy test cases from existing measure into new measure', () => {
 
         // check title of dup named tc - testCase.title + uuid 
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
-       
+
         // check a copied tc for expected values
         TestCasesPage.grabTestCaseId(31)
         TestCasesPage.clickEditforCreatedTestCase()
@@ -112,7 +112,7 @@ describe('Copy test cases from existing measure into new measure', () => {
     })
 
     it('Measures do not match population criteria - test cases copy but expected values do not', () => {
-        
+
         // change new measure's group config to not match original measure - switch to cohort
         MeasuresPage.actionCenter('edit')
 
@@ -141,7 +141,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 12500)
 
         // start switch to existing measure
-        cy.get(Header.mainMadiePageButton).click()        
+        cy.get(Header.mainMadiePageButton).click()
 
         // switch to all measure tab, search for original measure, view
         cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
@@ -166,8 +166,8 @@ describe('Copy test cases from existing measure into new measure', () => {
         TestCasesPage.actionCenter(TestCaseAction.copyToMeasure)
 
         // check toast for success, check stay on original measure test cases
-        Utilities.waitForElementVisible('[data-testid="test-case-list-success"]', 18500)
-        cy.get('[data-testid="test-case-list-success"]').should('have.text', 'Test Cases successfully copied without expected values due to differing Population Criteria on target Measure.')
+        Utilities.waitForElementVisible(TestCasesPage.TestCasesSuccessMsg, 18500)
+        cy.get(TestCasesPage.TestCasesSuccessMsg).should('have.text', 'Test Cases successfully copied without expected values due to differing Population Criteria on target Measure.')
 
         // go to new measure, test case tab
         cy.get(Header.mainMadiePageButton).click()
@@ -182,7 +182,7 @@ describe('Copy test cases from existing measure into new measure', () => {
 
         // check title of dup named tc - testCase.title + uuid 
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
-       
+
         // check a copied tc for expected values
         TestCasesPage.grabTestCaseId(31)
         TestCasesPage.clickEditforCreatedTestCase()
@@ -212,7 +212,7 @@ describe('Copy to new measure - partial success case', () => {
     const secondTestCaseTitle = 'valid test case'
 
     beforeEach('Create measure, measure group, test case and login', () => {
-    
+
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.QDM, measure1Options)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23', 'boolean')
 
@@ -223,9 +223,9 @@ describe('Copy to new measure - partial success case', () => {
 
         OktaLogin.Login()
     })
-    
+
     afterEach('Logout and Clean up Measures', () => {
-    
+
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
         Utilities.deleteMeasure('M2' + measureName, 'M2' + cqlLibraryName, false, false, 1)
@@ -247,8 +247,8 @@ describe('Copy to new measure - partial success case', () => {
         TestCasesPage.actionCenter(TestCaseAction.copyToMeasure)
 
         // verify toast
-        cy.get('[data-testid="test-case-list-success"]', { timeout: 11500 }).should('have.text', 'Test Cases have been successfully copied.')
-        
+        cy.get(TestCasesPage.TestCasesSuccessMsg, { timeout: 11500 }).should('have.text', 'Test Cases have been successfully copied.')
+
         // go to measure 1, test cases tab
         cy.get(Header.mainMadiePageButton).click()
 

@@ -142,7 +142,7 @@ describe('Practitioner Attribute', () => {
 
         cy.get(TestCasesPage.laboratoryElement).click()
         cy.get(TestCasesPage.plusIcon).eq(1).click()
-        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid=option-Performer]').click()
         cy.get('[id="type-select"]').click()

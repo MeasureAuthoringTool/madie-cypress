@@ -181,7 +181,7 @@ describe('Measure with Negation Rationale', () => {
 
         OktaLogin.Logout()
 
-       // Utilities.deleteMeasure(measureName, CqlLibraryName)
+        // Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('End to End Measure with Negation Rationale', () => {
@@ -275,7 +275,7 @@ describe('Measure with Negation Rationale', () => {
         QDMElements.addTimingRelevantPeriodDateTime('09/30/2011 08:00 AM', '09/30/2011 08:15 AM')
         QDMElements.addCode('SNOMEDCT', '254292007')
         // Enter attribute and its type
-        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid="option-Result"]').click()
         cy.get('[id="type-select"]').click()

@@ -120,7 +120,7 @@ describe('Qi-Core CQL Parameters', () => {
         // assert buttons enable & click clear
         cy.get(CQLEditorPage.applyParametersExpressionButton).should('be.enabled')
         cy.get(CQLEditorPage.clearParametersExpressionButton).should('be.enabled').click()
-        
+
         // assert defaults again
         cy.get(CQLEditorPage.parameterNameTextBox).should('not.have.value')
 
@@ -147,7 +147,7 @@ describe('Qi-Core CQL Parameters', () => {
 
         // enter values
         cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
-        
+
         cy.get(CQLEditorPage.parameterExpressionEditor)
             .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
 
@@ -176,7 +176,7 @@ describe('Qi-Core CQL Parameters', () => {
 
         // add values again
         cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
-        
+
         cy.get(CQLEditorPage.parameterExpressionEditor)
             .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
 
@@ -192,17 +192,17 @@ describe('Qi-Core CQL Parameters', () => {
     })
 
     it('Confirm that Parameter builder checks for duplicates', () => {
-    /*
-        scenario 3: verify duplicate check
-        re-do with same name, check for blue toast
-    */
+        /*
+            scenario 3: verify duplicate check
+            re-do with same name, check for blue toast
+        */
         const paramName = 'NewParameter'
 
         cy.get(CQLEditorPage.parametersTab).click()
 
         // enter values
         cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
-        
+
         cy.get(CQLEditorPage.parameterExpressionEditor)
             .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
 
@@ -214,7 +214,7 @@ describe('Qi-Core CQL Parameters', () => {
 
         // enter values again
         cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
-        
+
         cy.get(CQLEditorPage.parameterExpressionEditor)
             .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
 
@@ -234,7 +234,7 @@ describe('Qi-Core CQL Parameters', () => {
         //Navigate to Saved Parameters tab
         cy.get(CQLEditorPage.savedParametersTab).click()
 
-         Utilities.waitForElementVisible('[data-testid="parameters-row-0"] > :nth-child(1)', 75000)
+        Utilities.waitForElementVisible('[data-testid="parameters-row-0"] > :nth-child(1)', 75000)
         cy.get('[data-testid="parameters-row-0"] > :nth-child(1)').should('contain.text', 'Measurement Period')
 
     })
@@ -253,7 +253,7 @@ describe('Qi-Core CQL Parameters', () => {
 
         //Save
         cy.get(CQLEditorPage.saveParameterBtn).click()
-        cy.get('[class="toast success"]').should('contain.text', 'Parameter Measurement Period has been successfully updated.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Parameter Measurement Period has been successfully updated.')
     })
 
     it('Dirty check pops up when there are changes in CQL and Edit parameters button is clicked', () => {
@@ -322,7 +322,7 @@ describe('Delete Saved Parameters', () => {
 
         // insert parameter to make measure dirty
         const paramName = 'NewParameter'
-        cy.get(CQLEditorPage.parameterNameTextBox).type(paramName) 
+        cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
         cy.get(CQLEditorPage.parameterExpressionEditor)
             .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
         cy.get(CQLEditorPage.applyParametersExpressionButton).click()
@@ -340,9 +340,9 @@ describe('Delete Saved Parameters', () => {
             cy.get(CQLEditorPage.modalConfirmationText).should('have.text', 'You have unsaved changes.Are you sure you want to discard your changes?')
 
             cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
-      
-            cy.get(CQLEditorPage.discardContinueButton).should('be.enabled')    
-            cy.get(CQLEditorPage.discardStayButton).should('be.enabled').click()          
+
+            cy.get(CQLEditorPage.discardContinueButton).should('be.enabled')
+            cy.get(CQLEditorPage.discardStayButton).should('be.enabled').click()
         })
 
         // confirm no action, still 1 saved parameter
@@ -374,14 +374,14 @@ describe('Delete Saved Parameters', () => {
             cy.get(CQLEditorPage.modalConfirmationText).should('have.text', 'Are you sure you want to delete this Parameter?')
 
             cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
-      
-            cy.get(CQLEditorPage.deleteCancelButton).should('be.enabled')     
-            cy.get(CQLEditorPage.deleteContinueButton).should('be.enabled').click()         
+
+            cy.get(CQLEditorPage.deleteCancelButton).should('be.enabled')
+            cy.get(CQLEditorPage.deleteContinueButton).should('be.enabled').click()
         })
 
-        cy.get(CQLEditorPage.saveSuccessMsg, {timeout: 6500}).should('have.text', 'Parameter Measurement Period has been successfully removed from the CQL.')
-       
-        cy.get(CQLEditorPage.saveCQLButton).should('be.disabled') 
+        cy.get(CQLEditorPage.saveSuccessMsg, { timeout: 6500 }).should('have.text', 'Parameter Measurement Period has been successfully removed from the CQL.')
+
+        cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
     })
 })
 

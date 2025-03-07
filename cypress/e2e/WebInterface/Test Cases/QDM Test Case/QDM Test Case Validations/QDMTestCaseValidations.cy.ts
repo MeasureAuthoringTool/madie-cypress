@@ -187,7 +187,7 @@ describe('Edit Test Case Validations', () => {
         cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
         cy.get(TestCasesPage.testCaseDescriptionTextBox).type(twoFiftyTwoCharacters, { delay: 0 })
         cy.get(TestCasesPage.testCaseSeriesTextBox).click()
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.disabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.editTestCaseDescriptionInlineError).should('contain.text', 'Test Case Description cannot be more than 250 characters.')
     })
 
@@ -210,7 +210,7 @@ describe('Edit Test Case Validations', () => {
         //Update Test Case Title with more than 250 characters
         cy.get(TestCasesPage.testCaseTitle).type(twoFiftyTwoCharacters, { delay: 0 })
         cy.get(TestCasesPage.testCaseSeriesTextBox).click()
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.disabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.editTestCaseTitleInlineError).contains('Test Case Title cannot be more ' +
             'than 250 characters.')
     })
@@ -234,7 +234,7 @@ describe('Edit Test Case Validations', () => {
         cy.get(TestCasesPage.testCaseTitle).clear()
         cy.get(TestCasesPage.testCaseSeriesTextBox).click()
 
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.disabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.editTestCaseTitleInlineError).should('contain.text', 'Test Case Title is required.')
     })
 
@@ -417,7 +417,7 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
         //select element and begin to add attribute
         cy.get(TestCasesPage.laboratoryElement).click()
         cy.get(TestCasesPage.plusIcon).eq(1).click()
-        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get(TestCasesPage.referenceRangeAttribute).click()
         cy.get(TestCasesPage.attributeType).should('contain.text', 'Interval<Quantity>')
@@ -430,7 +430,7 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
 
         //attempt to navigate away without clicking on the add button (for the attribute)
         cy.get(Header.measures).click()
-        Utilities.waitForElementVisible(TestCasesPage.QDMDiscardChangesDialog, 35000)
+        Utilities.waitForElementVisible(MeasureGroupPage.popUpConfirmationModal, 35000)
         Global.clickOnKeepWorking()
         //user stays on current page
         cy.readFile('cypress/fixtures/measureId').should('exist').then((measureid) => {
@@ -446,7 +446,7 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
 
         //another attempt to navigate away from current page after clicking on the add button
         cy.get(Header.measures).click()
-        Utilities.waitForElementVisible(TestCasesPage.QDMDiscardChangesDialog, 35000)
+        Utilities.waitForElementVisible(MeasureGroupPage.popUpConfirmationModal, 35000)
         Global.clickOnDiscardChanges()
 
         //user is navigated away from test case page

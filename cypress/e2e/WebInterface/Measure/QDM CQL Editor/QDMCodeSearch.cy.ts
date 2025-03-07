@@ -339,7 +339,7 @@ describe('QDM Code Search fields', () => {
         cy.get('[data-testid="delete-code-0"]').click()
         cy.get(CQLEditorPage.removeCodeConfirmationMsg).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
         cy.get(CQLEditorPage.removeCodeContinueBtn).click()
-        cy.get('[class="toast success"]').should('contain.text', 'Code AMB and code system ActCode has been successfully removed from the CQL')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB and code system ActCode has been successfully removed from the CQL')
         cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
         cy.get(CQLEditorPage.savedCodesTab).click()

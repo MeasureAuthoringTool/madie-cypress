@@ -43,10 +43,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         TestCasesPage.enterPatientDemographics('01/01/2000 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
         //add element - code system to TC
         //Element - Medication:Discharged: Antithrombotic Therapy for Ischemic Stroke
-        cy.get('[data-testid="elements-tab-medication"]').click()
+        cy.get(TestCasesPage.MedicationElementTab).click()
         cy.get('[data-testid="data-type-Medication, Discharge: Antithrombotic Therapy for Ischemic Stroke"]').click()
         cy.get(TestCasesPage.authorDateTime).type('06/01/2025 01:00 PM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-RxNORM"]').click()
         cy.get('[id="code-selector"]').click()
@@ -77,17 +77,17 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(umlsLoginForm.closeGenericError).click()
 
         //Element - Encounter:Performed: Nonelective Inpatient Encounter
-        cy.get('[data-testid="elements-tab-encounter"]').scrollIntoView().click()
+        cy.get(TestCasesPage.EncounterElementTab).scrollIntoView().click()
         cy.get('[data-testid="data-type-Encounter, Performed: Nonelective Inpatient Encounter"]').click()
         QDMElements.addTimingRelevantPeriodDateTime('06/01/2025 01:00 PM', '06/02/2025 01:00 PM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
         cy.get('[id="code-selector"]').click()
         cy.get('[data-testid="code-option-183452005"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
         //navigate to the attribute sub tab and enter value
-        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid="option-Diagnoses"]').click()
         cy.get('[data-testid="value-set-selector"]').scrollIntoView().click()
@@ -100,10 +100,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.addAttribute).click()
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -113,10 +113,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         TestCasesPage.enterPatientDemographics('02/29/1980 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
         //add element - code system to TC
         //Element - Medication:Discharged: Antithrombotic Therapy for Ischemic Stroke
-        cy.get('[data-testid="elements-tab-medication"]').click()
+        cy.get(TestCasesPage.MedicationElementTab).click()
         cy.get('[data-testid="data-type-Medication, Discharge: Antithrombotic Therapy for Ischemic Stroke"]').click()
         cy.get(TestCasesPage.authorDateTime).type('02/28/2024 01:00 PM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-RxNORM"]').click()
         cy.get('[id="code-selector"]').click()
@@ -147,17 +147,17 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(umlsLoginForm.closeGenericError).click()
 
         //Element - Encounter:Performed: Nonelective Inpatient Encounter
-        cy.get('[data-testid="elements-tab-encounter"]').scrollIntoView().click()
+        cy.get(TestCasesPage.EncounterElementTab).scrollIntoView().click()
         cy.get('[data-testid="data-type-Encounter, Performed: Nonelective Inpatient Encounter"]').click()
         QDMElements.addTimingRelevantPeriodDateTime('02/28/2024 01:00 PM', '02/29/2024 01:00 PM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
         cy.get('[id="code-selector"]').click()
         cy.get('[data-testid="code-option-183452005"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
         //navigate to the attribute sub tab and enter value
-        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid="option-Diagnoses"]').click()
         cy.get('[data-testid="value-set-selector"]').scrollIntoView().click()
@@ -173,10 +173,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click()
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -244,10 +244,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.qdmTCElementTable).should('contain.text', 'Datatype, Value Set & CodeTimingAttribute 1ActionsEncounter, PerformedNonelective Inpatient EncounterSNOMEDCT: 183452005 relP:  06/01/2028 1:00 PM - 06/02/2028 1:00 PMDiagnoses - DiagnosisComponent Code: SNOMEDCT : 111297002, Present On Admission Indicator: null, Rank: 1•••Medication, DischargeAntithrombotic Therapy for Ischemic StrokeRxNORM: 1536498 authdT:  06/01/2028 1:00 PM•••')
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to the main test case list page
@@ -262,10 +262,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.qdmTCElementTable).should('contain.text', 'Datatype, Value Set & CodeTimingAttribute 1ActionsEncounter, PerformedNonelective Inpatient EncounterSNOMEDCT: 183452005 relP:  02/28/2027 1:00 PM - 02/28/2027 1:00 PMDiagnoses - DiagnosisComponent Code: SNOMEDCT : 111297002, Present On Admission Indicator: null, Rank: 1•••Medication, DischargeAntithrombotic Therapy for Ischemic StrokeRxNORM: 1536498 authdT:  02/28/2027 1:00 PM•••')
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //Navigate to Test Cases page and add Test Case details
@@ -302,10 +302,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.qdmTCElementTable).should('contain.text', 'Datatype, Value Set & CodeTimingAttribute 1ActionsEncounter, PerformedNonelective Inpatient EncounterSNOMEDCT: 183452005 relP:  06/01/2025 1:00 PM - 06/02/2025 1:00 PMDiagnoses - DiagnosisComponent Code: SNOMEDCT : 111297002, Present On Admission Indicator: null, Rank: 1•••Medication, DischargeAntithrombotic Therapy for Ischemic StrokeRxNORM: 1536498 authdT:  06/01/2025 1:00 PM•••')
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to the main test case list page
@@ -320,10 +320,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.qdmTCElementTable).should('contain.text', 'Datatype, Value Set & CodeTimingAttribute 1ActionsEncounter, PerformedNonelective Inpatient EncounterSNOMEDCT: 183452005 relP:  02/28/2024 1:00 PM - 02/28/2024 1:00 PMDiagnoses - DiagnosisComponent Code: SNOMEDCT : 111297002, Present On Admission Indicator: null, Rank: 1•••Medication, DischargeAntithrombotic Therapy for Ischemic StrokeRxNORM: 1536498 authdT:  02/28/2024 1:00 PM•••')
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
     })
@@ -384,10 +384,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.qdmTCElementTable).should('contain.text', 'Datatype, Value Set & CodeTimingAttribute 1ActionsEncounter, PerformedNonelective Inpatient EncounterSNOMEDCT: 183452005 relP:  06/01/2028 1:00 PM - 06/02/2028 1:00 PMDiagnoses - DiagnosisComponent Code: SNOMEDCT : 111297002, Present On Admission Indicator: null, Rank: 1•••Medication, DischargeAntithrombotic Therapy for Ischemic StrokeRxNORM: 1536498 authdT:  06/01/2028 1:00 PM•••')
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to the main test case list page
@@ -418,10 +418,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.qdmTCElementTable).should('contain.text', 'Datatype, Value Set & CodeTimingAttribute 1ActionsEncounter, PerformedNonelective Inpatient EncounterSNOMEDCT: 183452005 relP:  02/28/2027 1:00 PM - 02/28/2027 1:00 PMDiagnoses - DiagnosisComponent Code: SNOMEDCT : 111297002, Present On Admission Indicator: null, Rank: 1•••Medication, DischargeAntithrombotic Therapy for Ischemic StrokeRxNORM: 1536498 authdT:  02/28/2027 1:00 PM•••')
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //Navigate to Test Cases page and add Test Case details
@@ -458,10 +458,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.qdmTCElementTable).should('contain.text', 'Datatype, Value Set & CodeTimingAttribute 1ActionsEncounter, PerformedNonelective Inpatient EncounterSNOMEDCT: 183452005 relP:  06/01/2025 1:00 PM - 06/02/2025 1:00 PMDiagnoses - DiagnosisComponent Code: SNOMEDCT : 111297002, Present On Admission Indicator: null, Rank: 1•••Medication, DischargeAntithrombotic Therapy for Ischemic StrokeRxNORM: 1536498 authdT:  06/01/2025 1:00 PM•••')
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to the main test case list page
@@ -491,10 +491,10 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.qdmTCElementTable).should('contain.text', 'Datatype, Value Set & CodeTimingAttribute 1ActionsEncounter, PerformedNonelective Inpatient EncounterSNOMEDCT: 183452005 relP:  02/28/2024 1:00 PM - 02/28/2024 1:00 PMDiagnoses - DiagnosisComponent Code: SNOMEDCT : 111297002, Present On Admission Indicator: null, Rank: 1•••Medication, DischargeAntithrombotic Therapy for Ischemic StrokeRxNORM: 1536498 authdT:  02/28/2024 1:00 PM•••')
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        Utilities.waitForElementEnabled(TestCasesPage.QDMTCSaveBtn, 3500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
     })
 })

@@ -142,7 +142,7 @@ describe('Quantity Attribute', () => {
 
         cy.get(TestCasesPage.laboratoryElement).click()
         cy.get(TestCasesPage.plusIcon).eq(1).click()
-        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get(TestCasesPage.referenceRangeAttribute).click()
         cy.get(TestCasesPage.attributeType).should('contain.text', 'Interval<Quantity>')

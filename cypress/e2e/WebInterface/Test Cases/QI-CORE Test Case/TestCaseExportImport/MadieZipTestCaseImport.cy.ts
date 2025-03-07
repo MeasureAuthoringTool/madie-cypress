@@ -24,7 +24,7 @@ const testCase2: TestCase = {
     title: 'Test Case 2',
     description: 'Description 2',
     group: 'Test Series 2',
-    json:  TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
+    json: TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
 }
 
 describe('MADIE Zip Test Case Import', () => {
@@ -245,7 +245,7 @@ describe('MADIE Zip Test Case Import', () => {
         //Click on the Copy button and verify success msg
         cy.get('[data-testid="copy-button-tooltip"]').should('exist')
         cy.get('[data-testid="copy-button-tooltip"]').click()
-        cy.get('[class="toast success"]').should('contain.text', 'Copied to clipboard!')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Copied to clipboard!')
     })
 })
 

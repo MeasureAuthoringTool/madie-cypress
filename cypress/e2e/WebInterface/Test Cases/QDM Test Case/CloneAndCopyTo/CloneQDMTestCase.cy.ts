@@ -1,11 +1,11 @@
-import {MeasureCQL} from "../../../../../Shared/MeasureCQL"
-import {CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
-import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
-import {TestCasesPage} from "../../../../../Shared/TestCasesPage"
-import {OktaLogin} from "../../../../../Shared/OktaLogin"
-import {Utilities} from "../../../../../Shared/Utilities"
-import {MeasuresPage} from "../../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../../Shared/EditMeasurePage"
+import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 
 const now = Date.now()
 let testCaseDescription = 'DENOMFail test case'
@@ -45,7 +45,7 @@ describe('Clone QDM Test Case', () => {
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterClone).click()
 
-        cy.get('[class="toast success"]').should('contain.text', 'Test case cloned successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test case cloned successfully')
     })
 
     it('Non Measure owner unable to clone Test case', () => {
