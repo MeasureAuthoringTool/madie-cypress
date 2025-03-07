@@ -142,7 +142,7 @@ describe('Test Case Attributes', () => {
 
         cy.get(TestCasesPage.AssessmentElementTab).click()
         cy.get(TestCasesPage.plusIcon).eq(1).click()
-        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid=option-Result]').click()
         cy.get(TestCasesPage.attributeType).click()
@@ -175,7 +175,7 @@ describe('Test Case Attributes', () => {
         //Add Date Time Attribute
         cy.get(TestCasesPage.AssessmentElementTab).click()
         cy.get(TestCasesPage.plusIcon).eq(1).click()
-        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid=option-Result]').click()
         cy.get(TestCasesPage.attributeType).click()
@@ -186,9 +186,9 @@ describe('Test Case Attributes', () => {
         //cy.get(TestCasesPage.attributeChip).should('contain.text', 'Result: 12/12/2000 11:30 AM')
 
         //Add Related To Attribute
-        cy.get('[data-testid="elements-tab-care_goal"]').click()
+        cy.get(TestCasesPage.CareGoalElementTab).click()
         cy.get(TestCasesPage.plusIcon).eq(0).click()
-        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid="option-Related To"]').click()
         cy.get('[id="data-element-selector"]').click()

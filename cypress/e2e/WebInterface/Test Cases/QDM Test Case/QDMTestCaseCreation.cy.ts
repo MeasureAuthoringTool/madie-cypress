@@ -71,9 +71,9 @@ describe('Validating the creation of QDM Test Case', () => {
         cy.get(TestCasesPage.QDMDob).type('01/01/2020 12:00 PM')
 
         //save dob value
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled').wait(1500)
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled').wait(1500)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         //click on bread crumb to navigate back to the main test case list page
         cy.get(TestCasesPage.testCasesBCLink).find('[class="madie-link"]').should('contain.text', 'Test Cases').click()
@@ -252,8 +252,8 @@ describe('Run QDM Test Case ', () => {
         TestCasesPage.enterPatientDemographics('085/27/1981 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //save the Test Case
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
     })
@@ -302,18 +302,18 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         TestCasesPage.enterPatientDemographics('01/01/2000 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
         //add element - code system to TC
         //Element - Medication:Discharged: Antithrombotic Therapy for Ischemic Stroke
-        cy.get('[data-testid="elements-tab-medication"]').click()
+        cy.get(TestCasesPage.MedicationElementTab).click()
         cy.get('[data-testid="data-type-Medication, Discharge: Antithrombotic Therapy for Ischemic Stroke"]').click()
         cy.get(TestCasesPage.authorDateTime).type('06/01/2025 01:00 PM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-RxNORM"]').click()
         cy.get('[id="code-selector"]').click()
         cy.get('[data-testid="code-option-1536498"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
         Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 35000)
 
@@ -321,7 +321,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
         TestCasesPage.clickEditforCreatedTestCase()
-        Utilities.waitForElementVisible('[data-testid="elements-tab-encounter"]', 50000)
+        Utilities.waitForElementVisible(TestCasesPage.EncounterElementTab, 50000)
         TestCasesPage.grabElementId(1)
         TestCasesPage.qdmTestCaseElementAction('edit')
         //add negation
@@ -341,9 +341,9 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get('[data-testid="option-1162745003"]').click()
         Utilities.waitForElementVisible('[data-testid="add-negation-rationale"]', 35000)
         cy.get('[data-testid="add-negation-rationale"]').click()
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
         Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 35000)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -353,14 +353,14 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         //add Element Performed: Nonelective Inpatient Encounter
         QDMElements.addElement('encounter', 'Performed: Nonelective Inpatient Encounter')
         QDMElements.addTimingRelevantPeriodDateTime('06/01/2025 01:00 PM', '06/02/2025 01:00 PM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
         cy.get('[id="code-selector"]').click()
         cy.get('[data-testid="code-option-183452005"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
         //navigate to the attribute sub tab and enter value
-        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid="option-Diagnoses"]').click()
         cy.get('[data-testid="value-set-selector"]').scrollIntoView().click()
@@ -377,9 +377,9 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         Utilities.waitForElementVisible(umlsLoginForm.closeGenericError, 35000)
         cy.get(umlsLoginForm.closeGenericError).click()
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
         Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 35000)
         //Add Expected value for Test case
@@ -406,9 +406,9 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('be.visible')
         cy.get(TestCasesPage.testCaseDENEXCEPTxpected).type('1')
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
         Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 35000)
 

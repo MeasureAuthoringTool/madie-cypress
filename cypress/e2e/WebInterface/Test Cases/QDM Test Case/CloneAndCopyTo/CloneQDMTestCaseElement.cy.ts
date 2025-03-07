@@ -137,10 +137,10 @@ describe('Clone QDM Test Case', () => {
 
         //add element - code system to TC
         //Element - Encounter:Performed: Observation Services
-        cy.get('[data-testid="elements-tab-encounter"]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Observation Services"]').click()
+        cy.get(TestCasesPage.EncounterElementTab).click()
+        cy.get(TestCasesPage.EncounterOSCard).click()
         QDMElements.addTimingRelevantPeriodDateTime('03/07/2023 08:00 AM', '03/08/2023 08:15 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
         cy.get('[id="code-selector"]').click()
@@ -151,9 +151,9 @@ describe('Clone QDM Test Case', () => {
         cy.get(umlsLoginForm.closeGenericError).click()
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
         Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 30000)
 
@@ -173,9 +173,9 @@ describe('Clone QDM Test Case', () => {
         cy.get(umlsLoginForm.closeGenericError).click()
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
         Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 30000)
 
@@ -276,10 +276,10 @@ describe('Clone QDM Test Case', () => {
 
         //add element - code system to TC
         //Element - Encounter:Performed: Observation Services
-        cy.get('[data-testid="elements-tab-encounter"]').click()
-        cy.get('[data-testid="data-type-Encounter, Performed: Observation Services"]').click()
+        cy.get(TestCasesPage.EncounterElementTab).click()
+        cy.get(TestCasesPage.EncounterOSCard).click()
         QDMElements.addTimingRelevantPeriodDateTime('03/07/2023 08:00 AM', '03/08/2023 08:15 AM')
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
         cy.get('[id="code-system-selector"]').click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
         cy.get('[id="code-selector"]').click()
@@ -290,9 +290,9 @@ describe('Clone QDM Test Case', () => {
         cy.get(umlsLoginForm.closeGenericError).click()
 
         //save changes
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.visible')
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
         Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 30000)
 
@@ -313,7 +313,7 @@ describe('Clone QDM Test Case', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //clone option is not available
-        cy.get('[class="data-elements-table"]').find('[class="qpp-c-button"]').first().click({ force: true })
+        cy.get(TestCasesPage.qdmTCElementTable).find('[class="qpp-c-button"]').first().click({ force: true })
         Utilities.waitForElementToNotExist(TestCasesPage.editBtnNoId, 3000)
 
     })

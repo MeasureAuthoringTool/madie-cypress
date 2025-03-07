@@ -68,8 +68,8 @@ describe('QDM Test Case sorting by Test Case number', () => {
         TestCasesPage.enterPatientDemographics('05/27/1981 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //save the Test Case
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to main measure list page
@@ -116,8 +116,8 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
         cy.get(TestCasesPage.QDMRace).scrollIntoView().click()
         cy.get('[data-value="Other Race"]').click()
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
         Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 20000)
         //Navigate back to Test Cases page
@@ -142,8 +142,8 @@ describe('QDM Test Case sorting by Test Case number', () => {
         TestCasesPage.enterPatientDemographics('05/27/1981 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //save the Test Case
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to main measure list page
@@ -160,7 +160,7 @@ describe('QDM Test Case sorting by Test Case number', () => {
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterClone).click()
 
-        cy.get('[class="toast success"]').should('contain.text', 'Test case cloned successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test case cloned successfully')
         Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 5000)
         cy.get(TestCasesPage.testCaseListTable).should('includes.text', 'Case #StatusGroupTitleDescriptionLast Saved3N/AQDMManifestTCGroupQDMManifestTC')
     })
@@ -204,8 +204,8 @@ describe('Import Test cases onto an existing QDM measure via file and ensure tes
         TestCasesPage.enterPatientDemographics('05/27/1981 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //save the Test Case
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
         //navigate to the main measures page
         cy.get(Header.measures).click()
@@ -359,8 +359,8 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         TestCasesPage.enterPatientDemographics('05/27/1981 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //save the Test Case
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         // navigate to test case tab

@@ -3,6 +3,7 @@ import { Utilities } from "../../../Shared/Utilities"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let CQLLibraryPublisher = 'ICF'
@@ -57,7 +58,7 @@ describe('QDM CQL Library Validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('{downArrow}').type('{enter}')
 
         CQLLibraryPage.clickCreateLibraryButton()
-        cy.get('[class="toast success"]').should('contain.text', 'Cql Library successfully created')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Cql Library successfully created')
     })
 
     it('Verify _ is allowed while editing QDM CQL Library name', () => {

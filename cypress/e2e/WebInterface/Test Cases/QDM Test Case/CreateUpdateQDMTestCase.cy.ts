@@ -135,10 +135,10 @@ describe('Create and Update QDM Test Case', () => {
         cy.contains('Sex').should('be.visible')
 
         cy.get(TestCasesPage.QDMGender).click()
-        cy.get(TestCasesPage.QDMGenderOption).find('li').should('contain.text', 'Asked But DeclinedFemaleFemale (finding)MaleMale (finding)Patient sex unknown (finding)')
+        cy.get(TestCasesPage.SelectionOptionChoice).find('li').should('contain.text', 'Asked But DeclinedFemaleFemale (finding)MaleMale (finding)Patient sex unknown (finding)')
 
         // need this to dismiss the dropdown
-        cy.get(TestCasesPage.QDMGenderOption).contains('Asked But Declined').click()
+        cy.get(TestCasesPage.SelectionOptionChoice).contains('Asked But Declined').click()
 
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
@@ -150,8 +150,8 @@ describe('Create and Update QDM Test Case', () => {
         cy.get(TestCasesPage.testCaseSeriesTextBox).clear().type(updatedTestCaseSeries).type('{enter}')
 
         //save the Test Case
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
         //Navigate to Test case list page
@@ -202,8 +202,8 @@ describe('Create and Update QDM Test Case', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).check()
 
         //save the Test Case
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
     })
@@ -252,8 +252,8 @@ describe('Non Boolean Test case Expected Values', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).type('2')
 
         //save the Test Case
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
     })
@@ -423,8 +423,8 @@ describe('Create and update QDM Test case validations', () => {
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.testCaseTitle).clear().type(testCaseTitleWithSpecialChar)
 
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get('[class="toast danger"]').should('contain.text', 'Test Case Title can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
 
     })
@@ -447,8 +447,8 @@ describe('Create and update QDM Test case validations', () => {
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.testCaseSeriesTextBox).clear().type(testCaseSeriesWithSpecialChar).type('{enter}')
 
-        cy.get(TestCasesPage.QDMTCSaveBtn).should('be.enabled')
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get('[class="toast danger"]').should('contain.text', 'Test Case Group can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
 
     })

@@ -10,7 +10,7 @@ export class QDMElements {
 
             case 'encounter': {
 
-                cy.get('[data-testid="elements-tab-encounter"]').click()
+                cy.get(TestCasesPage.EncounterElementTab).click()
                 cy.get('[data-testid="data-type-Encounter, ' + elementTitle + '"]').click()
 
                 break
@@ -97,9 +97,9 @@ export class QDMElements {
 
     public static addCode(codeSystem: string, code: string): void {
 
-        cy.get('[data-testid="sub-navigation-tab-codes"]').scrollIntoView()
-        Utilities.waitForElementVisible('[data-testid="sub-navigation-tab-codes"]', 700000)
-        cy.get('[data-testid="sub-navigation-tab-codes"]').click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).scrollIntoView()
+        Utilities.waitForElementVisible(TestCasesPage.ExpandedOSSDetailCardTabCodes, 700000)
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
         cy.get('[id="code-system-selector"]').click()
         Utilities.waitForElementVisible('[data-testid="code-system-option-' + codeSystem + '"]', 700000)
         cy.get('[data-testid="code-system-option-' + codeSystem + '"]').click()
@@ -111,7 +111,7 @@ export class QDMElements {
 
     public static enterAttribute(attribute: string, type: string): void {
 
-        cy.get('[data-testid="sub-navigation-tab-attributes"]').click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
 
         cy.get('[id="attribute-select"]').click()
         cy.get('[data-testid="option-' + attribute + '"]').click()

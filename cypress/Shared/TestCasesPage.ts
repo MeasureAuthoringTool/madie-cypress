@@ -40,7 +40,7 @@ export class TestCasesPage {
     public static readonly shiftSpecificTestCaseDates = '[data-testid="shift-dates-input"]'
     public static readonly shiftSpecificTestCasesCancelBtn = '[data-testid="shift-dates-cancel-button"]'
     public static readonly shiftSpecificTestCasesSaveBtn = '[data-testid="shift-dates-save-button"]'
-    public static readonly shiftSpecificTestCasesSuccessMsg = '[data-testid="test-case-list-success"]'
+    public static readonly TestCasesSuccessMsg = '[data-testid="test-case-list-success"]'
 
     //QDM Test Case Demographics elements
     public static readonly QDMDob = '[data-testid="date-of-birth-input"]'
@@ -50,7 +50,7 @@ export class TestCasesPage {
 
     // changed label to "sex" - only label text changed, all these selectors are the same 12/30/24
     public static readonly QDMGender = '[id="demographics-gender-select-id"]'
-    public static readonly QDMGenderOption = '.MuiList-root'
+    public static readonly SelectionOptionChoice = '.MuiList-root'
     public static readonly QDMEthnicity = '[id="demographics-ethnicity-select-id"]'
     public static readonly QEMEthnicityOptions = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiPaper-root MuiMenu-paper MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-177ic5c"]'
 
@@ -93,7 +93,6 @@ export class TestCasesPage {
     public static readonly ExpandedOSSDetailCardTiming = '[class="timing"]'
     public static readonly ExpandedOSSDetailCardTabCodes = '[data-testid="sub-navigation-tab-codes"]'
     public static readonly ExpandedOSSDetailCardTabAttributes = '[data-testid="sub-navigation-tab-attributes"]'
-    public static readonly ExpandedOSSDetailCardTabNegationRationale = '[data-testid="sub-navigation-tab-negation_rationale"]'
     public static readonly EncounterEDVCard = '[data-testid="data-type-Encounter, Performed: Emergency Department Visit"]'
     public static readonly EncounterEICard = '[data-testid="data-type-Encounter, Performed: Encounter Inpatient"]'
     public static readonly EncounterOSCard = '[data-testid="data-type-Encounter, Performed: Observation Services"]'
@@ -128,8 +127,6 @@ export class TestCasesPage {
     public static readonly PhysicalExamBTCard = '[data-testid="data-type-Physical Exam, Performed: Body temperature"]'
 
     //QDM misc test case page objects
-    public static readonly QDMDiscardChangesDialog = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-mbdu2s"]'
-    public static readonly QDMTCSaveBtn = '[data-testid="edit-test-case-save-button"]'
     public static readonly tcSaveSuccessMsg = '[class="toast success"]'
     public static readonly tcSaveAlertDangerMsg = '[class="toast danger"]'
     public static readonly editTestCaseDescriptionInlineError = '[data-testid="test-case-description-helper-text"]'
@@ -408,7 +405,6 @@ export class TestCasesPage {
     public static readonly laboratoryElement = '[data-testid="elements-tab-laboratory_test"]'
     public static readonly plusIcon = '[data-testid=AddCircleOutlineIcon]'
     public static readonly addAttribute = '[data-testid="add-attribute-button"]'
-    public static readonly attributesTab = '[data-testid="sub-navigation-tab-attributes"]'
     public static readonly selectAttributeDropdown = '[id="attribute-select"]'
     public static readonly referenceRangeAttribute = '[data-testid="option-Reference Range"]'
     public static readonly interpretationAttribute = '[data-testid="option-Interpretation"]'
@@ -461,7 +457,7 @@ export class TestCasesPage {
         if (eleTableEntry === null || eleTableEntry === undefined) {
             eleTableEntry = 1
         }
-        cy.get('[class="data-elements-table"]').find('tr').eq(eleTableEntry).find('[class="MuiSpeedDial-root MuiSpeedDial-directionRight css-19yoayi"]').then(($element) => {
+        cy.get(TestCasesPage.qdmTCElementTable).find('tr').eq(eleTableEntry).find('[class="MuiSpeedDial-root MuiSpeedDial-directionRight css-19yoayi"]').then(($element) => {
             attrData = $element.attr('data-testid').toString().valueOf()
             return attrData
         }).then((attrData) => {
@@ -977,11 +973,11 @@ export class TestCasesPage {
         cy.get(TestCasesPage.QDMRace).click()
         cy.get('[data-value="' + race + '"]').click()
 
-        cy.get(TestCasesPage.QDMTCSaveBtn).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
         // Utilities.waitForElementEnabled(TestCasesPage.runQDMTestCaseBtn, 7500)
 
         cy.get(TestCasesPage.QDMGender).click()
-        cy.get(TestCasesPage.QDMGenderOption).contains(gender).click()
+        cy.get(TestCasesPage.SelectionOptionChoice).contains(gender).click()
         cy.get(TestCasesPage.QDMEthnicity).click()
         cy.get('[data-value="' + ethnicity + '"]').click()
         cy.get(TestCasesPage.QDMDob).clear().click()

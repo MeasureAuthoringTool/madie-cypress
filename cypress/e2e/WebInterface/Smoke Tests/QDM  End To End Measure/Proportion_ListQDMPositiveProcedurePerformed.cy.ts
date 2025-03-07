@@ -341,7 +341,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         //Element - Physical Exam:Performed: Best Corrected Visual Acuity Exam Using Snellen Chart
         QDMElements.addElement('physicalexam', 'Performed: Best Corrected Visual Acuity Exam Using Snellen Chart')
         cy.get(TestCasesPage.authorDateTime).type('02/02/2012 01:15 PM')
-        cy.get(TestCasesPage.attributesTab).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid="option-Result"]').click()
         cy.get('[id="type-select"]').click()

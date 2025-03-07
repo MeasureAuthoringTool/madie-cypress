@@ -5,7 +5,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-import {Global} from "../../../../Shared/Global"
+import { Global } from "../../../../Shared/Global"
 
 let measureName = 'QDMTestingParameters' + Date.now()
 let CqlLibraryName = 'QDMParametersLibrary' + Date.now()
@@ -117,7 +117,7 @@ describe('QDM CQL Parameters', () => {
         // assert buttons enable & click clear
         cy.get(CQLEditorPage.applyParametersExpressionButton).should('be.enabled')
         cy.get(CQLEditorPage.clearParametersExpressionButton).should('be.enabled').click()
-        
+
         // assert defaults again
         cy.get(CQLEditorPage.parameterNameTextBox).should('not.have.value')
 
@@ -143,7 +143,7 @@ describe('QDM CQL Parameters', () => {
         cy.get(CQLEditorPage.parametersTab).click()
 
         cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
-        
+
         cy.get(CQLEditorPage.parameterExpressionEditor)
             .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
 
@@ -172,7 +172,7 @@ describe('QDM CQL Parameters', () => {
 
         // add values again & repeat
         cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
-        
+
         cy.get(CQLEditorPage.parameterExpressionEditor)
             .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
 
@@ -188,16 +188,16 @@ describe('QDM CQL Parameters', () => {
     })
 
     it('Confirm that Parameter builder checks for duplicates', () => {
-    /*
-        scenario 3: verify duplicate check
-        re-do with same name, check for blue toast
-    */
+        /*
+            scenario 3: verify duplicate check
+            re-do with same name, check for blue toast
+        */
         const paramName = 'NewParameter'
 
         cy.get(CQLEditorPage.parametersTab).click()
 
         cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
-        
+
         cy.get(CQLEditorPage.parameterExpressionEditor)
             .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
 
@@ -209,7 +209,7 @@ describe('QDM CQL Parameters', () => {
 
         // enter duplicate
         cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
-        
+
         cy.get(CQLEditorPage.parameterExpressionEditor)
             .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
 
@@ -218,7 +218,7 @@ describe('QDM CQL Parameters', () => {
         // check for duplicate toast
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', `Parameter ${paramName} has already been defined in CQL.`)
 
-       // same as above, verify 2 parameters in document - duplicate not added
+        // same as above, verify 2 parameters in document - duplicate not added
         cy.get(CQLEditorPage.mainCqlDocument).find('.ace_line:contains("parameter")').should('have.length', 2)
     })
 
@@ -248,7 +248,7 @@ describe('QDM CQL Parameters', () => {
 
         //Save
         cy.get(CQLEditorPage.saveParameterBtn).click()
-        cy.get('[class="toast success"]').should('contain.text', 'Parameter Measurement Period has been successfully updated.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Parameter Measurement Period has been successfully updated.')
     })
 
     it('Dirty check pops up when there are changes in CQL and Edit parameters button is clicked', () => {
@@ -316,7 +316,7 @@ describe('Delete Saved Parameters', () => {
 
         // insert parameter to make measure dirty
         const paramName = 'NewParameter'
-        cy.get(CQLEditorPage.parameterNameTextBox).type(paramName) 
+        cy.get(CQLEditorPage.parameterNameTextBox).type(paramName)
         cy.get(CQLEditorPage.parameterExpressionEditor)
             .find('textarea.ace_text-input').type('Interval<DateTime>', { force: true })
         cy.get(CQLEditorPage.applyParametersExpressionButton).click()
@@ -334,9 +334,9 @@ describe('Delete Saved Parameters', () => {
             cy.get(CQLEditorPage.modalConfirmationText).should('have.text', 'You have unsaved changes.Are you sure you want to discard your changes?')
 
             cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
-      
-            cy.get(CQLEditorPage.discardContinueButton).should('be.enabled')    
-            cy.get(CQLEditorPage.discardStayButton).should('be.enabled').click()          
+
+            cy.get(CQLEditorPage.discardContinueButton).should('be.enabled')
+            cy.get(CQLEditorPage.discardStayButton).should('be.enabled').click()
         })
 
         // confirm no action, still 1 saved parameter
@@ -368,23 +368,23 @@ describe('Delete Saved Parameters', () => {
             cy.get(CQLEditorPage.modalConfirmationText).should('have.text', 'Are you sure you want to delete this Parameter?')
 
             cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
-      
-            cy.get(CQLEditorPage.deleteCancelButton).should('be.enabled')     
-            cy.get(CQLEditorPage.deleteContinueButton).should('be.enabled').click()         
+
+            cy.get(CQLEditorPage.deleteCancelButton).should('be.enabled')
+            cy.get(CQLEditorPage.deleteContinueButton).should('be.enabled').click()
         })
 
-        cy.get(CQLEditorPage.saveSuccessMsg, {timeout: 6500}).should('have.text', 'Parameter Measurement Period has been successfully removed from the CQL.')
-       
-        cy.get(CQLEditorPage.saveCQLButton).should('be.disabled') 
+        cy.get(CQLEditorPage.saveSuccessMsg, { timeout: 6500 }).should('have.text', 'Parameter Measurement Period has been successfully removed from the CQL.')
+
+        cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
     })
 })
 
 describe('QDM CQL Parameters - Measure ownership Validations', () => {
-   /*
-    scenario 4:
-    access non-owned measure
-    verify no tab access
-    */
+    /*
+     scenario 4:
+     access non-owned measure
+     verify no tab access
+     */
     beforeEach('Create Measure and Login', () => {
 
         //Create New Measure
