@@ -58,7 +58,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
             cy.get(EditMeasurePage.measureGroupsTab).click()
 
-            Utilities.setMeasureGroupType()
+            MeasureGroupPage.setMeasureGroupType()
 
             cy.get(MeasureGroupPage.popBasis).should('exist')
             cy.get(MeasureGroupPage.popBasis).should('be.visible')
@@ -217,7 +217,7 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
             cy.get(EditMeasurePage.measureGroupsTab).click()
 
-            Utilities.setMeasureGroupType()
+            MeasureGroupPage.setMeasureGroupType()
 
             cy.get(MeasureGroupPage.popBasis).should('exist')
             cy.get(MeasureGroupPage.popBasis).should('be.visible')

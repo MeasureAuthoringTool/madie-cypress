@@ -449,6 +449,7 @@ describe('JSON Resource ID tests', () => {
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.wait(2000)
         cy.get(TestCasesPage.aceEditor).type(emptyResourceIDTCJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -542,6 +543,7 @@ describe('JSON Resource ID tests', () => {
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.wait(2000)
         cy.get(TestCasesPage.aceEditor).type(missingResourceIDTCJsonButHasFullUrlExt, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -623,6 +625,7 @@ describe('JSON Resource ID tests', () => {
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.wait(2000)
         cy.get(TestCasesPage.aceEditor).type(missingResourceIDTCJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -700,6 +703,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).click()
+        cy.wait(2000)
         cy.get(TestCasesPage.aceEditor).type(dupResourceIDTCJson)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -755,6 +759,7 @@ describe('JSON Resource ID tests', () => {
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.wait(2000)
         cy.get(TestCasesPage.aceEditor).type(missingMetaProfile, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -820,7 +825,7 @@ describe('JSON Resource ID tests - Proportion Score Type', () => {
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        Utilities.setMeasureGroupType()
+        MeasureGroupPage.setMeasureGroupType()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
         cy.get(MeasureGroupPage.popBasis).should('exist')
@@ -924,7 +929,7 @@ describe('JSON Resource ID tests -- CV', () => {
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        Utilities.setMeasureGroupType()
+        MeasureGroupPage.setMeasureGroupType()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
 

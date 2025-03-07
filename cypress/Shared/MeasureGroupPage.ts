@@ -813,4 +813,28 @@ export class MeasureGroupPage {
         })
         return user
     }
+
+    public static setMeasureGroupType(type?: MeasureType): void {
+
+        if (!type) {
+            type = MeasureType.process
+        }
+
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).should('be.visible')
+        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
+            if ($ele.text() == "Text") {
+                cy.wrap($ele).should('exist')
+                cy.wrap($ele).focus()
+                cy.wrap($ele).click()
+            }
+        })
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).type(type).type('{downArrow}').type('{enter}')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+    }
 }
