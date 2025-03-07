@@ -72,7 +72,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
     it('End to End Proportion Episode Measure, Pass Result', () => {
 
         //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('editFAIL')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
