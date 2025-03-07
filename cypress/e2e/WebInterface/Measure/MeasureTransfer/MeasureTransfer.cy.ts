@@ -85,7 +85,7 @@ describe('Measure Transfer', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
-        Utilities.setMeasureGroupType()
+        MeasureGroupPage.setMeasureGroupType()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')

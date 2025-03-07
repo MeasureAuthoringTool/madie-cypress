@@ -53,7 +53,7 @@ describe('Validate Measure Group additions', () => {
             cy.url().should('contain', fileContents + '/edit/groups/2')
         })
 
-        Utilities.setMeasureGroupType()
+        MeasureGroupPage.setMeasureGroupType()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
         cy.get(MeasureGroupPage.popBasis).should('exist')
