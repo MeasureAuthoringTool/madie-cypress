@@ -136,8 +136,8 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.measurePopulationOption).eq(0).click() //select denom
 
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('exist')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.MOBooleanFunctionValue, 20700)
         cy.get(MeasureGroupPage.MOBooleanFunctionValue).should('exist')
         cy.get(MeasureGroupPage.MOBooleanFunctionValue).should('be.visible')
@@ -455,8 +455,8 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.measurePopulationOption).eq(0).click() //select denom
 
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('exist')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.MOToCodeValue, 20700)
         cy.get(MeasureGroupPage.MOBooleanFunctionValue).should('exist')
         cy.get(MeasureGroupPage.MOBooleanFunctionValue).should('be.visible')
@@ -603,8 +603,8 @@ describe('Measure Observation - Expected Values', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'num')
 
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('exist')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.MOBooleanFunctionValue, 20700)
         cy.get(MeasureGroupPage.MOBooleanFunctionValue).should('exist')
         cy.get(MeasureGroupPage.MOBooleanFunctionValue).should('be.visible')

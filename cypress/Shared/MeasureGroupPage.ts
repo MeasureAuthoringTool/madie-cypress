@@ -3,6 +3,7 @@ import { EditMeasurePage } from "./EditMeasurePage"
 import { CQLEditorPage } from "./CQLEditorPage"
 import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
+import { TestCasesPage } from "./TestCasesPage"
 import { v4 as uuidv4 } from 'uuid'
 
 export enum MeasureType {
@@ -373,8 +374,8 @@ export class MeasureGroupPage {
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'denom')
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('exist')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.MOBooleanFunctionValue, 20700)
         cy.get(MeasureGroupPage.MOBooleanFunctionValue).should('exist')
         cy.get(MeasureGroupPage.MOBooleanFunctionValue).should('be.visible')

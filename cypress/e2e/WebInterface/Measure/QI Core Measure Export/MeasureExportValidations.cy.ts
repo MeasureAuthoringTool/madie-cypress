@@ -213,7 +213,7 @@ describe('Error Message on Measure Export when the Population Criteria does not 
         cy.get(EditMeasurePage.cqlEditorTextBox).type(updatedMeasureCQL)
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
-        cy.get(CQLEditorPage.measureErrorToast).should('contain.text', 'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.')
+        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.')
 
         cy.get(Header.measures).click()
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {

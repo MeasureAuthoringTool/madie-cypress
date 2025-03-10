@@ -60,6 +60,7 @@ export class TestCasesPage {
     public static readonly ElementsSubTabHeading = '[class="test-case-tab-heading"]'
     public static readonly AssessmentElementTab = '[data-testid="elements-tab-assessment"]'
     public static readonly CareGoalElementTab = '[data-testid="elements-tab-care_goal"]'
+    public static readonly ConditionElementTab = '[data-testid="elements-tab-condition"]'
     public static readonly MedicationElementTab = '[data-testid="elements-tab-medication"]'
     public static readonly EncounterElementTab = '[data-testid="elements-tab-encounter"]'
     public static readonly CharacteristicElementTab = '[data-testid="elements-tab-patient_characteristic"]'
@@ -91,14 +92,12 @@ export class TestCasesPage {
     public static readonly CharacteristicMFFSPCard = '[data-testid="data-type-Patient Characteristic Payer: Medicare FFS payer"]'
 
     //QDM misc test case page objects
-    public static readonly tcSaveAlertDangerMsg = '[class="toast danger"]'
     public static readonly editTestCaseDescriptionInlineError = '[data-testid="test-case-description-helper-text"]'
     public static readonly QDMTcDiscardChangesButton = '[data-testid="ds-btn"]'
     public static readonly QDMRunTestCasefrmTestCaseListPage = '[data-testid="qdm-test-case-run-button"]'
 
     //SDE Sub tab
     public static readonly qdmSDESubTab = '[data-testid="sde-tab"]'
-    public static readonly includeSDERadioBtn = '[class="PrivateSwitchBase-input css-1m9pwf3"]'
     public static readonly saveSDEOption = '[data-testid="sde-save"]'
 
     //Test case QRDA Export
@@ -106,13 +105,12 @@ export class TestCasesPage {
     public static readonly successMsg = '.toast'
 
     //TC error concerning CQL and PC mismatch
-    public static readonly CQLPCTCMismatchError = '[data-testid="execution_context_loading_errors"]'
     public static readonly testCaseResultrow = '[data-testid="test-case-row-0"]'
     public static readonly testCaseResultrow2 = '[data-testid="test-case-row-1"]'
 
     //edit test case without knowing test case ID
     public static readonly actionBtnNoId = '[class="action-button"]'
-    public static readonly editBtnNoId = '[class="btn-container"]'
+    public static readonly btnContainer = '[class="btn-container"]'
 
     //tabs on the test case page
     public static readonly cqlHasErrorsMsg = '[data-testid="test-case-cql-has-errors-message"]'
@@ -120,7 +118,6 @@ export class TestCasesPage {
     public static readonly tctExpectedActualSubTab = '[data-testid="expectoractual-tab"]'
 
     //QDM Test Case
-    public static readonly qdmCQLFailureErrorList = '[data-testid="execution_context_loading_errors"]'
     public static readonly qdmExpansionRadioOptionGroup = '[data-testid="manifest-expansion-radio-buttons-group"]'
     public static readonly qdmExpansionSubTab = '[data-testid="nav-link-expansion"]'
     public static readonly qdmManifestSelectDropDownBox = '[id="manifest-select"]'
@@ -157,10 +154,7 @@ export class TestCasesPage {
     public static readonly voTCCQLEditor = '[class="ace_text-input"]'
     public static readonly testCaseSeriesTextBox = '[data-testid="test-case-series"] > .MuiOutlinedInput-root'
     public static readonly editTestCaseSaveButton = '[data-testid="edit-test-case-save-button"]'
-    public static readonly sdeTestCaseSaveButton = '[data-testid="sde-save"]'
     public static readonly errorToastMsg = '[data-testid="error-toast"]'
-    public static readonly dangerToastMsg = '[class="toast danger"]'
-    public static readonly confirmationMsg = '.toast'
     public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
     public static readonly aceEditorJsonInput = '[data-testid="test-case-json-editor-input"]'
     public static readonly testCaseTitle = '[data-testid="test-case-title"]'
@@ -209,7 +203,6 @@ export class TestCasesPage {
     public static readonly testCaseDENEXCEPTxpected = '[data-testid="test-population-denominatorException-expected"]'
     public static readonly testCaseMSRPOPLExpected = '[data-testid="test-population-measurePopulation-expected"]'
     public static readonly testCaseMSRPOPLEXExpected = '[data-testid="test-population-measurePopulationExclusion-expected"]'
-    public static readonly testCasePopulationHeaderForNoMeasureGroup = '[data-testid="execution_context_loading_errors"]'
     public static readonly testCasePopulationValuesTable = '[data-testid="test-case-population-list-tbl"]'
     public static readonly initialPopulationRow = '[data-testid="test-row-population-id-initialPopulation"]'
     public static readonly numeratorRow = '[data-testid="test-row-population-id-numerator"]'
@@ -630,7 +623,7 @@ export class TestCasesPage {
         cy.get(this.editTestCaseSaveButton).click()
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 6500)
 
-        cy.get(this.confirmationMsg).each(msg => {
+        cy.get(this.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
 
@@ -846,16 +839,16 @@ export class TestCasesPage {
 
                 cy.get('[data-testid="test-case-title-0_caseNumber"]')
                     .invoke('text').then(maxCaseNumber => {
-                    originalCount = Number(maxCaseNumber)
-                })
+                        originalCount = Number(maxCaseNumber)
+                    })
 
                 cy.get(TestCasesPage.actionCenterClone).should('be.enabled').click()
                 Utilities.waitForElementVisible(EditMeasurePage.successMessage, 2500)
 
                 cy.get('[data-testid="test-case-title-0_caseNumber"]')
                     .invoke('text').then(newMaxNumber => {
-                    expect(originalCount + 1).eq(Number(newMaxNumber))
-                })
+                        expect(originalCount + 1).eq(Number(newMaxNumber))
+                    })
                 break
 
             case TestCaseAction.copyToMeasure:

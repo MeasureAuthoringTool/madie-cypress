@@ -365,9 +365,9 @@ export class Utilities {
     public static validateToastMessage(message: string, timeout?: number) {
 
         if (!timeout) {
-            cy.get('.toast').should('have.text', message)
+            cy.get(TestCasesPage.successMsg).should('have.text', message)
         } else {
-            cy.get('.toast', { timeout }).should('have.text', message)
+            cy.get(TestCasesPage.successMsg, { timeout }).should('have.text', message)
         }
     }
 
