@@ -1,0 +1,49 @@
+{
+  "name": "madie-cypress",
+  "description": "automated cypress tests for MADiE",
+  "longDescription": "",
+  "status": "",
+  "permissions": {
+    "license": [
+      {
+        "name": "",
+        "URL": ""
+      }
+    ],
+    "usageType": "",
+    "exemptionText": ""
+  },
+  "organization": "",
+  "repositoryURL": "https://github.com/MeasureAuthoringTool/madie-cypress",
+  "vcs": "git",
+  "laborHours": 14062,
+  "platforms": [],
+  "categories": [],
+  "softwareType": "",
+  "languages": [
+    "TypeScript",
+    "HTML",
+    "JavaScript",
+    "Dockerfile"
+  ],
+  "maintenance": "",
+  "date": {
+    "created": "2021-10-01T14:29:51Z",
+    "lastModified": "2025-03-07T13:29:00Z",
+    "metaDataLastUpdated": "2025-03-07T18:11:02.907Z"
+  },
+  "tags": [],
+  "contact": {
+    "email": "",
+    "name": ""
+  },
+  "localisation": false,
+  "repositoryType": "",
+  "userInput": false,
+  "fismaLevel": "",
+  "group": "",
+  "subsetInHealthcare": [],
+  "userType": [],
+  "repositoryHost": "github",
+  "maturityModelTier": 0
+}
