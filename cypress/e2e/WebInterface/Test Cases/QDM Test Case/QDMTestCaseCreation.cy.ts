@@ -259,7 +259,7 @@ describe('Run QDM Test Case ', () => {
     })
 })
 
-describe.only('Validating Expansion -> Manifest selections / navigation functionality', () => {
+describe('Validating Expansion -> Manifest selections / navigation functionality', () => {
 
     beforeEach('Create Measure', () => {
 
