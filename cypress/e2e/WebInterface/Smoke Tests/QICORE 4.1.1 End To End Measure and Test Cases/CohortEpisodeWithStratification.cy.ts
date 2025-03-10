@@ -50,7 +50,7 @@ describe('Measure Creation and Testing: Cohort Episode w/ Stratification', () =>
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        Utilities.setMeasureGroupType()
+        MeasureGroupPage.setMeasureGroupType()
 
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
