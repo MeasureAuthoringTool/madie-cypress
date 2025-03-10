@@ -4,6 +4,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 const date = Date.now()
 let measureName = 'QiCoreCodeSearch' + date
@@ -201,7 +202,7 @@ describe('Qi Core Code Search fields', () => {
         cy.get(CQLEditorPage.toolTipMsg).should('contain.text', 'This code is active in this code system version')
         cy.get(CQLEditorPage.codeSystemSearchResultsTbl).should('contain.text', 'CodeDescriptionCode SystemSystem VersionAMBambulatoryActCode2023-02')
         cy.get(CQLEditorPage.applyCodeBtn).click()
-        cy.get('.toast').should('contain.text', 'Code AMB has already been defined in CQL.')
+        cy.get(TestCasesPage.successMsg).should('contain.text', 'Code AMB has already been defined in CQL.')
 
         //Save and Discard changes button should be disabled
         cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')

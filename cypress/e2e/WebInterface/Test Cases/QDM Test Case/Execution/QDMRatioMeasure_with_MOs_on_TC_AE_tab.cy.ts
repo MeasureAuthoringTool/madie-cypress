@@ -515,7 +515,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         cy.get(MeasureGroupPage.measurePopulationOption).eq(4).click()
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).contains('Denominator Observations').click()
+        cy.get(TestCasesPage.SelectionOptionChoice).contains('Denominator Observations').click()
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionDropdownList).eq(0).click()
         cy.get(MeasureGroupPage.denominatorExclusionSelect).click()
@@ -524,7 +524,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         cy.get(MeasureGroupPage.measurePopulationOption).eq(15).click()
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
         cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).contains('Numerator Observations').click()
+        cy.get(TestCasesPage.SelectionOptionChoice).contains('Numerator Observations').click()
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionDropdownList).contains('Sum').click()
 

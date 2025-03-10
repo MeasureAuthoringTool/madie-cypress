@@ -42,7 +42,7 @@ export class QDMElements {
 
             case 'condition': {
 
-                cy.get('[data-testid="elements-tab-condition"]').click()
+                cy.get(TestCasesPage.ConditionElementTab).click()
                 cy.get('[data-testid="data-type-' + elementTitle + '"]').click()
 
                 break

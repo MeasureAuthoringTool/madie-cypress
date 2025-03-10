@@ -93,7 +93,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         cy.get(TestCasesPage.filAttachDropBox).attachFile(genericTextFile)
 
         //error in import modal window
-        cy.get('[class="toast danger"]').should('contain.text', 'An error occurred while validating the import file. Please try again or reach out to the Help Desk.')
+        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'An error occurred while validating the import file. Please try again or reach out to the Help Desk.')
 
         //import button becomes unavailable
         cy.get(TestCasesPage.importTestCaseBtnOnModal).should('be.disabled')
@@ -116,7 +116,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         cy.get(TestCasesPage.filAttachDropBox).attachFile('example.json')
 
         //message in import modal window about the file being empty
-        cy.get('[class="toast danger"]').should('contain.text', 'No patients were found in the selected import file!')
+        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'No patients were found in the selected import file!')
 
         //import button becomes unavailable
         cy.get(TestCasesPage.importTestCaseBtnOnModal).should('be.disabled')

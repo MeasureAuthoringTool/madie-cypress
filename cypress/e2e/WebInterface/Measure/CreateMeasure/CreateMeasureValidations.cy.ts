@@ -1046,7 +1046,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
                 //check / select radio button for the value of 'Yes'
                 cy.wrap(radio).eq(0).check({ force: true }).should('be.checked');
 
-                cy.get(TestCasesPage.sdeTestCaseSaveButton).click()
+                cy.get(TestCasesPage.saveSDEOption).click()
                 cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
 
                 // Verify that first radio button is no longer checked

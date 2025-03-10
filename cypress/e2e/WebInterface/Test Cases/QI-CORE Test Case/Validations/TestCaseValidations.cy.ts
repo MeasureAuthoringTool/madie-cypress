@@ -132,7 +132,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Create test
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
 
@@ -252,7 +252,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
 
@@ -401,7 +401,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
 
@@ -569,7 +569,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
 
@@ -924,7 +924,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
 
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.tcSaveAlertDangerMsg).should('contain.text', 'An error occurred while creating the test case: The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
+        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'An error occurred while creating the test case: The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
     })
 
     it('Edit Test Case: Verify error message when the Test case Title and group names are duplicate', () => {
