@@ -75,7 +75,7 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
         cy.get(TestCasesPage.qdmSDESidNavLink).click()
 
         // access left menu - SDE = YES, save
-        cy.get(TestCasesPage.includeSDERadioBtn).eq(0).click()
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).click()
         cy.get(TestCasesPage.saveSDEOption).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
 
@@ -91,7 +91,7 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
 
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
@@ -146,7 +146,7 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
         cy.get(TestCasesPage.qdmSDESidNavLink).click()
 
         // access left menu - SDE, verify NO is checked
-        cy.get(TestCasesPage.includeSDERadioBtn).eq(1).should('be.checked')
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).should('be.checked')
 
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.newTestCaseButton, 15500)
@@ -160,7 +160,7 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
 
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
@@ -209,7 +209,7 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
@@ -236,7 +236,7 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
         Utilities.waitForElementVisible(TestCasesPage.qdmSDESidNavLink, 30000)
         cy.get(TestCasesPage.qdmSDESidNavLink).click()
 
-        cy.get(TestCasesPage.includeSDERadioBtn).eq(0).click()
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).click()
         cy.get(TestCasesPage.saveSDEOption).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
 

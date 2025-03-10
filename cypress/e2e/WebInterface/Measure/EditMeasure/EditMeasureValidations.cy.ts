@@ -100,13 +100,13 @@ describe('Edit Measure Validations', () => {
         cy.get(EditMeasurePage.endorsementNumber).type('23!@$')
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
 
-        cy.get(EditMeasurePage.endorserFieldsErrorMsg).should('contain.text', 'Endorser Number must be alpha numeric')
+        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Endorser Number must be alpha numeric')
 
         //Add Endorsing Organization without Endorser Number
         cy.get(EditMeasurePage.endorsementNumber).clear()
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
 
-        cy.get(EditMeasurePage.endorserFieldsErrorMsg).should('contain.text', 'Endorser Number is Required')
+        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Endorser Number is Required')
 
     })
 })

@@ -260,7 +260,7 @@ describe('QDM Test Case Excel Export', () => {
 
         //Export Test cases and assert the values
         cy.get(TestCasesPage.actionCenterExport).click()
-        cy.get('[class="btn-container"]').contains('Excel').click()
+        cy.get(TestCasesPage.btnContainer).contains('Excel').click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'Excel exported successfully')
 
         const file = 'cypress/downloads/eCQMTitle-v0.0.000-QDM-TestCases.xlsx'

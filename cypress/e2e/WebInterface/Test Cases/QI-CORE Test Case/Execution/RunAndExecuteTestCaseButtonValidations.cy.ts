@@ -174,7 +174,7 @@ describe('Run / Execute Test Case button validations', () => {
 
         cy.get(MeasureGroupPage.reportingTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
-        
+
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //validation successful save message
@@ -530,8 +530,8 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
 
-        Utilities.waitForElementVisible(TestCasesPage.confirmationMsg, 60000)
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        Utilities.waitForElementVisible(TestCasesPage.successMsg, 60000)
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
 
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -566,7 +566,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.executeTestCaseButton).focus()
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
-        
+
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
         //Check Test Execution for second Population criteria
@@ -675,7 +675,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -798,7 +798,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -865,7 +865,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -970,7 +970,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -1091,7 +1091,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1353,7 +1353,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.dangerToastMsg).find(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(EditMeasurePage.errorMessage).find(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1501,7 +1501,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1558,7 +1558,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             cy.get(MeasureGroupPage.reportingTab).click()
             Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
-    
+
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
@@ -1619,7 +1619,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-            cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+            cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1687,7 +1687,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             cy.get(MeasureGroupPage.reportingTab).click()
             Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
-    
+
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
             cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
@@ -1828,7 +1828,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //confirm no message
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
-    })
+        })
 })
 
 describe('Verify multiple IPs on the highlighting tab', () => {
@@ -1836,7 +1836,7 @@ describe('Verify multiple IPs on the highlighting tab', () => {
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')  
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population', 'boolean')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()

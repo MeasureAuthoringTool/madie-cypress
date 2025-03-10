@@ -74,7 +74,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         Utilities.waitForElementVisible(TestCasesPage.qdmSDESidNavLink, 30000)
         cy.get(TestCasesPage.qdmSDESidNavLink).click()
 
-        cy.get(TestCasesPage.includeSDERadioBtn).eq(0).click()
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).click()
         cy.get(TestCasesPage.saveSDEOption).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
 
@@ -269,7 +269,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         Utilities.waitForElementVisible(TestCasesPage.qdmSDESidNavLink, 30000)
         cy.get(TestCasesPage.qdmSDESidNavLink).click()
 
-        cy.get(TestCasesPage.includeSDERadioBtn).eq(0).click()
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).click()
         cy.get(TestCasesPage.saveSDEOption).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
 

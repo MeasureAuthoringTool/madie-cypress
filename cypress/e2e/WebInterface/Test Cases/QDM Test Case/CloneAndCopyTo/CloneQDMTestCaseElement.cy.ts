@@ -314,7 +314,7 @@ describe('Clone QDM Test Case', () => {
 
         //clone option is not available
         cy.get(TestCasesPage.qdmTCElementTable).find('[class="qpp-c-button"]').first().click({ force: true })
-        Utilities.waitForElementToNotExist(TestCasesPage.editBtnNoId, 3000)
+        Utilities.waitForElementToNotExist(TestCasesPage.btnContainer, 3000)
 
     })
 })

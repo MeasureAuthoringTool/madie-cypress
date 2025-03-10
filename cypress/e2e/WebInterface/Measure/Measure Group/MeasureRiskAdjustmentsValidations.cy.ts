@@ -117,7 +117,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(CQLEditorPage.saveCQLButton).click()
 
         //confirm error toast related to SD and/or RA
-        cy.get(CQLEditorPage.measureErrorToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
 
         //navigate to the PC tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -163,7 +163,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(CQLEditorPage.saveCQLButton).click()
 
         //confirm error toast related to SD and/or RA
-        cy.get(CQLEditorPage.measureErrorToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
 
         //navigate to the PC tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -200,7 +200,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        Utilities.waitForElementToNotExist(CQLEditorPage.measureErrorToast, 75)
+        Utilities.waitForElementToNotExist(EditMeasurePage.errorMessage, 75)
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
 
@@ -237,7 +237,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(CQLEditorPage.saveCQLButton).click()
 
         //confirm error toast related to SD and/or RA
-        cy.get(CQLEditorPage.measureErrorToast).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
+        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
 
         //navigate to the PC tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -266,7 +266,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        Utilities.waitForElementToNotExist(CQLEditorPage.measureErrorToast, 75)
+        Utilities.waitForElementToNotExist(EditMeasurePage.errorMessage, 75)
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
     })

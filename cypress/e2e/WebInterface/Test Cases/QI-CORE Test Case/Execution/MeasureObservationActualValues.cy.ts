@@ -155,8 +155,8 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.log('Adding Measure Observations')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('exist')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('be.visible')
         cy.get('[data-value="daysObs"]').click() //select daysObs
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
@@ -164,8 +164,8 @@ describe('Non Boolean Measure Observation Actual values', () => {
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
         cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('exist')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('be.visible')
         cy.get('[data-value="daysObs"]').click() //select daysObs
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
@@ -291,8 +291,8 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.log('Adding Measure Observations')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('exist')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('be.visible')
         cy.get('[data-value="boolFunc"]').click() //select boolFunc
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
@@ -300,8 +300,8 @@ describe('Boolean Measure Observation Actual values', () => {
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
         cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('exist')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('be.visible')
         cy.get('[data-value="boolFunc2"]').click() //select boolFunc2
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
@@ -330,7 +330,7 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('be.visible')
+        cy.get(TestCasesPage.successMsg).should('be.visible')
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 

@@ -69,15 +69,15 @@ describe('QDM Test Cases : Export Test Case', () => {
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
-        cy.get('[class="btn-container"]').contains('QRDA').click()
+        cy.get(TestCasesPage.btnContainer).contains('QRDA').click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'QRDA exported successfully')
 
         //verify zip file exists
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip'), {timeout: 500000}).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
         // unzipping the QRDA Export
-        cy.task('unzipFile', {zipFile: 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip', path: downloadsFolder}).then(results => {
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip', path: downloadsFolder }).then(results => {
             cy.log('unzipFile Task finished')
         })
 
@@ -181,10 +181,10 @@ describe('Export Test cases by Non Measure Owner', () => {
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
-        cy.get('[class="btn-container"]').contains('QRDA').click()
+        cy.get(TestCasesPage.btnContainer).contains('QRDA').click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'QRDA exported successfully')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip'), {timeout: 500000}).should('exist')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM-TestCases.zip'), { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
     })

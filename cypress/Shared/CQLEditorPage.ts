@@ -14,9 +14,6 @@ export class CQLEditorPage {
     //message that appears for various alerts that occur at successful saving
     public static readonly saveAlertMessage = '[id="status-handler"]'
 
-    //error toast message when a CQL change has an affect on PC
-    public static readonly measureErrorToast = '[class="toast danger"]'
-
     //error tooltip container
     public static readonly errorContainer = '#ace-editor-wrapper > div.ace_tooltip'
     public static readonly errorMsg = '[data-testid="generic-errors-text-list"]'
@@ -51,7 +48,6 @@ export class CQLEditorPage {
     public static readonly applyCodeBtn = '[data-testid="apply-code-0"]'
     public static readonly removeCodeBtn = '[data-testid="remove-code-0"]'
     public static readonly selectDropdownBtn = '[data-testid="select-action-0_apply"]'
-    public static readonly selectOptionListBox = '[class="btn-container"]'
     public static readonly removeCodeConfirmationMsg = '[class="dialog-warning-body"]'
     public static readonly removeCodeContinueBtn = '[data-testid="delete-dialog-continue-button"]'
 

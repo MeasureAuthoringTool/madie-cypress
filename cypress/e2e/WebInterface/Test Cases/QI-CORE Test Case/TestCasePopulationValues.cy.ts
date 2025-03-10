@@ -39,7 +39,7 @@ describe('Test Case Expected Measure Group population values based on initial me
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.testCasePopulationHeaderForNoMeasureGroup).should('contain.text', 'No Population Criteria is associated with this measure. Please review the Population Criteria tab.')
+        cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'No Population Criteria is associated with this measure. Please review the Population Criteria tab.')
     })
 
     it('Validate Population Values check boxes are correct based on measure scoring value that is applied, ' +
@@ -79,7 +79,7 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
             cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
             cy.get(TestCasesPage.testCaseDENOMExpected).check().should('be.checked')
-    })
+        })
 
     it('Validate notification that a reset of population values, on test cases, will occur once the completed ' +
         'save / update of the scoring value is executed', () => {
@@ -142,7 +142,7 @@ describe('Test Case Expected Measure Group population values based on initial me
 
             cy.get(MeasureGroupPage.scoreUpdateConfirmModal).should('not.exist')
 
-    })
+        })
 
     it('Validate Population Values are reset on all test cases that exist under a measure group, after the score ' +
         'unit value is saved / updated', () => {
@@ -225,7 +225,7 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(TestCasesPage.detailsTab).should('exist')
             cy.get(TestCasesPage.detailsTab).should('be.visible')
             cy.get(TestCasesPage.detailsTab).click()
-            cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
+            cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
             //navigate back to the measure group tab / page and...
             //change score unit value and save / update measure with new value
             cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -273,7 +273,7 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
             cy.get(TestCasesPage.testCaseIPPExpected).should('be.empty')
 
-    })
+        })
 
     it('Test Case Population value options are limited to those that are defined from Measure Group -- required populations', () => {
 

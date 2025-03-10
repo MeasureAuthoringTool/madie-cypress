@@ -64,7 +64,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         //Assert saved observation values
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -280,18 +280,18 @@ describe('Measure observation expected result', () => {
         cy.log('Adding Measure Observations')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(0).click() //select isFinishedEncounter
+        cy.get(TestCasesPage.SelectionOptionChoice).should('exist')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('be.visible')
+        cy.get(TestCasesPage.SelectionOptionChoice).eq(0).click() //select isFinishedEncounter
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
         cy.get(MeasureGroupPage.numeratorObservation).click()
-        cy.get(MeasureGroupPage.measureObservationSelect).should('exist')
-        cy.get(MeasureGroupPage.measureObservationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureObservationSelect).eq(0).click() //select isFinishedEncounter
+        cy.get(TestCasesPage.SelectionOptionChoice).should('exist')
+        cy.get(TestCasesPage.SelectionOptionChoice).should('be.visible')
+        cy.get(TestCasesPage.SelectionOptionChoice).eq(0).click() //select isFinishedEncounter
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 

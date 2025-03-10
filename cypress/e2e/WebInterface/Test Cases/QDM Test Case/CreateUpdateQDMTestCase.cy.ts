@@ -364,7 +364,7 @@ describe('Create and update QDM Test case validations', () => {
 
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
-        cy.get('[class="toast danger"]').should('contain.text', 'Test Case Title can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
+        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Test Case Title can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
 
     })
 
@@ -401,7 +401,7 @@ describe('Create and update QDM Test case validations', () => {
 
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
-        cy.get('[class="toast danger"]').should('contain.text', 'Test Case Group can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
+        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Test Case Group can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
 
     })
 
@@ -425,7 +425,7 @@ describe('Create and update QDM Test case validations', () => {
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get('[class="toast danger"]').should('contain.text', 'Test Case Title can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
+        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Test Case Title can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
 
     })
 
@@ -449,7 +449,7 @@ describe('Create and update QDM Test case validations', () => {
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get('[class="toast danger"]').should('contain.text', 'Test Case Group can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
+        cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Test Case Group can not contain special characters: /[`!@#$%^&*()_\\+=\\[\\]{};\':"\\\\|,.<>\\/?~]/')
 
     })
 })

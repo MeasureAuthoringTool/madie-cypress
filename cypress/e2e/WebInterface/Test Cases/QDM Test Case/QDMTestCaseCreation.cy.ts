@@ -286,7 +286,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
 
                 //check / select radio button for the value of 'Latest'
                 cy.wrap(radio).eq(0).check({ force: true }).should('be.checked');
-                cy.contains('[data-testid="manifest-expansion-radio-buttons-group"] > :nth-child(1) > .MuiTypography-root', 'Latest');
+                cy.contains(TestCasesPage.qdmExpansionRadioOptionGroup + ' > :nth-child(1) > .MuiTypography-root', 'Latest');
 
                 cy.get(TestCasesPage.qdmManifestSelectDropDownBox).should('not.exist')
 

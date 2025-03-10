@@ -118,7 +118,7 @@ describe('Test Case Import: functionality tests', () => {
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         OktaLogin.UILogout()
 
@@ -142,7 +142,7 @@ describe('Test Case Import: functionality tests', () => {
 
         //export test case
         cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
-        cy.get('[data-testid="export-action-icon"]').click()
+        cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
@@ -177,7 +177,7 @@ describe('Test Case Import: functionality tests', () => {
 
         //export test case
         cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
-        cy.get('[data-testid="export-action-icon"]').click()
+        cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
@@ -495,7 +495,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
 
         //export test case
         cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
-        cy.get('[data-testid="export-action-icon"]').click()
+        cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
@@ -585,7 +585,7 @@ describe('Test case uniqueness error validation', () => {
 
         //export test case
         cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
-        cy.get('[data-testid="export-action-icon"]').click()
+        cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
@@ -703,7 +703,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
 
         //export test case
         cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
-        cy.get('[data-testid="export-action-icon"]').click()
+        cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 

@@ -1,5 +1,6 @@
 import { MeasuresPage } from "./MeasuresPage"
 import { Utilities } from "./Utilities"
+import { TestCasesPage } from "./TestCasesPage"
 
 export enum EditMeasureActions {
 
@@ -61,7 +62,7 @@ export class EditMeasurePage {
     public static readonly endorsementNumber = '[data-testid="endorsement-number-input"]'
     public static readonly endorsingOrganizationTextBox = '[id="endorser"]'
     public static readonly endorsingOrganizationOption = '[id="endorser-option-1"]'
-    public static readonly endorserFieldsErrorMsg = '[class="toast danger"]'
+    public static readonly errorMessage = '[class="toast danger"]'
 
     //left panel
     public static readonly leftPanelMeasureInformation = '[data-testid="leftPanelMeasureInformation"]'
@@ -88,7 +89,6 @@ export class EditMeasurePage {
     //References page
     public static readonly addReferenceButton = '[data-testid="create-reference-button"]'
     public static readonly selectMeasureReference = '.chevron-container > [data-testid="ExpandMoreIcon"]'
-    public static readonly measureReferenceDropdown = '[class="btn-container"]'
     public static readonly referenceTypeDropdown = '[id="measure-referenceType"]'
     public static readonly editReferenceModal = '[data-testid="dialog-form"]'
     public static readonly editReferenceCloseModalBtn = '[data-testid="close-button"]'
@@ -203,8 +203,8 @@ export class EditMeasurePage {
                 cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
                 cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')
                 Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 125000)
-                cy.get('.toast').should('contain.text', 'Measure exported successfully')
-                cy.get('[data-testid="ds-btn"]').click()
+                cy.get(TestCasesPage.successMsg).should('contain.text', 'Measure exported successfully')
+                cy.get(TestCasesPage.QDMTcDiscardChangesButton).click()
                 break
             }
 

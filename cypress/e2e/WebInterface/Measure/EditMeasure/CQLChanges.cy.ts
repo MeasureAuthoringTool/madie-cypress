@@ -124,14 +124,14 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
             //wait until toast message appears
-            Utilities.waitForElementVisible(CQLEditorPage.measureErrorToast, 350000)
-            cy.get(CQLEditorPage.measureErrorToast).should('contain.text', 'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.')
+            Utilities.waitForElementVisible(EditMeasurePage.errorMessage, 350000)
+            cy.get(EditMeasurePage.errorMessage).should('contain.text', 'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.')
             //navigate to the PC tab and verify mismatch message appears
             cy.get(EditMeasurePage.measureGroupsTab).click()
             cy.get(MeasureGroupPage.CQLPCMismatchError).should('contain.text', 'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.')
             //navigate to the TC tab and verify mismatch message appears and the execute test case button is disabled
             cy.get(EditMeasurePage.testCasesTab).click()
-            cy.get(TestCasesPage.CQLPCTCMismatchError).should('contain.text', 'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.')
+            cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.')
             cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
             TestCasesPage.clickEditforCreatedTestCase()
             //navigate into the test case and verify that the Run Test Case button is also disabled
@@ -282,14 +282,14 @@ describe('CQL Changes and how that impacts test cases, observations and populati
             cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
             //wait until toast message appears
-            Utilities.waitForElementVisible(CQLEditorPage.measureErrorToast, 35000)
-            cy.get(CQLEditorPage.measureErrorToast).should('contain.text', 'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.')
+            Utilities.waitForElementVisible(EditMeasurePage.errorMessage, 35000)
+            cy.get(EditMeasurePage.errorMessage).should('contain.text', 'CQL return types do not match population criteria! Test Cases will not execute until this issue is resolved.')
             //navigate to the PC tab and verify mismatch message appears
             cy.get(EditMeasurePage.measureGroupsTab).click()
             cy.get(MeasureGroupPage.CQLPCMismatchError).should('contain.text', 'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.')
             //navigate to the TC tab and verify mismatch message appears and the exectue test case button is disabled
             cy.get(EditMeasurePage.testCasesTab).click()
-            cy.get(TestCasesPage.CQLPCTCMismatchError).should('contain.text', 'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.')
+            cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'One or more Population Criteria has a mismatch with CQL return types. Test Cases cannot be executed until this is resolved.')
             cy.get(TestCasesPage.executeTestCaseButton).should('be.disabled')
             TestCasesPage.clickEditforCreatedTestCase()
             //navigate into the test case and verify that the Run Test Case button is also disabled

@@ -1,4 +1,5 @@
 import { Utilities } from "./Utilities"
+import { TestCasesPage } from "./TestCasesPage"
 
 export class MeasuresPage {
 
@@ -108,8 +109,8 @@ export class MeasuresPage {
                 cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
                 cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')
                 Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 125000)
-                cy.get('.toast').should('contain.text', 'Measure exported successfully')
-                cy.get('[data-testid="ds-btn"]').click()
+                cy.get(TestCasesPage.successMsg).should('contain.text', 'Measure exported successfully')
+                cy.get(TestCasesPage.QDMTcDiscardChangesButton).click()
 
                 break
             }
