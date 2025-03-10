@@ -175,7 +175,7 @@ describe('Qi Core Code Search fields', () => {
 
         //Apply code to the Measure
         cy.get(CQLEditorPage.applyCodeBtn).click()
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB has been successfully added to the CQL.')
 
         //Save and Discard changes button should be enabled after applying the code
         cy.get(CQLEditorPage.saveCQLButton).should('be.enabled')
@@ -243,7 +243,7 @@ describe('Qi Core Code Search fields', () => {
         cy.get('[data-testid="code-suffix-field-input"]').type('1234')
         cy.get('[id="include-code-system-version-checkbox"]').check()
         cy.get('[data-testid="apply-button"]').click()
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB has been successfully added to the CQL.')
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
@@ -270,7 +270,7 @@ describe('Qi Core Code Search fields', () => {
 
         //Apply code to the Measure
         cy.get(CQLEditorPage.applyCodeBtn).click()
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB has been successfully added to the CQL.')
 
         //Add another code with the same Code system
         cy.get(CQLEditorPage.codeText).clear().type('ACUTE')
@@ -283,7 +283,7 @@ describe('Qi Core Code Search fields', () => {
 
         //Apply code to the Measure
         cy.get(CQLEditorPage.applyCodeBtn).click()
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code ACUTE has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code ACUTE has been successfully added to the CQL.')
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
@@ -393,7 +393,7 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
 
         //Apply code to the Measure
         cy.get(CQLEditorPage.applyCodeBtn).click()
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB has been successfully added to the CQL.')
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
@@ -419,7 +419,7 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
         cy.get('[data-testid="code-suffix-field-input"]').type('1234')
         cy.get('[id="include-code-system-version-checkbox"]').check()
         cy.get('[data-testid="apply-button"]').click()
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been updated successfully.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB has been updated successfully.')
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
@@ -446,7 +446,7 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
 
         //Apply code to the Measure
         cy.get(CQLEditorPage.applyCodeBtn).click()
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Code AMB has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB has been successfully added to the CQL.')
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()

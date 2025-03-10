@@ -254,7 +254,7 @@ describe('Run QDM Test Case ', () => {
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
     })
 })
@@ -314,8 +314,8 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
-        Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 35000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 35000)
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -344,8 +344,8 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
-        Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 35000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 35000)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 50000)
@@ -380,8 +380,8 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
-        Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 35000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 35000)
         //Add Expected value for Test case
         //navigate to the Expected / Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click()
@@ -409,8 +409,8 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
-        Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 35000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 35000)
 
         //logout of MADiE
         OktaLogin.UILogout()

@@ -1,10 +1,10 @@
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {Global} from "../../../../Shared/Global"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { Global } from "../../../../Shared/Global"
 
 const date = Date.now()
 let measureName = 'QDMCQLFunctions' + date
@@ -196,11 +196,11 @@ describe('QDM CQL Functions', () => {
         cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard changes?')
         cy.get(CQLEditorPage.modalConfirmationText).should('contain.text', 'Are you sure you want to discard your changes in the CQL and edit the Function in the CQL?')
         cy.get(Global.keepWorkingCancel).click()
-         /*
-        Note: should be
-        Global.clickOnKeepWorking()
-        but this modal title has Discard changes? instead of Discard Changes?
-        */
+        /*
+       Note: should be
+       Global.clickOnKeepWorking()
+       but this modal title has Discard changes? instead of Discard Changes?
+       */
 
 
         //Click on Delete button
@@ -223,7 +223,7 @@ describe('QDM CQL Functions', () => {
         cy.get(CQLEditorPage.deleteSavedFunctions).click()
         cy.get(CQLEditorPage.modalConfirmationText).should('contain.text', 'Are you sure you want to delete this Function?')
         cy.get(CQLEditorPage.deleteContinueButton).should('be.enabled').click()
-        cy.get(CQLEditorPage.saveSuccessMsg, {timeout: 6500}).should('have.text', 'Function Denominator Observation has been successfully removed from the CQL.')
+        cy.get(EditMeasurePage.successMessage, { timeout: 6500 }).should('have.text', 'Function Denominator Observation has been successfully removed from the CQL.')
     })
 
     it('Verify error message appears on Functions tab when there is an error in the Measure CQL', () => {

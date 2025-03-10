@@ -204,7 +204,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
 
         //Add Elements to the Test case
@@ -251,7 +251,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Add Elements to the second Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -311,7 +311,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Execute Test case on Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()

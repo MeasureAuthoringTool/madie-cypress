@@ -6,7 +6,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 
 const url = Cypress.config('baseUrl')
@@ -75,7 +75,7 @@ describe('QI-Core Measure Export', () => {
         cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
 
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
         //Add SDE to the Measure
         //Click on Supplemental data tab
@@ -96,7 +96,7 @@ describe('QI-Core Measure Export', () => {
 
         //Save Supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Navigate to Measures page
         cy.get('[data-testid="close-error-button"]').click()
@@ -185,10 +185,10 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
         MeasuresPage.actionCenter('export')
 
         //verify zip file exists
-        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR4.zip', {timeout: 5500})
+        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR4.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', {zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR4.zip', path: downloadsFolder})
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR4.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
@@ -371,10 +371,10 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         MeasuresPage.actionCenter('export')
 
         //verify zip file exists
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR4.zip', {timeout: 500000}).should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR4.zip', { timeout: 500000 }).should('exist')
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', {zipFile: 'eCQMTitle4QICore-v1.0.000-FHIR4.zip', path: downloadsFolder})
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v1.0.000-FHIR4.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
             })

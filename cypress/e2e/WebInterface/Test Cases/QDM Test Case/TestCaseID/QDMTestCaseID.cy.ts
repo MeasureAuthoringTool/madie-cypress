@@ -70,7 +70,7 @@ describe('QDM Test Case sorting by Test Case number', () => {
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to main measure list page
         cy.get(Header.mainMadiePageButton).click()
@@ -118,8 +118,8 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get('[data-value="Other Race"]').click()
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
-        Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 20000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 20000)
         //Navigate back to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -144,7 +144,7 @@ describe('QDM Test Case sorting by Test Case number', () => {
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to main measure list page
         cy.get(Header.mainMadiePageButton).click()
@@ -206,7 +206,7 @@ describe('Import Test cases onto an existing QDM measure via file and ensure tes
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
@@ -361,7 +361,7 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         // navigate to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

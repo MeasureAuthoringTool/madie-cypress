@@ -153,8 +153,8 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get('[data-testid="test-case-title-1_caseNumber"]').should('contain.text', '1')
 
         //verify confirmation message
-        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 35000)
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', '(2) Test cases imported successfully')
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 35000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', '(2) Test cases imported successfully')
 
         //Verify created test case Titles exist on Test Cases Page 
         cy.contains(testCase2.title).should('be.visible')

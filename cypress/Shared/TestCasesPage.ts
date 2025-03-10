@@ -127,7 +127,6 @@ export class TestCasesPage {
     public static readonly PhysicalExamBTCard = '[data-testid="data-type-Physical Exam, Performed: Body temperature"]'
 
     //QDM misc test case page objects
-    public static readonly tcSaveSuccessMsg = '[class="toast success"]'
     public static readonly tcSaveAlertDangerMsg = '[class="toast danger"]'
     public static readonly editTestCaseDescriptionInlineError = '[data-testid="test-case-description-helper-text"]'
     public static readonly QDMTcDiscardChangesButton = '[data-testid="ds-btn"]'
@@ -644,7 +643,7 @@ export class TestCasesPage {
                     Utilities.waitForElementEnabled('[data-testid="export-test-case-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="export-test-case-' + fileContents + '"]').should('be.enabled')
                     cy.get('[data-testid="export-test-case-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    cy.get(this.tcSaveSuccessMsg).should('contain.text', 'Test case exported successfully')
+                    cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test case exported successfully')
                     break
                 }
                 case 'exporttransaction': {
@@ -655,7 +654,7 @@ export class TestCasesPage {
                     Utilities.waitForElementEnabled('[data-testid="export-transaction-bundle-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="export-transaction-bundle-' + fileContents + '"]').should('be.enabled')
                     cy.get('[data-testid="export-transaction-bundle-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    cy.get(this.tcSaveSuccessMsg).should('contain.text', 'Test case exported successfully')
+                    cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test case exported successfully')
                     break
                 }
                 case 'exportcollection': {
@@ -666,7 +665,7 @@ export class TestCasesPage {
                     Utilities.waitForElementEnabled('[data-testid="export-collection-bundle-' + fileContents + '"]', 55000)
                     cy.get('[data-testid="export-collection-bundle-' + fileContents + '"]').should('be.enabled')
                     cy.get('[data-testid="export-collection-bundle-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    cy.get(this.tcSaveSuccessMsg).should('contain.text', 'Test case exported successfully')
+                    cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test case exported successfully')
                     break
                 }
                 case 'shift': {
@@ -1011,7 +1010,7 @@ export class TestCasesPage {
                     })
 
                 cy.get(TestCasesPage.actionCenterClone).should('be.enabled').click()
-                Utilities.waitForElementVisible(this.tcSaveSuccessMsg, 2500)
+                Utilities.waitForElementVisible(EditMeasurePage.successMessage, 2500)
 
                 cy.get('[data-testid="test-case-title-0_caseNumber"]')
                     .invoke('text').then(newMaxNumber => {
@@ -1033,21 +1032,21 @@ export class TestCasesPage {
 
                 cy.get(TestCasesPage.actionCenterDelete).should('be.enabled').click()
                 cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
-                Utilities.waitForElementVisible(this.tcSaveSuccessMsg, 2500)
+                Utilities.waitForElementVisible(EditMeasurePage.successMessage, 2500)
                 break
 
             case TestCaseAction.exportCollection:
 
                 cy.get(TestCasesPage.actionCenterExport).should('be.enabled').click()
                 cy.get(TestCasesPage.exportCollectionTypeOption).should('be.visible').click()
-                Utilities.waitForElementVisible(this.tcSaveSuccessMsg, 7500)
+                Utilities.waitForElementVisible(EditMeasurePage.successMessage, 7500)
                 break
 
             case TestCaseAction.exportTransaction:
 
                 cy.get(TestCasesPage.actionCenterExport).should('be.enabled').click()
                 cy.get(TestCasesPage.exportTransactionTypeOption).should('be.visible').click()
-                Utilities.waitForElementVisible(this.tcSaveSuccessMsg, 7500)
+                Utilities.waitForElementVisible(EditMeasurePage.successMessage, 7500)
                 break
 
             case TestCaseAction.shiftDates:

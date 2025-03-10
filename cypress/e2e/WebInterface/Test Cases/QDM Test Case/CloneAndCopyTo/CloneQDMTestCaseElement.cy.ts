@@ -100,7 +100,7 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
 
         //add second PC / group to measure
@@ -123,7 +123,7 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
 
 
@@ -154,8 +154,8 @@ describe('Clone QDM Test Case', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
-        Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 30000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 30000)
 
         // grab the element id of the first entry in the element table
         TestCasesPage.grabElementId(1)
@@ -176,8 +176,8 @@ describe('Clone QDM Test Case', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
-        Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 30000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 30000)
 
         //confirm changes was updated to the corrected element
         cy.get("tr").eq(1).should('contain', 'Encounter, PerformedObservation ServicesSNOMEDCT: 448951000124107 relP:  03/07/2023 8:00 AM - 03/08/2023 8:15 AM')
@@ -239,7 +239,7 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
 
         //add second PC / group to measure
@@ -262,7 +262,7 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
 
 
@@ -293,8 +293,8 @@ describe('Clone QDM Test Case', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
-        Utilities.waitForElementToNotExist(TestCasesPage.tcSaveSuccessMsg, 30000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 30000)
 
         OktaLogin.UILogout()
 

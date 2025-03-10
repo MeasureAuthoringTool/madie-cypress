@@ -158,7 +158,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
 
         //adding second group
@@ -184,7 +184,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
 
         //Add Elements to first Test case
@@ -306,7 +306,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Execute Test case on Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()

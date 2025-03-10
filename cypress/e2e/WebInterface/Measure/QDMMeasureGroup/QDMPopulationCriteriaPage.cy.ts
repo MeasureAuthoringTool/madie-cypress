@@ -80,7 +80,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'ipp')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
 
         cy.get(MeasureGroupPage.QDMAddPopCriteriaBtn).click()
         Utilities.waitForElementVisible(MeasureGroupPage.QDMPopulationCriteria2, 30000)
@@ -166,8 +166,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.enabled')
         cy.get(MeasureGroupPage.measureReportingSaveBtn).click()
         //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Measure Reporting Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('exist')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reporting Updated Successfully')
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -192,8 +192,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.enabled')
         cy.get(MeasureGroupPage.measureReportingSaveBtn).click()
         //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Measure Reporting Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('exist')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reporting Updated Successfully')
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -222,8 +222,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.enabled')
         cy.get(MeasureGroupPage.measureReportingSaveBtn).click()
         //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Measure Reporting Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('exist')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reporting Updated Successfully')
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -265,8 +265,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.enabled')
         cy.get(MeasureGroupPage.measureReportingSaveBtn).click()
         //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Measure Reporting Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('exist')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reporting Updated Successfully')
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
@@ -302,7 +302,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //save the Risk Adjustment data
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
         //click on the Supplemental Data button / link on the left page to populate fields on the right
         cy.get(MeasureGroupPage.QDMSupplementalDataElementsTab).click()
@@ -312,7 +312,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //save Supplemental data Elements
         cy.get(MeasureGroupPage.QDMSaveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
     })
 })
 
@@ -391,7 +391,7 @@ describe('Save Population Criteria on QDM measure', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'SDE Ethnicity')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
 
         cy.get(MeasureGroupPage.QDMAddPopCriteriaBtn).click()
         Utilities.waitForElementVisible(MeasureGroupPage.QDMPopulationCriteria2, 30000)
@@ -404,7 +404,7 @@ describe('Save Population Criteria on QDM measure', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'SDE Ethnicity')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
 
     })
 })
@@ -457,8 +457,8 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('not.exist')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 30000)
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group saved successfully.')
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
 
         cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
         cy.get(MeasureGroupPage.initialPopulationSelect).click()

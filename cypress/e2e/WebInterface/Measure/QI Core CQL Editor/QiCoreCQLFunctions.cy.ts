@@ -1,10 +1,10 @@
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
-import {Utilities} from "../../../../Shared/Utilities"
-import {Global} from "../../../../Shared/Global"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Utilities } from "../../../../Shared/Utilities"
+import { Global } from "../../../../Shared/Global"
 
 const date = Date.now()
 let measureName = 'QiCoreCQLFunctions' + date
@@ -102,7 +102,7 @@ describe('Qi Core CQL Functions', () => {
         cy.get(CQLEditorPage.savedFunctionsTab).click().wait(1000)
 
         // Note: this enforces https://jira.cms.gov/browse/MAT-8005
-      
+
         cy.get('[data-testid="functions-row-0"] > :nth-child(1)').should('contain.text', 'isFinishedEncounter')
         cy.get('[data-testid="functions-row-1"] > :nth-child(1)').should('contain.text', 'MeasureObservation')
         cy.get('[data-testid="functions-row-2"] > :nth-child(1)').should('contain.text', 'Denominator Exclusions')
@@ -202,7 +202,7 @@ describe('Qi Core CQL Functions', () => {
         cy.get(CQLEditorPage.deleteSavedFunctions).click()
         cy.get(CQLEditorPage.modalConfirmationText).should('contain.text', 'Are you sure you want to delete this Function?')
         cy.get(CQLEditorPage.deleteContinueButton).should('be.enabled').click()
-        cy.get(CQLEditorPage.saveSuccessMsg, {timeout: 6500}).should('have.text', 'Function isFinishedEncounter has been successfully removed from the CQL.')
+        cy.get(EditMeasurePage.successMessage, { timeout: 6500 }).should('have.text', 'Function isFinishedEncounter has been successfully removed from the CQL.')
     })
 
     it('Verify error message appears on Functions tab when there is an error in the Measure CQL', () => {

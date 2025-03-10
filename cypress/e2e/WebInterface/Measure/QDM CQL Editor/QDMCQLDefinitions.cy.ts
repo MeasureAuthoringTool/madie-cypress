@@ -312,7 +312,7 @@ describe('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         cy.get(CQLEditorPage.deleteCQLDefinitions).click()
         cy.get(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn).click()
-        Utilities.waitForElementVisible(CQLEditorPage.saveSuccessMsg, 60000)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 60000)
 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 

@@ -1014,7 +1014,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
 
         //Add Supplemental Data Elements
@@ -1027,7 +1027,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Add Elements to first Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -1047,7 +1047,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
                 cy.wrap(radio).eq(0).check({ force: true }).should('be.checked');
 
                 cy.get(TestCasesPage.sdeTestCaseSaveButton).click()
-                cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Configuration Updated Successfully')
+                cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
 
                 // Verify that first radio button is no longer checked
                 cy.wrap(radio).eq(1).should('not.be.checked');

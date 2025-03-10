@@ -234,7 +234,7 @@ describe('Measure with Negation Rationale', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for ' +
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
 
         //Add Supplemental Data Elements
@@ -248,7 +248,7 @@ describe('Measure with Negation Rationale', () => {
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Add Elements to the Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -288,7 +288,7 @@ describe('Measure with Negation Rationale', () => {
 
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Execute Test case on Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
