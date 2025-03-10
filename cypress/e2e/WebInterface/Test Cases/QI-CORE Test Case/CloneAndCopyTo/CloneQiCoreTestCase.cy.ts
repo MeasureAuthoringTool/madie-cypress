@@ -1,6 +1,6 @@
 import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import {TestCaseAction, TestCasesPage} from "../../../../../Shared/TestCasesPage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
@@ -53,8 +53,7 @@ describe('Clone Qi Core Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.checkTestCase(1)
-        cy.get(TestCasesPage.actionCenterClone).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test case cloned successfully')
+        TestCasesPage.actionCenter(TestCaseAction.clone)
     })
 
     it('Non Measure owner unable to clone Test case', () => {

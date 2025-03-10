@@ -1,7 +1,7 @@
 import { EditMeasurePage } from "./EditMeasurePage"
 import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
-import dateTimeISO = CypressCommandLine.dateTimeISO;
+import dateTimeISO = CypressCommandLine.dateTimeISO
 
 export type TestCase = {
     title: string,
@@ -52,7 +52,6 @@ export class TestCasesPage {
     public static readonly QDMGender = '[id="demographics-gender-select-id"]'
     public static readonly SelectionOptionChoice = '.MuiList-root'
     public static readonly QDMEthnicity = '[id="demographics-ethnicity-select-id"]'
-    public static readonly QEMEthnicityOptions = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiPaper-root MuiMenu-paper MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-177ic5c"]'
 
     //QDM Test Case Demographics herlper text elements
     public static readonly QDMDOBHelperTxt = '[id="birth-date-helper-text"]'
@@ -60,32 +59,13 @@ export class TestCasesPage {
     //QDM Test Case Elements elements / objects -- sub tabs sections
     public static readonly ElementsSubTabHeading = '[class="test-case-tab-heading"]'
     public static readonly AssessmentElementTab = '[data-testid="elements-tab-assessment"]'
-    public static readonly CareExperienceElementTab = '[data-testid="elements-tab-care_experience"]'
-    public static readonly AllergyElementTab = '[data-testid="elements-tab-allergy"]'
-    public static readonly AdverseEventElementTab = '[data-testid="elements-tab-adverse_event"]'
     public static readonly CareGoalElementTab = '[data-testid="elements-tab-care_goal"]'
-    public static readonly CommunicationElementTab = '[data-testid="elements-tab-communication"]'
-    public static readonly ConditionElementTab = '[data-testid="elements-tab-condition"]'
-    public static readonly DeviceElementTab = '[data-testid="elements-tab-device"]'
-    public static readonly DiagnosticStudyElementTab = '[data-testid="elements-tab-diagnostic_study"]'
-    public static readonly FamilyHistoryElementTab = '[data-testid="elements-tab-family_history"]'
-    public static readonly ImmunizationElementTab = '[data-testid="elements-tab-immunization"]'
-    public static readonly InterventionElementTab = '[data-testid="elements-tab-intervention"]'
     public static readonly MedicationElementTab = '[data-testid="elements-tab-medication"]'
-    public static readonly ParticipationElementTab = '[data-testid="elements-tab-participation"]'
-    public static readonly ProcedureElementTab = '[data-testid="elements-tab-procedure"]'
     public static readonly EncounterElementTab = '[data-testid="elements-tab-encounter"]'
     public static readonly CharacteristicElementTab = '[data-testid="elements-tab-patient_characteristic"]'
-    public static readonly PhysicalExamElementTab = '[data-testid="elements-tab-physical_exam"]'
-    public static readonly RelatedPersonElementTab = '[data-testid="elements-tab-related_person"]'
-    public static readonly SubstanceElementTab = '[data-testid="elements-tab-substance"]'
-    public static readonly SymptomElementTab = '[data-testid="elements-tab-symptom"]'
-    public static readonly TimingCellContainer = '[class="timing-cell-container"]'
     public static readonly qdmTCElementTable = '[class="data-elements-table"]'
 
     //QDM Test Case Elements elements / objects -- Encounter
-    public static readonly EncounterOSSCard = '[data-testid="data-type-Encounter, Performed: Outpatient Surgery Service"]'
-    public static readonly EncounterOSSCardExpandBtn = '[data-testid="AddCircleOutlineIcon"]'
     public static readonly ExpandedOSSDetailCard = '[data-testid="data-element-card"]'
     public static readonly ExpandedOSSDetailCardClose = '[data-testid="close-element-card"]'
     public static readonly ExpandedOSSDetailCardTitle = '[class="title"]'
@@ -98,13 +78,6 @@ export class TestCasesPage {
     public static readonly EncounterOSCard = '[data-testid="data-type-Encounter, Performed: Observation Services"]'
 
     //QDM Test Case Elements elements / objects -- Laboratory
-    public static readonly LaboratoryHLTCard = '[data-testid="data-type-Laboratory Test, Performed: Hematocrit lab test"]'
-    public static readonly LaboratoryGLTCard = '[data-testid="data-type-Laboratory Test, Performed: Glucose lab test"]'
-    public static readonly LaboratoryBLTCard = '[data-testid="data-type-Laboratory Test, Performed: Bicarbonate lab test"]'
-    public static readonly LaboratoryWHBCCLTCard = '[data-testid="data-type-Laboratory Test, Performed: White blood cells count lab test"]'
-    public static readonly LaboratorySLTCard = '[data-testid="data-type-Laboratory Test, Performed: Sodium lab test"]'
-    public static readonly LaboratoryPLTCard = '[data-testid="data-type-Laboratory Test, Performed: Potassium lab test"]'
-    public static readonly LaboratoryCLTCard = '[data-testid="data-type-Laboratory Test, Performed: Creatinine lab test"]'
     public static readonly locationPeriodStartDate = '[data-testid="location-period-start-input"]'
     public static readonly locationPeriodEndDate = '[data-testid="location-period-end-input"]'
     public static readonly relevantPeriodStartDate = '[data-testid="relevant-period-start-input"]'
@@ -115,23 +88,13 @@ export class TestCasesPage {
 
     //QDM Test Case Elements elements / objects -- Characteristic
     public static readonly CharacteristicMAPCard = '[data-testid="data-type-Patient Characteristic Payer: Medicare Advantage payer"]'
-    public static readonly CharacteristicPayerCard = '[data-testid="data-type-Patient Characteristic Payer: Payer"]'
     public static readonly CharacteristicMFFSPCard = '[data-testid="data-type-Patient Characteristic Payer: Medicare FFS payer"]'
-
-    //QDM Test Case Elements elements / objects -- Physical Exam
-    public static readonly PhysicalExamOSbyPOCard = '[data-testid="data-type-Physical Exam, Performed: Oxygen Saturation by Pulse Oximetry"]'
-    public static readonly PhysicalExameBWCard = '[data-testid="data-type-Physical Exam, Performed: Body weight"]'
-    public static readonly PhysicalExamSBPCard = '[data-testid="data-type-Physical Exam, Performed: Systolic Blood Pressure"]'
-    public static readonly PhysicalExamRRCard = '[data-testid="data-type-Physical Exam, Performed: Respiratory Rate"]'
-    public static readonly PhysicalExamHRCard = '[data-testid="data-type-Physical Exam, Performed: Heart Rate"]'
-    public static readonly PhysicalExamBTCard = '[data-testid="data-type-Physical Exam, Performed: Body temperature"]'
 
     //QDM misc test case page objects
     public static readonly tcSaveAlertDangerMsg = '[class="toast danger"]'
     public static readonly editTestCaseDescriptionInlineError = '[data-testid="test-case-description-helper-text"]'
     public static readonly QDMTcDiscardChangesButton = '[data-testid="ds-btn"]'
     public static readonly QDMRunTestCasefrmTestCaseListPage = '[data-testid="qdm-test-case-run-button"]'
-    public static readonly deleteQDMTCAttribute = '[data-testid=delete-chip-button-0]'
 
     //SDE Sub tab
     public static readonly qdmSDESubTab = '[data-testid="sde-tab"]'
@@ -158,22 +121,15 @@ export class TestCasesPage {
 
     //QDM Test Case
     public static readonly qdmCQLFailureErrorList = '[data-testid="execution_context_loading_errors"]'
-    public static readonly qdmTCJson = '[class="panel-content"]'
     public static readonly qdmExpansionRadioOptionGroup = '[data-testid="manifest-expansion-radio-buttons-group"]'
     public static readonly qdmExpansionSubTab = '[data-testid="nav-link-expansion"]'
     public static readonly qdmManifestSelectDropDownBox = '[id="manifest-select"]'
-    public static readonly qdmManifestFirstOption = '[data-value="ecqm-update-4q2017-eh"]'
-    public static readonly qdmManifestMaySecondOption = '[data-value="ecqm-update-2024-05-02"]'
     public static readonly qdmMantifestMayFailTestOption = '[data-testid="manifest-option-ecqm-update-2022-05-05"]'
     public static readonly qdmManifestSaveBtn = '[data-testid="manifest-expansion-save-button"]'
-    public static readonly qdmManifestDiscardBtn = '[data-testid="manifest-expansion-discard-changes-button"]'
     public static readonly qdmManifestSuccess = '[data-testid="manifest-expansion-success-text"]'
 
     //CQL area on Test Case page
     public static readonly tcCQLArea = '[data-testid="test-case-cql-editor"]'
-
-    //QDM Configuration subsection
-    public static readonly configurationSubTab = '[data-testid="qdm-nav-collapser"]'
 
     //misc test case page objects
     public static readonly tcColumnAscendingArrow = '[data-testid="KeyboardArrowUpIcon"]'
@@ -183,21 +139,15 @@ export class TestCasesPage {
     public static readonly qdmTCHighlightingDU = '[data-testid="definitions-used-section"]'
     public static readonly tcIPHighlightingDetails = '[data-testid="IP-highlighting"]'
     public static readonly tcHLCollapseResultBtn = '[data-testid="ExpandLessIcon"]'
-    public static readonly tcHLExpandResultBtn = '[data-testid="ExpandMoreIcon"]'
     public static readonly tcHLResultsSection = '[data-testid="results-section"]'
     public static readonly tcDENOMHighlightingDetails = '[data-testid="DENOM-highlighting"]'
     public static readonly tcNUMERHighlightingDetails = '[data-testid="NUMER-highlighting"]'
-    public static readonly tcDENEXHighlightingDetails = '[data-testid="DENEX-highlighting"]'
-    public static readonly tcDENEXCEPHighlightingDetails = '[data-testid="DENEXCEP-highlighting"]'
-    public static readonly tcNUMEXHighlightingDetails = '[data-testid="NUMEX-highlighting"]'
     public static readonly tcDEFINITIONSHighlightingDetails = '[data-testid="definitions-highlighting"]'
     public static readonly tcFUNCTIONSHighlightingDetails = '[data-testid="functions-highlighting"]'
-    public static readonly definitionsFristResultSection = '[class="GroupCoverageResultsSection___StyledDiv-sc-x9ujt7-0 gKcqGP"]'
     public static readonly tcUNUSEDHightlightingDetails = '[data-testid="unused-highlighting"]'
     public static readonly tcHighlightingTab = '[data-testid="highlighting-tab"]'
     public static readonly ippActualCheckBox = '[data-testid="test-population-initialPopulation-actual"]'
     public static readonly numActualCheckBox = '[data-testid="test-population-numerator-actual"]'
-    public static readonly numExclusionActuralCheckBox = '[data-testid="test-population-numeratorExclusion-actual"]'
     public static readonly denomActualCheckBox = '[data-testid="test-population-denominator-actual"]'
     public static readonly denomExclusionActualCheckBox = '[data-testid="test-population-denominatorExclusion-actual"]'
     public static readonly newTestCaseButton = '[data-testid="create-new-test-case-button"]'
@@ -206,15 +156,11 @@ export class TestCasesPage {
     public static readonly voTCCQLobject = '[id="ace-editor-wrapper"]'
     public static readonly voTCCQLEditor = '[class="ace_text-input"]'
     public static readonly testCaseSeriesTextBox = '[data-testid="test-case-series"] > .MuiOutlinedInput-root'
-    public static readonly existingTestCaseSeriesDropdown = '#mui-6'
     public static readonly editTestCaseSaveButton = '[data-testid="edit-test-case-save-button"]'
     public static readonly sdeTestCaseSaveButton = '[data-testid="sde-save"]'
-    public static readonly tcDiscardChangesButton = '[data-testid="edit-test-case-discard-button"]'
     public static readonly errorToastMsg = '[data-testid="error-toast"]'
     public static readonly dangerToastMsg = '[class="toast danger"]'
     public static readonly confirmationMsg = '.toast'
-    public static readonly confirmationMsgWithErrorOrWarning = '#content > div > h3'
-    public static readonly testCaseSeriesList = 'tbody > tr > :nth-child(3)'
     public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
     public static readonly aceEditorJsonInput = '[data-testid="test-case-json-editor-input"]'
     public static readonly testCaseTitle = '[data-testid="test-case-title"]'
@@ -225,10 +171,7 @@ export class TestCasesPage {
     public static readonly tcClearSearch = '[data-testid="test-cases-clear-search"]'
     public static readonly tcClearSearchIcon = '[data-testid="ClearIcon"]'
     public static readonly tcFilterInput = '[data-testid="filter-by-select"]'
-    public static readonly tcFilterByStatus = '[data-testid="filter-by-Status"]'
     public static readonly tcFilterByGroup = '[data-testid="filter-by-Group"]'
-    public static readonly tcFilterByTitle = '[data-testid="filter-by-Title"]'
-    public static readonly tcFilterByDescription = '[data-testid="filter-by-Description"]'
     public static readonly tcFilterByDeselect = '[data-testid="filter-by--"]'
     public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
     public static readonly qdmSDESidNavLink = '[data-testid="nav-link-sde"]'
@@ -240,24 +183,12 @@ export class TestCasesPage {
     public static readonly testCaseExecutionError = '[data-testid="execution_context_loading_errors"]'
     public static readonly runTestButton = '[data-testid="run-test-case-button"]'
     public static readonly runTestAlertMsg = '[data-testid="calculation-info-alert"]'
-    public static readonly testCalculationResults = '[data-testid=calculation-results]'
-    public static readonly testCalculationResultsLineTwo = '[data-testid="calculation-results"] > div > :nth-child(2)'
-    public static readonly testCalculationResultsLineThree = '[data-testid="calculation-results"] > div > :nth-child(3)'
-    public static readonly testCalculationResultsLineFour = '[data-testid="calculation-results"] > div > :nth-child(4)'
-    public static readonly testCalculationResultsLineFive = '[data-testid="calculation-results"] > div > :nth-child(5)'
-    public static readonly testCalculationResultsLineSix = '[data-testid="calculation-results"] > div > :nth-child(6)'
-    public static readonly testCalculationResultsLineSeven = '[data-testid="calculation-results"] > div > :nth-child(7)'
-    public static readonly testCalculationResultsLineEight = '[data-testid="calculation-results"] > div > :nth-child(8)'
-    public static readonly testCalculationResultsLineNine = '[data-testid="calculation-results"] > div > :nth-child(9)'
-    public static readonly testCalculationError = '[data-testid="calculation-error-alert"]'
     public static readonly testCaseListPassingPercTab = '[data-testid="passing-tab"]'
     public static readonly testCaseListCoveragePercTab = '[data-testid="coverage-tab"]'
     public static readonly testCaseListCoverageHighlighting = '[data-testid="code-coverage-highlighting"]'
-    public static readonly selectTestCaseDropdownBtn = '.chevron-container > [data-testid="ExpandMoreIcon"]'
     public static readonly testCaseListTable = '[data-testid="test-case-tbl"]'
     public static readonly testCaseAction0Btn = '[data-testid="test-case-title-0_action"]'
     public static readonly tcPopulationCriteriaNavLink = '[data-testid="test-case-pop-criteria-nav"]'
-    public static readonly tcCoverageTabList = '[data-testid="coverage-tab-list"]'
     public static readonly tcCoverageTabIPpop = '[data-testid="Initial Population-population"]'
     public static readonly tcCoverageTabDenompop = '[data-testid="Denominator-population"]'
     public static readonly tcCoverageTabDenomExcludepop = '[data-testid="Denominator Exclusion-population"]'
@@ -279,9 +210,7 @@ export class TestCasesPage {
     public static readonly testCaseMSRPOPLExpected = '[data-testid="test-population-measurePopulation-expected"]'
     public static readonly testCaseMSRPOPLEXExpected = '[data-testid="test-population-measurePopulationExclusion-expected"]'
     public static readonly testCasePopulationHeaderForNoMeasureGroup = '[data-testid="execution_context_loading_errors"]'
-    public static readonly testCasePopulationValuesHeader = '.GroupPopulations___StyledSpan-sc-1752rtp-1'
     public static readonly testCasePopulationValuesTable = '[data-testid="test-case-population-list-tbl"]'
-    public static readonly testCasePopulationValues = '.TestCasePopulationList___StyledTr-sc-iww9ze-3'
     public static readonly initialPopulationRow = '[data-testid="test-row-population-id-initialPopulation"]'
     public static readonly numeratorRow = '[data-testid="test-row-population-id-numerator"]'
     public static readonly numeratorExclusionRow = '[data-testid="test-row-population-id-numeratorExclusion"]'
@@ -298,7 +227,6 @@ export class TestCasesPage {
     //QDM Test Case Page
     public static readonly elementsTab = '[data-testid=elements-tab]'
     public static readonly jsonTab = '[data-testid=json-tab]'
-    public static readonly highlightingTab = '[data-testid=highlighting-tab]'
     public static readonly expectedOrActualTab = '[data-testid=expectoractual-tab]'
     public static readonly runQDMTestCaseBtn = '[data-testid=qdm-test-case-run-button]'
 
@@ -314,16 +242,11 @@ export class TestCasesPage {
     public static readonly genderSelectValuesElementTab = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
     public static readonly bonnieImportTestCaseBtn = '[data-testid="import-test-cases-from-bonnie-button"]'
     public static readonly highlightingPCTabSelector = '[data-testid="population-criterion-selector"]'
-    public static readonly qdmTestCaseViewBtn = '.action'
     public static readonly lastSavedDate = '[data-testid="test-case-title-0_lastModifiedAt"]'
     public static readonly testCaseNameDropdown = '#edit-test-case-bread-crumbs > .MuiInputBase-root > .MuiSelect-select'
     public static readonly testCaseListCheckBox = '.px-1 > input'
-    public static readonly cloneBtn = '[data-testid="clone-action-icon"]'
-    public static readonly exportBtn = '[data-testid="export-action-btn"]'
 
     //Stratifications
-    public static readonly denominatorStratificationOneExpectedValue = '[data-testid="test-population-Strata-1 Denominator-expected"]'
-    public static readonly numeratorStratificationTwoExpectedValue = '[data-testid="test-population-Strata-2 Numerator-expected"]'
     public static readonly initialPopulationStratificationExpectedValue = '[data-testid="Strata 1-initialPopulation-expected"]'
     public static readonly measurePopulationStratificationExpectedValue = '[data-testid="Strata 1-measurePopulation-expected"]'
     public static readonly initialPopulationStrata2ExpectedValue = '[data-testid="Strata 2-initialPopulation-expected"]'
@@ -340,7 +263,6 @@ export class TestCasesPage {
     public static readonly measureObservationExpectedValueError = '[data-testid="measurePopulationObservation-error-helper-text"]'
     public static readonly denominatorObservationExpectedValueError = '[data-testid="denominatorObservation-error-helper-text"]'
     public static readonly numeratorObservationExpectedValueError = '[data-testid="numeratorObservation-error-helper-text"]'
-    public static readonly eaMeasureGroupOneStratification = '[data-testid="measure-group-1-stratifications"]'
     public static readonly cvMeasureObservationActualValue = '[data-testid="test-population-measurePopulationObservation-actual"]'
     public static readonly denominatorMeasureObservationActualValue = '[data-testid="test-population-denominatorObservation-actual"]'
     public static readonly numeratorMeasureObservationActualValue = '[data-testid="test-population-numeratorObservation-actual"]'
@@ -357,12 +279,10 @@ export class TestCasesPage {
     public static readonly importTestCasesBtn = '[data-testid="show-import-test-cases-button"]'
     public static readonly filAttachDropBox = '[data-testid="file-drop-input"]'
     public static readonly importInProgress = '[data-testid = "testcase-list-loading-spinner"]'
-    public static readonly importTestCaseModalList = '[data-testid="test-case-preview-list"]'
     public static readonly importTestCaseModalHeader = '[data-testid="test-case-preview-header"]'
     public static readonly importWarningMessages = '[data-testid="import-warning-messages"]'
 
     //Warning Modal
-    public static readonly discardChangesConfirmationModal = '[id="mui-4"]'
     public static readonly discardChangesConfirmationText = '[id="discard-changes-dialog-body"]'
     public static readonly discardChangesCancelBtn = '[data-testid="discard-dialog-cancel-button"]'
     public static readonly continueDiscardChangesBtn = '[data-testid="discard-dialog-continue-button"]'
@@ -376,7 +296,6 @@ export class TestCasesPage {
     public static readonly importTestCaseBtnOnModal = '[data-testid="test-case-import-import-btn"]'
     public static readonly importTestCaseCancelBtnOnModal = '[data-testid="test-case-import-cancel-btn"]'
     public static readonly importTestCaseAlertMessage = '[class="madie-alert warning"]'
-    public static readonly importTestCaseDetailedAlertMessage = '[class="StatusHandler___StyledSpan-sc-1tujbo9-0 dBOLeU"]'
     public static readonly importTestCaseBtn = '[data-testid="import-test-case-btn"]'
     public static readonly testCaseFileImport = '[data-testid="import-file-input"]'
     public static readonly tcFileDropInput = '[data-testid="file-drop-input"]'
@@ -386,7 +305,6 @@ export class TestCasesPage {
     public static readonly testCasesNonBonnieFileImportModal = '[data-testid="test-case-import-content-div"]'
     public static readonly testCasesNonBonnieFileImport = '[data-testid="file-drop-input"]'
     public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile = '[data-testid="test-case-preview-header"]'
-    public static readonly testCasesNonBonnieFileImportFileUploadStatusDetails = '[class="TestCaseImportDialog___StyledSmall2-sc-v92oci-6 gpyrWs"]'
     public static readonly importTestCaseSuccessMsg = '[data-testid=success-toast]'
     public static readonly importTestCaseErrorMsg = '[data-testid=error-toast]'
     public static readonly importTestCaseSuccessInfo = '[id="content"]'
@@ -439,7 +357,6 @@ export class TestCasesPage {
     public static readonly actionCenterShiftDates = '[data-testid="shift-test-case-dates-action-btn"]'
 
     // copy to modal
-    public static readonly copyToCancel = '[data-testid="copy-test-cases-cancel-button"]'
     public static readonly copyToSave = '[data-testid="copy-test-cases-continue-button"]'
 
     //This function grabs the data-testid value off of the view button and extracts the id out of it.
@@ -612,83 +529,6 @@ export class TestCasesPage {
             }
         })
 
-    }
-    public static testCaseAction(action: string, secondTestCase?: boolean): void {
-        let filePath = 'cypress/fixtures/testCaseId'
-
-        if (secondTestCase === true) {
-            filePath = 'cypress/fixtures/testCaseId2'
-        }
-        cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="select-action-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid="select-action-' + fileContents + '"]', 50000)
-            cy.get('[data-testid="select-action-' + fileContents + '"]').should('be.enabled')
-            switch ((action.valueOf()).toString().toLowerCase()) {
-                case "edit": {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    Utilities.waitForElementVisible('[data-testid="view-edit-test-case-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="view-edit-test-case-' + fileContents + '"]').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid="view-edit-test-case-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="view-edit-test-case-' + fileContents + '"]').should('be.enabled')
-                    cy.get('[data-testid="view-edit-test-case-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    break
-                }
-                case 'export': {
-                    cy.scrollTo('top')
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
-                    Utilities.waitForElementVisible('[data-testid="export-test-case-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="export-test-case-' + fileContents + '"]').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid="export-test-case-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="export-test-case-' + fileContents + '"]').should('be.enabled')
-                    cy.get('[data-testid="export-test-case-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test case exported successfully')
-                    break
-                }
-                case 'exporttransaction': {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
-                    Utilities.waitForElementVisible('[data-testid="export-transaction-bundle-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="export-transaction-bundle-' + fileContents + '"]').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid="export-transaction-bundle-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="export-transaction-bundle-' + fileContents + '"]').should('be.enabled')
-                    cy.get('[data-testid="export-transaction-bundle-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test case exported successfully')
-                    break
-                }
-                case 'exportcollection': {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    cy.intercept('GET', '/api/measures/' + fileContents + '/exports').as('measureExport')
-                    Utilities.waitForElementVisible('[data-testid="export-collection-bundle-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="export-collection-bundle-' + fileContents + '"]').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid="export-collection-bundle-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="export-collection-bundle-' + fileContents + '"]').should('be.enabled')
-                    cy.get('[data-testid="export-collection-bundle-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test case exported successfully')
-                    break
-                }
-                case 'shift': {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    Utilities.waitForElementVisible('[data-testid="shift-dates-btn-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="shift-dates-btn-' + fileContents + '"]').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid="shift-dates-btn-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="shift-dates-btn-' + fileContents + '"]').should('be.enabled')
-                    cy.get('[data-testid="shift-dates-btn-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    break
-                }
-                case 'delete': {
-                    cy.get('[data-testid="select-action-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    Utilities.waitForElementVisible('[data-testid="delete-test-case-btn-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="delete-test-case-btn-' + fileContents + '"]').should('be.visible')
-                    Utilities.waitForElementEnabled('[data-testid="delete-test-case-btn-' + fileContents + '"]', 55000)
-                    cy.get('[data-testid="delete-test-case-btn-' + fileContents + '"]').should('be.enabled')
-                    cy.get('[data-testid="delete-test-case-btn-' + fileContents + '"]').scrollIntoView().click({ force: true })
-                    break
-                }
-                default: { }
-            }
-        })
     }
 
     public static createTestCase(testCaseTitle: string, testCaseDescription: string, testCaseSeries: string, testCaseJson?: string): void {
@@ -1006,16 +846,16 @@ export class TestCasesPage {
 
                 cy.get('[data-testid="test-case-title-0_caseNumber"]')
                     .invoke('text').then(maxCaseNumber => {
-                        originalCount = Number(maxCaseNumber)
-                    })
+                    originalCount = Number(maxCaseNumber)
+                })
 
                 cy.get(TestCasesPage.actionCenterClone).should('be.enabled').click()
                 Utilities.waitForElementVisible(EditMeasurePage.successMessage, 2500)
 
                 cy.get('[data-testid="test-case-title-0_caseNumber"]')
                     .invoke('text').then(newMaxNumber => {
-                        expect(originalCount + 1).eq(Number(newMaxNumber))
-                    })
+                    expect(originalCount + 1).eq(Number(newMaxNumber))
+                })
                 break
 
             case TestCaseAction.copyToMeasure:
