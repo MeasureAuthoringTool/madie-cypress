@@ -172,8 +172,8 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/ASBTestSeriesFFailing Test Case' + secondTestCaseDescription + todaysDate + 'Edit1N/ASBTestSeriesPPassing Test Case' + testCaseDescription + todaysDate + 'Edit')
 
         //verify confirmation message
-        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 35000)
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', '(2) Test cases imported successfully')
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 35000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', '(2) Test cases imported successfully')
 
         //export test case
         cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
@@ -480,8 +480,8 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
             .click()
             .type('Some description')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMsg, 35000)
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 35000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group updated successfully.')
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
         cy.get(Header.mainMadiePageButton).should('be.visible')

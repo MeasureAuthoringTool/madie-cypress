@@ -64,7 +64,7 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -77,7 +77,7 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
         // access left menu - SDE = YES, save
         cy.get(TestCasesPage.includeSDERadioBtn).eq(0).click()
         cy.get(TestCasesPage.saveSDEOption).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Configuration Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
 
         //Add JSON for TC
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -136,13 +136,13 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementEnabled(TestCasesPage.newTestCaseButton, 15500)
-        
+
         cy.get(TestCasesPage.qdmSDESidNavLink).click()
 
         // access left menu - SDE, verify NO is checked
@@ -194,7 +194,7 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -238,7 +238,7 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
 
         cy.get(TestCasesPage.includeSDERadioBtn).eq(0).click()
         cy.get(TestCasesPage.saveSDEOption).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Configuration Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

@@ -198,7 +198,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
 
         //Apply Value Set to the Measure
         cy.get(CQLEditorPage.applyValueSet).click()
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Value Set Office Visit has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Value Set Office Visit has been successfully added to the CQL.')
 
         //Save and Discard changes button should be enabled after applying the Value Set
         cy.get(CQLEditorPage.saveCQLButton).should('be.enabled')
@@ -314,7 +314,7 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         //Add suffix
         cy.get(CQLEditorPage.valueSetSuffixInput).type('1234')
         cy.get(CQLEditorPage.applyValueSetSuffix).click()
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text', 'Value Set Cancer Stage I (1234) has been successfully added to the CQL.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Value Set Cancer Stage I (1234) has been successfully added to the CQL.')
 
         //Save and Discard changes button should be enabled after applying the Value Set
         cy.get(CQLEditorPage.saveCQLButton).should('be.enabled')

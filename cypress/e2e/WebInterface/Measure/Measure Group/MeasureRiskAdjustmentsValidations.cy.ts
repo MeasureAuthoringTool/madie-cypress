@@ -102,7 +102,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //save the Risk Adjustment data
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
         //navigate to the CQL tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -147,7 +147,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //save the Risk Adjustment
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
         //navigate to the CQL tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -181,9 +181,9 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(MeasureGroupPage.removeCloseDefinitionSelection).eq(0).click()
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
 
-        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
-        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg, { timeout: 25000 }).should('not.be.visible')
+        cy.get(EditMeasurePage.successMessage, { timeout: 25000 }).should('not.be.visible')
 
         //select a definition and enter a description for Initial Population
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
@@ -195,7 +195,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //save the Risk Adjustment
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
@@ -222,7 +222,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //save the Risk Adjustment
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
         //navigate to the CQL tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -291,7 +291,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //save the Risk Adjustment data
         cy.get(MeasureGroupPage.saveRiskAdjustments).click().click()
-        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
         //navigate back to main measures page
         cy.get(Header.measures).click()
@@ -308,7 +308,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).eq(0).click()
         cy.get(MeasureGroupPage.cancelIcon).first().click()
         cy.get(MeasureGroupPage.saveRiskAdjustments).click().click()
-        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
 
         //navigate back to main measures page
         cy.get(Header.measures).click()

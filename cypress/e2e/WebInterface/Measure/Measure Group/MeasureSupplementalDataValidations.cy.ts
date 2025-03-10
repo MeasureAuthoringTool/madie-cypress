@@ -100,7 +100,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //save the supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //navigate to the CQL tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -146,7 +146,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //save the supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //navigate to the CQL tab
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -180,9 +180,9 @@ describe('Validations between Supplemental Data Elements with the CQL definition
         cy.get(MeasureGroupPage.removeCloseDefinitionSelection).eq(0).click()
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
 
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg, { timeout: 25000 }).should('not.be.visible')
+        cy.get(EditMeasurePage.successMessage, { timeout: 25000 }).should('not.be.visible')
 
         //set supplemental data definition to e Denom
         cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
@@ -194,7 +194,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //save the supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
@@ -225,7 +225,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //save the supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //navigate to the CQL tab
         cy.get(EditMeasurePage.cqlEditorTab).click()

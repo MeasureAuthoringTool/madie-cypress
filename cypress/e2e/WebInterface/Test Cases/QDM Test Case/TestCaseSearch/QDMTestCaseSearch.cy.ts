@@ -64,7 +64,7 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to main measure list page
         cy.get(Header.mainMadiePageButton).click()

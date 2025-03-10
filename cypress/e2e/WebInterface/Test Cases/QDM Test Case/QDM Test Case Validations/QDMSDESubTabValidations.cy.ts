@@ -64,7 +64,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -76,7 +76,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         cy.get(TestCasesPage.includeSDERadioBtn).eq(0).click()
         cy.get(TestCasesPage.saveSDEOption).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Configuration Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
 
         //Add Elements to the test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -114,7 +114,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Execute test case
         cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
@@ -161,7 +161,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -210,7 +210,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -249,7 +249,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -271,7 +271,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
         cy.get(TestCasesPage.includeSDERadioBtn).eq(0).click()
         cy.get(TestCasesPage.saveSDEOption).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Configuration Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

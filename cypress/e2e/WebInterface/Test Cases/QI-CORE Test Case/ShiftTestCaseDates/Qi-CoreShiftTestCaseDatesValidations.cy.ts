@@ -80,7 +80,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shftAllTestCasesSaveBtn, 3500)
         cy.get(TestCasesPage.shftAllTestCasesSaveBtn).click()
-        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 3500)
 
         //confirm success message
         cy.get(TestCasesPage.shiftAllTestCasesSuccessMsg).should('contain.text', 'All Test Case dates successfully shifted.')
@@ -158,7 +158,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shiftSpecificTestCasesSaveBtn, 3500)
         cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
-        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 3500)
 
         //confirm success message
         cy.get(TestCasesPage.TestCasesSuccessMsg).should('contain.text', 'All Test Case dates successfully shifted.')

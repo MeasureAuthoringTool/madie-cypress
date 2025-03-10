@@ -375,7 +375,7 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //confirm message
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group updated successfully.')
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
@@ -400,7 +400,7 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //confirm message
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group updated successfully.')
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
@@ -420,7 +420,7 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //confirm message
-        cy.get(MeasureGroupPage.successfulSaveMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group updated successfully.')
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
@@ -495,7 +495,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         cy.get('[data-testid=ArrowDropDownIcon]').eq(2).click()
 
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
-        cy.get(MeasureGroupPage.riskAdjustmentSaveSuccessMsg).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
     })
 
     it('Verify that description entered for each SDE Definition is accurate', () => {
@@ -517,7 +517,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
             .type('Denominator Description')
         //Save Supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
         //navigate to the main MADiE page
         cy.get(Header.mainMadiePageButton).click()
@@ -591,7 +591,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
         //Save Supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
-        cy.get(MeasureGroupPage.supplementalDataElementsSaveSuccessMsg).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
     })
 
     it('Clicking on Discard changes button on Supplemental data elements page will revert the changes made before save', () => {

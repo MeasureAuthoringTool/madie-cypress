@@ -54,7 +54,6 @@ export class CQLEditorPage {
     public static readonly selectOptionListBox = '[class="btn-container"]'
     public static readonly removeCodeConfirmationMsg = '[class="dialog-warning-body"]'
     public static readonly removeCodeContinueBtn = '[data-testid="delete-dialog-continue-button"]'
-    public static readonly saveSuccessMsg = '[class="toast success"]'
 
     //Value Sets page / tab
     public static readonly valueSetsTab = '[data-testid="valueSets-tab"]'

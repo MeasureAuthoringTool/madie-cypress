@@ -373,7 +373,7 @@ describe('Delete Saved Parameters', () => {
             cy.get(CQLEditorPage.deleteContinueButton).should('be.enabled').click()
         })
 
-        cy.get(CQLEditorPage.saveSuccessMsg, { timeout: 6500 }).should('have.text', 'Parameter Measurement Period has been successfully removed from the CQL.')
+        cy.get(EditMeasurePage.successMessage, { timeout: 6500 }).should('have.text', 'Parameter Measurement Period has been successfully removed from the CQL.')
 
         cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
     })

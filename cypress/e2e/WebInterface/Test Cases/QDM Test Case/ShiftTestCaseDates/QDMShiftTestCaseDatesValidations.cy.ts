@@ -224,7 +224,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shftAllTestCasesSaveBtn, 3500)
         cy.get(TestCasesPage.shftAllTestCasesSaveBtn).click()
-        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 3500)
 
         //confirm success message
         cy.get(TestCasesPage.shiftAllTestCasesSuccessMsg).should('contain.text', 'All Test Case dates successfully shifted.')
@@ -248,7 +248,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -266,7 +266,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -282,7 +282,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         //save the shift test case
         Utilities.waitForElementEnabled(TestCasesPage.shftAllTestCasesSaveBtn, 3500)
         cy.get(TestCasesPage.shftAllTestCasesSaveBtn).click()
-        Utilities.waitForElementVisible(TestCasesPage.tcSaveSuccessMsg, 3500)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 3500)
 
         //confirm success message
         cy.get(TestCasesPage.shiftAllTestCasesSuccessMsg).should('contain.text', 'All Test Case dates successfully shifted.')
@@ -306,7 +306,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -324,7 +324,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
     })
 
@@ -367,7 +367,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
 
         //confirm success message
-        cy.get(TestCasesPage.tcSaveSuccessMsg, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
+        cy.get(EditMeasurePage.successMessage, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
 
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -388,7 +388,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -407,7 +407,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
 
         //confirm success message
-        cy.get(TestCasesPage.tcSaveSuccessMsg, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
+        cy.get(EditMeasurePage.successMessage, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
 
         //navigate to the edit page for the 2nd test case
         TestCasesPage.clickEditforCreatedTestCase(true)
@@ -422,7 +422,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -441,7 +441,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
 
         //confirm success message
-        cy.get(TestCasesPage.tcSaveSuccessMsg, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
+        cy.get(EditMeasurePage.successMessage, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
 
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -462,7 +462,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
         //navigate back to the main test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -480,7 +480,7 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
 
         //confirm success message
-        cy.get(TestCasesPage.tcSaveSuccessMsg, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
+        cy.get(EditMeasurePage.successMessage, { timeout: 5500 }).should('contain.text', 'All Test Case dates successfully shifted.')
 
         //navigate to the edit page for the first test case
         TestCasesPage.clickEditforCreatedTestCase(true)
@@ -495,6 +495,6 @@ describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 3500)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.tcSaveSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
     })
 })

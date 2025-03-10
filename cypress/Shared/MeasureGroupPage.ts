@@ -120,7 +120,7 @@ export class MeasureGroupPage {
     public static readonly improvementNotationDescQiCore = '[data-testid="improvement-notation-description"]'
     public static readonly improvementNotationValues = '[class="MuiList-root MuiList-padding MuiMenu-list css-1c1ttle"]'
     public static readonly measureReportingSaveBtn = '[data-testid="measure-Reporting-save"]'
-    public static readonly successfulSaveMsg = '[class="toast success"]'
+
     //Measure Group Type
     public static readonly measureGroupTypeSelect = '[data-testid="measure-group-type-dropdown"]'
     public static readonly measureGroupTypeCheckbox = '[id="measure-group-type"]'
@@ -243,7 +243,6 @@ export class MeasureGroupPage {
     public static readonly cancelIcon = '[data-testid=CancelIcon]'
     public static readonly riskAdjustmentDescriptionTextBox = '[class=risk-description]'
     public static readonly saveRiskAdjustments = '[data-testid="measure-Risk Adjustment-save"]'
-    public static readonly riskAdjustmentSaveSuccessMsg = '[class="toast success"]'
     public static readonly riskAdjDropDown = '[data-testid="risk-adjustment-dropdown"]'
 
     //Supplemental data elements
@@ -251,7 +250,6 @@ export class MeasureGroupPage {
     public static readonly supplementalDataDefinitionDropdown = '#supplemental-data-listbox'
     public static readonly supplementalDataDefinitionDescriptionTextBox = '[data-testid="supplementalDataDescription"]'
     public static readonly saveSupplementalDataElements = '[data-testid="measure-Supplemental Data-save"]'
-    public static readonly supplementalDataElementsSaveSuccessMsg = '[class="toast success"]'
     public static readonly removeCloseDefinitionSelection = '[data-testid="CancelIcon"]'
     public static readonly discardChangesBtn = '[data-testid=cancel-button]'
     public static readonly discardChangesConfirmationMsg = '.MuiDialogContent-root'

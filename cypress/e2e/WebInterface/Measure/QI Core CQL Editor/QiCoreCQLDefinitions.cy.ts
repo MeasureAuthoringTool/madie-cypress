@@ -93,7 +93,7 @@ const cqlMissingDefinitionName = 'library QiCoreLibrary1723824228401 version \'0
     'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
     '   (Enc E where E.status = \'finished\') is not null '
 
-    const cqlDefinitionNameKeyword = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
+const cqlDefinitionNameKeyword = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'include SupplementalDataElements version \'3.5.000\' called SupplementalData\n' +
@@ -278,10 +278,10 @@ describe('Qi-Core CQL Definitions Builder', () => {
         //Navigate to Saved Definitions tab
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         Utilities.waitForElementVisible('[data-testid="definitions-row-0"] > :nth-child(1)', 60000)
-        
+
         cy.get('[data-testid="definitions-row-0"] > :nth-child(1)').should('contain.text', 'Initial Population')
         cy.get('[data-testid="definitions-row-0"] > :nth-child(2)').should('contain.text', 'Boolean')
-        
+
         cy.get('[data-testid="definitions-row-1"] > :nth-child(1)').should('contain.text', 'Qualifying Encounters')
         cy.get('[data-testid="definitions-row-1"] > :nth-child(2)').should('contain.text', 'Encounter')
     })
@@ -307,7 +307,7 @@ describe('Qi-Core CQL Definitions Builder', () => {
         cy.get(CQLEditorPage.definitionNameTextBox).type(' updated')
 
         cy.get(CQLEditorPage.saveDefinitionBtn).click()
- 
+
         cy.get('.ace_content').should('contain', 'Initial Population updated')
     })
 
@@ -347,8 +347,8 @@ describe('Qi-Core CQL Definitions Builder', () => {
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
         cy.get(CQLEditorPage.deleteCQLDefinitions).click()
         cy.get(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn).click()
-        Utilities.waitForElementVisible(CQLEditorPage.saveSuccessMsg, 60000)
-        cy.get(CQLEditorPage.saveSuccessMsg).should('contain.text','Definition Initial Population has been successfully removed from the CQL.')
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 60000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Definition Initial Population has been successfully removed from the CQL.')
 
         //Navigate to Saved Definitions again and assert if the Definition is removed from Saved Definitions
         cy.get(CQLEditorPage.expandCQLBuilder).click()
@@ -379,8 +379,8 @@ describe('Qi-Core CQL Definitions Builder', () => {
         cy.get('[data-testid="definitions-row-0"] > :nth-child(3)').should('contain.text', 'Test Comments')
 
         const longComment = 'Adding a comment that is needlessly long for no real reason, other than to' +
-        ' annoy any future users of this piece of functionality. It really should not have to be like' +
-        ' this but here we are anyway'
+            ' annoy any future users of this piece of functionality. It really should not have to be like' +
+            ' this but here we are anyway'
         //Edit Comment
         cy.get(CQLEditorPage.editCQLDefinitions).click()
         cy.get(CQLEditorPage.commentTextBox).clear().type(longComment)
@@ -395,8 +395,8 @@ describe('Qi-Core CQL Definitions Builder', () => {
 
         //Navigate to Saved Definitions tab and verify comment
         cy.get(CQLEditorPage.savedDefinitionsTab).click()
-        const shortenedComment= 'Adding a comment that is needlessly long for no real reason, other than to' +
-        ' annoy any future users of this piece of functShow more'
+        const shortenedComment = 'Adding a comment that is needlessly long for no real reason, other than to' +
+            ' annoy any future users of this piece of functShow more'
         cy.get('[data-testid="definitions-row-0"] > :nth-child(3)').should('contain.text', shortenedComment)
     })
 
@@ -469,7 +469,7 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer,  "Parse: 7:8 | Definition is missing a name.")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "Parse: 7:8 | Definition is missing a name.")
     })
 
     it('Qi-Core CQL Definitions throws specific error when Definition name is a reserved keyword', () => {
@@ -482,7 +482,7 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer,  "Parse: 7:13 | Definition names must not be a reserved word.")
+        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "Parse: 7:13 | Definition names must not be a reserved word.")
     })
 
 })
@@ -525,7 +525,7 @@ describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
 
         // click into View screen
         cy.get('[data-testid="view-button-0"]').click()
-        
+
         cy.get(CQLEditorPage.definitionNameTextBox).should('be.disabled')
         // sub element of type combo-box
         cy.get('[data-testid="type-selector-input"]').should('be.disabled')
