@@ -184,7 +184,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('not.exist')
-        cy.get('[data-testid="create-test-case-populations"]').should('contain.text', 'No data for current scoring. Please make sure at least one measure group has been created.')
+        cy.get(TestCasesPage.testCasePopulationList).should('contain.text', 'No data for current scoring. Please make sure at least one measure group has been created.')
     })
 
     it('Verify if group populations are added/deleted, test case expected values will be updated', () => {
@@ -288,7 +288,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         //Close the Toast message
-        cy.get('[data-testid="ClearIcon"]').click()
+        cy.get(TestCasesPage.clearIconBtn).click()
 
         //Navigate to Test case Expected values tab and verify Measure Observation Expected value exists
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -319,7 +319,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         //Close the Toast message
-        cy.get('[data-testid="ClearIcon"]').click()
+        cy.get(TestCasesPage.clearIconBtn).click()
 
         //Navigate to Test case Expected values tab and verify Measure Observation Expected value does not exist
         cy.get(EditMeasurePage.testCasesTab).click()

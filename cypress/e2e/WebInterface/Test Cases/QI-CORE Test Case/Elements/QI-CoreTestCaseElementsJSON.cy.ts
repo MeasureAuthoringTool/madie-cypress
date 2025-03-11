@@ -268,7 +268,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
         // add a new race OMB value
         cy.get(TestCasesPage.dobSelectValueElementTab).find('[id="date"]').type('{moveToStart}{home}{ctrl+a}{del}{moveToStart}{home}').type('05/27/1981')
-        cy.get(TestCasesPage.genderSelectBoxElementTab).click()
+        cy.get(TestCasesPage.genderDdOnElementTab).click()
         cy.get(TestCasesPage.genderSelectValuesElementTab).should('contain.text', 'Other').click()
         cy.get(TestCasesPage.raceOmbselectBoxElementTab).click()
         cy.get('#raceOMB-option-4').scrollIntoView().click({ force: true })
@@ -439,7 +439,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
         // add a new race OMB value
         cy.get(TestCasesPage.dobSelectValueElementTab).find('[id="date"]').type('{moveToStart}{home}{ctrl+a}{del}{moveToStart}{home}').type('05/27/1981')
-        cy.get(TestCasesPage.genderSelectBoxElementTab).click()
+        cy.get(TestCasesPage.genderDdOnElementTab).click()
         cy.get(TestCasesPage.genderSelectValuesElementTab).should('contain.text', 'Other').click()
         cy.get(TestCasesPage.raceOmbselectBoxElementTab).click()
         cy.get('#raceOMB-option-4').scrollIntoView().click({ force: true })
@@ -644,7 +644,7 @@ describe.skip('QI-Core Test Case Element tab tests', () => {
         cy.get('[id="ethnicityDetailed"]').click()
         cy.get('[id="ethnicityDetailed-option-0"]').click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get('[data-testid="demographics-ethnicity-detailed-input"]').should('contain.text', 'Mexican', 'Spaniard')
+        cy.get(TestCasesPage.ethnicityDetailedElementTab).should('contain.text', 'Mexican', 'Spaniard')
 
     })
 

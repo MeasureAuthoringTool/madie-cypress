@@ -37,7 +37,6 @@ export class EditMeasurePage {
     public static readonly sureDialog = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-aa4ov7 react-draggable"]'
     public static readonly sureDialogCancelBtn = '[data-testid="associate-cms-identifier-confirmation-dialog-cancel-button"]'
     public static readonly sureDialogContinueBtn = '[data-testid="associate-cms-identifier-confirmation-dialog-continue-button"]'
-    public static readonly sureDialogBody = '[id="discard-changes-dialog-body"]'
     public static readonly associateCmsAssociateBtn = '[data-testid="associate-cms-id-button"]'
     public static readonly associateCopyMetaData = '[data-testid="copy-cms-id-checkbox"]'
 

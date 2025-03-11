@@ -314,7 +314,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.expectedOrActualTab).click()
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         //enter 3 for the expected denominator to generate 3 observation field
         cy.get(TestCasesPage.testCaseDENOMExpected).type('3')
@@ -351,7 +351,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.expectedOrActualTab).click()
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         //validate values that were saved in the E/A fields retain values
         cy.get(TestCasesPage.testCaseDENOMExpected).should('contain.value', 3)
@@ -415,7 +415,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.expectedOrActualTab).click()
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         //enter 3 for the expected denominator to generate 3 observation field
         cy.get(TestCasesPage.testCaseDENOMExpected).type('3')
@@ -461,7 +461,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.expectedOrActualTab).click()
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         //observation fields cannot be edited
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.be.enabled')
@@ -542,7 +542,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         TestCasesPage.clickEditforCreatedTestCase()
 
         //click on the Expected / Actual tab
-        cy.get(TestCasesPage.expectedOrActualTab).click()
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         //enter 1 for expected initial population
         cy.get(TestCasesPage.testCaseIPPExpected).type('1')
@@ -565,7 +565,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'Test Case Updated Successfully')
 
-        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).click()
+        cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
         cy.get(TestCasesPage.ippActualCheckBox).should('contain.value', '1')
         cy.get(TestCasesPage.denomActualCheckBox).should('contain.value', '1')

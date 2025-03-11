@@ -1,3 +1,5 @@
+import { TestCasesPage } from './TestCasesPage'
+
 export class Global {
 
     public static readonly dirtCheckModal = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-aa4ov7 react-draggable"]'
@@ -11,14 +13,14 @@ export class Global {
     public static clickOnDiscardChanges(): void {
 
         cy.get(this.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
-        cy.get(this.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(TestCasesPage.discardChangesConfirmationBody).should('contain.text', 'Are you sure you want to discard your changes?')
         cy.get(this.discardChangesContinue).click()
     }
 
     public static clickOnKeepWorking(): void {
 
         cy.get(this.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
-        cy.get(this.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(TestCasesPage.discardChangesConfirmationBody).should('contain.text', 'Are you sure you want to discard your changes?')
         cy.get(this.keepWorkingCancel).click()
     }
 }

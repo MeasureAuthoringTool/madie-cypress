@@ -94,7 +94,6 @@ export class TestCasesPage {
     //QDM misc test case page objects
     public static readonly editTestCaseDescriptionInlineError = '[data-testid="test-case-description-helper-text"]'
     public static readonly QDMTcDiscardChangesButton = '[data-testid="ds-btn"]'
-    public static readonly QDMRunTestCasefrmTestCaseListPage = '[data-testid="qdm-test-case-run-button"]'
 
     //SDE Sub tab
     public static readonly qdmSDESubTab = '[data-testid="sde-tab"]'
@@ -163,7 +162,7 @@ export class TestCasesPage {
     public static readonly tcTriggerSearch = '[data-testid="test-cases-trigger-search"]'
     public static readonly tcSearchIcone = '[data-testid="SearchIcon"]'
     public static readonly tcClearSearch = '[data-testid="test-cases-clear-search"]'
-    public static readonly tcClearSearchIcon = '[data-testid="ClearIcon"]'
+    public static readonly clearIconBtn = '[data-testid="ClearIcon"]'
     public static readonly tcFilterInput = '[data-testid="filter-by-select"]'
     public static readonly tcFilterByGroup = '[data-testid="filter-by-Group"]'
     public static readonly tcFilterByDeselect = '[data-testid="filter-by--"]'
@@ -211,7 +210,6 @@ export class TestCasesPage {
     public static readonly denominatorExclusionRow = '[data-testid="test-row-population-id-denominatorExclusion"]'
     public static readonly denominatorExceptionRow = '[data-testid="test-row-population-id-denominatorException"]'
     public static readonly measureObservationRow = '[data-testid="test-population-measurePopulationObservation-expected"]'
-    public static readonly denominatorObservationRow = '[data-testid="test-population-denominatorObservation-expected"]'
     public static readonly numeratorObservationRow = '[data-testid="test-population-numeratorObservation-expected"]'
     public static readonly measureGroup1Label = '[data-testid="measure-group-1"]'
     public static readonly measureGroup2Label = '[data-testid="measure-group-2"]'
@@ -220,8 +218,7 @@ export class TestCasesPage {
     //QDM Test Case Page
     public static readonly elementsTab = '[data-testid=elements-tab]'
     public static readonly jsonTab = '[data-testid=json-tab]'
-    public static readonly expectedOrActualTab = '[data-testid=expectoractual-tab]'
-    public static readonly runQDMTestCaseBtn = '[data-testid=qdm-test-case-run-button]'
+    public static readonly runQDMTestCaseBtn = '[data-testid="qdm-test-case-run-button"]'
 
     //Test Case Page
     public static readonly dobSelectValueElementTab = '[class="MuiFormControl-root MuiTextField-root css-1uwaluo"]'
@@ -231,7 +228,6 @@ export class TestCasesPage {
     public static readonly raceOmbselectBoxElementTab = '[id="raceOMB"]'
     public static readonly raceOmbElementTab = '[data-testid="demographics-race-omb"]'
     public static readonly genderDdOnElementTab = '[id="gender-selector"]'
-    public static readonly genderSelectBoxElementTab = '[id="gender-selector"]'
     public static readonly genderSelectValuesElementTab = '[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]'
     public static readonly bonnieImportTestCaseBtn = '[data-testid="import-test-cases-from-bonnie-button"]'
     public static readonly highlightingPCTabSelector = '[data-testid="population-criterion-selector"]'
@@ -247,7 +243,6 @@ export class TestCasesPage {
 
     //measure versioning attempt with invalid test case
     public static readonly versionMeasureWithTCErrors = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-1uop03p react-draggable"]'
-    public static readonly versionMeasurewithTCErrorsModalBody = '[id="discard-changes-dialog-body"]'
     public static readonly versionMeasurewithTCErrorsCancel = '[data-testid="invalid-test-dialog-cancel-button"]'
     public static readonly versionMeasurewithTCErrorsContinue = '[data-testid="invalid-test-dialog-continue-button"]'
 
@@ -276,8 +271,7 @@ export class TestCasesPage {
     public static readonly importWarningMessages = '[data-testid="import-warning-messages"]'
 
     //Warning Modal
-    public static readonly discardChangesConfirmationText = '[id="discard-changes-dialog-body"]'
-    public static readonly discardChangesCancelBtn = '[data-testid="discard-dialog-cancel-button"]'
+    public static readonly discardChangesConfirmationBody = '[id="discard-changes-dialog-body"]'
     public static readonly continueDiscardChangesBtn = '[data-testid="discard-dialog-continue-button"]'
 
     //Delete Test Case

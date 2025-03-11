@@ -48,7 +48,7 @@ let CQLForCVMeasure = 'library SimpleFhirMeasure version \'0.0.001\'\n' +
     'define function "booleanFunction"():\n' +
     '  true'
 
-    // same as zipfileExportQICore
+// same as zipfileExportQICore
 let measureCQLCardTests = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     '\n' +
     'using QICore version \'4.1.1\'\n' +
@@ -333,8 +333,8 @@ describe('Warning modal on Test Case JSON Editor', () => {
         //Warning Modal displayed when user navigated to Measure Group tab without saving changes
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
-        cy.get(TestCasesPage.discardChangesConfirmationText).should('contain.text', 'Are you sure you want to discard your changes?')
-        cy.get(TestCasesPage.discardChangesCancelBtn).click()
+        cy.get(TestCasesPage.discardChangesConfirmationBody).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(Global.keepWorkingCancel).click()
 
         //Click on details tab & the warning modal should not display
         cy.get(TestCasesPage.detailsTab).click()

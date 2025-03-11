@@ -352,7 +352,7 @@ describe('Dirty Check Validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Navigate to Expected/Actual tab and enter Expected values
-        cy.get(TestCasesPage.expectedOrActualTab).click()
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseIPPExpected).type('2')
         cy.get(TestCasesPage.testCaseNUMERExpected).type('3')
         cy.get(TestCasesPage.testCaseDENOMExpected).type('4')
@@ -522,7 +522,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'An error exists with the measure CQL, please review the CQL Editor tab')
 
         //confirm that the Run Test button is disabled
-        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('not.be.enabled')
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('not.be.enabled')
     })
 
     it('A message is displayed if the measure is missing a group', () => {
@@ -561,7 +561,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'No Population Criteria is associated with this measure. Please review the Population Criteria tab.')
 
         //confirm that the Run Test button is disabled
-        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('not.be.enabled')
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('not.be.enabled')
     })
 })
 
@@ -625,7 +625,7 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
         cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'An error exists with the measure CQL, please review the CQL Editor tab.')
 
         //confirm that the Run Test button is disabled
-        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('not.be.enabled')
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('not.be.enabled')
     })
 })
 
@@ -711,7 +711,7 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
         cy.get(TestCasesPage.testCaseExecutionError).should('contain.text', 'An error exists with the measure CQL, please review the CQL Editor tab.')
 
         //confirm that the Run Test button is disabled
-        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('not.be.enabled')
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('not.be.enabled')
     })
 })
 

@@ -336,7 +336,7 @@ describe('Delete Saved Parameters', () => {
             cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
 
             cy.get(CQLEditorPage.discardContinueButton).should('be.enabled')
-            cy.get(CQLEditorPage.discardStayButton).should('be.enabled').click()
+            cy.get(Global.keepWorkingCancel).should('be.enabled').click()
         })
 
         // confirm no action, still 1 saved parameter
