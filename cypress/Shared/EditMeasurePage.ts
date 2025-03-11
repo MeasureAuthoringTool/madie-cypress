@@ -22,7 +22,6 @@ export class EditMeasurePage {
     public static readonly cqlEditorTab = '[data-testid=cql-editor-tab]'
     public static readonly measureGroupsTab = '[data-testid=groups-tab]'
     public static readonly testCasesTab = '[data-testid=patients-tab]'
-    public static readonly reviewInfoTab = '[data-testid=review-tab]'
     public static readonly editMeasureButtonActionBtn = '[data-testid="action-center-actual-icon"]'
     public static readonly editMeasureDeleteActionBtn = '[data-testid="DeleteOutlinedIcon"]'
     public static readonly editMeasureVersionActionBtn = '[data-testid="VersionMeasure"]'
@@ -35,7 +34,6 @@ export class EditMeasurePage {
 
     //Associate QDM and QI Core measures:
     public static readonly associateCmsIdDialog = '[data-testid="associate-cms-id-dialog-tbl"]'
-    public static readonly cpyMetaDataCheckBox = '[data-testid="copy-cms-id-checkbox"]'
     public static readonly sureDialog = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-aa4ov7 react-draggable"]'
     public static readonly sureDialogCancelBtn = '[data-testid="associate-cms-identifier-confirmation-dialog-cancel-button"]'
     public static readonly sureDialogContinueBtn = '[data-testid="associate-cms-identifier-confirmation-dialog-continue-button"]'
@@ -44,7 +42,6 @@ export class EditMeasurePage {
     public static readonly associateCopyMetaData = '[data-testid="copy-cms-id-checkbox"]'
 
     //Measurement Information
-    public static readonly measurementInformationForm = '[data-testid="measure-information-edit"]'
     public static readonly measureNameTextBox = '[data-testid="measure-name-input"]'
     public static readonly cqlLibraryNameTextBox = '[data-testid="cql-library-name-input"]'
     public static readonly measurementInformationSaveButton = '[data-testid="measurement-information-save-button"]'
@@ -65,7 +62,6 @@ export class EditMeasurePage {
     public static readonly errorMessage = '[class="toast danger"]'
 
     //left panel
-    public static readonly leftPanelMeasureInformation = '[data-testid="leftPanelMeasureInformation"]'
     public static readonly leftPanelDescription = '[data-testid="leftPanelMeasureDescription"]'
     public static readonly leftPanelCopyright = '[data-testid="leftPanelMeasureCopyright"]'
     public static readonly leftPanelDisclaimer = '[data-testid="leftPanelMeasureDisclaimer"]'
@@ -74,7 +70,6 @@ export class EditMeasurePage {
     public static readonly leftPanelGuidance = '[data-testid="leftPanelMeasureGuidance"]'
     public static readonly leftPanelMClinicalGuidanceRecommendation = '[data-testid="leftPanelMeasureClinicalRecommendation"]'
     public static readonly leftPanelModelAndMeasurementPeriod = '[data-testid="leftPanelModelAndMeasurementPeriod"]'
-    public static readonly leftPanelRiskAdjustment = '[data-testid="leftPanelMeasureRiskAdjustment"]'
     public static readonly leftPanelReference = '[data-testid="leftPanelMeasureReferences"]'
     public static readonly leftPanelDefinition = '[data-testid="leftPanelQDMMeasureDefinition"]'
     public static readonly leftPanelTransmissionFormat = '[data-testid="leftPanelMeasureTransmissionFormat"]'
@@ -91,11 +86,8 @@ export class EditMeasurePage {
     public static readonly selectMeasureReference = '.chevron-container > [data-testid="ExpandMoreIcon"]'
     public static readonly referenceTypeDropdown = '[id="measure-referenceType"]'
     public static readonly editReferenceModal = '[data-testid="dialog-form"]'
-    public static readonly editReferenceCloseModalBtn = '[data-testid="close-button"]'
     public static readonly documentationOption = '[data-testid="Documentation-option"]'
-    public static readonly citationOption = '[data-testid="Citation-option"]'
     public static readonly justificationOption = '[data-testid="Justification-option"]'
-    public static readonly unknownOption = '[data-testid="Unknown-option"]'
     public static readonly measureReferenceText = '[data-testid="measure-referenceText"]'
     public static readonly saveButton = '[data-testid="save-button"]'
     public static readonly successMessage = '[class="toast success"]'
@@ -130,7 +122,6 @@ export class EditMeasurePage {
     public static readonly cqlEditorDiscardButton = '[data-testid="reset-cql-btn"]'
 
     //Delete Measure
-    public static readonly deleteMeasureButton = '[data-testid=delete-measure-button]'
     public static readonly deleteMeasureConfirmationMsg = '.message'
     public static readonly deleteMeasureConfirmationButton = '[data-testid=delete-measure-button-2]'
     public static readonly successfulMeasureDeleteMsg = '[data-testid=edit-measure-information-success-text]'

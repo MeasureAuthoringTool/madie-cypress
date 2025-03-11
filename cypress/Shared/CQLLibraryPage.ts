@@ -41,7 +41,6 @@ export class CQLLibraryPage {
     public static readonly newCQLLibName = '[data-testid="cql-library-name-text-field-input"]'
     public static readonly currentCQLLibName = '[id="cql-library-name-text-field-input"]'
     public static readonly discardChanges = '[data-testid="cql-library-cancel-button"]'
-    public static readonly currentCQLLibSavebtn = '[data-testid="cql-library-save-button"]'
     public static readonly headerDetails = '[class="details"]'
     public static readonly cqlLibraryDesc = '[id="cql-library-description"]'
     public static readonly cqlLibraryCreatePublisher = '[data-testid="publisher"]'
