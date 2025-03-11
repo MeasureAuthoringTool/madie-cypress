@@ -2,6 +2,7 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { Header } from "../../../Shared/Header"
 import { Utilities } from "../../../Shared/Utilities"
+import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 
 describe('Create CQL Library', () => {
 
@@ -51,8 +52,8 @@ describe('Create CQL Library', () => {
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
 
-        CQLLibraryPage.validateCQlLibraryName(CQLLibraryName)
-        CQLLibraryPage.validateCQlLibraryModel('QDM v5.6')
+        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
+        CQLLibrariesPage.validateCQLLibraryName('QDM v5.6')
         cy.log('QDM CQL Library Created Successfully')
     })
 })
