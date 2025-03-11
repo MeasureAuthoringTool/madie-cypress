@@ -95,8 +95,11 @@ export class CQLLibraryPage {
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
 
-        this.validateCQlLibraryName(CQLLibraryName)
-        this.validateCQlLibraryModel('QI-Core')
+        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+
+            cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').should('contain', CQLLibraryName)
+            cy.get('[data-testid=cqlLibrary-button-' + fileContents + '-model' + ']').should('contain', 'QI-Core')
+        })
         cy.log('QI-Core CQL Library Created Successfully')
     }
 
@@ -144,24 +147,6 @@ export class CQLLibraryPage {
             })
         })
         return user
-    }
-
-    public static validateCQlLibraryName(expectedValue: string): void {
-        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
-
-            let element = cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').parent()
-            element.parent().should('contain', expectedValue)
-
-        })
-    }
-
-    public static validateCQlLibraryModel(expectedValue: string): void {
-        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
-
-            let element = cy.get('[data-testid=cqlLibrary-button-' + fileContents + '-model' + ']').parent()
-            element.parent().should('contain', expectedValue)
-
-        })
     }
 
     public static clickCreateLibraryButton(): void {
