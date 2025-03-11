@@ -33,7 +33,6 @@ export class MeasuresPage {
     public static readonly confirmMeasureVersionNumber = '[data-testid="confirm-version-input"]'
     public static readonly measureVersionContinueBtn = '[data-testid="create-version-continue-button"]'
     public static readonly measureVersionSuccessMsg = '[data-testid="success-toast"]'
-    public static readonly measureVersioningErrorMsg = '[data-testid="error-toast"]'
     public static readonly measureVersionHelperText = '[data-testid="version-helper-text"]'
 
     //CQL to ELM version field

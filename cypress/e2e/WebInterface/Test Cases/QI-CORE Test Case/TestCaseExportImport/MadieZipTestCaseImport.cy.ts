@@ -87,7 +87,7 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
@@ -110,7 +110,7 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
@@ -185,7 +185,7 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
@@ -208,7 +208,7 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 

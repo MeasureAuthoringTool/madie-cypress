@@ -8,7 +8,7 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
-const now  = Date.now()
+const now = Date.now()
 const measureName = 'RatioPatientTwoIPsWithMOs' + now
 const CqlLibraryName = 'RatioPatientTwoIPsWithMOs' + now
 const testCaseTitleIpp1Pass = 'IPP1 PASS'
@@ -177,7 +177,7 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
             'with warnings in JSON')
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -252,7 +252,7 @@ describe('Measure Creation and Testing: Ratio Patient Two IPs w/ MOs', () => {
 
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
             'with warnings in JSON')
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()

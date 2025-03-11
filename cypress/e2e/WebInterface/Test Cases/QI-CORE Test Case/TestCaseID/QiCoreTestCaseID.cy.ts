@@ -80,7 +80,7 @@ describe('Test Case sorting by Test Case number', () => {
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', descList)
-        
+
         //thrid click removes sorting
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
@@ -92,23 +92,23 @@ describe('Test Case sorting by Test Case number', () => {
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', ascList)
-     //   Utilities.waitForElementVisible(TestCasesPage.testCaseAction0Btn, 5000)
+        //   Utilities.waitForElementVisible(TestCasesPage.testCaseAction0Btn, 5000)
 
         TestCasesPage.clickEditforCreatedTestCase()
-       
+
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
         cy.get(TestCasesPage.testCaseTitle).click()
         cy.get(TestCasesPage.testCaseTitle).type('{moveToEnd}')
         cy.get(TestCasesPage.testCaseTitle).type('12')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
         cy.get(TestCasesPage.testCaseTitle).click()
         cy.get(TestCasesPage.testCaseTitle).type('{moveToEnd}')
         cy.get(TestCasesPage.testCaseTitle).type('{backspace}{backspace}')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
         //Navigate back to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -235,7 +235,7 @@ describe('Qi Core Measure - Test case number on a Draft Measure', () => {
     beforeEach('Create Measure, Test case & Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Qualifying Encounters','Qualifying Encounters', 'Encounter') 
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Qualifying Encounters', 'Qualifying Encounters', 'Qualifying Encounters', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
         OktaLogin.Login()
     })

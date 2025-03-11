@@ -420,7 +420,7 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '        and QICoreCommon."ToInterval" ( AnesthesiaProcedure.performed ) ends 1 day after day of start of QualifyingEncounter.period\n' +
     '        and PatientRefusal.authoredOn during day of (end of AnesthesiaProcedure.performed.toInterval()).CalendarDayOfOrDayAfter()\n' +
     '      return QualifyingEncounter'
-    
+
 let tcJson = '{\n' +
     '  "resourceType": "Bundle",\n' +
     '  "id": "612e6f6e02c62a011f2f1d45",\n' +
@@ -797,7 +797,7 @@ describe('Measure Highlighting', () => {
             }
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
-       
+
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
@@ -903,7 +903,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
             }
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
-     
+
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
@@ -1019,9 +1019,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
             }
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
-       
+
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).click()
-       
+
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Initial Population')
@@ -1137,8 +1137,8 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
             cy.get('[data-statement-name="Initial PopulationOne"]').should('contain.text', '\ndefine "Initial PopulationOne":\ntrue\n')
 
             cy.get('[data-testid="group-coverage-nav-' + secondGroupId + '"]').contains('NUMER').click()
-            Utilities.waitForElementVisible('[data-testid="NUMER-highlighting"]', 35000)
-            cy.get('[data-testid="NUMER-highlighting"]').should('contain', '\ndefine "Initial Population":\nexists "Qualifying Encounters"\n')
+            Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
+            cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain', '\ndefine "Initial Population":\nexists "Qualifying Encounters"\n')
             cy.get('[data-ref-id="244"]').should('have.color', '#A63B12')
             cy.get('[data-ref-id="245"]').should('have.color', '#A63B12')
         })
@@ -1195,9 +1195,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
         cy.get('[data-testid="qi-core-groups"]').click()
-        
+
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).click()
-        
+
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
@@ -1282,8 +1282,8 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
             '        else unit\n' +
             '    end')
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Unused').click()
-        Utilities.waitForElementVisible('[data-testid="unused-highlighting"]', 35000)
-        cy.get('[data-testid="unused-highlighting"]').should('contain.text', 'define "Patient Reason for Not Performing Assessment of Cognition Using Standardized Tools or Alternate Methods": "unavailable"ResultsNA define "Denominator Exceptions": "unavailable"ResultsNA define "SDE Ethnicity": "unavailable"ResultsNA define "SDE Race": "unavailable"ResultsNA define "SDE Sex": "unavailable"ResultsNA define "SDE Payer": "unavailable"ResultsNA define "track1": "unavailable"ResultsNA define "SDE Ethnicity": "unavailable"ResultsNA define "SDE Payer": "unavailable"ResultsNA define "SDE Race": "unavailable"ResultsNA define "SDE Sex": "unavailable"ResultsNA ')
+        Utilities.waitForElementVisible(TestCasesPage.tcUNUSEDHightlightingDetails, 35000)
+        cy.get(TestCasesPage.tcUNUSEDHightlightingDetails).should('contain.text', 'define "Patient Reason for Not Performing Assessment of Cognition Using Standardized Tools or Alternate Methods": "unavailable"ResultsNA define "Denominator Exceptions": "unavailable"ResultsNA define "SDE Ethnicity": "unavailable"ResultsNA define "SDE Race": "unavailable"ResultsNA define "SDE Sex": "unavailable"ResultsNA define "SDE Payer": "unavailable"ResultsNA define "track1": "unavailable"ResultsNA define "SDE Ethnicity": "unavailable"ResultsNA define "SDE Payer": "unavailable"ResultsNA define "SDE Race": "unavailable"ResultsNA define "SDE Sex": "unavailable"ResultsNA ')
     })
 })
 
@@ -1335,9 +1335,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
             }
         })
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
-        
+
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).click()
-        
+
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')

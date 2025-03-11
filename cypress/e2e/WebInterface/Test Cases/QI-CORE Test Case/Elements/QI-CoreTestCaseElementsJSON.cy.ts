@@ -122,7 +122,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Create
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
 
@@ -243,7 +243,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
 
@@ -395,7 +395,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
 
@@ -566,7 +566,7 @@ describe.skip('QI Core DOB, Gender, Race, and Ethnicity data validations: Edit T
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
         })
 

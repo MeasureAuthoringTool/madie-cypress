@@ -32,7 +32,7 @@ describe('Fluent Function Capability', () => {
     after('Clean up', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName) 
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Verify Fluent function for the Measure', () => {
@@ -90,7 +90,7 @@ describe('Fluent Function Capability', () => {
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
             'with warnings in JSON')
 
         cy.get(EditMeasurePage.testCasesTab).click()

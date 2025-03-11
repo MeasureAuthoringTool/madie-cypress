@@ -7,6 +7,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -90,7 +91,7 @@ describe('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(MeasuresPage.measureVersioningErrorMsg).should('contain.text', 'Requested measure cannot be versioned')
+        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Requested measure cannot be versioned')
         cy.get(MeasuresPage.measureVersionHelperText).should('contain.text', 'Please include valid CQL in the CQL editor to version before versioning this measure')
 
     })
@@ -121,7 +122,7 @@ describe('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(MeasuresPage.measureVersioningErrorMsg).should('contain.text', 'Requested measure cannot be versioned')
+        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Requested measure cannot be versioned')
         cy.get(MeasuresPage.measureVersionHelperText).should('contain.text', 'Please include valid CQL in the CQL editor to version before versioning this measure')
 
     })
