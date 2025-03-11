@@ -97,7 +97,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
             cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
             cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-            cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries, {delay:50}).type('{enter}')
+            cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries, { delay: 50 }).type('{enter}')
 
             TestCasesPage.clickCreateTestCaseButton()
 
@@ -120,7 +120,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
             cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-            cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+            cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -261,7 +261,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
             cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-            cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+            cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
             Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 37700)
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
@@ -399,7 +399,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 

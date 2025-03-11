@@ -53,7 +53,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Save edited / updated to test case
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON'])
         })
 
@@ -102,7 +102,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON'])
         })
 
@@ -236,7 +236,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('not.exist')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON'])
         })
 
@@ -305,7 +305,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('be.visible')
+        cy.get(TestCasesPage.successMsg).should('be.visible')
 
         //Remove Measure Observation from Measure group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -425,7 +425,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Save edited / updated to test case
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).each(msg => {
+        cy.get(TestCasesPage.successMsg).each(msg => {
             expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON'])
         })
     })

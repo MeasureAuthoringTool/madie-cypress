@@ -82,7 +82,7 @@ describe('Test Case Execution with codes', () => {
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 

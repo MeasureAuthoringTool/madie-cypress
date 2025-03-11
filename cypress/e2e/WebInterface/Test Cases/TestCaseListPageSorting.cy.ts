@@ -96,7 +96,7 @@ describe('Sort by each of the test case list page\'s columns', () => {
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.confirmationMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 

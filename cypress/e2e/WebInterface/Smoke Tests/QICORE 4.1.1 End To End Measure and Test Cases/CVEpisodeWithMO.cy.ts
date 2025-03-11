@@ -7,7 +7,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import {Header} from "../../../../Shared/Header";
+import { Header } from "../../../../Shared/Header";
 
 let measureName = 'CVEpisodeWithMO' + Date.now()
 let CqlLibraryName = 'CVEpisodeWithMO' + Date.now()
@@ -134,7 +134,7 @@ describe('Measure Creation and Testing: CV Episode Measure With MO', () => {
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.confirmationMsg).should('contain.text', 'Test case updated successfully ' +
+        cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
             'with warnings in JSON')
 
         cy.get(EditMeasurePage.testCasesTab).click()
