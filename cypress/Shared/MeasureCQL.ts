@@ -2584,6 +2584,249 @@ export class MeasureCQL {
         '      )\n' +
         '  )'
 
+    public static readonly QDM_CQL_withDRC= 'library CMS153ChlamydiaScreeninginWomen version \'13.0.000\'\n' +
+        '\n' +
+        'using QDM version \'5.6\'\n' +
+        '\n' +
+        'include CQMCommonQDM version \'9.0.000\' called Global\n' +
+        'include HospiceQDM version \'7.0.000\' called Hospice\n' +
+        '\n' +
+        'codesystem "AdministrativeGender": \'urn:oid:2.16.840.1.113883.5.1\'\n' +
+        'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\'\n' +
+        'codesystem "SNOMEDCT": \'urn:oid:2.16.840.1.113883.6.96\' \n' +
+        '\n' +
+        'valueset "Chlamydia Screening": \'urn:oid:2.16.840.1.113883.3.464.1003.110.12.1052\'\n' +
+        'valueset "Complications of Pregnancy, Childbirth and the Puerperium": \'urn:oid:2.16.840.1.113883.3.464.1003.111.12.1012\'\n' +
+        'valueset "Contraceptive Medications": \'urn:oid:2.16.840.1.113883.3.464.1003.196.12.1080\'\n' +
+        'valueset "Diagnoses Used to Indicate Sexual Activity": \'urn:oid:2.16.840.1.113883.3.464.1003.111.12.1018\'\n' +
+        'valueset "Diagnostic Studies During Pregnancy": \'urn:oid:2.16.840.1.113883.3.464.1003.111.12.1008\'\n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "HIV": \'urn:oid:2.16.840.1.113883.3.464.1003.120.12.1003\'\n' +
+        'valueset "Home Healthcare Services": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
+        'valueset "Isotretinoin": \'urn:oid:2.16.840.1.113883.3.464.1003.196.12.1143\'\n' +
+        'valueset "Lab Tests During Pregnancy": \'urn:oid:2.16.840.1.113883.3.464.1003.111.12.1007\'\n' +
+        'valueset "Lab Tests for Sexually Transmitted Infections": \'urn:oid:2.16.840.1.113883.3.464.1003.110.12.1051\'\n' +
+        'valueset "Office Visit": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+        'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.12\'\n' +
+        'valueset "Pap Test": \'urn:oid:2.16.840.1.113883.3.464.1003.108.12.1017\'\n' +
+        'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Pregnancy Test": \'urn:oid:2.16.840.1.113883.3.464.1003.111.12.1011\'\n' +
+        'valueset "Preventive Care Services Established Office Visit, 18 and Up": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
+        'valueset "Preventive Care Services Initial Office Visit, 18 and Up": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1023\'\n' +
+        'valueset "Preventive Care Services, Initial Office Visit, 0 to 17": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1022\'\n' +
+        'valueset "Preventive Care, Established Office Visit, 0 to 17": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1024\'\n' +
+        'valueset "Procedures Used to Indicate Sexual Activity": \'urn:oid:2.16.840.1.113883.3.464.1003.111.12.1017\'\n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+        'valueset "Telephone Visits": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1080\'\n' +
+        'valueset "Virtual Encounter": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1089\'\n' +
+        'valueset "XRay Study": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1034\'\n' +
+        '\n' +
+        'code "Female": \'F\' from "AdministrativeGender" display \'Female\'\n' +
+        'code "Have you ever had vaginal intercourse [PhenX]": \'64728-9\' from "LOINC" display \'Have you ever had vaginal intercourse [PhenX]\'\n' +
+        'code "Yes (qualifier value)": \'373066001\' from "SNOMEDCT" display \'Yes (qualifier value)\'\n' +
+        '\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+        '\n' +
+        'context Patient\n' +
+        '\n' +
+        'define "Has Diagnoses Identifying Sexual Activity":\n' +
+        '  exists ( ( ["Diagnosis": "Diagnoses Used to Indicate Sexual Activity"]\n' +
+        '      union ["Diagnosis": "HIV"]\n' +
+        '      union ["Diagnosis": "Complications of Pregnancy, Childbirth and the Puerperium"] ) SexualActivityDiagnosis\n' +
+        '      where SexualActivityDiagnosis.prevalencePeriod overlaps "Measurement Period"\n' +
+        '  )\n' +
+        '\n' +
+        'define "Has Active Contraceptive Medications":\n' +
+        '  exists ( ["Medication, Active": "Contraceptive Medications"] ActiveContraceptives\n' +
+        '      where ActiveContraceptives.relevantPeriod overlaps "Measurement Period"\n' +
+        '  )\n' +
+        '\n' +
+        'define "Denominator":\n' +
+        '  "Initial Population"\n' +
+        '\n' +
+        'define "SDE Ethnicity":\n' +
+        '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+        '\n' +
+        'define "SDE Payer":\n' +
+        '  ["Patient Characteristic Payer": "Payer Type"]\n' +
+        '\n' +
+        'define "SDE Race":\n' +
+        '  ["Patient Characteristic Race": "Race"]\n' +
+        '\n' +
+        'define "SDE Sex":\n' +
+        '  ["Patient Characteristic Sex": "CMS Sex"]\n' +
+        '\n' +
+        'define "Numerator":\n' +
+        '  exists ( ["Laboratory Test, Performed": "Chlamydia Screening"] ChlamydiaTest\n' +
+        '      where Global."LatestOf" ( ChlamydiaTest.relevantDatetime, ChlamydiaTest.relevantPeriod ) during day of "Measurement Period"\n' +
+        '        and ChlamydiaTest.result is not null\n' +
+        '  )\n' +
+        '\n' +
+        'define "Has Diagnostic Studies Identifying Sexual Activity":\n' +
+        '  exists ( ["Diagnostic Study, Order": "Diagnostic Studies During Pregnancy"] SexualActivityDiagnostics\n' +
+        '      where SexualActivityDiagnostics.authorDatetime during day of "Measurement Period"\n' +
+        '  )\n' +
+        '\n' +
+        'define "Has Laboratory Tests Identifying Sexual Activity":\n' +
+        '  exists ( ["Laboratory Test, Order": "Pregnancy Test"] PregnancyTest\n' +
+        '      where PregnancyTest.authorDatetime during day of "Measurement Period"\n' +
+        '  )\n' +
+        '    or "Has Laboratory Tests Identifying Sexual Activity But Not Pregnancy"\n' +
+        '\n' +
+        'define "Has Laboratory Tests Identifying Sexual Activity But Not Pregnancy":\n' +
+        '  exists ( ( ["Laboratory Test, Order": "Pap Test"]\n' +
+        '      union ["Laboratory Test, Order": "Lab Tests During Pregnancy"]\n' +
+        '      union ["Laboratory Test, Order": "Lab Tests for Sexually Transmitted Infections"] ) LabOrders\n' +
+        '      where LabOrders.authorDatetime during day of "Measurement Period"\n' +
+        '  )\n' +
+        '\n' +
+        'define "Has Ordered Contraceptive Medications":\n' +
+        '  exists ( ["Medication, Order": "Contraceptive Medications"] OrderedContraceptives\n' +
+        '      where OrderedContraceptives.authorDatetime during day of "Measurement Period"\n' +
+        '  )\n' +
+        '\n' +
+        'define "Has Procedures Identifying Sexual Activity":\n' +
+        '  exists ( ["Procedure, Performed": "Procedures Used to Indicate Sexual Activity"] ProceduresForSexualActivity\n' +
+        '      where Global."NormalizeInterval" ( ProceduresForSexualActivity.relevantDatetime, ProceduresForSexualActivity.relevantPeriod ) during day of "Measurement Period"\n' +
+        '  )\n' +
+        '\n' +
+        'define "Initial Population":\n' +
+        '  AgeInYearsAt(date from \n' +
+        '    end of "Measurement Period"\n' +
+        '  ) in Interval[16, 24]\n' +
+        '    and exists ( ["Patient Characteristic Sex": "Female"] )\n' +
+        '    and exists ( "Qualifying Encounters" )\n' +
+        '    and ( ( "Has Assessments Identifying Sexual Activity" )\n' +
+        '        or ( "Has Diagnoses Identifying Sexual Activity" )\n' +
+        '        or ( "Has Active Contraceptive Medications" )\n' +
+        '        or ( "Has Ordered Contraceptive Medications" )\n' +
+        '        or ( "Has Laboratory Tests Identifying Sexual Activity" )\n' +
+        '        or ( "Has Diagnostic Studies Identifying Sexual Activity" )\n' +
+        '        or ( "Has Procedures Identifying Sexual Activity" )\n' +
+        '    )\n' +
+        '\n' +
+        'define "Stratification 1":\n' +
+        '  AgeInYearsAt(date from \n' +
+        '    end of "Measurement Period"\n' +
+        '  ) in Interval[16, 20]\n' +
+        '\n' +
+        'define "Stratification 2":\n' +
+        '  AgeInYearsAt(date from \n' +
+        '    end of "Measurement Period"\n' +
+        '  ) in Interval[21, 24]\n' +
+        '\n' +
+        'define "Qualifying Encounters":\n' +
+        '  ( ( ["Encounter, Performed": "Office Visit"]\n' +
+        '      union ["Encounter, Performed": "Preventive Care Services Established Office Visit, 18 and Up"]\n' +
+        '      union ["Encounter, Performed": "Preventive Care Services Initial Office Visit, 18 and Up"]\n' +
+        '      union ["Encounter, Performed": "Preventive Care Services, Initial Office Visit, 0 to 17"]\n' +
+        '      union ["Encounter, Performed": "Preventive Care, Established Office Visit, 0 to 17"]\n' +
+        '      union ["Encounter, Performed": "Home Healthcare Services"]\n' +
+        '      union ["Encounter, Performed": "Telephone Visits"]\n' +
+        '      union ["Encounter, Performed": "Virtual Encounter"] ) ValidEncounters\n' +
+        '      where ValidEncounters.relevantPeriod during day of "Measurement Period"\n' +
+        '  )\n' +
+        '\n' +
+        'define "Denominator Exclusions":\n' +
+        '  Hospice."Has Hospice Services"\n' +
+        '    or ( ( "Has Pregnancy Test Exclusion" )\n' +
+        '        and not ( "Has Assessments Identifying Sexual Activity" )\n' +
+        '        and not ( "Has Diagnoses Identifying Sexual Activity" )\n' +
+        '        and not ( "Has Active Contraceptive Medications" )\n' +
+        '        and not ( "Has Ordered Contraceptive Medications" )\n' +
+        '        and not ( "Has Laboratory Tests Identifying Sexual Activity But Not Pregnancy" )\n' +
+        '        and not ( "Has Diagnostic Studies Identifying Sexual Activity" )\n' +
+        '        and not ( "Has Procedures Identifying Sexual Activity" )\n' +
+        '    )\n' +
+        '\n' +
+        'define "Has Assessments Identifying Sexual Activity":\n' +
+        '  exists ( ["Assessment, Performed": "Have you ever had vaginal intercourse [PhenX]"] SexualActivityAssessment\n' +
+        '      where SexualActivityAssessment.result ~ "Yes (qualifier value)"\n' +
+        '        and Global."NormalizeInterval" ( SexualActivityAssessment.relevantDatetime, SexualActivityAssessment.relevantPeriod ) on or before end of "Measurement Period"\n' +
+        '  )\n' +
+        '\n' +
+        'define "Has Pregnancy Test Exclusion":\n' +
+        '  exists ( ( ["Laboratory Test, Order": "Pregnancy Test"] PregnancyTest\n' +
+        '        with ["Diagnostic Study, Order": "XRay Study"] XrayOrder\n' +
+        '          such that XrayOrder.authorDatetime occurs 6 days or less on or after day of PregnancyTest.authorDatetime\n' +
+        '        where PregnancyTest.authorDatetime during "Measurement Period"\n' +
+        '    )\n' +
+        '      union ( ["Laboratory Test, Order": "Pregnancy Test"] PregnancyTestOrder\n' +
+        '          with ["Medication, Order": "Isotretinoin"] AccutaneOrder\n' +
+        '            such that AccutaneOrder.authorDatetime occurs 6 days or less on or after day of PregnancyTestOrder.authorDatetime\n' +
+        '          where PregnancyTestOrder.authorDatetime during "Measurement Period"\n' +
+        '      )\n' +
+        '  )'
+
+    public static readonly QDM_CQL_withLargeIncludedLibrary = 'library CMS1192 version \'1.1.000\'\n' +
+        '\n' +
+        'using QDM version \'5.6\'\n' +
+        '\n' +
+        'include MATGlobalCommonFunctionsQDM version \'8.0.000\' called Global\n' +
+        'include SDOH version \'3.0.000\' called SDOH\n' +
+        '\n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+        'valueset "Patient Expired": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.309\'\n' +
+        'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+        '\n' +
+        'context Patient\n' +
+        '\n' +
+        'define "SDE Ethnicity":\n' +
+        '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+        '\n' +
+        'define "SDE Payer":\n' +
+        '  ["Patient Characteristic Payer": "Payer Type"]\n' +
+        '\n' +
+        'define "SDE Race":\n' +
+        '  ["Patient Characteristic Race": "Race"]\n' +
+        '\n' +
+        'define "SDE Sex":\n' +
+        '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+        '\n' +
+        'define "Qualifying Encounters":\n' +
+        '  SDOH."Qualifying Encounters"\n' +
+        '\n' +
+        'define "Encounter without Food Screening":\n' +
+        '  SDOH."Qualifying Encounters" encounter\n' +
+        '    without SDOH."Food Insecurity Screening" screening\n' +
+        '      such that Global.NormalizeInterval ( screening.relevantDatetime, screening.relevantPeriod ) starts during day of Global.HospitalizationWithObservation ( encounter )\n' +
+        '    without SDOH."Food Insecurity Screening Not Done" screeningNotDone\n' +
+        '      such that Global.NormalizeInterval ( screeningNotDone.relevantDatetime, screeningNotDone.relevantPeriod ) starts during day of Global.HospitalizationWithObservation ( encounter )\n' +
+        '\n' +
+        'define "Encounter without Housing Instability Screening":\n' +
+        '  SDOH."Qualifying Encounters" encounter\n' +
+        '    without SDOH."Housing Instability Screening" screening\n' +
+        '      such that Global.NormalizeInterval ( screening.relevantDatetime, screening.relevantPeriod ) starts during day of Global.HospitalizationWithObservation ( encounter )\n' +
+        '    without SDOH."Housing Instability Screening Not Done" screeningNotDone\n' +
+        '      such that Global.NormalizeInterval ( screeningNotDone.relevantDatetime, screeningNotDone.relevantPeriod ) starts during day of Global.HospitalizationWithObservation ( encounter )\n' +
+        '\n' +
+        'define "Encounter without Interpersonal Safety Screening":\n' +
+        '  SDOH."Qualifying Encounters" encounter\n' +
+        '    without SDOH."Interpersonal Safety Screening" screening\n' +
+        '      such that Global.NormalizeInterval ( screening.relevantDatetime, screening.relevantPeriod ) starts during day of Global.HospitalizationWithObservation ( encounter )\n' +
+        '    without SDOH."Interpersonal Safety Screening Not Done" screeningNotDone\n' +
+        '      such that Global.NormalizeInterval ( screeningNotDone.relevantDatetime, screeningNotDone.relevantPeriod ) starts during day of Global.HospitalizationWithObservation ( encounter )\n' +
+        '\n' +
+        'define "Encounter without Transportation Needs Screening":\n' +
+        '  SDOH."Qualifying Encounters" encounter\n' +
+        '    without SDOH."Transportation Needs Screening" screening\n' +
+        '      such that Global.NormalizeInterval ( screening.relevantDatetime, screening.relevantPeriod ) starts during day of Global.HospitalizationWithObservation ( encounter )\n' +
+        '    without SDOH."Transportation Needs Screening Not Done" screeningNotDone\n' +
+        '      such that Global.NormalizeInterval ( screeningNotDone.relevantDatetime, screeningNotDone.relevantPeriod ) starts during day of Global.HospitalizationWithObservation ( encounter )\n' +
+        '\n' +
+        'define "Encounter without Utility Difficulties Screening":\n' +
+        '  SDOH."Qualifying Encounters" encounter\n' +
+        '    without SDOH."Utility Difficulties Screening" screening\n' +
+        '      such that Global.NormalizeInterval ( screening.relevantDatetime, screening.relevantPeriod ) starts during day of Global.HospitalizationWithObservation ( encounter )\n' +
+        '    without SDOH."Utility Difficulties Screening Not Done" screeningNotDone\n' +
+        '      such that Global.NormalizeInterval ( screeningNotDone.relevantDatetime, screeningNotDone.relevantPeriod ) starts during day of Global.HospitalizationWithObservation ( encounter )\n' +
+        '\n' +
+        'define "Denominator Exclusions":\n' +
+        '  SDOH."Qualifying Encounters" QualifyingEncounter\n' +
+        '    where QualifyingEncounter.dischargeDisposition in "Patient Expired"'
+
     public static readonly CQLHLResults_value = 'library BugQICoreMeasure version \'0.0.000\'\n' +
 
         'using QICore version \'4.1.1\'\n' +
