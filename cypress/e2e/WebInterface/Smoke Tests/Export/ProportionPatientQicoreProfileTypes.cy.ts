@@ -136,8 +136,8 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
             })
 
         //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle4QICore-v1.0.000-FHIR.html' &&
-            'eCQMTitle4QICore-v1.0.000-FHIR.xml' && 'eCQMTitle4QICore-v1.0.000-FHIR.json', { timeout: 500000 })
-
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle4QICore-v1.0.000-FHIR.html')
+            .and('contain', 'eCQMTitle4QICore-v1.0.000-FHIR.xml')
+            .and('contain', 'eCQMTitle4QICore-v1.0.000-FHIR.json')
     })
 })

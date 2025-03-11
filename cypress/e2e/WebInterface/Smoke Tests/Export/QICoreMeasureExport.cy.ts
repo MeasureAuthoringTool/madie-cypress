@@ -71,7 +71,10 @@ describe('QI-Core Measure Export', () => {
         //'Include in Report Type' field added for Initial Population when Risk adjustment variable is added
         cy.get(MeasureGroupPage.ippIncludeInReportTypeField).should('exist')
         cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
-        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Individual' && 'Subject List' && 'Summary' && 'Data Collection')
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Individual')
+            .and('contain.text', 'Subject List')
+            .and('contain.text', 'Summary')
+            .and('cotain.text', 'Data Collection')
         cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
 
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
@@ -91,7 +94,10 @@ describe('QI-Core Measure Export', () => {
         //'Include in Report Type' field added when Supplemental data element is added
         cy.get(MeasureGroupPage.ippIncludeInReportTypeField).should('exist')
         cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
-        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Individual' && 'Subject List' && 'Summary' && 'Data Collection')
+        cy.get(MeasureGroupPage.ippIncludeInReportTypeDropdownList).should('contain.text', 'Individual')
+            .and('contain.text', 'Subject List')
+            .and('contain.text', 'Summary')
+            .and('cotain.text', 'Data Collection')
         cy.get('[data-testid=ArrowDropDownIcon]').eq(1).click()
 
         //Save Supplemental data

@@ -67,8 +67,8 @@ describe('QI-Core Single Test Case Export', () => {
             })
         cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
             //Verify all files exist in exported zip file
-            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json' &&
-                patientId, 'README.txt')
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
+                .and('contain',patientId, 'README.txt')
         })
     })
 
@@ -100,8 +100,8 @@ describe('QI-Core Single Test Case Export', () => {
             })
         cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
             //Verify all files exist in exported zip file
-            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json' &&
-                patientId, 'README.txt')
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
+                .and('contain', patientId, 'README.txt')
         })
     })
 })
@@ -158,13 +158,13 @@ describe('QI-Core Test Case Export for all test cases', () => {
             })
         cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
             //Verify all files exist in exported zip file
-            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json' &&
-                patientId, 'README.txt')
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
+                .and('contain', patientId, 'README.txt')
         })
         cy.readFile(testCasePIdPathSecnD).should('exist').then((patientId2) => {
             //Verify all files exist in exported zip file
-            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries2-Title for Auto Test2.json' &&
-                patientId2)
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries2-TitleforAutoTest2.json')
+                .and('contain', patientId2)
         })
     })
 
@@ -200,13 +200,13 @@ describe('QI-Core Test Case Export for all test cases', () => {
             })
         cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
             //Verify all files exist in exported zip file
-            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-Title for Auto Test.json' &&
-                patientId, 'README.txt')
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
+                .and('contain', patientId, 'README.txt')
         })
         cy.readFile(testCasePIdPathSecnD).should('exist').then((patientId2) => {
             //Verify all files exist in exported zip file
-            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries2-Title for Auto Test2.json' &&
-                patientId2)
+            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries2-TitleforAutoTest2.json')
+                .and('contain', patientId2)
         })
         cy.reload()
         Utilities.waitForElementVisible('[data-testid="user-profile-select"]', 60000)

@@ -113,8 +113,9 @@ describe('FHIR Measure Export, Not the Owner', () => {
             })
 
         //Verify all files exist in exported zip file
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4.zip')).should('contain', 'eCQMTitle4QICore-v0.0.000-FHIR.html' &&
-            'eCQMTitle4QICore-v0.0.000-FHIR.xml' && 'eCQMTitle4QICore-v0.0.000-FHIR.json')
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4.zip')).should('contain', 'eCQMTitle4QICore-v0.0.000-FHIR.html')
+            .and('contain', 'eCQMTitle4QICore-v0.0.000-FHIR.xml')
+            .and('contain', 'eCQMTitle4QICore-v0.0.000-FHIR.json')
 
         // cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v1.0.000-FHIR.html' &&
         //     'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json' && 'FHIRHelpers-4.1.000.cql' && 'CQMCommon-1.0.000.cql' && 'FHIRCommon-4.1.000.cql'
