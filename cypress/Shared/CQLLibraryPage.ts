@@ -2,10 +2,13 @@ import { Header } from "./Header"
 import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 import { v4 as uuidv4 } from 'uuid'
+import { CQLLibrariesPage } from "./CQLLibrariesPage"
 
 export enum EditLibraryActions {
 
-    delete
+    delete,
+    version,
+    draft
 }
 
 
@@ -53,10 +56,14 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryExperimentalChkBox = '[id="experimental"]'
     public static readonly editLibraryOwnershipError = '[id="content"]'
     public static readonly editSavedLibraryAlias = '[data-testid="library-alias-input"]'
+    public static readonly libraryInfoPanel = '#page-header'
+    public static readonly draftBubble = '[data-testid="draft-bubble"]'
 
     // action center
     public static readonly actionCenterButton = '[data-testid="action-center-actual-icon"]'
     public static readonly actionCenterDelete = '[data-testid="DeleteLibrary"]'
+    public static readonly actionCenterVersion = '[data-testid="VersionLibrary"]'
+    public static readonly actionCenterDraft = '[data-testid="DraftLibrary"]'
 
     //CQL Editor
     public static readonly cqlLibraryEditorTextBox = '.ace_content'
@@ -430,6 +437,31 @@ export class CQLLibraryPage {
                 cy.get(this.cqlLibraryDeleteDialogContinueBtn).click()
                 break
             }
+            case EditLibraryActions.version: {
+
+                cy.get(this.actionCenterVersion).should('be.visible')
+                cy.get(this.actionCenterVersion).should('be.enabled')
+                cy.get(this.actionCenterVersion).click()
+
+                // click major & continue
+                cy.get('input[value="major"]').check()
+                cy.get(CQLLibrariesPage.createVersionContinueButton).should('be.visible')
+                cy.get(CQLLibrariesPage.createVersionContinueButton).click()
+                break
+            }
+            case EditLibraryActions.draft: {
+                
+                cy.get(this.actionCenterDraft).should('be.visible')
+                cy.get(this.actionCenterDraft).should('be.enabled')
+                cy.get(this.actionCenterDraft).click()
+
+                cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
+        
+                cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
+                cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
+
+            }
+
             default: { }
         }
     }
