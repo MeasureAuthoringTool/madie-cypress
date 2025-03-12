@@ -36,7 +36,7 @@ describe('Ratio based measure with measure observations', () => {
     beforeEach('Create Measure, Test Case and login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measure.name, measure.libName, measure.model, { measureCql: cql })
-       
+
         // all these declared values need to match your CQL definitions and functions
         const obs1: MeasureObservations = {
             aggregateMethod: 'Count',
@@ -57,9 +57,9 @@ describe('Ratio based measure with measure observations', () => {
         OktaLogin.Logout()
         Utilities.deleteMeasure(measure.name, measure.libName)
     })
-    
+
     it('Test Case Export & Import - Persist expected values through the process', () => {
-    
+
         MeasuresPage.actionCenter('edit')
 
         // verify populations
@@ -84,7 +84,7 @@ describe('Ratio based measure with measure observations', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).type('3')
         cy.get(TestCasesPage.testCaseDENOMExpected).type('1')
         cy.get(TestCasesPage.testCaseNUMERExpected).type('1')
-        cy.get(TestCasesPage.denominatorObservationRow).type('1')
+        cy.get(TestCasesPage.denominatorObservationExpectedRow).type('1')
         cy.get(TestCasesPage.numeratorObservationRow).type('1')
 
         // save - return to list
@@ -97,7 +97,7 @@ describe('Ratio based measure with measure observations', () => {
         cy.get(TestCasesPage.actionCenterExport).click()
         cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
-        const exportPath ='cypress/downloads/AutoTestTitle-v0.0.000-FHIR4-TestCases.zip'
+        const exportPath = 'cypress/downloads/AutoTestTitle-v0.0.000-FHIR4-TestCases.zip'
         cy.readFile(exportPath).should('exist')
 
         // need this for now? - clicks below won't work with invisible elements overlapping screen
@@ -112,10 +112,10 @@ describe('Ratio based measure with measure observations', () => {
         cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 6500)
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(exportPath, {force: true})
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(exportPath, { force: true })
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseBtnOnModal, 15000)
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
- 
+
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         TestCasesPage.grabTestCaseId(1)
@@ -127,7 +127,7 @@ describe('Ratio based measure with measure observations', () => {
         cy.get(TestCasesPage.testCaseIPPExpected).should('have.value', '3')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('have.value', '1')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('have.value', '1')
-        cy.get(TestCasesPage.denominatorObservationRow).should('have.value', '1')
+        cy.get(TestCasesPage.denominatorObservationExpectedRow).should('have.value', '1')
         cy.get(TestCasesPage.numeratorObservationRow).should('have.value', '1')
     })
 })
@@ -137,7 +137,7 @@ describe('Proportion based measure with no observations', () => {
     beforeEach('Create Measure, Test Case and login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measure.name, measure.libName, measure.model, { measureCql: cql })
-       
+
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.encounter, MeasureScoring.Proportion, pops)
 
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
@@ -149,7 +149,7 @@ describe('Proportion based measure with no observations', () => {
         OktaLogin.Logout()
         Utilities.deleteMeasure(measure.name, measure.libName)
     })
-    
+
 
     it('Test Case Export & Import - Persist expected values through the process', () => {
 
@@ -188,7 +188,7 @@ describe('Proportion based measure with no observations', () => {
         cy.get(TestCasesPage.actionCenterExport).click()
         cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
-        const exportPath ='cypress/downloads/AutoTestTitle-v0.0.000-FHIR4-TestCases.zip'
+        const exportPath = 'cypress/downloads/AutoTestTitle-v0.0.000-FHIR4-TestCases.zip'
         cy.readFile(exportPath).should('exist')
 
         // need this for now? - clicks below won't work with invisible elements overlapping screen
@@ -203,7 +203,7 @@ describe('Proportion based measure with no observations', () => {
         cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 6500)
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(exportPath, {force: true})
+        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(exportPath, { force: true })
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseBtnOnModal, 15000)
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 

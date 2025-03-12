@@ -141,7 +141,7 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export test case
-        cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        cy.get(TestCasesPage.testCaseListTable).find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
@@ -176,7 +176,7 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(EditMeasurePage.successMessage).should('contain.text', '(2) Test cases imported successfully')
 
         //export test case
-        cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        cy.get(TestCasesPage.testCaseListTable).find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
@@ -494,7 +494,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export test case
-        cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        cy.get(TestCasesPage.testCaseListTable).find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
@@ -584,7 +584,7 @@ describe('Test case uniqueness error validation', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export test case
-        cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        cy.get(TestCasesPage.testCaseListTable).find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
@@ -702,7 +702,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export test case
-        cy.get('[data-testid="test-case-tbl"]').find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        cy.get(TestCasesPage.testCaseListTable).find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })

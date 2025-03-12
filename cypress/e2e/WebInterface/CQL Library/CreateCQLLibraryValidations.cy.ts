@@ -4,6 +4,7 @@ import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { Utilities } from "../../../Shared/Utilities"
 import { Global } from "../../../Shared/Global"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 
@@ -205,7 +206,7 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.newCQLLibName).type(CQLLibraryName + randValue)
         cy.get(CQLLibraryPage.cqlLibraryModalField).click()
         cy.get(CQLLibraryPage.cqlLibraryCreateForm).click()
-        cy.get(CQLLibraryPage.cqlLibraryCreateFormSideClickArea).click()
+        cy.get(TestCasesPage.testCaseStatus).click()
         cy.get(CQLLibraryPage.cqlLibraryModelErrorMsg).should('contain.text', 'A CQL library model is required.')
         cy.get(CQLLibraryPage.saveCQLLibraryBtn).should('be.disabled')
     })

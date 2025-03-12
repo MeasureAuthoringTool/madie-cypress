@@ -152,13 +152,13 @@ describe('Measure Versioning when the measure has test case with errors', () => 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        Utilities.waitForElementVisible(TestCasesPage.versionMeasurewithTCErrorsModalBody, 20000)
+        Utilities.waitForElementVisible(TestCasesPage.discardChangesConfirmationBody, 20000)
 
-        cy.get(TestCasesPage.versionMeasurewithTCErrorsModalBody).should('contain.text', 'You have test cases that are invalid.')
+        cy.get(TestCasesPage.discardChangesConfirmationBody).should('contain.text', 'You have test cases that are invalid.')
 
         cy.get(TestCasesPage.versionMeasurewithTCErrorsCancel).click()
 
-        Utilities.waitForElementToNotExist(TestCasesPage.versionMeasurewithTCErrorsModalBody, 20000)
+        Utilities.waitForElementToNotExist(TestCasesPage.discardChangesConfirmationBody, 20000)
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
@@ -174,10 +174,10 @@ describe('Measure Versioning when the measure has test case with errors', () => 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        Utilities.waitForElementVisible(TestCasesPage.versionMeasurewithTCErrorsModalBody, 20000)
+        Utilities.waitForElementVisible(TestCasesPage.discardChangesConfirmationBody, 20000)
 
         cy.get(TestCasesPage.versionMeasurewithTCErrorsContinue).click()
-        Utilities.waitForElementToNotExist(TestCasesPage.versionMeasurewithTCErrorsModalBody, 20000)
+        Utilities.waitForElementToNotExist(TestCasesPage.discardChangesConfirmationBody, 20000)
 
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')

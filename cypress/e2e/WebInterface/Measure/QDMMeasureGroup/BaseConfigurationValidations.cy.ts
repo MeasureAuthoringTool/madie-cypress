@@ -229,7 +229,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(Global.DiscardCancelBtn).click()
 
         //click on 'No, Keep working' button
-        cy.get(MeasureGroupPage.qdmDiscardModalCancelButton).click()
+        cy.get(Global.keepWorkingCancel).click()
 
         //verify state of Base Configuration page is as it was prior to clicking on the Discard button
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
@@ -252,7 +252,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(Global.DiscardCancelBtn).click()
 
         //click on 'No, Keep working' button
-        cy.get(MeasureGroupPage.qdmDiscardModalCancelButton).click()
+        cy.get(Global.keepWorkingCancel).click()
 
         //verify state of Base Configuration page is as it was prior to clicking on the Discard button
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
@@ -279,7 +279,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(Global.DiscardCancelBtn).click()
 
         //click on 'No, Keep working' button
-        cy.get(MeasureGroupPage.qdmDiscardModalCancelButton).click()
+        cy.get(Global.keepWorkingCancel).click()
 
         //validate that 'No" radio button is selected / checked
         cy.contains('label', 'No')
@@ -316,13 +316,13 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
 
         //confirm dirty check / discard modal appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmDirtyCheckDiscardModal, 30000)
-        cy.get(MeasureGroupPage.qdmDiscardModalCancelButton).should('be.visible')
-        cy.get(MeasureGroupPage.qdmDiscardModalCancelButton).should('be.enabled')
+        cy.get(Global.keepWorkingCancel).should('be.visible')
+        cy.get(Global.keepWorkingCancel).should('be.enabled')
         cy.get(MeasureGroupPage.qdmDiscardModalContinueButton).should('be.visible')
         cy.get(MeasureGroupPage.qdmDiscardModalContinueButton).should('be.enabled')
 
         //cancel navigation
-        cy.get(MeasureGroupPage.qdmDiscardModalCancelButton).click()
+        cy.get(Global.keepWorkingCancel).click()
 
         //verify state of Base Configuration page is as it was prior to clicking on the Discard button
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')

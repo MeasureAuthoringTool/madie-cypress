@@ -113,7 +113,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         //Validate measure observation expected values
-        cy.get(TestCasesPage.denominatorObservationRow).type('@#')
+        cy.get(TestCasesPage.denominatorObservationExpectedRow).type('@#')
         cy.get(TestCasesPage.denominatorObservationExpectedValueError).should('contain.text', 'Only positive numeric values can be entered in the expected values')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.numeratorObservationRow).type('ab12')
@@ -124,7 +124,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
 
         //Save measure observation expected values
-        cy.get(TestCasesPage.denominatorObservationRow).clear().type('1.3')
+        cy.get(TestCasesPage.denominatorObservationExpectedRow).clear().type('1.3')
         cy.get(TestCasesPage.numeratorObservationRow).clear().type('5')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 10000)
@@ -133,7 +133,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.denominatorObservationRow).should('contain.value', '1.3')
+        cy.get(TestCasesPage.denominatorObservationExpectedRow).should('contain.value', '1.3')
         cy.get(TestCasesPage.numeratorObservationRow).should('contain.value', '5')
     })
 

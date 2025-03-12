@@ -1185,7 +1185,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
         //Close the Toast message
-        cy.get('[data-testid="ClearIcon"]').click()
+        cy.get(TestCasesPage.clearIconBtn).click()
 
         //create a test case that will fail:
 
@@ -1574,7 +1574,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
             //Close the Toast message
-            cy.get('[data-testid="ClearIcon"]').click()
+            cy.get(TestCasesPage.clearIconBtn).click()
 
             //Navigate to Test Cases page and add Test Case details
             cy.get(EditMeasurePage.testCasesTab).click()
