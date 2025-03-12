@@ -66,7 +66,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -94,7 +94,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
             cy.writeFile(filePath, request.response.body.id)
         })
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
         //navigate back to the main MADiE / measure list page
@@ -117,7 +117,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -128,7 +128,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
@@ -164,7 +164,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumberFirst)
         cy.log('Major Version Created Successfully')
 
@@ -188,10 +188,10 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         CreateMeasurePage.clickCreateDraftButton()
 
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
-        Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 100000)
+        Utilities.waitForElementToNotExist(TestCasesPage.importTestCaseSuccessMsg, 100000)
 
         //navigate back to the main MADiE / measure list page
         cy.get(Header.mainMadiePageButton).click()
@@ -236,7 +236,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumberSecond)
         cy.log('Major Version Created Successfully')
 
@@ -305,7 +305,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumberFirst)
         cy.log('Major Version Created Successfully')
 
@@ -329,10 +329,10 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         CreateMeasurePage.clickCreateDraftButton()
 
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
-        Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 100000)
+        Utilities.waitForElementToNotExist(TestCasesPage.importTestCaseSuccessMsg, 100000)
 
         //navigate back to the main MADiE / measure list page
         cy.get(Header.mainMadiePageButton).click()
@@ -355,7 +355,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumberSecond)
         cy.log('Major Version Created Successfully')
 
@@ -428,7 +428,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Major Version Created Successfully')
         MeasuresPage.actionCenter('draft')
@@ -443,9 +443,9 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
         CreateMeasurePage.clickCreateDraftButton()
 
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
-        Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 100000)
+        Utilities.waitForElementToNotExist(TestCasesPage.importTestCaseSuccessMsg, 100000)
 
         //navigate back to the main MADiE / measure list page
         cy.get(Header.mainMadiePageButton).click()

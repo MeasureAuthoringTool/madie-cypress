@@ -342,7 +342,7 @@ describe('Warning modal on Test Case JSON Editor', () => {
 
         //Click on Test Cases tab and discard all changes
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.continueDiscardChangesBtn).click()
+        cy.get(Global.discardChangesContinue).click()
         cy.get(TestCasesPage.newTestCaseButton).should('exist')
     })
 })
@@ -767,9 +767,9 @@ describe('JSON Resource ID tests', () => {
         Utilities.waitForElementVisible(TestCasesPage.editTestCaseSaveButton, 27700)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get('[data-testid="success-toast"]').should('exist')
-        cy.get('[data-testid="success-toast"]').should('be.visible')
-        cy.get('[data-testid="success-toast"]').should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('exist')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('be.visible')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView()
         Utilities.waitForElementVisible(TestCasesPage.detailsTab, 27700)

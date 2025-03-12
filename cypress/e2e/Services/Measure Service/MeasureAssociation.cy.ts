@@ -198,9 +198,9 @@ describe('Measure Association: Validations', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        Utilities.waitForElementVisible(MeasuresPage.VersionDraftMsgs, 35000)
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
-        Utilities.waitForElementToNotExist(MeasuresPage.VersionDraftMsgs, 35000)
+        Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessMsg, 35000)
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        Utilities.waitForElementToNotExist(TestCasesPage.importTestCaseSuccessMsg, 35000)
         OktaLogin.UILogout()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId1').should('exist').then((qdmId2) => {

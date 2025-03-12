@@ -7,6 +7,7 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage, MeasureGroups, MeasureObservations, MeasureScoring, MeasureType, PopulationBasis } from "../../../../../Shared/MeasureGroupPage"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
 const now = Date.now()
@@ -106,13 +107,13 @@ describe('Ratio based measure with measure observations', () => {
         // delete all tc
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
-        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         // re-import immediately
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 6500)
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(exportPath, { force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(exportPath, { force: true })
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseBtnOnModal, 15000)
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
@@ -197,13 +198,13 @@ describe('Proportion based measure with no observations', () => {
         // delete all tc
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
-        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         // re-import immediately
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 6500)
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(exportPath, { force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(exportPath, { force: true })
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseBtnOnModal, 15000)
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 

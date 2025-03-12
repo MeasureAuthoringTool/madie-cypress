@@ -48,8 +48,7 @@ export class CQLEditorPage {
     public static readonly applyCodeBtn = '[data-testid="apply-code-0"]'
     public static readonly removeCodeBtn = '[data-testid="remove-code-0"]'
     public static readonly selectDropdownBtn = '[data-testid="select-action-0_apply"]'
-    public static readonly removeCodeConfirmationMsg = '[class="dialog-warning-body"]'
-    public static readonly removeCodeContinueBtn = '[data-testid="delete-dialog-continue-button"]'
+    public static readonly confirmationMsgRemoveDelete = '[class="dialog-warning-body"]'
 
     //Value Sets page / tab
     public static readonly valueSetsTab = '[data-testid="valueSets-tab"]'
@@ -129,9 +128,7 @@ export class CQLEditorPage {
 
     public static readonly modalBody = '.MuiDialog-paper'
     public static readonly modalXButton = '[data-testid="close-button"]'
-    public static readonly modalConfirmationText = '.dialog-warning-body'
     public static readonly modalActionWarning = '.dialog-warning-action'
-    public static readonly discardContinueButton = '[data-testid="discard-dialog-continue-button"]'
     public static readonly deleteCancelButton = '[data-testid="delete-dialog-cancel-button"]'
     public static readonly deleteContinueButton = '[data-testid="delete-dialog-continue-button"]'
 

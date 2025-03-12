@@ -5,6 +5,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let measureName = 'TestMeasure' + Date.now() + 1
 let CqlLibraryName = 'TestLibrary' + Date.now() + 1
@@ -50,7 +51,7 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //Validate message on page
-        cy.get('[id="status-handler"]').find('[id="content"]').should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(2) Errors:Row: 11, Col:0: ELM: 0:0 | Measure CQL must contain a Context.Row: 7, Col:0: VSAC: 0:110 | Invalid Code system')
+        cy.get('[id="status-handler"]').find(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(2) Errors:Row: 11, Col:0: ELM: 0:0 | Measure CQL must contain a Context.Row: 7, Col:0: VSAC: 0:110 | Invalid Code system')
 
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -75,7 +76,7 @@ describe('Validations around code system in Measure CQL', () => {
 
 
         //Validate message on page
-        cy.get('[id="status-handler"]').find('[id="content"]').should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(2) Errors:Row: 11, Col:0: ELM: 0:0 | Measure CQL must contain a Context.Row: 7, Col:0: VSAC: 0:72 | Version not found.')
+        cy.get('[id="status-handler"]').find(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(2) Errors:Row: 11, Col:0: ELM: 0:0 | Measure CQL must contain a Context.Row: 7, Col:0: VSAC: 0:72 | Version not found.')
 
 
         cy.get('.page-header').click()
@@ -103,7 +104,7 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //Validate message on page
-        cy.get('[id="status-handler"]').find('[id="content"]').should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(2) Errors:Row: 11, Col:0: ELM: 0:0 | Measure CQL must contain a Context.Row: 10, Col:0: Code: 0:57 | Code not found.')
+        cy.get('[id="status-handler"]').find(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(2) Errors:Row: 11, Col:0: ELM: 0:0 | Measure CQL must contain a Context.Row: 10, Col:0: Code: 0:57 | Code not found.')
 
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -128,7 +129,7 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //Validate message on page
-        cy.get('[id="status-handler"]').find('[id="content"]').should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(1) Error:Row: 9, Col:0: ELM: 0:0 | Measure CQL must contain a Context.')
+        cy.get('[id="status-handler"]').find(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(1) Error:Row: 9, Col:0: ELM: 0:0 | Measure CQL must contain a Context.')
 
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -153,7 +154,7 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //Validate message on page
-        cy.get('[id="status-handler"]').find('[id="content"]').should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(1) Error:Row: 9, Col:0: ELM: 0:0 | Measure CQL must contain a Context.')
+        cy.get('[id="status-handler"]').find(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(1) Error:Row: 9, Col:0: ELM: 0:0 | Measure CQL must contain a Context.')
 
         //Validate error(s) in CQL Editor window
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -177,7 +178,7 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //Validate message on page
-        cy.get('[id="status-handler"]').find('[id="content"]').should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(2) Errors:Row: 11, Col:0: ELM: 0:0 | Measure CQL must contain a Context.Row: 7, Col:0: VSAC: 0:107 | Version not found.')
+        cy.get('[id="status-handler"]').find(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(2) Errors:Row: 11, Col:0: ELM: 0:0 | Measure CQL must contain a Context.Row: 7, Col:0: VSAC: 0:107 | Version not found.')
 
         cy.get('.page-header').click()
 
@@ -203,7 +204,7 @@ describe('Validations around code system in Measure CQL', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //Validate message on page
-        cy.get('[id="status-handler"]').find('[id="content"]').should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(2) Errors:Row: 10, Col:0: ELM: 0:0 | Measure CQL must contain a Context.Row: 8, Col:0: VSAC: 0:125 | "\'http://cts.nlm.nih.gov/INCORRECT/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\' is not a valid URL. Fhir URL should start with \'http://cts.nlm.nih.gov/fhir/ValueSet/\'"')
+        cy.get('[id="status-handler"]').find(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(2) Errors:Row: 10, Col:0: ELM: 0:0 | Measure CQL must contain a Context.Row: 8, Col:0: VSAC: 0:125 | "\'http://cts.nlm.nih.gov/INCORRECT/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\' is not a valid URL. Fhir URL should start with \'http://cts.nlm.nih.gov/fhir/ValueSet/\'"')
 
         cy.get('.page-header').click()
 

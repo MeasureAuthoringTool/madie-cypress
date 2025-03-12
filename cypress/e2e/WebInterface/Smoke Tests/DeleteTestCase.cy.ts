@@ -7,6 +7,7 @@ import { TestCase, TestCasesPage } from "../../../Shared/TestCasesPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
 const now = Date.now()
 let measureName = 'DeleteTC' + now
@@ -53,8 +54,8 @@ describe('Delete Test Case', () => {
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
 
-        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCase1.title + '?')
-        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + testCase1.title + '?')
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase1.title)
     })
@@ -70,8 +71,8 @@ describe('Delete Test Case', () => {
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterDelete).click()
 
-        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCase2.title + ', ' + testCase1.title + '?')
-        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + testCase2.title + ', ' + testCase1.title + '?')
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase1.title)
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase2.title)

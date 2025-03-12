@@ -291,7 +291,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         //navigate to main MADiE page and, then, navigate to measure details page
         cy.get(Header.mainMadiePageButton).click()
         //click on 'No, Keep working' button
-        cy.get(MeasureGroupPage.qdmDiscardModalContinueButton).click()
+        cy.get(Global.discardChangesContinue).click()
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
@@ -318,8 +318,8 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.qdmDirtyCheckDiscardModal, 30000)
         cy.get(Global.keepWorkingCancel).should('be.visible')
         cy.get(Global.keepWorkingCancel).should('be.enabled')
-        cy.get(MeasureGroupPage.qdmDiscardModalContinueButton).should('be.visible')
-        cy.get(MeasureGroupPage.qdmDiscardModalContinueButton).should('be.enabled')
+        cy.get(Global.discardChangesContinue).should('be.visible')
+        cy.get(Global.discardChangesContinue).should('be.enabled')
 
         //cancel navigation
         cy.get(Global.keepWorkingCancel).click()

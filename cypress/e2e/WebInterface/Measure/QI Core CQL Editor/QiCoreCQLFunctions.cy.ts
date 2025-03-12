@@ -174,7 +174,7 @@ describe('Qi Core CQL Functions', () => {
 
         //Click on Discard changes
         cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard changes?')
-        cy.get(CQLEditorPage.modalConfirmationText).should('contain.text', 'Are you sure you want to discard your changes in the CQL and edit the Function in the CQL?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to discard your changes in the CQL and edit the Function in the CQL?')
         cy.get(Global.keepWorkingCancel).click()
         /*
         Note: should be
@@ -185,9 +185,9 @@ describe('Qi Core CQL Functions', () => {
         //Click on Delete button
         cy.get(CQLEditorPage.deleteSavedFunctions).click()
         cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard changes?')
-        cy.get(CQLEditorPage.modalConfirmationText).should('contain.text', 'Are you sure you want to discard your changes in the CQL and delete the Function from the CQL?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to discard your changes in the CQL and delete the Function from the CQL?')
         cy.get(Global.discardChangesContinue).click()
-        cy.get(CQLEditorPage.modalConfirmationText).should('contain.text', 'Are you sure you want to delete this Function?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete this Function?')
     })
 
     it('Delete Saved Qi Core CQL Functions', () => {
@@ -200,7 +200,7 @@ describe('Qi Core CQL Functions', () => {
 
         //Delete saved Function
         cy.get(CQLEditorPage.deleteSavedFunctions).click()
-        cy.get(CQLEditorPage.modalConfirmationText).should('contain.text', 'Are you sure you want to delete this Function?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete this Function?')
         cy.get(CQLEditorPage.deleteContinueButton).should('be.enabled').click()
         cy.get(EditMeasurePage.successMessage, { timeout: 6500 }).should('have.text', 'Function isFinishedEncounter has been successfully removed from the CQL.')
     })

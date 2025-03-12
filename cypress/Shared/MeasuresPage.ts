@@ -20,7 +20,6 @@ export class MeasuresPage {
 
     //Measure Version
     public static readonly versionMeasuresSelectionButton = '[data-testid="version-type"]'
-    public static readonly VersionDraftMsgs = '[data-testid="success-toast"]'
     public static readonly updateDraftedMeasuresTextBox = '[data-testid="measure-name-input"]'
     public static readonly createDraftContinueBtn = '[data-testid="create-draft-continue-button"]'
     public static readonly draftModalSelectionBox = '[data-testid="measure-model-select"]'
@@ -32,7 +31,6 @@ export class MeasuresPage {
     public static readonly measureVersionPatch = '[data-testid="patch-option"]'
     public static readonly confirmMeasureVersionNumber = '[data-testid="confirm-version-input"]'
     public static readonly measureVersionContinueBtn = '[data-testid="create-version-continue-button"]'
-    public static readonly measureVersionSuccessMsg = '[data-testid="success-toast"]'
     public static readonly measureVersionHelperText = '[data-testid="version-helper-text"]'
 
     //CQL to ELM version field

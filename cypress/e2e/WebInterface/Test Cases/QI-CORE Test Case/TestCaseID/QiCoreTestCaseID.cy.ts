@@ -8,6 +8,7 @@ import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { Header } from "../../../../../Shared/Header"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
 const timestamp = Date.now()
 let measureName = 'QiCoreTestCaseId' + timestamp
@@ -179,13 +180,13 @@ describe('Import Test cases onto an existing Qi Core measure via file and ensure
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -253,7 +254,7 @@ describe('Qi Core Measure - Test case number on a Draft Measure', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumber)
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -262,7 +263,7 @@ describe('Qi Core Measure - Test case number on a Draft Measure', () => {
 
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(measureName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
         cy.reload()
@@ -339,8 +340,8 @@ describe('QICore Test Case - Deleting all test cases resets test case counter', 
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
 
-        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCase1.title + '?')
-        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + testCase1.title + '?')
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         // verify test case #1 no longer shown, test case #2 is still shown
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase1.title)
@@ -349,7 +350,7 @@ describe('QICore Test Case - Deleting all test cases resets test case counter', 
         // delete test case #2
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterDelete).click()
-        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         // verify no test cases associated with this measure
         cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 0)

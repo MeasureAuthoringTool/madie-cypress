@@ -338,8 +338,8 @@ describe('QDM Code Search fields', () => {
         //Remove Code
         Utilities.waitForElementVisible('[data-testid="delete-code-0"]', 60000)
         cy.get('[data-testid="delete-code-0"]').click()
-        cy.get(CQLEditorPage.removeCodeConfirmationMsg).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
-        cy.get(CQLEditorPage.removeCodeContinueBtn).click()
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
+        cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Code AMB and code system ActCode has been successfully removed from the CQL')
         cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
@@ -393,8 +393,8 @@ describe('QDM Code Search fields', () => {
         //Remove Code
         Utilities.waitForElementVisible('[data-testid="delete-code-0"]', 80000)
         cy.get('[data-testid="delete-code-0"]').click()
-        cy.get(CQLEditorPage.removeCodeConfirmationMsg).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
-        cy.get(CQLEditorPage.removeCodeContinueBtn).click()
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete AMB ambulatory?')
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         //Verify the Code System is still available in the CQL Editor
         cy.get('[class="ace_content"]').should('contain.text', 'codesystem "ActCode": \'urn:oid:2.16.840.1.113883.5.4\'')

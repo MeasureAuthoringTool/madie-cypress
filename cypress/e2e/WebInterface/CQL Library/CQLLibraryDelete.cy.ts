@@ -5,6 +5,8 @@ import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { Header } from "../../../Shared/Header"
 import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utilities"
 import { OktaLogin } from "../../../Shared/OktaLogin"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
 let filePath = 'cypress/fixtures/cqlLibraryId'
 let CQLLibraryName = ''
@@ -65,7 +67,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
 
         //verify deleting Library removes it from library list
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialog, 50000)
-        cy.get(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn).click()
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox, 50000)
         cy.get(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox).should('contain.text', 'The Draft CQL Library has been deleted.')
@@ -103,7 +105,7 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
 
         //verify deleting Library removes it from library list
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialog, 50000)
-        cy.get(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn).click()
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox, 50000)
         cy.get(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox).should('contain.text', 'The Draft CQL Library has been deleted.')
@@ -246,7 +248,7 @@ describe('Action Center Buttons - Delete CQL Library', () => {
         CQLLibrariesPage.cqlLibraryActionCenter('delete')
 
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialog, 50000)
-        cy.get(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn).click()
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox, 50000)
         cy.get(CQLLibraryPage.cqlLibrarySuccessfulDeleteMsgBox).should('contain.text', 'The Draft CQL Library has been deleted.')

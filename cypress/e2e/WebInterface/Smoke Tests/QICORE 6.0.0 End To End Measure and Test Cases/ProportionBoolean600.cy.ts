@@ -20,7 +20,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6,
-            { measureCql: measureCQL, mpStartDate: '2025-01-01', mpEndDate: '2025-12-31'})
+            { measureCql: measureCQL, mpStartDate: '2025-01-01', mpEndDate: '2025-12-31' })
 
         OktaLogin.Login()
     })
@@ -74,14 +74,14 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        Utilities.waitForElementVisible(TestCasesPage.importNonBonnieTestCasesBtn, 65000)
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        Utilities.waitForElementVisible(TestCasesPage.importTestCasesBtn, 65000)
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join('cypress/fixtures', 'CMS645FHIR-v1.4.000-FHIR6-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join('cypress/fixtures', 'CMS645FHIR-v1.4.000-FHIR6-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)

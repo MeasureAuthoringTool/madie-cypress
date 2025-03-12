@@ -64,7 +64,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //select file
-        cy.get('[data-testid="file-drop-div"]').click()
+        cy.get(TestCasesPage.tcFileDrop).click()
         cy.get(TestCasesPage.filAttachDropBox).attachFile(singleTestCaseFile)
 
         //click on the 'Import' button on the modal window
@@ -173,7 +173,7 @@ describe('Import Test cases onto an existing QDM measure via file -- Message tha
         cy.get(TestCasesPage.filAttachDropBox).attachFile(testCaseWInvalidGroup)
 
         //import modal should contain test case name
-        cy.get(TestCasesPage.importTestCaseModalHeader).should('contain.text', 'TestingWithGroupInvalidCharacters.json')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'TestingWithGroupInvalidCharacters.json')
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((measureID) => {
             cy.intercept('POST', '/api/measures/' + measureID + '/test-cases/list').as('testCaseList')
@@ -206,7 +206,7 @@ describe('Import Test cases onto an existing QDM measure via file -- Message tha
         cy.get(TestCasesPage.filAttachDropBox).attachFile(testCaseWInvalidTitle)
 
         //import modal should contain test case name
-        cy.get(TestCasesPage.importTestCaseModalHeader).should('contain.text', 'TestingWithTitleInvalidCharacters.json')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'TestingWithTitleInvalidCharacters.json')
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((measureID) => {
             cy.intercept('POST', '/api/measures/' + measureID + '/test-cases/list').as('testCaseList')

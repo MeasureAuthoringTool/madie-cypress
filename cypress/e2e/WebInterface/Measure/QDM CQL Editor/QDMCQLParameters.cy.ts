@@ -331,11 +331,11 @@ describe('Delete Saved Parameters', () => {
 
             cy.get(CQLEditorPage.modalXButton).should('be.visible')
 
-            cy.get(CQLEditorPage.modalConfirmationText).should('have.text', 'You have unsaved changes.Are you sure you want to discard your changes?')
+            cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('have.text', 'You have unsaved changes.Are you sure you want to discard your changes?')
 
             cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
 
-            cy.get(CQLEditorPage.discardContinueButton).should('be.enabled')
+            cy.get(Global.discardChangesContinue).should('be.enabled')
             cy.get(Global.keepWorkingCancel).should('be.enabled').click()
         })
 
@@ -344,7 +344,7 @@ describe('Delete Saved Parameters', () => {
 
         cy.get(CQLEditorPage.deleteSavedCQLParameters).click()
 
-        cy.get(CQLEditorPage.discardContinueButton).should('be.visible').click()
+        cy.get(Global.discardChangesContinue).should('be.visible').click()
 
         // confirm measure is clean
         cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
@@ -365,7 +365,7 @@ describe('Delete Saved Parameters', () => {
 
             cy.get(CQLEditorPage.modalXButton).should('be.visible')
 
-            cy.get(CQLEditorPage.modalConfirmationText).should('have.text', 'Are you sure you want to delete this Parameter?')
+            cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('have.text', 'Are you sure you want to delete this Parameter?')
 
             cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
 

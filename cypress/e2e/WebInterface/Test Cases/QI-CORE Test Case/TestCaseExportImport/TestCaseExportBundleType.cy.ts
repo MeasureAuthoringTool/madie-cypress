@@ -1,13 +1,13 @@
-import {TestCaseJson} from "../../../../../Shared/TestCaseJson"
-import {CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
-import {OktaLogin} from "../../../../../Shared/OktaLogin"
-import {MeasuresPage} from "../../../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../../../Shared/EditMeasurePage"
-import {Utilities} from "../../../../../Shared/Utilities"
-import {TestCaseAction, TestCasesPage} from "../../../../../Shared/TestCasesPage"
-import {MeasureCQL} from "../../../../../Shared/MeasureCQL"
-import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
-import {Header} from "../../../../../Shared/Header"
+import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
+import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { OktaLogin } from "../../../../../Shared/OktaLogin"
+import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { Utilities } from "../../../../../Shared/Utilities"
+import { TestCaseAction, TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { Header } from "../../../../../Shared/Header"
 
 const now = require('dayjs')
 let todaysDate = now().format('MM/DD/YYYY')
@@ -177,13 +177,13 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -267,13 +267,13 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -350,7 +350,7 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         TestCasesPage.checkTestCase(1)
         TestCasesPage.actionCenter(TestCaseAction.exportCollection)
 
-         //verify that the export occurred
+        //verify that the export occurred
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
         cy.log('Successfully verified zip file export')
 
@@ -365,13 +365,13 @@ describe('QI-Core: Single Test Case on Measure: Export / Import Bundle options: 
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -456,13 +456,13 @@ describe('QI-Core: Multiple Test Case on Measure: Export / Import Bundle options
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)

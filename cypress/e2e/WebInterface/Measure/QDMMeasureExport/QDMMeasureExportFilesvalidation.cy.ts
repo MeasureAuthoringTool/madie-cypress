@@ -6,6 +6,7 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Utilities } from "../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let qdmMeasureName = 'QDMTestMeasure' + Date.now()
 let qdmCqlLibraryName = 'QDMLibrary' + Date.now()
@@ -354,7 +355,7 @@ describe('Successful QDM Measure Export with versioned measure', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Major Version Created Successfully')
 
