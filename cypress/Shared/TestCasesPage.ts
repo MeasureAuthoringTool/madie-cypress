@@ -2,6 +2,7 @@ import { EditMeasurePage } from "./EditMeasurePage"
 import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 import dateTimeISO = CypressCommandLine.dateTimeISO
+import { CQLEditorPage } from "./CQLEditorPage"
 
 export type TestCase = {
     title: string,
@@ -267,16 +268,12 @@ export class TestCasesPage {
     public static readonly importTestCasesBtn = '[data-testid="show-import-test-cases-button"]'
     public static readonly filAttachDropBox = '[data-testid="file-drop-input"]'
     public static readonly importInProgress = '[data-testid = "testcase-list-loading-spinner"]'
-    public static readonly importTestCaseModalHeader = '[data-testid="test-case-preview-header"]'
     public static readonly importWarningMessages = '[data-testid="import-warning-messages"]'
 
     //Warning Modal
     public static readonly discardChangesConfirmationBody = '[id="discard-changes-dialog-body"]'
-    public static readonly continueDiscardChangesBtn = '[data-testid="discard-dialog-continue-button"]'
 
     //Delete Test Case
-    public static readonly deleteTestCaseConfirmationText = '[class="dialog-warning-body"]'
-    public static readonly deleteTestCaseContinueBtn = '[data-testid="delete-dialog-continue-button"]'
     public static readonly deleteAllTestCasesBtn = '[data-testid=delete-all-test-cases-button]'
 
     //Import Test cases
@@ -285,17 +282,13 @@ export class TestCasesPage {
     public static readonly importTestCaseAlertMessage = '[class="madie-alert warning"]'
     public static readonly importTestCaseBtn = '[data-testid="import-test-case-btn"]'
     public static readonly testCaseFileImport = '[data-testid="import-file-input"]'
-    public static readonly tcFileDropInput = '[data-testid="file-drop-input"]'
     public static readonly tcFileDrop = '[data-testid="file-drop-div"]'
     public static readonly tcImportButton = '[data-testid="select-file-button"]'
     public static readonly tcImportError = '[data-testid="test-case-import-error-div"]'
     public static readonly testCasesNonBonnieFileImportModal = '[data-testid="test-case-import-content-div"]'
-    public static readonly testCasesNonBonnieFileImport = '[data-testid="file-drop-input"]'
     public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile = '[data-testid="test-case-preview-header"]'
-    public static readonly importTestCaseSuccessMsg = '[data-testid=success-toast]'
-    public static readonly importTestCaseErrorMsg = '[data-testid=error-toast]'
+    public static readonly importTestCaseSuccessMsg = '[data-testid="success-toast"]'
     public static readonly importTestCaseSuccessInfo = '[id="content"]'
-    public static readonly importNonBonnieTestCasesBtn = '[data-testid="import-test-cases-button"]'
 
     //Export Test Cases
     public static readonly exportTestCasesBtn = '[data-testid="export-test-cases-button"]'
@@ -858,7 +851,7 @@ export class TestCasesPage {
             case TestCaseAction.delete:
 
                 cy.get(TestCasesPage.actionCenterDelete).should('be.enabled').click()
-                cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+                cy.get(CQLEditorPage.deleteContinueButton).click()
                 Utilities.waitForElementVisible(EditMeasurePage.successMessage, 2500)
                 break
 

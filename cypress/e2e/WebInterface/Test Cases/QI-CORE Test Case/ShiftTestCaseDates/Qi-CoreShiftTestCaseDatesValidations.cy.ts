@@ -70,7 +70,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
         cy.get(Global.DiscardCancelBtn).click()
 
         //confirm discarding change on page
-        cy.get(TestCasesPage.continueDiscardChangesBtn).click()
+        cy.get(Global.discardChangesContinue).click()
         //confirm that shift test case text box is empty
         cy.get(TestCasesPage.shiftAllTestCaseDates).should('be.empty')
 

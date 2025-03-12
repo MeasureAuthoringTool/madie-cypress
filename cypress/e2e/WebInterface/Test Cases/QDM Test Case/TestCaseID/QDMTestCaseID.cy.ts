@@ -221,7 +221,7 @@ describe('Import Test cases onto an existing QDM measure via file and ensure tes
         cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //select file
-        cy.get('[data-testid="file-drop-div"]').click()
+        cy.get(TestCasesPage.tcFileDrop).click()
         cy.get(TestCasesPage.filAttachDropBox).attachFile(singleTestCaseFile)
 
         //click on the 'Import' button on the modal window
@@ -270,7 +270,7 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -279,8 +279,8 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
 
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(newMeasureName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        Utilities.waitForElementVisible(MeasuresPage.VersionDraftMsgs, 50000)
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessMsg, 50000)
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
         cy.get('[data-testid="row-item"]').eq(0).contains('Edit').click()
@@ -374,8 +374,8 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         // delete test case #1
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
-        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete QDMManifestTC?')
-        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete QDMManifestTC?')
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         // verify test case #1 no longer shown, test case #2 is still shown
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', 'QDMManifestTC')
@@ -384,7 +384,7 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         // delete test case #2
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterDelete).click()
-        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         // verify no test cases associated with this measure
         cy.get(TestCasesPage.testCaseCountByCaseNumber).should("have.length", 0)

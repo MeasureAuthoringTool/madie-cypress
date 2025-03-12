@@ -3,6 +3,7 @@ import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibrar
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../../Shared/Header"
 import { Utilities } from "../../../../Shared/Utilities"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let CqlLibraryOne: string
 const CQLLibraryPublisher = 'SemanticBits'
@@ -71,8 +72,8 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
     })
 
     it('Add Draft to the versioned Library from Edit Library screen', () => {
-         //intercept draft id once library is drafted
-         cy.readFile(filePath).should('exist').then((fileContents) => {
+        //intercept draft id once library is drafted
+        cy.readFile(filePath).should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
         })
 
@@ -109,7 +110,7 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
 
         //Verify that Non Measure owner unable to edit Library
         CQLLibrariesPage.clickViewforCreatedLibrary()
-        cy.get(CQLLibraryPage.editLibraryOwnershipError).should('contain.text', 'You are not the owner of the CQL Library. Only owner can edit it.')
+        cy.get(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'You are not the owner of the CQL Library. Only owner can edit it.')
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).should('have.attr', 'disabled', 'disabled')
         cy.get(CQLLibraryPage.cqlLibraryDesc).should('have.attr', 'disabled', 'disabled')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.disabled')

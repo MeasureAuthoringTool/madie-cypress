@@ -200,7 +200,7 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -220,7 +220,7 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
             cy.writeFile(filePath, request.response.body.id)
         })
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
         cy.clearCookies()
@@ -276,8 +276,8 @@ describe('Delete Test Case with Shared user', () => {
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
 
-        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCaseTitle + '?')
-        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + testCaseTitle + '?')
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCaseTitle)
     })

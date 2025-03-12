@@ -5,6 +5,7 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Global } from "../../../../Shared/Global"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let randValue = Cypress._.random(100)
 let newMeasureName = ''
@@ -85,8 +86,8 @@ describe('QDM Measure Reference', () => {
         //Delete Measure Reference
         // .deleteReference will work as long as there is only 1 item on the table
         cy.get(EditMeasurePage.deleteReference).should('have.attr', 'aria-label', 'Delete').click()
-        cy.get('[class="dialog-warning-body"]').should('contain.text', 'Are you sure you want to delete ' + 'Measure Reference' + '?')
-        cy.get('[data-testid="delete-dialog-continue-button"]').click()
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + 'Measure Reference' + '?')
+        cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure reference deleted successfully')
     })
 })

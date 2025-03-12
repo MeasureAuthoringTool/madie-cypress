@@ -205,9 +205,9 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Are you sure?')
 
         //choose yes to delete
-        Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn, 5000)
-        Utilities.waitForElementEnabled(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn, 5000)
-        cy.get(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn).click()
+        Utilities.waitForElementVisible(CQLEditorPage.deleteContinueButton, 5000)
+        Utilities.waitForElementEnabled(CQLEditorPage.deleteContinueButton, 5000)
+        cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully removed from the CQL')
 
         //Deletes the library include statement from the CQL
@@ -252,9 +252,9 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Are you sure?')
 
         //choose yes to delete
-        Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn, 5000)
-        Utilities.waitForElementEnabled(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn, 5000)
-        cy.get(CQLLibraryPage.cqlLibraryDeleteDialogContinueBtn).click()
+        Utilities.waitForElementVisible(CQLEditorPage.deleteContinueButton, 5000)
+        Utilities.waitForElementEnabled(CQLEditorPage.deleteContinueButton, 5000)
+        cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully removed from the CQL')
 
         //Deletes the library include statement from the CQL

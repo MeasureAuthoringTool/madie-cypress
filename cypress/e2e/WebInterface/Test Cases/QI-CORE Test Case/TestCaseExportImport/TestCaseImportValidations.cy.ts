@@ -80,7 +80,7 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //confirm that the import button is disabled / not available
-        Utilities.waitForElementToNotExist(TestCasesPage.importNonBonnieTestCasesBtn, 35000)
+        Utilities.waitForElementToNotExist(TestCasesPage.importTestCasesBtn, 35000)
     })
 
     it('Measure is in DRAFT status: measure has been shared with user: import button is available, import can occur, import can be cancelled and modal will close, upon cancelling', () => {
@@ -153,13 +153,13 @@ describe('Test Case Import: functionality tests', () => {
         cy.reload()
         cy.get(EditMeasurePage.testCasesTab).click()
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -188,13 +188,13 @@ describe('Test Case Import: functionality tests', () => {
         cy.reload()
         cy.get(EditMeasurePage.testCasesTab).click()
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -237,7 +237,7 @@ describe('Test Case Import validations for versioned Measures', () => {
         Utilities.waitForElementEnabled(MeasuresPage.measureVersionContinueBtn, 60000)
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.enabled')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -248,7 +248,7 @@ describe('Test Case Import validations for versioned Measures', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //confirm that the import button is disabled / not available
-        Utilities.waitForElementToNotExist(TestCasesPage.importNonBonnieTestCasesBtn, 35000)
+        Utilities.waitForElementToNotExist(TestCasesPage.importTestCasesBtn, 35000)
     })
 
     it('Measure is in VERSIONED status: measure has been shared with user: import button is not available', () => {
@@ -266,7 +266,7 @@ describe('Test Case Import validations for versioned Measures', () => {
         Utilities.waitForElementEnabled(MeasuresPage.measureVersionContinueBtn, 60000)
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.enabled')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(MeasuresPage.measureVersionSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -305,7 +305,7 @@ describe('Test Case Import validations for versioned Measures', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //confirm that the import button is disabled / not available
-        Utilities.waitForElementToNotExist(TestCasesPage.importNonBonnieTestCasesBtn, 35000)
+        Utilities.waitForElementToNotExist(TestCasesPage.importTestCasesBtn, 35000)
     })
 })
 
@@ -341,17 +341,17 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(invalidFileToUpload, 'CQLCsNoVersionVSACExists.txt'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(invalidFileToUpload, 'CQLCsNoVersionVSACExists.txt'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.tcImportError, 35000)
-        cy.get('[data-testid="test-case-import-error-div"] > small').should('contain.text', 'The import file must be a zip file. No Test Cases can be imported.')
+        cy.get(TestCasesPage.tcImportError + ' > small').should('contain.text', 'The import file must be a zip file. No Test Cases can be imported.')
     })
 
     it('Importing: .zip\'s test case folder does not contain a json file', () => {
@@ -363,20 +363,20 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(invalidFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases (4).zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(invalidFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases (4).zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases (4).zip')
 
         //verifies alert message at top of page informing user that no test case was imported
-        cy.get('[data-testid="test-case-import-error-div"] > small').should('contain.text', 'Unable to find any valid test case json. Please make sure the format is accurate')
+        cy.get(TestCasesPage.tcImportError + ' > small').should('contain.text', 'Unable to find any valid test case json. Please make sure the format is accurate')
     })
 
     it('Importing: .zip\'s test case folder contains multiple json files', () => {
@@ -388,20 +388,20 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(invalidFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases (3).zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(invalidFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases (3).zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'eCQMTitle-v0.0.000-FHIR4-TestCases (3).zip')
 
         //verifies alert message at tope of page informing user that no test case was imported
-        cy.get('[data-testid="test-case-import-error-div"] > small').should('contain.text', 'Unable to find any valid test case json. Please make sure the format is accurate')
+        cy.get(TestCasesPage.tcImportError + ' > small').should('contain.text', 'Unable to find any valid test case json. Please make sure the format is accurate')
     })
 
     it('Importing: .zip\'s test case folder contains malformed json file', () => {
@@ -413,13 +413,13 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(invalidFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases (5).zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(invalidFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases (5).zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -516,13 +516,13 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), {
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), {
             action: 'drag-drop',
             force: true
         })
@@ -595,8 +595,8 @@ describe('Test case uniqueness error validation', () => {
 
         //delete test case
         cy.get('[data-testid="delete-action-icon"]').click()
-        Utilities.waitForElementVisible(TestCasesPage.deleteTestCaseContinueBtn, 35000)
-        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+        Utilities.waitForElementVisible(CQLEditorPage.deleteContinueButton, 35000)
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         //Create test case
         cy.get(TestCasesPage.newTestCaseButton).scrollIntoView()
@@ -636,13 +636,13 @@ describe('Test case uniqueness error validation', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -655,8 +655,8 @@ describe('Test case uniqueness error validation', () => {
 
         //verifies alert message at top of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', '(0) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
-        cy.get('[id="content"]').find('[data-testid="failed-test-cases"]').find('span').should('contain.text', 'Reason: The Test Case Group and Title are already used in another test case on this measure. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', '(0) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
+        cy.get(TestCasesPage.importTestCaseSuccessInfo).find('[data-testid="failed-test-cases"]').find('span').should('contain.text', 'Reason: The Test Case Group and Title are already used in another test case on this measure. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
     })
 
 })
@@ -725,13 +725,13 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -746,7 +746,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
 
         //verifies alert message at tope of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
-        cy.get(TestCasesPage.importTestCaseAlertMessage).find('[id="content"]').should('contain.text', 'Following test case(s) were imported successfully, but the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been')
+        cy.get(TestCasesPage.importTestCaseAlertMessage).find(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'Following test case(s) were imported successfully, but the measure populations do not match the populations in the import file. The Test Case has been imported, but no expected values have been')
     })
 })
 

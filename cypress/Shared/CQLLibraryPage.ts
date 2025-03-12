@@ -3,6 +3,7 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 import { v4 as uuidv4 } from 'uuid'
 import { CQLLibrariesPage } from "./CQLLibrariesPage"
+import { CQLEditorPage } from "./CQLEditorPage"
 
 export enum EditLibraryActions {
 
@@ -15,7 +16,6 @@ export enum EditLibraryActions {
 export class CQLLibraryPage {
     public static readonly measureCQLGenericErrorsList = '[data-testid="generic-errors-text-list"]'
     public static readonly cqlLibrarySuccessfulDeleteMsgBox = '[data-testid="cql-library-list-snackBar"]'
-    public static readonly cqlLibraryDeleteDialogContinueBtn = '[data-testid="delete-dialog-continue-button"]'
     public static readonly applyEditsSavedLibraryBtn = '[data-testid="apply-button"]'
     public static readonly cqlLibraryDeleteDialogCancelBtn = '[data-testid="delete-dialog-cancel-button"]'
     public static readonly cqlLibraryDeleteDialog = '[data-testid="delete-dialog"]'
@@ -52,7 +52,6 @@ export class CQLLibraryPage {
     public static readonly cqlLibDescHelperText = '[data-testid="cql-library-description-helper-text"]'
     public static readonly cqlLibPubHelperText = '[data-testid="publisher-helper-text"]'
     public static readonly cqlLibraryExperimentalChkBox = '[id="experimental"]'
-    public static readonly editLibraryOwnershipError = '[id="content"]'
     public static readonly editSavedLibraryAlias = '[data-testid="library-alias-input"]'
     public static readonly libraryInfoPanel = '#page-header'
     public static readonly draftBubble = '[data-testid="draft-bubble"]'
@@ -430,9 +429,9 @@ export class CQLLibraryPage {
                 cy.get('.dialog-warning-action').should('have.text', 'This Action cannot be undone.')
 
                 // click "yes delete"
-                cy.get(this.cqlLibraryDeleteDialogContinueBtn).should('be.visible')
-                cy.get(this.cqlLibraryDeleteDialogContinueBtn).should('be.enabled')
-                cy.get(this.cqlLibraryDeleteDialogContinueBtn).click()
+                cy.get(CQLEditorPage.deleteContinueButton).should('be.visible')
+                cy.get(CQLEditorPage.deleteContinueButton).should('be.enabled')
+                cy.get(CQLEditorPage.deleteContinueButton).click()
                 break
             }
             case EditLibraryActions.version: {
@@ -448,13 +447,13 @@ export class CQLLibraryPage {
                 break
             }
             case EditLibraryActions.draft: {
-                
+
                 cy.get(this.actionCenterDraft).should('be.visible')
                 cy.get(this.actionCenterDraft).should('be.enabled')
                 cy.get(this.actionCenterDraft).click()
 
                 cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
-        
+
                 cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
                 cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
 

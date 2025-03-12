@@ -58,7 +58,7 @@ describe('Import Test Case into the Test Case Editor', () => {
 
         //Upload Text file
         cy.get(TestCasesPage.testCaseFileImport).attachFile('GenericCQLBoolean.txt')
-        cy.get(TestCasesPage.importTestCaseErrorMsg).should('contain.text', 'An error occurred while reading the file. Please make sure the test case file is valid.')
+        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'An error occurred while reading the file. Please make sure the test case file is valid.')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
 
@@ -75,7 +75,7 @@ describe('Import Test Case into the Test Case Editor', () => {
 
         //Upload invalid Json file
         cy.get(TestCasesPage.testCaseFileImport).attachFile('example.json')
-        cy.get(TestCasesPage.importTestCaseErrorMsg).should('contain.text', 'No test case resources were found in imported file.')
+        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'No test case resources were found in imported file.')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
 
@@ -93,7 +93,7 @@ describe('Import Test Case into the Test Case Editor', () => {
 
         //Upload a bulk Json file
         cy.get(TestCasesPage.testCaseFileImport).attachFile('BulkPatientFile.json')
-        cy.get(TestCasesPage.importTestCaseErrorMsg).should('contain.text', 'No test case resources were found in imported file.')
+        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'No test case resources were found in imported file.')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
     })
 

@@ -110,7 +110,7 @@ describe('Test case Coverage tab', () => {
         cy.get(TestCasesPage.filAttachDropBox).attachFile(prodBonneTestCasesFile)
 
         //import modal should contain test case name
-        cy.get(TestCasesPage.importTestCaseModalHeader).should('contain.text', '[82] Test Cases from File: patients_39E0424A-1727-4629-89E2-C46C2FBB3F5F_QDM_56_1702482074.json')
+        cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', '[82] Test Cases from File: patients_39E0424A-1727-4629-89E2-C46C2FBB3F5F_QDM_56_1702482074.json')
 
         //click on the 'Import' button on the modal window
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()

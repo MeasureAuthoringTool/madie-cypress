@@ -167,7 +167,7 @@ describe('Measure Transfer - Multiple instances', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumber)
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         cy.log('Version Created Successfully')
         cy.reload()
 
@@ -176,7 +176,7 @@ describe('Measure Transfer - Multiple instances', () => {
 
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(randomMeasureName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
         //Share Measure with ALT User
@@ -226,8 +226,8 @@ describe('Delete Test Case with Transferred user', () => {
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
 
-        cy.get(TestCasesPage.deleteTestCaseConfirmationText).should('contain.text', 'Are you sure you want to delete ' + testCaseTitle + '?')
-        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + testCaseTitle + '?')
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCaseTitle)
     })

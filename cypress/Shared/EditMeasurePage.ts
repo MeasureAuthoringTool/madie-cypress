@@ -103,7 +103,6 @@ export class EditMeasurePage {
     public static readonly definitionMetaTable = '[id="measure-meta-data-table"]'
     public static readonly definitionMetaTableBody = '[data-testid="measure-definitions-table-body"]'
     public static readonly emptyDefinitionVal = '[data-testid="empty-definitions"]'
-    public static readonly defDeleteContinueButton = '[data-testid="delete-dialog-continue-button"]'
 
     //Transmission Format page
     public static readonly transmissionFormatDescription = '[data-testid="measure-transmission-format"]'

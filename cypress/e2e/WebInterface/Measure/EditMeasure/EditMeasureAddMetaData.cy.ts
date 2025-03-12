@@ -6,6 +6,7 @@ import { Header } from "../../../../Shared/Header"
 import { Utilities } from "../../../../Shared/Utilities"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 const now = Date.now()
 let measureName = 'MeasureDefs' + now
@@ -232,8 +233,8 @@ describe('Edit Measure: Add Meta Data', () => {
         //delete definition
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
         cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find('[class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1tb4h4m"]').should('have.attr', 'aria-label', 'Delete').click()
-        Utilities.waitForElementVisible(EditMeasurePage.defDeleteContinueButton, 50000)
-        cy.get(EditMeasurePage.defDeleteContinueButton).click()
+        Utilities.waitForElementVisible(CQLEditorPage.deleteContinueButton, 50000)
+        cy.get(CQLEditorPage.deleteContinueButton).click()
         Utilities.waitForElementToNotExist
         cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find(EditMeasurePage.emptyDefinitionVal).should('include.text', 'There are currently no definitions. Click the (Add Term) button above to add one.')
         cy.log('Measure Definition deleted successfully')

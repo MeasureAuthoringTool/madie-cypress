@@ -8,6 +8,7 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { Header } from "../../../../../Shared/Header"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
 const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 const now = Date.now()
@@ -131,16 +132,16 @@ describe('MADIE Zip Test Case Import', () => {
         TestCasesPage.checkTestCase(1)
         TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterDelete).click()
-        cy.get(TestCasesPage.deleteTestCaseContinueBtn).click()
+        cy.get(CQLEditorPage.deleteContinueButton).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -216,13 +217,13 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.testCasesNonBonnieFileImport).selectFile('cypress/fixtures/CMS108FHIR-v0.2.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/fixtures/CMS108FHIR-v0.2.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -291,14 +292,14 @@ describe('MADIE Zip Test Case Import: error message should appear when the .madi
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        cy.get(TestCasesPage.importNonBonnieTestCasesBtn).click()
+        cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
         Utilities.waitForElementVisible(TestCasesPage.tcImportButton, 3750)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.tcFileDrop).find(TestCasesPage.tcFileDropInput).attachFile('TestCase7345TsteCQM-v0.0.000-FHIR4-TestCases.zip')
+        cy.get(TestCasesPage.tcFileDrop).find(TestCasesPage.filAttachDropBox).attachFile('TestCase7345TsteCQM-v0.0.000-FHIR4-TestCases.zip')
         cy.get(TestCasesPage.tcImportError).should('contain.text', 'Zip file is in an incorrect format. If this is an export prior to June 20, 2024 please reexport your test case and try again.')
 
         //close the test case import modal

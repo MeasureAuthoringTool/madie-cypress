@@ -60,14 +60,14 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
 
         cy.log('Draft Created Successfully')
     })
@@ -84,14 +84,14 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
 
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
@@ -164,8 +164,8 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        Utilities.waitForElementVisible(MeasuresPage.VersionDraftMsgs, 100000)
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New version of measure is Successfully created')
+        Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessMsg, 100000)
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
 
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
@@ -182,7 +182,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
         CreateMeasurePage.clickCreateDraftButton()
 
-        cy.get(MeasuresPage.VersionDraftMsgs).should('contain.text', 'New draft created successfully.')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
         //verify CQL after draft
