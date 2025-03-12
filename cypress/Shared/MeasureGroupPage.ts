@@ -222,7 +222,6 @@ export class MeasureGroupPage {
     public static readonly qdmTypeValuePill = '[class="MuiChip-label MuiChip-labelSmall css-1pjtbja"]'
     public static readonly qdmDirtyCheckDiscardModal = '[data-testid="discard-dialog"]'
     public static readonly qdmDiscardModalContinueButton = '[data-testid="discard-dialog-continue-button"]'
-    public static readonly qdmDiscardModalCancelButton = '[data-testid="discard-dialog-cancel-button"]'
     public static readonly qdmBCSaveButton = '[data-testid="measure-Base Configuration-save"]'
     public static readonly qdmBCSaveButtonSuccessMsg = '[data-testid="edit-base-configuration-success-text"]'
     public static readonly qdmTypeHelperText = '[data-testid="base-configuration-types-helper-text"]'

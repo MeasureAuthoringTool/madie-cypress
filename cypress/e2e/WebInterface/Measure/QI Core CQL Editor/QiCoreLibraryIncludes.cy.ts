@@ -8,6 +8,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Global } from "../../../../Shared/Global"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let measureName = 'QiCoreTestMeasure' + Date.now()
 let CqlLibraryName = 'QiCoreLibrary' + Date.now()
@@ -145,7 +146,7 @@ describe('Qi-Core Library Includes fields', () => {
         Global.clickOnKeepWorking()
 
         //confirm contents in CQL editor still contains changes and save button is still available
-        cy.get('[data-testid="SearchIcon"]').click()
+        cy.get(TestCasesPage.tcSearchIcone).click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
         Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
@@ -169,7 +170,7 @@ describe('Qi-Core Library Includes fields', () => {
         //confirm that CQL value is the same as it was prior to change and the save button is not available
         cy.reload()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get('[data-testid="SearchIcon"]').eq(0).click()
+        cy.get(TestCasesPage.tcSearchIcone).eq(0).click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
         Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
@@ -294,7 +295,7 @@ describe('Qi-Core Library Includes fields', () => {
         Global.clickOnKeepWorking()
 
         //confirm contents in CQL editor still contains changes and save button is still available
-        cy.get('[data-testid="SearchIcon"]').click()
+        cy.get(TestCasesPage.tcSearchIcone).click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '1 of 1')
         Utilities.waitForElementVisible(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
@@ -319,7 +320,7 @@ describe('Qi-Core Library Includes fields', () => {
         //confirm that CQL value is the same as it was prior to change and the save button is not available
         cy.reload()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
-        cy.get('[data-testid="SearchIcon"]').eq(0).click()
+        cy.get(TestCasesPage.tcSearchIcone).eq(0).click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
         Utilities.waitForElementToNotExist(CQLLibraryPage.measureCQLGenericErrorsList, 5000)
@@ -365,7 +366,7 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully edited in the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get('[data-testid="SearchIcon"]').click()
+        cy.get(TestCasesPage.tcSearchIcone).click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
 
@@ -412,7 +413,7 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library FHIRHelpers has been successfully edited in the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get('[data-testid="SearchIcon"]').click()
+        cy.get(TestCasesPage.tcSearchIcone).click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
 

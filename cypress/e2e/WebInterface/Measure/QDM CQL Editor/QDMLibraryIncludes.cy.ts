@@ -7,6 +7,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { Global } from "../../../../Shared/Global"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
@@ -281,7 +282,7 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.toastMeasureMessage).should('contain.text', 'Library MATGlobalCommonFunctionsQDM has been successfully removed from the CQL')
 
         //Deletes the library include statement from the CQL
-        cy.get('[data-testid="SearchIcon"]').click()
+        cy.get(TestCasesPage.tcSearchIcone).click()
         cy.get('.ace_search_form > .ace_search_field').type('fgdfgfgdfg')
         cy.get('[class="ace_search_counter"]').should('contain.text', '0 of 0')
 

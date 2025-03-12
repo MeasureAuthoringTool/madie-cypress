@@ -135,7 +135,7 @@ describe('Measure Creation and Testing: CV Episode Measure With Stratification',
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
 
         //Close the Toast message
-        cy.get('[data-testid="ClearIcon"]').click()
+        cy.get(TestCasesPage.clearIconBtn).click()
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

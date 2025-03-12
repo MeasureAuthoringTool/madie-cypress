@@ -8,6 +8,7 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../Shared/Header"
 import { Global } from "../../../../Shared/Global"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let measureCQLPFTests = MeasureCQL.CQL_Populations
@@ -447,7 +448,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         Utilities.waitForElementVisible(EditMeasurePage.sureDialog, 35000)
         Utilities.waitForElementVisible(EditMeasurePage.sureDialogCancelBtn, 35000)
         Utilities.waitForElementVisible(EditMeasurePage.sureDialogContinueBtn, 35000)
-        cy.get(EditMeasurePage.sureDialog).find(EditMeasurePage.sureDialogBody).should('contain.text', 'Are you sure you wish to associate this CMS ID?This Action cannot be undone.')
+        cy.get(EditMeasurePage.sureDialog).find(TestCasesPage.discardChangesConfirmationBody).should('contain.text', 'Are you sure you wish to associate this CMS ID?This Action cannot be undone.')
 
         cy.get(EditMeasurePage.sureDialogCancelBtn).click()
         Utilities.waitForElementToNotExist(EditMeasurePage.sureDialog, 35000)

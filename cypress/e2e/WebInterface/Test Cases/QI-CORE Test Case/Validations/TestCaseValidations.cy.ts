@@ -275,7 +275,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
         cy.get(TestCasesPage.ethnicityDetailedElementTab).should('contain.text', 'Mexican')
 
         // add a new race OMB value
-        cy.get(TestCasesPage.genderSelectBoxElementTab).click()
+        cy.get(TestCasesPage.genderDdOnElementTab).click()
         cy.get(TestCasesPage.genderSelectValuesElementTab).should('contain.text', 'Other').click()
         cy.get(TestCasesPage.raceOmbselectBoxElementTab).click()
         cy.get('#raceOMB-option-4').scrollIntoView().click({ force: true })
@@ -443,7 +443,7 @@ describe.skip('QI Core Gender, Race, and Ethnicity data validations: Edit Test C
         cy.get(TestCasesPage.elementsTab).click()
 
         // add a new race OMB value
-        cy.get(TestCasesPage.genderSelectBoxElementTab).click()
+        cy.get(TestCasesPage.genderDdOnElementTab).click()
         cy.get(TestCasesPage.genderSelectValuesElementTab).should('contain.text', 'Other').click()
         cy.get(TestCasesPage.raceOmbselectBoxElementTab).click()
         cy.get('#raceOMB-option-4').scrollIntoView().click({ force: true })

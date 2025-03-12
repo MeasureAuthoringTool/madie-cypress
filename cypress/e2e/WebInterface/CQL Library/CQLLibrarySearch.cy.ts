@@ -2,6 +2,7 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 import { Header } from "../../../Shared/Header"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
 
 var CQLLibraryName = ""
 let CQLLibraryPublisher = 'ICFer'
@@ -165,9 +166,9 @@ describe('CQL Library Search Validations', () => {
 
         cy.get(CQLLibraryPage.LibTableRows).should('have.length.lte', 1)
 
-        cy.get(CQLLibraryPage.ClearSearchBox).should('exist')
-        cy.get(CQLLibraryPage.ClearSearchBox).should('be.visible')
-        cy.get(CQLLibraryPage.ClearSearchBox).click()
+        cy.get(TestCasesPage.clearIconBtn).should('exist')
+        cy.get(TestCasesPage.clearIconBtn).should('be.visible')
+        cy.get(TestCasesPage.clearIconBtn).click()
 
         cy.get(CQLLibraryPage.LibTableRows).should('have.length.greaterThan', 1)
 

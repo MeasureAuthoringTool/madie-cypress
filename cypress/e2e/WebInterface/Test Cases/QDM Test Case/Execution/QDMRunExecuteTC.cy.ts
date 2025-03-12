@@ -636,7 +636,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.QDMDob).type('01/01/2020 12:00 AM')
 
         //Add Expected/Actual value to first Population criteria
-        cy.get(TestCasesPage.expectedOrActualTab).click()
+        cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseIPPExpected).eq(0).click()
         //save dob value
         Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 60000)

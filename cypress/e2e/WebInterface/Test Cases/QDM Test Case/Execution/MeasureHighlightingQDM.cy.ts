@@ -276,9 +276,9 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
         TestCasesPage.clickEditforCreatedTestCase()
 
         //run test case
-        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('be.visible')
-        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('be.enabled')
-        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).click()
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
+        cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
         //navigate to the highlighting sub tab
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
@@ -403,9 +403,9 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         TestCasesPage.clickEditforCreatedTestCase()
 
         //run test case
-        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('be.visible')
-        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).should('be.enabled')
-        cy.get(TestCasesPage.QDMRunTestCasefrmTestCaseListPage).click()
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.visible')
+        cy.get(TestCasesPage.runQDMTestCaseBtn).should('be.enabled')
+        cy.get(TestCasesPage.runQDMTestCaseBtn).click()
 
         //navigate to the highlighting sub tab
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
