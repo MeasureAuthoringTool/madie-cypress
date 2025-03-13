@@ -79,7 +79,7 @@ export class CQLLibraryPage {
 
         cy.get(Header.cqlLibraryTab).should('be.visible')
 
-        cy.get(Header.cqlLibraryTab).click()
+        cy.get(Header.cqlLibraryTab).click().wait(1500)
 
         Utilities.waitForElementEnabled(CQLLibraryPage.createCQLLibraryBtn, 60000)
 
@@ -96,6 +96,7 @@ export class CQLLibraryPage {
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type(CQLLibraryPublisher).type('{downArrow}{enter}')
 
         this.clickCreateLibraryButton()
+        Utilities.waitForElementToNotExist('[class="toast success"]', 60000)
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()
 
