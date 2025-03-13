@@ -25,12 +25,11 @@ describe('Delete Library', () => {
 
         cy.get(Header.cqlLibraryTab).click()
 
-        // will change from https://jira.cms.gov/browse/MAT-7122
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
         CQLLibraryPage.actionCenter(EditLibraryActions.delete)
 
-        cy.get('[data-testid="edit-library-cql-success-text"]').should('contain.text', 'The Draft CQL Library has been deleted.')
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'The Draft CQL Library has been deleted.')
 
         //Verify the deleted library is not on My Libraries page list
         cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', libraryName)
@@ -38,7 +37,7 @@ describe('Delete Library', () => {
         //Navigate to All Libraries tab
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
 
-        //Verify the deleted library is noton All Measures page list
+        //Verify the deleted library is not on All Measures page list
         cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', libraryName)
     })
 })
@@ -70,8 +69,7 @@ describe('Delete Library ownership validation', () => {
 
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
 
-        // will change from https://jira.cms.gov/browse/MAT-7122
-        CQLLibrariesPage.clickEditforCreatedLibrary()
+        CQLLibrariesPage.clickViewforCreatedLibrary()
 
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryNameTextbox, 11500)
 
