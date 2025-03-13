@@ -265,7 +265,7 @@ export class TestCasesPage {
     public static readonly createTestCaseSaveButton = '[data-testid="create-test-case-save-button"]'
 
     //import test case
-    public static readonly importTestCasesBtn = '[data-testid="show-import-test-cases-button"]'
+    public static readonly importTestCasesBtn = '[data-testid="import-test-cases-button"]'
     public static readonly filAttachDropBox = '[data-testid="file-drop-input"]'
     public static readonly importInProgress = '[data-testid = "testcase-list-loading-spinner"]'
     public static readonly importWarningMessages = '[data-testid="import-warning-messages"]'
