@@ -42,6 +42,7 @@ export class TestCasesPage {
     public static readonly shiftSpecificTestCasesCancelBtn = '[data-testid="shift-dates-cancel-button"]'
     public static readonly shiftSpecificTestCasesSaveBtn = '[data-testid="shift-dates-save-button"]'
     public static readonly TestCasesSuccessMsg = '[data-testid="test-case-list-success"]'
+    public static readonly executionContextWarning = '[data-testid="execution_context_loading_warning"]'
 
     //QDM Test Case Demographics elements
     public static readonly QDMDob = '[data-testid="date-of-birth-input"]'
