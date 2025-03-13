@@ -25,6 +25,12 @@ const testCase2: TestCase = {
     group: 'SBTestSeries',
     json: TestCaseJson.TestCaseJson_Valid
 }
+const testCaseErrorTst: TestCase = {
+    title: 'Erroring Test case',
+    description: 'Erroring Test Group',
+    group: 'SBTestSeriesError',
+    json: null
+}
 
 describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
 
@@ -183,5 +189,96 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
                 })
             })
         })
+    })
+})
+
+describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
+
+    beforeEach('Create Measure and Login', () => {
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false,
+            'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'Boolean')
+
+        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase1.json)
+        TestCasesPage.CreateTestCaseAPI(testCaseErrorTst.title, testCaseErrorTst.group, testCaseErrorTst.description, testCaseErrorTst.json, false, true)
+        OktaLogin.Login()
+    })
+
+    afterEach('Clean up', () => {
+
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+    })
+
+    it('Shift test case date error message, when test case is erroroneous, on the Test Case Data', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //navigate to the page to utilize the shift *all* test case feature
+        cy.get(TestCasesPage.testCaseDataSideLink).click()
+        Utilities.waitForElementVisible(TestCasesPage.shiftAllTestCaseDates, 3500)
+        cy.get(TestCasesPage.shiftAllTestCaseDates).type('4')
+
+        //confirm buttons that appear on page to either discard or save the shift dates
+        Utilities.waitForElementEnabled(Global.DiscardCancelBtn, 3500)
+        Utilities.waitForElementEnabled(TestCasesPage.shftAllTestCasesSaveBtn, 3500)
+
+        //discard shifting dates
+        cy.get(Global.DiscardCancelBtn).click()
+
+        //confirm discarding change on page
+        cy.get(Global.discardChangesContinue).click()
+        //confirm that shift test case text box is empty
+        cy.get(TestCasesPage.shiftAllTestCaseDates).should('be.empty')
+
+        //enter new value in the shift test case text box
+        cy.get(TestCasesPage.shiftAllTestCaseDates).type('3')
+
+        //save the shift test case
+        Utilities.waitForElementEnabled(TestCasesPage.shftAllTestCasesSaveBtn, 3500)
+        cy.get(TestCasesPage.shftAllTestCasesSaveBtn).click()
+
+        Utilities.waitForElementVisible(TestCasesPage.executionContextWarning, 50000)
+        cy.get(TestCasesPage.executionContextWarning).should('contain.text', 'The following Test Case dates could not be shifted. Please try again. If the issue continues, please contact helpdesk.SBTestSeriesError - Erroring Test case')
+
+    })
+    it('Shift test case date error message, when test case is erroroneous, through the Action center buttons', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.checkTestCase(2)
+        cy.get(TestCasesPage.actionCenterShiftDates).click()
+        Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
+
+        //enter a value to shift test case's dates by
+        Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
+        cy.get(TestCasesPage.shiftSpecificTestCaseDates).type('3')
+
+        //shiftSpecificTestCasesCancelBtn
+        cy.get(TestCasesPage.shiftSpecificTestCasesCancelBtn).click()
+
+        // re-activate action center
+        cy.get(TestCasesPage.actionCenterShiftDates).click()
+        Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
+        //enter a value to shift test case's dates by
+        Utilities.waitForElementVisible(TestCasesPage.shiftSpecificTestCaseDates, 3500)
+        cy.get(TestCasesPage.shiftSpecificTestCaseDates).clear().type('-3')
+
+        //save the shift test case
+        Utilities.waitForElementEnabled(TestCasesPage.shiftSpecificTestCasesSaveBtn, 3500)
+        cy.get(TestCasesPage.shiftSpecificTestCasesSaveBtn).click()
+
+        Utilities.waitForElementVisible(TestCasesPage.executionContextWarning, 50000)
+        cy.get(TestCasesPage.executionContextWarning).should('contain.text', 'The following Test Case dates could not be shifted. Please try again. If the issue continues, please contact helpdesk.SBTestSeriesError - Erroring Test case')
     })
 })
