@@ -2357,6 +2357,18 @@ export class MeasureCQL {
         'define "track1":\n' +
         ' true\n'
 
+    public  static readonly QICORE_CQL_CohortPatientBoolean = 'library FluentFunction version \'1.0.000\'\n' +
+        '\n' +
+        'using QICore version \'4.1.1\'\n' +
+        '\n' +
+        'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+        'include CQMCommon version \'1.0.000\' called Global\n' +
+        '\n' +
+        'context Patient\n' +
+        '\n' +
+        'define "Initial Population":\n' +
+        '  exists Global."Inpatient Encounter"'
+
     public static readonly QICORE_CQL_CVPatientwithMO = 'library CVPatient version \'0.0.000\'\n' +
         '\n' +
         'using QICore version \'4.1.1\'\n' +

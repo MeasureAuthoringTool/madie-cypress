@@ -7,9 +7,11 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import {MeasureCQL} from "../../../../Shared/MeasureCQL";
 
 let measureName = 'CohortPatientBoolean' + Date.now()
 let CqlLibraryName = 'CohortPatientBoolean' + Date.now()
+let measureCQL = MeasureCQL.QICORE_CQL_CohortPatientBoolean
 let testCaseTitle = 'PASS'
 let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
@@ -19,9 +21,8 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
 
     before('Create Measure, Test Case and Login', () => {
 
-        OktaLogin.Login()
-
-        CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4, '01/01/2012', '12/31/2012')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+            '2012-01-01', '2012-12-31')
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
@@ -39,16 +40,9 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
 
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
+
         cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        //Clear the text in CQL Library Editor
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-
-        cy.readFile('cypress/fixtures/CQLForCohortPatientBoolean.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-
-        })
-
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -75,6 +69,9 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
