@@ -7,7 +7,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { Header } from "../../../../Shared/Header";
+
 
 let measureName = 'CVEpisodeWithMO' + Date.now()
 let CqlLibraryName = 'CVEpisodeWithMO' + Date.now()

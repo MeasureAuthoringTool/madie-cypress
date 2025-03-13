@@ -2357,6 +2357,55 @@ export class MeasureCQL {
         'define "track1":\n' +
         ' true\n'
 
+    public static readonly QICORE_CQL_CVPatientwithMO = 'library CVPatient version \'0.0.000\'\n' +
+        '\n' +
+        'using QICore version \'4.1.1\'\n' +
+        '\n' +
+        'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+        'include CQMCommon version \'1.0.000\' called Global\n' +
+        '\n' +
+        'codesystem "SNOMED": \'http://snomed.info/sct\'\n' +
+        '\n' +
+        'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n' +
+        '\n' +
+        'code "Unscheduled (qualifier value)": \'103390000\' from "SNOMED" display \'Unscheduled (qualifier value)\'\n' +
+        '\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+        '  default Interval[@2022-01-01T00:00:00.0, @2023-01-01T00:00:00.0)\n' +
+        '\n' +
+        'context Patient\n' +
+        '\n' +
+        'define "Initial Population 1":\n' +
+        '   exists ( "Inpatient Encounters" )\n' +
+        '\n' +
+        'define "Measure Population":\n' +
+        '    exists ("Inpatient Encounters During Day of Measurement Period")\n' +
+        '\n' +
+        'define "Measure Population Exclusions":\n' +
+        '    exists ("Inpatient Encounters During Day of Measurement Period LOS GT 120 Days")\n' +
+        '\n' +
+        'define function "Measure Observation"():\n' +
+        '  Count({\n' +
+        '    ( "Measure Popluation Visits Excluding Measure Popluation Exclusions") Enc\n' +
+        '          where Enc.priority ~ "Unscheduled (qualifier value)"\n' +
+        '          })\n' +
+        '\n' +
+        'define "Measure Popluation Visits Excluding Measure Popluation Exclusions":\n' +
+        '  "Inpatient Encounters"\n' +
+        '      except "Inpatient Encounters During Day of Measurement Period LOS GT 120 Days"\n' +
+        '\n' +
+        'define "Inpatient Encounters":\n' +
+        '  [Encounter: "Encounter Inpatient"] InptEncounter\n' +
+        '      where InptEncounter.status = \'finished\'\n' +
+        '\n' +
+        'define "Inpatient Encounters During Day of Measurement Period":\n' +
+        '  "Inpatient Encounters" IE\n' +
+        '    where IE.period ends during day of "Measurement Period"\n' +
+        '\n' +
+        'define "Inpatient Encounters During Day of Measurement Period LOS GT 120 Days":\n' +
+        '  "Inpatient Encounters During Day of Measurement Period" IE\n' +
+        '    where Global."LengthInDays"(IE.period) > 120'
+
     public static readonly CQLQDMObservationRun = 'library RatioListQDMPositiveEncounterPerformedWithMO1697030589521 version \'0.0.000\'\n' +
 
         'using QDM version \'5.6\'\n' +

@@ -72,7 +72,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
     it('End to End Proportion Episode Measure, Pass Result', () => {
 
         //Click on Edit Button
-        MeasuresPage.actionCenter('editFAIL')
+        MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
@@ -110,6 +110,9 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')

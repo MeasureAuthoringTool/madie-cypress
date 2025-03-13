@@ -7,9 +7,11 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import {MeasureCQL} from "../../../../Shared/MeasureCQL";
 
 let measureName = 'CVPatientWithMO' + Date.now()
 let CqlLibraryName = 'CVPatientWithMO' + Date.now()
+let measureCQL = MeasureCQL.QICORE_CQL_CVPatientwithMO
 let testCaseTitle = 'PASS'
 let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
@@ -19,8 +21,8 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
 
     before('Create Measure, Test Case and Login', () => {
 
-        OktaLogin.Login()
-        CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4, '01/01/2012', '12/31/2012')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+            '2012-01-01', '2012-12-31')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
         OktaLogin.Login()
     })
@@ -37,16 +39,10 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
         //Click on Edit Button
         MeasuresPage.actionCenter("edit")
         cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        //Clear the text in CQL Library Editor
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
-
-        cy.readFile('cypress/fixtures/CQLForCVPatient.txt').should('exist').then((fileContents) => {
-            cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
-
-        })
-
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Create Measure Group
