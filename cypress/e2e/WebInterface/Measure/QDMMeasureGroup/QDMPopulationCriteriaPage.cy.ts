@@ -28,6 +28,13 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, true, simpleQDMMeasureCQL)
         OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
+        OktaLogin.Login()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -108,7 +115,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL')
 
         //Add Initial Population
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+        cy.get(MeasureGroupPage.initialPopulationSelect).wait(2000).click()
+        cy.get('ul > li[data-value="ipp"]').wait(2000).click()
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -356,6 +364,7 @@ describe('No values in QDM PC fields, when no CQL', () => {
         cy.get(MeasureGroupPage.QDMPopCriteria1IPDesc).should('be.visible')
     })
 })
+
 describe('Save Population Criteria on QDM measure', () => {
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
@@ -365,6 +374,13 @@ describe('Save Population Criteria on QDM measure', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, false, simpleQDMMeasureCQL)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
         OktaLogin.Login()
     })
 
@@ -390,7 +406,7 @@ describe('Save Population Criteria on QDM measure', () => {
 
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'SDE Ethnicity')
 
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).wait(2000).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
 
         cy.get(MeasureGroupPage.QDMAddPopCriteriaBtn).click()
@@ -425,6 +441,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
         OktaLogin.Login()
     })
 
@@ -456,7 +473,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         //no error should appear
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('not.exist')
 
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).wait(2000).click()
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
 
@@ -488,6 +505,7 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
         OktaLogin.Login()
     })
 
