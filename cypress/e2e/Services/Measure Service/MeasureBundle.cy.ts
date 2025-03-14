@@ -317,9 +317,13 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                             expect(response.body.resourceType).to.eql('Bundle')
                             expect(response.body.entry).to.be.a('array')
                             expect(response.body.entry[0].resource.resourceType).to.eql('Measure')
-                            expect(response.body.entry[0].resource.meta.profile[0]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm')
-                            expect(response.body.entry[0].resource.meta.profile[1]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-measure-cqfm')
-                            expect(response.body.entry[0].resource.meta.profile[2]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/executable-measure-cqfm')
+                            expect(response.body.entry[0].resource.meta.profile[0]).to.eql('http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablemeasure')
+                            expect(response.body.entry[0].resource.meta.profile[1]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/computable-measure-cqfm')
+                            expect(response.body.entry[0].resource.meta.profile[2]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/publishable-measure-cqfm')
+                            expect(response.body.entry[0].resource.meta.profile[3]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/executable-measure-cqfm')
+                            expect(response.body.entry[0].resource.meta.profile[4]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cql-measure-cqfm')
+                            expect(response.body.entry[0].resource.meta.profile[5]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/elm-measure-cqfm')
+                            expect(response.body.entry[0].resource.meta.profile[6]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cohort-measure-cqfm')
                             expect(response.body.entry[0].resource.description).to.eql('Measure Description')
                             expect(response.body.entry[0].resource.usage).to.eql('Measure Guidance')
                             expect(response.body.entry[0].resource.author[0].name).to.eql('ACO Health Solutions')
@@ -366,7 +370,7 @@ describe('Measure Observation Validation', () => {
         newCqlLibraryName = CqlLibraryName + randValue
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName,measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
     })
 
     beforeEach('Set Access Token', () => {
