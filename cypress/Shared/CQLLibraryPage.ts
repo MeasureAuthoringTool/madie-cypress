@@ -56,7 +56,7 @@ export class CQLLibraryPage {
     public static readonly libraryInfoPanel = '#page-header'
     public static readonly draftBubble = '[data-testid="draft-bubble"]'
 
-    // action center
+    // Edit page action center
     public static readonly actionCenterButton = '[data-testid="action-center-actual-icon"]'
     public static readonly actionCenterDelete = '[data-testid="DeleteLibrary"]'
     public static readonly actionCenterVersion = '[data-testid="VersionLibrary"]'
