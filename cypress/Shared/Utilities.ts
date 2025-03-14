@@ -318,14 +318,23 @@ export class Utilities {
             valueDataElement == MeasureGroupPage.qdmScoringRatio
 
         ) {
-            cy.get(dropdownDataElement).click()
-            cy.get(valueDataElement).click()
+            cy.get(dropdownDataElement).wait(2000).click()
+            cy.get(valueDataElement).wait(2000).click()
         }
-        else {
+        else if (dropdownDataElement == '[id="improvement-notation-select"]') {
             cy.get(dropdownDataElement)
-                .parent()
+                .wait(2000)
                 .click()
                 .get('ul > li[data-value="' + valueDataElement + '"]')
+                .wait(2000)
+                .click()
+        }
+        else {
+            Utilities.waitForElementVisible(dropdownDataElement, 50000)
+            cy.get(dropdownDataElement)
+                .wait(2000)
+                .get('ul > li[data-value="' + valueDataElement + '"]')
+                .wait(2000)
                 .click()
         }
     }
