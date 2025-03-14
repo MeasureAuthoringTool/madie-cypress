@@ -321,7 +321,9 @@ export class Utilities {
             cy.get(dropdownDataElement).wait(2000).click()
             cy.get(valueDataElement).wait(2000).click()
         }
-        else if (dropdownDataElement == '[id="improvement-notation-select"]') {
+        else if (dropdownDataElement == '[id="improvement-notation-select"]' ||
+            dropdownDataElement == MeasureGroupPage.initialPopulationSelect
+        ) {
             cy.get(dropdownDataElement)
                 .wait(2000)
                 .click()
