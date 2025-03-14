@@ -51,12 +51,11 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
         const measureOptions: CreateMeasureOptions = {
             measureCql: qdmMeasureCQL,
             measureScoring: 'Cohort',
-            patientBasis: false,
+            patientBasis: 'false',
             blankMetadata: true
         }
         CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCqlLibraryName, SupportedModels.QDM, measureOptions)
-
-        MeasureGroupPage.CreateCohortMeasureGroupWithoutTypeAPI(false, false, 'Initial Population')
+        MeasureGroupPage.CreateCohortMeasureGroupWithoutTypeAPI(false, false, 'Initial Population', 'Encounter')
         OktaLogin.Login()
     })
 

@@ -33,7 +33,7 @@ describe('Copy test cases from existing measure into new measure', () => {
     const measureOptions: CreateMeasureOptions = {
         measureCql: existingMeasureCql,
         measureScoring: 'Proportion',
-        patientBasis: true
+        patientBasis: 'true'
     }
     const populations: MeasureGroups = {
         initialPopulation: 'Initial Population',
@@ -201,13 +201,13 @@ describe('Copy to new measure - partial success case', () => {
     const measure1Options: CreateMeasureOptions = {
         measureCql: basicCql,
         measureScoring: 'Cohort',
-        patientBasis: true
+        patientBasis: 'true'
     }
     const measure2Options: CreateMeasureOptions = {
         measureCql: basicCql,
         measureNumber: 1,
         measureScoring: 'Cohort',
-        patientBasis: true
+        patientBasis: 'true'
     }
     const secondTestCaseTitle = 'valid test case'
 
