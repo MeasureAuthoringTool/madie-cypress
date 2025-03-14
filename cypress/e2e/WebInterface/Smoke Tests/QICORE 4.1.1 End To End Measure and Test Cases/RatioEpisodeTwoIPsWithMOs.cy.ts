@@ -165,6 +165,7 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
         cy.get(TestCasesPage.numeratorObservationRow).eq(0).should('exist')
         cy.get(TestCasesPage.numeratorObservationRow).eq(0).should('be.enabled')
+        cy.get(TestCasesPage.numeratorObservationRow).eq(0).scrollIntoView()
         cy.get(TestCasesPage.numeratorObservationRow).eq(0).should('be.visible')
         cy.get(TestCasesPage.numeratorObservationRow).eq(0).clear().type('1')
 
