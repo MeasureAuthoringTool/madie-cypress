@@ -6,7 +6,7 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { v4 as uuidv4 } from 'uuid'
 import { QiCore4Cql } from "../../../Shared/FHIRMeasuresCQL"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
-import { Measure, TestCase } from '@madie/madie-models'
+import { Measure, TestCase, GroupPopulation, PopulationType } from '@madie/madie-models'
 const dayjs = require('dayjs')
 
 const now = Date.now()
@@ -46,7 +46,7 @@ describe('Admin API - Reset test case expected values', () => {
         TestCasesPage.CreateTestCaseAPI('title', 'series', 'desc', testCase)
         
         // set expected value "true" on test case
-        let initialTestCase: any 
+        let updatedTestCase: TestCase 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/testCaseId').should('exist').then((tcId) => {
@@ -59,32 +59,34 @@ describe('Admin API - Reset test case expected values', () => {
                         method: 'GET'
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        initialTestCase = response.body
 
                         cy.readFile('cypress/fixtures/groupId').should('exist').then((gId) => {
 
-                            const tcExpectedValue = {
-                                'groupId': gId,
-                                'populationBasis': 'boolean',
-                                'populationValues': [
+                            const tcExpectedValue: GroupPopulation = {
+                                "groupId": gId,
+                                "populationBasis": "boolean",
+                                "populationValues": [
                                     {
-                                        'actual': true,
-                                        'expected': true,
-                                        'id': uuidv4(),
-                                        'name': 'initialPopulation'
+                                        "actual": true,
+                                        "expected": true,
+                                        "id": uuidv4(),
+                                        "name": PopulationType.INITIAL_POPULATION
                                     }
                                 ],
-                                'scoring': 'Cohort',
-                                'stratificationValues': []
+                                "scoring": "Cohort",
+                                "stratificationValues": []
                             }
-                            initialTestCase.groupPopulations[0] = tcExpectedValue
+
+                            // response.body = original test case, .assign() is TS needed to merge the data into 1 object
+                            updatedTestCase = Object.assign(response.body, {"groupPopulations": [tcExpectedValue]})
+                            
                             cy.request({
                                 failOnStatusCode: false,
                                 url: '/api/measures/' + measureId + '/test-cases/' + tcId,
                                 headers: {
                                     authorization: 'Bearer ' + accessToken.value
                                 },
-                                body: initialTestCase,
+                                body: updatedTestCase,
                                 method: 'PUT'
                             }).then((response) => {
                                 expect(response.status).to.eql(200)
@@ -141,7 +143,7 @@ describe('Admin API - Reset test case expected values', () => {
                             expect(response.status).to.eql(201)
                             cy.writeFile('cypress/fixtures/measureId2', response.body.id)
                             cy.writeFile('cypress/fixtures/versionId2', response.body.versionId)
-                         //   cy.writeFile('cypress/fixtures/measureSetId2', response.body.measureSetId)
+                            cy.writeFile('cypress/fixtures/measureSetId2', response.body.measureSetId)
                             cy.writeFile('cypress/fixtures/testCaseId2', response.body.testCases[0].id)
                         })
                     })
