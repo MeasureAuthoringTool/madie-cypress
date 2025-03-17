@@ -92,8 +92,7 @@ describe('Measure Sharing', () => {
         MeasureGroupPage.setMeasureGroupType()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
-
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
         cy.get(MeasureGroupPage.reportingTab).click()
 
         Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
