@@ -41,7 +41,8 @@ describe('Validating Population tabs', () => {
 
         //change score and select population value for new score and save
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'num')
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
+        cy.get('[data-value="num"]').click()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
@@ -168,7 +169,8 @@ describe('Validating Population tabs', () => {
 
         //select Ratio scoring type and only indicate a value for one of the required fields
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'denom')
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
+        cy.get('[data-value="denom"]').click()
 
         //make reporting the active tab
         //Click on Reporting tab
@@ -185,9 +187,12 @@ describe('Validating Population tabs', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
         cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'num')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'denom')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'num')
+        cy.get(MeasureGroupPage.initialPopulationSelect).click()
+        cy.get('[data-value="num"]').click()
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+        cy.get('[data-value="denom"]').click()
+        cy.get(MeasureGroupPage.numeratorSelect).click()
+        cy.get('[data-value="num"]').click()
 
         //make reporting the active tab
         //Click on Reporting tab
