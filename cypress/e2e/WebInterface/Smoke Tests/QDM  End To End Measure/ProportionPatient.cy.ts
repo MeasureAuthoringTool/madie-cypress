@@ -7,7 +7,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QDMElements } from "../../../../Shared/QDMElements"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
+import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 
 const now = Date.now()
 const measureName = 'ProportionPatient' + now
@@ -168,7 +168,6 @@ describe('Measure Creation: Proportion Patient Based', () => {
         cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //Group Creation
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -195,10 +194,10 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //add pop criteria
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -221,7 +220,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         //add Timing Relevant Period DateTime
         QDMElements.addTimingRelevantPeriodDateTime('01/26/2012 08:00 AM', '01/26/2012 08:15 AM')
         //add Code
-        QDMElements.addCode('HCPCS', 'G0438')
+        QDMElements.addCode('HCPCSLevelII', 'G0438')
         // Enter attribute and its type
         QDMElements.enterAttribute('Length Of Stay', 'Quantity')
         //enter quantity type
