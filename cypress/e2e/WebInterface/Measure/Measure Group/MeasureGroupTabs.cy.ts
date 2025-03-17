@@ -41,8 +41,7 @@ describe('Validating Population tabs', () => {
 
         //change score and select population value for new score and save
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
-        cy.get(MeasureGroupPage.initialPopulationSelect).click()
-        cy.get('[data-value="num"]').click()
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'num')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
@@ -169,8 +168,7 @@ describe('Validating Population tabs', () => {
 
         //select Ratio scoring type and only indicate a value for one of the required fields
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
-        cy.get(MeasureGroupPage.initialPopulationSelect).click()
-        cy.get('[data-value="denom"]').click()
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'denom')
 
         //make reporting the active tab
         //Click on Reporting tab
@@ -187,12 +185,9 @@ describe('Validating Population tabs', () => {
         Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
         cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
-        cy.get(MeasureGroupPage.initialPopulationSelect).click()
-        cy.get('[data-value="num"]').click()
-        cy.get(MeasureGroupPage.denominatorSelect).click()
-        cy.get('[data-value="denom"]').click()
-        cy.get(MeasureGroupPage.numeratorSelect).click()
-        cy.get('[data-value="num"]').click()
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'num')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'denom')
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'num')
 
         //make reporting the active tab
         //Click on Reporting tab

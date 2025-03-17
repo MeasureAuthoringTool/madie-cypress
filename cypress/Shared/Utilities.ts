@@ -339,6 +339,24 @@ export class Utilities {
         }
     }
 
+    public static populationSelect(populationType: string, populationOption: string): void {
+        cy.get(populationType).should('exist').should('be.visible')
+
+        if (populationType == MeasureGroupPage.initialPopulationSelect ||
+            populationType == MeasureGroupPage.denominatorSelect ||
+            populationType == MeasureGroupPage.denominatorExclusionSelect ||
+            populationType == MeasureGroupPage.denominatorExceptionSelect ||
+            populationType == MeasureGroupPage.numeratorSelect ||
+            populationType == MeasureGroupPage.numeratorExclusionSelect ||
+            populationType == MeasureGroupPage.measurePopulationSelect ||
+            populationType == MeasureGroupPage.measurePopulationExclusionSelect ||
+            populationType == MeasureGroupPage.measureObservationPopSelect
+        ) {
+            cy.get(populationType).click()
+            cy.get('[data-value="' + populationOption + '"]').click()
+        }
+    }
+
     public static setMeasureGroupType(): void {
 
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
