@@ -88,22 +88,26 @@ describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
         cy.get(MeasureGroupPage.popBasis).type('Encounter')
         cy.get(MeasureGroupPage.popBasisOption).click()
 
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Ratio')
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
 
         cy.get(MeasureGroupPage.addSecondInitialPopulationLink).click()
 
-        Utilities.dropdownSelect(MeasureGroupPage.firstInitialPopulationSelect, 'Initial Population 1')
-        Utilities.dropdownSelect(MeasureGroupPage.secondInitialPopulationSelect, 'Initial Population 2')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.populationSelect(MeasureGroupPage.firstInitialPopulationSelect, 'Initial Population 1')
+        Utilities.populationSelect(MeasureGroupPage.secondInitialPopulationSelect, 'Initial Population 2')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
 
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Denominator Observation')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Sum')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'Numerator Observation')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorAggregateFunction, 'Sum')
+        cy.get(MeasureGroupPage.denominatorObservation).click()
+        cy.get('[data-value="Denominator Observation"]').click()
+        cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
+        cy.get('[data-value="Sum"]').click()
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        cy.get(MeasureGroupPage.numeratorObservation).click()
+        cy.get('[data-value="Numerator Observation"]').click()
+        cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
+        cy.get('[data-value="Sum"]').click()
 
         cy.get(MeasureGroupPage.reportingTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
