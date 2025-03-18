@@ -353,7 +353,9 @@ export class Utilities {
             populationType == MeasureGroupPage.numeratorExclusionSelect ||
             populationType == MeasureGroupPage.measurePopulationSelect ||
             populationType == MeasureGroupPage.measurePopulationExclusionSelect ||
-            populationType == MeasureGroupPage.measureObservationPopSelect
+            populationType == MeasureGroupPage.measureObservationPopSelect ||
+            populationType == MeasureGroupPage.firstInitialPopulationSelect ||
+            populationType == MeasureGroupPage.secondInitialPopulationSelect
         ) {
             cy.get(populationType).click()
             cy.get('[data-value="' + populationOption + '"]').click()
