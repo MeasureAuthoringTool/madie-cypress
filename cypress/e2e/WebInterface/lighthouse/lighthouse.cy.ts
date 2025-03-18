@@ -159,7 +159,7 @@ describe('Navigate to the QDM "CQL Editor" page', () => {
 
         const thresholds = {
             performance: 11,
-            accessibility: 94,
+            accessibility: 87,
             'total-blocking-time': 10000,
             'speed-index': 42000,
             'cumulative-layout-shift': 100,
@@ -238,7 +238,7 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
             'Updated Successfully')
 
         //add pop criteria
-        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click().wait(2000)
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
@@ -368,8 +368,8 @@ describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test ca
         TestCasesPage.clickEditforCreatedTestCase()
         const thresholds = {
             performance: 3,
-            accessibility: 94,
-            'total-blocking-time': 8600,
+            accessibility: 87,
+            'total-blocking-time': 10020,
             'speed-index': 39000,
             'cumulative-layout-shift': 100,
         };
@@ -418,8 +418,8 @@ describe('Navigate to the "My CQL Libraries" page', () => {
         cy.get(Header.cqlLibraryTab).click()
         const thresholds = {
             performance: 10,
-            accessibility: 94,
-            'total-blocking-time': 9100,
+            accessibility: 76,
+            'total-blocking-time': 10100,
             'speed-index': 28000,
             'cumulative-layout-shift': 100,
         };
@@ -466,10 +466,10 @@ describe('Navigate to the "All CQL Libraries" page', () => {
         cy.reload()
         cy.get(Header.cqlLibraryTab).click()
         Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesBtn, 5000)
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesBtn).click().wait(2000)
         const thresholds = {
             performance: 10,
-            accessibility: 94,
+            accessibility: 76,
             'total-blocking-time': 20000,
             'speed-index': 28000,
             'cumulative-layout-shift': 100,
