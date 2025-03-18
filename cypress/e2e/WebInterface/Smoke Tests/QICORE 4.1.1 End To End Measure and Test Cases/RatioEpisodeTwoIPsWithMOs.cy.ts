@@ -58,6 +58,7 @@ let measureCQL = 'library HHSH version \'0.0.000\'\n' +
     '        with TheEncounter E \n' +
     '            such that MedOrder.authoredOn before start of E.period )'
 
+//MAT-8424
 describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
     before('Create Measure and Test Case', () => {
