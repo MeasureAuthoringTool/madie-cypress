@@ -213,7 +213,7 @@ describe('Copy to new measure - partial success case', () => {
     it('All test cases copy - even new, "empty", or "invalid"', () => {
 
         // go to measure 2, test cases tab
-        MeasuresPage.actionCenter('edit', 2)
+        MeasuresPage.actionCenter('edit', 1)
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
