@@ -1,4 +1,4 @@
-import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
@@ -17,6 +17,7 @@ let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 
+//MAT-8424
 describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
 
     before('Create Measure, Test Case and Login', () => {
@@ -52,7 +53,7 @@ describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
         Utilities.setMeasureGroupType()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Cohort')
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
 
         cy.get(MeasureGroupPage.reportingTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
