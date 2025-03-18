@@ -6,17 +6,21 @@ import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { Header } from "../../../../../Shared/Header"
+import * as path from 'path'
 
-let measureName = 'TCExport' + Date.now()
-let CqlLibraryName = 'TCExportLib' + Date.now()
+const measureName = 'TCExport' + Date.now()
+const CqlLibraryName = 'TCExportLib' + Date.now()
 const testCase: TestCase = {
     title: 'Title for Auto Test',
     description: 'DENOMFail',
     group: 'SBTestSeries',
     json: TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 }
+const testCasePIdPath = 'cypress/fixtures/testCasePId'
+const testCasePIdPathSecnD = 'cypress/fixtures/testCasePId2'
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
+const zipPath = 'cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'
 
 describe('QI-Core Single Test Case Export', () => {
 
@@ -34,8 +38,7 @@ describe('QI-Core Single Test Case Export', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    it('Export single QI-Core Test case', () => {
-        let testCasePIdPath = 'cypress/fixtures/testCasePId'
+    it('Export single QI-Core Test Case', () => {
 
         OktaLogin.Login()
 
@@ -57,7 +60,7 @@ describe('QI-Core Single Test Case Export', () => {
         cy.get(TestCasesPage.actionCenterExport).click()
         cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
+        cy.readFile(zipPath).should('exist')
         cy.log('Successfully verified zip file export')
 
         // unzipping the Test Case Export
@@ -67,13 +70,13 @@ describe('QI-Core Single Test Case Export', () => {
             })
         cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
             //Verify all files exist in exported zip file
-            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
+            cy.readFile(zipPath).should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
                 .and('contain',patientId, 'README.txt')
         })
     })
 
     it('Non-owner of Measure: Export single QI-Core Test case', () => {
-        let testCasePIdPath = 'cypress/fixtures/testCasePId'
+
         OktaLogin.AltLogin()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
@@ -90,7 +93,7 @@ describe('QI-Core Single Test Case Export', () => {
         cy.get(TestCasesPage.actionCenterExport).click()
         cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
-        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
+        cy.readFile(zipPath).should('exist')
         cy.log('Successfully verified zip file export')
 
         // unzipping the Test Case Export
@@ -100,8 +103,51 @@ describe('QI-Core Single Test Case Export', () => {
             })
         cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
             //Verify all files exist in exported zip file
-            cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
+            cy.readFile(zipPath).should('contain', 'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
                 .and('contain', patientId, 'README.txt')
+        })
+    })
+
+    it('QMIG STU5 Reference Validations', () => {
+
+        OktaLogin.Login()
+
+        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
+        cy.get(Header.cqlLibraryTab).click()
+
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
+        cy.get(Header.mainMadiePageButton).click()
+
+        MeasuresPage.actionCenter('edit')
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        // export
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterExport).click()
+        cy.get(TestCasesPage.exportCollectionTypeOption).click()
+
+        cy.readFile(zipPath).should('exist')
+        cy.log('Successfully verified zip file export')
+
+        // unzipping the Test Case Export
+        cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', path: downloadsFolder })
+            .then(results => {
+                cy.log('unzipFile Task finished')
+            })
+        cy.readFile(testCasePIdPath).should('exist').then((patientId) => {
+
+            // read testcase json
+            const testCasePath = path.join(downloadsFolder, patientId,  'eCQMTitle4QICore-v0.0.000-SBTestSeries-TitleforAutoTest.json')
+            cy.readFile(testCasePath).then(testCaseJson => {
+
+                const measureReport = testCaseJson.entry.find(entries => {
+                    return entries.resource.resourceType == 'MeasureReport'
+                })
+
+                expect(measureReport.resource.extension[0].url).to.eq('http://hl7.org/fhir/StructureDefinition/cqf-inputParameters')
+            })
         })
     })
 })
@@ -124,8 +170,6 @@ describe('QI-Core Test Case Export for all test cases', () => {
     })
 
     it('Export All QI-Core Test cases', () => {
-        let testCasePIdPath = 'cypress/fixtures/testCasePId'
-        let testCasePIdPathSecnD = 'cypress/fixtures/testCasePId2'
 
         OktaLogin.Login()
 
@@ -169,8 +213,7 @@ describe('QI-Core Test Case Export for all test cases', () => {
     })
 
     it('Non-owner of Measure: Export All QI-Core Test cases', () => {
-        let testCasePIdPath = 'cypress/fixtures/testCasePId'
-        let testCasePIdPathSecnD = 'cypress/fixtures/testCasePId2'
+        
         OktaLogin.AltLogin()
 
         cy.reload()
