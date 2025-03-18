@@ -8,15 +8,20 @@ import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 
-let qicoreMeasureName = 'QICoreTestMeasure' + Date.now()
-let qicoreCqlLibraryName = 'QiCoreLibrary' + Date.now()
-let qicoreMeasureCQL = MeasureCQL.SBTEST_CQL
-let qdmMeasureName = 'QDMTestMeasure' + Date.now()
-let qdmCqlLibraryName = 'QDMLibrary' + Date.now()
-let qdmMeasureCQL = MeasureCQL.QDMSimpleCQL
+const timestamp = Date.now()
+const qicoreMeasureName = 'QICoreTranslatorVersion' + timestamp
+const qicoreCqlLibraryName = 'QiCoreTranslatorVersionLibrary' + timestamp
+const qicoreMeasureCQL = MeasureCQL.SBTEST_CQL
+const qdmMeasureName = 'QDMTranslatorVersion' + timestamp
+const qdmCqlLibraryName = 'QDMTranslatorVersionLibrary' + timestamp
+const qdmMeasureCQL = MeasureCQL.QDMSimpleCQL
 const now = require('dayjs')
-let mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
-let mpEndDate = now().format('YYYY-MM-DD')
+const mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
+const mpEndDate = now().format('YYYY-MM-DD')
+
+const expectedQiCoreVersion = '3.22.0'
+const oldQiCoreVersion = '3.20.0'
+const expectedQdmVersion = '3.14.0'
 
 describe('Measure Service: Translator Version for QI-Core Measure', () => {
 
@@ -64,7 +69,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql('3.20.0')
+                    expect(response.body).to.eql(expectedQiCoreVersion)
                 })
             })
         })
@@ -108,7 +113,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql('3.18.0')
+                    expect(response.body).to.eql(oldQiCoreVersion)
                 })
             })
         })
@@ -166,7 +171,7 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql('3.14.0')
+                    expect(response.body).to.eql(expectedQdmVersion)
                 })
             })
         })
@@ -211,7 +216,7 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql('3.14.0')
+                    expect(response.body).to.eql(expectedQdmVersion)
                 })
             })
         })
