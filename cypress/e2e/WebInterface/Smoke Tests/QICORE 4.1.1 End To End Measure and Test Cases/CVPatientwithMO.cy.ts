@@ -1,13 +1,13 @@
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL";
+import {MeasureCQL} from "../../../../Shared/MeasureCQL"
 
 let measureName = 'CVPatientWithMO' + Date.now()
 let CqlLibraryName = 'CVPatientWithMO' + Date.now()
@@ -50,11 +50,13 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
 
         Utilities.setMeasureGroupType()
 
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Continuous Variable')
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population 1')
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'Initial Population 1')
-        Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'Measure Observation')
-        Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Maximum')
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population 1')
+        Utilities.populationSelect(MeasureGroupPage.measurePopulationSelect, 'Initial Population 1')
+        cy.get(MeasureGroupPage.cvMeasureObservation).click()
+        cy.get('[data-value="Measure Observation"]').click()
+        cy.get(MeasureGroupPage.cvAggregateFunction).click()
+        cy.get('[data-value="Maximum"]').click()
 
         cy.get(MeasureGroupPage.reportingTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')

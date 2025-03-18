@@ -195,8 +195,7 @@ describe('QI-Core Measure Versioning', () => {
 
     })
 
-    //Skipping until MAT-8409 is fixed
-    it.skip('Add Major Version to the Qi-Core Measure and verify that the versioned Measure is in read only', () => {
+    it('Add Major Version to the Qi-Core Measure and verify that the versioned Measure is in read only', () => {
 
         MeasuresPage.actionCenter('version')
         Utilities.waitForElementVisible(MeasuresPage.measureVersionTypeDropdown, 50000)
