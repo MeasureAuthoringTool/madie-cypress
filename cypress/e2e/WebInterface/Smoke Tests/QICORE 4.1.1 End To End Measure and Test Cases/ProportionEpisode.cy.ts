@@ -69,6 +69,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
+    //MAT-8424
     it('End to End Proportion Episode Measure, Pass Result', () => {
 
         //Click on Edit Button
@@ -91,9 +92,9 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         cy.get(MeasureGroupPage.popBasisOption).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Proportion')
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
 
         cy.get(MeasureGroupPage.reportingTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
