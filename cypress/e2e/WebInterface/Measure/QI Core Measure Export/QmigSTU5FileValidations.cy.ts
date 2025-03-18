@@ -9,9 +9,9 @@ import * as path from 'path'
 
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-const fhirHelpers = 'resources/library-FHIRHelpers-4.1.000.json'
+const qiCoreCommonLib = 'resources/QICoreCommon-3.0.000.json'
 
-describe('QMIG STU5 Compliance: Proportion Measure Export Meta Profile Validations', () => {
+describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
 
     const measureName = 'Stu5ProportionExport' + Date.now()
     const cqlLibraryName = 'Stu5PropExportLib' + Date.now()
@@ -64,10 +64,12 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Meta Profile Validatio
 
             expect(measureJson.entry[0].resource.resourceType).to.eq('Measure')
             expect(measureJson.entry[0].resource.meta.profile).to.deep.contain.members(expectedMeasureProfiles)
+            expect(measureJson.entry[0].resource.contained[0].extension[0].url).to.eq('http://hl7.org/fhir/StructureDefinition/cqf-logicDefinition')
+            expect(measureJson.entry[0].resource.extension[0].url).to.eq('http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-effectiveDataRequirements')
         })
 
-        // read fhirHelpers
-        cy.readFile(path.join(downloadsFolder, fhirHelpers)).then(libJson => {
+        // read QICoreCommon
+        cy.readFile(path.join(downloadsFolder, qiCoreCommonLib)).then(libJson => {
 
             const expectedLibraryProfile = [ 
                 "http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablelibrary",
@@ -81,11 +83,18 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Meta Profile Validatio
 
             expect(libJson.resourceType).to.eq('Library')
             expect(libJson.meta.profile).to.deep.contain.members(expectedLibraryProfile)
+            expect(libJson.extension[0].url).to.eq('http://hl7.org/fhir/StructureDefinition/cqf-directReferenceCode')
+        })
+
+        // read measure-
+        cy.readFile(path.join(downloadsFolder, 'resources/measure-STU5ProportionExport-v0.0.000.json')).then(measureJson => {
+            expect(measureJson.contained[0].extension[0].url).to.eq('http://hl7.org/fhir/StructureDefinition/cqf-logicDefinition')
+            expect(measureJson.extension[0].url).to.eq('http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-effectiveDataRequirements')
         })
     })
 })
 
-describe('QMIG STU5 Compliance: Cohort Measure Export Meta Profile Validations', () => {
+describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
 
     const measureName = 'Stu5CohortExport' + Date.now()
     const cqlLibraryName = 'Stu5CohortExportLib' + Date.now()
@@ -139,8 +148,8 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Meta Profile Validations',
             expect(measureJson.entry[0].resource.meta.profile).to.deep.contain.members(expectedMeasureProfiles)
         })
 
-        // read fhirHelpers
-        cy.readFile(path.join(downloadsFolder, fhirHelpers)).then(libJson => {
+        // read QICoreCommon
+        cy.readFile(path.join(downloadsFolder, qiCoreCommonLib)).then(libJson => {
 
             const expectedLibraryProfile = [ 
                 "http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-shareablelibrary",
@@ -154,11 +163,12 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Meta Profile Validations',
 
             expect(libJson.resourceType).to.eq('Library')
             expect(libJson.meta.profile).to.deep.contain.members(expectedLibraryProfile)
+            expect(libJson.extension[0].url).to.eq('http://hl7.org/fhir/StructureDefinition/cqf-directReferenceCode')
         })
     })
 })
 
-describe('QMIG STU5 Compliance: Continuous Variable Measure Export Meta Profile Validations', () => {
+describe('QMIG STU5 Compliance: Continuous Variable Measure Export Validations', () => {
 
     const measureName = 'Stu5CVExport' + Date.now()
     const cqlLibraryName = 'Stu5CVExportLib' + Date.now()
@@ -217,7 +227,7 @@ describe('QMIG STU5 Compliance: Continuous Variable Measure Export Meta Profile 
     })
 })
 
-describe('QMIG STU5 Compliance: Ratio Measure Export Meta Profile Validations', () => {
+describe('QMIG STU5 Compliance: Ratio Measure Export Validations', () => {
 
     const measureName = 'Stu5RatioExport' + Date.now()
     const cqlLibraryName = 'Stu5RatioExportLib' + Date.now()
