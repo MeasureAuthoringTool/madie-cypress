@@ -133,7 +133,7 @@ describe('Test case list page - Action Center icons for measure owner', () => {
 })
 
 describe('Test case list page - Action Center icons for versioned measure', () => {
-    
+
     beforeEach('Create measure and login', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measure.name, measure.cqlLibraryName, 'Proportion', false, measure.cql, null, false, '2025-01-01', '2025-12-31')
@@ -215,7 +215,7 @@ describe('Test case list page - Action Center icons for versioned measure', () =
 })
 
 describe('Test case list page - Action Center icons for non-owner', () => {
-    
+
     beforeEach('Create measure and login', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measure.name, measure.cqlLibraryName, 'Proportion', false, measure.cql, null, false, '2025-01-01', '2025-12-31')
@@ -262,10 +262,10 @@ describe('Test case list page - Action Center icons for non-owner', () => {
         cy.get(TestCasesPage.actionCenterClone).should('not.exist')
         cy.get(TestCasesPage.actionCenterShiftDates).should('not.exist')
 
-       cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
-       cy.get('[data-testid="export-tooltip"]').should('have.attr', 'aria-label', 'Test cases must be executed prior to exporting.')
+        cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
+        cy.get('[data-testid="export-tooltip"]').should('have.attr', 'aria-label', 'Test cases must be executed prior to exporting.')
 
-       cy.get(TestCasesPage.executeTestCaseButton).click()
+        cy.get(TestCasesPage.executeTestCaseButton).click()
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 30500)
 
         cy.get(TestCasesPage.actionCenterExport).should('be.enabled').click()
@@ -280,22 +280,22 @@ describe('Test case list page - Action Center icons for non-owner', () => {
             cy.get(qrdaButton).should('be.visible')
             cy.get(excelButton).should('be.visible').click()
         })
-   })
+    })
 
-   it('Non-owner sees Copy To icon; it enables correctly', () => {
+    it('Non-owner sees Copy To icon; it enables correctly', () => {
 
-       cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.disabled')
-       cy.get('[data-testid="copy-tooltip"]').should('have.attr', 'aria-label', 'Select test cases to copy to another measure')
+        cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.disabled')
+        cy.get('[data-testid="copy-tooltip"]').should('have.attr', 'aria-label', 'Select test cases to copy to another measure')
 
-       TestCasesPage.checkTestCase(2)
-       cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled')
-       TestCasesPage.checkTestCase(1)
-       cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled')
+        TestCasesPage.checkTestCase(2)
+        cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled')
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled')
 
-       cy.get(TestCasesPage.actionCenterCopyToMeasure).click()
+        cy.get(TestCasesPage.actionCenterCopyToMeasure).click()
 
-       cy.contains('Copy To').should('be.visible')
-       cy.get(MeasuresPage.measureListTitles).should('be.visible')
-   })
+        cy.contains('Copy To').should('be.visible')
+        cy.get(MeasuresPage.measureListTitles).should('be.visible')
+    })
 })
 

@@ -61,7 +61,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the import test case button
-        cy.get(TestCasesPage.importTestCasesBtn).click()
+        cy.get(TestCasesPage.qdmImportTestCasesBtn).click()
 
         //select file
         cy.get(TestCasesPage.tcFileDrop).click()
@@ -87,7 +87,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the import test case button
-        cy.get(TestCasesPage.importTestCasesBtn).click()
+        cy.get(TestCasesPage.qdmImportTestCasesBtn).click()
 
         //Attach Text file
         cy.get(TestCasesPage.filAttachDropBox).attachFile(genericTextFile)
@@ -110,7 +110,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the import test case button
-        cy.get(TestCasesPage.importTestCasesBtn).click()
+        cy.get(TestCasesPage.qdmImportTestCasesBtn).click()
 
         //Upload invalid Json file
         cy.get(TestCasesPage.filAttachDropBox).attachFile('example.json')
@@ -167,7 +167,7 @@ describe('Import Test cases onto an existing QDM measure via file -- Message tha
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the import test case button
-        cy.get(TestCasesPage.importTestCasesBtn).click()
+        cy.get(TestCasesPage.qdmImportTestCasesBtn).click()
 
         //select file
         cy.get(TestCasesPage.filAttachDropBox).attachFile(testCaseWInvalidGroup)
@@ -182,7 +182,7 @@ describe('Import Test cases onto an existing QDM measure via file -- Message tha
             //spinner indicating that import progress is busy is shown / is visible
             cy.get(TestCasesPage.importInProgress).should('be.visible')
             //wait until the import buttong appears on the page, again
-            Utilities.waitForElementVisible(TestCasesPage.importTestCasesBtn, 50000)
+            Utilities.waitForElementVisible(TestCasesPage.qdmImportTestCasesBtn, 50000)
         })
         Utilities.waitForElementVisible(TestCasesPage.importWarningMessages, 30000)
         cy.get(TestCasesPage.importWarningMessages).should('include.text', '(0) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
@@ -200,7 +200,7 @@ describe('Import Test cases onto an existing QDM measure via file -- Message tha
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the import test case button
-        cy.get(TestCasesPage.importTestCasesBtn).click()
+        cy.get(TestCasesPage.qdmImportTestCasesBtn).click()
 
         //select file
         cy.get(TestCasesPage.filAttachDropBox).attachFile(testCaseWInvalidTitle)
@@ -215,7 +215,7 @@ describe('Import Test cases onto an existing QDM measure via file -- Message tha
             //spinner indicating that import progress is busy is shown / is visible
             cy.get(TestCasesPage.importInProgress).should('be.visible')
             //wait until the import buttong appears on the page, again
-            Utilities.waitForElementVisible(TestCasesPage.importTestCasesBtn, 50000)
+            Utilities.waitForElementVisible(TestCasesPage.qdmImportTestCasesBtn, 50000)
         })
         Utilities.waitForElementVisible(TestCasesPage.importWarningMessages, 30000)
         cy.get(TestCasesPage.importWarningMessages).should('include.text', '(0) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')

@@ -104,7 +104,7 @@ describe('Test case Coverage tab', () => {
 
         //import test cases from BONNIE PROD
         //click on the import test case button
-        cy.get(TestCasesPage.importTestCasesBtn).click()
+        cy.get(TestCasesPage.qdmImportTestCasesBtn).click()
 
         //select file
         cy.get(TestCasesPage.filAttachDropBox).attachFile(prodBonneTestCasesFile)

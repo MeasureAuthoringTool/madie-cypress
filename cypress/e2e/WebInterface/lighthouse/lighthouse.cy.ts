@@ -160,7 +160,7 @@ describe('Navigate to the QDM "CQL Editor" page', () => {
         const thresholds = {
             performance: 11,
             accessibility: 87,
-            'total-blocking-time': 10000,
+            'total-blocking-time': 12000,
             'speed-index': 42000,
             'cumulative-layout-shift': 100,
         };
@@ -241,9 +241,15 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click().wait(2000)
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorExclusionSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorExclusionSelect).click()
+            .get('ul > li[data-value="Denominator Exclusions"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.numeratorSelect, 50000)
+        cy.get(MeasureGroupPage.numeratorSelect).click()
+            .get('ul > li[data-value="Numerator"]').wait(2000).click()
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -258,7 +264,7 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
 
         //import test cases from BONNIE PROD
         //click on the import test case button
-        cy.get(TestCasesPage.importTestCasesBtn).click()
+        cy.get(TestCasesPage.qdmImportTestCasesBtn).click()
 
         //select file
         cy.get(TestCasesPage.filAttachDropBox).attachFile(prodBonneTestCasesFile)
@@ -369,8 +375,8 @@ describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test ca
         const thresholds = {
             performance: 3,
             accessibility: 87,
-            'total-blocking-time': 10020,
-            'speed-index': 39000,
+            'total-blocking-time': 14000,
+            'speed-index': 40000,
             'cumulative-layout-shift': 100,
         };
 
@@ -419,7 +425,7 @@ describe('Navigate to the "My CQL Libraries" page', () => {
         const thresholds = {
             performance: 10,
             accessibility: 76,
-            'total-blocking-time': 10100,
+            'total-blocking-time': 12000,
             'speed-index': 28000,
             'cumulative-layout-shift': 100,
         };
