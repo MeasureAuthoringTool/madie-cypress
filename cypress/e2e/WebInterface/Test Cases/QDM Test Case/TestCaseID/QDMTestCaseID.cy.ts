@@ -218,7 +218,7 @@ describe('Import Test cases onto an existing QDM measure via file and ensure tes
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 710000)
 
         //click on the import test case button
-        cy.get(TestCasesPage.importTestCasesBtn).click()
+        cy.get(TestCasesPage.qdmImportTestCasesBtn).click()
 
         //select file
         cy.get(TestCasesPage.tcFileDrop).click()

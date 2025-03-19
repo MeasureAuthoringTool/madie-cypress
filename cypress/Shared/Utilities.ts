@@ -335,7 +335,6 @@ export class Utilities {
             Utilities.waitForElementVisible(dropdownDataElement, 50000)
             cy.get(dropdownDataElement)
                 .wait(2000)
-                .click()
                 .get('ul > li[data-value="' + valueDataElement + '"]')
                 .wait(2000)
                 .click()

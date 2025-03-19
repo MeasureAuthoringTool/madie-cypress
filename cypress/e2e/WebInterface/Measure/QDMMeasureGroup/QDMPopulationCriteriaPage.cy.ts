@@ -81,10 +81,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.initialPopulationSelect).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'ipp')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
@@ -401,10 +398,7 @@ describe('Save Population Criteria on QDM measure', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.initialPopulationSelect).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'SDE Ethnicity')
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'SDE Ethnicity')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).wait(2000).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
@@ -415,9 +409,7 @@ describe('Save Population Criteria on QDM measure', () => {
         cy.get(MeasureGroupPage.QDMPopCriteria2IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria2IP).should('contain.text', 'Select Initial Population')
 
-        cy.get(MeasureGroupPage.QDMPopCriteria2IP).click()
-
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'SDE Ethnicity')
+        Utilities.dropdownSelect(MeasureGroupPage.QDMPopCriteria2IP, 'SDE Ethnicity')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
@@ -463,12 +455,9 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.initialPopulationSelect).click()
-
         //select a value that will return the correct boolean type
-        Utilities.waitForElementVisible(MeasureGroupPage.measurePopulationOption, 30000)
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'Initial Population')
+        Utilities.waitForElementVisible(MeasureGroupPage.initialPopulationSelect, 30000)
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
 
         //no error should appear
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('not.exist')
@@ -477,10 +466,8 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 30000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
 
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.initialPopulationSelect).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.measurePopulationOption, 30000)
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'Bilateral Mastectomy Diagnosis')
+        Utilities.waitForElementVisible(MeasureGroupPage.initialPopulationSelect, 30000)
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Bilateral Mastectomy Diagnosis')
 
         //helper text / error message should appear
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
@@ -528,12 +515,9 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-        cy.get(MeasureGroupPage.initialPopulationSelect).click()
-
         //select a value that will return the correct boolean type
-        Utilities.waitForElementVisible(MeasureGroupPage.measurePopulationOption, 30000)
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationOption, 'Numerator')
+        Utilities.waitForElementVisible(MeasureGroupPage.initialPopulationSelect, 30000)
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Numerator')
 
         //helper text / error message should appear
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
