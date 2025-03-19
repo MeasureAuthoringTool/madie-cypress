@@ -171,6 +171,7 @@ describe('Import Test cases onto an existing Qi Core measure via file and ensure
 
         cy.reload()
 
+        Utilities.waitForElementVisible(Header.mainMadiePageButton, 45500)
         cy.get(Header.mainMadiePageButton).click()
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit', 2)
