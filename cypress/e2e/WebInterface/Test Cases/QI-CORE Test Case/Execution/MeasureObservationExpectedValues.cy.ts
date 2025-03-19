@@ -17,6 +17,7 @@ let testCaseDescription = 'DENOMFail' + now
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 
+//MAT-8424
 describe('Measure Observation Expected values', () => {
 
     beforeEach('Create Measure, Test Case and login', () => {
