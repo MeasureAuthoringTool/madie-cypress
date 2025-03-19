@@ -145,6 +145,36 @@ let measureCQL_without_CodeSystem_Name = 'library QDMCQLFunctions1735670044066 v
     'define "n":\n' +
     '\ttrue'
 
+let measureCQL_with_Concept_Constructor = 'library ProportionPatient1742325506823 version \'1.0.000\'\n' +
+    'using QDM version \'5.6\'\n' +
+    '\n' +
+    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+    '\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'context Patient\n' +
+    'define "SDE Ethnicity":\n' +
+    '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+    'define "SDE Payer":\n' +
+    '  ["Patient Characteristic Payer": "Payer"]\n' +
+    'define "SDE Race":\n' +
+    '  ["Patient Characteristic Race": "Race"]\n' +
+    'define "SDE Sex":\n' +
+    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+    'define "ipp":\n' +
+    '\ttrue\n' +
+    'define "d":\n' +
+    '\t true\n' +
+    'define "n":\n' +
+    '\ttrue\n' +
+    '\t\n' +
+    'Concept {\n' +
+    'Code \'66071002\' from "SNOMED-CT",\n' +
+    'Code \'B18.1\' from "ICD-10-CM"\n' +
+    '} display \'Type B viral hepatitis'
+
 describe('Validate errors/warnings/success messages on CQL editor component on save', () => {
 
     beforeEach('Create measure and login', () => {
@@ -345,6 +375,24 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLEditorPage.errorMsg).should('contain.text', "Parse: 0:19 | Measure Context must be 'Patient'.")
+    })
+
+    it('When Concept constructor is used in the QDM Measure CQL, the constructor was removed and a success message is displayed while saving CQL', () => {
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Add CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.get(EditMeasurePage.cqlEditorTab).type('{selectAll}{del}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_with_Concept_Constructor)
+
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementVisible('#content', 60000)
+
+        cy.get('#content').should('contain.text', 'Concept Constructs are not supported in MADiE. It has been removed.')
+        cy.get(EditMeasurePage.cqlEditorTextBox).should('not.contain', 'Concept {Code \'66071002\' from "SNOMED-CT",Code \'B18.1\' from "ICD-10-CM"} display \'Type B viral hepatitis')
     })
 })
 
