@@ -749,6 +749,7 @@ let tcJson = '{\n' +
     '  ]\n' +
     '}'
 
+//MAT-8425
 describe('Measure Highlighting', () => {
 
     beforeEach('Create measure and login', () => {

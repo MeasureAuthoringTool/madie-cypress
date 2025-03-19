@@ -52,6 +52,7 @@ let measureCQL = 'library Library4969 version \'0.0.000\'\n' +
     'define function hoursObs(e Encounter):\n' +
     '  duration in hours of e.period'
 
+//MAT-8424
 describe('Non Boolean Measure Observation Actual values', () => {
 
     beforeEach('Create Measure, Test Case and login', () => {
