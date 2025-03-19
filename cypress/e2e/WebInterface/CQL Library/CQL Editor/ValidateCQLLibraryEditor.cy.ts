@@ -5,6 +5,7 @@ import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import {MeasuresPage} from "../../../../Shared/MeasuresPage";
 
 let apiCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -278,6 +279,23 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get(CQLLibraryPage.measureCQLGenericErrorsList).should('contain.text', "Parse: 7:20 | Measure Context must be 'Patient'.")
     })
 
+    it('When Concept constructor is used in the Library CQL, the constructor was removed and a success message is displayed while saving CQL', () => {
+
+        cy.get(Header.cqlLibraryTab).click()
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+        Utilities.typeFileContents('cypress/fixtures/CQLWithConceptConstructor.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
+
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
+
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}').type('Concept {Code \'66071002\' from "SNOMED-CT",Code \'B18.1\' from "ICD-10-CM"} display \'Type B viral hepatitis', { parseSpecialCharSequences: false })
+
+            //save the value in the CQL Editor
+            cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
+            Utilities.waitForElementVisible('#content', 60000)
+
+        cy.get('#content').should('contain.text', 'Concept Constructs are not supported in MADiE. It has been removed.')
+            cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('not.contain', 'Concept {Code \'66071002\' from "SNOMED-CT",Code \'B18.1\' from "ICD-10-CM"} display \'Type B viral hepatitis')
+    })
 })
 
 describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {

@@ -282,7 +282,7 @@ describe('Measure: CQL Editor', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).contains(newCqlLibraryName + 'TEST')
     })
 
-    it('Verify error appears on CQL Editor when concept construct is used', () => {
+    it('When Concept constructor is used in the Qi Core Measure CQL, the constructor was removed and a success message is displayed while saving CQL', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -299,12 +299,14 @@ describe('Measure: CQL Editor', () => {
             //Validate message on page
             cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
-
-            cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}').type('concept Type B Hepatitis')
+            cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}').type('Concept {Code \'66071002\' from "SNOMED-CT",Code \'B18.1\' from "ICD-10-CM"} display \'Type B viral hepatitis', { parseSpecialCharSequences: false })
 
             //save the value in the CQL Editor
             cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-            cy.get(EditMeasurePage.cqlEditorTextBox).should('contain', '/*CONCEPT DECLARATION REMOVED: CQL concept construct shall NOT be used.*/')
+            Utilities.waitForElementVisible('#content', 60000)
+
+            cy.get('#content').should('contain.text', 'Concept Constructs are not supported in MADiE. It has been removed.')
+            cy.get(EditMeasurePage.cqlEditorTextBox).should('not.contain', 'Concept {Code \'66071002\' from "SNOMED-CT",Code \'B18.1\' from "ICD-10-CM"} display \'Type B viral hepatitis')
         })
     })
 
