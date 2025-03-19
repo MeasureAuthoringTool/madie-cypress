@@ -51,7 +51,7 @@ let measureCQL_WithErrors = 'library ' + newCqlLibraryName + ' version \'0.0.000
     'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
     'valueset "Pap Test": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.108.12.1017\'\n' +
     'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
-    'valueset "HPV Test": \'\')\n'+
+    'valueset "HPV Test": \'\')\n' +
     'context Patient\n'
 
 let measureCQL_WithWarnings = 'library TestLibrary16969620425371870 version \'0.0.000\'\n' +
@@ -129,11 +129,8 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Verify errors in CQL Editor component
-        cy.get('.madie-alert').should('contain', '(4) Errors:')
-        cy.get('.madie-alert').should('contain.text', 'Errors:Row: 14, Col:23: ELM: 23:23 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}Row: 14, Col:0: VSAC: 0:22 | "\'\' is not a valid URL. Fhir URL should start with \'http://cts.nlm.nih.gov/fhir/ValueSet/\'"Row: 14, Col:0: VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 14:0-14:22Row: 14, Col:23: Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'')
-
-        //Verify the same error(s) appear in CQL Editor windows
-        //Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, ' ELM: 23:23 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'} VSAC: 0:22 | "\'\' is not a valid URL. Fhir URL should start with \'http://cts.nlm.nih.gov/fhir/ValueSet/\'" VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 14:0-14:22 Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
+        cy.get('[class="madie-alert warning"]').should('contain', '(3) Errors:')
+        cy.get('[class="madie-alert warning"]').should('contain.text', 'CQL updated successfully(3) Errors:Row: 14, Col:0: VSAC: 0:22 | "\'\' is not a valid URL. Fhir URL should start with \'http://cts.nlm.nih.gov/fhir/ValueSet/\'"Row: 14, Col:0: VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 14:0-14:22Row: 14, Col:23: Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
 
     })
 
@@ -151,10 +148,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Verify errors in CQL Editor component
-        cy.get('.madie-alert').should('contain', '(6) Errors:')
-        cy.get('.madie-alert').should('contain', '(1) Warning:')
-        cy.get('.madie-alert').should('contain.text', 'Row: 24, Col:17: ELM: 17:268 | Could not resolve membership operator for terminology ' +
-            'target of the retrieve.')
+        cy.get('[class="madie-alert warning"]').should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(4) Errors:Row: 26, Col:27: ELM: 27:81 | Expected an expression of type \'System.Boolean\', but found an expression of type \'Interval of System.DateTime\'.Row: 26, Col:83: ELM: 83:95 | Could not resolve call to operator IncludedIn with signature (list<QICore.Encounter>,interval<System.DateTime>).Row: 26, Col:116: Parse: 116:117 | no viable alternative at input \'during day of "Measurement Period")\'Row: 26, Col:116: Parse: 116:117 | extraneous input \')\' expecting {<EOF>, \'define\', \'context\'}(1) Warning:Row: 24, Col:17: ELM: 17:268 | Could not resolve membership operator for terminology target of the retrieve.')
 
         //Verify the same warning(s) appear in CQL Editor windows
         Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 17:268 | Could not ' +
@@ -181,7 +175,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
 
         OktaLogin.Logout()
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let randValue = (Math.floor((Math.random() * 1000) + 2))
         let newCqlLibraryName = CqlLibraryName + randValue
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
@@ -221,11 +215,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
         cy.get('[data-testid="library-warning"]').should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
 
         //Verify errors in CQL Editor component
-        cy.get('.madie-alert').should('contain', '(4) Errors:')
-        cy.get('.madie-alert').should('contain.text', 'Errors:Row: 14, Col:23: ELM: 23:23 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}Row: 14, Col:0: VSAC: 0:22 | "\'\' is not a valid URL. Fhir URL should start with \'http://cts.nlm.nih.gov/fhir/ValueSet/\'"Row: 14, Col:0: VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 14:0-14:22Row: 14, Col:23: Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'')
-
-        //Verify the same error(s) appear in CQL Editor windows
-        Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, ' ELM: 23:23 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'} VSAC: 0:22 | "\'\' is not a valid URL. Fhir URL should start with \'http://cts.nlm.nih.gov/fhir/ValueSet/\'" VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 14:0-14:22 Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
+        cy.get('[class="madie-alert warning"]').should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(3) Errors:Row: 14, Col:0: VSAC: 0:22 | \"\'\' is not a valid URL. Fhir URL should start with \'http://cts.nlm.nih.gov/fhir/ValueSet/\'\"Row: 14, Col:0: VSAC: 0:22 | Request failed with status code 404 for oid = \'\' location = 14:0-14:22Row: 14, Col:23: Parse: 23:24 | extraneous input \')\' expecting {<EOF>, \'using\', \'include\', \'public\', \'private\', \'parameter\', \'codesystem\', \'valueset\', \'code\', \'concept\', \'define\', \'context\'}')
 
     })
 
@@ -245,10 +235,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
         //Verify errors in CQL Editor component
-        cy.get('.madie-alert').should('contain', '(6) Errors:')
-        cy.get('.madie-alert').should('contain', '(1) Warning:')
-        cy.get('.madie-alert').should('contain.text', 'Row: 24, Col:17: ELM: 17:268 | Could not resolve membership operator for terminology ' +
-            'target of the retrieve.')
+        cy.get('[class="madie-alert warning"]').should('contain.text', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.(4) Errors:Row: 26, Col:27: ELM: 27:81 | Expected an expression of type \'System.Boolean\', but found an expression of type \'Interval of System.DateTime\'.Row: 26, Col:83: ELM: 83:95 | Could not resolve call to operator IncludedIn with signature (list<QICore.Encounter>,interval<System.DateTime>).Row: 26, Col:116: Parse: 116:117 | no viable alternative at input \'during day of "Measurement Period")\'Row: 26, Col:116: Parse: 116:117 | extraneous input \')\' expecting {<EOF>, \'define\', \'context\'}(1) Warning:Row: 24, Col:17: ELM: 17:268 | Could not resolve membership operator for terminology target of the retrieve.')
 
         //Verify the same warning(s) appear in CQL Editor windows
         Utilities.validateErrors(CQLEditorPage.warningInCQLEditorWindow, CQLEditorPage.errorContainer, 'ELM: 17:268 | Could not ' +
