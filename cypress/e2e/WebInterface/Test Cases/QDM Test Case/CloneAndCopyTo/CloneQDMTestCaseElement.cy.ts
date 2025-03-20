@@ -254,9 +254,7 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
-        cy.get(MeasureGroupPage.denominatorSelect).click()
-            .get('ul > li[data-value="Denominator"]').wait(2000).click()
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 

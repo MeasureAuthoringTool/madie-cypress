@@ -139,9 +139,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
-        cy.get(MeasureGroupPage.denominatorSelect).click()
-            .get('ul > li[data-value="Denominator"]').wait(2000).click()
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).should('exist')
@@ -167,19 +165,15 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
 
-        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
-        cy.get(MeasureGroupPage.denominatorSelect).click()
-            .get('ul > li[data-value="Denominator 2"]').wait(2000).click()
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).should('exist')
         cy.get(MeasureGroupPage.denominatorObservation).should('be.visible')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Denominator Observation')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Count')
 
-        Utilities.waitForElementVisible(MeasureGroupPage.numeratorSelect, 50000)
-        cy.get(MeasureGroupPage.numeratorSelect).click()
-            .get('ul > li[data-value="Numerator 2"]').wait(2000).click()
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
         cy.get(MeasureGroupPage.numeratorObservation).should('exist')
         cy.get(MeasureGroupPage.numeratorObservation).should('be.visible')

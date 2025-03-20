@@ -86,9 +86,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
-        cy.get(MeasureGroupPage.denominatorSelect).click()
-            .get('ul > li[data-value="Denominator"]').wait(2000).click()
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 

@@ -440,12 +440,8 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
-        cy.get(MeasureGroupPage.denominatorSelect).click()
-            .get('ul > li[data-value="Denominator"]').wait(2000).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.numeratorSelect, 50000)
-        cy.get(MeasureGroupPage.numeratorSelect).click()
-            .get('ul > li[data-value="Numerator"]').wait(2000).click()
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
 
         //Click on Stratification tab
         Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 32000)
