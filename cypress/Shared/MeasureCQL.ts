@@ -1277,10 +1277,25 @@ export class MeasureCQL {
         'using QDM version \'5.6\'\n' +
         '\n' +
         'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+        'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
         '\n' +
         'parameter "Measurement Period" Interval<DateTime>\n' +
         'context Patient\n' +
         '\n' +
+        'define "SDE Ethnicity":\n' +
+        '    ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
+
+        'define "SDE Payer":\n' +
+        '    ["Patient Characteristic Payer": "Payer"]\n' +
+
+        'define "SDE Race":\n' +
+        '    ["Patient Characteristic Race": "Race"]\n' +
+
+        'define "SDE Sex":\n' +
+        '    ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
         'define "Patient16To23":\n' +
         '  AgeInYearsAt(start of "Measurement Period") >= 16\n' +
         '    and AgeInYearsAt(start of "Measurement Period") < 24\n'
@@ -2357,7 +2372,7 @@ export class MeasureCQL {
         'define "track1":\n' +
         ' true\n'
 
-    public  static readonly QICORE_CQL_CohortPatientBoolean = 'library FluentFunction version \'1.0.000\'\n' +
+    public static readonly QICORE_CQL_CohortPatientBoolean = 'library FluentFunction version \'1.0.000\'\n' +
         '\n' +
         'using QICore version \'4.1.1\'\n' +
         '\n' +
@@ -2645,7 +2660,7 @@ export class MeasureCQL {
         '      )\n' +
         '  )'
 
-    public static readonly QDM_CQL_withDRC= 'library CMS153ChlamydiaScreeninginWomen version \'13.0.000\'\n' +
+    public static readonly QDM_CQL_withDRC = 'library CMS153ChlamydiaScreeninginWomen version \'13.0.000\'\n' +
         '\n' +
         'using QDM version \'5.6\'\n' +
         '\n' +

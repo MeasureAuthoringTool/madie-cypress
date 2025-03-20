@@ -31,6 +31,23 @@ describe('Test case Coverage tab', () => {
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureNamePropListQDM, CqlLibraryNamePropListQDM, measureCQLPRODCat, false, false,
             '2012-01-01', '2012-12-31')
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        // add SDE to test case coverage
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
+
+        //Save Supplemental data
+        cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        OktaLogin.UILogout()
 
         OktaLogin.Login()
     })
@@ -161,6 +178,20 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        // add SDE to test case coverage
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
+
+        //Save Supplemental data
+        cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
         OktaLogin.Logout()
         cy.clearAllCookies()
         cy.clearLocalStorage()
@@ -451,6 +482,7 @@ describe('Run / Execute QDM Test Case button validations', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true)
         OktaLogin.Login()
+
 
     })
 
