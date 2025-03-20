@@ -86,7 +86,7 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 
@@ -109,7 +109,7 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 
@@ -225,7 +225,7 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 
@@ -248,7 +248,7 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 

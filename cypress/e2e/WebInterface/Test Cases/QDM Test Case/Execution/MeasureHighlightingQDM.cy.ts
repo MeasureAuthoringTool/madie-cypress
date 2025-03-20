@@ -71,8 +71,8 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes validate /
         //navigate to the criteria section of the PC
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
 
         //intercept first group id once update to the measure group is saved
         cy.readFile(measurePath).should('exist').then((fileContents) => {
@@ -155,8 +155,8 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
         //navigate to the criteria section of the PC
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
 
         //intercept first group id once update to the measure group is saved
         cy.readFile(measurePath).should('exist').then((fileContents) => {
@@ -252,9 +252,9 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusion')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, "Denominator Exclusion")
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
 
         //intercept group id once update to the measure group is saved
         cy.readFile(measurePath).should('exist').then((fileContents) => {
@@ -354,9 +354,9 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusion')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, "Denominator Exclusion")
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
 
         //intercept group id once update to the measure group is saved
         cy.readFile(measurePath).should('exist').then((fileContents) => {
@@ -379,9 +379,9 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         cy.get(MeasureGroupPage.QDMPopulationCriteria2).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusion')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorExclusionSelect, "Denominator Exclusion")
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
 
         //intercept group id once update to the measure group is saved
         cy.readFile(measurePath).should('exist').then((fileContents) => {
