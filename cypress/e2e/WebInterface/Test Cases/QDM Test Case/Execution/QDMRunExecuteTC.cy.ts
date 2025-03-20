@@ -87,9 +87,15 @@ describe('Test case Coverage tab', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusions')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorExclusionSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorExclusionSelect).click()
+            .get('ul > li[data-value="Denominator Exclusions"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.numeratorSelect, 50000)
+        cy.get(MeasureGroupPage.numeratorSelect).click()
+            .get('ul > li[data-value="Numerator"]').wait(2000).click()
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')

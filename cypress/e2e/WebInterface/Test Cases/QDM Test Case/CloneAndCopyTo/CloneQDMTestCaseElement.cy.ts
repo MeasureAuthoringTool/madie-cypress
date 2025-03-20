@@ -86,7 +86,9 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 
@@ -109,7 +111,9 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 
@@ -225,7 +229,9 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 
@@ -248,7 +254,9 @@ describe('Clone QDM Test Case', () => {
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
 

@@ -193,8 +193,12 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.numeratorSelect, 50000)
+        cy.get(MeasureGroupPage.numeratorSelect).click()
+            .get('ul > li[data-value="Numerator"]').wait(2000).click()
 
         //Click on Stratification tab
         cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
@@ -267,8 +271,12 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.numeratorSelect, 50000)
+        cy.get(MeasureGroupPage.numeratorSelect).click()
+            .get('ul > li[data-value="Numerator"]').wait(2000).click()
 
         //Click on Stratification tab
         Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 32000)
@@ -378,8 +386,12 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.numeratorSelect, 50000)
+        cy.get(MeasureGroupPage.numeratorSelect).click()
+            .get('ul > li[data-value="Numerator"]').wait(2000).click()
 
         //assert that Stratification is no longer available
         cy.get(MeasureGroupPage.stratificationTab).should('not.exist')
@@ -428,8 +440,12 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.numeratorSelect, 50000)
+        cy.get(MeasureGroupPage.numeratorSelect).click()
+            .get('ul > li[data-value="Numerator"]').wait(2000).click()
 
         //Click on Stratification tab
         Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 32000)

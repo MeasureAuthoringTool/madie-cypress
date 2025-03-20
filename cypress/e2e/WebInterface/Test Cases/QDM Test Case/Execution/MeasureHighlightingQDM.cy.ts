@@ -71,8 +71,12 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes validate /
         //navigate to the criteria section of the PC
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.numeratorSelect, 50000)
+        cy.get(MeasureGroupPage.numeratorSelect).click()
+            .get('ul > li[data-value="Numerator"]').wait(2000).click()
 
         //intercept first group id once update to the measure group is saved
         cy.readFile(measurePath).should('exist').then((fileContents) => {
@@ -155,8 +159,12 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
         //navigate to the criteria section of the PC
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.numeratorSelect, 50000)
+        cy.get(MeasureGroupPage.numeratorSelect).click()
+            .get('ul > li[data-value="Numerator"]').wait(2000).click()
 
         //intercept first group id once update to the measure group is saved
         cy.readFile(measurePath).should('exist').then((fileContents) => {
@@ -252,9 +260,15 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusion')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorExclusionSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorExclusionSelect).click()
+            .get('ul > li[data-value="Denominator Exclusion"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.numeratorSelect, 50000)
+        cy.get(MeasureGroupPage.numeratorSelect).click()
+            .get('ul > li[data-value="Numerator"]').wait(2000).click()
 
         //intercept group id once update to the measure group is saved
         cy.readFile(measurePath).should('exist').then((fileContents) => {
@@ -354,9 +368,15 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusion')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorExclusionSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorExclusionSelect).click()
+            .get('ul > li[data-value="Denominator Exclusion"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.numeratorSelect, 50000)
+        cy.get(MeasureGroupPage.numeratorSelect).click()
+            .get('ul > li[data-value="Numerator"]').wait(2000).click()
 
         //intercept group id once update to the measure group is saved
         cy.readFile(measurePath).should('exist').then((fileContents) => {
@@ -379,9 +399,15 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         cy.get(MeasureGroupPage.QDMPopulationCriteria2).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Denominator Exclusion')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorSelect).click()
+            .get('ul > li[data-value="Denominator"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.denominatorExclusionSelect, 50000)
+        cy.get(MeasureGroupPage.denominatorExclusionSelect).click()
+            .get('ul > li[data-value="Denominator Exclusion"]').wait(2000).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.numeratorSelect, 50000)
+        cy.get(MeasureGroupPage.numeratorSelect).click()
+            .get('ul > li[data-value="Numerator"]').wait(2000).click()
 
         //intercept group id once update to the measure group is saved
         cy.readFile(measurePath).should('exist').then((fileContents) => {
