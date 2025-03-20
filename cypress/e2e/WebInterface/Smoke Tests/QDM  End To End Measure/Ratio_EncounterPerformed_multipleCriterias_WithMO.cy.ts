@@ -165,7 +165,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
 
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator 2")
 
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
         cy.get(MeasureGroupPage.denominatorObservation).should('exist')
@@ -173,7 +173,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'Denominator Observation')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorAggregateFunction, 'Count')
 
-        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator 2")
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
         cy.get(MeasureGroupPage.numeratorObservation).should('exist')
         cy.get(MeasureGroupPage.numeratorObservation).should('be.visible')
