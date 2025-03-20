@@ -208,6 +208,15 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
             //Short Name Identifier
             expect(bodyText).to.include('Short Name Identifier\teCQMTitle4QICore')
 
+            //Measure Population Criteria
+            expect(bodyText).to.include('Measure Population Criteria (ID: Group_1)\n' +
+                'Initial Population\tID: InitialPopulation_1\n' +
+                'Description: No description provided Logic Definition: Qualifying Encounters\n' +
+                'Denominator\tID: Denominator_1\n' +
+                'Description: No description provided Logic Definition: Qualifying Encounters\n' +
+                'Numerator\tID: Numerator_1\n' +
+                'Description: No description provided Logic Definition: Qualifying Encounters')
+
             //Population Basis, Scoring, Type, Improvement Notation
             expect(bodyText).to.include('Population Basis\tEncounter\n' +
                 'Scoring\t[http://terminology.hl7.org/CodeSystem/measure-scoring#proportion: \'Proportion\']\n' +
@@ -391,6 +400,15 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
             //Version Number
             expect(bodyText).to.include('Version Number\t1.0.000')
+
+            //Measure Population Criteria
+            expect(bodyText).to.include('Measure Population Criteria (ID: Group_1)\n' +
+                'Initial Population\tID: InitialPopulation_1\n' +
+                'Description: No description provided Logic Definition: Qualifying Encounters\n' +
+                'Denominator\tID: Denominator_1\n' +
+                'Description: No description provided Logic Definition: Qualifying Encounters\n' +
+                'Numerator\tID: Numerator_1\n' +
+                'Description: No description provided Logic Definition: Qualifying Encounters')
 
             //Population Basis, Scoring, Type, Improvement Notation
             expect(bodyText).to.include('Population Basis\tEncounter\n' +
