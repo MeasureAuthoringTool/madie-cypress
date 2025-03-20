@@ -423,7 +423,7 @@ export class TestCasesPage {
             cy.get(this.importInProgress).should('be.visible')
 
             //wait until the import buttong appears on the page, again
-            Utilities.waitForElementVisible(this.importTestCasesBtn, 50000)
+            Utilities.waitForElementVisible(this.qdmImportTestCasesBtn, 50000)
 
             //list is returned
             cy.wait('@testCaseList').then(({ response }) => {
