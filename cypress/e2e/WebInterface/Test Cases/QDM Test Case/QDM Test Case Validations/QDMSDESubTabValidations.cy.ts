@@ -20,7 +20,6 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
     beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
 
-        //Create New Measure and Test case
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', false, qdmMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
@@ -31,9 +30,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
     afterEach('Log out and Clean up', () => {
 
         OktaLogin.Logout()
-
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('SDE sub tab is visible on Edit Test case Highlighting page when SDE is included', () => {
@@ -128,7 +125,7 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         Utilities.waitForElementVisible('[data-testid="cql-highlighting"] > :nth-child(1)', 35000)
         cy.get('[data-testid="cql-highlighting"] > :nth-child(1)').should('contain.text', 'define "SDE Ethnicity":\n' +
             '  ["Patient Characteristic Ethnicity": "Ethnicity"]')
-        cy.get('[data-testid="cql-highlighting"] > :nth-child(2)').should('contain.text', '[PatientCharacteristicEthnicity\n' +
+        cy.get('[data-testid="cql-highlighting"] > :nth-child(2)').should('contain.text', 'Results[Patient Characteristic Ethnicity: Ethnicity\n' +
             'CODE: CDCREC 2186-5] ')
 
     })
@@ -289,5 +286,78 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '5%')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', 'Coverage')
 
+    })
+
+    it('Test case Demographics fields load data dynamically from declared valuesets in CQL', () => {
+
+        MeasuresPage.actionCenter('edit')
+
+        //Save CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Add Supplemental Data Elements
+        MeasureGroupPage.includeSdeData()
+
+        //Navigate to test case page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //navigate to the SDE side tab section on the test cases tab
+        Utilities.waitForElementVisible(TestCasesPage.qdmSDESidNavLink, 30000)
+        cy.get(TestCasesPage.qdmSDESidNavLink).click()
+
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).click()
+        cy.get(TestCasesPage.saveSDEOption).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
+
+        
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //enter specific values for dob, race, and gender
+        TestCasesPage.enterPatientDemographics('01/01/2001 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
+
+        // back to cql, edit for new valuesets & update definition
+        cy.get(EditMeasurePage.cqlEditorTab).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+
+        cy.wait(3500)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{command}a{backspace}')
+        
+        Utilities.typeFileContents('cypress/fixtures/QDMSDEMeasureAfterChanges.txt', EditMeasurePage.cqlEditorTextBox)
+        
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 12500)
+        
+        // back to test case, edit same one, update affected fields
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        TestCasesPage.enterPatientDemographics('', '', '', 'Male (finding)', 'Colombian')
+
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
     })
 })

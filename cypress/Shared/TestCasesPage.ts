@@ -799,9 +799,8 @@ export class TestCasesPage {
         if (race) {
             cy.get(TestCasesPage.QDMRace).click()
             cy.get('[data-value="' + race + '"]').click()
+            cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
         }
-
-        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
 
         if (gender) {
             cy.get(TestCasesPage.QDMGender).click()

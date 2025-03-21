@@ -2610,7 +2610,7 @@ export class MeasureCQL {
         '    GlucoseTest1000Time: Global."EarliestOf" ( GlucoseResult1000.relevantDatetime, GlucoseResult1000.relevantPeriod ),\n' +
         '    EarlierGlucoseTestTime: Global."EarliestOf" ( EarlierGlucoseTest.relevantDatetime, EarlierGlucoseTest.relevantPeriod )\n' +
         '    where GlucoseTest1000Time during Interval[( start of HospitalizationInterval - 1 hour ), ( start of HospitalizationInterval + 6 hour )]\n' +
-        '      and EarlierGlucoseTestTime during Interval[( start of HospitalizationInterval - 1 hour ), GlucoseTest1000Time )\n' +
+        '      and EarlierGlucoseTestTime during Interval[( start of HospitalizationInterval - 1 hour ), GlucoseTest1000Time]\n' +
         '      and EarlierGlucoseTest is not null\n' +
         '      and EarlierGlucoseTest.id !~ GlucoseResult1000.id\n' +
         '    return GlucoseResult1000\n' +
@@ -2683,7 +2683,7 @@ export class MeasureCQL {
         'valueset "Lab Tests During Pregnancy": \'urn:oid:2.16.840.1.113883.3.464.1003.111.12.1007\'\n' +
         'valueset "Lab Tests for Sexually Transmitted Infections": \'urn:oid:2.16.840.1.113883.3.464.1003.110.12.1051\'\n' +
         'valueset "Office Visit": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-        'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.12\'\n' +
+        'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.121\'\n' +
         'valueset "Pap Test": \'urn:oid:2.16.840.1.113883.3.464.1003.108.12.1017\'\n' +
         'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
         'valueset "Pregnancy Test": \'urn:oid:2.16.840.1.113883.3.464.1003.111.12.1011\'\n' +
