@@ -794,14 +794,16 @@ export class TestCasesPage {
         cy.get(TestCasesPage.QDMLivingStatus).click()
         cy.get(TestCasesPage.QDMLivingStatusOPtion).contains(livingStatus).click()
         cy.get(TestCasesPage.QDMRace).click()
+        Utilities.waitForElementVisible('[data-value="' + race + '"]', 100000)
         cy.get('[data-value="' + race + '"]').click()
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        // Utilities.waitForElementEnabled(TestCasesPage.runQDMTestCaseBtn, 7500)
+        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
 
         cy.get(TestCasesPage.QDMGender).click()
+        Utilities.waitForElementVisible(TestCasesPage.SelectionOptionChoice, 100000)
         cy.get(TestCasesPage.SelectionOptionChoice).contains(gender).click()
         cy.get(TestCasesPage.QDMEthnicity).click()
+        Utilities.waitForElementVisible('[data-value="' + ethnicity + '"]', 100000)
         cy.get('[data-value="' + ethnicity + '"]').click()
         cy.get(TestCasesPage.QDMDob).clear().click()
         cy.get(TestCasesPage.QDMDob).type(dob).click()
