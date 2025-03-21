@@ -801,15 +801,17 @@ export class TestCasesPage {
             cy.get('[data-value="' + race + '"]').click()
         }
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
 
         if (gender) {
             cy.get(TestCasesPage.QDMGender).click()
+            Utilities.waitForElementVisible(TestCasesPage.SelectionOptionChoice, 100000)
             cy.get(TestCasesPage.SelectionOptionChoice).contains(gender).click()
         }
 
         if (ethnicity) {
             cy.get(TestCasesPage.QDMEthnicity).click()
+            Utilities.waitForElementVisible('[data-value="' + ethnicity + '"]', 100000)
             cy.get('[data-value="' + ethnicity + '"]').click()
         }
 
