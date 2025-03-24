@@ -101,6 +101,8 @@ describe('QI-Core Measure Export', () => {
         cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000{enter}')
 
+        cy.get('#draggable-dialog-title').click()
+
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
