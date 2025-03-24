@@ -7,7 +7,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL";
+import { MeasureCQL } from "../../../../Shared/MeasureCQL";
 
 let measureName = 'CohortPatientBoolean' + Date.now()
 let CqlLibraryName = 'CohortPatientBoolean' + Date.now()
@@ -17,7 +17,6 @@ let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 
-//MAT-8424
 describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
 
     before('Create Measure, Test Case and Login', () => {

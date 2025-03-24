@@ -69,7 +69,6 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    //MAT-8424
     it('End to End Proportion Episode Measure, Pass Result', () => {
 
         //Click on Edit Button
