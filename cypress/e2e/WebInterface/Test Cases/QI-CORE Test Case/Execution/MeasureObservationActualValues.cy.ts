@@ -108,6 +108,9 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')    
+        cy.wait('@callstacks', { timeout: 60000 })
+
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
@@ -182,6 +185,9 @@ describe('Non Boolean Measure Observation Actual values', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')    
+        cy.wait('@callstacks', { timeout: 60000 })
+
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
@@ -250,6 +256,9 @@ describe('Boolean Measure Observation Actual values', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')    
+        cy.wait('@callstacks', { timeout: 60000 })
+
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
@@ -317,6 +326,9 @@ describe('Boolean Measure Observation Actual values', () => {
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')    
+        cy.wait('@callstacks', { timeout: 60000 })
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
