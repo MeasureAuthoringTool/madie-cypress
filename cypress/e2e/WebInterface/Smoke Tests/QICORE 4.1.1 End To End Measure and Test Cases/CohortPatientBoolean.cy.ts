@@ -17,7 +17,6 @@ let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 
-//MAT-8424
 describe('Measure Creation and Testing: Cohort Patient Boolean', () => {
 
     before('Create Measure, Test Case and Login', () => {
