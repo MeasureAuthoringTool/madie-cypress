@@ -10,7 +10,7 @@ import { Header } from "../../../../Shared/Header"
 import { Global } from "../../../../Shared/Global"
 import {Environment} from "../../../../Shared/Environment"
 import { LandingPage } from "../../../../Shared/LandingPage"
-import {QdmCql} from "../../../../Shared/QDMMeasuresCQL";
+import {QdmCql} from "../../../../Shared/QDMMeasuresCQL"
 
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
@@ -296,7 +296,7 @@ describe('Export measure on the Edit Measure page', () => {
 })
 
 //Skipping until feature flag 'ShareMeasure' is removed
-describe('Share measure from the Edit Measure page', () => {
+describe.skip('Share measure from the Edit Measure page', () => {
 
     before(() => {
 
@@ -321,7 +321,7 @@ describe('Share measure from the Edit Measure page', () => {
         Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
     })
 
-    it('Share QDM 5.6 measure', () => {
+    it('Verify Measure owner can share QDM 5.6 Measure from Edit Measure page Action centre share button and shred user is able to edit Measure', () => {
 
         OktaLogin.Login()
 
