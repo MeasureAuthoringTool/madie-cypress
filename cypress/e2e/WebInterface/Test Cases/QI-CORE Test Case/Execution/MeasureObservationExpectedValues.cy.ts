@@ -17,7 +17,6 @@ let testCaseDescription = 'DENOMFail' + now
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 
-//MAT-8424
 describe('Measure Observation Expected values', () => {
 
     beforeEach('Create Measure, Test Case and login', () => {
@@ -46,7 +45,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).check()
+        cy.get(TestCasesPage.testCaseMSRPOPLExpected).click()
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).should('be.checked')
 
         //Validate measure observation expected values
@@ -108,9 +107,9 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseDENOMExpected).check()
+        cy.get(TestCasesPage.testCaseDENOMExpected).click()
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.checked')
-        cy.get(TestCasesPage.testCaseNUMERExpected).check()
+        cy.get(TestCasesPage.testCaseNUMERExpected).click()
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.checked')
 
         //Validate measure observation expected values
@@ -151,7 +150,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).check()
+        cy.get(TestCasesPage.testCaseMSRPOPLExpected).click()
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).should('be.checked')
 
         //Enter value in to Measure observation Expected values
