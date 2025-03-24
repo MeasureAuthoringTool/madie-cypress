@@ -128,7 +128,7 @@ export class MeasureGroupPage {
     public static readonly measureGroupTypeDropdownBtn = '[class="MuiBackdrop-root MuiBackdrop-invisible css-esi9ax"]'
 
     //Scoring drop-down box
-    public static readonly measureScoringSelect = '[data-testid="scoring-select"]'
+    public static readonly measureScoringSelect = '#scoring-select'//'[id="scoring-select"]'
     public static readonly measureScoringCohort = '[data-testid="group-scoring-option-COHORT"]'
     public static readonly measureScoringProportion = '[data-testid="group-scoring-option-PROPORTION"]'
     public static readonly measureScoringRatio = '[data-testid="group-scoring-option-RATIO"]'
@@ -832,5 +832,21 @@ export class MeasureGroupPage {
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).type(type).type('{downArrow}').type('{enter}')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+    }
+
+    public static includeSdeData(): void {
+
+        //Add Supplemental Data Elements
+        cy.get(this.leftPanelSupplementalDataTab).click()
+        cy.get(this.supplementalDataDefinitionSelect).click()
+        cy.get(this.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
+        cy.get(this.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
+        cy.get(this.supplementalDataDefinitionDropdown).contains('SDE Race').click()
+        cy.get(this.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
+
+        //Save Supplemental data
+        cy.get(this.saveSupplementalDataElements).click({ force: true })
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+
     }
 }
