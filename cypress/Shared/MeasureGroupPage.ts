@@ -128,7 +128,7 @@ export class MeasureGroupPage {
     public static readonly measureGroupTypeDropdownBtn = '[class="MuiBackdrop-root MuiBackdrop-invisible css-esi9ax"]'
 
     //Scoring drop-down box
-    public static readonly measureScoringSelect = '[data-testid="scoring-select"]'
+    public static readonly measureScoringSelect = '#scoring-select'//'[id="scoring-select"]'
     public static readonly measureScoringCohort = '[data-testid="group-scoring-option-COHORT"]'
     public static readonly measureScoringProportion = '[data-testid="group-scoring-option-PROPORTION"]'
     public static readonly measureScoringRatio = '[data-testid="group-scoring-option-RATIO"]'
