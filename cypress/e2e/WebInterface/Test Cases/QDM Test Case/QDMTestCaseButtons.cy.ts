@@ -51,8 +51,8 @@ describe('Test case list page - Action Center icons for measure owner', () => {
         //navigate to the criteria section of the PC
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 9500)
 
@@ -156,8 +156,8 @@ describe('Test case list page - Action Center icons for versioned measure', () =
         //navigate to the criteria section of the PC
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 9500)
 
@@ -238,8 +238,8 @@ describe('Test case list page - Action Center icons for non-owner', () => {
         //navigate to the criteria section of the PC
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorSelect, 'Denominator')
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Numerator')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, "Denominator")
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, "Numerator")
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 9500)
         OktaLogin.UILogout()

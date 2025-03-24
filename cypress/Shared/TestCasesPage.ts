@@ -423,7 +423,7 @@ export class TestCasesPage {
             cy.get(this.importInProgress).should('be.visible')
 
             //wait until the import buttong appears on the page, again
-            Utilities.waitForElementVisible(this.importTestCasesBtn, 50000)
+            Utilities.waitForElementVisible(this.qdmImportTestCasesBtn, 50000)
 
             //list is returned
             cy.wait('@testCaseList').then(({ response }) => {
@@ -790,21 +790,35 @@ export class TestCasesPage {
 
     public static enterPatientDemographics(dob?: dateTimeISO, livingStatus?: string, race?: string, gender?: string, ethnicity?: string): void {
 
-        Utilities.waitForElementVisible(TestCasesPage.QDMLivingStatus, 50000)
-        cy.get(TestCasesPage.QDMLivingStatus).click()
-        cy.get(TestCasesPage.QDMLivingStatusOPtion).contains(livingStatus).click()
-        cy.get(TestCasesPage.QDMRace).click()
-        cy.get('[data-value="' + race + '"]').click()
+        if (livingStatus) {
+            Utilities.waitForElementVisible(TestCasesPage.QDMLivingStatus, 50000)
+            cy.get(TestCasesPage.QDMLivingStatus).click()
+            cy.get(TestCasesPage.QDMLivingStatusOPtion).contains(livingStatus).click()
+        }
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        // Utilities.waitForElementEnabled(TestCasesPage.runQDMTestCaseBtn, 7500)
+        if (race) {
+            cy.get(TestCasesPage.QDMRace).click()
+            cy.get('[data-value="' + race + '"]').click()
+        }
 
-        cy.get(TestCasesPage.QDMGender).click()
-        cy.get(TestCasesPage.SelectionOptionChoice).contains(gender).click()
-        cy.get(TestCasesPage.QDMEthnicity).click()
-        cy.get('[data-value="' + ethnicity + '"]').click()
-        cy.get(TestCasesPage.QDMDob).clear().click()
-        cy.get(TestCasesPage.QDMDob).type(dob).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
+
+        if (gender) {
+            cy.get(TestCasesPage.QDMGender).click()
+            Utilities.waitForElementVisible(TestCasesPage.SelectionOptionChoice, 100000)
+            cy.get(TestCasesPage.SelectionOptionChoice).contains(gender).click()
+        }
+
+        if (ethnicity) {
+            cy.get(TestCasesPage.QDMEthnicity).click()
+            Utilities.waitForElementVisible('[data-value="' + ethnicity + '"]', 100000)
+            cy.get('[data-value="' + ethnicity + '"]').click()
+        }
+
+        if (dob) {
+            cy.get(TestCasesPage.QDMDob).clear().click()
+            cy.get(TestCasesPage.QDMDob).type(dob).click()
+        }
     }
 
     // input the visible "Case #" value to have that test case's checkbox toggled from its current status
