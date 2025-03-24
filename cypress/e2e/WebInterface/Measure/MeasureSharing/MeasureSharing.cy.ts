@@ -112,12 +112,82 @@ describe('Measure Sharing', () => {
     })
 
     //Skipping until feature flag 'ShareMeasure' is removed
-    it.skip('Measure owner can share Measure from Action centre share button', () => {
+    it.skip('Verify Measure owner can share Measure from Action centre share button and shred user is able to edit Measure', () => {
 
-        //Login
+        //Login as Regular user and share Measure with ALT user
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('share')
+        cy.get(EditMeasurePage.shareOption).click({force: true})
+        cy.get(EditMeasurePage.harpIdInputTextBox).type(harpUserALT)
+        cy.get(EditMeasurePage.addBtn).click()
+
+        //Verify that the Harp id is added to the table
+        cy.get(EditMeasurePage.expandArrow).click()
+        cy.get(EditMeasurePage.sharedUserTable).should('contain.text', harpUserALT)
+
+        cy.get(EditMeasurePage.saveUserBtn).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully shared')
+
+        //Login as ALT User
+        OktaLogin.AltLogin()
+        cy.get(LandingPage.myMeasuresTab).click()
+        cy.reload()
+        cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
+
+        //Delete button disabled for shared owner
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        })
+        cy.get('[data-testid="delete-action-tooltip"]').should('not.be.enabled')
+
+        //Edit Measure details
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.measureNameTextBox).clear().type(updatedMeasureName)
+        cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type(updatedCqlLibraryName)
+        cy.get(EditMeasurePage.measurementInformationSaveButton).click()
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
+
+        //Edit Measure CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+
+        Utilities.typeFileContents('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.cqlEditorTextBox)
+
+        //save CQL on measure
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //Click on the measure group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.get(MeasureGroupPage.addMeasureGroupButton).click()
+        MeasureGroupPage.setMeasureGroupType()
+
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
+
+        //Create New Test case
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+
     })
 
     //Skipping until feature flag 'ShareMeasure' is removed
