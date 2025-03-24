@@ -8,6 +8,9 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../Shared/Header"
 import { Global } from "../../../../Shared/Global"
+import {Environment} from "../../../../Shared/Environment"
+import { LandingPage } from "../../../../Shared/LandingPage"
+import {QdmCql} from "../../../../Shared/QDMMeasuresCQL"
 
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
@@ -20,6 +23,8 @@ let measureQICore = ''
 let measureQDM = ''
 let qdmCQLLibrary = ''
 let qiCoreCQLLibrary = ''
+let harpUserALT = Environment.credentials().harpUserALT
+let qdmMeasureCQL = QdmCql.simpleQDM_CQL
 
 describe('Delete measure on the measure edit page', () => {
 
@@ -302,16 +307,12 @@ describe.skip('Share measure from the Edit Measure page', () => {
         const date = Date.now()
         measureQDM = 'QDMShareMeasure' + date
         qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 3 + randValue
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, qdmCQLLibrary, 'Proportion', false, qdmManifestTestCQL, null, false,
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, qdmCQLLibrary, 'Cohort', true, qdmManifestTestCQL, null, false,
             '2025-01-01', '2025-12-31')
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
-            'Numerator', '', 'Denominator')
 
         measureQICore = 'QICoreShareMeasure' + date
         qiCoreCQLLibrary = 'QiCoreTestLibrary' + Date.now() + randValue + 3 + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests, 1)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Initial Population', '', '',
-            'Initial Population', '', 'Initial Population', 'boolean')
     })
 
     after(() => {
@@ -320,20 +321,80 @@ describe.skip('Share measure from the Edit Measure page', () => {
         Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
     })
 
-    it('Share QDM 5.6 measure', () => {
+    it('Verify Measure owner can share QDM 5.6 Measure from Edit Measure page Action centre share button and shred user is able to edit Measure', () => {
 
         OktaLogin.Login()
 
-        MeasuresPage.actionCenter("edit")
+        MeasuresPage.actionCenter('edit')
 
         Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
 
         EditMeasurePage.actionCenter(EditMeasureActions.share)
+        cy.get(EditMeasurePage.shareOption).click({force: true})
+        cy.get(EditMeasurePage.harpIdInputTextBox).type(harpUserALT)
+        cy.get(EditMeasurePage.addBtn).click()
+
+        //Verify that the Harp id is added to the table
+        cy.get(EditMeasurePage.expandArrow).click()
+        cy.get(EditMeasurePage.sharedUserTable).should('contain.text', harpUserALT)
+
+        cy.get(EditMeasurePage.saveUserBtn).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully shared')
+
+        //Login as ALT User
+        OktaLogin.AltLogin()
+        cy.get(LandingPage.myMeasuresTab).click()
+        cy.get(MeasuresPage.measureListTitles).should('contain', measureQDM)
+
+        //Delete button disabled for shared owner
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        })
+        cy.get('[data-testid="delete-action-btn"]').should('be.disabled')
+
+        //Edit Measure details
+        MeasuresPage.actionCenter('edit')
+
+        cy.get(EditMeasurePage.measureNameTextBox).clear().type('Updated' + measureQDM)
+        cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type('Updated' + qdmCQLLibrary)
+        cy.get(EditMeasurePage.measurementInformationSaveButton).click()
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
+
+        //Edit Measure CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(qdmMeasureCQL)
+
+        //save CQL on measure
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(2000)
+
+        //Click on the measure group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //navigate to the criteria section of the PC
+        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
+
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+
+        //save population definition with scoring unit
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        //validation successful save message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
     })
 
-    it('Share QiCore 4.1.1 measure', () => {
+    it('Verify Measure owner can share Qi Core Measure from Edit Measure page Action centre share button and shred user is able to edit Measure', () => {
 
+        //Login as Regular user and share Measure with ALT user
         OktaLogin.Login()
 
         MeasuresPage.actionCenter("edit", 1)
@@ -341,6 +402,71 @@ describe.skip('Share measure from the Edit Measure page', () => {
         Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
 
         EditMeasurePage.actionCenter(EditMeasureActions.share)
+        cy.get(EditMeasurePage.shareOption).click({force: true})
+        cy.get(EditMeasurePage.harpIdInputTextBox).type(harpUserALT)
+        cy.get(EditMeasurePage.addBtn).click()
+
+        //Verify that the Harp id is added to the table
+        cy.get(EditMeasurePage.expandArrow).click()
+        cy.get(EditMeasurePage.sharedUserTable).should('contain.text', harpUserALT)
+
+        cy.get(EditMeasurePage.saveUserBtn).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'The measure(s) were successfully shared')
+
+        //Login as ALT User
+        OktaLogin.AltLogin()
+        cy.get(LandingPage.myMeasuresTab).click()
+        cy.get(MeasuresPage.measureListTitles).should('contain', measureQICore)
+
+        //Delete button disabled for shared owner
+        cy.readFile('cypress/fixtures/measureId' + '1').should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        })
+        cy.get('[data-testid="delete-action-btn"]').should('be.disabled')
+
+        //Edit Measure details
+        MeasuresPage.actionCenter('edit', 1)
+
+        cy.get(EditMeasurePage.measureNameTextBox).clear().type('Updated' + measureQICore)
+        cy.get(EditMeasurePage.cqlLibraryNameTextBox).clear().type('Updated' + qiCoreCQLLibrary)
+        cy.get(EditMeasurePage.measurementInformationSaveButton).click()
+        cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('contain.text', 'Measurement Information Updated Successfully')
+
+        //Edit Measure CQL
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
+
+        Utilities.typeFileContents('cypress/fixtures/CQLForTestCaseExecution.txt', EditMeasurePage.cqlEditorTextBox)
+
+        //save CQL on measure
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //Click on the measure group tab
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        MeasureGroupPage.setMeasureGroupType()
+
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
+        cy.get(MeasureGroupPage.reportingTab).click()
+
+        Utilities.waitForElementVisible(MeasureGroupPage.improvementNotationSelect, 5000)
+
+        Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
+
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
 
     })
 })

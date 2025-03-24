@@ -28,7 +28,7 @@ export class EditMeasurePage {
     public static readonly editMeasureDraftActionBtn = '[data-testid="DraftMeasure"]'
     public static readonly editMeasureExportActionBtn = '[data-testid="ExportMeasure"]'
     public static readonly viewHRActionBtn = '[data-testid="Viewhumanreadable"]'
-    public static readonly shareMeasureActionBtn = '[data-testid="ShareMeasure"]'
+    public static readonly shareMeasureActionBtn = '[data-testid="Share/Unshare"]'
     public static readonly editPageVersionDraftMsg = '[data-testid="edit-measure-information-success-text"]'
     public static readonly humanReadablePopup = '#draggable-dialog-title'
 
@@ -103,6 +103,16 @@ export class EditMeasurePage {
     public static readonly definitionMetaTable = '[id="measure-meta-data-table"]'
     public static readonly definitionMetaTableBody = '[data-testid="measure-definitions-table-body"]'
     public static readonly emptyDefinitionVal = '[data-testid="empty-definitions"]'
+
+    //Share/Un share Measure
+    public static readonly shareOption = '[data-testid="Share With-option"]'
+    public static readonly unshareOption = '[data-testid="Unshare-option"]'
+    public static readonly harpIdInputTextBox = '[data-testid="harp-id-input"]'
+    public static readonly addBtn = '[id="add-user-btn"]'
+    public static readonly expandArrow= '[data-testid="KeyboardArrowRightIcon"]'
+    public static readonly sharedUserTable = '[data-testid="row-item"]'
+    public static readonly saveUserBtn = '[data-testid="share-save-button"]'
+    public static readonly successMsg = '[class="toast success"]'
 
     //Transmission Format page
     public static readonly transmissionFormatDescription = '[data-testid="measure-transmission-format"]'
