@@ -101,7 +101,7 @@ export class CreateMeasurePage {
         cy.get(LandingPage.newMeasureButton).wait(2000).click()
         cy.get(this.measureNameTextbox).type(measureName)
         cy.get(this.measureModelDropdown).click()
-        cy.get('[id="mui-6"]').contains(model).click()
+        cy.get('[class="MuiList-root MuiList-padding MuiMenu-list css-1c1ttle"]').contains(model).click()
         cy.get(this.eCQMAbbreviatedTitleTextbox).type('eCQMTitle01')
         cy.get(this.cqlLibraryNameTextbox).type(CqlLibraryName)
 
