@@ -8,6 +8,8 @@ import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from "../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { Utilities } from "../../../Shared/Utilities"
+import {LandingPage} from "../../../Shared/LandingPage";
+import { Header } from "../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -30,13 +32,6 @@ describe('QDM Measure Versioning', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true, QDMMeasureCQL)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
@@ -50,6 +45,15 @@ describe('QDM Measure Versioning', () => {
     })
 
     it('Add Major Version to the QDM Measure and verify that the versioned Measure is in read only', () => {
+
+        MeasuresPage.actionCenter("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(2000)
+
+        //Navigate to Measures page
+        cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('version')
 
@@ -104,13 +108,6 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', false, qdmCMSMeasureCQL)
-        OktaLogin.Login()
-        MeasuresPage.actionCenter("edit")
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Qualifying Encounters')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
@@ -123,6 +120,15 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
     })
 
     it('Add Major Version to the QDM Measure and verify that the versioned Measure is in read only', () => {
+
+        MeasuresPage.actionCenter("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(2000)
+
+        //Navigate to Measures page
+        cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('version')
 
