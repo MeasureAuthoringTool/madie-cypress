@@ -44,7 +44,7 @@ const measureCQL = 'library NonPatientBasedRatioMeasureWithMultipleGroupsandStra
     '  ["Patient Characteristic Race": "Race"]\n' +
     '\n' +
     'define "SDE Sex":\n' +
-    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+    '    ["Patient Characteristic Sex": "CMS Sex"]\n' +
     '\n' +
     'define "Initial Population":\n' +
     '  "Qualifying Encounters"\n' +
@@ -197,7 +197,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living')
+        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
 
         //Adding Element data to the test case
 
