@@ -28,6 +28,7 @@ const measureCQL = 'library NonPatientBasedRatioMeasureWithMultipleGroupsandStra
     'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\' \n' +
     'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
     'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\' \n' +
+    'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.121\'\n' +
     '\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
     '\n' +
@@ -187,13 +188,16 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
 
+        //Add Supplemental Data Elements
+        MeasureGroupPage.includeSdeData()
+
         //Add Elements to first Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('07/31/2003 12:00 AM', 'Living')
 
         //Adding Element data to the test case
 

@@ -715,6 +715,7 @@ export class MeasureCQL {
         'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\' \n' +
         'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
         'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\' \n' +
+        'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.121\'\n' +
         '\n' +
         'parameter "Measurement Period" Interval<DateTime>\n' +
         '\n' +
