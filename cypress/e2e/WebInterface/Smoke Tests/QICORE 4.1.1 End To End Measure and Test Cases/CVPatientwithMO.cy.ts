@@ -7,7 +7,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import {MeasureCQL} from "../../../../Shared/MeasureCQL"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 
 let measureName = 'CVPatientWithMO' + Date.now()
 let CqlLibraryName = 'CVPatientWithMO' + Date.now()
@@ -43,7 +43,7 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(2000)
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()

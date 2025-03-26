@@ -99,7 +99,7 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{upArrow}{upArrow}{end}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(2000)
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()

@@ -177,7 +177,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible').wait(2000)
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -188,6 +188,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).type('This is a description.')
 
         //Save Supplemental data
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
@@ -394,7 +395,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '50%')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', 'Passing')
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(1/2)')
-
     })
 
     it('Run / Execute single failing Test Cases', () => {
