@@ -76,9 +76,11 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         MeasuresPage.actionCenter("edit")
 
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -111,6 +113,9 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
