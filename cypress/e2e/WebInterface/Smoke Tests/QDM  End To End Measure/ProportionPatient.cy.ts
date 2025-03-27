@@ -33,7 +33,6 @@ const measureCQL = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
     'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\' \n' +
     'valueset "History of bilateral mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1068\' \n' +
     'valueset "Mammography": \'urn:oid:2.16.840.1.113883.3.464.1003.108.12.1018\' \n' +
-    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\' \n' +
     '\n' +
     'valueset "Outpatient": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1087\' \n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
@@ -44,6 +43,7 @@ const measureCQL = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
     'valueset "Unilateral Mastectomy Right": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1134\' \n' +
     'valueset "Unilateral Mastectomy, Unspecified Laterality": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1071\' \n' +
     'valueset "Chemistry Tests": \'urn:oid:2.16.840.1.113762.1.4.1147.82\' \n' +
+    'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.121\'\n' +
     '\n' +
     'code "Female": \'F\' from "AdministrativeGender" display \'Female\'\n' +
     'code "Left (qualifier value)": \'7771000\' from "SNOMEDCT" display \'Left (qualifier value)\'\n' +
@@ -63,7 +63,7 @@ const measureCQL = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
     '  ["Patient Characteristic Race": "Race"]\n' +
     '\n' +
     'define "SDE Sex":\n' +
-    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+    '    ["Patient Characteristic Sex": "CMS Sex"]\n' +
     '\n' +
     'define "Bilateral Mastectomy Diagnosis":\n' +
     '  ["Diagnosis": "History of bilateral mastectomy"] BilateralMastectomyHistory\n' +
@@ -205,6 +205,9 @@ describe('Measure Creation: Proportion Patient Based', () => {
 
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
+
+        //Add Supplemental Data Elements
+        MeasureGroupPage.includeSdeData()
 
         //Add Elements to the Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
