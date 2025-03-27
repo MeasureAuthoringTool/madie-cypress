@@ -63,7 +63,7 @@ const measureCQL = 'library Cataracts2040BCVAwithin90Days version \'12.0.000\'\n
     'valueset "Moderate or Severe Impairment, Better Eye, Profound Impairment Lesser Eye": \'urn:oid:2.16.840.1.113883.3.526.3.1464\' \n' +
     'valueset "Morgagnian Cataract": \'urn:oid:2.16.840.1.113883.3.526.3.1558\' \n' +
     'valueset "Nystagmus and Other Irregular Eye Movements": \'urn:oid:2.16.840.1.113883.3.526.3.1465\' \n' +
-    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\' \n' +
+    'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.121\'\n' +
     'valueset "Open Wound of Eyeball": \'urn:oid:2.16.840.1.113883.3.526.3.1430\' \n' +
     'valueset "Optic Atrophy": \'urn:oid:2.16.840.1.113883.3.526.3.1466\' \n' +
     'valueset "Optic Neuritis": \'urn:oid:2.16.840.1.113883.3.526.3.1467\' \n' +
@@ -109,7 +109,7 @@ const measureCQL = 'library Cataracts2040BCVAwithin90Days version \'12.0.000\'\n
     '  ["Patient Characteristic Race": "Race"]\n' +
     '\n' +
     'define "SDE Sex":\n' +
-    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+    '  ["Patient Characteristic Sex": "CMS Sex"]\n' +
     '\n' +
     'define "Denominator":\n' +
     '  "Initial Population"\n' +
@@ -264,6 +264,9 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
 
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
+
+        //Add Supplemental Data Elements
+        MeasureGroupPage.includeSdeData()
 
         //Add Elements to the Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

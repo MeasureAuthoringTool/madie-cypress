@@ -45,7 +45,7 @@ const measureCQL = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
     'valueset "Chemistry Tests": \'urn:oid:2.16.840.1.113762.1.4.1147.82\' \n' +
     'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.121\'\n' +
     '\n' +
-    'code "Female": \'F\' from "AdministrativeGender" display \'Female\'\n' +
+    'code "Female (finding)": \'248152002\' from "SNOMEDCT" display \'Female (finding)\'\n' +
     'code "Left (qualifier value)": \'7771000\' from "SNOMEDCT" display \'Left (qualifier value)\'\n' +
     'code "Right (qualifier value)": \'24028007\' from "SNOMEDCT" display \'Right (qualifier value)\'\n' +
     '\n' +
@@ -120,7 +120,7 @@ const measureCQL = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
     '    end of "Measurement Period"\n' +
     '\n' +
     'define "Initial Population":\n' +
-    '  exists ( ["Patient Characteristic Sex": "Female"] )\n' +
+    '  exists ( ["Patient Characteristic Sex": "Female (finding)"] )\n' +
     '    and AgeInYearsAt(date from \n' +
     '      end of "Measurement Period"\n' +
     '    )in Interval[52, 74]\n' +
