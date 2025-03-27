@@ -336,7 +336,7 @@ export class TestCasesPage {
     public static readonly actionCenterDelete = '[data-testid="delete-action-btn"]'
     public static readonly actionCenterClone = '[data-testid="clone-action-btn"]'
     public static readonly actionCenterCopyToMeasure = '[data-testid="copy-action-btn"]'
-    public static readonly actionCenterExport = '[data-testid="export-action-btn"]'
+    public static readonly actionCenterExport = 'form [data-testid="export-action-btn"]'
     public static readonly actionCenterShiftDates = '[data-testid="shift-test-case-dates-action-btn"]'
 
     // copy to modal
