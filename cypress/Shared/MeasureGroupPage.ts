@@ -216,7 +216,7 @@ export class MeasureGroupPage {
     public static readonly qdmScoringCV = '[data-testid="scoring-option-CONTINUOUS_VARIABLE"]'
     public static readonly qdmScoringProportion = '[data-testid="scoring-option-PROPORTION"]'
     public static readonly qdmType = '[id="base-configuration-types"]'
-    public static readonly qdmPatientBasis = '[class="PrivateSwitchBase-input css-1m9pwf3"]'
+    public static readonly qdmPatientBasis = 'input[type="radio"]'
     public static readonly qdmSDERadioButtons = '[data-testid="sde-option-radio-buttons-group"]'
     public static readonly qdmTypeOptionZero = '[id="base-configuration-types-option-0"]'
     public static readonly qdmTypeValuePill = '[class="MuiChip-label MuiChip-labelSmall css-1pjtbja"]'

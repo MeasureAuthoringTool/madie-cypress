@@ -117,6 +117,18 @@ describe('QDM Test Case Excel Export', () => {
         cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
 
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        // include sde in coverage
+        //navigate to the SDE side tab section on the test cases tab
+        Utilities.waitForElementVisible(TestCasesPage.qdmSDESidNavLink, 30000)
+        cy.get(TestCasesPage.qdmSDESidNavLink).click()
+
+        cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).click()
+        cy.get(TestCasesPage.saveSDEOption).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
+
         //Add Elements to the Test case
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -128,7 +140,6 @@ describe('QDM Test Case Excel Export', () => {
         //Save Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
-
 
         //Element - Encounter:Performed: Encounter Inpatient
         QDMElements.addElement('encounter', 'Performed: Encounter Inpatient')
@@ -272,6 +283,11 @@ describe('QDM Test Case Excel Export', () => {
             expect(rows[0]['__EMPTY_8']).to.equal('sex')
             expect(rows[1]['__EMPTY_1']).to.equal('SBTestSeries')
             expect(rows[2]['Actual']).to.equal(3)
+
+            // dynamic SDE - https://jira.cms.gov/browse/MAT-8336
+            expect(rows[1]['__EMPTY_11']).to.equal('[Patient Characteristic Ethnicity: Ethnicity\nCODE: CDCREC 2186-5]')
+            expect(rows[1]['__EMPTY_13']).to.equal('[Patient Characteristic Race: Race\nCODE: CDCREC 2106-3]')
+            expect(rows[1]['__EMPTY_15']).to.equal('[Patient Characteristic Sex: ONCAdministrativeSex\nCODE: AdministrativeGender M]')
         });
     })
 })
