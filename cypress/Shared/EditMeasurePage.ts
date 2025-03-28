@@ -1,4 +1,4 @@
-import { MeasuresPage } from "./MeasuresPage"
+import { MeasureActionOptions, MeasuresPage } from "./MeasuresPage"
 import { Utilities } from "./Utilities"
 import { TestCasesPage } from "./TestCasesPage"
 
@@ -27,6 +27,8 @@ export class EditMeasurePage {
     public static readonly editMeasureVersionActionBtn = '[data-testid="VersionMeasure"]'
     public static readonly editMeasureDraftActionBtn = '[data-testid="DraftMeasure"]'
     public static readonly editMeasureExportActionBtn = '[data-testid="ExportMeasure"]'
+    public static readonly editMeasureExportStandard = '[data-testid="export-option"]'
+    public static readonly editMeasureExportForPublish = '[data-testid=""export-publishing-option""]'
     public static readonly viewHRActionBtn = '[data-testid="Viewhumanreadable"]'
     public static readonly shareMeasureActionBtn = '[data-testid="Share/Unshare"]'
     public static readonly editPageVersionDraftMsg = '[data-testid="edit-measure-information-success-text"]'
@@ -187,7 +189,7 @@ export class EditMeasurePage {
     public static readonly measureClinicalRecommendationSaveButton = '[data-testid="measureClinical Recommendation StatementSave"]'
     public static readonly measureClinicalRecommendationSuccessMessage = '[data-testid="measureClinical Recommendation StatementSuccess"]'
 
-    public static actionCenter(action: EditMeasureActions): void {
+    public static actionCenter(action: EditMeasureActions, options?: MeasureActionOptions): void {
 
         cy.get(this.editMeasureButtonActionBtn).click()
 
@@ -195,9 +197,18 @@ export class EditMeasurePage {
 
             case EditMeasureActions.export: {
 
+                const exportWithInfo = options?.exportWithInfo
+
                 cy.get(this.editMeasureExportActionBtn).should('be.visible')
                 cy.get(this.editMeasureExportActionBtn).should('be.enabled')
                 cy.get(this.editMeasureExportActionBtn).click()
+
+                if (exportWithInfo) {
+                    cy.get(this.editMeasureExportStandard).click()
+                }
+                else {
+                    cy.get(this.editMeasureExportForPublish).click()
+                }
 
                 cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
                 cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')
