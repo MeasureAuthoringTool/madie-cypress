@@ -496,7 +496,7 @@ describe('Qi-Core Code Search - Measure ownership Validations', () => {
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
         //Navigate to Saved Functions tab
-        cy.get(CQLEditorPage.codesTab).click()
+        cy.get(CQLEditorPage.codesTab).click().wait(2000)
         cy.get(CQLEditorPage.savedCodesTab).click()
 
         //Edit button should not be visible
