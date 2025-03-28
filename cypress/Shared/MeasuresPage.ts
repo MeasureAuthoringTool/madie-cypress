@@ -1,6 +1,12 @@
 import { Utilities } from "./Utilities"
 import { TestCasesPage } from "./TestCasesPage"
 
+export type MeasureActionOptions = {
+    exportWithInfo: boolean,
+    versionType: string,
+    updateModelVersion: boolean
+}
+
 export class MeasuresPage {
 
     public static readonly measureListTitles = '[data-testid="measure-list-tbl"]'
@@ -55,7 +61,7 @@ export class MeasuresPage {
         })
     }
 
-    public static actionCenter(action: string, measureNumber?: number): void {
+    public static actionCenter(action: string, measureNumber?: number, options?: MeasureActionOptions): void {
 
         //There is a prerequsite that you have a measure created and measure ID stored to a file
 
@@ -99,9 +105,18 @@ export class MeasuresPage {
 
             case 'export': {
 
+                const exportWithInfo = options?.exportWithInfo
+
                 cy.get('[data-testid="export-action-btn"]').should('be.visible')
                 cy.get('[data-testid="export-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="export-action-btn"]').click()
+
+                if (exportWithInfo) {
+                    cy.get('[data-testid="export-option"]').click()
+                }
+                else {
+                    cy.get('[data-testid="export-publishing-option]').click()
+                }
 
                 cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
                 cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')
