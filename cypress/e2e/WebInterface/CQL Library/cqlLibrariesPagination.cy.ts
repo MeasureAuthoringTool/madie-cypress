@@ -1,10 +1,7 @@
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { Utilities } from "../../../Shared/Utilities"
 import { Header } from "../../../Shared/Header"
-import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
-import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { MeasuresPage } from "../../../Shared/MeasuresPage";
 
 let apiCQLLibraryName = ''
@@ -16,7 +13,9 @@ describe('Validate QDM CQL on CQL Library page', () => {
 
         apiCQLLibraryName = 'QdmValidationsLib' + Date.now()
 
-        CQLLibraryPage.createQDMCQLLibraryAPI(apiCQLLibraryName, CQLLibraryPublisher)
+        for (var x = 1; x <= 12; x++) {
+            CQLLibraryPage.createQDMCQLLibraryAPI(apiCQLLibraryName + x, CQLLibraryPublisher + x)
+        }
         OktaLogin.Login()
     })
 
@@ -59,8 +58,9 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
     beforeEach('Create CQL library', () => {
 
         apiCQLLibraryName = 'CqlValidationsLib' + Date.now()
-
-        CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName, CQLLibraryPublisher)
+        for (var x = 1; x <= 12; x++) {
+            CQLLibraryPage.createCQLLibraryAPI(apiCQLLibraryName + x, CQLLibraryPublisher + x)
+        }
         OktaLogin.Login()
     })
 
