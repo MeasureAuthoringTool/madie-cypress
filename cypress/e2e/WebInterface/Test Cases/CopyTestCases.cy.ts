@@ -1,12 +1,12 @@
-import {CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
-import {MeasureGroupPage} from "../../../Shared/MeasureGroupPage"
-import {TestCasesPage} from "../../../Shared/TestCasesPage"
-import {OktaLogin} from "../../../Shared/OktaLogin"
-import {Utilities} from "../../../Shared/Utilities"
-import {MeasuresPage} from "../../../Shared/MeasuresPage"
-import {EditMeasurePage} from "../../../Shared/EditMeasurePage"
-import {MeasureCQL} from "../../../Shared/MeasureCQL"
-import {TestCaseJson} from "../../../Shared/TestCaseJson";
+import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
+import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { Utilities } from "../../../Shared/Utilities"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import { MeasureCQL } from "../../../Shared/MeasureCQL"
+import { TestCaseJson } from "../../../Shared/TestCaseJson";
 
 let testCaseDescription = 'DENOMFail' + Date.now()
 let measureName = 'QDMTestMeasure' + Date.now()
@@ -22,8 +22,7 @@ let secondMeasureName = 'SecondMeasure' + Date.now()
 let secondLibraryName = 'SecondLibrary' + Date.now()
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 
-//Skipping until Feature flag 'CopyTestCases' is removed
-describe.skip('Copy QDM Test Cases', () => {
+describe('Copy QDM Test Cases', () => {
 
     before('Create measure and login', () => {
 
@@ -76,8 +75,7 @@ describe.skip('Copy QDM Test Cases', () => {
     })
 })
 
-//Skipping until Feature flag 'CopyTestCases' is removed
-describe.skip('Copy Qi Core Test Cases', () => {
+describe('Copy Qi Core Test Cases', () => {
 
     before('Create measure and login', () => {
 
