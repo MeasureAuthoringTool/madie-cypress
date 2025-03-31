@@ -48,6 +48,14 @@ describe('Quantity Attribute -- Adding multiple attributes', () => {
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
 
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Add Supplemental Data Elements
+        MeasureGroupPage.includeSdeData()
+
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()

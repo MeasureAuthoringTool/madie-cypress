@@ -53,6 +53,7 @@ let measureCQL = 'library Library5749 version \'0.0.000\'\n' +
     'valueset "Thrombolytic medications": \'urn:oid:2.16.840.1.113762.1.4.1170.4\'\n' +
     'valueset "Chlamydia Screening": \'urn:oid:2.16.840.1.113883.3.464.1003.110.12.1052\'\n' +
     'valueset "Falls Screening": \'urn:oid:2.16.840.1.113883.3.464.1003.118.12.1028\'\n' +
+    'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.121\'\n' +
     'code "Birth date": \'21112-8\' from "LOINC" display \'Birth date\'\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
     'context Patient\n' +
@@ -63,7 +64,7 @@ let measureCQL = 'library Library5749 version \'0.0.000\'\n' +
     'define "SDE Race":\n' +
     '  ["Patient Characteristic Race": "Race"]\n' +
     'define "SDE Sex":\n' +
-    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n' +
+    '    ["Patient Characteristic Sex": "CMS Sex"]\n' +
     'define "Initial Population":\n' +
     '  ["Adverse Event": "Encounter Inpatient"] //Adverse Event\n' +
     '      union ["Allergy/Intolerance": "Observation Services"] //Allergy\n' +
@@ -126,6 +127,14 @@ describe('Quantity Attribute', () => {
 
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Add Supplemental Data Elements
+        MeasureGroupPage.includeSdeData()
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
