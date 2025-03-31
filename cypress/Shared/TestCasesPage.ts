@@ -798,6 +798,7 @@ export class TestCasesPage {
 
         if (race) {
             cy.get(TestCasesPage.QDMRace).click()
+            Utilities.waitForElementVisible('[data-value="' + race + '"]', 100000)
             cy.get('[data-value="' + race + '"]').click()
             cy.get(TestCasesPage.editTestCaseSaveButton).click().wait(2000)
         }
