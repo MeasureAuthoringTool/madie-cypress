@@ -420,11 +420,13 @@ export class CreateMeasurePage {
                 if (measureNumber > 0) {
                     cy.writeFile('cypress/fixtures/measureId' + measureNumber, response.body.id)
                     cy.writeFile('cypress/fixtures/measureSetId' + measureNumber, response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/versionId' + response.body.versionId, response.body.versionId)
 
                 }
                 else {
                     cy.writeFile('cypress/fixtures/measureId', response.body.id)
                     cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
+                    cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
                 }
 
             })
