@@ -5,8 +5,8 @@ import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../Shared/Header"
 import {CQLEditorPage} from "../../../Shared/CQLEditorPage";
 
-const now = Date.now()
-const libraryName = 'TestLibrary1' + now
+let randValue = (Math.floor((Math.random() * 1000) + 1))
+const libraryName = 'DeleteCQLLibraryTest' + randValue
 const publisher = 'Mayo Clinic'
 
 describe('Delete CQL Library - Library List Page', () => {
