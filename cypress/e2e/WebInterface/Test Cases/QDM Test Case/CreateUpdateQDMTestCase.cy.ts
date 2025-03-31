@@ -6,13 +6,15 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import {QdmCql} from "../../../../Shared/QDMMeasuresCQL";
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
+import {CQLLibraryPage} from "../../../../Shared/CQLLibraryPage";
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMTestLibrary' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCQLLibraryName = ''
-let measureCQL = MeasureCQL.simpleQDM_CQL
 let measureScoring = 'Cohort'
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
@@ -22,67 +24,44 @@ let testCaseSeriesWithSpecialChar = 'SBTestSeries!@#$%^&*()_+=-{}|[]'
 let updatedTestCaseTitle = testCaseTitle + ' ' + 'UpdatedTestCaseTitle'
 let updatedTestCaseDescription = testCaseDescription + ' ' + 'UpdatedTestCaseDescription'
 let updatedTestCaseSeries = 'ICFTestSeries'
-let measureCQLWithElements = 'library QDMTestLibrary1686087138930 version \'0.0.000\'\n' +
+let measureCQLWithElements = QdmCql.QDMTestCaseCQLFullElementSection
+const measureCQLPatient = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
+    '\n' +
     'using QDM version \'5.6\'\n' +
-    'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\'\n' +
-    'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\' \n' +
-    'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\' \n' +
-    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
-    'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\' \n' +
-    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\' \n' +
+    '\n' +
+    'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
+    'include AdultOutpatientEncountersQDM version \'1.0.000\' called AdultOutpatientEncounters\n' +
+    'include HospiceQDM version \'1.0.000\' called Hospice\n' +
+    'include PalliativeCareQDM version \'4.0.000\' called PalliativeCare\n' +
+    'include AdvancedIllnessandFrailtyQDM version \'1.0.000\' called AIFrailLTCF\n' +
+    '\n' +
+    'codesystem "AdministrativeGender": \'urn:oid:2.16.840.1.113883.5.1\' \n' +
+    'codesystem "SNOMEDCT": \'urn:oid:2.16.840.1.113883.6.96\' \n' +
+    '\n' +
+    'valueset "Bilateral Mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1005\' \n' +
+    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\' \n' +
+    'valueset "History of bilateral mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1068\' \n' +
+    'valueset "Mammography": \'urn:oid:2.16.840.1.113883.3.464.1003.108.12.1018\' \n' +
+    '\n' +
+    'valueset "Outpatient": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1087\' \n' +
     'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
-    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
-    'valueset "Active Bleeding or Bleeding Diathesis (Excluding Menses)": \'urn:oid:2.16.840.1.113883.3.3157.4036\' \n' +
-    'valueset "Active Peptic Ulcer": \'urn:oid:2.16.840.1.113883.3.3157.4031\' \n' +
-    'valueset "Adverse reaction to thrombolytics": \'urn:oid:2.16.840.1.113762.1.4.1170.6\' \n' +
-    'valueset "Allergy to thrombolytics": \'urn:oid:2.16.840.1.113762.1.4.1170.5\' \n' +
-    'valueset "Anticoagulant Medications, Oral": \'urn:oid:2.16.840.1.113883.3.3157.4045\' \n' +
-    'valueset "Aortic Dissection and Rupture": \'urn:oid:2.16.840.1.113883.3.3157.4028\' \n' +
-    'valueset "birth date": \'urn:oid:2.16.840.1.113883.3.560.100.4\' \n' +
-    'valueset "Cardiopulmonary Arrest": \'urn:oid:2.16.840.1.113883.3.3157.4048\' \n' +
-    'valueset "Cerebral Vascular Lesion": \'urn:oid:2.16.840.1.113883.3.3157.4025\' \n' +
-    'valueset "Closed Head and Facial Trauma": \'urn:oid:2.16.840.1.113883.3.3157.4026\' \n' +
-    'valueset "Dementia": \'urn:oid:2.16.840.1.113883.3.3157.4043\' \n' +
-    'valueset "Discharge To Acute Care Facility": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.87\' \n' +
-    'valueset "ED": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1085\' \n' +
-    'valueset "Endotracheal Intubation": \'urn:oid:2.16.840.1.113762.1.4.1045.69\' \n' +
-    'valueset "Fibrinolytic Therapy": \'urn:oid:2.16.840.1.113883.3.3157.4020\' \n' +
-    'valueset "Intracranial or Intraspinal surgery": \'urn:oid:2.16.840.1.113762.1.4.1170.2\' \n' +
-    'valueset "Ischemic Stroke": \'urn:oid:2.16.840.1.113883.3.464.1003.104.12.1024\' \n' +
-    'valueset "Major Surgical Procedure": \'urn:oid:2.16.840.1.113883.3.3157.4056\' \n' +
-    'valueset "Malignant Intracranial Neoplasm Group": \'urn:oid:2.16.840.1.113762.1.4.1170.3\' \n' +
-    'valueset "Mechanical Circulatory Assist Device": \'urn:oid:2.16.840.1.113883.3.3157.4052\' \n' +
-    'valueset "Neurologic impairment": \'urn:oid:2.16.840.1.113883.3.464.1003.114.12.1012\' \n' +
-    'code "Birth date": \'21112-8\' from "LOINC" display \'Birth date\'\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\' \n' +
+    'valueset "Status Post Left Mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1069\' \n' +
+    'valueset "Status Post Right Mastectomy": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1070\' \n' +
+    'valueset "Unilateral Mastectomy Left": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1133\' \n' +
+    'valueset "Unilateral Mastectomy Right": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1134\' \n' +
+    'valueset "Unilateral Mastectomy, Unspecified Laterality": \'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1071\' \n' +
+    'valueset "Chemistry Tests": \'urn:oid:2.16.840.1.113762.1.4.1147.82\' \n' +
+    'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.121\'\n' +
+    '\n' +
+    'code "Female (finding)": \'248152002\' from "SNOMEDCT" display \'Female (finding)\'\n' +
+    'code "Left (qualifier value)": \'7771000\' from "SNOMEDCT" display \'Left (qualifier value)\'\n' +
+    'code "Right (qualifier value)": \'24028007\' from "SNOMEDCT" display \'Right (qualifier value)\'\n' +
+    '\n' +
     'parameter "Measurement Period" Interval<DateTime>\n' +
+    '\n' +
     'context Patient\n' +
-    'define "Initial Population":\n' +
-    '  ["Adverse Event": "Encounter Inpatient"] //Adverse Event\n' +
-    '      union ["Allergy/Intolerance": "Observation Services"] //Allergy\n' +
-    '      union ["Assessment, Order": "Active Bleeding or Bleeding Diathesis (Excluding Menses)"] //Assessment\n' +
-    '      union ["Patient Care Experience": "Active Peptic Ulcer"] //Care Experience\n' +
-    '      union ["Care Goal": "Adverse reaction to thrombolytics"] //Care Goal - missing from current list\n' +
-    '      union ["Patient Characteristic Payer": "Payer"] //Characteristic\n' +
-    '      //threw in a patient demographic - should not show up\n' +
-    '      union ["Patient Characteristic Race": "Race"]\n' +
-    '      union ["Diagnosis": "Allergy to thrombolytics"] //Condition\n' +
-    '      union ["Communication, Performed": "Anticoagulant Medications, Oral"] //Communication\n' +
-    '      //threw a negation element in to see if it maps correctly\n' +
-    '    //   union ["Communication, Not Performed": "Aortic Dissection and Rupture"] //Communication\n' +
-    '      union ["Device, Order": "Cardiopulmonary Arrest"] //Device\n' +
-    '      union ["Diagnostic Study, Order": "Cerebral Vascular Lesion"] //Diagnostic Study\n' +
-    '      union ["Encounter, Performed": "Emergency Department Visit"] //Encounter\n' +
-    '      union ["Family History": "Closed Head and Facial Trauma"] //Family History\n' +
-    '      union ["Immunization, Order": "Dementia"] //Immunization\n' +
-    '      union ["Intervention, Order": "ED"] //Intervention\n' +
-    '      union ["Laboratory Test, Order": "Endotracheal Intubation"] //Laboratory\n' +
-    '      union ["Medication, Active": "Fibrinolytic Therapy"] //Medication\n' +
-    '      union ["Participation": "Intracranial or Intraspinal surgery"] //Participation\n' +
-    '      union ["Physical Exam, Order": "Ischemic Stroke"] //Physical Exam\n' +
-    '      union ["Procedure, Order": "Major Surgical Procedure"] //Procedure\n' +
-    '      union ["Related Person": "Malignant Intracranial Neoplasm Group"] //Related Person - mssing from curent list\n' +
-    '      union ["Substance, Administered": "Mechanical Circulatory Assist Device"] //Substance\n' +
-    '      union ["Symptom": "Neurologic impairment"] //Symptom\n' +
+    '\n' +
     'define "SDE Ethnicity":\n' +
     '  ["Patient Characteristic Ethnicity": "Ethnicity"]\n' +
     '\n' +
@@ -93,7 +72,79 @@ let measureCQLWithElements = 'library QDMTestLibrary1686087138930 version \'0.0.
     '  ["Patient Characteristic Race": "Race"]\n' +
     '\n' +
     'define "SDE Sex":\n' +
-    '  ["Patient Characteristic Sex": "ONC Administrative Sex"]\n'
+    '    ["Patient Characteristic Sex": "CMS Sex"]\n' +
+    '\n' +
+    'define "Bilateral Mastectomy Diagnosis":\n' +
+    '  ["Diagnosis": "History of bilateral mastectomy"] BilateralMastectomyHistory\n' +
+    '    where BilateralMastectomyHistory.prevalencePeriod starts on or before \n' +
+    '    end of "Measurement Period"\n' +
+    '\n' +
+    'define "Bilateral Mastectomy Procedure":\n' +
+    '  ["Procedure, Performed": "Bilateral Mastectomy"] BilateralMastectomyPerformed\n' +
+    '    where Global."NormalizeInterval" ( BilateralMastectomyPerformed.relevantDatetime, BilateralMastectomyPerformed.relevantPeriod ) ends on or before \n' +
+    '    end of "Measurement Period"\n' +
+    '\n' +
+    'define "Denominator":\n' +
+    '  "Initial Population"\n' +
+    '\n' +
+    'define "Denominator Exclusions":\n' +
+    '  Hospice."Has Hospice Services"\n' +
+    '    or ( ( exists ( "Right Mastectomy Diagnosis" )\n' +
+    '          or exists ( "Right Mastectomy Procedure" )\n' +
+    '      )\n' +
+    '        and ( exists ( "Left Mastectomy Diagnosis" )\n' +
+    '            or exists ( "Left Mastectomy Procedure" )\n' +
+    '        )\n' +
+    '    )\n' +
+    '    or exists "Bilateral Mastectomy Diagnosis"\n' +
+    '    or exists "Bilateral Mastectomy Procedure"\n' +
+    '    or AIFrailLTCF."Is Age 66 or Older with Advanced Illness and Frailty"\n' +
+    '    or AIFrailLTCF."Is Age 66 or Older Living Long Term in a Nursing Home"\n' +
+    '    or PalliativeCare."Has Palliative Care in the Measurement Period"\n' +
+    '\n' +
+    'define "Left Mastectomy Diagnosis":\n' +
+    '  ( ["Diagnosis": "Status Post Left Mastectomy"]\n' +
+    '    union ( ["Diagnosis": "Unilateral Mastectomy, Unspecified Laterality"] UnilateralMastectomyDiagnosis\n' +
+    '        where UnilateralMastectomyDiagnosis.anatomicalLocationSite ~ "Left (qualifier value)"\n' +
+    '    ) ) LeftMastectomy\n' +
+    '    where LeftMastectomy.prevalencePeriod starts on or before \n' +
+    '    end of "Measurement Period"\n' +
+    '\n' +
+    'define "Left Mastectomy Procedure":\n' +
+    '  ["Procedure, Performed": "Unilateral Mastectomy Left"] UnilateralMastectomyLeftPerformed\n' +
+    '    where Global."NormalizeInterval" ( UnilateralMastectomyLeftPerformed.relevantDatetime, UnilateralMastectomyLeftPerformed.relevantPeriod ) ends on or before \n' +
+    '    end of "Measurement Period"\n' +
+    '\n' +
+    'define "Right Mastectomy Diagnosis":\n' +
+    '  ( ["Diagnosis": "Status Post Right Mastectomy"] RightMastectomyProcedure\n' +
+    '    union ( ["Diagnosis": "Unilateral Mastectomy, Unspecified Laterality"] UnilateralMastectomyDiagnosis\n' +
+    '        where UnilateralMastectomyDiagnosis.anatomicalLocationSite ~ "Right (qualifier value)"\n' +
+    '    ) ) RightMastectomy\n' +
+    '    where RightMastectomy.prevalencePeriod starts on or before \n' +
+    '    end of "Measurement Period"\n' +
+    '\n' +
+    'define "Right Mastectomy Procedure":\n' +
+    '  ["Procedure, Performed": "Unilateral Mastectomy Right"] UnilateralMastectomyRightPerformed\n' +
+    '    where Global."NormalizeInterval" ( UnilateralMastectomyRightPerformed.relevantDatetime, UnilateralMastectomyRightPerformed.relevantPeriod ) ends on or before \n' +
+    '    end of "Measurement Period"\n' +
+    '\n' +
+    'define "Initial Population":\n' +
+    '  exists ( ["Patient Characteristic Sex": "Female (finding)"] )\n' +
+    '    and AgeInYearsAt(date from \n' +
+    '      end of "Measurement Period"\n' +
+    '    )in Interval[52, 74]\n' +
+    '    and exists AdultOutpatientEncounters."Qualifying Encounters"\n' +
+    '\n' +
+    'define "Numerator":\n' +
+    '  exists ( ["Diagnostic Study, Performed": "Mammography"] Mammogram\n' +
+    '      where ( Global."NormalizeInterval" ( Mammogram.relevantDatetime, Mammogram.relevantPeriod ) ends during day of Interval["October 1 Two Years Prior to the Measurement Period", \n' +
+    '        end of "Measurement Period"]\n' +
+    '      )\n' +
+    '  )\n' +
+    '\n' +
+    'define "October 1 Two Years Prior to the Measurement Period":\n' +
+    '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)\n' +
+    '  '
 
 
 describe('Create and Update QDM Test Case', () => {
@@ -104,8 +155,8 @@ describe('Create and Update QDM Test Case', () => {
     beforeEach('Create measure and login', () => {
 
         //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, measureScoring, true, measureCQL)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, measureScoring, true, measureCQLPatient)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
 
     })
@@ -121,6 +172,21 @@ describe('Create and Update QDM Test Case', () => {
 
         MeasuresPage.actionCenter('edit')
 
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Add Supplemental Data Elements
+        MeasureGroupPage.includeSdeData()
+
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -130,15 +196,6 @@ describe('Create and Update QDM Test Case', () => {
 
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
-
-        // check sex (formaly called gender) dropdown for all new options - MAT-7798
-        cy.contains('Sex').should('be.visible')
-
-        cy.get(TestCasesPage.QDMGender).click()
-        cy.get(TestCasesPage.SelectionOptionChoice).find('li').should('contain.text', 'Asked But DeclinedFemaleFemale (finding)MaleMale (finding)Patient sex unknown (finding)')
-
-        // need this to dismiss the dropdown
-        cy.get(TestCasesPage.SelectionOptionChoice).contains('Asked But Declined').click()
 
         //enter a value of the dob, Race and gender
         TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
@@ -217,7 +274,7 @@ describe('Non Boolean Test case Expected Values', () => {
     beforeEach('Create measure and login', () => {
 
         //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, measureScoring, false, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, measureScoring, false, measureCQLWithElements)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'SDE Ethnicity')
         OktaLogin.Login()
 
@@ -256,58 +313,6 @@ describe('Non Boolean Test case Expected Values', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
-    })
-})
-
-
-describe('QDM element tabs', () => {
-
-    newMeasureName = measureName + randValue + 2
-    newCQLLibraryName = CqlLibraryName + randValue + 2
-
-    beforeEach('Create measure and login', () => {
-
-        //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, measureScoring, false, measureCQLWithElements)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
-
-    })
-
-    afterEach('Logout and Clean up Measures', () => {
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
-
-    })
-
-    it('Verify QDM Element tabs relevant to the Measure CQL', () => {
-
-        MeasuresPage.actionCenter('edit')
-
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //create test case
-        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
-
-        //Navigate to Edit Test Case page
-        TestCasesPage.clickEditforCreatedTestCase()
-
-        cy.get(TestCasesPage.QDMElementsTab).scrollIntoView()
-            .should('contain', 'Adverse Event')
-            .should('contain', 'Allergy')
-            .should('contain', 'Assessment')
-            .should('contain', 'Care Experience')
-
-        //Navigate to CQL Editor tab and verify the same Elements are present in the Measure CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-            .should('contain', 'Adverse Event')
-            .should('contain', 'Allergy')
-            .should('contain', 'Assessment')
-            .should('contain', 'Care Experience')
     })
 })
 
