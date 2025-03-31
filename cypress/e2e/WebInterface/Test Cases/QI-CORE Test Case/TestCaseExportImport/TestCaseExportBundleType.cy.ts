@@ -100,7 +100,7 @@ describe('QI-Core: Export Bundle options for Non Measure Owner: Transaction or C
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
+        //cy.reload()
 
         MeasuresPage.actionCenter('edit')
 
