@@ -39,11 +39,6 @@ describe('Create and Update Test Case for Qi Core 4 Measure', () => {
 
     beforeEach('Create Measure and login', () => {
 
-        sessionStorage.clear()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
         OktaLogin.Login()
