@@ -215,8 +215,10 @@ describe('Run QDM Test Case ', () => {
     beforeEach('Create Measure', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, CQLSimple_for_QDM, false, false,
-            '2023-01-01', '2024-01-01')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, CQLSimple_for_QDM, null, false, '2023-01-01', '2024-01-01')
+        //create Measure Group
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23',
+            'boolean')
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -248,13 +250,12 @@ describe('Run QDM Test Case ', () => {
         //navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('085/27/1981 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        //navigate back to the test case list page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
 
-        //save the Test Case
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
+        //execute test case
+        cy.get(TestCasesPage.executeTestCaseButton).click()
 
     })
 })
@@ -269,14 +270,36 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
         OktaLogin.Login()
+
+        //adding supplemental data
         MeasuresPage.actionCenter('edit')
+        // add SDE to test case coverage
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
+
+        //Save Supplemental data
+        cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 50000)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 50000)
+
+        //make basic change to CQL value and save
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
+
         //navigate to the test case list Expansion page
         cy.get(TestCasesPage.qdmExpansionSubTab).click()
         //selecting initial manifest value that will allow test case to pass
