@@ -32,6 +32,15 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
         OktaLogin.Login()
+
+        //adding supplemental data
+        MeasuresPage.actionCenter('edit')
+        // add SDE to test case coverage
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        MeasureGroupPage.includeSdeData()
+        cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')

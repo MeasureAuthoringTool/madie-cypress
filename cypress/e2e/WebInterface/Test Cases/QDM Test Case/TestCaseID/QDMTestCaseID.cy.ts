@@ -40,6 +40,15 @@ describe('QDM Test Case sorting by Test Case number', () => {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
         OktaLogin.Login()
+
+        //adding supplemental data
+        MeasuresPage.actionCenter('edit')
+        // add SDE to test case coverage
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        MeasureGroupPage.includeSdeData()
+        cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -175,6 +184,15 @@ describe('Import Test cases onto an existing QDM measure via file and ensure tes
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, '', false, false)
         OktaLogin.Login()
+
+        //adding supplemental data
+        MeasuresPage.actionCenter('edit')
+        // add SDE to test case coverage
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        MeasureGroupPage.includeSdeData()
+        cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -246,6 +264,15 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateTestCaseAPI(testCase1.group, testCase1.title, testCase1.description)
         OktaLogin.Login()
+
+        //adding supplemental data
+        MeasuresPage.actionCenter('edit')
+        // add SDE to test case coverage
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        MeasureGroupPage.includeSdeData()
+        cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
@@ -330,6 +357,15 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
         OktaLogin.Login()
+
+        //adding supplemental data
+        MeasuresPage.actionCenter('edit')
+        // add SDE to test case coverage
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        MeasureGroupPage.includeSdeData()
+        cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
