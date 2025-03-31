@@ -9,6 +9,7 @@ import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { QDMElements } from "../../../../../Shared/QDMElements"
 import { umlsLoginForm } from "../../../../../Shared/umlsLoginForm"
+import { Header } from "../../../../../Shared/Header"
 
 let measureName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'RatioListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -36,6 +37,15 @@ describe('Clone QDM Test Case', () => {
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
 
         OktaLogin.Login()
+
+        //adding supplemental data
+        MeasuresPage.actionCenter('edit')
+        // add SDE to test case coverage
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        MeasureGroupPage.includeSdeData()
+        cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Logout and Clean up', () => {

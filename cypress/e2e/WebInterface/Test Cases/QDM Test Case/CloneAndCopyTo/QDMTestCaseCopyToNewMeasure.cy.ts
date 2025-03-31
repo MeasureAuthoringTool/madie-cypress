@@ -46,6 +46,15 @@ describe('Copy test cases from existing measure into new measure', () => {
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.process, PopulationBasis.boolean, MeasureScoring.Proportion, populations)
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description)
         OktaLogin.Login()
+
+        //adding supplemental data
+        MeasuresPage.actionCenter('edit')
+        // add SDE to test case coverage
+        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        MeasureGroupPage.includeSdeData()
+        cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -92,14 +101,17 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
+        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
+        Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
+
         // check tc count is correct (original measure +1)
-        TestCasesPage.grabValidateTestCaseNumber(32)
+        TestCasesPage.grabValidateTestCaseNumber(1)
 
         // check title of dup named tc - testCase.title + uuid 
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         // check a copied tc for expected values
-        TestCasesPage.grabTestCaseId(31)
+        TestCasesPage.grabTestCaseId(2)
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -177,14 +189,17 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
+        cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
+        Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
+
         // check tc count is correct (original measure +1)
-        TestCasesPage.grabValidateTestCaseNumber(32)
+        TestCasesPage.grabValidateTestCaseNumber(1)
 
         // check title of dup named tc - testCase.title + uuid 
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         // check a copied tc for expected values
-        TestCasesPage.grabTestCaseId(31)
+        TestCasesPage.grabTestCaseId(2)
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
