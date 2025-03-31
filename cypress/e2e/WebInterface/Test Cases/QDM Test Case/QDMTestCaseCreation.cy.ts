@@ -277,18 +277,7 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
-
-        //Save Supplemental data
-        cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 50000)
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
-        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 50000)
+        MeasureGroupPage.includeSdeData()
 
         //make basic change to CQL value and save
         cy.get(EditMeasurePage.cqlEditorTab).click()

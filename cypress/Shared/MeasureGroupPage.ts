@@ -846,7 +846,9 @@ export class MeasureGroupPage {
 
         //Save Supplemental data
         cy.get(this.saveSupplementalDataElements).click({ force: true })
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 50000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 50000)
 
     }
 }
