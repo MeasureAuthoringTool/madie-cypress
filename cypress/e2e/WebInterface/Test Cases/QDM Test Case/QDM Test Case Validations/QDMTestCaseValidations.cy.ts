@@ -255,7 +255,7 @@ describe('Edit Test Case Validations', () => {
         cy.get(TestCasesPage.elementsTab).click()
 
         // enter full patient to ensure page is dirty
-        TestCasesPage.enterPatientDemographics('04/10/1942 12:00 AM', 'Living', 'White', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('04/10/1942 12:00 AM', 'Living')
 
         //attempt to navigate away from the test case page
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -412,7 +412,7 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
 
-        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living', 'White', 'Male', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('01/01/2020 12:00 AM', 'Living')
 
         //select element and begin to add attribute
         cy.get(TestCasesPage.laboratoryElement).click()
