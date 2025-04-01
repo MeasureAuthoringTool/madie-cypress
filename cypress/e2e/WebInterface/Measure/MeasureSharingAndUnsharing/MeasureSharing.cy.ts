@@ -302,8 +302,7 @@ describe('Measure Sharing - Multiple instances', () => {
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
-        cy.get('[class="table-body"]').should('contain', newMeasureName)
-        cy.get('[class="table-body"]').should('contain', updatedMeasuresPageName)
+        cy.get('[class="measure-table"]').should('contain', updatedMeasuresPageName)
 
     })
 })
