@@ -8,8 +8,11 @@ import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { Header } from "../../../../../Shared/Header"
 import * as path from 'path'
 
+let randValue = (Math.floor((Math.random() * 1000) + 1))
 const measureName = 'TCExport' + Date.now()
 const CqlLibraryName = 'TCExportLib' + Date.now()
+let newMeasureName = ''
+let newCQLLibraryName = ''
 const testCase: TestCase = {
     title: 'Title for Auto Test',
     description: 'DENOMFail',
@@ -19,23 +22,27 @@ const testCase: TestCase = {
 const testCasePIdPath = 'cypress/fixtures/testCasePId'
 const testCasePIdPathSecnD = 'cypress/fixtures/testCasePId2'
 const downloadsFolder = Cypress.config('downloadsFolder')
-const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
+const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 const zipPath = 'cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'
 
 describe('QI-Core Single Test Case Export', () => {
 
     deleteDownloadsFolderBeforeAll()
+    deleteDownloadsFolderBeforeEach()
+
+    newMeasureName = measureName + randValue + 9 + randValue
+    newCQLLibraryName = CqlLibraryName + randValue + 8 + randValue
 
     beforeEach('Create measure, measure group, test case and login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName)
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCQLLibraryName)
     })
 
     it('Export single QI-Core Test Case', () => {
