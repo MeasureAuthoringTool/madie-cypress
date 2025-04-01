@@ -72,8 +72,8 @@ let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
     'define "Denom":\n' +
     'true'
 
-//this is test is failing in jenkins test run, needs to be debugged before we can run it again through jenkins
-describe.skip('FHIR Measure Export, Not the Owner', () => {
+
+describe('FHIR Measure Export, Not the Owner', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -116,13 +116,6 @@ describe.skip('FHIR Measure Export, Not the Owner', () => {
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4.zip')).should('contain', 'eCQMTitle4QICore-v0.0.000-FHIR.html')
             .and('contain', 'eCQMTitle4QICore-v0.0.000-FHIR.xml')
             .and('contain', 'eCQMTitle4QICore-v0.0.000-FHIR.json')
-
-        // cy.readFile(path.join(downloadsFolder, 'eCQMTitle-v1.0.000-FHIR4.zip')).should('contain', 'eCQMTitle-v1.0.000-FHIR.html' &&
-        //     'eCQMTitle-v1.0.000-FHIR.xml' && 'eCQMTitle-v1.0.000-FHIR.json' && 'FHIRHelpers-4.1.000.cql' && 'CQMCommon-1.0.000.cql' && 'FHIRCommon-4.1.000.cql'
-        //     && 'QICoreCommon-1.2.000.cql' && 'SupplementalDataElements-3.1.000.cql' && measureName+'-1.0.000.cql' && 'CQMCommon-1.0.000.xml'
-        //     && 'CQMCommon-1.0.000.json' && 'FHIRCommon-4.1.000.xml' && 'FHIRCommon-4.1.000.json' && 'FHIRHelpers-4.1.000.xml' && 'FHIRHelpers-4.1.000.json'
-        //     && 'QICoreCommon-1.2.000.xml' && 'QICoreCommon-1.2.000.json' && 'SupplementalDataElements-3.1.000.xml' && 'SupplementalDataElements-3.1.000.json'
-        //     && measureName+'-1.0.000.xml' && measureName+'-1.0.000.json')
 
     })
 })
