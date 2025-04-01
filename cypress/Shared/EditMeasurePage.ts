@@ -113,6 +113,8 @@ export class EditMeasurePage {
     public static readonly sharedUserTable = '[data-testid="row-item"]'
     public static readonly saveUserBtn = '[data-testid="share-save-button"]'
     public static readonly successMsg = '[class="toast success"]'
+    public static readonly unshareCheckBox = '.PrivateSwitchBase-input'
+    public static readonly acceptBtn = '[data-testid="share-confirmation-dialog-accept-button"]'
 
     //Transmission Format page
     public static readonly transmissionFormatDescription = '[data-testid="measure-transmission-format"]'
@@ -213,7 +215,7 @@ export class EditMeasurePage {
                 cy.get(this.editMeasureVersionActionBtn).should('be.enabled')
                 cy.get(this.editMeasureVersionActionBtn).click()
 
-                // version modal   
+                // version modal
                 cy.get('#draggable-dialog-title').find('h2').should('have.text', 'Create Version')
 
                 cy.get(MeasuresPage.versionMeasuresSelectionButton).click()
