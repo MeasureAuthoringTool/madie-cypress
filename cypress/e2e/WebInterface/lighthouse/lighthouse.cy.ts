@@ -161,7 +161,7 @@ describe('Navigate to the QDM "CQL Editor" page', () => {
             performance: 11,
             accessibility: 87,
             'total-blocking-time': 12000,
-            'speed-index': 42000,
+            'speed-index': 50000,
             'cumulative-layout-shift': 100,
         };
 
@@ -426,7 +426,7 @@ describe('Navigate to the "My CQL Libraries" page', () => {
             performance: 10,
             accessibility: 76,
             'total-blocking-time': 12000,
-            'speed-index': 28000,
+            'speed-index': 40000,
             'cumulative-layout-shift': 100,
         };
 
@@ -477,7 +477,7 @@ describe('Navigate to the "All CQL Libraries" page', () => {
             performance: 10,
             accessibility: 76,
             'total-blocking-time': 20000,
-            'speed-index': 28000,
+            'speed-index': 40000,
             'cumulative-layout-shift': 100,
         };
 
