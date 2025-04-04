@@ -16,6 +16,7 @@ export class MeasureCQL {
     public static readonly stndBasicQICoreCQL = 'library TestLibrary1709929148231865 version \'0.0.000\'\n' +
         'using QICore version \'4.1.1\'\n' +
         'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+        'include QICoreCommon version \'2.1.000\' called QICoreCommon\n' +
         'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
         'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
         'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
