@@ -3,7 +3,7 @@ import { Utilities } from "../../../Shared/Utilities"
 import { CQLLibraryPage, EditLibraryActions } from "../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../Shared/Header"
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage";
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage";
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 const libraryName = 'DeleteCQLLibraryTest' + randValue
@@ -24,8 +24,6 @@ describe('Delete CQL Library - Library List Page', () => {
 
     it('Verify Library Owner can Delete Library through Library page Action center on Library list Page', () => {
 
-        //Login as Regular User
-        OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.cqlLibraryActionCenter('delete')
 
