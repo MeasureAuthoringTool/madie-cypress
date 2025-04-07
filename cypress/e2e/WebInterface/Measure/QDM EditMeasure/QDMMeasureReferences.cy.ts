@@ -90,6 +90,39 @@ describe('QDM Measure Reference', () => {
         cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure reference deleted successfully')
     })
+
+    it('Search for QDM Measure Reference', () => {
+
+        //Add Measure Reference
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.leftPanelReference).click()
+        cy.get(EditMeasurePage.addReferenceButton).click()
+        cy.get(EditMeasurePage.referenceTypeDropdown).click()
+        cy.get(EditMeasurePage.documentationOption).click()
+        cy.get(EditMeasurePage.measureReferenceText).type('Measure Reference')
+        cy.get(EditMeasurePage.saveButton).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
+        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Documentation')
+        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Measure Reference')
+
+        //Add second Reference
+        cy.get(EditMeasurePage.addReferenceButton).click()
+        cy.get(EditMeasurePage.referenceTypeDropdown).click()
+        cy.get(EditMeasurePage.justificationOption).click()
+        cy.get(EditMeasurePage.measureReferenceText).type('Test')
+        cy.get(EditMeasurePage.saveButton).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
+        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Justification')
+        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Test')
+
+        //Search for Reference
+        cy.get(EditMeasurePage.searchReferenceTextBox).type('Test')
+        cy.get(EditMeasurePage.searchReferenceIcon).click()
+        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Justification')
+        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Test')
+        cy.get(EditMeasurePage.measureReferenceTable).should('not.contain', 'Measure Reference')
+
+    })
 })
 
 describe('Add Measure Reference - ownership validation', () => {
