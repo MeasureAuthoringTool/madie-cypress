@@ -1373,9 +1373,10 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 42700)
         Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 50000)
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
-        cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
+        cy.get(TestCasesPage.aceEditor).wait(1000).type(validTestCaseJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')

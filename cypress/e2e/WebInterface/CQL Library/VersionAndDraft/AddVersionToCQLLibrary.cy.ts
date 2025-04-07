@@ -55,6 +55,7 @@ describe('Action Center Buttons - Add Version to CQL Library', () => {
 
     it('Non Measure owner unable to Version CQL Library using Action Center buttons', () => {
 
+        OktaLogin.UILogout()
         OktaLogin.AltLogin()
 
         cy.get(Header.cqlLibraryTab).click()

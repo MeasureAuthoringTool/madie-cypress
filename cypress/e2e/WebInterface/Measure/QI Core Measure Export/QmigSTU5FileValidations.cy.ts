@@ -9,7 +9,7 @@ import * as path from 'path'
 
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-const qiCoreCommonLib = 'resources/QICoreCommon-3.0.000.json'
+const qiCoreCommonLib = 'resources/library-QICoreCommon-2.1.000.json'
 
 describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
 
@@ -39,6 +39,7 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
         cy.task('unzipFile', { zipFile: fileName + '4.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
+                cy.wait(1000)
             })
     })
 
@@ -87,7 +88,7 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
         })
 
         // read measure-
-        cy.readFile(path.join(downloadsFolder, 'resources/measure-STU5ProportionExport-v0.0.000.json')).then(measureJson => {
+        cy.readFile(path.join(downloadsFolder, 'resources/measure-' + cqlLibraryName + '-Draft based on 0.0.000.json')).then(measureJson => {
             expect(measureJson.contained[0].extension[0].url).to.eq('http://hl7.org/fhir/StructureDefinition/cqf-logicDefinition')
             expect(measureJson.extension[0].url).to.eq('http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-effectiveDataRequirements')
         })
@@ -121,6 +122,7 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
         cy.task('unzipFile', { zipFile: fileName + '4.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
+                cy.wait(1000)
             })
     })
 
@@ -196,6 +198,7 @@ describe('QMIG STU5 Compliance: Continuous Variable Measure Export Validations',
         cy.task('unzipFile', { zipFile: fileName + '4.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
+                cy.wait(1000)
             })
     })
 
@@ -254,6 +257,7 @@ describe('QMIG STU5 Compliance: Ratio Measure Export Validations', () => {
         cy.task('unzipFile', { zipFile: fileName + '4.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
+                cy.wait(1000)
             })
     })
 
