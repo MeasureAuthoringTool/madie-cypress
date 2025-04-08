@@ -97,7 +97,7 @@
 		"registry": "https://npm.pkg.github.com/"
 	},
 	"dependencies": {
-		"@madie/madie-models": "^1.4.32",
+		"@madie/madie-models": "^1.4.33",
 		"fs-extra": "^11.3.0",
 		"node": "^18.17.0",
 		"unzipper": "^0.12.3",
