@@ -8,6 +8,8 @@ export class MeasuresPage {
     public static readonly searchInputBox = '[data-testid="searchMeasure-input"]'
 
     //export
+    public static readonly exportNonPublishingOption = '[data-testid="export-option"]'
+    public static readonly exportPublishingOption = '[data-testid="export-publishing-option"]'
     public static readonly exportingDialog = '[class="MuiBox-root css-1c2c0mn"]'
     public static readonly exportingSpinner = '[class="MuiCircularProgress-svg css-13o7eu2"]'
     public static readonly exportFinishedCheck = '[data-testid="CheckCircleOutlineIcon"]'
@@ -103,6 +105,9 @@ export class MeasuresPage {
                 cy.get('[data-testid="export-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="export-action-btn"]').click()
 
+                //<button data-testid="export-publishing-option">Export for Publishing</button>
+                Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 50000)
+                cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Export for Publishing').click()
                 cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
                 cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')
                 Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 125000)
