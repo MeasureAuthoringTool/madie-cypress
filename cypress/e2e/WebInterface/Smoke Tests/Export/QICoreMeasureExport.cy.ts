@@ -9,9 +9,11 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
-
+const now = require('dayjs')
 const url = Cypress.config('baseUrl')
 const path = require('path')
+let mpStartDate = null
+let mpEndDate = null
 let versionNumber = '1.0.000'
 let measureName = 'TestMeasure' + Date.now()
 let measureNameFC = ''
@@ -162,10 +164,12 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
+        mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
+        mpEndDate = now().format('YYYY-MM-DD')
         measureNameFC = 'HRExport1' + Date.now()
         CqlLibraryNameFC = 'HRExport1Lib' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureNameFC, CqlLibraryNameFC, measureCQLContent)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureNameFC, CqlLibraryNameFC, measureCQLContent, null, false, mpStartDate, mpEndDate)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
 
         OktaLogin.Login()
@@ -202,17 +206,31 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
 
         //remove the baseUrl so that we can visit a local file
         Cypress.config('baseUrl', null)
-
+        cy.wait(1000)
         // Load the HTML file
         cy.visit('./cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR.html')
-
+        cy.wait(1000)
         // Scrub the HTML and verify the data we are looking for
         cy.document().then((doc) => {
 
             const bodyText = doc.body.innerText;
+            //meta details
+            expect(bodyText).to.include('Knowledge Artifact Metadata\n' +
+                'Name (machine-readable)\t' + CqlLibraryNameFC + '\n' +
+                'Title (human-readable)\t' + measureNameFC + '\n' +
+                'Status\tdraft\n' +
+                'Experimental\tfalse\n' +
+                'Description\tSemanticBits\n' +
+                'Purpose\tthis is a meta purpose value\n' +
+                'Clinical Usage\tthis is a meta guidance (usage) value -- for the \'Clinical Usage\' field\n' +
+                'Effective Period\t' + mpStartDate + '..' + mpEndDate + '\n' +
+                'Measure Steward\tSemanticBits\n' +
+                'Copyright\tUNKNOWN')
+
 
             //Short Name Identifier
-            expect(bodyText).to.include('Short Name Identifier\teCQMTitle4QICore')
+            expect(bodyText).to.include('Measure Metadata\n' +
+                'Short Name Identifier\teCQMTitle4QICore')
 
             //Measure Population Criteria
             expect(bodyText).to.include('Measure Population Criteria (ID: Group_1)\n' +
@@ -333,11 +351,14 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
     before('Create New Measure and Login', () => {
         Cypress.config('baseUrl', url)
+        cy.wait(1000)
+        mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
+        mpEndDate = now().format('YYYY-MM-DD')
 
         measureNameFC = 'HRExport2' + Date.now()
         CqlLibraryNameFC = 'HRExport2Lib' + Date.now()
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureNameFC, CqlLibraryNameFC, measureCQLContent)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureNameFC, CqlLibraryNameFC, measureCQLContent, null, false, mpStartDate, mpEndDate)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
 
         OktaLogin.Login()
@@ -364,6 +385,17 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
         cy.get(Header.mainMadiePageButton).click()
 
+        //making random change in CQL and save change
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        cy.get(Header.mainMadiePageButton).click()
+
+        //version measure
         MeasuresPage.actionCenter('version')
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
@@ -394,14 +426,27 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
         //remove the baseUrl so that we can visit a local file
         Cypress.config('baseUrl', null)
-
+        cy.wait(1000)
         // Load the HTML file
         cy.visit('./cypress/downloads/eCQMTitle4QICore-v1.0.000-FHIR.html')
-
+        cy.wait(1000)
         // Scrub the HTML and verify the data we are looking for
         cy.document().then((doc) => {
 
             const bodyText = doc.body.innerText;
+
+            //meta details
+            expect(bodyText).to.include('Knowledge Artifact Metadata\n' +
+                'Name (machine-readable)\t' + CqlLibraryNameFC + '\n' +
+                'Title (human-readable)\t' + measureNameFC + '\n' +
+                'Status\tactive\n' +
+                'Experimental\tfalse\n' +
+                'Description\tSemanticBits\n' +
+                'Purpose\tthis is a meta purpose value\n' +
+                'Clinical Usage\tthis is a meta guidance (usage) value -- for the \'Clinical Usage\' field\n' +
+                'Effective Period\t' + mpStartDate + '..' + mpEndDate + '\n' +
+                'Measure Steward\tSemanticBits\n' +
+                'Copyright\tUNKNOWN')
 
             //Short Name Identifier
             expect(bodyText).to.include('Short Name Identifier\teCQMTitle4QICore')
