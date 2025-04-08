@@ -21,6 +21,19 @@ export class CQLLibrariesPage {
     public static readonly actionCenterDeleteBtn = '[data-testid="delete-action-btn"]'
     public static readonly actionCenterVersionBtn = '[data-testid="version-action-btn"]'
     public static readonly actionCenterDraftBtn = '[data-testid="draft-action-btn"]'
+    public static readonly actionCenterShareBtn = '[data-testid="share-action-btn"]'
+
+    //Share/Un share Library
+    public static readonly shareOption = '[data-testid="Share With-option"]'
+    public static readonly unshareOption = '[data-testid="Unshare-option"]'
+    public static readonly harpIdInputTextBox = '[data-testid="harp-id-input"]'
+    public static readonly addBtn = '[id="add-user-btn"]'
+    public static readonly expandArrow= '[data-testid="KeyboardArrowRightIcon"]'
+    public static readonly sharedUserTable = '[data-testid="row-item"]'
+    public static readonly saveUserBtn = '[data-testid="share-save-button"]'
+    public static readonly successMsg = '[class="toast success"]'
+    public static readonly unshareCheckBox = '.PrivateSwitchBase-input'
+    public static readonly acceptBtn = '[data-testid="share-confirmation-dialog-accept-button"]'
 
     public static clickEditforCreatedLibrary(secondLibrary?: boolean): void {
         let filePath = 'cypress/fixtures/cqlLibraryId'
@@ -132,6 +145,13 @@ export class CQLLibrariesPage {
                 cy.get(this.actionCenterDraftBtn).should('be.visible')
                 cy.get(this.actionCenterDraftBtn).should('be.enabled')
                 cy.get(this.actionCenterDraftBtn).click()
+
+                break
+            }
+            case 'share': {
+                cy.get(this.actionCenterShareBtn).should('be.visible')
+                cy.get(this.actionCenterShareBtn).should('be.enabled')
+                cy.get(this.actionCenterShareBtn).click()
 
                 break
             }
