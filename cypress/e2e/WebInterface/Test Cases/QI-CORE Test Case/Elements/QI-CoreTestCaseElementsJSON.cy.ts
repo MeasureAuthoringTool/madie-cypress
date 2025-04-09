@@ -669,7 +669,9 @@ describe.skip('QI-Core Test Case Element tab tests', () => {
 
 
 })
-describe('QI-Core 6 Test Case Element tab tests', () => {
+// skipping the below test until the feature flag controlling the element tab for QI Core Test Cases is removed
+// attempt to edit test case race fields if user is not th owner and whom the measure has not been shared
+describe.skip('QI-Core 6 Test Case Element tab tests', () => {
     beforeEach('Create Measure, Measure Group and Test Case', () => {
 
         //Create New Measure
@@ -695,7 +697,7 @@ describe('QI-Core 6 Test Case Element tab tests', () => {
 
     })
 
-    it.only('Remove test case attributes', () => {
+    it('Remove test case attributes', () => {
 
         OktaLogin.Login()
 
