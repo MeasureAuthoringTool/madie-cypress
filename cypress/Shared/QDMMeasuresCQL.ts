@@ -1482,4 +1482,399 @@ export class QdmCql {
         '\texists ["Laboratory Test, Performed": "Syphilis Tests"] SyphilisTest\n' +
         'where SyphilisTest.result is not null\n' +
         'and Global."LatestOf" ( SyphilisTest.relevantDatetime, SyphilisTest.relevantPeriod ) during day of "Measurement Period"'
+
+    // CMS 1028
+    public static readonly severeObstetricComplications = 'library SevereObstetricComplicationsForTesting version \'0.0.000\'\n' +
+        'using QDM version \'5.6\'\n' +
+        'include CQMCommonQDM version \'9.0.000\' called Global\n' +
+        'include PCMaternalQDM version \'5.0.000\' called PCMaternal\n' +
+        'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\'\n\n' +
+        'valueset "20 to 42 Plus Weeks Gestation": \'urn:oid:2.16.840.1.113762.1.4.1110.67\'\n' +
+        'valueset "Acute Heart Failure": \'urn:oid:2.16.840.1.113762.1.4.1029.233\'\n' +
+        'valueset "Acute Myocardial Infarction": \'urn:oid:2.16.840.1.113883.3.666.5.623\'\n' +
+        'valueset "Acute or Persistent Asthma": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.271\'\n' +
+        'valueset "Acute Renal Failure": \'urn:oid:2.16.840.1.113762.1.4.1110.53\'\n' +
+        'valueset "Acute Respiratory Distress Syndrome": \'urn:oid:2.16.840.1.113762.1.4.1029.214\'\n' +
+        'valueset "Air and Thrombotic Embolism": \'urn:oid:2.16.840.1.113762.1.4.1029.243\'\n' +
+        'valueset "Amniotic Fluid Embolism": \'urn:oid:2.16.840.1.113762.1.4.1029.217\'\n' +
+        'valueset "Anemia": \'urn:oid:2.16.840.1.113762.1.4.1029.323\'\n' +
+        'valueset "Aortic Aneurysm": \'urn:oid:2.16.840.1.113762.1.4.1029.219\'\n' +
+        'valueset "Autoimmune Disease": \'urn:oid:2.16.840.1.113762.1.4.1029.311\'\n' +
+        'valueset "Bariatric Surgery": \'urn:oid:2.16.840.1.113762.1.4.1029.317\'\n' + 
+        'valueset "Bleeding Disorder": \'urn:oid:2.16.840.1.113762.1.4.1029.287\'\n' +
+        'valueset "Blood Transfusion": \'urn:oid:2.16.840.1.113762.1.4.1029.213\'\n' +
+        'valueset "Cardiac Arrest Ventricular Fibrillation": \'urn:oid:2.16.840.1.113762.1.4.1029.221\'\n' +
+        'valueset "Cardiac Disease": \'urn:oid:2.16.840.1.113762.1.4.1029.341\'\n' +
+        'valueset "CMS Sex": \'urn:oid:2.16.840.1.113762.1.4.1021.121\'\n' +
+        'valueset "Conversion of Cardiac Rhythm": \'urn:oid:2.16.840.1.113762.1.4.1029.357\'\n' +
+        'valueset "Disseminated Intravascular Coagulation": \'urn:oid:2.16.840.1.113762.1.4.1029.223\'\n' +
+        'valueset "Eclampsia": \'urn:oid:2.16.840.1.113762.1.4.1029.225\'\n' +
+        'valueset "Economic Housing Instability": \'urn:oid:2.16.840.1.113762.1.4.1029.292\'\n' +
+        'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+        'valueset "Gastrointestinal Disease": \'urn:oid:2.16.840.1.113762.1.4.1029.338\'\n' +
+        'valueset "Gestational Diabetes": \'urn:oid:2.16.840.1.113762.1.4.1029.269\'\n' +
+        'valueset "Heart Failure Cardiac Arrest Related to Procedure or Surgery": \'urn:oid:2.16.840.1.113762.1.4.1029.227\'\n' +
+        'valueset "Hematocrit Lab Test": \'urn:oid:2.16.840.1.113762.1.4.1045.114\'\n' +
+        'valueset "HIV in Pregnancy Childbirth and Puerperium": \'urn:oid:2.16.840.1.113762.1.4.1029.272\'\n' +
+        'valueset "Hypertension": \'urn:oid:2.16.840.1.113762.1.4.1029.332\'\n' +
+        'valueset "Hysterectomy": \'urn:oid:2.16.840.1.113762.1.4.1029.358\'\n' +
+        'valueset "Long Term Anticoagulant Use": \'urn:oid:2.16.840.1.113762.1.4.1029.366\'\n' +
+        'valueset "Mental Health Disorder": \'urn:oid:2.16.840.1.113762.1.4.1029.314\'\n' +
+        'valueset "Mild or Moderate Preeclampsia": \'urn:oid:2.16.840.1.113762.1.4.1029.329\'\n' +
+        'valueset "Morbid or Severe Obesity": \'urn:oid:2.16.840.1.113762.1.4.1029.290\'\n' +
+        'valueset "Multiple Pregnancy": \'urn:oid:2.16.840.1.113762.1.4.1029.284\'\n' +
+        'valueset "Neuromuscular Disease": \'urn:oid:2.16.840.1.113762.1.4.1029.308\'\n' +
+        'valueset "Patient Expired": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.309\'\n' +
+        'valueset "Payer Type": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+        'valueset "Placenta Accreta": \'urn:oid:2.16.840.1.113762.1.4.1029.302\'\n' +
+        'valueset "Placenta Increta or Percreta": \'urn:oid:2.16.840.1.113762.1.4.1029.388\'\n' +
+        'valueset "Placenta Previa": \'urn:oid:2.16.840.1.113762.1.4.1110.78\'\n' +
+        'valueset "Placental Abruption": \'urn:oid:2.16.840.1.113762.1.4.1029.305\'\n' +
+        'valueset "Preexisting Diabetes": \'urn:oid:2.16.840.1.113762.1.4.1029.275\'\n' +
+        'valueset "Present on Admission is No or Unable To Determine": \'urn:oid:2.16.840.1.113762.1.4.1029.370\'\n' +
+        'valueset "Present On Admission is Yes or Exempt": \'urn:oid:2.16.840.1.113762.1.4.1110.63\'\n' +
+        'valueset "Preterm Birth": \'urn:oid:2.16.840.1.113762.1.4.1029.299\'\n' +
+        'valueset "Previous Cesarean": \'urn:oid:2.16.840.1.113762.1.4.1029.278\'\n' +
+        'valueset "Puerperal Cerebrovascular Disorder": \'urn:oid:2.16.840.1.113762.1.4.1029.229\'\n' +
+        'valueset "Pulmonary Edema": \'urn:oid:2.16.840.1.113762.1.4.1029.231\'\n' +
+        'valueset "Pulmonary Hypertension": \'urn:oid:2.16.840.1.113762.1.4.1029.281\'\n' +
+        'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+        'valueset "Renal Disease": \'urn:oid:2.16.840.1.113762.1.4.1029.335\'\n' +
+        'valueset "Sepsis": \'urn:oid:2.16.840.1.113762.1.4.1029.237\'\n' +
+        'valueset "Severe Anesthesia Complications": \'urn:oid:2.16.840.1.113762.1.4.1029.235\'\n' +
+        'valueset "Severe Maternal Morbidity Diagnoses": \'urn:oid:2.16.840.1.113762.1.4.1029.255\'\n' +
+        'valueset "Severe Maternal Morbidity Procedures": \'urn:oid:2.16.840.1.113762.1.4.1029.256\'\n' +
+        'valueset "Severe Preeclampsia": \'urn:oid:2.16.840.1.113762.1.4.1029.327\'\n' +
+        'valueset "Shock": \'urn:oid:2.16.840.1.113762.1.4.1029.239\'\n' +
+        'valueset "Sickle Cell Disease with Crisis": \'urn:oid:2.16.840.1.113762.1.4.1029.241\'\n' +
+        'valueset "Substance Abuse": \'urn:oid:2.16.840.1.113762.1.4.1029.320\'\n' +
+        'valueset "Thyrotoxicosis": \'urn:oid:2.16.840.1.113762.1.4.1029.296\'\n' +
+        'valueset "Tracheostomy": \'urn:oid:2.16.840.1.113762.1.4.1029.359\'\n' +
+        'valueset "Venous Thromboembolism in Pregnancy": \'urn:oid:2.16.840.1.113762.1.4.1029.363\'\n' +
+        'valueset "Ventilation": \'urn:oid:2.16.840.1.113762.1.4.1029.360\'\n' +
+        'valueset "White Blood Cells Count Lab Test": \'urn:oid:2.16.840.1.113762.1.4.1045.129\'\n\n' +
+        'code "Heart rate": \'8867-4\' from "LOINC" display \'Heart rate\'\n' +
+        'code "Systolic blood pressure": \'8480-6\' from "LOINC" display \'Systolic blood pressure\'\n\n' +
+        'context Patient\n\n' +
+        'define "Cardiac Conversion, Tracheostomy Or Ventilation Procedures":\n' +
+        '["Procedure, Performed": "Conversion of Cardiac Rhythm"]\n' +
+        '  union ["Procedure, Performed": "Tracheostomy"]\n' +
+        '  union ["Procedure, Performed": "Ventilation"]\n\n' +
+        'define "Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation":\n' +
+        '"Delivery Encounters With Calculated Gestational Age Greater Than Or Equal To 20 Weeks"\n' +
+        '  union "Delivery Encounters With Estimated Gestational Age Assessment Greater Than Or Equal To 20 Weeks"\n' +
+        '  union "Delivery Encounters With Gestational Age Greater Than Or Equal To 20 Weeks Based On Coding"\n\n' +
+        'define "Delivery Encounters With Blood Transfusion":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  with ["Procedure, Performed": "Blood Transfusion"] BloodTransfusion\n' +
+        '  such that Global."NormalizeInterval" ( BloodTransfusion.relevantDatetime, BloodTransfusion.relevantPeriod ) starts during PCMaternal."HospitalizationWithEDOBTriageObservation" ( TwentyWeeksPlusEncounter )\n\n' +
+        'define "Delivery Encounters With Calculated Gestational Age Greater Than Or Equal To 20 Weeks":\n' +
+        'PCMaternal."Delivery Encounter With Age Range" DeliveryEncounter\n' +
+        '  where PCMaternal."CalculatedGestationalAge" ( DeliveryEncounter ) >= 20\n\n' +
+        'define "Delivery Encounters With Cardiac Conversion, Tracheostomy Or Ventilation Procedures":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  with "Cardiac Conversion, Tracheostomy Or Ventilation Procedures" ConvTrachVentProcedures\n' +
+        '  such that Global."NormalizeInterval" ( ConvTrachVentProcedures.relevantDatetime, ConvTrachVentProcedures.relevantPeriod ) starts during PCMaternal."HospitalizationWithEDOBTriageObservation" ( TwentyWeeksPlusEncounter )\n\n' +
+        'define "Delivery Encounters With Estimated Gestational Age Assessment Greater Than Or Equal To 20 Weeks":\n' +
+        'PCMaternal."Delivery Encounter With Age Range" DeliveryEncounter\n' +
+        '  where PCMaternal."CalculatedGestationalAge" ( DeliveryEncounter ) is null\n' +
+        '  and ( PCMaternal."LastEstimatedGestationalAge" ( DeliveryEncounter ) >= 20 weeks )\n\n' +
+        'define "Delivery Encounters With Expiration":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where TwentyWeeksPlusEncounter.dischargeDisposition in "Patient Expired"\n\n' +
+        'define "Delivery Encounters With Gestational Age Greater Than Or Equal To 20 Weeks Based On Coding":\n' +
+        'PCMaternal."Delivery Encounter With Age Range" DeliveryEncounter\n' +
+        '  let CGA: PCMaternal."CalculatedGestationalAge" ( DeliveryEncounter ),\n' +
+        '  EGA: PCMaternal."LastEstimatedGestationalAge" ( DeliveryEncounter )\n' +
+        '  where CGA is null\n' +
+        '  and EGA is null\n' +
+        '  and exists ( DeliveryEncounter.diagnoses EncounterDiagnoses\n' +
+        '    where EncounterDiagnoses.code in "20 to 42 Plus Weeks Gestation"\n' +
+        '  )\n\n' +
+        'define "Delivery Encounters With Hysterectomy":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  with ["Procedure, Performed": "Hysterectomy"] Hysterectomy\n' +
+        '  such that Global."NormalizeInterval" ( Hysterectomy.relevantDatetime, Hysterectomy.relevantPeriod ) starts during PCMaternal."HospitalizationWithEDOBTriageObservation" ( TwentyWeeksPlusEncounter )\n\n' +
+        'define "Delivery Encounters With Severe Obstetric Complications":\n' +
+        '"Delivery Encounters With Severe Obstetric Complications Diagnosis Or Procedure Excluding Blood Transfusion"\n' +
+        '  union "Delivery Encounters With Expiration"\n' +
+        '  union "Delivery Encounters With Blood Transfusion"\n\n' +
+        'define "Delivery Encounters With Severe Obstetric Complications Diagnosis Or Procedure Excluding Blood Transfusion":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsNoOrUTD"(TwentyWeeksPlusEncounter).code in "Severe Maternal Morbidity Diagnoses"\n' +
+        '  or exists ( ["Procedure, Performed": "Severe Maternal Morbidity Procedures"] SMMProcedures\n' +
+        '    where Global."NormalizeInterval" ( SMMProcedures.relevantDatetime, SMMProcedures.relevantPeriod ) starts during PCMaternal."HospitalizationWithEDOBTriageObservation" ( TwentyWeeksPlusEncounter )\n' +
+        ')\n\n' +
+        'define "Delivery Encounters With Severe Obstetric Complications Excluding Blood Transfusions":\n' +
+        '"Delivery Encounters With Severe Obstetric Complications Diagnosis Or Procedure Excluding Blood Transfusion"\n' +
+        '  union "Delivery Encounters With Expiration"\n\n' +
+        'define "Delivery Encounters With Severe Obstetric Complications Excluding Blood Transfusions Only":\n' +
+        '"Delivery Encounters With Severe Obstetric Complications"\n' +
+        '  intersect "Delivery Encounters With Severe Obstetric Complications Excluding Blood Transfusions"\n\n' +
+        'define "Denominator":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation"\n\n' +
+        'define "Initial Population":\n' +
+        'PCMaternal."Delivery Encounter With Age Range"\n\n' +
+        'define "Numerator 1 Delivery Encounters With Severe Obstetric Complications":\n' +
+        '"Delivery Encounters With Severe Obstetric Complications"\n\n' +
+        'define "Numerator 2 Delivery Encounters With Severe Obstetric Complications Excluding Blood Transfusions Only":\n' +
+        '"Delivery Encounters With Severe Obstetric Complications Excluding Blood Transfusions Only"\n\n' +
+        'define "Numerator Exclusion 1 SOC With Hysterectomy or Blood Transfusion with Placenta Increta or Placenta Percreta Without Additional SOC":\n' +
+        '"SOC With Hysterectomy Or Blood Transfusion With Placenta Increta Or Placenta Percreta Without Additional SOC"\n\n' +
+        'define "Numerator Exclusion 2 SOC Excluding Blood Transfusions Only With Hysterectomy Or Blood Transfusion With Placenta Increta Or Placenta Percreta Without Additional SOC":\n' +
+        '"SOC Excluding Blood Transfusions Only With Hysterectomy Or Blood Transfusion With Placenta Increta Or Placenta Percreta Without Additional SOC"\n\n' +
+        'define "Risk Variable Anemia":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Anemia"\n\n' +
+        'define "Risk Variable Asthma":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Acute or Persistent Asthma"\n\n' +
+        'define "Risk Variable Autoimmune Disease":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Autoimmune Disease"\n\n' +
+        'define "Risk Variable Bariatric Surgery":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Bariatric Surgery"\n\n' +
+        'define "Risk Variable Bleeding Disorder":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Bleeding Disorder"\n\n' +
+        'define "Risk Variable Cardiac Disease":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Cardiac Disease"\n\n' +
+        'define "Risk Variable Economic Housing Instability":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Economic Housing Instability"\n\n' +
+        'define "Risk Variable Gastrointestinal Disease":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Gastrointestinal Disease"\n\n' +
+        'define "Risk Variable Gestational Diabetes":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Gestational Diabetes"\n\n' +
+        'define "Risk Variable HIV":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "HIV in Pregnancy Childbirth and Puerperium"\n' +
+        'define "Risk Variable Hypertension":\n\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Hypertension"\n\n' +
+        'define "Risk Variable Long Term Anticoagulant Use":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Long Term Anticoagulant Use"\n' +
+        'define "Risk Variable Maternal Age":\n\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  let MaternalAge: AgeInYearsAt(date from start of TwentyWeeksPlusEncounter.relevantPeriod)\n' +
+        '  return { TwentyWeeksPlusEncounter, MaternalAge }\n\n' +
+        'define "Risk Variable Mental Health Disorder":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Mental Health Disorder"\n\n' +
+        'define "Risk Variable Morbid Obesity":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Morbid or Severe Obesity"\n\n' +
+        'define "Risk Variable Multiple Pregnancy":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Multiple Pregnancy"\n\n' +
+        'define "Risk Variable Neuromuscular":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Neuromuscular Disease"\n\n' +
+        'define "Risk Variable Obstetrical VTE":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Venous Thromboembolism in Pregnancy"\n\n' +
+        'define "Risk Variable Other Preeclampsia":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Mild or Moderate Preeclampsia"\n\n' +
+        'define "Risk Variable Placenta Previa":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Placenta Previa"\n\n' +
+        'define "Risk Variable Placental Abruption":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Placental Abruption"\n\n' +
+        'define "Risk Variable Placental Accreta Spectrum":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Placenta Accreta"\n' +
+        '  or "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Placenta Increta or Percreta"\n\n' +
+        'define "Risk Variable Preexisting Diabetes":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Preexisting Diabetes"\n\n' +
+        'define "Risk Variable Preterm Birth":\n' +
+          //CGA stands for Calculated Gestational Age.  EGA stands for Estimated Gestational Age.
+        '( PCMaternal."Delivery Encounter With Age Range" DeliveryEncounter\n' +
+        'let CGA: PCMaternal."CalculatedGestationalAge" ( DeliveryEncounter ),\n' +
+        'EGA: PCMaternal."LastEstimatedGestationalAge" ( DeliveryEncounter )\n' +
+        'where CGA in Interval[20, 36]\n' +
+        'or ( CGA is null\n' +
+        '  and ( EGA >= 20 weeks\n' +
+        '  and EGA <= 36 weeks\n' +
+        '  )\n' +
+        ')\n' +
+        ')\n' +
+        'union ( PCMaternal."Delivery Encounter With Age Range" DeliveryEncounter\n' +
+        'let CGA: PCMaternal."CalculatedGestationalAge" ( DeliveryEncounter ),\n' +
+        'EGA: PCMaternal."LastEstimatedGestationalAge" ( DeliveryEncounter )\n' +
+        'where CGA is null\n' +
+        'and EGA is null\n' +
+        'and "POAIsYesOrExempt"(DeliveryEncounter).code in "Preterm Birth"\n' +
+        ')\n' +
+        'define "Risk Variable Previous Cesarean":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Previous Cesarean"\n\n' +
+        'define "Risk Variable Pulmonary Hypertension":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Pulmonary Hypertension"\n\n' +
+        'define "Risk Variable Renal Disease":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Renal Disease"\n\n' +
+        'define "Risk Variable Severe Preeclampsia":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Severe Preeclampsia"\n\n' +
+        'define "Risk Variable Substance Abuse":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Substance Abuse"\n\n' +
+        'define "Risk Variable Thyrotoxicosis":\n' +
+        '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+        '  where "POAIsYesOrExempt"(TwentyWeeksPlusEncounter).code in "Thyrotoxicosis"\n\n' +
+        'define "SDE Ethnicity":\n' +
+        '["Patient Characteristic Ethnicity": "Ethnicity"]\n\n' +
+        'define "SDE Payer":\n' +
+        '["Patient Characteristic Payer": "Payer Type"]\n\n' +
+        'define "SDE Race":\n' +
+        '["Patient Characteristic Race": "Race"]\n\n' +
+        'define "SDE Sex":\n' +
+        '["Patient Characteristic Sex": "CMS Sex"]\n\n' +
+        'define "SOC Excluding Blood Transfusions Only With Hysterectomy Or Blood Transfusion With Placenta Increta Or Placenta Percreta Without Additional SOC":\n' +
+          '( "Delivery Encounters With Severe Obstetric Complications Excluding Blood Transfusions Only" SOCExcludingTransfusion\n' +
+              'where exists ( SOCExcludingTransfusion.diagnoses EncounterDiagnoses\n' +
+                  'where EncounterDiagnoses.code in "Placenta Increta or Percreta"\n' +
+              ')\n' +
+                'and ( exists "Delivery Encounters With Blood Transfusion"\n' +
+                    'or exists "Delivery Encounters With Hysterectomy"\n' +
+                ')\n' +
+          ')\n' +
+            'except ( ( "Delivery Encounters With Severe Obstetric Complications Excluding Blood Transfusions Only" SOCExcludingTransfusion\n' +
+                  'where ( "POAIsNoOrUTD"(SOCExcludingTransfusion).code in "Severe Maternal Morbidity Diagnoses" )\n' +
+              ')\n' +
+                'union "Delivery Encounters With Cardiac Conversion, Tracheostomy Or Ventilation Procedures"\n' +
+                'union "Delivery Encounters With Expiration"\n' +
+            ')\n\n' +
+        'define "SOC With Hysterectomy Or Blood Transfusion With Placenta Increta Or Placenta Percreta Without Additional SOC":\n' +
+          '( "Delivery Encounters With Severe Obstetric Complications" SOCEncounter\n' +
+              'where exists ( SOCEncounter.diagnoses EncounterDiagnoses\n' +
+                  'where EncounterDiagnoses.code in "Placenta Increta or Percreta"\n' +
+              ')\n' +
+                'and ( exists "Delivery Encounters With Blood Transfusion"\n' +
+                    'or exists "Delivery Encounters With Hysterectomy"\n' +
+                ')\n' +
+          ')\n' +
+            'except ( ( "Delivery Encounters With Severe Obstetric Complications" SOCEncounter\n' +
+                  'where ( "POAIsNoOrUTD"(SOCEncounter).code in "Severe Maternal Morbidity Diagnoses" )\n' +
+              ')\n' +
+                'union "Delivery Encounters With Cardiac Conversion, Tracheostomy Or Ventilation Procedures"\n' +
+                'union "Delivery Encounters With Expiration"\n' +
+            ')\n\n' +
+        'define "SDE Delivery Encounters With Severe Obstetric Complication Procedures":\n' +
+          '( "Delivery Encounters With Severe Obstetric Complications"\n' +
+            'except "SOC With Hysterectomy Or Blood Transfusion With Placenta Increta Or Placenta Percreta Without Additional SOC" ) Encounter\n' +
+            'where exists ( ["Procedure, Performed": "Severe Maternal Morbidity Procedures"]\n' +
+              'union ["Procedure, Performed": "Blood Transfusion"] ) SMMProcedures\n' +
+              'where Global."NormalizeInterval" ( SMMProcedures.relevantDatetime, SMMProcedures.relevantPeriod ) starts during PCMaternal."HospitalizationWithEDOBTriageObservation" ( Encounter )\n\n' +
+        'define "SDE Delivery Encounters with Severe Obstetric Complication Diagnosis":\n' +
+          '( "Delivery Encounters With Severe Obstetric Complications"\n' +
+            'except "SOC With Hysterectomy Or Blood Transfusion With Placenta Increta Or Placenta Percreta Without Additional SOC" ) Encounter\n' +
+            'where "POAIsNoOrUTD"(Encounter).code in "Severe Maternal Morbidity Diagnoses"\n\n' +
+        'define "SDE Variable Calculated Gestational Age":\n' +
+          'PCMaternal."Variable Calculated Gestational Age"\n\n' +
+        'define "SDE SOC Diagnoses Detail":\n' +
+          '"SDE Delivery Encounters with Severe Obstetric Complication Diagnosis" Encounter\n' +
+            'let complication: "POAIsNoOrUTD"(Encounter)\n' +
+            'return {\n' +
+              'id: Encounter.id,\n' +
+              'code: Encounter.code,\n' +
+              'complications: complication C\n' +
+                'where C.code in "Severe Maternal Morbidity Diagnoses"\n' +
+                'return {\n' +
+                  'code: C,\n' +
+                  'SOCDxCategory: "SOCDxCategory"(C)\n' +
+                '}\n' +
+            '}\n\n' +
+        'define "SDE SOC Procedure Detail":\n' +
+          '"SDE Delivery Encounters With Severe Obstetric Complication Procedures" Encounter\n' +
+            'let procedure: "SOCProcedures"(Encounter)\n' +
+            'return {\n' +
+              'id: Encounter.id,\n' +
+              'code: Encounter.code,\n' +
+              'procedures: procedure P\n' +
+                'return {\n' +
+                  'code: P,\n' +
+                  'SOCProcedureCategory: "SOCProcedureCategory"(P)\n' +
+                '}\n' +
+            '}\n\n' +
+        'define "Risk Variable Lab And Physical Exam Results":\n' +
+        '{ \n' +
+            'FirstHeartRate: "FirstPhysicalExamWithEncounterId"(["Physical Exam, Performed": "Heart rate"]),\n' +
+            'FirstSystolicBloodPressure: "FirstPhysicalExamWithEncounterId"(["Physical Exam, Performed": "Systolic blood pressure"]),\n' +
+            'FirstHematocritLab: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "Hematocrit Lab Test"]),\n' +
+            'FirstWhiteBloodCellCount: "FirstLabTestWithEncounterId"(["Laboratory Test, Performed": "White Blood Cells Count Lab Test"])\n' +
+          '}\n\n' +
+        'define function "POAIsYesOrExempt"(Encounter "Encounter, Performed"):\n' +
+          'Encounter.diagnoses EncounterDiagnoses\n' +
+            'where EncounterDiagnoses.presentOnAdmissionIndicator in "Present On Admission is Yes or Exempt"\n' +
+            'return EncounterDiagnoses.code\n\n' +
+        'define function "FirstPhysicalExamWithEncounterId"(ExamList List<QDM.PositivePhysicalExamPerformed>):\n' +
+          '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+            'let FirstExam: First(ExamList Exam\n' +
+                'where Exam.result is not null\n' +
+                  'and Global."EarliestOf"(Exam.relevantDatetime, Exam.relevantPeriod) during Interval[start of PCMaternal."HospitalizationWithEDOBTriageObservation"(TwentyWeeksPlusEncounter) - 1440 minutes, PCMaternal."LastTimeOfDelivery"(TwentyWeeksPlusEncounter))\n' +
+                'sort by Global."EarliestOf"(relevantDatetime, relevantPeriod)\n' +
+            ')\n' +
+            'return {\n' +
+              'EncounterId: TwentyWeeksPlusEncounter.id,\n' +
+              'FirstResult: FirstExam.result as Quantity,\n' +
+              'Timing: Global."EarliestOf" ( FirstExam.relevantDatetime, FirstExam.relevantPeriod )\n' +
+            '}\n\n' +
+        'define function "FirstLabTestWithEncounterId"(LabList List<QDM.PositiveLaboratoryTestPerformed>):\n' +
+          '"Delivery Encounters At Greater Than Or Equal To 20 Weeks Gestation" TwentyWeeksPlusEncounter\n' +
+            'let FirstLab: First(LabList Lab\n' +
+                'where Lab.result is not null\n' +
+                  'and Lab.resultDatetime during Interval[start of PCMaternal."HospitalizationWithEDOBTriageObservation"(TwentyWeeksPlusEncounter) - 1440 minutes, PCMaternal."LastTimeOfDelivery"(TwentyWeeksPlusEncounter))\n' +
+                'sort by resultDatetime\n' +
+            ')\n' +
+            'return {\n' +
+              'EncounterId: TwentyWeeksPlusEncounter.id,\n' +
+              'FirstResult: FirstLab.result as Quantity,\n' +
+              'Timing: FirstLab.resultDatetime\n' +
+            '}\n\n' +
+        'define function "POAIsNoOrUTD"(Encounter "Encounter, Performed"):\n' +
+          'Encounter.diagnoses EncounterDiagnoses\n' +
+            'where EncounterDiagnoses.presentOnAdmissionIndicator in "Present on Admission is No or Unable To Determine"\n' +
+            'return EncounterDiagnoses.code\n\n' +
+        'define function "SOCProcedures"(Encounter "Encounter, Performed"):\n' +
+          '( ["Procedure, Performed": "Severe Maternal Morbidity Procedures"]\n' +
+            'union ["Procedure, Performed": "Blood Transfusion"] ) SMMProcedures\n' +
+            'where Global."NormalizeInterval" ( SMMProcedures.relevantDatetime, SMMProcedures.relevantPeriod ) starts during PCMaternal."HospitalizationWithEDOBTriageObservation" ( Encounter )\n\n' +
+        'define function "SOCProcedureCategory"(Procedure "Procedure, Performed"):\n' +
+          'case\n' +
+            'when Procedure.code in "Blood Transfusion" then \'Blood Transfusion\'\n' +
+            'when Procedure.code in "Conversion of Cardiac Rhythm" then \'Conversion of cardiac rhythm\'\n' +
+            'when Procedure.code in "Hysterectomy" then \'Hysterectomy\'\n' +
+            'when Procedure.code in "Tracheostomy" then \'Tracheostomy\'\n' +
+            'when Procedure.code in "Ventilation" then \'Ventilation\' \n' +
+            'else null end\n\n' +
+        'define function "SOCDxCategory"(Dx Code):\n' +
+          'case\n' +
+            'when Dx.code in "Acute Heart Failure" then \'Acute Heart Failure\'\n' +
+            'when Dx.code in "Acute Myocardial Infarction" then \'Acute Myocardial Infarction\'\n' +
+            'when Dx.code in "Acute Renal Failure" then \'Acute Renal Failure\'\n' +
+            'when Dx.code in "Acute Respiratory Distress Syndrome" then \'Acute Respiratory Distress Syndrome\'\n' +
+            'when Dx.code in "Air and Thrombotic Embolism" then \'Air and Thrombotic Embolism\'\n' +
+            'when Dx.code in "Amniotic Fluid Embolism" then \'Amniotic Fluid Embolism\'\n' +
+            'when Dx.code in "Aortic Aneurysm" then \'Aortic Aneurysm\'\n' +
+            'when Dx.code in "Cardiac Arrest Ventricular Fibrillation" then \'Cardiac Arrest Ventricular Fibrillation\'\n' +
+            'when Dx.code in "Disseminated Intravascular Coagulation" then \'Disseminated Intravascular Coagulation\'\n' +
+            'when Dx.code in "Eclampsia" then \'Eclampsia\'\n' +
+            'when Dx.code in "Heart Failure Cardiac Arrest Related to Procedure or Surgery" then \'Heart Failure Cardiac Arrest Related to Procedure or Surgery\'\n' +
+            'when Dx.code in "Puerperal Cerebrovascular Disorder" then \'Puerperal Cerebrovascular Disorder\'\n' +
+            'when Dx.code in "Pulmonary Edema" then \'Pulmonary Edema\'\n' +
+            'when Dx.code in "Sepsis" then \'Sepsis\'\n' +
+            'when Dx.code in "Severe Anesthesia Complications" then \'Severe Anesthesia Complications\'\n' +
+            'when Dx.code in "Shock" then \'Shock\'\n' +
+            'when Dx.code in "Sickle Cell Disease with Crisis" then \'Sickle Cell Disease with Crisis\'\n' +
+            'else null end'
 }
