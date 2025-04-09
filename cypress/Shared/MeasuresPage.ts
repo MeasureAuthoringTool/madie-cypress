@@ -3,7 +3,7 @@ import { TestCasesPage } from "./TestCasesPage"
 import { EditMeasureActions } from "./EditMeasurePage"
 
 export type MeasureActionOptions = {
-    exportWithInfo?: boolean,
+    exportForPublish?: boolean,
     versionType?: string,
     updateModelVersion?: boolean
 }
@@ -108,19 +108,18 @@ export class MeasuresPage {
 
             case 'export': {
 
-                const exportWithInfo = options?.exportWithInfo
+                const exportForPublish = options?.exportForPublish
 
                 cy.get('[data-testid="export-action-btn"]').should('be.visible')
                 cy.get('[data-testid="export-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="export-action-btn"]').click()
 
-                if (exportWithInfo) {
-                    Utilities.waitForElementVisible(MeasuresPage.exportNonPublishingOption, 50000)
-                    cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
-                }
-                else {
+                if (exportForPublish) {
                     Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 50000)
                     cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Export for Publishing').click()
+                } else {
+                    Utilities.waitForElementVisible(MeasuresPage.exportNonPublishingOption, 50000)
+                    cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
                 }
 
                 cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
