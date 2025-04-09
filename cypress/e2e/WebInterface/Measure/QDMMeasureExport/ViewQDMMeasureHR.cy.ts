@@ -56,4 +56,20 @@ describe('View Human Readable for QDM Measure', () => {
         cy.get(EditMeasurePage.humanReadablePopup).should('contain.text', 'Human Readable')
         cy.get(':nth-child(4) > tbody > :nth-child(1) > td').should('contain.text', measureQDM)
     })
+
+    it('Export measure from HR modal', () => {
+
+        OktaLogin.Login()
+
+        MeasuresPage.actionCenter('viewhr')
+
+        Utilities.waitForElementVisible(EditMeasurePage.humanReadablePopup, 60000)
+        cy.get(EditMeasurePage.humanReadablePopup).should('contain.text', 'Human Readable')
+
+        cy.get('[data-testid="human-readable-export-button"]').scrollIntoView().click()
+        cy.get(MeasuresPage.exportPublishingOption).click()
+
+        cy.contains('Success').should('be.visible')
+        cy.get(MeasuresPage.exportFinishedCheck).should('be.visible')
+    })
 })
