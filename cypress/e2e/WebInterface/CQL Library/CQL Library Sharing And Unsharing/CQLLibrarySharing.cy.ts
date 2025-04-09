@@ -297,4 +297,29 @@ describe.skip('Share CQL Library using Action Center buttons', () => {
         cy.get('[data-testid="share-action-btn"]').should('be.visible')
         cy.get('[data-testid="share-action-btn"]').should('be.disabled')
     })
+
+
+    it('Verify error message when CQL Library is shared with same user multiple times', () => {
+
+        OktaLogin.Login()
+
+        //Navigate to CQL Library Page
+        cy.get(Header.cqlLibraryTab).click()
+
+        //Share Library with ALT user
+        CQLLibrariesPage.cqlLibraryActionCenter('share')
+        cy.get(CQLLibrariesPage.shareOption).click({force: true})
+        cy.get(CQLLibrariesPage.harpIdInputTextBox).type(harpUserALT)
+        cy.get(CQLLibrariesPage.addBtn).click()
+
+        //Verify that the Harp id is added to the table
+        cy.get(CQLLibrariesPage.expandArrow).click()
+        cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
+
+        //Share the Library with same user again
+        cy.get(CQLLibrariesPage.harpIdInputTextBox).type(harpUserALT)
+        cy.get(CQLLibrariesPage.addBtn).click()
+        cy.get('[data-testid="harp-id-input-helper-text"]').should('contain.text', 'The selected Libraries are already shared with this user.')
+
+    })
 })
