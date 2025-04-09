@@ -21,6 +21,18 @@ export enum TestCaseAction {
 }
 
 export class TestCasesPage {
+    //Qi Core 6
+    public static readonly testCaseAvailableElementTab = '[data-testid="available-tab"]'
+    public static readonly testCaseAddedElementTab = '[data-testid="added-tab"]'
+    public static readonly elementActionBtn = '[id="basic-button"]'
+    public static readonly elementActionEditBtn = '[class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-1km1ehz"]'
+    public static readonly elementMetaTabBtn = '[class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1dwgyyd"]'
+    public static readonly elementActionCenterBtn = '[data-testid="elements-action-center-button"]'
+    public static readonly elementActionCenterBtnIcon = '[data-testid="elements-action-center-actual-icon"]'
+    public static readonly elementActionCenterDeleteBtn = '[data-testid="DeleteOutlinedIcon"]'
+    public static readonly elementActionCenterConfirmDialog = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3nccws react-draggable"]'
+    public static readonly actionConfirmDialogMsg = '[class="dialog-warning-body"]'
+
     //observation fields
     public static readonly denom0Observation = '[id="denominatorObservation0-expected-cb"]'
     public static readonly denom1Observation = '[id="denominatorObservation1-expected-cb"]'

@@ -437,7 +437,7 @@ export class CreateMeasurePage {
         return user
     }
 
-    public static CreateMeasureAPI(measureName: string, cqlLibraryName: string, model: SupportedModels, optionalParams?: CreateMeasureOptions): string {
+    public static CreateMeasureAPI(measureName: string, cqlLibraryName: string, model: SupportedModels, optionalParams?: CreateMeasureOptions, measureCQL?: string): string {
 
         let user,
             mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD'),
@@ -460,7 +460,7 @@ export class CreateMeasurePage {
             measureCql = optionalParams.measureCql
         }
         else {
-            measureCql = '' // can add a real default here, if needed
+            measureCql = measureCQL // can add a real default here, if needed
         }
 
         if (optionalParams && optionalParams.elmJson) {
