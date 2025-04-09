@@ -1,5 +1,12 @@
 import { Utilities } from "./Utilities"
 import { TestCasesPage } from "./TestCasesPage"
+import { EditMeasureActions } from "./EditMeasurePage"
+
+export type MeasureActionOptions = {
+    exportWithInfo?: boolean,
+    versionType?: string,
+    updateModelVersion?: boolean
+}
 
 export class MeasuresPage {
 
@@ -57,7 +64,7 @@ export class MeasuresPage {
         })
     }
 
-    public static actionCenter(action: string, measureNumber?: number): void {
+    public static actionCenter(action: string, measureNumber?: number, options?: MeasureActionOptions): void {
 
         //There is a prerequsite that you have a measure created and measure ID stored to a file
 
@@ -101,13 +108,21 @@ export class MeasuresPage {
 
             case 'export': {
 
+                const exportWithInfo = options?.exportWithInfo
+
                 cy.get('[data-testid="export-action-btn"]').should('be.visible')
                 cy.get('[data-testid="export-action-btn"]').should('be.enabled')
                 cy.get('[data-testid="export-action-btn"]').click()
 
-                //<button data-testid="export-publishing-option">Export for Publishing</button>
-                Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 50000)
-                cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Export for Publishing').click()
+                if (exportWithInfo) {
+                    Utilities.waitForElementVisible(MeasuresPage.exportNonPublishingOption, 50000)
+                    cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+                }
+                else {
+                    Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 50000)
+                    cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Export for Publishing').click()
+                }
+
                 cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
                 cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')
                 Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 125000)

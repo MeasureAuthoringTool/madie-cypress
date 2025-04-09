@@ -1,4 +1,4 @@
-import { MeasuresPage } from "./MeasuresPage"
+import { MeasureActionOptions, MeasuresPage } from "./MeasuresPage"
 import { Utilities } from "./Utilities"
 import { TestCasesPage } from "./TestCasesPage"
 
@@ -191,7 +191,7 @@ export class EditMeasurePage {
     public static readonly measureClinicalRecommendationSaveButton = '[data-testid="measureClinical Recommendation StatementSave"]'
     public static readonly measureClinicalRecommendationSuccessMessage = '[data-testid="measureClinical Recommendation StatementSuccess"]'
 
-    public static actionCenter(action: EditMeasureActions): void {
+    public static actionCenter(action: EditMeasureActions, options?: MeasureActionOptions): void {
 
         cy.get(this.editMeasureButtonActionBtn).click()
 
@@ -199,9 +199,20 @@ export class EditMeasurePage {
 
             case EditMeasureActions.export: {
 
+                const exportWithInfo = options?.exportWithInfo
+
                 cy.get(this.editMeasureExportActionBtn).should('be.visible')
                 cy.get(this.editMeasureExportActionBtn).should('be.enabled')
                 cy.get(this.editMeasureExportActionBtn).click()
+
+                if (exportWithInfo) {
+                    Utilities.waitForElementVisible(MeasuresPage.exportNonPublishingOption, 50000)
+                    cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
+                }
+                else {
+                    Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 50000)
+                    cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Export for Publishing').click()
+                }
 
                 cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
                 cy.get(MeasuresPage.exportingSpinner).should('exist').should('be.visible')

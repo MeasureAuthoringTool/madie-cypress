@@ -54,4 +54,20 @@ describe('View Human Readable for Qi Core Measure', () => {
         cy.get(EditMeasurePage.humanReadablePopup).should('contain.text', 'Human Readable')
         cy.get(':nth-child(3) > .content-container').should('contain.text', 'eCQMTitle4QICore')
     })
+
+    it('Export measure from View HR modal', () => {
+
+        OktaLogin.Login()
+
+        MeasuresPage.actionCenter('viewhr')
+
+        Utilities.waitForElementVisible(EditMeasurePage.humanReadablePopup, 60000)
+        cy.get(EditMeasurePage.humanReadablePopup).should('contain.text', 'Human Readable')
+
+        cy.get('[data-testid="human-readable-export-button"]').scrollIntoView().click()
+        cy.get(MeasuresPage.exportPublishingOption).click()
+
+        cy.contains('Success').should('be.visible')
+        cy.get(MeasuresPage.exportFinishedCheck).should('be.visible')
+    })
 })
