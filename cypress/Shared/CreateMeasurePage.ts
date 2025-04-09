@@ -182,7 +182,9 @@ export class CreateMeasurePage {
                         "sdeIncluded": null
                     },
                     'measureMetaData': {
+                        "guidance": "this is a meta guidance (usage) value -- for the 'Clinical Usage' field",
                         "description": "SemanticBits",
+                        "purpose": "this is a meta purpose value",
                         "experimental": false,
                         "steward": {
                             "name": "SemanticBits",
