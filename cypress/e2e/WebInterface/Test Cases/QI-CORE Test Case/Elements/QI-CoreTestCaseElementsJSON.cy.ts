@@ -1,6 +1,6 @@
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { CreateMeasurePage, SupportedModels } from "../../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels, CreateMeasureOptions } from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
@@ -17,7 +17,12 @@ let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_missingMetaProfile
-let measureCQL6 = MeasureCQL.CQL_BoneDensity_Proportion_Boolean
+
+const options: CreateMeasureOptions = {
+    measureCql: MeasureCQL.CQL_BoneDensity_Proportion_Boolean
+}
+
+//let measureCQL6 = MeasureCQL.CQL_BoneDensity_Proportion_Boolean
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
 let harpUserALT = Environment.credentials().harpUserALT
 let TCJsonRace = TestCaseJson.TCJsonRaceOMBRaceDetailed
@@ -676,7 +681,7 @@ describe.skip('QI-Core 6 Test Case Element tab tests', () => {
 
         //Create New Measure
         cy.setAccessTokenCookie()
-        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore6, null, measureCQL6)
+        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore6, options)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
