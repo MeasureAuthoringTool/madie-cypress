@@ -7,6 +7,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { LandingPage } from "../../../../Shared/LandingPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -38,6 +39,11 @@ let updatedMeasureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'
     '\t true\n' +
     'define "n":\n' +
     '\ttrue'
+
+    /*
+        Tests below all involve failures of the export process.
+        EditMeasurePage.actionCenter() assumes success, so we can't use it
+    */
 
 describe('Error Message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
 
@@ -71,6 +77,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')
             cy.get('[data-testid="export-action-btn"]').click()
+            cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
 
             cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
             cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'Missing Measure Developers')
@@ -114,6 +121,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')
             cy.get('[data-testid="export-action-btn"]').click()
+            cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
 
             cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
         })
@@ -137,6 +145,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')
             cy.get('[data-testid="export-action-btn"]').click()
+            cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
 
             cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
         })
@@ -177,6 +186,7 @@ describe('Error Message on Measure Export when the Measure does not have Populat
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')
             cy.get('[data-testid="export-action-btn"]').click()
+            cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
 
             cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
             cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'Missing Population Criteria')
@@ -222,6 +232,7 @@ describe('Error Message on Measure Export when the Population Criteria does not 
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')
             cy.get('[data-testid="export-action-btn"]').click()
+            cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
 
             cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
             cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'CQL Populations Return Types are invalid')
@@ -229,3 +240,38 @@ describe('Error Message on Measure Export when the Population Criteria does not 
     })
 })
 
+describe('Error Message on Measure Export for Publish when measure was versioned before Madie 2.2.0', () => {
+
+    // this test will rely on PROD data being available in the lower environments
+    // this measure must have been versioned prior to Madie 2.2.0 (4/9/2025)
+    const specialMeasureName = 'Antithrombotic Therapy by End of Hospital Day 2'
+    
+    it('Verify error message when not able to perform Export for Publish', () => {
+
+        OktaLogin.Login()
+
+        // navigate to the all measures tab
+        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
+        cy.get(LandingPage.allMeasuresTab).should('be.visible')
+        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
+        cy.get(LandingPage.allMeasuresTab).should('be.enabled')
+        cy.get(LandingPage.allMeasuresTab).click()
+
+        // search for specific measure - it should be 1st on the search result
+        cy.get(MeasuresPage.searchInputBox).clear().type(specialMeasureName).type('{enter}')
+        cy.contains('View').click()
+
+        // perform export for publish
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
+        cy.get(EditMeasurePage.editMeasureExportActionBtn).should('be.visible')
+        cy.get(EditMeasurePage.editMeasureExportActionBtn).should('be.enabled')
+        cy.get(EditMeasurePage.editMeasureExportActionBtn).click()
+
+        Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 50000)
+        cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Export for Publishing').click()
+
+        // verify error
+        cy.get('.loading-title').should('contain.text', 'Your download could not be completed')
+        cy.get('.error-message').should('contain.text', 'Measure cannot be exported for publishing because it was versioned prior to MADiE version 2.2.0. Please use a newer version or select "Export" for this measure.')
+    })
+})
