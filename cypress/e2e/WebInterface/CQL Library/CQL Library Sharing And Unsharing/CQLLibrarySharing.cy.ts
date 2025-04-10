@@ -230,7 +230,7 @@ describe.skip('Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(CQLLibrariesPage.saveUserBtn).click()
-        cy.get('[class="MuiAlert-message css-1xsto0d"]').should('contain.text', 'The Libraries were successfully shared.')
+        cy.get('[class="MuiAlert-message css-1xsto0d"]').should('contain.text', 'The Library(ies) were successfully shared.')
 
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -276,7 +276,7 @@ describe.skip('Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(CQLLibrariesPage.saveUserBtn).click()
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'The Libraries were successfully shared.')
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'The Library(ies) were successfully shared.')
 
     })
 
@@ -321,5 +321,98 @@ describe.skip('Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibrariesPage.addBtn).click()
         cy.get('[data-testid="harp-id-input-helper-text"]').should('contain.text', 'The selected Libraries are already shared with this user.')
 
+    })
+})
+
+//Skipping until feature flag 'ShareLibrary' is removed
+describe.skip('Share CQL Library using Action Center buttons - Multiple instances', () => {
+
+    beforeEach('Create CQL Library', () => {
+
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        newCQLLibraryName = CQLLibraryName + randValue + randValue + 1
+        updatedCQLLibraryName = CQLLibraryName + randValue + 5
+
+        CQLLibraryPage.createAPICQLLibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher)
+    })
+
+    afterEach('LogOut', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteLibrary(updatedCQLLibraryName)
+
+    })
+
+    it('Verify all instances of the CQL Library (Version and Draft) are shared to the user', () => {
+
+        OktaLogin.Login()
+
+        //Navigate to CQL Library Page
+        cy.get(Header.cqlLibraryTab).click()
+        CQLLibrariesPage.cqlLibraryActionCenter('version')
+
+        cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('exist')
+        cy.get(CQLLibrariesPage.versionLibraryRadioButton).should('be.enabled')
+        cy.get(CQLLibrariesPage.versionLibraryRadioButton).eq(0).click()
+
+        cy.get(CQLLibrariesPage.createVersionContinueButton).should('exist')
+        cy.get(CQLLibrariesPage.createVersionContinueButton).should('be.visible')
+        cy.get(CQLLibrariesPage.createVersionContinueButton).click()
+        cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New version of CQL Library is Successfully created')
+        CQLLibrariesPage.validateVersionNumber(newCQLLibraryName, versionNumber)
+        cy.log('Version Created Successfully')
+
+        //Add Draft to Versioned Library
+        CQLLibrariesPage.cqlLibraryActionCenter('draft')
+        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('exist')
+        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.visible')
+        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).should('be.enabled')
+        cy.get(CQLLibrariesPage.updateDraftedLibraryTextBox).clear().type(updatedCQLLibraryName)
+
+        cy.get(CQLLibrariesPage.createDraftContinueBtn).should('exist')
+        cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
+        cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
+
+        //intercept draft id once library is drafted
+        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+            cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
+        })
+        cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
+        cy.wait('@draft', { timeout: 60000 }).then((request) => {
+            cy.writeFile('cypress/fixtures/cqlLibraryId', request.response.body.id)
+        })
+        cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
+        cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', 'Draft 1.0.000')
+        cy.log('Draft Created Successfully')
+
+        //Select both the instances (Draft and Version) of the Library and verify Library table contains latest instance(Draft) of the Library
+        cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        cy.get('[data-testid="cqlLibrary-button-1_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+        cy.get(CQLLibrariesPage.actionCenterShareBtn).click()
+        cy.get(CQLLibrariesPage.shareOption).click({force: true})
+        cy.get('[data-testid="library-landing"]').should('contain.text', updatedCQLLibraryName)
+
+        //Verify information text on share screen
+        cy.get('[class="share-unshare-dialog-info-text"]').should('contain.text', 'When sharing a library, all versions and drafts are shared, so only the most recent library name appears here.')
+
+        //Share Library with ALT user
+        cy.get(CQLLibrariesPage.harpIdInputTextBox).type(harpUserALT)
+        cy.get(CQLLibrariesPage.addBtn).click()
+
+        //Verify that the Harp id is added to the table
+        cy.get(CQLLibrariesPage.expandArrow).click()
+        cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
+
+        cy.get(CQLLibrariesPage.saveUserBtn).click()
+        cy.get('[class="MuiAlert-message css-1xsto0d"]').should('contain.text', 'The Library(ies) were successfully shared.')
+
+        //Login as ALT User and verify both Draft and Versioned Library are shared
+        OktaLogin.AltLogin()
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
+        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
+        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get('[data-testid="cqlLibrary-button-0_cqlLibraryName"]').should('contain.text', updatedCQLLibraryName)
+        cy.get('[data-testid="cqlLibrary-button-1_cqlLibraryName"]').should('contain.text', newCQLLibraryName)
     })
 })
