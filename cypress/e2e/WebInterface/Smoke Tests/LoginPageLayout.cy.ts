@@ -16,20 +16,13 @@ describe('Login page layout', () => {
 
     it('Login help links are correct', () => {
 
-        // expand
-        cy.get(OktaLogin.needHelpButton).click()
-
-        Utilities.waitForElementVisible(OktaLogin.forgotPassword, 3500)
         cy.get(OktaLogin.forgotPassword).click()
 
-      //  Utilities.waitForElementVisible(OktaLogin.resetViaEmail, 3500)
-        cy.get(OktaLogin.resetViaEmail).should('be.visible')
+        cy.contains('Reset your password').should('be.visible')
+        cy.contains('Email or Username ').should('be.visible')
 
         Utilities.waitForElementVisible(OktaLogin.backFromReset, 3500)
         cy.get(OktaLogin.backFromReset).should('have.text', 'Back to sign in').click()
-
-        // expand again
-        cy.get(OktaLogin.needHelpButton).click()
 
         cy.get(OktaLogin.helpLink).should('have.attr', 'href').and('contain', 'idm.cms.gov/help')
 
@@ -59,7 +52,7 @@ describe('Login page layout', () => {
         cy.contains('CMS/HHS Vulnerability Disclosure Policy').should('have.attr', 'href', 'https://www.cms.gov/about-cms/information-systems/privacy/vulnerability-disclosure-policy')
 
         cy.contains('CMS.gov').should('have.attr', 'href', 'https://www.cms.gov/')
-        })
+    })
 
     it('Footer displays all relevant info', () => {
 
