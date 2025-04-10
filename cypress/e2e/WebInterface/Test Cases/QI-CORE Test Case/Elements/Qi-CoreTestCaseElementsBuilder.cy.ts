@@ -49,7 +49,7 @@ describe.skip('Check for UI Elements Builder on QiCore 6.0.0 measures only', () 
         cy.contains('div', 'QICore AdverseEvent').children().last().should('have.attr', 'type', 'button')
     })
 
-     it('UI Elements Builder does not show on test cases for 4.1.1 measures', () => {
+    it('UI Elements Builder does not show on test cases for 4.1.1 measures', () => {
 
         cy.clearCookies()
         cy.clearLocalStorage()
@@ -73,6 +73,6 @@ describe.skip('Check for UI Elements Builder on QiCore 6.0.0 measures only', () 
 
         // assert that blank editor field is there
         cy.get(TestCasesPage.aceEditorJsonInput).should('be.empty')
-     })
+    })
 })
 

@@ -1,14 +1,15 @@
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels, CreateMeasureOptions } from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../../../Shared/Utilities"
-import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
+import { TestCase, TestCaseAction, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { Environment } from "../../../../../Shared/Environment"
+import { Header } from "../../../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -16,6 +17,12 @@ let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJson = TestCaseJson.TestCaseJson_missingMetaProfile
+
+const options: CreateMeasureOptions = {
+    measureCql: MeasureCQL.CQL_BoneDensity_Proportion_Boolean
+}
+
+//let measureCQL6 = MeasureCQL.CQL_BoneDensity_Proportion_Boolean
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
 let harpUserALT = Environment.credentials().harpUserALT
 let TCJsonRace = TestCaseJson.TCJsonRaceOMBRaceDetailed
@@ -662,5 +669,112 @@ describe.skip('QI-Core Test Case Element tab tests', () => {
 
         cy.get('[id="ethnicityDetailed"]').should('be.disabled')
 
+    })
+
+
+
+})
+// skipping the below test until the feature flag controlling the element tab for QI Core Test Cases is removed
+// attempt to edit test case race fields if user is not th owner and whom the measure has not been shared
+describe.skip('QI-Core 6 Test Case Element tab tests', () => {
+    beforeEach('Create Measure, Measure Group and Test Case', () => {
+
+        //Create New Measure
+        cy.setAccessTokenCookie()
+        CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore6, options)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 60000)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
+    })
+
+    afterEach('Clean up and Logout', () => {
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
+
+    })
+
+    it('Remove test case attributes', () => {
+
+        OktaLogin.Login()
+
+        cy.get(Header.measures).click()
+        MeasuresPage.actionCenter('edit')
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Add Supplemental Data Elements
+        MeasureGroupPage.includeSdeData()
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Navigate to Edit Test Case page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        // these only show for STU6
+        cy.get(TestCasesPage.jsonTab).should('be.visible').and('be.enabled')
+        cy.get(TestCasesPage.elementsTab).should('be.visible').and('have.attr', 'aria-selected', 'true')
+        cy.reload()
+
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 150000)
+        cy.get(TestCasesPage.plusIcon).eq(3).click()
+
+        cy.get(TestCasesPage.testCaseAddedElementTab).click()
+        cy.get('[data-testid="create-test-case-form"]')
+            .find('[class="allotment-wrapper"]')
+            .find('[class="split-view split-view-horizontal split-view-separator-border allotment-module_splitView__L-yRc allotment-module_horizontal__7doS8 allotment-module_separatorBorder__x-rDS"]')
+            .find('[data-testid="elements-content"]')
+            .find('[class="panel-content-pane"]')
+            .find('[class="MuiBox-root css-1yuhvjn"]')
+            .get(TestCasesPage.elementActionBtn).should('include.text', 'Actions').click().wait(1000)
+
+        cy.get('[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper MuiMenu-paper MuiMenu-paper css-pwxzbm"]')
+            .find('[class="MuiList-root MuiList-padding MuiMenu-list css-r8u8y9"]')
+            .get(TestCasesPage.elementActionEditBtn).eq(0).contains('Edit').click().wait(1000)
+
+        cy.get('[data-testid="elements-content"]').find('[class="panel-content-pane"]')
+            .find('[data-testid="tc-builder-resource-editor"]')
+            .find('[class="MuiBox-root css-am8yia"]')
+            .find('[class="MuiBox-root css-1rtq33e"]')
+            .find('[class="MuiTabs-root MuiTabs-vertical css-n38zky"]')
+            .find('[class="MuiTabs-scroller MuiTabs-hideScrollbar MuiTabs-scrollableY css-ccrt04"]')
+            .find('[class="MuiTabs-flexContainer MuiTabs-flexContainerVertical css-j7qwjs"]')
+            .get(TestCasesPage.elementMetaTabBtn).eq(3).scrollIntoView().contains('meta').click()
+        Utilities.waitForElementVisible(TestCasesPage.elementActionCenterBtn, 50000)
+        cy.get(TestCasesPage.elementActionCenterBtn).scrollIntoView()
+        cy.get(TestCasesPage.elementActionCenterBtnIcon).scrollIntoView()
+        cy.get(TestCasesPage.elementActionCenterBtnIcon).click()
+        Utilities.waitForElementVisible(TestCasesPage.elementActionCenterDeleteBtn, 50000)
+        cy.get(TestCasesPage.elementActionCenterDeleteBtn).eq(1).click()
+
+        Utilities.waitForElementVisible(TestCasesPage.elementActionCenterConfirmDialog, 50000)
+
+        cy.get(TestCasesPage.actionConfirmDialogMsg).should('include.text', 'Are you sure you want to delete Patient.meta?')
+        cy.get(CQLEditorPage.deleteCancelButton).click()
+        Utilities.waitForElementVisible(TestCasesPage.elementMetaTabBtn, 50000)
+
+        Utilities.waitForElementVisible(TestCasesPage.elementActionCenterBtn, 50000)
+        cy.get(TestCasesPage.elementActionCenterBtn).scrollIntoView()
+        cy.get(TestCasesPage.elementActionCenterBtnIcon).scrollIntoView()
+        cy.get(TestCasesPage.elementActionCenterBtnIcon).click()
+        Utilities.waitForElementVisible(TestCasesPage.elementActionCenterDeleteBtn, 50000)
+        cy.get(TestCasesPage.elementActionCenterDeleteBtn).eq(1).click()
+
+        Utilities.waitForElementVisible(TestCasesPage.elementActionCenterConfirmDialog, 50000)
+        cy.get(CQLEditorPage.deleteContinueButton).click()
+        cy.get(TestCasesPage.elementMetaTabBtn).should('not.include.text', 'meta')
     })
 })
