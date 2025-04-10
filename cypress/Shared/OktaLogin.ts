@@ -14,11 +14,11 @@ export class OktaLogin {
 
     public static readonly needHelpButton = 'a[data-se="needhelp"]'
     public static readonly forgotPassword = '[data-se="forgot-password"]'
-    public static readonly helpLink = '[data-se="help-link"]'
+    public static readonly helpLink = '[data-se="help"]'
     public static readonly termsAndConditionsButton = '[data-testid="terms-and-conditions-button"]'
     public static readonly tcClose = '[data-testid="terms-and-conditions-close-button"]'
     public static readonly resetViaEmail = '[data-se="email-button"]'
-    public static readonly backFromReset = '[data-se="back-link"]'
+    public static readonly backFromReset = '[data-se="cancel"]'
 
     public static AltLogin() {
 
