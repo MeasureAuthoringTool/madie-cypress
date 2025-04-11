@@ -21,6 +21,18 @@ export enum TestCaseAction {
 }
 
 export class TestCasesPage {
+    //Qi Core 6
+    public static readonly testCaseAvailableElementTab = '[data-testid="available-tab"]'
+    public static readonly testCaseAddedElementTab = '[data-testid="added-tab"]'
+    public static readonly elementActionBtn = '[id="basic-button"]'
+    public static readonly elementActionEditBtn = '[class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-1km1ehz"]'
+    public static readonly elementMetaTabBtn = '[class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1dwgyyd"]'
+    public static readonly elementActionCenterBtn = '[data-testid="elements-action-center-button"]'
+    public static readonly elementActionCenterBtnIcon = '[data-testid="elements-action-center-actual-icon"]'
+    public static readonly elementActionCenterDeleteBtn = '[data-testid="DeleteOutlinedIcon"]'
+    public static readonly elementActionCenterConfirmDialog = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3nccws react-draggable"]'
+    public static readonly actionConfirmDialogMsg = '[class="dialog-warning-body"]'
+
     //observation fields
     public static readonly denom0Observation = '[id="denominatorObservation0-expected-cb"]'
     public static readonly denom1Observation = '[id="denominatorObservation1-expected-cb"]'
@@ -529,15 +541,15 @@ export class TestCasesPage {
         cy.get(this.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(this.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(this.createTestCaseTitleInput, 30000)
+        cy.get(this.createTestCaseGroupInput).should('exist')
+        cy.get(this.createTestCaseGroupInput).should('be.visible')
+        cy.get(this.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
         cy.get(this.createTestCaseTitleInput).type(testCaseTitle.toString())
         cy.get(this.createTestCaseDescriptionInput).should('exist')
         cy.get(this.createTestCaseDescriptionInput).should('be.visible')
         cy.get(this.createTestCaseDescriptionInput).should('be.enabled')
         cy.get(this.createTestCaseDescriptionInput).focus()
         cy.get(this.createTestCaseDescriptionInput).type(testCaseDescription)
-        cy.get(this.createTestCaseGroupInput).should('exist')
-        cy.get(this.createTestCaseGroupInput).should('be.visible')
-        cy.get(this.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
 
         this.clickCreateTestCaseButton()
 
