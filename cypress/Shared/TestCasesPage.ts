@@ -541,15 +541,15 @@ export class TestCasesPage {
         cy.get(this.createTestCaseTitleInput).should('exist')
         Utilities.waitForElementVisible(this.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(this.createTestCaseTitleInput, 30000)
+        cy.get(this.createTestCaseGroupInput).should('exist')
+        cy.get(this.createTestCaseGroupInput).should('be.visible')
+        cy.get(this.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
         cy.get(this.createTestCaseTitleInput).type(testCaseTitle.toString())
         cy.get(this.createTestCaseDescriptionInput).should('exist')
         cy.get(this.createTestCaseDescriptionInput).should('be.visible')
         cy.get(this.createTestCaseDescriptionInput).should('be.enabled')
         cy.get(this.createTestCaseDescriptionInput).focus()
         cy.get(this.createTestCaseDescriptionInput).type(testCaseDescription)
-        cy.get(this.createTestCaseGroupInput).should('exist')
-        cy.get(this.createTestCaseGroupInput).should('be.visible')
-        cy.get(this.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
 
         this.clickCreateTestCaseButton()
 

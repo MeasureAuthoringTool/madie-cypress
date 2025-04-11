@@ -78,8 +78,7 @@ describe('Delete Test Case', () => {
         cy.get(TestCasesPage.testCaseListTable).should('not.contain', testCase2.title)
     })
 
-    //Skipping until MAT-8550 is fixed
-    it.skip('Verify Non owner of the Measure unable to delete Test Case', () => {
+    it('Verify Non owner of the Measure unable to delete Test Case', () => {
 
         MeasuresPage.actionCenter("edit")
 
