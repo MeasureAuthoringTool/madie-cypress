@@ -27,6 +27,7 @@ const testCase2: TestCase = {
     group: 'Test Series 2',
     json: TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
 }
+const testCaseUpdateToast = 'Test case updated successfully with warnings in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.'
 
 describe('MADIE Zip Test Case Import', () => {
 
@@ -88,7 +89,9 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
+
+        cy.get(TestCasesPage.successMsg).should('have.text', testCaseUpdateToast)
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
@@ -111,7 +114,7 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', testCaseUpdateToast)
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
@@ -186,7 +189,7 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', testCaseUpdateToast)
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
@@ -209,7 +212,7 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', testCaseUpdateToast)
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
