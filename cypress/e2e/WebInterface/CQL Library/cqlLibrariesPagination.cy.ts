@@ -25,7 +25,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
     })
     it('Verify Pagination for "All CQL Libraries"', () => {
 
-        cy.get(Header.cqlLibraryTab).click()
+        cy.get(Header.cqlLibraryTab).click().wait(2000)
         Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesBtn, 5000)
         cy.get(CQLLibraryPage.allLibrariesBtn).click().wait(2000)
         //Verify URL before clicking on Next button
