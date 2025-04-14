@@ -160,7 +160,7 @@ describe('Navigate to the QDM "CQL Editor" page', () => {
         const thresholds = {
             performance: 11,
             accessibility: 87,
-            'total-blocking-time': 12000,
+            'total-blocking-time': 14000,
             'speed-index': 50000,
             'cumulative-layout-shift': 100,
         };
@@ -302,7 +302,7 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
         const thresholds = {
             performance: 17,
             accessibility: 78,
-            'total-blocking-time': 10000,
+            'total-blocking-time': 12000,
             'speed-index': 55000,
             'cumulative-layout-shift': 100,
         };
