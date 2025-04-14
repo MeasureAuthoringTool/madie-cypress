@@ -56,10 +56,18 @@ describe('Action Center Buttons - Add Version to CQL Library', () => {
     it('Non Measure owner unable to Version CQL Library using Action Center buttons', () => {
 
         OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+
+        cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
 
-        cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(Header.cqlLibraryTab).click().wait(1000)
+        cy.get(Header.mainMadiePageButton).click().wait(1000)
+        cy.get(Header.cqlLibraryTab).click().wait(1000)
+        cy.reload()
+        cy.get(CQLLibraryPage.allLibrariesBtn).wait(2000).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 600000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
@@ -68,10 +76,13 @@ describe('Action Center Buttons - Add Version to CQL Library', () => {
         cy.get(CQLLibrariesPage.actionCenterVersionBtn).should('be.visible')
         cy.get(CQLLibrariesPage.actionCenterVersionBtn).should('be.disabled')
 
-        CQLLibrariesPage.clickViewforCreatedLibrary()
+        CQLLibrariesPage.clickViewforCreatedLibrary(false, true)
 
         cy.get(CQLLibraryPage.actionCenterButton).should('not.exist')
 
         Utilities.deleteLibrary(CqlLibraryOne)
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
     })
 })
