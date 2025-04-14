@@ -33,8 +33,7 @@ describe('CQL Library Validations', () => {
 
         cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait('@libraries', { timeout: 60000 })
-
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
@@ -91,7 +90,7 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
         //Enter a name for the new CQL Library
         cy.get(CQLLibraryPage.newCQLLibName).click()
-        cy.get(CQLLibraryPage.newCQLLibName).focused().type(CQLLibraryName + randValue)
+        cy.get(CQLLibraryPage.newCQLLibName).type(CQLLibraryName + randValue)
         //select a model value
         cy.get(CQLLibraryPage.cqlLibraryModelDropdown).click()
         cy.get(CQLLibraryPage.cqlLibraryModelQICore).click()
@@ -114,7 +113,7 @@ describe('CQL Library Validations', () => {
         //Click Edit CQL Library
         CQLLibrariesPage.clickEditforCreatedLibrary()
         //change up the value of the CQL Library name
-        cy.get(CQLLibraryPage.currentCQLLibName).focus().type(CQLLibraryName + randValue + 'Updated')
+        cy.get(CQLLibraryPage.currentCQLLibName).click().type(CQLLibraryName + randValue + 'Updated')
         //verify the existence, accessibility, the text and the functionality of the Discard button
         cy.get(CQLLibraryPage.discardChanges).should('exist')
         cy.get(CQLLibraryPage.discardChanges).should('be.visible')
