@@ -30,7 +30,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
+        //Adding wait time until MAT-8559 is fixed
+        cy.get(Header.cqlLibraryTab).click().wait(2000)
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
@@ -83,7 +84,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
+        //Adding wait time until MAT-8559 is fixed
+        cy.get(Header.cqlLibraryTab).click().wait(2000)
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
@@ -202,7 +204,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
+        //Adding wait time until MAT-8559 is fixed
+        cy.get(Header.cqlLibraryTab).click().wait(2000)
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
@@ -229,8 +232,10 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
+        //Adding wait time until MAT-8559 is fixed
+        cy.get(Header.cqlLibraryTab).click().wait(2000)
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         CQLLibrariesPage.clickViewforCreatedLibrary()
 
@@ -274,8 +279,7 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', CQLLibraryName)
     })
 
-    //Skipping until MAT-8418 is fixed
-    it.skip('Delete CQL Library - Draft Library - user has had the Library shared with them', () => {
+    it('Delete CQL Library - Draft Library - user has had the Library shared with them', () => {
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
@@ -286,7 +290,7 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
 
         CQLLibrariesPage.clickEditforCreatedLibrary()
         cy.get(CQLLibraryPage.actionCenterButton).click()
-        Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
+        Utilities.waitForElementToNotExist(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
 
     })
 
