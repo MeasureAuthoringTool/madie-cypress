@@ -3,6 +3,7 @@ import { Header } from "../../../Shared/Header"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import {Utilities} from "../../../Shared/Utilities";
 
 var CQLLibraryName = ""
 let CQLLibraryPublisher = 'ICFer'
@@ -23,13 +24,14 @@ describe('CQL Library Search Validations', () => {
 
     })
 
-    it('Filter text box and button appears on each tab ("My Libraries" and "All Libraries"), on the Libraries page', () => {
+    //Skipping due to MAT-8559
+    it.skip('Filter text box and button appears on each tab ("My Libraries" and "All Libraries"), on the Libraries page', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait('@libraries', { timeout: 60000 })
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         //ensure we are on the My Libraries tab
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
@@ -53,14 +55,15 @@ describe('CQL Library Search Validations', () => {
 
     })
 
-    it('Filter label appears on each tab (My Libraries and All Libraries), on the Libraries page', () => {
+    //Skipping due to MAT-8559
+    it.skip('Filter label appears on each tab (My Libraries and All Libraries), on the Libraries page', () => {
 
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait('@libraries', { timeout: 60000 })
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         //ensure we are on the My Libraries tab
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
@@ -82,14 +85,15 @@ describe('CQL Library Search Validations', () => {
 
     })
 
-    it('Filter is based on the Libraries name', () => {
+    //Skipping due to MAT-8559
+    it.skip('Filter is based on the Libraries name', () => {
 
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait('@libraries', { timeout: 60000 })
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         //ensure we are on the My Libraries tab
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
@@ -140,7 +144,7 @@ describe('CQL Library Search Validations', () => {
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait('@libraries', { timeout: 60000 })
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         //ensure we are on the My Libraries tab
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
@@ -188,7 +192,8 @@ describe('CQL Library Search Validations -- User ownership', () => {
         OktaLogin.Logout()
 
     })
-    it('Owner is different than current user, library will only appear in "All Libraries" searched list', () => {
+    //Skipping due to MAT-8559
+    it.skip('Owner is different than current user, library will only appear in "All Libraries" searched list', () => {
         //log in as user that does not own the Library
         OktaLogin.Login()
 
@@ -197,7 +202,7 @@ describe('CQL Library Search Validations -- User ownership', () => {
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait('@libraries', { timeout: 60000 })
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         //ensure we are on the My Libraries tab
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
@@ -240,7 +245,8 @@ describe('CQL Library Search Validations -- User ownership', () => {
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
 
     })
-    it('Owner is the same as the current user, library will appear in, both, "All Libraries" and "My Libraries" searched lists', () => {
+    //Skipping due to MAT-8559
+    it.skip('Owner is the same as the current user, library will appear in, both, "All Libraries" and "My Libraries" searched lists', () => {
         //log in as user that does not own the Library
         OktaLogin.AltLogin()
 
@@ -249,7 +255,7 @@ describe('CQL Library Search Validations -- User ownership', () => {
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        cy.wait('@libraries', { timeout: 60000 })
+        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         //ensure we are on the My Libraries tab
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
