@@ -189,7 +189,8 @@ describe('CQL Library Validations -- User ownership', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
+        //Adding wait time until MAT-8559 is fixed
+        cy.get(Header.cqlLibraryTab).click().wait(2000)
 
         Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
@@ -200,7 +201,13 @@ describe('CQL Library Validations -- User ownership', () => {
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
 
-        CQLLibrariesPage.clickViewforCreatedLibrary()
+        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+            cy.get('[data-testid=view-cql-library-button-' + fileContents + ']').should('exist')
+            cy.get('[data-testid=view-cql-library-button-' + fileContents + ']').should('be.visible')
+            Utilities.waitForElementEnabled('[data-testid=view-cql-library-button-' + fileContents + ']', 3500)
+            cy.get('[data-testid=view-cql-library-button-' + fileContents + ']').click()
+
+        })
 
         cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.disabled')
 
