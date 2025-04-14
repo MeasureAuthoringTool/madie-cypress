@@ -28,7 +28,7 @@ export class CQLLibrariesPage {
     public static readonly unshareOption = '[data-testid="Unshare-option"]'
     public static readonly harpIdInputTextBox = '[data-testid="harp-id-input"]'
     public static readonly addBtn = '[id="add-user-btn"]'
-    public static readonly expandArrow= '[data-testid="KeyboardArrowRightIcon"]'
+    public static readonly expandArrow = '[data-testid="KeyboardArrowRightIcon"]'
     public static readonly sharedUserTable = '[data-testid="row-item"]'
     public static readonly saveUserBtn = '[data-testid="share-save-button"]'
     public static readonly successMsg = '[class="toast success"]'
@@ -62,16 +62,26 @@ export class CQLLibrariesPage {
         })
     }
 
-    public static clickViewforCreatedLibrary(secondLibrary?: boolean): void {
+    public static clickViewforCreatedLibrary(secondLibrary?: boolean, altUserAction?: boolean): void {
         let filePath = 'cypress/fixtures/cqlLibraryId'
 
         if (secondLibrary === true) {
             filePath = 'cypress/fixtures/cqlLibraryId2'
         }
-        //Navigate to CQL Library Page
-        cy.get(Header.cqlLibraryTab).should('exist')
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
+        if (altUserAction === true) {
+            //Navigate to CQL Library Page
+            cy.get(Header.cqlLibraryTab).should('exist')
+            cy.get(Header.cqlLibraryTab).should('be.visible')
+            cy.get(Header.cqlLibraryTab).click()
+            cy.reload()
+            Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesBtn, 50000)
+            cy.get(CQLLibraryPage.allLibrariesBtn).wait(2000).click()
+        } else {
+            //Navigate to CQL Library Page
+            cy.get(Header.cqlLibraryTab).should('exist')
+            cy.get(Header.cqlLibraryTab).should('be.visible')
+            cy.get(Header.cqlLibraryTab).click()
+        }
         Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
         cy.readFile(filePath).should('exist').then((fileContents) => {
 
@@ -100,14 +110,14 @@ export class CQLLibrariesPage {
     public static validateVersionNumber(expectedValue: string, versionNumber: string): void {
         cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
 
-           cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']')
-            .should('contain.text', expectedValue)
-            .parent()
-            .invoke('data', 'testid')
-            .then(testId => {
-                const value: string  = (testId.split('_')[0]).slice(-1) // extract row index value
-                cy.get('[data-testid="cqlLibrary-button-' + value + '_version"]').should('contain.text', versionNumber)
-            })
+            cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']')
+                .should('contain.text', expectedValue)
+                .parent()
+                .invoke('data', 'testid')
+                .then(testId => {
+                    const value: string = (testId.split('_')[0]).slice(-1) // extract row index value
+                    cy.get('[data-testid="cqlLibrary-button-' + value + '_version"]').should('contain.text', versionNumber)
+                })
         })
     }
 

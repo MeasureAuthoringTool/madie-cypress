@@ -43,6 +43,11 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
     it('Add Draft to the versioned Library from My Libraries', () => {
 
         //Add Draft to Versioned Library
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+
+        cy.setAccessTokenCookie()
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.cqlLibraryActionCenter('draft')
@@ -65,13 +70,25 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         })
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', 'Draft 1.0.000')
-        cy.log('Draft Created Successfully')
+        cy.log('Draft Created Successfully').wait(1000)
+
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+
+        cy.setAccessTokenCookie()
 
         //Delete Draft Library
         Utilities.deleteLibrary(CqlLibraryOne)
     })
 
     it('Add Draft to the versioned Library from Edit Library screen', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+
+        cy.setAccessTokenCookie()
         //intercept draft id once library is drafted
         cy.readFile(filePath).should('exist').then((fileContents) => {
             cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
@@ -90,6 +107,13 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'New Draft of CQL Library is Successfully created')
         cy.get(CQLLibraryPage.draftBubble).should('be.visible')
         cy.log('Draft Created Successfully')
+        OktaLogin.UILogout()
+
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+
+        cy.setAccessTokenCookie()
 
         //Delete Draft Library
         Utilities.deleteLibrary(CqlLibraryOne)
@@ -98,9 +122,18 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
     it('Non Measure Owner unable to add Draft to the versioned Library using Action Center Buttons', () => {
 
         //Verify that the Draft button is disabled for Non Measure owner
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+
+        cy.setAccessTokenCookieALT()
+
         OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(Header.cqlLibraryTab).click().wait(1000)
+        cy.get(Header.mainMadiePageButton).click().wait(1000)
+        cy.get(Header.cqlLibraryTab).click().wait(1000)
+        cy.reload()
+        cy.get(CQLLibraryPage.allLibrariesBtn).wait(2000).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 600000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
@@ -109,10 +142,15 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         cy.get(CQLLibrariesPage.actionCenterDraftBtn).should('be.disabled')
 
         //Verify that Non Measure owner unable to edit Library
-        CQLLibrariesPage.clickViewforCreatedLibrary()
+        CQLLibrariesPage.clickViewforCreatedLibrary(null, true)
         cy.get(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'You are not the owner of the CQL Library. Only owner can edit it.')
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).should('have.attr', 'disabled', 'disabled')
         cy.get(CQLLibraryPage.cqlLibraryDesc).should('have.attr', 'disabled', 'disabled')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.disabled')
+
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
     })
 })
