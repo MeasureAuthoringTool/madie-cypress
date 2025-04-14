@@ -2,7 +2,7 @@ import { TestCasesPage } from './TestCasesPage'
 
 export class Global {
 
-    public static readonly dirtCheckModal = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-aa4ov7 react-draggable"]'
+    public static readonly dirtCheckModal = '.MuiDialogContent-root'
     public static readonly discardChangesBtn = '[data-testid="group-form-discard-btn"]'
     public static readonly discardChangesContinue = '[data-testid="discard-dialog-continue-button"]'
     public static readonly discardChangesConfirmationModal = '.MuiBox-root'
