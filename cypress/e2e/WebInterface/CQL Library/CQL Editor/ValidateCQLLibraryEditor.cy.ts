@@ -5,7 +5,7 @@ import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import {MeasuresPage} from "../../../../Shared/MeasuresPage";
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 
 let apiCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -170,7 +170,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/CQLWithDefNoName.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
-        
+
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
 
         cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
@@ -189,7 +189,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/CQLWithDefReservedKeyword.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
-        
+
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
 
         cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
@@ -263,7 +263,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
     })
 
     it('Verify error message when context is set to anything except Patient', () => {
-        
+
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/CQLWithPractitionerContext.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
@@ -287,14 +287,14 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
 
-            cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}').type('Concept {Code \'66071002\' from "SNOMED-CT",Code \'B18.1\' from "ICD-10-CM"} display \'Type B viral hepatitis', { parseSpecialCharSequences: false })
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}').type('Concept {Code \'66071002\' from "SNOMED-CT",Code \'B18.1\' from "ICD-10-CM"} display \'Type B viral hepatitis', { parseSpecialCharSequences: false })
 
-            //save the value in the CQL Editor
-            cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-            Utilities.waitForElementVisible('#content', 60000)
+        //save the value in the CQL Editor
+        cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
+        Utilities.waitForElementVisible('#content', 60000)
 
         cy.get('#content').should('contain.text', 'Concept Constructs are not supported in MADiE. It has been removed.')
-            cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('not.contain', 'Concept {Code \'66071002\' from "SNOMED-CT",Code \'B18.1\' from "ICD-10-CM"} display \'Type B viral hepatitis')
+        cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).should('not.contain', 'Concept {Code \'66071002\' from "SNOMED-CT",Code \'B18.1\' from "ICD-10-CM"} display \'Type B viral hepatitis')
     })
 })
 
@@ -383,6 +383,6 @@ describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {
 
         cy.get(Header.mainMadiePageButton).click()
 
-        cy.get(CQLLibrariesPage.cqlLibraryDirtyCheck).should('be.visible')
+        cy.get(MeasureGroupPage.qdmDirtyCheckDiscardModal).should('be.visible')
     })
 })
