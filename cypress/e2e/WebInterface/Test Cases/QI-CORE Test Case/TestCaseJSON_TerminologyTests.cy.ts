@@ -414,7 +414,8 @@ describe('JSON Resource ID tests', () => {
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details ' +
+            'for this group updated successfully.')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -458,33 +459,24 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with ' +
+            'errors in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.')
 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'HAPI-1821: [element="id"] Invalid attribute value "": Attribute value must not be empty ("")')
+        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'HAPI-1821: ' +
+            '[element="id"] Invalid attribute value "": Attribute value must not be empty ("")')
     })
 
-    it('JSON missing Resource IDs; the fullUrl value will automatically update with an ending slash and should result with an update but with errors', () => {
+    it('JSON missing Resource IDs; the fullUrl value will automatically update with an ending ' +
+        'slash and should result with an update but with errors', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        // cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
-        // cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
-        // cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
-        // cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
-        //     if ($ele.text() == "Text") {
-        //         cy.wrap($ele).should('exist')
-        //         cy.wrap($ele).focus()
-        //         cy.wrap($ele).click()
-        //     }
-        // })
-        // cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
         cy.get(MeasureGroupPage.popBasis).should('exist')
@@ -552,7 +544,8 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with ' +
+            'errors in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.')
 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
@@ -634,7 +627,8 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with ' +
+            'errors in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.')
     })
 
     it('JSON has Resource IDs duplicated for different resources', () => {
@@ -719,7 +713,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources in bundle must have unique ID regardless of type. Multiple resources detected with ID [4989ju789fn93bvy562loe87c]')
     })
 
-    it('Verify warning message for missing Meta.Profile Values on Resources in Test case Json', () => {
+    it.only('Verify warning message for missing Meta.Profile Values on Resources in Test case Json', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -769,7 +763,8 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.importTestCaseSuccessMsg).should('exist')
         cy.get(TestCasesPage.importTestCaseSuccessMsg).should('be.visible')
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get('.toast').should('have.text', 'Test case updated successfully with warnings in ' +
+            'JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.')
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView()
         Utilities.waitForElementVisible(TestCasesPage.detailsTab, 27700)
