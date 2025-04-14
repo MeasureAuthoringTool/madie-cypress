@@ -7,8 +7,6 @@ let model = 'QI-Core v4.1.1'
 let CQLLibraryPublisher = 'SemanticBits'
 let harpUser = Environment.credentials().harpUser
 
-
-
 describe('CQL Library Service: Create CQL Library', () => {
 
     beforeEach('Set Access Token', () => {
@@ -100,8 +98,8 @@ describe('CQL Library Service: Create CQL Library', () => {
             }).then((response) => {
                 expect(response.status).to.eql(200)
                 expect(response.body).to.not.be.null
-                expect(response.body).to.be.a('array')
-                expect(response.body[0].id).to.be.exist
+                expect(response.body.content).to.be.a('array')
+                expect(response.body.content[0].id).to.be.exist
             })
         })
     })
@@ -144,10 +142,9 @@ describe('CQL Library Service: Create CQL Library', () => {
             }).then((response) => {
                 expect(response.status).to.eql(200)
                 expect(response.body).to.not.be.null
-                expect(response.body).to.be.a('array')
-                cy.get(response.body.length)
-                expect(response.body[0].id).to.be.exist
-                expect(response.body[0].librarySet.owner).to.eql(harpUser)
+                expect(response.body.content).to.be.a('array')
+                expect(response.body.content[0].id).to.be.exist
+                expect(response.body.content[0].librarySet.owner).to.eql(harpUser)
             })
         })
     })
