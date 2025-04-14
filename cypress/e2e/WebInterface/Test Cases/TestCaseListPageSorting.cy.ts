@@ -95,8 +95,8 @@ describe('Sort by each of the test case list page\'s columns', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'MADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
