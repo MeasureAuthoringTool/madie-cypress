@@ -1062,6 +1062,7 @@ describe('Delete QDM Measure with admin API Key', () => {
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'd')
     })
 
+    //MAT-8548
     it('Delete versioned QDM Measure with admin API key', () => {
 
         //Version Measure
