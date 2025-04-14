@@ -110,15 +110,15 @@ describe('Test Case Import: functionality tests', () => {
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check()
+        cy.get(TestCasesPage.testCaseIPPExpected).click()
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.')
 
         OktaLogin.UILogout()
 
