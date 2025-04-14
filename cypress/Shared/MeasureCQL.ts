@@ -3267,22 +3267,18 @@ export class MeasureCQL {
         'define function daysObs(e Encounter):\n' +
         '  duration in days of e.period\n'
 
-    public static readonly CQL_BoneDensity_Proportion_Boolean = '/*\n' +
-        'Test impact for QICore6 uplift: HL7 FHIR profile urls and resource types should be changed to ConditionProblemsHealthConcerns, ConditionEncounterDiagnosis, LaboratoryResultObservation, and ObservationCancelled\n' +
-        '*/\n' +
-        '\n' +
-        'library BoneDensityProstateCancerAndrogenDeprivationTherapyFHIR6 version \'1.4.000\'\n' +
+    public static readonly CQL_BoneDensity_Proportion_Boolean = 'library BoneDensityProstateCancerAndrogenDeprivationTherapyFHIR6 version \'1.4.000\'\n' +
         '\n' +
         'using QICore version \'6.0.0\'\n' +
         '\n' +
         'include FHIRHelpers version \'4.4.000\' called FHIRHelpers\n' +
-        'include SupplementalDataElements version \'4.0.000\' called SDE\n' +
-        'include QICoreCommon version \'3.0.000\' called QICoreCommon\n' +
+        'include SupplementalDataElements version \'5.1.000\' called SDE\n' +
+        'include QICoreCommon version \'4.0.000\' called QICoreCommon\n' +
         '\n' +
         'codesystem "SNOMEDCT": \'http://snomed.info/sct\'\n' +
         '\n' +
-        'valueset "Androgen deprivation therapy for Urology Care": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1151.48\'\n' +
-        'valueset "DEXA Dual Energy Xray Absorptiometry, Bone Density for Urology Care": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1151.38\'\n' +
+        'valueset "Androgen Deprivation Therapy for Urology Care": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1248.352\'\n' +
+        'valueset "DEXA Bone Density for Urology Care": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1248.359\'\n' +
         'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
         'valueset "Patient Declined": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1582\'\n' +
         'valueset "Prostate Cancer": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.319\'\n' +
@@ -3301,20 +3297,15 @@ export class MeasureCQL {
         '  "Initial Population"\n' +
         '\n' +
         'define "Numerator":\n' +
-        '  "Has Baseline DEXA Scan Two Years Prior to the Start of or Less than Three Months After the Start of ADT"\n' +
-        '\n' +
-        '\n' +
-        '/*\n' +
-        '@commentedOut: exists ( "No Bone Density Scan Ordered Due to Patient Refusal" ) \n' +
-        '                 or exists ( "No Bone Density Scan Performed Due to Patient Refusal" )\n' +
-        '@commmentedOutReason: Negation issue related to https://github.com/cqframework/cql-execution/issues/296, which is tied to https://oncprojectracking.healthit.gov/support/browse/BONNIEMAT-1455. Due to this being the only logic in population, created a \'false\' placeholder\n' +
-        '*/\n' +
-        '\n' +
+        '   "Has Baseline DEXA Scan Two Years Prior to the Start of or Less than Three Months After the Start of ADT"\n' +
         '\n' +
         'define "Denominator Exception":\n' +
-        '    //placeholder\n' +
-        '  \n' +
         '  false\n' +
+        '  // @commmentedOutReason: Negation issue related to https://github.com/cqframework/cql-execution/issues/296, \n' +
+        '  //                       which is tied to https://oncprojectracking.healthit.gov/support/browse/BONNIEMAT-1455. \n' +
+        '  //                       Due to this being the only logic in population, created a \'false\' placeholder\n' +
+        '  // exists ( "No Bone Density Scan Ordered Due to Patient Refusal")\n' +
+        '  //   or exists ( "No Bone Density Scan Performed Due to Patient Refusal")\n' +
         '\n' +
         'define "SDE Ethnicity":\n' +
         '  SDE."SDE Ethnicity"\n' +
@@ -3329,7 +3320,7 @@ export class MeasureCQL {
         '  SDE."SDE Sex"\n' +
         '\n' +
         'define "Has Baseline DEXA Scan Two Years Prior to the Start of or Less than Three Months After the Start of ADT":\n' +
-        '  exists ( ( [ServiceRequest: "DEXA Dual Energy Xray Absorptiometry, Bone Density for Urology Care"] DEXAOrdered\n' +
+        '  exists ( ( [ServiceRequest: "DEXA Bone Density for Urology Care"] DEXAOrdered\n' +
         '        with "Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period" OrderTwelveMonthsADT\n' +
         '          such that DEXAOrdered.authoredOn 3 months or less on or after day of OrderTwelveMonthsADT.authoredOn\n' +
         '            or DEXAOrdered.authoredOn 2 years or less before day of OrderTwelveMonthsADT.authoredOn\n' +
@@ -3337,29 +3328,22 @@ export class MeasureCQL {
         '          and DEXAOrdered.intent = \'order\'\n' +
         '          and DEXAOrdered.doNotPerform is not true\n' +
         '    )\n' +
-        '\n' +
-        '      /*\n' +
-        '      @QICore6Uplift: Update Observation to LaboratoryResultObservation (ObservationClinicalResult includes non-imaging tests)\n' +
-        '      */    \n' +
-        '      union ( [LaboratoryResultObservation: "DEXA Dual Energy Xray Absorptiometry, Bone Density for Urology Care"] DEXAPerformed\n' +
-        '          with "Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period" OrderTwelveMonthsADT\n' +
-        '            such that DEXAPerformed.effective.toInterval ( ) 3 months or less on or after day of OrderTwelveMonthsADT.authoredOn\n' +
-        '              or DEXAPerformed.effective.toInterval ( ) 2 years or less before day of OrderTwelveMonthsADT.authoredOn\n' +
-        '          where DEXAPerformed.status in { \'final\', \'amended\', \'corrected\' }\n' +
-        '      )\n' +
+        '    union ( [LaboratoryResultObservation: "DEXA Bone Density for Urology Care"] DEXAPerformed\n' +
+        '      with "Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period" OrderTwelveMonthsADT\n' +
+        '        such that DEXAPerformed.effective.toInterval ( ) 3 months or less on or after day of OrderTwelveMonthsADT.authoredOn\n' +
+        '          or DEXAPerformed.effective.toInterval ( ) 2 years or less before day of OrderTwelveMonthsADT.authoredOn\n' +
+        '      where DEXAPerformed.status in { \'final\', \'amended\', \'corrected\' }\n' +
+        '    )\n' +
         '  )\n' +
         '\n' +
         'define "No Bone Density Scan Ordered Due to Patient Refusal":\n' +
-        '  [ServiceNotRequested: "DEXA Dual Energy Xray Absorptiometry, Bone Density for Urology Care"] DEXANotOrdered\n' +
+        '  [ServiceNotRequested: "DEXA Bone Density for Urology Care"] DEXANotOrdered\n' +
         '    with "Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period" OrderTwelveMonthsADT\n' +
         '      such that DEXANotOrdered.authoredOn 3 months or less on or after day of OrderTwelveMonthsADT.authoredOn\n' +
         '        and DEXANotOrdered.reasonRefused in "Patient Declined"\n' +
         '\n' +
-        '/*\n' +
-        '@QICore6Uplift: Update ObservationNotDone to ObservationCancelled\n' +
-        '*/    \n' +
         'define "No Bone Density Scan Performed Due to Patient Refusal":\n' +
-        '  [ObservationCancelled: "DEXA Dual Energy Xray Absorptiometry, Bone Density for Urology Care"] DEXANotPerformed\n' +
+        '  [ObservationCancelled: "DEXA Bone Density for Urology Care"] DEXANotPerformed\n' +
         '    with "Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period" OrderTwelveMonthsADT\n' +
         '      such that DEXANotPerformed.issued 3 months or less on or after day of OrderTwelveMonthsADT.authoredOn\n' +
         '        and DEXANotPerformed.notDoneReason in "Patient Declined"\n' +
@@ -3370,7 +3354,7 @@ export class MeasureCQL {
         '      with "Prostate Cancer Diagnosis" ProstateCancer\n' +
         '        such that ADTDateTime during day of ProstateCancer.prevalenceInterval()\n' +
         '          and ADTDateTime during day of Interval[start of "Measurement Period" - 3 months, start of "Measurement Period" + 9 months]\n' +
-        '      sort ascending\n' +
+        '    sort ascending\n' +
         '  )\n' +
         '\n' +
         'define "Order for 12 Months of ADT in 3 Months Before to 9 Months After Start of Measurement Period":\n' +
@@ -3383,7 +3367,7 @@ export class MeasureCQL {
         '        and OrderTwelveMonthADT.doNotPerform is not true\n' +
         '\n' +
         'define "Androgen Deprivation Therapy for Urology Care Medication Active Start Dates":\n' +
-        '  [MedicationRequest: "Androgen deprivation therapy for Urology Care"] ADTActive\n' +
+        '  [MedicationRequest: "Androgen Deprivation Therapy for Urology Care"] ADTActive\n' +
         '    let firstMedicationPeriod: First((collapse(ADTActive.dosageInstruction.timing.repeat.bounds DoseTime\n' +
         '          return DoseTime.toInterval()\n' +
         '      )) DrugPeriods\n' +
@@ -3405,7 +3389,7 @@ export class MeasureCQL {
         '    return medicationDateTime\n' +
         '\n' +
         'define "Androgen Deprivation Therapy for Urology Care Medication Order Start Dates":\n' +
-        '  [MedicationRequest: "Androgen deprivation therapy for Urology Care"] ADTOrder\n' +
+        '  [MedicationRequest: "Androgen Deprivation Therapy for Urology Care"] ADTOrder\n' +
         '    let firstMedicationPeriod: First((collapse(ADTOrder.dosageInstruction.timing.repeat.bounds DoseTime\n' +
         '          return DoseTime.toInterval()\n' +
         '      )) DrugPeriods\n' +
@@ -3422,11 +3406,9 @@ export class MeasureCQL {
         '        and OfficeVisit.status = \'finished\'\n' +
         '  )\n' +
         '\n' +
-        '/*\n' +
-        '@QICore6Uplift: Update Condition to be a union of ConditionProblemsHealthConcerns and ConditionEncounterDiagnosis\n' +
-        '*/    \n' +
         'define "Prostate Cancer Diagnosis":\n' +
-        '  ([ConditionProblemsHealthConcerns: "Prostate Cancer"] union [ConditionEncounterDiagnosis: "Prostate Cancer"]) ProstateCancer\n' +
+        '  ([ConditionProblemsHealthConcerns: "Prostate Cancer"] \n' +
+        '    union [ConditionEncounterDiagnosis: "Prostate Cancer"]) ProstateCancer\n' +
         '    where ProstateCancer.prevalenceInterval ( ) overlaps "Measurement Period"\n' +
         '      and ProstateCancer.clinicalStatus ~ QICoreCommon."active"\n' +
         '      and ProstateCancer.verificationStatus ~ QICoreCommon."confirmed"\n' +

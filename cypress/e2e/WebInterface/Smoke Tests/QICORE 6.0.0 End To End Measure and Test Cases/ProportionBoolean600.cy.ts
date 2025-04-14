@@ -20,7 +20,7 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6,
-            { measureCql: measureCQL, mpStartDate: '2025-01-01', mpEndDate: '2025-12-31' })
+            { measureCql: measureCQL, mpStartDate: '2026-01-01', mpEndDate: '2026-12-31' })
 
         OktaLogin.Login()
     })
