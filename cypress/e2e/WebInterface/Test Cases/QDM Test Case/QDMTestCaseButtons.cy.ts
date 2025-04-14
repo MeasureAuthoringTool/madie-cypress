@@ -162,17 +162,18 @@ describe('Test case list page - Action Center icons for versioned measure', () =
         Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 9500)
 
         EditMeasurePage.actionCenter(EditMeasureActions.version)
-        cy.get(EditMeasurePage.testCasesTab).click()
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteVersionedMeasure(measure.name, measure.cqlLibraryName)
+        Utilities.deleteMeasure(measure.name, measure.cqlLibraryName)
     })
 
     it('Export icon is present and it enables correctly', () => {
         // checks that delete, clone, and shift dates are not present at all
+        cy.get(EditMeasurePage.testCasesTab).click()
+
         cy.get(TestCasesPage.actionCenterDelete).should('not.exist')
         cy.get(TestCasesPage.actionCenterClone).should('not.exist')
         cy.get(TestCasesPage.actionCenterShiftDates).should('not.exist')
@@ -195,9 +196,12 @@ describe('Test case list page - Action Center icons for versioned measure', () =
             cy.get(qrdaButton).should('be.visible')
             cy.get(excelButton).should('be.visible').click()
         })
+
     })
 
     it('Copy To icon is present and it enables correctly', () => {
+
+        cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.disabled')
         cy.get('[data-testid="copy-tooltip"]').should('have.attr', 'aria-label', 'Select test cases to copy to another measure')
@@ -211,6 +215,7 @@ describe('Test case list page - Action Center icons for versioned measure', () =
 
         cy.contains('Copy To').should('be.visible')
         cy.get(MeasuresPage.measureListTitles).should('be.visible')
+
     })
 })
 
@@ -280,6 +285,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
             cy.get(qrdaButton).should('be.visible')
             cy.get(excelButton).should('be.visible').click()
         })
+
     })
 
     it('Non-owner sees Copy To icon; it enables correctly', () => {
@@ -296,6 +302,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
 
         cy.contains('Copy To').should('be.visible')
         cy.get(MeasuresPage.measureListTitles).should('be.visible')
+
     })
 })
 
