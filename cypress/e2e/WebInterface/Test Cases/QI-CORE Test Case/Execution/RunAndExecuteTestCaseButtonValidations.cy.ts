@@ -224,7 +224,7 @@ describe('Run / Execute Test Case button validations', () => {
 
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
         cy.log('JSON added to test case successfully')
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -422,7 +422,7 @@ describe('Run / Execute Test Case button validations', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
 
         //Add valid json to the test case and run
         cy.get('#ace-editor-wrapper > .ace_scroller > .ace_content').eq(0).type('{selectall}{backspace}{selectall}{backspace}')
@@ -531,7 +531,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
 
         Utilities.waitForElementVisible(TestCasesPage.successMsg, 60000)
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
 
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -666,7 +666,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -675,7 +675,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -789,7 +789,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -798,7 +798,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -865,7 +865,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -961,7 +961,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -970,7 +970,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -1091,7 +1091,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1105,7 +1105,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         //check the check box for the expected IP
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check({ force: true }).should('be.checked')
+        cy.get(TestCasesPage.testCaseIPPExpected).click().should('be.checked')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -1227,7 +1227,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1241,7 +1241,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         //check the check box for the expected IP
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check({ force: true }).should('be.checked')
+        cy.get(TestCasesPage.testCaseIPPExpected).click().should('be.checked')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -1384,7 +1384,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1398,7 +1398,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         //check the check box for the expected IP
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).check({ force: true }).should('be.checked')
+        cy.get(TestCasesPage.testCaseIPPExpected).click().should('be.checked')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -1493,7 +1493,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
-            cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+            cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
             cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -1502,7 +1502,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-            cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+            TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1516,7 +1516,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             //check the check box for the expected IP
             cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
             cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseIPPExpected).invoke('click').check().should('be.checked')
+            cy.get(TestCasesPage.testCaseIPPExpected).click().should('be.checked')
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -1792,7 +1792,7 @@ describe('Verify multiple IPs on the highlighting tab', () => {
         Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
