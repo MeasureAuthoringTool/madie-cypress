@@ -34,7 +34,7 @@ export class EditMeasurePage {
 
     //Associate QDM and QI Core measures:
     public static readonly associateCmsIdDialog = '[data-testid="associate-cms-id-dialog-tbl"]'
-    public static readonly sureDialog = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-aa4ov7 react-draggable"]'
+    public static readonly sureDialog = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-3nccws react-draggable"]'
     public static readonly sureDialogCancelBtn = '[data-testid="associate-cms-identifier-confirmation-dialog-cancel-button"]'
     public static readonly sureDialogContinueBtn = '[data-testid="associate-cms-identifier-confirmation-dialog-continue-button"]'
     public static readonly associateCmsAssociateBtn = '[data-testid="associate-cms-id-button"]'
@@ -93,7 +93,7 @@ export class EditMeasurePage {
     public static readonly measureReferenceTable = '[data-testid="measure-references-table-body"]'
     public static readonly deleteReference = '[data-testid*="delete-measure-reference"]'
     public static readonly editReference = '[data-testid*="edit-measure-reference"]'
-    public static readonly searchReferenceTextBox= '[data-testid="measure-reference-search-input"]'
+    public static readonly searchReferenceTextBox = '[data-testid="measure-reference-search-input"]'
     public static readonly searchReferenceIcon = '[data-testid="SearchIcon"]'
 
     //Definition(Terms) page
@@ -111,7 +111,7 @@ export class EditMeasurePage {
     public static readonly unshareOption = '[data-testid="Unshare-option"]'
     public static readonly harpIdInputTextBox = '[data-testid="harp-id-input"]'
     public static readonly addBtn = '[id="add-user-btn"]'
-    public static readonly expandArrow= '[data-testid="KeyboardArrowRightIcon"]'
+    public static readonly expandArrow = '[data-testid="KeyboardArrowRightIcon"]'
     public static readonly sharedUserTable = '[data-testid="row-item"]'
     public static readonly saveUserBtn = '[data-testid="share-save-button"]'
     public static readonly successMsg = '[class="toast success"]'
