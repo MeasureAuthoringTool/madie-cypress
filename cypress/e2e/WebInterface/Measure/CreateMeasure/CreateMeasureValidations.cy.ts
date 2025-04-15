@@ -253,8 +253,8 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //confirm dirty check window
-        cy.get(EditMeasurePage.dirtCheckModal).should('exist')
-        cy.get(EditMeasurePage.dirtCheckModal).should('be.visible')
+        cy.get(MeasureGroupPage.qdmDirtyCheckDiscardModal).should('exist')
+        cy.get(MeasureGroupPage.qdmDirtyCheckDiscardModal).should('be.visible')
 
     })
 
