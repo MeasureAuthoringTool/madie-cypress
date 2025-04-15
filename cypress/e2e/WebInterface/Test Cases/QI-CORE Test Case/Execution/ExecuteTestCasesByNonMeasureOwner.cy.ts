@@ -8,7 +8,6 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { LandingPage } from "../../../../../Shared/LandingPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import {delay} from "rxjs";
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
