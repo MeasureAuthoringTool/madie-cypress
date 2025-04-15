@@ -356,7 +356,7 @@ describe('No values in QDM PC fields, when no CQL', () => {
         cy.get(MeasureGroupPage.initialPopulationSelect).scrollTo
         cy.get(MeasureGroupPage.initialPopulationSelect).click()
 
-        cy.get('[class="MuiList-root MuiList-padding MuiMenu-list css-1c1ttle"]').should('be.empty')
+        cy.get('[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]').should('be.empty')
 
         cy.get(MeasureGroupPage.QDMPopCriteria1IPDesc).should('be.visible')
     })
