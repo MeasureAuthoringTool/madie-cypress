@@ -359,7 +359,7 @@ describe('Test Case Expected Measure Group population values based on initial me
     })
 })
 
-describe('Test Case Population dependencies', () => {
+describe.only('Test Case Population dependencies', () => {
 
     before('Create measure and login', () => {
 
@@ -406,6 +406,9 @@ describe('Test Case Population dependencies', () => {
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
 
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
 
         //click on Expected / Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
