@@ -909,7 +909,7 @@ export class TestCasesPage {
     public static checkToastMessageOK(element: string) {
 
         cy.get(element).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON', 'Test case updated successfully with warnings in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.'])
+            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON', 'Test case updated successfully with warnings in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.', 'Test case updated successfully with errors in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.', 'Test case updated successfully with errors in JSON'])
         })
     }
 }
