@@ -24,8 +24,7 @@ describe('CQL Library Search Validations', () => {
 
     })
 
-    //Skipping due to MAT-8559
-    it.skip('Filter text box and button appears on each tab ("My Libraries" and "All Libraries"), on the Libraries page', () => {
+    it('Filter text box and button appears on each tab ("My Libraries" and "All Libraries"), on the Libraries page', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
@@ -55,8 +54,7 @@ describe('CQL Library Search Validations', () => {
 
     })
 
-    //Skipping due to MAT-8559
-    it.skip('Filter label appears on each tab (My Libraries and All Libraries), on the Libraries page', () => {
+    it('Filter label appears on each tab (My Libraries and All Libraries), on the Libraries page', () => {
 
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
@@ -85,8 +83,7 @@ describe('CQL Library Search Validations', () => {
 
     })
 
-    //Skipping due to MAT-8559
-    it.skip('Filter is based on the Libraries name', () => {
+    it('Filter is based on the Libraries name', () => {
 
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
@@ -192,8 +189,8 @@ describe('CQL Library Search Validations -- User ownership', () => {
         OktaLogin.Logout()
 
     })
-    //Skipping due to MAT-8559
-    it.skip('Owner is different than current user, library will only appear in "All Libraries" searched list', () => {
+
+    it('Owner is different than current user, library will only appear in "All Libraries" searched list', () => {
         //log in as user that does not own the Library
         OktaLogin.Login()
 
@@ -245,8 +242,8 @@ describe('CQL Library Search Validations -- User ownership', () => {
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
 
     })
-    //Skipping due to MAT-8559
-    it.skip('Owner is the same as the current user, library will appear in, both, "All Libraries" and "My Libraries" searched lists', () => {
+
+    it('Owner is the same as the current user, library will appear in, both, "All Libraries" and "My Libraries" searched lists', () => {
         //log in as user that does not own the Library
         OktaLogin.AltLogin()
 

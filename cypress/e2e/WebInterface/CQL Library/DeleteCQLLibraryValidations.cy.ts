@@ -30,8 +30,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
-        //Adding wait time until MAT-8559 is fixed
-        cy.get(Header.cqlLibraryTab).click().wait(2000)
+        cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
@@ -84,8 +83,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
-        //Adding wait time until MAT-8559 is fixed
-        cy.get(Header.cqlLibraryTab).click().wait(2000)
+        cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
@@ -204,8 +202,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
-        //Adding wait time until MAT-8559 is fixed
-        cy.get(Header.cqlLibraryTab).click().wait(2000)
+        cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
@@ -232,8 +229,7 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
-        //Adding wait time until MAT-8559 is fixed
-        cy.get(Header.cqlLibraryTab).click().wait(2000)
+        cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
         Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 

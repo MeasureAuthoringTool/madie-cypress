@@ -189,8 +189,7 @@ describe('CQL Library Validations -- User ownership', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        //Adding wait time until MAT-8559 is fixed
-        cy.get(Header.cqlLibraryTab).click().wait(2000)
+        cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
