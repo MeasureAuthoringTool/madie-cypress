@@ -359,7 +359,7 @@ describe('Test Case Expected Measure Group population values based on initial me
     })
 })
 
-describe.only('Test Case Population dependencies', () => {
+describe('Test Case Population dependencies', () => {
 
     before('Create measure and login', () => {
 
