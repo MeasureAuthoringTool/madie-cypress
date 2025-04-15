@@ -119,7 +119,8 @@ export class MeasureGroupPage {
     public static readonly improvementNotationSelect = '[id="improvement-notation-select"]'
     public static readonly improvementNotationDescText = '[data-testid="improvement-notation-description-input"]'
     public static readonly improvementNotationDescQiCore = '[data-testid="improvement-notation-description"]'
-    public static readonly improvementNotationValues = '[class="MuiList-root MuiList-padding MuiMenu-list css-1c1ttle"]'
+    //<ul class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk" role="listbox" tabindex="-1" aria-labelledby="improvement-notation-select-label" id="mui-39"><li class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-1km1ehz" tabindex="-1" role="option" aria-selected="false" data-value="">-<span class="MuiTouchRipple-root css-w0pj6f"></span></li><li class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters Mui-selected MuiMenuItem-root MuiMenuItem-gutters Mui-selected css-1km1ehz" tabindex="0" role="option" aria-selected="true" data-value="Increased score indicates improvement">Increased score indicates improvement<span class="MuiTouchRipple-root css-w0pj6f"></span></li><li class="MuiButtonBase-root MuiMenuItem-root MuiMenuItem-gutters MuiMenuItem-root MuiMenuItem-gutters css-1km1ehz" tabindex="-1" role="option" aria-selected="false" data-value="Decreased score indicates improvement">Decreased score indicates improvement<span class="MuiTouchRipple-root css-w0pj6f"></span></li></ul>
+    public static readonly improvementNotationValues = '[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]'
     public static readonly measureReportingSaveBtn = '[data-testid="measure-Reporting-save"]'
 
     //Measure Group Type
