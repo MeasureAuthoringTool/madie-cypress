@@ -15,7 +15,7 @@ export class CQLLibrariesPage {
     public static readonly versionErrorMsg = '[data-testid=create-version-error-message]'
     public static readonly versionCancelBtn = '[data-testid="create-version-cancel-button"]'
     public static readonly editCQLLibraryAlertMessage = '.madie-alert'
-    public static readonly cqlLibraryDirtyCheck = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-aa4ov7 react-draggable"]'
+    public static readonly cqlLibraryDirtyCheck = '.MuiDialogContent-root'
 
     //Action Center buttons
     public static readonly actionCenterDeleteBtn = '[data-testid="delete-action-btn"]'
