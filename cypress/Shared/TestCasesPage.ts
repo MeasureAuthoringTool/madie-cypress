@@ -589,7 +589,7 @@ export class TestCasesPage {
         Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
         cy.get(TestCasesPage.aceEditor).type(err_TestCaseJson, { parseSpecialCharSequences: false })
 
         cy.log('Erroneous JSON added to test case successfully')

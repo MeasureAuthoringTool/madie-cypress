@@ -45,7 +45,6 @@ describe('Ability to run valid test cases whether or not the user is the owner o
     it('Run / Execute single passing Test Case, on the Test Case list page, where the user is not the owner nor shared' +
         ' -- Run button is available and correct results are provided', () => {
 
-
             //Click on Edit Measure
             MeasuresPage.actionCenter('edit', null)
 
@@ -111,8 +110,8 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
-            cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
-            cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
+            cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
+            cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, {parseSpecialCharSequences: false})
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -120,7 +119,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
             cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-            cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+            TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -252,7 +251,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
             cy.get(TestCasesPage.aceEditor).should('exist')
             cy.get(TestCasesPage.aceEditor).should('be.visible')
-            cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+            cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
             cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -261,7 +260,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
             cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-            cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+            TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
             Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 37700)
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
@@ -274,7 +273,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
             cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
             cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-            cy.get(TestCasesPage.testCaseIPPExpected).type('1')
+            cy.get(TestCasesPage.testCaseIPPExpected).click()
 
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
             cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -399,7 +398,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSON')
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -413,7 +412,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         //check the check box for the expected IP
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
-        cy.get(TestCasesPage.testCaseIPPExpected).invoke('click').check().should('be.checked')
+        cy.get(TestCasesPage.testCaseIPPExpected).click().should('be.checked')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
