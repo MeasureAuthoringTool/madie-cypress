@@ -179,15 +179,24 @@ describe('Measure Transfer - Multiple instances', () => {
         cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
+        OktaLogin.UILogout()
         //Share Measure with ALT User
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
         cy.setAccessTokenCookie()
         Utilities.setSharePermissions(MadieObject.Measure, PermissionActions.GRANT, harpUserALT)
 
+
         //Login as ALT User
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
-        cy.get('[class="table-body"]').should('contain', newMeasureName)
-        cy.get('[class="table-body"]').should('contain', randomMeasureName)
+        cy.get('[class="table-body measures-list"]').should('contain', newMeasureName)
+        cy.get('[class="table-body measures-list"]').should('contain', randomMeasureName)
     })
 })
 
