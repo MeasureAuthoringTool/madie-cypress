@@ -14,7 +14,9 @@ let measureName = 'RunExecuteTCButtonValidations' + now
 let CqlLibraryName = 'TestLibrary' + now
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 
-describe('Validating Expansion -> Manifest selections / navigation functionality', () => {
+// needs https://jira.cms.gov/browse/MAT-7901 to be completed, part of 2.2.2
+// feature flag: QICoreManifestExpansion
+describe.skip('Validating Expansion -> Manifest selections / navigation functionality', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
