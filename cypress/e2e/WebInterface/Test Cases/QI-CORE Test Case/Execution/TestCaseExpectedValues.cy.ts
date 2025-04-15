@@ -53,9 +53,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Save edited / updated to test case
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON'])
-        })
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
 
         //Navigate to Measure group page and update scoring type
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -102,9 +100,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.successMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON'])
-        })
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
 
         //Navigate to Measure group page and update scoring type
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -236,9 +232,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('not.exist')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.successMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON'])
-        })
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
 
         //Navigate to Measure Group page and add Numerator Exclusion & delete Denominator Exclusion
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -425,8 +419,6 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Save edited / updated to test case
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with warnings in JSON'])
-        })
+        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
     })
 })
