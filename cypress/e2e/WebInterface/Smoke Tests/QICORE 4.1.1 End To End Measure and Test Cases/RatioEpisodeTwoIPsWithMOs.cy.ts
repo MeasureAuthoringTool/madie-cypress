@@ -7,6 +7,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
 let measureName = 'RatioEpisodeTwoIPsWithMOs' + Date.now()
 let CqlLibraryName = 'RatioEpisodeTwoIPsWithMOs' + Date.now()
@@ -14,49 +15,7 @@ let testCaseTitlePass = 'MO PASS'
 let testCaseDescription = 'PASS' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let testCaseJsonIppPass = TestCaseJson.RatioEpisodeTwoIPsWithMOs_PASS
-let measureCQL = 'library HHSH version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include QICoreCommon version \'1.2.000\' called QICoreCommon\n' +
-    'include CQMCommon version \'1.0.000\' called CQMCommon\n' +
-    '\n' +
-    'valueset "Diabetes": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.103.12.1001\'\n' +
-    'valueset "Encounter Inpatient": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.666.5.307\'\n' +
-    'valueset "Emergency Department Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.292\'\n' +
-    'valueset "Hypoglycemics Treatment Medications": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1196.394\'\n' +
-    '\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
-    'define "Initial Population 1":\n' +
-    '    [Encounter: "Encounter Inpatient"] \n' +
-    '    \n' +
-    'define "Initial Population 2":\n' +
-    '    [Encounter: "Emergency Department Visit"] \n' +
-    '       \n' +
-    'define "Denominator":\n' +
-    '    "Initial Population 1" IP\n' +
-    '        with [Condition: "Diabetes"] Dx\n' +
-    '            such that Dx.toPrevalenceInterval() starts before start of IP.period\n' +
-    '    \n' +
-    'define "Numerator":\n' +
-    '    "Initial Population 2" IP\n' +
-    '        with [Condition: "Diabetes"] Dx\n' +
-    '            such that Dx.toPrevalenceInterval() starts before start of IP.period\n' +
-    '    \n' +
-    'define function "Denominator Observation"(TheEncounter Encounter):\n' +
-    '    Count( [MedicationRequest: "Hypoglycemics Treatment Medications"] MedOrder\n' +
-    '        with TheEncounter E \n' +
-    '            such that MedOrder.authoredOn before start of E.period )\n' +
-    '            \n' +
-    'define function "Numerator Observation"(TheEncounter Encounter):\n' +
-    '    Count( [MedicationRequest: "Hypoglycemics Treatment Medications"] MedOrder\n' +
-    '        with TheEncounter E \n' +
-    '            such that MedOrder.authoredOn before start of E.period )'
+let measureCQL = QiCore4Cql.ratioEpisodeTwoIPTwoMO
 
 describe('Measure Creation and Testing: Ratio Episode Two IPs w/ MOs', () => {
 
