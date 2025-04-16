@@ -8,9 +8,10 @@ import { Utilities } from "../../../../../Shared/Utilities"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
+let randValue = (Math.floor((Math.random() * 1000) + 1))
 const now = Date.now()
-let measureName = 'MeasureForTCExpectedValues' + now
-let CqlLibraryName = 'TestLibrary' + now
+let measureName = 'MeasureForTCExpectedValues' + now + randValue
+let CqlLibraryName = 'TestLibrary' + now + randValue
 let testCaseTitle = 'Title for Auto Test'
 let testCaseDescription = 'DENOMFail' + now
 let testCaseSeries = 'SBTestSeries'
