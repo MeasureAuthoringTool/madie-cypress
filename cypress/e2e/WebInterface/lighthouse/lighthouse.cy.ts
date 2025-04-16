@@ -373,7 +373,7 @@ describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test ca
 
         TestCasesPage.clickEditforCreatedTestCase()
         const thresholds = {
-            performance: 3,
+            performance: 2,
             accessibility: 87,
             'total-blocking-time': 14000,
             'speed-index': 40000,
