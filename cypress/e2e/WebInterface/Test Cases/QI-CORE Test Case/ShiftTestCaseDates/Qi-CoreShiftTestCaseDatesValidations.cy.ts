@@ -50,10 +50,6 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    /* 2/14/25 - did not change any steps to this test
-        only updated the title for clarity compared to
-        the new action center workflow for the same operation
-    */
     it('Shift all Test Case dates to the future using the tab in left menu', () => {
 
         //Click on Edit Measure
@@ -127,7 +123,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
                         expect(response.status).to.eql(200)
                         expect(response.body.id).to.eql(testCaseId2)
                         expect(response.body.title).to.eql(testCase2.title)
-                        expect(response.body.json).to.contain('"start" : "2025-05-13T03:34:10.054Z"')
+                        expect(response.body.json).to.contain('"start" : "2025-05-13T03:34:10.054+00:00"')
                     })
                 })
             })
@@ -247,6 +243,7 @@ describe('Shift Test Case Dates tests - Qi-Core Measure', () => {
         cy.get(TestCasesPage.executionContextWarning).should('contain.text', 'The following Test Case dates could not be shifted. Please try again. If the issue continues, please contact helpdesk.SBTestSeriesError - Erroring Test case')
 
     })
+
     it('Shift test case date error message, when test case is erroroneous, through the Action center buttons', () => {
 
         //Click on Edit Measure
