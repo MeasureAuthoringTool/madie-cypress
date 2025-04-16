@@ -61,7 +61,13 @@ describe('Ratio based measure with measure observations', () => {
 
     it('Test Case Export & Import - Persist expected values through the process', () => {
 
-        MeasuresPage.actionCenter('edit')
+        //Click on Edit Button
+        MeasuresPage.actionCenter("edit")
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         // verify populations
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -98,11 +104,11 @@ describe('Ratio based measure with measure observations', () => {
         cy.get(TestCasesPage.actionCenterExport).click()
         cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
+        cy.get(TestCasesPage.TestCasesSuccessMsg).should('be.visible')
+        Utilities.waitForElementToNotExist(TestCasesPage.TestCasesSuccessMsg, 10000)
+
         const exportPath = 'cypress/downloads/AutoTestTitle-v0.0.000-FHIR4-TestCases.zip'
         cy.readFile(exportPath).should('exist')
-
-        // need this for now? - clicks below won't work with invisible elements overlapping screen
-        cy.reload()
 
         // delete all tc
         TestCasesPage.checkTestCase(1)
