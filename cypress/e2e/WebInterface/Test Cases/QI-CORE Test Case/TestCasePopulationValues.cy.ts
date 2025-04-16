@@ -9,9 +9,10 @@ import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
+let randValue = (Math.floor((Math.random() * 1000) + 1))
 const now = Date.now()
-const measureName = 'TCPopValues' + now
-const CqlLibraryName = 'TCPopValuesLib' + now
+const measureName = 'TCPopValues' + now + randValue
+const CqlLibraryName = 'TCPopValuesLib' + now + randValue
 const testCaseTitle = 'test case title'
 const testCaseDescription = 'example'
 const testCaseSeries = 'SBTestSeries'
