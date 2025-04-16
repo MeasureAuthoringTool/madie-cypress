@@ -9,10 +9,11 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCase, TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { Header } from "../../../../Shared/Header"
 
+let randValue = (Math.floor((Math.random() * 1000) + 1))
 const now = Date.now()
 const measure = {
-    name: 'QDMTestCaseButtons' + now,
-    cqlLibraryName: 'QDMTestCaseButtonsLib' + now,
+    name: 'QDMTestCaseButtons' + now + randValue,
+    cqlLibraryName: 'QDMTestCaseButtonsLib' + now + randValue,
     cql: MeasureCQL.QDMHightlightingTabDefUsed_CQL
 }
 const testCase1: TestCase = {
@@ -167,7 +168,7 @@ describe('Test case list page - Action Center icons for versioned measure', () =
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measure.name, measure.cqlLibraryName)
+        Utilities.deleteVersionedMeasure(measure.name, measure.cqlLibraryName)
     })
 
     it('Export icon is present and it enables correctly', () => {
