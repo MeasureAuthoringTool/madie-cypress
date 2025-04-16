@@ -318,26 +318,26 @@ export class Utilities {
             valueDataElement == MeasureGroupPage.qdmScoringRatio
 
         ) {
-            cy.get(dropdownDataElement).wait(2000).click()
-            cy.get(valueDataElement).wait(2000).click()
+            cy.get(dropdownDataElement).wait(250).click()
+            cy.get(valueDataElement).wait(250).click()
         }
         else if (dropdownDataElement == '[id="improvement-notation-select"]' ||
             dropdownDataElement == MeasureGroupPage.initialPopulationSelect
         ) {
             cy.get(dropdownDataElement)
-                .wait(2000)
+                .wait(250)
                 .click()
                 .get('ul > li[data-value="' + valueDataElement + '"]')
-                .wait(2000)
+                .wait(250)
                 .click()
         }
         else {
             Utilities.waitForElementVisible(dropdownDataElement, 50000)
             cy.get(dropdownDataElement)
-                .wait(2000)
+                .wait(250)
                 .click()
                 .get('ul > li[data-value="' + valueDataElement + '"]')
-                .wait(2000)
+                .wait(250)
                 .click()
         }
     }
