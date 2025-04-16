@@ -9,9 +9,10 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 
+let randValue = (Math.floor((Math.random() * 1000) + 1))
 const now = Date.now()
-let measureName = 'RunExecuteTCButtonValidations' + now
-let CqlLibraryName = 'TestLibrary' + now
+let measureName = 'RunExecuteTCButtonValidations' + now + randValue
+let CqlLibraryName = 'TestLibrary' + now + randValue
 const testCase: TestCase = {
     title: 'test case title',
     description: 'DENOMFail' + now,
@@ -522,7 +523,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
@@ -856,7 +857,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
         cy.get(TestCasesPage.aceEditor).should('exist')
         cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.get(TestCasesPage.aceEditorJsonInput).should('exist')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
         cy.get(TestCasesPage.aceEditor).type(validTestCaseJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
