@@ -11,8 +11,7 @@ let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = Environment.credentials().harpUserALT
 let updatedCQLLibraryName = ''
 
-//Skipping until feature flag 'ShareLibrary' is removed
-describe.skip('Un Share CQL Library using Action Center buttons', () => {
+describe('Un Share CQL Library using Action Center buttons', () => {
 
     beforeEach('Create CQL Library', () => {
 
@@ -22,9 +21,12 @@ describe.skip('Un Share CQL Library using Action Center buttons', () => {
         CQLLibraryPage.createCQLLibraryAPI(newCQLLibraryName, CQLLibraryPublisher)
     })
 
-    afterEach('LogOut', () => {
+    afterEach('LogOut and Clean up', () => {
 
         OktaLogin.Logout()
+        cy.clearCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 
@@ -44,20 +46,19 @@ describe.skip('Un Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibrariesPage.unshareOption).click({force: true})
         cy.get(CQLLibrariesPage.expandArrow).click()
 
-        //Future work - MAT-8209
-        //cy.get(CQLLibrariesPage.unshareCheckBox).click()
-        // cy.get(CQLLibrariesPage.saveUserBtn).click()
-        // cy.get(CQLLibrariesPage.acceptBtn).click()
-        //
-        // cy.get('[class="MuiAlert-message css-1xsto0d"]').should('contain.text', 'The Libraries were successfully unshared.')
-        //
-        // //Login as ALT user and verify CQL Library is not visible on My Libraries page
-        // OktaLogin.AltLogin()
-        // cy.get(Header.cqlLibraryTab).click()
-        // cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        // cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        // cy.get(CQLLibraryPage.myLibrariesBtn).click()
-        // cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
+        cy.get(CQLLibrariesPage.unshareCheckBox).click()
+        cy.get(CQLLibrariesPage.saveUserBtn).click()
+        cy.get(CQLLibrariesPage.acceptBtn).click()
+
+        cy.get('[class="MuiAlert-message css-1xsto0d"]').should('contain.text', 'The Library(s) were successfully unshared.')
+
+        //Login as ALT user and verify CQL Library is not visible on My Libraries page
+        OktaLogin.AltLogin()
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
+        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
+        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
     })
 
     it('Verify CQL Library owner can un share Library from Edit Library page Action centre share button', () => {
@@ -77,26 +78,24 @@ describe.skip('Un Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibrariesPage.unshareOption).click({force: true})
         cy.get(CQLLibrariesPage.expandArrow).click()
 
-        //Future work - MAT-8209
-        //cy.get(CQLLibrariesPage.unshareCheckBox).click()
-        // cy.get(CQLLibrariesPage.saveUserBtn).click()
-        // cy.get(CQLLibrariesPage.acceptBtn).click()
-        //
-        // cy.get('[class="MuiAlert-message css-1xsto0d"]').should('contain.text', 'The Libraries were successfully unshared.')
-        //
-        // //Login as ALT user and verify CQL Library is not visible on My Libraries page
-        // OktaLogin.AltLogin()
-        // cy.get(Header.cqlLibraryTab).click()
-        // cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        // cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        // cy.get(CQLLibraryPage.myLibrariesBtn).click()
-        // cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
+        cy.get(CQLLibrariesPage.unshareCheckBox).eq(1).click()
+        cy.get(CQLLibrariesPage.saveUserBtn).click()
+        cy.get(CQLLibrariesPage.acceptBtn).click()
+
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'The Library(s) were successfully unshared.')
+
+        //Login as ALT user and verify CQL Library is not visible on My Libraries page
+        OktaLogin.AltLogin()
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
+        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
+        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
 
     })
 })
 
-//Skipping until feature flag 'ShareLibrary' is removed
-describe.skip('Un Share CQL Library using Action Center buttons - Multiple instances', () => {
+describe('Un Share CQL Library using Action Center buttons - Multiple instances', () => {
 
     beforeEach('Create CQL Library', () => {
 
@@ -169,22 +168,23 @@ describe.skip('Un Share CQL Library using Action Center buttons - Multiple insta
         cy.get(CQLLibrariesPage.unshareOption).click({force: true})
         cy.get('[data-testid="library-landing"]').should('contain.text', updatedCQLLibraryName)
         //Verify information text on share screen
-        cy.get('[class="share-unshare-dialog-info-text"]').should('contain.text', 'When sharing a library, all versions and drafts are shared, so only the most recent library name appears here.')
+        cy.get('[class="share-unshare-dialog-info-text"]').should('contain.text', 'When sharing a Library, all versions and drafts are shared, so only the most recent library name appears here.Deselect the users with whom you want to unshare the library(s).')
         cy.get(CQLLibrariesPage.expandArrow).click()
 
-        //Future work - MAT-8209
-        //cy.get(CQLLibrariesPage.unshareCheckBox).click()
-        // cy.get(CQLLibrariesPage.saveUserBtn).click()
-        // cy.get(CQLLibrariesPage.acceptBtn).click()
-        //
-        // cy.get('[class="MuiAlert-message css-1xsto0d"]').should('contain.text', 'The Libraries were successfully unshared.')
-        //
-        // //Login as ALT user and verify CQL Library is not visible on My Libraries page
-        // OktaLogin.AltLogin()
-        // cy.get(Header.cqlLibraryTab).click()
-        // cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        // cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        // cy.get(CQLLibraryPage.myLibrariesBtn).click()
-        // cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
+        cy.get(CQLLibrariesPage.unshareCheckBox).click()
+        cy.get(CQLLibrariesPage.saveUserBtn).click()
+        cy.get(CQLLibrariesPage.acceptBtn).click()
+
+        cy.get('[class="MuiAlert-message css-1xsto0d"]').should('contain.text', 'The Library(s) were successfully unshared.')
+
+        //Login as ALT user and verify CQL Library is not visible on My Libraries page
+        OktaLogin.AltLogin()
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
+        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
+        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        Utilities.waitForElementVisible('[class="cql-library-table"]', 60000)
+        cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
+        cy.get('[class="cql-library-table"]').should('not.contain', updatedCQLLibraryName)
     })
 })
