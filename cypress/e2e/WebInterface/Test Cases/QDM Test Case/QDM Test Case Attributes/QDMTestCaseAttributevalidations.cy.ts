@@ -96,7 +96,7 @@ let measureCQL = 'library Library5749 version \'0.0.000\'\n' +
     '      union ["Assessment, Performed": "Falls Screening"] //Assessment '
 
 
-describe('Remove Test case attribute', () => {
+describe('QDM Test case Attribute validations', () => {
 
     beforeEach('Create measure and login', () => {
 
@@ -177,5 +177,76 @@ describe('Remove Test case attribute', () => {
         // cy.get(TestCasesPage.jsonTab).click()
         // cy.get(TestCasesPage.qdmTCJson).should('not.contain.text', '"referenceRange"')
         // cy.get(TestCasesPage.qdmTCJson).should('not.contain.text', '"description": "Laboratory Test, Performed: Chlamydia Screening"')
+    })
+
+    it('Check Result attribute for expanded units past UCUM standard', () => {
+
+        // we are skipping non-essential steps here, like no SDE or test case demographics
+        cy.get(Header.measures).click()
+        MeasuresPage.actionCenter('edit')
+
+        //Click on Measure Group tab
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //Navigate to Test Cases page and add Test Case details
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //create test case
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+
+        //Navigate to Edit Test Case page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.get(TestCasesPage.laboratoryElement).click()
+        cy.get(TestCasesPage.plusIcon).eq(1).click()
+        cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
+
+        cy.get(TestCasesPage.selectAttributeDropdown).click()
+        cy.get(TestCasesPage.resultAttribute).click()
+        cy.get(TestCasesPage.selectAttributeDropdown).should('contain.text', 'Result')
+
+        cy.get(TestCasesPage.attributeType).click()
+        cy.get(TestCasesPage.quantityType).click()
+        cy.get(TestCasesPage.attributeType).should('contain.text', 'Quantity')
+
+        // check all units from https://jira.cms.gov/browse/MAT-7631
+        const validUnits = [
+                'years',
+                'year',
+                'months',
+                'month',
+                'weeks',
+                'week',
+                'days',
+                'day',
+                'hours',
+                'hour',
+                'minutes',
+                'minute',
+                'seconds',
+                'second',
+                'milliseconds',
+                'millisecond'
+            ]
+
+        cy.get(TestCasesPage.quantityValueInput).type('5')
+
+        for (let unit of validUnits) {
+            cy.get(TestCasesPage.quantityUnitInput).clear().type(unit)
+            cy.wait(750)
+
+            cy.get('[data-testid="quantity-unit-input-quantity-helper-text"]').should('not.exist')
+
+        }
+        
+        cy.get(TestCasesPage.quantityUnitInput).clear().type('problem')
+
+        cy.get('[data-testid="quantity-unit-input-quantity-helper-text"]').should('be.visible')
     })
 })
