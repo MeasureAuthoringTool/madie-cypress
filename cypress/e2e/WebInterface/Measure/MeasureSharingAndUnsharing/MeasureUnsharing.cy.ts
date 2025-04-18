@@ -12,8 +12,7 @@ let cqlLibraryName = 'TestCql' + Date.now()
 let harpUserALT = Environment.credentials().harpUserALT
 let measureCQL = MeasureCQL.SBTEST_CQL
 
-//Skipping until feature flag 'ShareMeasure' is removed
-describe.skip('Measure Un Sharing', () => {
+describe('Measure Un Sharing', () => {
 
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     let newMeasureName = measureName + randValue

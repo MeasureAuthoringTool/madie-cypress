@@ -111,8 +111,7 @@ describe('Measure Sharing', () => {
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
     })
 
-    //Skipping until feature flag 'ShareMeasure' is removed
-    it.skip('Verify Measure owner can share Measure from Action centre share button and shred user is able to edit Measure', () => {
+    it('Verify Measure owner can share Measure from Action centre share button and shred user is able to edit Measure', () => {
 
         //Login as Regular user and share Measure with ALT user
         OktaLogin.Login()
@@ -190,8 +189,7 @@ describe('Measure Sharing', () => {
 
     })
 
-    //Skipping until feature flag 'ShareMeasure' is removed
-    it.skip('Action centre share button disabled for Non Measure Owner', () => {
+    it('Action centre share button disabled for Non Measure Owner', () => {
 
         //Login
         OktaLogin.AltLogin()
