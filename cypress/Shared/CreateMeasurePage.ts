@@ -199,6 +199,23 @@ export class CreateMeasurePage {
                                 "oid": "2.16.840.1.113883.3.6308",
                                 "url": "www.eatrightpro.org"
                             }
+                        ],
+                        "references": [
+                            {
+                                "id": "759dbdc8-3cea-4f4b-bc5c-e9773889e347",
+                                "referenceText": "Text 1",
+                                "referenceType": "Citation"
+                            },
+                            {
+                                "id": "4d0597ae-c617-458a-800b-95f3b19300de",
+                                "referenceText": "Text 2",
+                                "referenceType": "Documentation"
+                            },
+                            {
+                                "id": "02496e27-73ec-4f26-9a15-84a433d5b0cc",
+                                "referenceText": "Text 3",
+                                "referenceType": "Justification"
+                            }
                         ]
                     },
                     'programUseContext': {
