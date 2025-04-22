@@ -228,6 +228,11 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 'Copyright\tUNKNOWN')
 
 
+            //References
+            expect(bodyText).to.include('Citation\tCitation: Citation - Text 1\n' +
+                'Documentation\tCitation: Documentation - Text 2\n' +
+                'Justification\tCitation: Justification - Text 3')
+
             //Short Name Identifier
             expect(bodyText).to.include('Measure Metadata\n' +
                 'Short Name Identifier\teCQMTitle4QICore')
@@ -447,6 +452,11 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 'Effective Period\t' + mpStartDate + '..' + mpEndDate + '\n' +
                 'Measure Steward\tSemanticBits\n' +
                 'Copyright\tUNKNOWN')
+
+            //References
+            expect(bodyText).to.include('Citation\tCitation: Citation - Text 1\n' +
+                'Documentation\tCitation: Documentation - Text 2\n' +
+                'Justification\tCitation: Justification - Text 3')
 
             //Short Name Identifier
             expect(bodyText).to.include('Short Name Identifier\teCQMTitle4QICore')
