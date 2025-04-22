@@ -8,20 +8,22 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { Header } from "../../../../../Shared/Header"
+import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 
 const now = Date.now()
-let measureName = 'RunExecuteTCButtonValidations' + now
-let CqlLibraryName = 'TestLibrary' + now
-let measureCQLPFTests = MeasureCQL.CQL_Populations
+const measureName = 'QiCoreManifestExpansion' + now
+const CqlLibraryName = 'QiCoreManifestExpansionLib' + now
+const measureCQLPFTests = MeasureCQL.CQL_Populations
+const testCaseJson = TestCaseJson.TestCaseJson_Valid
 
-// needs https://jira.cms.gov/browse/MAT-7901 to be completed, part of 2.2.2
-// feature flag: QICoreManifestExpansion
-describe.skip('Validating Expansion -> Manifest selections / navigation functionality', () => {
+describe('Validating QICore Expansion -> Manifest', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        TestCasesPage.CreateTestCaseAPI('passing test', 'abc', 'example', testCaseJson)
+
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -38,7 +40,12 @@ describe.skip('Validating Expansion -> Manifest selections / navigation function
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
-    it('Verify Expansion -> Manifest: Verify the general Qi Core Expansion sub-tab page and that the manifest drop-down list is not empty', () => {
+
+    it('Verify Madie users can successfully execute test cases against their chosen manifest version', () => {
+
+        // set intercept for manifest expansion
+        cy.intercept('PUT', '/api/terminology/value-sets/expansion/fhir').as('expansion')
+
 
         //navigate to the main measure list page
         cy.get(Header.mainMadiePageButton).click()
@@ -53,21 +60,42 @@ describe.skip('Validating Expansion -> Manifest selections / navigation function
         //navigate to the test case list Expansion page
         cy.get(TestCasesPage.qdmExpansionSubTab).click()
 
-        //validating that manifest is, now, selected and make a change in the selection
+        // select manifest expansion
         cy.get(TestCasesPage.qdmExpansionRadioOptionGroup)
             .find('[type="radio"]')
-            .then((radio) => {
-                //check / select radio button for manifest
-                cy.wrap(radio).eq(1).check({ force: true }).should('be.checked');
-                cy.contains('[id="manifest-select-label"]', 'Manifest');
+            .last()
+            .click()
 
-                cy.get(TestCasesPage.qdmManifestSelectDropDownBox).click()
-                cy.get(TestCasesPage.qdmMantifestMayFailTestOption).click()
-                Utilities.waitForElementVisible('[id="mui-59"]', 50000)
-                cy.get('[id="mui-59"]').should('not.be.empty')
-            })
+        // choose ecqm-update-2022-0505
+        cy.get(TestCasesPage.qdmManifestSelectDropDownBox).click()
+        cy.get(TestCasesPage.qdmMantifestMayFailTestOption).click()
+             
+        // save selection
+        cy.get(TestCasesPage.qdmManifestSaveBtn).click()
+        cy.get(TestCasesPage.qdmManifestSuccess).should('contain.text', 'Expansion details Updated Successfully')
 
+        // return to test case list
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
 
+        // intercept expansion API call & check for expected versions
+        const expectedVersions = ['20170504', '20190315', '20240110', '20180310']
+        cy.wait('@expansion').then(expansion => {
+            expect(expansion.response.body).to.have.length(5)
+            // no guarantee of return order, and this avoids a for loop
+            expect(expansion.response.body[0].version).to.be.oneOf(expectedVersions)
+            expect(expansion.response.body[1].version).to.be.oneOf(expectedVersions)
+            expect(expansion.response.body[2].version).to.be.oneOf(expectedVersions)
+            expect(expansion.response.body[3].version).to.be.oneOf(expectedVersions)
+            expect(expansion.response.body[4].version).to.be.oneOf(expectedVersions)
+        })
+
+        // execute tests
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 14500)
+
+        // check pass/fail
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('have.text', '100% Passing (1/1)')
     })
-
 })
