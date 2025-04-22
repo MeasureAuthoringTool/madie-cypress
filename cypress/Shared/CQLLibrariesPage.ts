@@ -101,7 +101,7 @@ export class CQLLibrariesPage {
     public static validateCQLLibraryName(expectedValue: string): void {
 
         cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').should('contain', expectedValue)
+            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain', expectedValue)
 
         })
     }
@@ -109,7 +109,7 @@ export class CQLLibrariesPage {
     public static validateVersionNumber(expectedValue: string, versionNumber: string): void {
         cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
 
-            cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']')
+            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]')
                 .should('contain.text', expectedValue)
                 .parent()
                 .invoke('data', 'testid')

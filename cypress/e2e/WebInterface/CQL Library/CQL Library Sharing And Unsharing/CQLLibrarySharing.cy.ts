@@ -194,8 +194,7 @@ describe('Remove user\'s share access from a library', () => {
     })
 })
 
-//Skipping until feature flag 'ShareLibrary' is removed
-describe.skip('Share CQL Library using Action Center buttons', () => {
+describe('Share CQL Library using Action Center buttons', () => {
 
     beforeEach('Create CQL Library', () => {
 
@@ -230,7 +229,7 @@ describe.skip('Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(CQLLibrariesPage.saveUserBtn).click()
-        cy.get('[class="MuiAlert-message css-1xsto0d"]').should('contain.text', 'The Library(ies) were successfully shared.')
+        cy.get('.MuiAlert-message').should('contain.text', 'The Library(s) were successfully shared.')
 
         //Login as ALT User
         OktaLogin.AltLogin()
@@ -276,7 +275,7 @@ describe.skip('Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(CQLLibrariesPage.saveUserBtn).click()
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'The Library(ies) were successfully shared.')
+        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'The Library(s) were successfully shared.')
 
     })
 
@@ -319,13 +318,12 @@ describe.skip('Share CQL Library using Action Center buttons', () => {
         //Share the Library with same user again
         cy.get(CQLLibrariesPage.harpIdInputTextBox).type(harpUserALT)
         cy.get(CQLLibrariesPage.addBtn).click()
-        cy.get('[data-testid="harp-id-input-helper-text"]').should('contain.text', 'The selected Libraries are already shared with this user.')
+        cy.get('[data-testid="harp-id-input-helper-text"]').should('contain.text', 'The selected library(s) are already shared with this user.')
 
     })
 })
 
-//Skipping until feature flag 'ShareLibrary' is removed
-describe.skip('Share CQL Library using Action Center buttons - Multiple instances', () => {
+describe('Share CQL Library using Action Center buttons - Multiple instances', () => {
 
     beforeEach('Create CQL Library', () => {
 
@@ -393,7 +391,7 @@ describe.skip('Share CQL Library using Action Center buttons - Multiple instance
         cy.get('[data-testid="library-landing"]').should('contain.text', updatedCQLLibraryName)
 
         //Verify information text on share screen
-        cy.get('[class="share-unshare-dialog-info-text"]').should('contain.text', 'When sharing a library, all versions and drafts are shared, so only the most recent library name appears here.')
+        cy.get('[class="share-unshare-dialog-info-text"]').should('contain.text', 'When sharing a Library, all versions and drafts are shared, so only the most recent library name appears here.')
 
         //Share Library with ALT user
         cy.get(CQLLibrariesPage.harpIdInputTextBox).type(harpUserALT)
@@ -404,7 +402,7 @@ describe.skip('Share CQL Library using Action Center buttons - Multiple instance
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(CQLLibrariesPage.saveUserBtn).click()
-        cy.get('[class="MuiAlert-message css-1xsto0d"]').should('contain.text', 'The Library(ies) were successfully shared.')
+        cy.get('.MuiAlert-message').should('contain.text', 'The Library(s) were successfully shared.')
 
         //Login as ALT User and verify both Draft and Versioned Library are shared
         OktaLogin.AltLogin()
