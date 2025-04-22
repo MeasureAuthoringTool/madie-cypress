@@ -123,8 +123,9 @@ describe('Measure Versioning', () => {
                     },
                     method: 'PUT'
                 }).then((response) => {
-                    expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('Response could not be completed for Measure with ID ' + measureId + ', since there is no population criteria on the measure.')
+                    expect(response.status).to.eql(400)
+                    //'User' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure does not have at least one Population Criteria.'
+                    expect(response.body.message).to.eql('User ' + harpUser + ' cannot version Measure with ID ' + measureId + '. Measure does not have at least one Population Criteria.')
                 })
             })
         })
