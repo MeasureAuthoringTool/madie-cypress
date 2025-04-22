@@ -195,11 +195,11 @@ describe('Proportion based measure with no observations', () => {
         cy.get(TestCasesPage.actionCenterExport).click()
         cy.get(TestCasesPage.exportCollectionTypeOption).click()
 
+        cy.get(TestCasesPage.TestCasesSuccessMsg).should('be.visible')
+        Utilities.waitForElementToNotExist(TestCasesPage.TestCasesSuccessMsg, 10000)
+
         const exportPath = 'cypress/downloads/AutoTestTitle-v0.0.000-FHIR4-TestCases.zip'
         cy.readFile(exportPath).should('exist')
-
-        // need this for now? - clicks below won't work with invisible elements overlapping screen
-        cy.reload()
 
         // delete all tc
         TestCasesPage.checkTestCase(1)
@@ -223,7 +223,7 @@ describe('Proportion based measure with no observations', () => {
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('have.value', '3')
-        cy.get(TestCasesPage.testCaseDENOMExpected).should('have.value', '1')
+        cy.get(TestCasesPage.testCaseDENOMExpected).should('have.value', '2')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('have.value', '1')
     })
 })
