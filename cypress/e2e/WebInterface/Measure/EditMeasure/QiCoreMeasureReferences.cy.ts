@@ -10,8 +10,7 @@ let randValue = Cypress._.random(100)
 let newMeasureName = ''
 let newCqlLibraryName = ''
 
-//Skipping until Feature flag 'QICoreMeasureReferences' is removed
-describe.skip('Qi Core Measure Reference', () => {
+describe('Qi Core Measure Reference', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -43,7 +42,7 @@ describe.skip('Qi Core Measure Reference', () => {
 
         //Edit Measure reference
         // .editReference will work as long as there is only 1 item on the table
-        cy.get(EditMeasurePage.editReference).should('have.attr', 'aria-label', 'Edit').click()
+        cy.get(EditMeasurePage.editQiCoreReference).eq(1).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.justificationOption).click()
         cy.get(EditMeasurePage.measureReferenceText).clear().type('Updated Measure Reference')
@@ -84,7 +83,7 @@ describe.skip('Qi Core Measure Reference', () => {
 
         //Delete Measure Reference
         // .deleteReference will work as long as there is only 1 item on the table
-        cy.get(EditMeasurePage.deleteReference).should('have.attr', 'aria-label', 'Delete').click()
+        cy.get(EditMeasurePage.deleteQiCoreReference).eq(1).click()
         cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + 'Measure Reference' + '?')
         cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure reference deleted successfully')
@@ -124,8 +123,7 @@ describe.skip('Qi Core Measure Reference', () => {
     })
 })
 
-//Skipping until Feature flag 'QICoreMeasureReferences' is removed
-describe.skip('Add Qi Core Measure Reference - ownership validation', () => {
+describe('Add Qi Core Measure Reference - ownership validation', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -154,8 +152,7 @@ describe.skip('Add Qi Core Measure Reference - ownership validation', () => {
     })
 })
 
-//Skipping until Feature flag 'QICoreMeasureReferences' is removed
-describe.skip('Delete or Edit Qi Core Measure Reference - Ownership validation', () => {
+describe('Delete or Edit Qi Core Measure Reference - Ownership validation', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -197,8 +194,8 @@ describe.skip('Delete or Edit Qi Core Measure Reference - Ownership validation',
         // older access method
         cy.get(EditMeasurePage.selectMeasureReference).should('not.exist')
         // current icons
-        cy.get(EditMeasurePage.deleteReference).should('not.exist')
-        cy.get(EditMeasurePage.editReference).should('not.exist')
+        cy.get(EditMeasurePage.deleteQiCoreReference).should('not.exist')
+        cy.get(EditMeasurePage.editQiCoreReference).should('not.exist')
     })
 })
 

@@ -95,6 +95,8 @@ export class EditMeasurePage {
     public static readonly editReference = '[data-testid*="edit-measure-reference"]'
     public static readonly searchReferenceTextBox = '[data-testid="measure-reference-search-input"]'
     public static readonly searchReferenceIcon = '[data-testid="SearchIcon"]'
+    public static readonly editQiCoreReference = '[aria-label="Edit"]'
+    public static deleteQiCoreReference = '[aria-label="Delete"]'
 
     //Definition(Terms) page
     public static readonly definitionInputTextbox = '[data-testid="measureDefinitionInput"]'
