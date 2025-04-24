@@ -7,7 +7,6 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { Global } from "../../../../Shared/Global"
 
 let measureOne = 'TestMeasure' + Date.now()
 let CqlLibraryName1 = 'TestLibrary' + Date.now()
@@ -116,94 +115,6 @@ describe('Validate Measure Group deletion functionality', () => {
         cy.get(MeasureGroupPage.numeratorSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'Surgical Absence of Cervix')
 
-    })
-
-    //This test case needs review for validity
-    it.skip('Test Cases still loads after a one from multiple groups are deleted', () => {
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //Click on Measure Group tab
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        for (let i = 0; i <= 3; i++) {
-            //click on the add measture grop button to create new group
-            cy.get(MeasureGroupPage.addMeasureGroupButton).should('exist')
-            cy.get(MeasureGroupPage.addMeasureGroupButton).should('be.visible')
-            cy.get(MeasureGroupPage.addMeasureGroupButton).click()
-        }
-
-        //click on the second group that was just created
-        cy.get(MeasureGroupPage.measureGroupFour).should('exist')
-        cy.get(MeasureGroupPage.measureGroupFour).click()
-
-
-        //select a group type
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
-        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
-            if ($ele.text() == "Process") {
-                cy.wrap($ele).should('exist')
-                cy.wrap($ele).focus()
-                cy.wrap($ele).click()
-            }
-        })
-        cy.get(MeasureGroupPage.measureGroupTypeDropdownBtn).should('exist').invoke('click')
-
-        //choose Procedure pop basis
-        cy.get(MeasureGroupPage.popBasis).should('exist')
-        cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('Procedure')
-        cy.get(MeasureGroupPage.popBasisOption).click()
-
-        //select scoring type
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
-
-        //select an initial population value
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Surgical Absence of Cervix')
-
-        //save newly created group
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
-        //click on the first group
-        cy.get(MeasureGroupPage.measureGroupOne).should('exist').focus().should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupOne).click()
-
-        Global.clickOnDiscardChanges()
-
-        //click on the second group that was just created
-        cy.get(MeasureGroupPage.measureGroupTwo).should('exist').should('be.visible')
-        cy.get(MeasureGroupPage.measureGroupTwo).click()
-
-        //click on Delete button for group
-        cy.get(MeasureGroupPage.deleteGroupbtn).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.deleteGroupbtn).click()
-
-        //clicking "yes" to confirm deletion of group
-        cy.get(MeasureGroupPage.yesDeleteModalbtn).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.yesDeleteModalbtn).click()
-
-        //navigate to the test case list tab / page
-        cy.get(EditMeasurePage.testCasesTab).should('exist').should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //confirm test case is still present on measure
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=test-case-row-' + fileContents + ']', { timeout: 80000 }).should('exist')
-            cy.get('[data-testid=edit-test-case-' + fileContents + ']', { timeout: 80000 }).should('be.visible')
-            cy.get('[data-testid=edit-test-case-' + fileContents + ']', { timeout: 80000 }).click()
-        })
-        cy.readFile('cypress/fixtures/testCaseId').should('exist').then((mId) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((tId) => {
-                cy.intercept('GET', 'https://dev-madie.hcqis.org/measures/' + mId + '/edit/test-cases/' + tId, [])
-
-            })
-        })
     })
 
     it('Test Cases still loads after all groups are deleted', () => {
