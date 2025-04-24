@@ -61,7 +61,7 @@ describe('Create CQL Library', () => {
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
         cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
-            cy.get('[data-testid=cqlLibrary-button-' + fileContents + '-model]').should('contain', model)
+            cy.get('[data-testid=cqlLibrary-button-' + fileContents + '-model-content]').should('contain', model)
 
         })
 
