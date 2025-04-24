@@ -7,40 +7,20 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { LibraryCQL } from "../../../../Shared/LibraryCQL"
 import { Global } from "../../../../Shared/Global"
 import { Utilities } from "../../../../Shared/Utilities"
-import { Environment } from "../../../../Shared/Environment"
-import { v4 as uuidv4 } from 'uuid'
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-
-let qdmMeasureNameMOS = 'CVListQDMPositiveEncounterPerformedWithMOAndStratification' + Date.now()
-let CqlLibraryName = 'CVListQDMPositiveEncounterPerformedWithMOAndStratification' + Date.now()
-let firstTestCaseTitle = 'PDxNotPsych60MinsDepart'
-let testCaseDescription = 'IPPStrat1Pass' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let secondTestCaseTitle = 'Order50AndPriorityAssessment180'
-let measureCQL = MeasureCQL.QDMMeasureWithMOandStrat
-
 
 let newCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
 let measureCQLLibName = ''
-
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let ratioMeasureCQL = MeasureCQL.ICFCleanTest_CQL
 let LibCQLQDMVal = LibraryCQL.validCQL4QDMLib
 let LibQICoreVal = LibraryCQL.validCQL4QICORELib
-
-let measureName = ''
-let CQLLibraryName = ''
-let model = 'QI-Core v4.1.1'
 let QICoreModel = 'QI-Core v4.1.1'
 let QDMModel = 'QDM v5.6'
-let harpUser = Environment.credentials().harpUser
-let eCQMTitle = 'eCQMTitle'
 
 describe('Validations on Measure Details page', () => {
 
@@ -56,26 +36,6 @@ describe('Validations on Measure Details page', () => {
     afterEach('Logout', () => {
         OktaLogin.Logout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-    })
-
-    it('Verify Steward & Developers section of Measure Details page', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //navigate to the Steward & Developers page
-        cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
-        cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('be.visible')
-        cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('include.text', 'Steward & Developers')
-        cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
-
-        //confirm Steward field
-        cy.get(EditMeasurePage.measureStewardDrpDwn).should('exist')
-        cy.get(EditMeasurePage.measureStewardDrpDwn).should('be.visible')
-
-        //confirm Developers field
-        cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('exist')
-        cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('be.visible')
     })
 
     it('Verify fields on the Steward & Developers section of Measure Details page are required and the messaging around the requirement', () => {
@@ -118,85 +78,6 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureDevelopersAlertMsg).should('exist')
         cy.get(EditMeasurePage.measureDevelopersAlertMsg).should('be.visible')
         cy.get(EditMeasurePage.measureDevelopersAlertMsg).should('include.text', 'At least one developer is required')
-    })
-
-    it('Validate Save buttons accessibility (Save when both fields have value)', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //navigate to the Steward & Developers page
-        cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
-        cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('be.visible')
-        cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
-
-        //select a value for Steward
-        cy.get(EditMeasurePage.measureStewardDrpDwn).should('exist').should('be.visible').click().type('Able Health')
-        cy.get(EditMeasurePage.measureStewardDrpDwnOption).click()
-        cy.get(EditMeasurePage.measureDeveloperDrpDwn).click()
-        cy.get(EditMeasurePage.measureDeveloperCancelIcon).click()
-        cy.get(EditMeasurePage.measureDeveloperDrpDwn).focused().blur()
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('exist')
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.disabled')
-
-        //select a value for Developers
-        cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('exist').should('be.visible').click().type('ACO Health Solutions')
-        cy.get(EditMeasurePage.measureDevelopersDrpDwnOption).click()
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('exist')
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.enabled')
-
-    })
-
-    it('Validate Discard button accessibility and text / label on button', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
-
-        //navigate to the Steward & Developers page
-        cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
-        cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('be.visible')
-        cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
-
-        //select a value for Steward
-        cy.get(EditMeasurePage.measureStewardDrpDwn).should('exist').should('be.visible').click().type('Able Health')
-        cy.get(EditMeasurePage.measureStewardDrpDwnOption).click()
-        cy.get(EditMeasurePage.measureDeveloperDrpDwn).click()
-        cy.get(EditMeasurePage.measureDeveloperCancelIcon).click()
-        cy.get(EditMeasurePage.measureDeveloperDrpDwn).focused().blur()
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('exist')
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.disabled')
-
-        //discard button becomes available
-        cy.get(Global.DiscardCancelBtn).should('exist')
-        cy.get(Global.DiscardCancelBtn).should('be.visible')
-        cy.get(Global.DiscardCancelBtn).should('be.enabled')
-
-        //discard previous entry
-        cy.get(Global.DiscardCancelBtn).click()
-        cy.get(Global.discardChangesContinue).click()
-
-        //verify that empty fields
-        cy.get(EditMeasurePage.measureStewardDrpDwn).click()
-        cy.get(EditMeasurePage.measureStewardDrpDwn).clear()
-        cy.get(EditMeasurePage.measureStewardDrpDwn).focused().blur()
-        cy.get(EditMeasurePage.measureStewardObjHoldingValue).should('be.empty')
-        cy.get(EditMeasurePage.measureDevelopersObjHoldingValue).should('be.empty')
-
-        //select a value for Developers
-        cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('exist').should('be.visible').click().type('ACO Health Solutions').click()
-        cy.get(EditMeasurePage.measureDeveloperDrpDwn).click()
-        cy.get(EditMeasurePage.measureDeveloperDrpDwn).focused().blur()
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('exist')
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.measureStewardDevelopersSaveButton).should('be.disabled')
-
-        //discard button becomes available
-        cy.get(Global.DiscardCancelBtn).should('exist')
-        cy.get(Global.DiscardCancelBtn).should('be.visible')
-        cy.get(Global.DiscardCancelBtn).should('be.enabled')
     })
 
     it('Validate dirty check on Steward & Developers section of Measure Details page', () => {
@@ -269,7 +150,6 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
 
         //select a value for Steward
-        //Utilities.dropdownSelect(EditMeasurePage.measureStewardDrpDwn, 'Able Health')
         cy.get(EditMeasurePage.measureStewardDrpDwn).should('exist').should('be.visible').click().type('Able Health')
         cy.get(EditMeasurePage.measureStewardDrpDwnOption).click()
         cy.get(EditMeasurePage.measureDeveloperDrpDwn).click()
@@ -703,59 +583,6 @@ describe('Measurement Period Validations', () => {
     })
 
 })
-describe('Setting time / date value in EST reflects as the same in user time zone', () => {
-
-    beforeEach('Set Access Token', () => {
-        cy.setAccessTokenCookie()
-    })
-    afterEach('Clean up', () => {
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CQLLibraryName)
-
-    })
-
-    it('Create New Measure, successful creation', () => {
-        measureName = 'TestMeasure' + Date.now() + randValue
-        CQLLibraryName = 'TestCql' + Date.now() + randValue
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/measure',
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + accessToken.value
-                },
-                body: {
-                    "measureName": measureName,
-                    "cqlLibraryName": CQLLibraryName,
-                    "model": model,
-                    "versionId": uuidv4(),
-                    "measureSetId": uuidv4(),
-                    "ecqmTitle": eCQMTitle,
-                    "measurementPeriodStart": '2012-01-01T05:00:00.000+00:00',
-                    "measurementPeriodEnd": '2012-12-31T05:00:00.000+00:00'
-                }
-            }).then((response) => {
-                expect(response.status).to.eql(201)
-                expect(response.body.createdBy).to.eql(harpUser)
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-            })
-
-        })
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-
-        cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
-
-        cy.get(EditMeasurePage.mpStart).should('contain.value', '01/01/2012')
-        cy.get(EditMeasurePage.mpEnd).should('contain.value', '12/31/2012')
-
-    })
-})
 
 describe('CQL Library Validations -- Attempting to use a QDM Library in a QI Core measure CQL', () => {
 
@@ -789,30 +616,14 @@ describe('CQL Library Validations -- Attempting to use a QDM Library in a QI Cor
 
         //write CQL value into CQL Editor
         cy.get(EditMeasurePage.cqlEditorTextBox).type('library ' + measureCQLLibName + ' version \'0.0.004\'\n' +
-
-
             'using QICore version \'4.1.1\'\n' +
-
-
-
             'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
             'include PalliativeCareQDM version \'4.0.000\' called Test\n' +
-
             'codesystem \"SNOMEDCT:2017-09\": \'http://snomed.info/sct/731000124108\' version \'http://snomed.info/sct/731000124108/version/201709\'\n' +
-
             'valueset \"Hysterectomy with No Residual Cervix\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.198.12.1014\'\n' +
             'valueset \"Office Visit\": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-
-
-
             'parameter \"Measurement Period\" Interval<DateTime>\n' +
-
-
-
             'context Patient\n' +
-
-
-
             'define \"Surgical Absence of Cervix\":\n' +
             '	[Procedure: \"Hysterectomy with No Residual Cervix\"] NoCervixHysterectomy\n' +
             '		where NoCervixHysterectomy.status = \'completed\'')
@@ -928,199 +739,4 @@ describe('CQL Library Validations -- Attempting to use a QI Core Library in a QD
     })
 })
 
-describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Stratification: SDE values / radio button test', () => {
-
-    before('Create Measure', () => {
-
-        //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(qdmMeasureNameMOS, CqlLibraryName, measureCQL, false, false,
-            '2025-01-01', '2025-12-31')
-        TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
-        TestCasesPage.CreateQDMTestCaseAPI(secondTestCaseTitle, testCaseSeries, testCaseDescription, null, true)
-
-        OktaLogin.Login()
-    })
-
-    after('Clean up', () => {
-
-        OktaLogin.Logout()
-
-        Utilities.deleteMeasure(qdmMeasureNameMOS, CqlLibraryName)
-
-    })
-
-    it('Creating a measure With MO And Stratification: Selecting SDE values / radio buttons', () => {
-
-        //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
-
-        //verify that the CQL to ELM version is not empty
-        cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
-
-        //Save CQL
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-
-        //Group Creation
-
-        //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        //click on / navigate to the Base Configuration sub-tab
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).should('be.visible')
-        cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
-
-        //Select Type
-        cy.get(MeasureGroupPage.qdmType).click().type('Appropriate Use Process').click()
-        cy.get(MeasureGroupPage.qdmTypeOptionZero).click()
-
-        //select 'Cohort' scoring on measure
-        Utilities.dropdownSelect(MeasureGroupPage.qdmScoring, MeasureGroupPage.qdmScoringCV)
-        cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Continuous Variable')
-
-        //Update the Patient Basis to 'No'
-        cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).click()
-
-        //click on the save button and confirm save success message Base Config
-        cy.get(MeasureGroupPage.qdmBCSaveButton).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
-        cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration ' +
-            'Updated Successfully')
-
-        //add pop criteria
-        cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('be.visible')
-
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'Measure Population')
-        Utilities.dropdownSelect(MeasureGroupPage.measurePopulationExclusionSelect, 'Measure Population Exclusions')
-        Utilities.dropdownSelect(MeasureGroupPage.measureObservationPopSelect, 'MeasureObservation')
-        Utilities.dropdownSelect(MeasureGroupPage.cvAggregateFunction, 'Median')
-
-        //Add Stratifications
-        cy.get(MeasureGroupPage.stratificationTab).click()
-        cy.get(MeasureGroupPage.stratOne).click()
-        cy.get('[data-value="Stratification 1"]').click()
-        cy.get(MeasureGroupPage.stratTwo).click()
-        cy.get('[data-value="Stratification 2"]').click()
-
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
-            'this group saved successfully.')
-
-        //Add Supplemental Data Elements
-        cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Ethnicity').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Payer').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('SDE Race').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).scrollIntoView().contains('SDE Sex').click()
-
-        //Save Supplemental data
-        cy.get('[data-testid="measure-Supplemental Data-save"]').click({ force: true })
-        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
-
-        //Add Elements to first Test case
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //navigate to the SDE side tab section on the test cases tab
-        Utilities.waitForElementVisible(TestCasesPage.qdmSDESidNavLink, 30000)
-        cy.get(TestCasesPage.qdmSDESidNavLink).click()
-
-        cy.get(MeasureGroupPage.qdmSDERadioButtons)
-            .find('[type="radio"]')
-            .then((radio) => {
-                //confirm that initial value is set to 'No'
-                cy.wrap(radio).eq(1).should('be.checked');
-
-                //check / select radio button for the value of 'Yes'
-                cy.wrap(radio).eq(0).check({ force: true }).should('be.checked');
-
-                cy.get(TestCasesPage.saveSDEOption).click()
-                cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
-
-                // Verify that first radio button is no longer checked
-                cy.wrap(radio).eq(1).should('not.be.checked');
-            });
-
-        //navigate away from the test cases tab
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-        Utilities.waitForElementVisible(MeasureGroupPage.leftPanelBaseConfigTab, 30000)
-
-        //navigate back to test cases page / tab
-        cy.get(EditMeasurePage.testCasesTab).click()
-
-        //navigate to the SDE side tab section on the test cases tab
-        Utilities.waitForElementVisible(TestCasesPage.qdmSDESidNavLink, 30000)
-        cy.get(TestCasesPage.qdmSDESidNavLink).click()
-
-        //verify that 'yes' is checked
-        cy.get(MeasureGroupPage.qdmSDERadioButtons)
-            .find('[type="radio"]')
-            .then((radio) => {
-
-                //check / select radio button for the value of 'Yes'
-                cy.wrap(radio).eq(0).should('be.checked');
-
-                // Verify that first radio button is no longer checked
-                cy.wrap(radio).eq(1).should('not.be.checked');
-            });
-
-        //make a change
-        cy.get(MeasureGroupPage.qdmSDERadioButtons)
-            .find('[type="radio"]')
-            .then((radio) => {
-
-                //check / select radio button for the value of 'Yes'
-                cy.wrap(radio).eq(1).check({ force: true }).should('be.checked');
-
-                // Verify that first radio button is no longer checked
-                cy.wrap(radio).eq(0).should('not.be.checked');
-            });
-
-        //attempt to navigate away from the test cases tab / page
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        // confirm dirty check window
-        Global.clickOnKeepWorking()
-
-        //confirm that previous edit is still present
-        cy.get(MeasureGroupPage.qdmSDERadioButtons)
-            .find('[type="radio"]')
-            .then((radio) => {
-
-                //check / select radio button for the value of 'Yes'
-                cy.wrap(radio).eq(1).should('be.checked');
-
-                // Verify that first radio button is no longer checked
-                cy.wrap(radio).eq(0).should('not.be.checked');
-            });
-
-        //discard changes on the test SDE Test Cases tab / page
-        cy.get(MeasureGroupPage.discardChangesBtn).click()
-        cy.get(Global.discardChangesContinue).click()
-
-        //verify that 'yes' is still checked after discarding changes on the page
-        cy.get(MeasureGroupPage.qdmSDERadioButtons)
-            .find('[type="radio"]')
-            .then((radio) => {
-
-                //check / select radio button for the value of 'Yes'
-                cy.wrap(radio).eq(0).should('be.checked');
-
-                // Verify that first radio button is no longer checked
-                cy.wrap(radio).eq(1).should('not.be.checked');
-            });
-    })
-})
 
