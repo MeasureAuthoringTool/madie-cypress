@@ -104,8 +104,8 @@ export class CQLLibraryPage {
 
         cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
 
-            cy.get('[data-testid=cqlLibrary-button-' + fileContents + ']').should('contain', CQLLibraryName)
-            cy.get('[data-testid=cqlLibrary-button-' + fileContents + '-model' + ']').should('contain', 'QI-Core')
+            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain', CQLLibraryName)
+            cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-model-content"]').should('contain', 'QI-Core')
         })
         cy.log('QI-Core CQL Library Created Successfully')
     }
