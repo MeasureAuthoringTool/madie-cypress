@@ -153,7 +153,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.testCaseTitle).should('have.attr', 'disabled', 'disabled')
         cy.get(TestCasesPage.testCaseDescriptionTextBox).should('have.attr', 'disabled', 'disabled')
-        cy.get('[id="test-case-series"]').should('have.attr', 'disabled', 'disabled')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('have.attr', 'disabled', 'disabled')
     })
 
     it('Fields on Measure Group page are not editable', () => {

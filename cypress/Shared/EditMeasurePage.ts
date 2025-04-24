@@ -84,7 +84,6 @@ export class EditMeasurePage {
     public static readonly addReferenceButton = '[data-testid="create-reference-button"]'
     public static readonly selectMeasureReference = '.chevron-container > [data-testid="ExpandMoreIcon"]'
     public static readonly referenceTypeDropdown = '[id="measure-referenceType"]'
-    public static readonly editReferenceModal = '[data-testid="dialog-form"]'
     public static readonly documentationOption = '[data-testid="Documentation-option"]'
     public static readonly justificationOption = '[data-testid="Justification-option"]'
     public static readonly measureReferenceText = '[data-testid="measure-referenceText"]'

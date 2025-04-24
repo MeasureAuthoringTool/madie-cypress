@@ -291,7 +291,7 @@ export class TestCasesPage {
     public static readonly discardChangesConfirmationBody = '[id="discard-changes-dialog-body"]'
 
     //Delete Test Case
-    public static readonly deleteAllTestCasesBtn = '[data-testid=delete-all-test-cases-button]'
+    public static readonly deleteAllTestCasesBtn = '[data-testid="delete-all-test-cases-button"]'
 
     //Import Test cases
     public static readonly importTestCaseBtnOnModal = '[data-testid="test-case-import-import-btn"]'
@@ -317,7 +317,7 @@ export class TestCasesPage {
 
     //QDM Test Case Attributes
     public static readonly laboratoryElement = '[data-testid="elements-tab-laboratory_test"]'
-    public static readonly plusIcon = '[data-testid=AddCircleOutlineIcon]'
+    public static readonly plusIcon = '[data-testid="AddCircleOutlineIcon"]'
     public static readonly addAttribute = '[data-testid="add-attribute-button"]'
     public static readonly selectAttributeDropdown = '[id="attribute-select"]'
     public static readonly referenceRangeAttribute = '[data-testid="option-Reference Range"]'
