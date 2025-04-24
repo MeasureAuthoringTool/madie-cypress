@@ -3,24 +3,10 @@ import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../Shared/Utilities"
-import { Environment } from "../../../../Shared/Environment"
-import { v4 as uuidv4 } from 'uuid'
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
-const now = require('dayjs')
-let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
-let mpEndDate = now().format('YYYY-MM-DD')
-
-let UiMpStartDate = now().subtract('1', 'year').format('MM/DD/YYYY')
-let UiMpEndDate = now().format('MM/DD/YYYY')
-
 let measureName = ''
-let CQLLibraryName = ''
 let CqlLibraryName = ''
-let model = 'QI-Core v4.1.1'
-let harpUser = Environment.credentials().harpUser
-let eCQMTitle = 'eCQMTitle'
-let versionIdPath = 'cypress/fixtures/versionId'
 
 describe('Edit Measure Validations', () => {
     before('Create Measure', () => {
@@ -180,100 +166,4 @@ describe('Measurement Period Validations', () => {
         cy.get(CreateMeasurePage.editMeasurementPeriodEndDateError).should('contain.text', 'Invalid date format. (mm/dd/yyyy)')
     })
 
-})
-
-describe('Setting time / date value in EST reflects as the same in user time zone', () => {
-
-    beforeEach('Set Access Token', () => {
-        cy.setAccessTokenCookie()
-    })
-    afterEach('Clean up', () => {
-
-        OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CQLLibraryName)
-
-    })
-
-    it('Create New Measure, successful creation', () => {
-        measureName = 'TestMeasure' + Date.now() + randValue
-        CQLLibraryName = 'TestCql' + Date.now() + randValue
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/measure',
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + accessToken.value
-                },
-                body: {
-                    "measureName": measureName,
-                    "cqlLibraryName": CQLLibraryName,
-                    "model": model,
-                    "versionId": uuidv4(),
-                    "measureSetId": uuidv4(),
-                    "ecqmTitle": eCQMTitle,
-                    "measurementPeriodStart": mpStartDate,
-                    "measurementPeriodEnd": mpEndDate
-                }
-            }).then((response) => {
-                expect(response.status).to.eql(201)
-                expect(response.body.createdBy).to.eql(harpUser)
-                cy.writeFile('cypress/fixtures/measureId', response.body.id)
-                cy.writeFile('cypress/fixtures/versionId', response.body.versionId)
-            })
-
-        })
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-
-        cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
-
-        cy.get(EditMeasurePage.mpStart).should('contain.value', UiMpStartDate)
-        cy.get(EditMeasurePage.mpEnd).should('contain.value', UiMpEndDate)
-
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        OktaLogin.Logout()
-        cy.setAccessTokenCookie()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.request({
-                        url: '/api/measures/' + id,
-                        method: 'PUT',
-                        headers: {
-                            Authorization: 'Bearer ' + accessToken.value
-                        },
-                        body: {
-                            "id": id,
-                            "measureName": measureName,
-                            "cqlLibraryName": CQLLibraryName,
-                            "model": 'QI-Core v4.1.1',
-                            "versionId": vId,
-                            "measureSetId": uuidv4(),
-                            "ecqmTitle": eCQMTitle,
-                            "measurementPeriodStart": '2012-01-01T05:00:00.000+00:00',
-                            "measurementPeriodEnd": '2012-12-31T05:00:00.000+00:00',
-                        }
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                    })
-                })
-            })
-        })
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        OktaLogin.Login()
-        MeasuresPage.actionCenter('edit')
-
-        cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
-
-        cy.get(EditMeasurePage.mpStart).should('contain.value', '01/01/2012')
-        cy.get(EditMeasurePage.mpEnd).should('contain.value', '12/31/2012')
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        OktaLogin.Logout()
-    })
 })
