@@ -18,7 +18,7 @@ export class QDMElements {
 
             case 'laboratory': {
 
-                cy.get('[data-testid=elements-tab-laboratory_test]').click()
+                cy.get(TestCasesPage.laboratoryElement).click()
                 cy.get('[data-testid="data-type-Laboratory Test, ' + elementTitle + '"]').click()
 
                 break
@@ -130,7 +130,7 @@ export class QDMElements {
 
     public static addAttribute(): void {
 
-        cy.get('[data-testid="add-attribute-button"]').click()
+        cy.get(TestCasesPage.addAttribute).click()
 
     }
 

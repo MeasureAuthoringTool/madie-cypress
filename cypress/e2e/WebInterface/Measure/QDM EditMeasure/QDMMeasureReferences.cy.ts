@@ -6,6 +6,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Global } from "../../../../Shared/Global"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let randValue = Cypress._.random(100)
 let newMeasureName = ''
@@ -61,12 +62,12 @@ describe('QDM Measure Reference', () => {
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelReference).click()
         cy.get(EditMeasurePage.addReferenceButton).click()
-        cy.get('[data-testid="dialog-form"]').should('exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.documentationOption).click()
         cy.get(EditMeasurePage.measureReferenceText).type('Measure Reference')
         cy.get(Global.DiscardCancelBtn).click()
-        cy.get('[data-testid="dialog-form"]').should('not.exist')
+        cy.get(TestCasesPage.createTestCaseDialog).should('not.exist')
     })
 
     it('Delete Measure Reference', () => {

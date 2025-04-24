@@ -7,6 +7,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 const now = Date.now()
 let measureName = 'MeasureDefs' + now
@@ -128,7 +129,7 @@ describe('Edit Measure: Add Meta Data', () => {
         //Definition
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
         cy.get(EditMeasurePage.createDefinitionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.editReferenceModal, 50000)
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseDialog, 50000)
         cy.get(EditMeasurePage.definitionTermInput).type('DefinitionTerm')
         cy.get(EditMeasurePage.definitionInput).type('Definition details for DefinitionTerm')
         Utilities.waitForElementEnabled(EditMeasurePage.saveButton, 50000)
@@ -222,7 +223,7 @@ describe('Edit Measure: Add Meta Data', () => {
         //definition
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
         cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find('[class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1ns8gjm"]').should('have.attr', 'aria-label', 'Edit').click()
-        Utilities.waitForElementVisible(EditMeasurePage.editReferenceModal, 50000)
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseDialog, 50000)
         cy.get(EditMeasurePage.definitionTermInput).clear().type('DefinitionTermUpdate')
         cy.get(EditMeasurePage.definitionInput).clear().type('Definition details for DefinitionTerm')
         Utilities.waitForElementEnabled(EditMeasurePage.saveButton, 50000)

@@ -69,7 +69,7 @@ describe('Validating QICore Expansion -> Manifest', () => {
         // choose ecqm-update-2022-0505
         cy.get(TestCasesPage.qdmManifestSelectDropDownBox).click()
         cy.get(TestCasesPage.qdmMantifestMayFailTestOption).click()
-             
+
         // save selection
         cy.get(TestCasesPage.qdmManifestSaveBtn).click()
         cy.get(TestCasesPage.qdmManifestSuccess).should('contain.text', 'Expansion details Updated Successfully')

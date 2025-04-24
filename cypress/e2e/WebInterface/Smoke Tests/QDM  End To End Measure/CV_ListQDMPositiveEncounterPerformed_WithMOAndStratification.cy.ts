@@ -261,12 +261,12 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="option-4525004"]').click()
         cy.get(TestCasesPage.authorDateTime).type('06/10/2025 05:00 AM')
         cy.get(TestCasesPage.locationPeriodEndDate).type('06/10/2025 08:00 AM')
-        cy.get('[data-testid="add-attribute-button"]').click()
+        cy.get(TestCasesPage.addAttribute).click()
         cy.get('[id="attribute-select"]').click()
         cy.get('[data-testid="option-Length Of Stay"]').click()
         cy.get('[data-testid="quantity-value-input-quantity"]').type('0')
         cy.get('#quantity-unit-input-quantity').type('d')
-        cy.get('[data-testid="add-attribute-button"]').click()
+        cy.get(TestCasesPage.addAttribute).click()
         //Close the Element
         cy.get(umlsLoginForm.closeGenericError).click()
 
@@ -285,7 +285,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="option-Length Of Stay"]').click()
         cy.get('[data-testid="quantity-value-input-quantity"]').type('3')
         cy.get('#quantity-unit-input-quantity').type('d')
-        cy.get('[data-testid="add-attribute-button"]').click()
+        cy.get(TestCasesPage.addAttribute).click()
         //Close the Element
         cy.get(umlsLoginForm.closeGenericError).click()
 
@@ -348,7 +348,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="option-4525004"]').click()
         cy.get(TestCasesPage.authorDateTime).type('01/29/2025 08:30 AM')
         QDMElements.addTimingLocationPeriodDateTime(' ', '01/29/2025 06:15 PM')
-        cy.get('[data-testid="add-attribute-button"]').click()
+        cy.get(TestCasesPage.addAttribute).click()
         //Close the Element
         cy.get(umlsLoginForm.closeGenericError).click()
 
@@ -398,7 +398,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="option-4525004"]').click()
         cy.get(TestCasesPage.authorDateTime).type('02/06/2025 08:00 AM')
         QDMElements.addTimingLocationPeriodDateTime(' ', '02/06/2025 08:15 PM')
-        cy.get('[data-testid="add-attribute-button"]').click()
+        cy.get(TestCasesPage.addAttribute).click()
         //Close the Element
         cy.get(umlsLoginForm.closeGenericError).click()
 
@@ -435,7 +435,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
         cy.get('[data-testid="option-SNOMEDCT"]').click()
         cy.get('[id="code-selector"]').click()
         cy.get('[data-testid="option-434081000124108"]').click()
-        cy.get('[data-testid="add-attribute-button"]').click()
+        cy.get(TestCasesPage.addAttribute).click()
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
