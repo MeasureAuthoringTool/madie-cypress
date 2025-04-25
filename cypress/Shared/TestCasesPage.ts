@@ -415,20 +415,23 @@ export class TestCasesPage {
     public static clickCreateTestCaseButton(): void {
 
         //setup for grabbing the measure create call
+        let measureID = null
         cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-            cy.intercept('POST', '/api/measures/' + id + '/test-cases').as('testcase')
-
-            Utilities.waitForElementEnabled(this.createTestCaseSaveButton, 5500)
+            measureID = id
+            cy.intercept('POST', '/api/measures/' + measureID + '/test-cases').as('testcase')
+            cy.get(this.createTestCaseSaveButton).should('exist')
+            Utilities.waitForElementVisible(this.createTestCaseSaveButton, 5000)
+            Utilities.waitForElementEnabled(this.createTestCaseSaveButton, 5000)
             cy.get(this.createTestCaseSaveButton).click()
-
             //saving testCaseId to file to use later
-            cy.wait('@testcase').then(({ response }) => {
+            cy.wait('@testcase', { timeout: 60000 }).then(({ response }) => {
                 expect(response.statusCode).to.eq(201)
                 cy.writeFile('cypress/fixtures/testCaseId', response.body.id)
+                cy.log(response.body.message)
             })
-            cy.get(EditMeasurePage.testCasesTab).click()
-
         })
+
+        cy.get(EditMeasurePage.testCasesTab).click()
     }
 
     public static clickQDMImportTestCaseButton(): void {
