@@ -299,7 +299,11 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type('TestDesc')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type('SBTestSeries').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('SBTestSeries')
+            .type('{downArrow}')
+            .should('have.attr', 'aria-controls', 'test-case-series-listbox')
+            .click()
+            .type('{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -356,7 +360,11 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type('PTC')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type('ICFTCSeries').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('ICFTCSeries')
+            .type('{downArrow}')
+            .should('have.attr', 'aria-controls', 'test-case-series-listbox')
+            .click()
+            .type('{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -425,7 +433,11 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type('FTC')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type('ICFTCSeries').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('ICFTCSeries')
+            .type('{downArrow}')
+            .should('have.attr', 'aria-controls', 'test-case-series-listbox')
+            .click()
+            .type('{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
