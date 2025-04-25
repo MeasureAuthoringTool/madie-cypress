@@ -295,8 +295,7 @@ describe('Export measure on the Edit Measure page', () => {
     })
 })
 
-//Skipping until feature flag 'ShareMeasure' is removed
-describe.skip('Share measure from the Edit Measure page', () => {
+describe('Share measure from the Edit Measure page', () => {
 
     before(() => {
 
