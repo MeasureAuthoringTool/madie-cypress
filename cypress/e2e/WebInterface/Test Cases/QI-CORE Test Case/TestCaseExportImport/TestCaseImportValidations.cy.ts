@@ -618,7 +618,8 @@ describe('Test case uniqueness error validation', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription + 'b1')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries + 'b1').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries + 'b1')
+        cy.get('#test-case-series-option-0').click()
 
         TestCasesPage.clickCreateTestCaseButton()
 

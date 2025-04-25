@@ -418,6 +418,7 @@ export class TestCasesPage {
         cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
             cy.intercept('POST', '/api/measures/' + id + '/test-cases').as('testcase')
 
+            Utilities.waitForElementEnabled(this.createTestCaseSaveButton, 5500)
             cy.get(this.createTestCaseSaveButton).click()
 
             //saving testCaseId to file to use later
