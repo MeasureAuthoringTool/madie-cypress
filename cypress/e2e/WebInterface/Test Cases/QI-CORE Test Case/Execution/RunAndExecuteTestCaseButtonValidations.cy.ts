@@ -207,7 +207,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group)
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -314,7 +314,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group)
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -400,7 +400,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group)
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -509,7 +509,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description + ' 2')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group + '2').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group + '2')
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -653,7 +653,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group)
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -776,7 +776,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type('TestDesc')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type('SBTestSeries').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('SBTestSeries')
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -843,7 +843,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type('FTC')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type('ICFTCSeries').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('ICFTCSeries')
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -948,7 +948,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type('FTC')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type('ICFTCSeries').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('ICFTCSeries')
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -1074,7 +1074,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group)
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -1210,7 +1210,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(failingTestCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(failingTestCase.group).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(failingTestCase.group)
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -1361,7 +1361,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group)
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -1480,7 +1480,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
             cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
             cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
             cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-            cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
+            cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group)
 
             TestCasesPage.clickCreateTestCaseButton()
 
@@ -1779,7 +1779,7 @@ describe('Verify multiple IPs on the highlighting tab', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase.group)
 
         TestCasesPage.clickCreateTestCaseButton()
 
