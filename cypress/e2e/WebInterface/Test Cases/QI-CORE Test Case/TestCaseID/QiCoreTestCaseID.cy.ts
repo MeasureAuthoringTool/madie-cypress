@@ -9,6 +9,7 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { Header } from "../../../../../Shared/Header"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
 const timestamp = Date.now()
 let measureName = 'QiCoreTestCaseId' + timestamp
@@ -118,6 +119,8 @@ describe('Test Case sorting by Test Case number', () => {
 })
 
 describe('Import Test cases onto an existing Qi Core measure via file and ensure test case ID / numbering appears', () => {
+
+    deleteDownloadsFolderBeforeAll()
 
     beforeEach('Create measure and login', () => {
 
@@ -291,7 +294,7 @@ describe('Qi Core Measure - Test case number on a Draft Measure', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase2.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase2.group).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase2.group)
 
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
