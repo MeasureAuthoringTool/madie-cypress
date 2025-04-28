@@ -178,13 +178,13 @@ describe('QDM Library Includes fields', () => {
         //attempt to delete and choose yes to discard changes
         Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
-        Utilities.waitForElementVisible('.MuiBox-root', 5000)
-        cy.get('.MuiBox-root').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
+        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "are you sure" pop up
-        Utilities.waitForElementVisible('.MuiBox-root', 5000)
-        cy.get('.MuiBox-root').should('contain.text', 'Are you sure?')
+        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
+        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Are you sure?')
 
         //choose cancel
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialogCancelBtn, 5000)
@@ -266,8 +266,8 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
 
         //confirm "are you sure" pop up
-        Utilities.waitForElementVisible('.MuiBox-root', 5000)
-        cy.get('.MuiBox-root').should('contain.text', 'Are you sure?')
+        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
+        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Are you sure?')
 
         //choose yes to delete
         Utilities.waitForElementVisible(CQLEditorPage.deleteContinueButton, 5000)
@@ -323,13 +323,13 @@ describe('QDM Library Includes fields', () => {
         //attempt to edit and choose yes to discard changes
         Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
         cy.get(CQLEditorPage.editSavedLibrary).click()
-        Utilities.waitForElementVisible('.MuiBox-root', 5000)
-        cy.get('.MuiBox-root').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
+        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "Details" pop up --
-        Utilities.waitForElementVisible('#draggable-dialog-title', 5000)
-        cy.get('#draggable-dialog-title').should('contain.text', 'Details')
+        Utilities.waitForElementVisible(CQLEditorPage.detailsModal, 5000)
+        cy.get(CQLEditorPage.detailsModal).should('contain.text', 'Details')
 
         //choose cancel
         cy.get(Global.DiscardCancelBtn).scrollIntoView()
@@ -365,13 +365,13 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
         cy.get(CQLEditorPage.editSavedLibrary).click()
-        Utilities.waitForElementVisible('.MuiBox-root', 5000)
-        cy.get('.MuiBox-root').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
+        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "Details" pop up
-        Utilities.waitForElementVisible('#draggable-dialog-title', 5000)
-        cy.get('#draggable-dialog-title').should('contain.text', 'Details')
+        Utilities.waitForElementVisible(CQLEditorPage.detailsModal, 5000)
+        cy.get(CQLEditorPage.detailsModal).should('contain.text', 'Details')
 
         //make an edit
         Utilities.waitForElementVisible(CQLLibraryPage.editSavedLibraryAlias, 5000)
@@ -415,8 +415,8 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).click()
 
         //confirm "Details" pop up --
-        Utilities.waitForElementVisible('#draggable-dialog-title', 5000)
-        cy.get('#draggable-dialog-title').should('contain.text', 'Details')
+        Utilities.waitForElementVisible(CQLEditorPage.detailsModal, 5000)
+        cy.get(CQLEditorPage.detailsModal).should('contain.text', 'Details')
 
         //make an edit
         Utilities.waitForElementVisible(CQLLibraryPage.editSavedLibraryAlias, 5000)

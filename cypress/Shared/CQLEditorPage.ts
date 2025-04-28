@@ -91,6 +91,8 @@ export class CQLEditorPage {
     public static readonly versionNumber = '[data-testid="library-version-container"]'
     public static readonly versionDropdownBtn = '[data-testid="version-select"]'
     public static readonly versionNumberList = '#mui-9'
+    public static readonly confirmationModal = '.MuiBox-root'
+    public static readonly detailsModal = '#draggable-dialog-title'
 
     //Definitions page
     public static readonly definitionsTab = '[data-testid="definitions-tab"]'

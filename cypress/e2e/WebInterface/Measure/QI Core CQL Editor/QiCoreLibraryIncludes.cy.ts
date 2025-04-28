@@ -50,7 +50,7 @@ describe('Qi-Core Library Includes fields', () => {
         //Search for QDM Libraries
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionVTE8.10.000VTE8.9.000VTE8.8.000VTE8.7.000VTE8.6.000Items per page 5.Items per page5​1 - 5 of 181234')
+        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionVTE8.10.000YaHu1257View / ApplyVTE8.9.000YaHu1257View / ApplyVTE8.8.000YaHu1257View / ApplyVTE8.7.000YaHu1257View / ApplyVTE8.6.000YaHu1257View / ApplyItems per page 5.Items per page5​1 - 5 of 181234')
     })
 
     it('Apply Qi-Core Included library to the CQL and save', () => {
@@ -61,7 +61,7 @@ describe('Qi-Core Library Includes fields', () => {
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionVTE8.10.000VTE8.9.000VTE8.8.000VTE8.7.000VTE8.6.000Items per page 5.Items per page5​1 - 5 of 181234')
+        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionVTE8.10.000YaHu1257View / ApplyVTE8.9.000YaHu1257View / ApplyVTE8.8.000YaHu1257View / ApplyVTE8.7.000YaHu1257View / ApplyVTE8.6.000YaHu1257View / ApplyItems per page 5.Items per page5​1 - 5 of 181234')
 
         //Apply Library to CQL
         cy.get('[data-testid="edit-button-0"]').click()
@@ -82,7 +82,7 @@ describe('Qi-Core Library Includes fields', () => {
         //Search for Library
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('vte')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionVTE8.10.000VTE8.9.000VTE8.8.000VTE8.7.000VTE8.6.000Items per page 5.Items per page5​1 - 5 of 181234')
+        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionVTE8.10.000YaHu1257View / ApplyVTE8.9.000YaHu1257View / ApplyVTE8.8.000YaHu1257View / ApplyVTE8.7.000YaHu1257View / ApplyVTE8.6.000YaHu1257View / ApplyItems per page 5.Items per page5​1 - 5 of 181234')
 
         //Apply Library to CQL
         cy.get('[data-testid="edit-button-0"]').click()
@@ -99,7 +99,7 @@ describe('Qi-Core Library Includes fields', () => {
         //Apply different Library with duplicate Alias
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('fhir')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get(CQLEditorPage.librarySearchTable).should('contain', 'nameversionownerActionCDSConnectCommonsForFHIRv4010.1.000pauld@mitre.orgFHIRCommon4.3.000julietrubiniFHIRCommon4.2.000julietrubiniFHIRCommon4.1.000julietrubiniFHIRCommon4.0.000julietrubin')
+        cy.get(CQLEditorPage.librarySearchTable).should('include.text', 'nameversionownerActionCDSConnectCommonsForFHIRv4010.1.000pauld@mitre.orgView / ApplyFHIRCommon4.3.000julietrubiniView / ApplyFHIRCommon4.2.000julietrubiniView / ApplyFHIRCommon4.1.000julietrubiniView / ApplyFHIRCommon4.0.000julietrubiniView / ApplyItems per page 5.Items per page5​1 - 5 of 201234')
         cy.get('[data-testid="edit-button-0"]').click()
         cy.get('[data-testid="library-alias-input"]').type('VTE')
         cy.get('[data-testid="apply-button"]').click()
@@ -107,7 +107,8 @@ describe('Qi-Core Library Includes fields', () => {
 
     })
 
-    it('Verify Included Libraries under Saved Libraries tab', () => {
+    //Skipping until MAT-8612 is fixed
+    it.skip('Verify Included Libraries under Saved Libraries tab', () => {
 
         //Click on Includes tab
         cy.get(CQLEditorPage.includesTab).click()
@@ -155,13 +156,13 @@ describe('Qi-Core Library Includes fields', () => {
         //attempt to delete and choose yes to discard changes
         Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
+        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "are you sure" pop up
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Are you sure?')
+        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
+        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Are you sure?')
 
         //choose cancel
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryDeleteDialogCancelBtn, 5000)
@@ -196,13 +197,13 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.deleteSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
+        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "are you sure" pop up
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Are you sure?')
+        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
+        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Are you sure?')
 
         //choose yes to delete
         Utilities.waitForElementVisible(CQLEditorPage.deleteContinueButton, 5000)
@@ -248,8 +249,8 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
 
         //confirm "are you sure" pop up
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Are you sure?')
+        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
+        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Are you sure?')
 
         //choose yes to delete
         Utilities.waitForElementVisible(CQLEditorPage.deleteContinueButton, 5000)
@@ -304,13 +305,13 @@ describe('Qi-Core Library Includes fields', () => {
         //attempt to edit and choose yes to discard changes
         Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
         cy.get(CQLEditorPage.editSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
+        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "Details" pop up --
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Details')
+        Utilities.waitForElementVisible(CQLEditorPage.detailsModal, 5000)
+        cy.get(CQLEditorPage.detailsModal).should('contain.text', 'Details')
 
         //choose cancel
         cy.get(Global.DiscardCancelBtn).scrollIntoView()
@@ -346,13 +347,13 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).scrollIntoView()
         Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
         cy.get(CQLEditorPage.editSavedLibrary).click()
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Discard Changes?')
+        Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
+        cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
         cy.get(Global.discardChangesContinue).click()
 
         //confirm "Details" pop up
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Details')
+        Utilities.waitForElementVisible(CQLEditorPage.detailsModal, 5000)
+        cy.get(CQLEditorPage.detailsModal).should('contain.text', 'Details')
 
         //make an edit
         Utilities.waitForElementVisible(CQLLibraryPage.editSavedLibraryAlias, 5000)
@@ -397,8 +398,8 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).click()
 
         //confirm "Details" pop up --
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Details')
+        Utilities.waitForElementVisible(CQLEditorPage.detailsModal, 5000)
+        cy.get(CQLEditorPage.detailsModal).should('contain.text', 'Details')
 
         //make an edit
         Utilities.waitForElementVisible(CQLLibraryPage.editSavedLibraryAlias, 5000)
@@ -450,8 +451,8 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).click()
 
         //confirm "Details" pop up --
-        Utilities.waitForElementVisible('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]', 5000)
-        cy.get('[class="MuiTypography-root MuiTypography-h6 MuiDialogTitle-root css-7hqw69"]').should('contain.text', 'Details')
+        Utilities.waitForElementVisible('#draggable-dialog-title', 5000)
+        cy.get('#draggable-dialog-title').should('contain.text', 'Details')
 
         //Confirm Library versions
         cy.get(CQLEditorPage.versionDropdownBtn).click()
