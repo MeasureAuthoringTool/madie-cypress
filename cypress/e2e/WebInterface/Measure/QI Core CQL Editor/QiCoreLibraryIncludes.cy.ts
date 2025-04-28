@@ -107,8 +107,7 @@ describe('Qi-Core Library Includes fields', () => {
 
     })
 
-    //Skipping until MAT-8612 is fixed
-    it.skip('Verify Included Libraries under Saved Libraries tab', () => {
+    it('Verify Included Libraries under Saved Libraries tab', () => {
 
         //Click on Includes tab
         cy.get(CQLEditorPage.includesTab).click()
