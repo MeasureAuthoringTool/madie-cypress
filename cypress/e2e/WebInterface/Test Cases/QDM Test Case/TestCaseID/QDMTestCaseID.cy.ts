@@ -125,7 +125,7 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
         cy.get(TestCasesPage.QDMRace).scrollIntoView().click()
         cy.get('[data-value="Other Race"]').click()
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 8500)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 20000)
