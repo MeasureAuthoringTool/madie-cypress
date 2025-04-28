@@ -159,9 +159,7 @@ describe('Test Case Attributes', () => {
         cy.get('[data-testid=option-DateTime]').click() //Select DateTime from dropdown
         cy.get('[data-testid="date-time-input"]').type('12/12/200011:30AM')
         cy.get(TestCasesPage.addAttribute).click()
-        //Commenting until MAT-7504 is fixed
-        //cy.get('tbody > tr > :nth-child(3)').should('contain.text', 'Result - 12/12/2000 11:30 AM')
-
+        cy.get('tbody > tr > :nth-child(3)').should('contain.text', 'Result -  12/12/2000 11:30 AM')
     })
 
     it('Add Related To attribute to the Test case', () => {
@@ -192,8 +190,7 @@ describe('Test Case Attributes', () => {
         cy.get('[data-testid=option-DateTime]').click() //Select DateTime from dropdown
         cy.get('[data-testid="date-time-input"]').type('12/12/200011:30AM')
         cy.get(TestCasesPage.addAttribute).click()
-        //Commenting until MAT-7504 is fixed
-        //cy.get(TestCasesPage.attributeChip).should('contain.text', 'Result: 12/12/2000 11:30 AM')
+        cy.get(TestCasesPage.attributeChip).should('contain.text', 'Result -  12/12/2000 11:30 AM')
 
         //Add Related To Attribute
         cy.get(TestCasesPage.CareGoalElementTab).click()
@@ -204,7 +201,6 @@ describe('Test Case Attributes', () => {
         cy.get('[id="data-element-selector"]').click()
         cy.get('[data-testid="Assessment, Performed: Falls Screening-option"]').click() //Select Laboratory Test, Performed: Chlamydia Screening from dropdown
         cy.get(TestCasesPage.addAttribute).click()
-        cy.get(TestCasesPage.attributeChip).should('contain', 'Assessment, Performed: Falls Screening')
-
+        cy.get('tbody > :nth-child(2)').find('.data-type-container').should('contain.text', 'Assessment, PerformedFalls Screening ')
     })
 })
