@@ -86,7 +86,7 @@ describe('QI-Core Measure Export with Info', () => {
     })
 })
 
-describe.only('QI-Core Measure Export for Publish', () => {
+describe('QI-Core Measure Export for Publish', () => {
 
     const exportOptions: MeasureActionOptions = {
         exportForPublish: true
