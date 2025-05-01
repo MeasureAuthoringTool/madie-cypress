@@ -454,12 +454,15 @@ export class CreateMeasurePage {
         return user
     }
 
-    public static CreateMeasureAPI(measureName: string, cqlLibraryName: string, model: SupportedModels, optionalParams?: CreateMeasureOptions): string {
+    public static CreateMeasureAPI(measureName: string, cqlLibraryName: string, model: SupportedModels, optionalParams?: CreateMeasureOptions, measureNumber?: number): string {
+
+        if ((measureNumber === undefined) || (measureNumber === null)) {
+            measureNumber = 0
+        }
 
         let user,
             mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD'),
             mpEndDate = now().format('YYYY-MM-DD'),
-            measureNumber = 0,
             ecqmTitle = 'AutoTestTitle',
             measureCql,
             elmJson,
