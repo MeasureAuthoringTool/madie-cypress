@@ -18,7 +18,7 @@ export class MeasuresPage {
     public static readonly exportNonPublishingOption = '[data-testid="export-option"]'
     public static readonly exportPublishingOption = '[data-testid="export-publishing-option"]'
     public static readonly exportingDialog = '[class="MuiBox-root css-1c2c0mn"]'
-    public static readonly exportingSpinner = '[class="MuiCircularProgress-svg css-13o7eu2"]'
+    public static readonly exportingSpinner = '.spinner'
     public static readonly exportFinishedCheck = '[data-testid="CheckCircleOutlineIcon"]'
 
     //Pagination
