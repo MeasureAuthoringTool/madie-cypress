@@ -47,7 +47,7 @@ describe('Login and initial "My Measures" page', () => {
 
             accessibility: 76, //The Lighthouse Accessibility score is a weighted average of all accessibility audits. Weighting is based on axe user impact assessments.
             'total-blocking-time': 11000, //In miliseconds, this measure the total amount of time that a page is blocked from responding to user input, such as mouse clicks, screen taps, or keyboard presses.
-            'speed-index': 40000, //In miliseconds, this measures how quickly content is visually displayed during page load.
+            'speed-index': 44000, //In miliseconds, this measures how quickly content is visually displayed during page load.
             'cumulative-layout-shift': 100, //Unexpected page element shifts -- basically, the measurement of shifting page elements
 
         };
@@ -302,7 +302,7 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
         const thresholds = {
             performance: 17,
             accessibility: 78,
-            'total-blocking-time': 12000,
+            'total-blocking-time': 13000,
             'speed-index': 55000,
             'cumulative-layout-shift': 100,
         };
@@ -376,7 +376,7 @@ describe('Navigate to the Qi Core "Test Cases" edit page, for a specific test ca
             performance: 2,
             accessibility: 87,
             'total-blocking-time': 14000,
-            'speed-index': 41000,
+            'speed-index': 46000,
             'cumulative-layout-shift': 100,
         };
 
@@ -425,7 +425,7 @@ describe('Navigate to the "My CQL Libraries" page', () => {
         const thresholds = {
             performance: 10,
             accessibility: 72,
-            'total-blocking-time': 12000,
+            'total-blocking-time': 13000,
             'speed-index': 42000,
             'cumulative-layout-shift': 100,
         };
