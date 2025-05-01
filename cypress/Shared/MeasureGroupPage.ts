@@ -589,6 +589,7 @@ export class MeasureGroupPage {
         if (measureNumber > 0) {
             measurePath = 'cypress/fixtures/measureId' + measureNumber
         }
+
         if ((popBasis == undefined) || (popBasis === null) || (popBasis == 'Boolean')) { popBasis = 'boolean' }
         if ((PopIniPopP == undefined) || (PopIniPopP === null)) { PopIniPopP = 'Initial PopulationOne' }
         if (altUser) {
