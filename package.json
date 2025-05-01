@@ -33,6 +33,7 @@
 		"dev:ui:testCases": "NO_COLOR=1 cypress run --env configFile=dev --spec 'cypress/e2e/WebInterface/Test Cases/**/*.cy.ts' --browser chrome --headed;",
 		"dev:ui:cqllibrary:versionAndDraft": "NO_COLOR=1 cypress run --env configFile=dev --spec 'cypress/e2e/WebInterface/CQL Library/VersionAndDraft/**/*.cy.ts' --browser chrome --headed;",
 		"dev:ui:cqllibrary:cqlEditor": "NO_COLOR=1 cypress run --env configFile=dev --spec 'cypress/e2e/WebInterface/CQL Library/CQL Editor/**/*.cy.ts' --browser chrome --headed;",
+		"dev:ui:cqllibrary": "NO_COLOR=1 cypress run --env configFile=dev --spec 'cypress/e2e/WebInterface/CQL Library/**/*.cy.ts' --browser chrome --headed;",
 		"dev:ui:smoketests": "NO_COLOR=1 cypress run --env configFile=dev --spec 'cypress/e2e/WebInterface/Smoke Tests/**/*' --browser chrome --headed;",
 		"dev:all:ui:tests": "NO_COLOR=1 cypress run --env configFile=dev --spec 'cypress/e2e/WebInterface/**/*.cy.ts' --browser chrome --headed;",
 		"dev:ui:measure:qicoreCqlEditor": "NO_COLOR=1 cypress run --env configFile=dev --spec 'cypress/e2e/WebInterface/Measure/QI Core CQL Editor/**/*.cy.ts' --browser chrome --headed;",
