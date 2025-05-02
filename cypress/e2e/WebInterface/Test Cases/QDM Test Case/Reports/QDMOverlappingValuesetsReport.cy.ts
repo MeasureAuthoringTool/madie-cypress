@@ -12,8 +12,8 @@ const originalMeasure = {
     CMSid: '334',
     title: 'Cesarean Birth'
 }
-
-describe('Generate the Overlapping Valueset report for a QDM measure', () => {
+// skipped until flag "OverlappingValueSets" = true
+describe.skip('Generate the Overlapping Valueset report for a QDM measure', () => {
 
     beforeEach('Login', () => {
 
