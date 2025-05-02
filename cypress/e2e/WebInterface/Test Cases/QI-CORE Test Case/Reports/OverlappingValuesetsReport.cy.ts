@@ -16,8 +16,8 @@ const measureWithNoOverlap = {
     CMSid: '1264FHIR',
     title: 'Emergency Care Access & Timeliness (REHQR) FHIR'
 }
-
-describe('Generate the Overlapping Valueset report for a QDM measure', () => {
+// skipped until flag "OverlappingValueSets" = true
+describe.skip('Generate the Overlapping Valueset report for a QDM measure', () => {
 
     beforeEach('Login', () => {
 
