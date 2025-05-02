@@ -50,7 +50,8 @@ describe('Un Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibrariesPage.saveUserBtn).click()
         cy.get(CQLLibrariesPage.acceptBtn).click()
 
-        cy.get('[class="MuiAlert-message css-1xsto0d"]').should('contain.text', 'The Library(s) were successfully unshared.')
+        Utilities.waitForElementVisible('[class="MuiAlert-message css-127h8j3"]', 60000)
+        cy.get('[class="MuiAlert-message css-127h8j3"]').should('contain.text', 'The Library(s) were successfully unshared.')
 
         //Login as ALT user and verify CQL Library is not visible on My Libraries page
         OktaLogin.AltLogin()
@@ -175,7 +176,8 @@ describe('Un Share CQL Library using Action Center buttons - Multiple instances'
         cy.get(CQLLibrariesPage.saveUserBtn).click()
         cy.get(CQLLibrariesPage.acceptBtn).click()
 
-        cy.get('[class="MuiAlert-message css-1xsto0d"]').should('contain.text', 'The Library(s) were successfully unshared.')
+        Utilities.waitForElementVisible('[class="MuiAlert-message css-127h8j3"]', 60000)
+        cy.get('[class="MuiAlert-message css-127h8j3"]').should('contain.text', 'The Library(s) were successfully unshared.')
 
         //Login as ALT user and verify CQL Library is not visible on My Libraries page
         OktaLogin.AltLogin()
