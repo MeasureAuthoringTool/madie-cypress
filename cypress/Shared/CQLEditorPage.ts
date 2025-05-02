@@ -76,6 +76,8 @@ export class CQLEditorPage {
     public static readonly expandCQLBuilder = '[data-testid="KeyboardTabOutlinedIcon"]'
 
     //Includes page
+    //<input aria-invalid="false" id="library-alias" name="libraryAlias" type="text" data-testid="library-alias-input" aria-required="true" class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-15v65ck" value="Common">
+    public static readonly editLibraryAliasInput = '[data-testid="library-alias-input"]'
     public static readonly includesTab = '[data-testid="includes-tab"]'
     public static readonly librarySearchTextBox = '[data-testid="searchTerm-text-input"]'
     public static readonly librarySearchBtn = '[data-testid="search-btn"]'
@@ -87,6 +89,7 @@ export class CQLEditorPage {
     public static readonly editSavedLibrary = '[data-testid="BorderColorOutlinedIcon"]'
     public static readonly libraryResultsTable = '[data-testid="library-results-table-body"]'
     public static readonly viewSavedLibrary = '[data-testid="view-button-0"]'
+    public static readonly editSavedLibraryBtn = '[data-testid="edit-button-0"]'
     public static readonly aliasName = '[data-testid="library-alias-container"]'
     public static readonly versionNumber = '[data-testid="library-version-container"]'
     public static readonly versionDropdownBtn = '[data-testid="version-select"]'

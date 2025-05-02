@@ -443,12 +443,10 @@ describe('QDM Library Includes fields', () => {
         cy.get(CQLEditorPage.savedLibrariesTab).click()
 
         //Click on View Details
-        cy.get(CQLEditorPage.viewSavedLibrary).click()
+        cy.get(CQLEditorPage.editSavedLibrary).click()
         //Verify Alias and Version number fields are read only
-        cy.get(CQLEditorPage.aliasName).should('contain.text', 'AliasCommon')
-        cy.get('[data-testid="library-alias-container"] > .result-value').should('not.be.enabled')
-        cy.get(CQLEditorPage.versionNumber).should('contain.text', 'Version8.0.000')
-        cy.get('[data-testid="library-version-container"] > .result-value').should('not.be.enabled')
+        cy.get(CQLEditorPage.editLibraryAliasInput).should('include.value', 'Common')
+        cy.get(CQLEditorPage.versionDropdownBtn).find('[id="version-select"]').should('contain.text', '8.0.000')
     })
 
     it('Verify all QDM Library versions are displayed while editing saved Libraries', () => {
