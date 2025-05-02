@@ -374,7 +374,7 @@ export class TestCasesPage {
         if (eleTableEntry === null || eleTableEntry === undefined) {
             eleTableEntry = 1
         }
-        cy.get(TestCasesPage.qdmTCElementTable).find('tr').eq(eleTableEntry).find('[class="MuiSpeedDial-root MuiSpeedDial-directionRight css-19yoayi"]').then(($element) => {
+        cy.get(TestCasesPage.qdmTCElementTable).find('tr').eq(eleTableEntry).find('[class="MuiSpeedDial-root MuiSpeedDial-directionRight css-td7g9m"]').then(($element) => {
             attrData = $element.attr('data-testid').toString().valueOf()
             return attrData
         }).then((attrData) => {
