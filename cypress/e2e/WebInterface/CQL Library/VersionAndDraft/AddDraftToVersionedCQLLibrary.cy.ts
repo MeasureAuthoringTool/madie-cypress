@@ -9,6 +9,10 @@ let CqlLibraryOne: string
 const CQLLibraryPublisher = 'SemanticBits'
 const versionNumber = '1.0.000'
 const filePath = 'cypress/fixtures/cqlLibraryId'
+const filePath2 = 'cypress/fixtures/cqlLibraryId2'
+
+
+
 
 describe('Action Center Buttons - Add Draft to CQL Library', () => {
 
@@ -65,12 +69,37 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
             cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
         })
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
+
+        //once this epic https://jira.cms.gov/browse/MAT-5119, is ready for deployment, the following code can be
+        //uncommented and used
+        // cy.wait('@draft', { timeout: 60000 }).then((request) => {
+        //     cy.writeFile(filePath2, request.response.body.id)
+        // })
+
+        //This check will need to be removed once epic https://jira.cms.gov/browse/MAT-5119 is ready for deployment
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
             cy.writeFile(filePath, request.response.body.id)
         })
+
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
+
+        //once this epic https://jira.cms.gov/browse/MAT-5119, is ready for deployment, the following code can be
+        //uncommented and used
+
+        // cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
+        // cy.get(CQLLibrariesPage.row0_Status).should('contain', 'Draft')
+        //
+        // cy.get(CQLLibrariesPage.row0_ExpandArrow).should('be.visible')
+        // cy.get(CQLLibrariesPage.row0_ExpandArrow).click()
+        //
+        // cy.readFile(filePath).should('exist').then((fileContents) => {
+        //     cy.get('[data-testid="cqlLibrary-expanded-' + fileContents + '"]').should('be.visible')
+        // })
+
+        //This check will need to be removed once epic https://jira.cms.gov/browse/MAT-5119 is ready for deployment
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', 'Draft 1.0.000')
-        cy.log('Draft Created Successfully').wait(1000)
+
+        cy.log('Draft Created Successfully')
 
         OktaLogin.UILogout()
         cy.clearAllCookies()
@@ -79,7 +108,11 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
 
         cy.setAccessTokenCookie()
 
-        //Delete Draft Library
+
+        //Delete Draft Library after epic https://jira.cms.gov/browse/MAT-5119
+        //Utilities.deleteLibrary(CqlLibraryOne,false, 2)
+
+        //Delete Draft Library before epic https://jira.cms.gov/browse/MAT-5119
         Utilities.deleteLibrary(CqlLibraryOne)
     })
 

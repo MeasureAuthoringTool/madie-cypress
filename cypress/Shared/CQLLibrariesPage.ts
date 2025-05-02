@@ -9,13 +9,17 @@ export class CQLLibrariesPage {
     public static readonly versionLibraryRadioButton = '[name="type"]'
     public static readonly createVersionContinueButton = '[data-testid="create-version-continue-button"] > :nth-child(1)'
     public static readonly VersionDraftMsgs = '.MuiAlert-message'
-    public static readonly cqlLibraryVersionList = '[data-testid="cqlLibrary-button-0_version"]'
     public static readonly updateDraftedLibraryTextBox = '[data-testid="cql-library-name-input"]'
     public static readonly createDraftContinueBtn = '[data-testid="create-draft-continue-button"]'
     public static readonly versionErrorMsg = '[data-testid=create-version-error-message]'
     public static readonly versionCancelBtn = '[data-testid="create-version-cancel-button"]'
     public static readonly editCQLLibraryAlertMessage = '.madie-alert'
     public static readonly cqlLibraryDirtyCheck = '.MuiDialogContent-root'
+
+    //Libraries row 0 elements
+    public static readonly cqlLibraryVersionList = '[data-testid="cqlLibrary-button-0_version"]'
+    public static readonly row0_Status = '[data-testid="cqlLibrary-button-0_status"]'
+    public static readonly row0_ExpandArrow = '[data-testid="cqlLibrary-button-0_expandArrow"]'
 
     //Action Center buttons
     public static readonly actionCenterDeleteBtn = '[data-testid="delete-action-btn"]'
