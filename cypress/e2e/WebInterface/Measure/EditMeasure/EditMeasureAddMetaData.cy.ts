@@ -222,7 +222,7 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //definition
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
-        cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find('[class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1ns8gjm"]').should('have.attr', 'aria-label', 'Edit').click()
+        cy.get('[aria-label="Edit"]').click()
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseDialog, 50000)
         cy.get(EditMeasurePage.definitionTermInput).clear().type('DefinitionTermUpdate')
         cy.get(EditMeasurePage.definitionInput).clear().type('Definition details for DefinitionTerm')
@@ -233,7 +233,7 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //delete definition
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
-        cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find('[class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1tb4h4m"]').should('have.attr', 'aria-label', 'Delete').click()
+        cy.get('[aria-label="Delete"]').click()
         Utilities.waitForElementVisible(CQLEditorPage.deleteContinueButton, 50000)
         cy.get(CQLEditorPage.deleteContinueButton).click()
         Utilities.waitForElementToNotExist
