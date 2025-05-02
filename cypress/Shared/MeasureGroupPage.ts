@@ -183,7 +183,7 @@ export class MeasureGroupPage {
     public static readonly updateMeasureGroupConfirmationMsg = '.MuiDialogContent-root > div'
     public static readonly popUpConfirmationModal = '[class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation24 MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-mbdu2s"]'
     public static readonly scoreUpdateConfirmModal = '[data-testid="update-measure-group-scoring-dialog"]'
-    public static readonly scoreUpdateMGConfirmMsg = '[class="MuiDialogContent-root css-1ty026z"]'
+    public static readonly scoreUpdateMGConfirmMsg = '.MuiDialogContent-root'
     public static readonly updateMeasureGroupConfirmationBtn = '[data-testid="update-measure-group-scoring-modal-agree-btn"]'
     public static readonly updatePopulationBasisConfirmationBtn = '[data-testid="update-measure-group-pop-basis-modal-agree-btn"]'
 
@@ -255,7 +255,7 @@ export class MeasureGroupPage {
     public static readonly discardChangesConfirmationMsg = '.MuiDialogContent-root'
     public static readonly supplementalDataDefinitionTextBox = '#supplementalDataElements'
     public static readonly ippIncludeInReportTypeField = '[data-testid="includeInReportType-container"] > :nth-child(1)'
-    public static readonly ippIncludeInReportTypeDropdownList = '[class="MuiAutocomplete-listbox css-ue1yok"]'
+    public static readonly ippIncludeInReportTypeDropdownList = '[class="MuiAutocomplete-listbox css-tkoe5p"]'
     public static readonly denomIncludeInReportTypeField = '[data-testid="includeInReportType-container"] > :nth-child(2)'
 
     public static createMeasureGroupforProportionMeasure(): void {

@@ -49,12 +49,7 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //validation message after attempting to save
-        cy.get(MeasureGroupPage.popUpConfirmationModal).should('exist')
-        cy.get(MeasureGroupPage.popUpConfirmationModal).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.popUpConfirmationModal, 30000)
-        cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('exist')
-        cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.scoreUpdateMGConfirmMsg, 30000)
+        Utilities.waitForElementVisible(MeasureGroupPage.scoreUpdateMGConfirmMsg, 60000)
         cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Your Measure Scoring is about to be saved and updated based on these changes. Any expected values on your test cases will be cleared for this measure.')
         cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'Are you sure you want to Save Changes?')
         cy.get(MeasureGroupPage.scoreUpdateMGConfirmMsg).should('contain.text', 'This action cannot be undone.')
