@@ -318,7 +318,7 @@ describe('Warning modal on Test Case JSON Editor', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -437,7 +437,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -522,7 +522,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -605,7 +605,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -682,7 +682,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -713,7 +713,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources in bundle must have unique ID regardless of type. Multiple resources detected with ID [4989ju789fn93bvy562loe87c]')
     })
 
-    it.only('Verify warning message for missing Meta.Profile Values on Resources in Test case Json', () => {
+    it('Verify warning message for missing Meta.Profile Values on Resources in Test case Json', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -740,7 +740,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -865,7 +865,7 @@ describe('JSON Resource ID tests - Proportion Score Type', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -974,7 +974,7 @@ describe('JSON Resource ID tests -- CV', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
 
         TestCasesPage.clickCreateTestCaseButton()
 
