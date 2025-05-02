@@ -31,7 +31,7 @@ export class CQLLibraryPage {
     public static readonly myLibrariesBtn = '[data-testid="my-cql-libraries-tab"]'
     public static readonly LibFilterTextField = '[data-testid="library-filter-input"]'
     public static readonly LibFilterSubmitBtn = '[data-testid="library-filter-submit"]'
-    public static readonly LibFilterLabel = '[id="mui-1-label"]'
+    public static readonly LibFilterLabel = '[id="mui-2-label"]'
     public static readonly LibTableRows = '[data-testid="row-item"]'
     public static readonly cqlLibraryModelQICore = '[data-testid="cql-library-model-option-QI-Core v4.1.1"]'
     public static readonly saveCQLLibraryBtn = '[data-testid="continue-button"]'
