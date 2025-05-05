@@ -218,15 +218,17 @@ describe('Test Case Expected Measure Group population values based on initial me
             cy.get(TestCasesPage.testCaseDENOMExpected).should('be.visible')
             cy.get(TestCasesPage.testCaseDENOMExpected).type('3')
 
-            cy.get(TestCasesPage.editTestCaseSaveButton).should('exist')
-            cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
-            cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-            cy.get(TestCasesPage.editTestCaseSaveButton).click()
             //navigate to the Details tab to see confirmation message
             cy.get(TestCasesPage.detailsTab).should('exist')
             cy.get(TestCasesPage.detailsTab).should('be.visible')
             cy.get(TestCasesPage.detailsTab).click()
+
+            cy.get(TestCasesPage.editTestCaseSaveButton).should('exist')
+            cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+            cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+            cy.get(TestCasesPage.editTestCaseSaveButton).click()
             cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
+
             //navigate back to the measure group tab / page and...
             //change score unit value and save / update measure with new value
             cy.get(EditMeasurePage.measureGroupsTab).click()
