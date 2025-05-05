@@ -75,6 +75,8 @@ describe('Validating the creation of QDM Test Case', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled').wait(1500)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
+
         //click on bread crumb to navigate back to the main test case list page
         cy.get(TestCasesPage.testCasesBCLink).find('[class="madie-link"]').should('contain.text', 'Test Cases').click()
 
