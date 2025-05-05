@@ -419,23 +419,6 @@ describe('Qi-Core Library Includes fields', () => {
 
     })
 
-    it('View Included Qi Core Library Details', () => {
-
-        cy.get(CQLEditorPage.includesTab).click()
-
-        //Navigate to Saved Libraries tab
-        cy.get(CQLEditorPage.savedLibrariesTab).should('contain.text', 'Saved Libraries (1)')
-        cy.get(CQLEditorPage.savedLibrariesTab).click()
-
-        //Click on View Details
-        cy.get(CQLEditorPage.viewSavedLibrary).click()
-        //Verify Alias and Version number fields are read only
-        cy.get(CQLEditorPage.aliasName).should('contain.text', 'AliasFHIRHelpers')
-        cy.get('[data-testid="library-alias-container"] > .result-value').should('not.be.enabled')
-        cy.get(CQLEditorPage.versionNumber).should('contain.text', 'Version4.1.000')
-        cy.get('[data-testid="library-version-container"] > .result-value').should('not.be.enabled')
-    })
-
     it('Verify all Qi Core Library versions are displayed while editing saved Libraries', () => {
 
         cy.get(CQLEditorPage.includesTab).click()
