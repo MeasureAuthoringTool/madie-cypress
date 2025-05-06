@@ -67,6 +67,16 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
                 cy.writeFile('cypress/fixtures/measureSetId', response.body.measureSetId)
             })
         })
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
 
         OktaLogin.Login()
@@ -111,7 +121,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    // run this & check modal for messsage
+    // run this and check modal for message
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
 
         MeasuresPage.actionCenter('edit')
@@ -155,6 +165,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
             cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
 
             cy.get('[data-testid="error-message"]').should('contain.text', 'Unable to Export measure.')
+            cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'CQL Contains Errors')
         })
     })
 })
@@ -244,6 +255,16 @@ describe('Error Message on Measure Export when the PC does not have Improvement 
     before('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
     })
 
     after('Log out and Cleanup', () => {

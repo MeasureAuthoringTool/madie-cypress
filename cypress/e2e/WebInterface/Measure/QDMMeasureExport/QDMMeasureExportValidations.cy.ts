@@ -61,6 +61,16 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
             blankMetadata: true
         }
         CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCqlLibraryName, SupportedModels.QDM, measureOptions)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
         MeasureGroupPage.CreateCohortMeasureGroupWithoutTypeAPI(false, false, 'Initial Population', 'Encounter')
         OktaLogin.Login()
     })
@@ -147,7 +157,8 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
             cy.get('[data-testid="export-action-btn"]').click()
             cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
 
-            cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure.')
+            cy.get('[class="error-message"]').should('contain.text', 'Unable to Export measure')
+            cy.get('[class="error-message"] > ul > :nth-child(1)').should('contain.text', 'CQL Contains Errors')
         })
     })
 })
