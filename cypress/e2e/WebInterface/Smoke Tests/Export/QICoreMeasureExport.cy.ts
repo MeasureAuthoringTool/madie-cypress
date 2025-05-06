@@ -224,9 +224,10 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 'Purpose\tthis is a meta purpose value\n' +
                 'Clinical Usage\tthis is a meta guidance (usage) value -- for the \'Clinical Usage\' field\n' +
                 'Effective Period\t' + mpStartDate + '..' + mpEndDate + '\n' +
+
+                'Measure Developer\tAcademy of Nutrition and Dietetics\n' +
                 'Measure Steward\tSemanticBits\n' +
                 'Copyright\tUNKNOWN')
-
 
             //References
             expect(bodyText).to.include('Citation\tCitation: Citation - Text 1\n' +
@@ -345,7 +346,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 '        else\n' +
                 '            Interval[period."start".value, period."end".value]\n' +
                 '\n' +
-                'Generated using version 0.4.6 of the sample-content-ig Liquid templates')
+                'Generated using version 0.4.7 of the sample-content-ig Liquid templates')
         })
     })
 })
@@ -450,8 +451,10 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 'Purpose\tthis is a meta purpose value\n' +
                 'Clinical Usage\tthis is a meta guidance (usage) value -- for the \'Clinical Usage\' field\n' +
                 'Effective Period\t' + mpStartDate + '..' + mpEndDate + '\n' +
+                'Measure Developer\tAcademy of Nutrition and Dietetics\n' +
                 'Measure Steward\tSemanticBits\n' +
                 'Copyright\tUNKNOWN')
+
 
             //References
             expect(bodyText).to.include('Citation\tCitation: Citation - Text 1\n' +
@@ -572,7 +575,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 '        else\n' +
                 '            Interval[period."start".value, period."end".value]\n' +
                 '\n' +
-                'Generated using version 0.4.6 of the sample-content-ig Liquid templates')
+                'Generated using version 0.4.7 of the sample-content-ig Liquid templates')
         })
     })
 })
