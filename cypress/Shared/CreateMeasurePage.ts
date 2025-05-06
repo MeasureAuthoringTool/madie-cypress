@@ -185,6 +185,12 @@ export class CreateMeasurePage {
                         "guidance": "this is a meta guidance (usage) value -- for the 'Clinical Usage' field",
                         "description": "SemanticBits",
                         "purpose": "this is a meta purpose value",
+                        "endorsements": [
+                            {
+                                "endorser": "CMS Consensus Based Entity",
+                                "endorsementId": "3502"
+                            }
+                        ],
                         "experimental": false,
                         "steward": {
                             "name": "SemanticBits",
