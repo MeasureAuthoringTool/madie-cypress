@@ -238,6 +238,11 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
             expect(bodyText).to.include('Measure Metadata\n' +
                 'Short Name Identifier\teCQMTitle4QICore')
 
+            //CBE Number / Identifier
+            expect(bodyText).to.include(
+                'Identifier\t3502'
+            )
+
             //Measure Population Criteria
             expect(bodyText).to.include('Measure Population Criteria (ID: Group_1)\n' +
                 'Initial Population\tID: InitialPopulation_1\n' +
@@ -463,6 +468,11 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
             //Short Name Identifier
             expect(bodyText).to.include('Short Name Identifier\teCQMTitle4QICore')
+
+            //CBE Number / Identifier
+            expect(bodyText).to.include(
+                'Identifier\t3502'
+            )
 
             //Version Number
             expect(bodyText).to.include('Version Number\t1.0.000')
