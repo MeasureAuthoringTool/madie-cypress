@@ -6,72 +6,21 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 
-let measureNameTimeStamp = 'TestMeasure' + Date.now()
-let measureName = measureNameTimeStamp
+let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
+let measureCQL = MeasureCQL.zipfileExportQICore
 
-let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include SupplementalDataElements version \'3.1.000\' called SDE\n' +
-    'include CQMCommon version \'1.0.000\' called CQMCommon \n' +
-    'include FHIRCommon version \'4.1.000\' called FHIRCommon\n' +
-    '\n' +
-    '\n' +
-    'codesystem "SNOMEDCT": \'http://snomed.info/sct\' \n' +
-    'codesystem "ActCode": \'http://terminology.hl7.org/CodeSystem/v3-ActCode\'  \n' +
-    '\n' +
-    '\n' +
-    'code "Healthcare professional (occupation)": \'223366009\' from "SNOMEDCT" display \'Healthcare professional (occupation)\'\n' +
-    'code "Medical practitioner (occupation)": \'158965000\' from "SNOMEDCT" display \'Medical practitioner (occupation)\'\n' +
-    'code "Ophthalmologist (occupation)": \'422234006\' from "SNOMEDCT" display \'Ophthalmologist (occupation)\'\n' +
-    'code "Optometrist (occupation)": \'28229004\' from "SNOMEDCT" display \'Optometrist (occupation)\'\n' +
-    'code "Physician (occupation)": \'309343006\' from "SNOMEDCT" display \'Physician (occupation)\'\n' +
-    'code "virtual": \'VR\' from "ActCode" display \'virtual\'\n' +
-    'code "Macular edema absent (situation)": \'428341000124108\' from "SNOMEDCT" display \'Macular edema absent (situation)\'\n' +
-    'code "AMB" : \'AMB\' from "ActCode" display \'Ambulatory\'\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
-    'define "SDE Ethnicity":\n' +
-    '  SDE."SDE Ethnicity"\n' +
-    '\n' +
-    'define "SDE Payer":\n' +
-    '  SDE."SDE Payer"\n' +
-    '\n' +
-    'define "SDE Race":\n' +
-    '  SDE."SDE Race"\n' +
-    '\n' +
-    'define "SDE Sex":\n' +
-    '  SDE."SDE Sex"\n' +
-    '\n' +
-    '\n' +
-    '\n' +
-    'define "Initial Population":\n' +
-    'true\n' +
-    '\n' +
-    'define "Num":\n' +
-    'true\n' +
-    '\n' +
-    'define "Denom":\n' +
-    'true'
 
 describe('Validations between Supplemental Data Elements with the CQL definitions', () => {
 
     beforeEach('Create New Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
-        //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '',
-            'Num', '', 'Initial Population', 'boolean')
-
-
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'ipp', 'boolean')
+        
+        OktaLogin.Login()
     })
 
     afterEach('Log out', () => {
@@ -82,7 +31,6 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
     it('Removing definition related to the SD alerts user.', () => {
 
-        OktaLogin.Login()
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
@@ -92,7 +40,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //set supplemental data definition to e Denom
         cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('Denom').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('denom').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
             .first() // select the first element
@@ -128,7 +76,6 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
     it('Fixing SD to point to something that is, now, in CQL, resolves alert.', () => {
 
-        OktaLogin.Login()
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
@@ -138,7 +85,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //set supplemental data definition to e Denom
         cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('Denom').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('denom').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
             .first() // select the first element
@@ -186,7 +133,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //set supplemental data definition to e Denom
         cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('Initial Population').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('ipp').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
             .first() // select the first element
@@ -207,7 +154,6 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
     it('Placing definition back into CQL and saving resolves the alert.', () => {
 
-        OktaLogin.Login()
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
@@ -217,7 +163,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
 
         //set supplemental data definition to e Denom
         cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('Denom').click()
+        cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('denom').click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
         cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox)
             .first() // select the first element
@@ -259,7 +205,7 @@ describe('Validations between Supplemental Data Elements with the CQL definition
             '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
             '\n' +
             '\n' +
-            'define "Denom":\n' +
+            'define "denom":\n' +
             ' true')
         //save updated CQL
         cy.get(CQLEditorPage.saveCQLButton).click()

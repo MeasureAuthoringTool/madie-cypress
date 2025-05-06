@@ -6,60 +6,12 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
+import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 
 let measureNameTimeStamp = 'TestMeasure' + Date.now()
 let measureName = measureNameTimeStamp
 let CqlLibraryName = 'TestLibrary' + Date.now()
-
-let measureCQL = 'library TestLibrary1678378360032 version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include SupplementalDataElements version \'3.1.000\' called SDE\n' +
-    'include CQMCommon version \'1.0.000\' called CQMCommon \n' +
-    'include FHIRCommon version \'4.1.000\' called FHIRCommon\n' +
-    '\n' +
-    '\n' +
-    'codesystem "SNOMEDCT": \'http://snomed.info/sct\' \n' +
-    'codesystem "ActCode": \'http://terminology.hl7.org/CodeSystem/v3-ActCode\'  \n' +
-    '\n' +
-    '\n' +
-    'code "Healthcare professional (occupation)": \'223366009\' from "SNOMEDCT" display \'Healthcare professional (occupation)\'\n' +
-    'code "Medical practitioner (occupation)": \'158965000\' from "SNOMEDCT" display \'Medical practitioner (occupation)\'\n' +
-    'code "Ophthalmologist (occupation)": \'422234006\' from "SNOMEDCT" display \'Ophthalmologist (occupation)\'\n' +
-    'code "Optometrist (occupation)": \'28229004\' from "SNOMEDCT" display \'Optometrist (occupation)\'\n' +
-    'code "Physician (occupation)": \'309343006\' from "SNOMEDCT" display \'Physician (occupation)\'\n' +
-    'code "virtual": \'VR\' from "ActCode" display \'virtual\'\n' +
-    'code "Macular edema absent (situation)": \'428341000124108\' from "SNOMEDCT" display \'Macular edema absent (situation)\'\n' +
-    'code "AMB" : \'AMB\' from "ActCode" display \'Ambulatory\'\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
-    'define "SDE Ethnicity":\n' +
-    '  SDE."SDE Ethnicity"\n' +
-    '\n' +
-    'define "SDE Payer":\n' +
-    '  SDE."SDE Payer"\n' +
-    '\n' +
-    'define "SDE Race":\n' +
-    '  SDE."SDE Race"\n' +
-    '\n' +
-    'define "SDE Sex":\n' +
-    '  SDE."SDE Sex"\n' +
-    '\n' +
-    '\n' +
-    '\n' +
-    'define "Initial Population":\n' +
-    'true\n' +
-    '\n' +
-    'define "Num":\n' +
-    'true\n' +
-    '\n' +
-    'define "Denom":\n' +
-    'true'
+let measureCQL = MeasureCQL.zipfileExportQICore
 
 describe('Validations between Risk Adjustments with the CQL definitions', () => {
 
@@ -69,14 +21,11 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
     beforeEach('Create New Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
-        //create Measure Group
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '',
-            'Num', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '',
+            'num', '', 'ipp', 'boolean')
 
         OktaLogin.Login()
-
     })
 
     afterEach('Log out', () => {
@@ -84,6 +33,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         OktaLogin.Logout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
+
     it('Removing definition related to the RA alerts user.', () => {
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
@@ -94,7 +44,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //select a definition and enter a description for denom
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Denom').click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('denom').click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
             .first() // select the first element
@@ -128,6 +78,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get('[data-testid="test-case-list-error"]').should('contain.text', 'Supplemental Data Elements or Risk Adjustment Variables in the Population Criteria section are invalid. Please check and update these values. Test cases will not execute until this issue is resolved.')
 
     })
+
     it('Fixing RA to point to something that is, now, in CQL, resolves alert.', () => {
 
         cy.get(Header.measures).click()
@@ -139,7 +90,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //select a definition and enter a description for denom
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Denom').click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('denom').click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
             .first() // select the first element
@@ -187,7 +138,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //select a definition and enter a description for Initial Population
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Initial Population').click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('ipp').click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
             .first() // select the first element
@@ -205,6 +156,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
 
     })
+
     it('Placing definition back into CQL and saving resolves the alert.', () => {
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
@@ -214,7 +166,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
         //select a definition and enter a description for denom
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Denom').click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('denom').click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
             .first() // select the first element
@@ -256,7 +208,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
             '{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}{downArrow}' +
             '\n' +
             '\n' +
-            'define "Denom":\n' +
+            'define "denom":\n' +
             ' true')
         //save updated CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
@@ -270,6 +222,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementToNotExist(MeasureGroupPage.pcErrorAlertToast, 75)
     })
+
     // user is able to create, add, and save RAs on a group
     it('QI Core: User able to create, add, and save RA and RA description', () => {
         cy.get(Header.measures).click()
@@ -281,13 +234,13 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
 
         //select a definition and enter a description for denom
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).click()
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Denom').click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('denom').click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
             .first() // select the first element
             .type('Initial Population Description')
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).eq(0).click()
-        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('Num').click()
+        cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).contains('num').click()
 
         //save the Risk Adjustment data
         cy.get(MeasureGroupPage.saveRiskAdjustments).click().click()
@@ -302,7 +255,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
 
         //confirm the values in the RA fields
-        cy.get(MeasureGroupPage.riskAdjDropDown).should('contain.text', 'DefinitionDenom+1')
+        cy.get(MeasureGroupPage.riskAdjDropDown).should('contain.text', 'Definitiondenom+1')
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('contain.text', 'Initial Population Description')
 
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).eq(0).click()
@@ -319,7 +272,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
 
         //confirm the values in the RA fields
-        cy.get(MeasureGroupPage.riskAdjDropDown).should('contain.text', 'DefinitionNum')
+        cy.get(MeasureGroupPage.riskAdjDropDown).should('contain.text', 'Definitionnum')
 
     })
 })
