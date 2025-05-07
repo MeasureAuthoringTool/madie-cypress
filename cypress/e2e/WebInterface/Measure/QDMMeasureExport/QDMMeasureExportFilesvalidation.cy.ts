@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
@@ -50,23 +50,36 @@ let baseXMLFileAdditinoalEncounterCriteriaSection = 'cypress/fixtures/HQMFCompar
 let exported = ''
 let expected = ''
 
+
+const xml2js = require('xml2js')
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 let qdmMeasureCQL = MeasureCQL.CQLQDMObservationRun
+let description = 'SemanticBits\n' +
+    '\n' +
+    'test'
+
+const measureData: CreateMeasureOptions = {
+    measureCql: qdmMeasureCQL,
+    ecqmTitle: qdmMeasureName,
+    cqlLibraryName: qdmCqlLibraryName,
+    measureScoring: 'Cohort',
+    description: description,
+    patientBasis: 'false'
+}
 
 describe('Verify QDM Measure Export file contents', () => {
 
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
-
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         //Create Measure and Measure group
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -78,6 +91,7 @@ describe('Verify QDM Measure Export file contents', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
+
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
 
@@ -91,6 +105,7 @@ describe('Verify QDM Measure Export file contents', () => {
             .then(results => {
                 cy.log('unzipFile Task finished')
             })
+
     })
 
     after('Clean up', () => {
@@ -138,7 +153,8 @@ describe('Verify QDM Measure Export file contents', () => {
         cy.readFile(path.join(downloadsFolder, 'resources/MATGlobalCommonFunctionsQDM-1.0.000.xml')).should('exist')
 
     })
-    it('Verify content of the XML / HQMF file, for a QDM Measure', () => {
+    it.only('Verify content of the XML / HQMF file, for a QDM Measure', () => {
+
         //read contents of the xml / HQMF file and compare that with the expected file contents (minus specific 
         //measure name and other data that can change from one generated HQMF file -to- the next)
         cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.xml')).should('exist').then((exportedFile) => {
@@ -259,9 +275,21 @@ describe('Verify QDM Measure Export file contents', () => {
                 cy.log('expected Sixteenth section file contents are: \n' + expected)
                 expect((exported).toString()).to.includes((expected).toString())
             })
+
+        })
+
+        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QDM-v0.0.000-QDM.xml')).then((xmlData) => {
+            // Parse the XML data
+            xml2js.parseString(xmlData, (err, result) => {
+                if (err) {
+                    throw new Error('Failed to parse XML file')
+                }
+                // Validate the value of the <text> tag
+                const textValue = result['QualityMeasureDocument']['text'][0]['$']['value']
+                expect(textValue).to.equal('SemanticBits\n\ntest')
+            })
         })
     })
-
 })
 
 describe('QDM Measure Export, Not the Owner', () => {
@@ -275,7 +303,7 @@ describe('QDM Measure Export, Not the Owner', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         //Create Measure and Measure group
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -329,7 +357,7 @@ describe('Successful QDM Measure Export with versioned measure', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
         //Create Measure and Measure group
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()

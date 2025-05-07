@@ -1,6 +1,6 @@
 import { Utilities } from "../../../Shared/Utilities"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
@@ -29,6 +29,8 @@ let TCTitle = 'test case title'
 let TCDescription = 'DENOMFail1651609688032'
 let TCJson = TestCaseJson.QDMTestCaseJson
 
+const measureData: CreateMeasureOptions = {}
+
 describe('Test Case population values based on Measure Group population definitions', () => {
     beforeEach('Create Measure and measure group', () => {
         let randTCNameValue = (Math.floor((Math.random() * 2000) + 3))
@@ -38,7 +40,13 @@ describe('Test Case population values based on Measure Group population definiti
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL)
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = cqlLibraryName
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'true'
+        measureData.measureCql = booleanPatientBasisQDM_CQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -205,8 +213,14 @@ describe('Measure Service: Test Case Endpoints: Create and Edit', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = cqlLibraryNameDeux
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'true'
+        measureData.measureCql = booleanPatientBasisQDM_CQL
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryNameDeux, measureScoring, true, booleanPatientBasisQDM_CQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
     })
 
     beforeEach('Set Token', () => {
@@ -302,8 +316,14 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
         measureName = 'QDMTestMeasure' + Date.now()
         CQLLibraryName = 'QDMTestCql' + Date.now()
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CQLLibraryName
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'true'
+        measureData.measureCql = booleanPatientBasisQDM_CQL
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CQLLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         cy.setAccessTokenCookie()
     })
 
@@ -434,19 +454,6 @@ describe('Measure Service: Test Case Endpoints: Validations', () => {
     })
 })
 
-/*        //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryNameDeux, measureScoring, true, booleanPatientBasisQDM_CQL, false, true)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'Initial Population')
-        //create test case
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson, false, true)
-
-        -----------
-
-        expect(response.status).to.eql(403)
-        expect(response.body.message).to.eql('User ' + harpUser + ' is not authorized for Measure with ID ' + measureId)
-*/
-
-
 describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not owner', () => {
     let randValue = (Math.floor((Math.random() * 2000) + 3))
     let cqlLibraryNameDeux = cqlLibraryName + randValue + 2
@@ -456,8 +463,14 @@ describe('Measure Service: Test Case Endpoints: Attempt to edit when user is not
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = cqlLibraryNameDeux
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'true'
+        measureData.measureCql = booleanPatientBasisQDM_CQL
+
         //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryNameDeux, measureScoring, true, booleanPatientBasisQDM_CQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -515,7 +528,13 @@ describe('Measure Service: Test Case Endpoint: User validation with test case im
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL)
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = cqlLibraryName
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'true'
+        measureData.measureCql = booleanPatientBasisQDM_CQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')

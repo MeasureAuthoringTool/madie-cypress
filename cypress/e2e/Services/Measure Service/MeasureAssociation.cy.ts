@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
@@ -23,6 +23,8 @@ let QDMCqlLibraryName0 = ''
 let measureQDMManifestName1 = ''
 let QDMCqlLibraryName1 = ''
 
+const measureData: CreateMeasureOptions = {}
+
 describe('Measure Association: Validations', () => {
 
     beforeEach('Create Measure', () => {
@@ -34,10 +36,17 @@ describe('Measure Association: Validations', () => {
         measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
         QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
 
+        measureData.ecqmTitle = measureQDMManifestName1
+        measureData.cqlLibraryName = QDMCqlLibraryName1
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
         //Create New QDM Measure
         //0
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName1, QDMCqlLibraryName1, 'Proportion', false, qdmManifestTestCQL, 0, false,
-            '2025-01-01', '2025-12-31')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -50,10 +59,18 @@ describe('Measure Association: Validations', () => {
         measureQDMManifestName0 = 'QDMManifestTestMN0' + Date.now() + randValue + 6 + randValue
         QDMCqlLibraryName0 = 'QDMManifestTestLN0' + Date.now() + randValue + 7 + randValue
 
+        measureData.ecqmTitle = measureQDMManifestName0
+        measureData.cqlLibraryName = QDMCqlLibraryName0
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+        measureData.measureNumber = 1
+
         //Create Second QDM Measure
         //1
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName0, QDMCqlLibraryName0, 'Proportion', false, qdmManifestTestCQL, 1, false,
-            '2025-01-01', '2025-12-31')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit', 1)
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -311,10 +328,17 @@ describe('Measure Association: Validations', () => {
         measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
         QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
 
+        measureData.ecqmTitle = measureQDMManifestName1
+        measureData.cqlLibraryName = QDMCqlLibraryName1
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
         //Create New QDM Measure
         //0
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName1, QDMCqlLibraryName1, 'Proportion', false, qdmManifestTestCQL, 0, false,
-            '2025-01-01', '2025-12-31')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
         OktaLogin.Login()

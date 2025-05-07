@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../../Shared/Utilities"
@@ -18,13 +18,21 @@ const now = Date.now()
 let measureName = 'ProportionPatient' + now
 let CqlLibraryName = 'ProportionPatient' + now
 
+const measureData: CreateMeasureOptions = {}
 
 describe('MADiE Shift Test Case Dates tests for QDM Measure', () => {
 
     beforeEach('Create Measure, test cases and Login', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Proportion', false, qdmManifestTestCQL, null, false,
-            '2025-01-01', '2025-12-31')
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC2', 'QDMManifestTCGroup2', 'QDMManifestTC2', '', true, false)

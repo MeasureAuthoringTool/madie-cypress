@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
@@ -23,6 +23,8 @@ let CqlLibraryNamePropListQDM = 'QDMTestLibrary' + Date.now()
 let measureCQLPRODCat = MeasureCQL.qdmMeasureCQLPRODCataracts2040BCVAwithin90Days
 const now = require('dayjs')
 let todaysDate = now().format('MM/DD/YYYY')
+
+const measureData: CreateMeasureOptions = {}
 
 describe('Test case Coverage tab', () => {
 
@@ -168,7 +170,14 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQL)
+
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -492,7 +501,12 @@ describe('Run / Execute QDM Test Case button validations', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true)
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
 
 
@@ -629,7 +643,13 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
         CqlLibraryName = 'QDMTestLibrary5' + Date.now()
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQL)
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -712,7 +732,13 @@ describe('Run / Execute Test Case by Non Measure Owner', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQL)
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()

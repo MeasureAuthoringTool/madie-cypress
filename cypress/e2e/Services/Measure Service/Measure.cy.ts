@@ -1,7 +1,7 @@
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { Environment } from "../../../Shared/Environment"
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { v4 as uuidv4 } from 'uuid'
@@ -1047,7 +1047,15 @@ describe('Delete QDM Measure with admin API Key', () => {
         newCQLLibraryName = CqlLibraryNameU + randValue + Date.now()
         let QDMMeasureCQL = MeasureCQL.simpleQDM_CQL
 
-        defaultUser = CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true, QDMMeasureCQL)
+        const measureData: CreateMeasureOptions = {
+            measureCql: QDMMeasureCQL,
+            ecqmTitle: newMeasureName,
+            cqlLibraryName: newCQLLibraryName,
+            measureScoring: 'Cohort',
+            patientBasis: 'true',
+        }
+
+        defaultUser = CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')

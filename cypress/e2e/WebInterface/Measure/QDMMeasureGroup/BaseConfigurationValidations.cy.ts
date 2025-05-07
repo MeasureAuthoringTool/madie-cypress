@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
@@ -17,6 +17,8 @@ let altMeasureName = ''
 let altCqlLibraryName = ''
 let measureScoring = 'Cohort'
 let measureCQL = MeasureCQL.simpleQDM_CQL
+
+const measureData: CreateMeasureOptions = {}
 
 describe('Validating Population tabs and fields, specific to QDM', () => {
     beforeEach('Create measure and login', () => {
@@ -418,8 +420,14 @@ describe('Updates on Base Configuration page', () => {
 
     beforeEach('Create Measure and login', () => {
 
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, true, measureCQL, null)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit', null)
         cy.get(EditMeasurePage.cqlEditorTab).click()

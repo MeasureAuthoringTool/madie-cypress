@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, CreateMeasureOptions } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../Shared/Utilities"
@@ -25,13 +25,23 @@ let measureQDMManifestName = 'QDMManifestTest' + Date.now()
 let CqlLibraryName = 'ProportionPatient' + Date.now()
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
+const measureData: CreateMeasureOptions = {
+    measureCql: measureCQL,
+    ecqmTitle: measureName,
+    cqlLibraryName: CqlLibraryName,
+    measureScoring: 'Cohort',
+    patientBasis: 'true',
+    mpStartDate: '2023-01-01',
+    mpEndDate: '2024-01-01'
+}
+
 describe('Validating the creation of QDM Test Case', () => {
 
     beforeEach('Create Measure', () => {
 
         //Create New Measure
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQL, 0, false, '2023-01-01', '2024-01-01')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         //create Measure Group
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population',
             'boolean')
@@ -92,8 +102,11 @@ describe('Validating the creation of QDM Test Case', () => {
 describe('Validating the Elements section on Test Cases', () => {
     beforeEach('Create Measure', () => {
 
+        measureData.patientBasis = 'false'
+        measureData.measureCql = mCQLForElementsValidation
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', false, mCQLForElementsValidation)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         //create Measure Group
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population',
             'boolean')
@@ -216,8 +229,11 @@ describe('Validating the Elements section on Test Cases', () => {
 describe('Run QDM Test Case ', () => {
     beforeEach('Create Measure', () => {
 
+        measureData.patientBasis = 'true'
+        measureData.measureCql = CQLSimple_for_QDM
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, CQLSimple_for_QDM, null, false, '2023-01-01', '2024-01-01')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         //create Measure Group
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23',
             'boolean')
@@ -266,9 +282,15 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
 
     beforeEach('Create Measure', () => {
 
+        measureData.ecqmTitle = measureQDMManifestName
+        measureData.patientBasis = 'false'
+        measureData.measureScoring = 'Proportion'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDMManifestName, CqlLibraryName, 'Proportion', false, qdmManifestTestCQL, null, false,
-            '2025-01-01', '2025-12-31')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
         OktaLogin.Login()

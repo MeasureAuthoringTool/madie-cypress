@@ -1,5 +1,5 @@
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
@@ -18,13 +18,22 @@ let testCaseDescription = 'DENEXPass' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let measureQDMNPBCQL = MeasureCQL.qdmCQLNonPatienBasedTest
 
+const measureData: CreateMeasureOptions = {}
+
 describe('Clone QDM Test Case', () => {
 
     beforeEach('Create Measure', () => {
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = 'Ratio'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measureQDMNPBCQL
+        measureData.mpStartDate = '2023-01-01'
+        measureData.mpEndDate = '2024-12-31'
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Ratio', false, measureQDMNPBCQL, null, false,
-            '2023-01-01', '2024-12-31')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()

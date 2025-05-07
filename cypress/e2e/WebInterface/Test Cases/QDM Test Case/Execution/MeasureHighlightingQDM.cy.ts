@@ -1,5 +1,5 @@
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, CreateMeasureOptions } from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
@@ -23,6 +23,8 @@ let testCaseSeries = 'SBTestSeries'
 let newMeasureName = ''
 let newCqlLibraryName = ''
 
+const measureData: CreateMeasureOptions = {}
+
 describe('QDM: Test Case Highlighting Left navigation panel: Includes validate / verify the Definitions Used section / label', () => {
 
     beforeEach('Create measure, measure group, test case and login', () => {
@@ -30,9 +32,16 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes validate /
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = scoringPropValue
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measureCQLDUTest
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringPropValue, false, measureCQLDUTest, null, false,
-            '2025-01-01', '2025-12-31')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
         OktaLogin.Login()
         //Click on Edit Measure
@@ -114,9 +123,16 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = scoringPropValue
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measureCQLPFTests
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringPropValue, false, measureCQLPFTests, null, false,
-            '2025-01-01', '2025-12-31')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
         OktaLogin.Login()
         //Click on Edit Measure
@@ -210,9 +226,16 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = scoringPropValue
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measureCQLPFTests
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringPropValue, false, measureCQLPFTests, null, false,
-            '2025-01-01', '2025-12-31')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
         OktaLogin.Login()
         //Click on Edit Measure
@@ -312,9 +335,16 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = scoringPropValue
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measureCQLPFTests
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringPropValue, false, measureCQLPFTests, null, false,
-            '2025-01-01', '2025-12-31')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
         OktaLogin.Login()
         //Click on Edit Measure

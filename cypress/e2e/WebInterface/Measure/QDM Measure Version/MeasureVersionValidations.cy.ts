@@ -1,5 +1,5 @@
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
@@ -58,12 +58,18 @@ let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\
     'define "Initial Population":\'\'\n' +
     '\t  \'Inpatient Encounters\'\n'
 
+const measureData: CreateMeasureOptions = {}
 
 describe('Measure Versioning validations', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, 'Cohort', true)
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = cqlLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -159,7 +165,13 @@ describe('Non Measure owner unable to create Version', () => {
         let newMeasureName = measureName + randValue
         let newCqlLibraryName = cqlLibraryName + randValue
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', true, measureCQL)
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()

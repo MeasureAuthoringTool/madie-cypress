@@ -11,7 +11,7 @@ import { Global } from "../../../../Shared/Global"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 
-const options: CreateMeasureOptions = {
+const measureData: CreateMeasureOptions = {
     measureCql: MeasureCQL.CQL_BoneDensity_Proportion_Boolean
 }
 let randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -49,16 +49,32 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
 
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, measureQDM, 'Proportion', false, qdmManifestTestCQL, null, false,
-            '2025-01-01', '2025-12-31')
+
+        measureData.ecqmTitle = measureQDM
+        measureData.cqlLibraryName = measureQDM
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
         //Create Second QDM Measure
         measureQDM2 = 'QDMMeasure2' + Date.now() + randValue + 6 + randValue
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM2, measureQDM2, 'Proportion', false, qdmManifestTestCQL, 2, false,
-            '2025-01-01', '2025-12-31')
+        measureData.ecqmTitle = measureQDM2
+        measureData.cqlLibraryName = measureQDM2
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+        measureData.measureNumber = 2
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(2, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
@@ -320,8 +336,17 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, measureQDM, 'Proportion', false, qdmManifestTestCQL, null, false,
-            '2025-01-01', '2025-12-31')
+
+        measureData.ecqmTitle = measureQDM
+        measureData.cqlLibraryName = measureQDM
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+        measureData.measureNumber = null
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
@@ -529,30 +554,48 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
 
         //Create New QDM Measure
         measureQDM = 'QDMMeasure4QiCore600' + Date.now() + randValue + 8 + randValue
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, measureQDM, 'Proportion', false, qdmManifestTestCQL, null, false,
-            '2025-01-01', '2025-12-31')
+
+        measureData.ecqmTitle = measureQDM
+        measureData.cqlLibraryName = measureQDM
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+        measureData.measureNumber = null
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
         //Create Second QDM Measure
         measureQDM2 = 'QDMMeasure24QiCore600' + Date.now() + randValue + 6 + randValue
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM2, measureQDM2, 'Proportion', false, qdmManifestTestCQL, 2, false,
-            '2025-01-01', '2025-12-31')
+        measureData.ecqmTitle = measureQDM2
+        measureData.cqlLibraryName = measureQDM
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+        measureData.measureNumber = 2
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(2, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
-
 
         //Create new QI Core 6.0.0 measure
         measureQICore = 'QICore600Measure' + Date.now() + randValue + 4 + randValue
 
-        CreateMeasurePage.CreateMeasureAPI(measureQICore, measureQICore, SupportedModels.qiCore6, options, 3)
+        measureData.measureCql = MeasureCQL.CQL_BoneDensity_Proportion_Boolean
+
+        CreateMeasurePage.CreateMeasureAPI(measureQICore, measureQICore, SupportedModels.qiCore6, measureData, 3)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', null, 3)
 
         //Create second QI Core measure
         measureQICore2 = 'QICore600Measure2' + Date.now() + randValue + 2 + randValue
 
-        CreateMeasurePage.CreateMeasureAPI(measureQICore2, measureQICore2, SupportedModels.qiCore6, options, 4)
+        CreateMeasurePage.CreateMeasureAPI(measureQICore2, measureQICore2, SupportedModels.qiCore6, measureData, 4)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', null, 4)
 
 
@@ -805,15 +848,26 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, measureQDM, 'Proportion', false, qdmManifestTestCQL, null, false,
-            '2025-01-01', '2025-12-31')
+
+        measureData.ecqmTitle = measureQDM
+        measureData.cqlLibraryName = measureQDM
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+        measureData.measureNumber = null
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
         //Create new QI Core 6.0.0 measure
         measureQICore = 'QICore600Measure' + Date.now() + randValue + 4 + randValue
 
-        CreateMeasurePage.CreateMeasureAPI(measureQICore, measureQICore, SupportedModels.qiCore6, options, 2)
+        measureData.measureCql = MeasureCQL.CQL_BoneDensity_Proportion_Boolean
+
+        CreateMeasurePage.CreateMeasureAPI(measureQICore, measureQICore, SupportedModels.qiCore6, measureData, 2)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', null, 2)
 
 

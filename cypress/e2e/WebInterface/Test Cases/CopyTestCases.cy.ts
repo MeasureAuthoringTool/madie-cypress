@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
@@ -22,6 +22,8 @@ let secondMeasureName = 'SecondMeasure' + Date.now()
 let secondLibraryName = 'SecondLibrary' + Date.now()
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 
+const measureData: CreateMeasureOptions = {}
+
 describe('Copy QDM Test Cases', () => {
 
     before('Create measure and login', () => {
@@ -30,12 +32,27 @@ describe('Copy QDM Test Cases', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
+
         //Create QDM Measure, PC and Test Case
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, measureScoring, true, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
+
         //Create 2nd QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(secondMeasureName, secondLibraryName, measureScoring, true, measureCQL, 2)
+
+        measureData.ecqmTitle = secondMeasureName
+        measureData.cqlLibraryName = secondLibraryName
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
+        measureData.measureNumber = 2
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
 
     })

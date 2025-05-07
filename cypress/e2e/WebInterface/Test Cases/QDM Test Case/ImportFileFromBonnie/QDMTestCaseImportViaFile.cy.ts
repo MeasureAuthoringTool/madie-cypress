@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
@@ -19,14 +19,22 @@ let measureCQLPFTests = MeasureCQL.simpleQDM_CQL
 const now = require('dayjs')
 let todaysDate = now().format('MM/DD/YYYY')
 
+const measureData: CreateMeasureOptions = {}
+
 describe('Import Test cases onto an existing QDM measure via file', () => {
 
     beforeEach('Login and Create Measure', () => {
 
         CqlLibraryName = 'TestLibrary2' + Date.now()
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQLPFTests
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQLPFTests)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -129,8 +137,14 @@ describe('Import Test cases onto an existing QDM measure via file -- Message tha
 
         CqlLibraryName = 'TestLibrary2' + Date.now()
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQLPFTests
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', true, measureCQLPFTests)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()

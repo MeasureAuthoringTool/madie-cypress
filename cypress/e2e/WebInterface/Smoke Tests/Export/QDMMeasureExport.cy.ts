@@ -1,5 +1,5 @@
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
@@ -17,14 +17,23 @@ const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-fol
 let qdmMeasureCQL = MeasureCQL.QDM_CQL_withDRC
 let qdmCMSMeasureCQL = MeasureCQL.QDM_CQL_withLargeIncludedLibrary
 
+const measureData: CreateMeasureOptions = {
+    measureCql: qdmCMSMeasureCQL,
+    ecqmTitle: qdmMeasureName,
+    cqlLibraryName: qdmCqlLibraryName,
+    measureScoring: 'Proportion',
+    patientBasis: 'true',
+    mpStartDate: '2026-01-01',
+    mpEndDate: '2026-12-31'
+}
+
 describe('Successful QDM Measure Export', () => {
 
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Proportion',
-            true, qdmMeasureCQL, 0, false, '2026-01-01', '2026-12-31')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population',
             'Denominator Exclusions', '', 'Numerator', '', 'Denominator')
 
@@ -363,8 +372,12 @@ describe('QDM Measure Export for CMS Measure with huge included Library', () => 
 
     before('Create New Measure and Login', () => {
         Cypress.config('baseUrl', url)
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName+'2',
-            'Proportion', false, qdmCMSMeasureCQL)
+
+        measureData.cqlLibraryName = qdmCqlLibraryName+'2'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmCMSMeasureCQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false,
             'Qualifying Encounters', 'Denominator Exclusions', '',
             'Encounter without Food Screening', '', 'Qualifying Encounters')

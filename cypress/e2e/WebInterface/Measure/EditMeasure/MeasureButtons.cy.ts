@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, CreateMeasureOptions } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage, EditMeasureActions } from "../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../Shared/Utilities"
@@ -26,6 +26,8 @@ let qiCoreCQLLibrary = ''
 let harpUserALT = Environment.credentials().harpUserALT
 let qdmMeasureCQL = QdmCql.simpleQDM_CQL
 
+const measureData: CreateMeasureOptions = {}
+
 describe('Delete measure on the measure edit page', () => {
 
     beforeEach('Create Measure', () => {
@@ -37,8 +39,16 @@ describe('Delete measure on the measure edit page', () => {
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
         qiCoreCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 8 + randValue
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, qdmCQLLibrary, 'Proportion', false, qdmManifestTestCQL, null, false,
-            '2025-01-01', '2025-12-31')
+
+        measureData.ecqmTitle = measureQDM
+        measureData.cqlLibraryName = qdmCQLLibrary
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
@@ -118,9 +128,16 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
+        measureData.ecqmTitle = measureQDM
+        measureData.cqlLibraryName = qdmCQLLibrary
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
         //Create Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, qdmCQLLibrary, 'Proportion', false, qdmManifestTestCQL, null, false,
-            '2025-01-01', '2025-12-31')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
@@ -244,8 +261,16 @@ describe('Export measure on the Edit Measure page', () => {
         const date = Date.now()
         measureQDM = 'QDMExportMeasure' + date
         qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 3 + randValue
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, qdmCQLLibrary, 'Proportion', false, qdmManifestTestCQL, null, false,
-            '2025-01-01', '2025-12-31')
+
+        measureData.ecqmTitle = measureQDM
+        measureData.cqlLibraryName = qdmCQLLibrary
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
@@ -306,8 +331,16 @@ describe('Share measure from the Edit Measure page', () => {
         const date = Date.now()
         measureQDM = 'QDMShareMeasure' + date
         qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 3 + randValue
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, qdmCQLLibrary, 'Cohort', true, qdmManifestTestCQL, null, false,
-            '2025-01-01', '2025-12-31')
+
+        measureData.ecqmTitle = measureQDM
+        measureData.cqlLibraryName = qdmCQLLibrary
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
         measureQICore = 'QICoreShareMeasure' + date
         qiCoreCQLLibrary = 'QiCoreTestLibrary' + Date.now() + randValue + 3 + randValue
@@ -481,8 +514,16 @@ describe('Dirty Check Validations', () => {
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 7 + randValue
         qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 7 + randValue
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, qdmCQLLibrary, 'Proportion', false, qdmManifestTestCQL, null, false,
-            '2025-01-01', '2025-12-31')
+
+        measureData.ecqmTitle = measureQDM
+        measureData.cqlLibraryName = qdmCQLLibrary
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
@@ -552,8 +593,16 @@ describe('View measure Human Readable on the Edit Measure page', () => {
         const date = Date.now()
         measureQDM = 'QDMExportMeasure' + date
         qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 3 + randValue
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, qdmCQLLibrary, 'Proportion', false, qdmManifestTestCQL, null, false,
-            '2025-01-01', '2025-12-31')
+
+        measureData.ecqmTitle = measureQDM
+        measureData.cqlLibraryName = qdmCQLLibrary
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 

@@ -1,5 +1,5 @@
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
@@ -16,12 +16,20 @@ let testCaseSeries = 'SBTestSeries'
 let measureCQL = MeasureCQL.SBTEST_CQL
 let measureScoring = 'Cohort'
 
+const measureData: CreateMeasureOptions = {}
+
 describe('Clone QDM Test Case', () => {
 
     before('Create measure and login', () => {
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
+
         //Create QDM Measure, PC and Test Case with ALT user
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, true, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()

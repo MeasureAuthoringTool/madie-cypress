@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
@@ -247,13 +247,22 @@ let measureCQL = 'library HospitalHarmHyperglycemiainHospitalizedPatients versio
     '  )\n' +
     '\n'
 
+const measureData: CreateMeasureOptions = {}
+
 describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', () => {
 
     beforeEach('Create Measure', () => {
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = scoringValue
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measureCQL
+        measureData.mpStartDate = '2023-01-01'
+        measureData.mpEndDate = '2024-01-01'
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringValue, false, measureCQL, null, false,
-            '2023-01-01', '2024-01-01')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson, false, false)
         OktaLogin.Login()
     })
@@ -481,9 +490,16 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
 
     beforeEach('Create Measure', () => {
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = scoringValue
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measureCQL2RunObservations
+        measureData.mpStartDate = '2023-01-01'
+        measureData.mpEndDate = '2025-01-01'
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, scoringValue, false, measureCQL2RunObservations, null, false,
-            '2023-01-01', '2025-01-01')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJsonwMOElements, false, false)
         OktaLogin.Login()
         //Click on Edit Measure

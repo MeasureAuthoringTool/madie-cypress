@@ -103,7 +103,8 @@
 		"node": "^18.17.0",
 		"unzipper": "^0.12.3",
 		"uuid": "^7.0.3",
-		"xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+		"xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
+		"xml2js": "^0.6.2"
 	},
 	"overrides": {
 		"ws": "^8.17.1",

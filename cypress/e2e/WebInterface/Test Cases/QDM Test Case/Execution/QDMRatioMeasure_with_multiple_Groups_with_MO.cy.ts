@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
@@ -19,13 +19,22 @@ let testCaseSeries = 'SBTestSeries'
 let measureQDMPBCQL = MeasureCQL.qdmCQLPatientBasedTest
 let measureQDMNPBCQL = MeasureCQL.qdmCQLNonPatienBasedTest
 
+const measureData: CreateMeasureOptions = {}
+
 describe('Measure Creation: Patient Based: Ratio measure with multiple groups with MOs', () => {
 
     before('Create Measure', () => {
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = 'Ratio'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureQDMPBCQL
+        measureData.mpStartDate = '2023-01-01'
+        measureData.mpEndDate = '2024-12-31'
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Ratio', true, measureQDMPBCQL, null, false,
-            '2023-01-01', '2024-12-31')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -198,9 +207,16 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
 
     before('Create Measure', () => {
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = 'Ratio'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measureQDMNPBCQL
+        measureData.mpStartDate = '2023-01-01'
+        measureData.mpEndDate = '2024-12-31'
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Ratio', false, measureQDMNPBCQL, null, false,
-            '2023-01-01', '2024-12-31')
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
