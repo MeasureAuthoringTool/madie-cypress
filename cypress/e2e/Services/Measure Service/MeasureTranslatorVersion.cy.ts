@@ -1,5 +1,5 @@
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
 import { v4 as uuidv4 } from 'uuid'
 import { OktaLogin } from "../../../Shared/OktaLogin"
@@ -22,6 +22,8 @@ const mpEndDate = now().format('YYYY-MM-DD')
 const expectedQiCoreVersion = '3.22.0'
 const oldQiCoreVersion = '3.20.0'
 const expectedQdmVersion = '3.14.0'
+
+const measureData: CreateMeasureOptions = {}
 
 describe('Measure Service: Translator Version for QI-Core Measure', () => {
 
@@ -124,7 +126,13 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
 
     beforeEach('Create QDM Measure and Set Access Token', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Cohort', true, qdmMeasureCQL)
+        measureData.ecqmTitle = qdmMeasureName
+        measureData.cqlLibraryName = qdmCqlLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = qdmMeasureCQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()

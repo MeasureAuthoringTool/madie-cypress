@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
 import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
@@ -59,6 +59,8 @@ let PopDenom = 'denom'
 let PopDenex = 'ipp'
 let PopDenexcep = 'denom'
 let PopNumex = 'numeratorExclusion'
+
+const measureData: CreateMeasureOptions = {}
 
 describe('QI-Core Measure Export', () => {
 
@@ -434,10 +436,16 @@ describe('QDM Measure Export', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmMeasureCQL
+
         cy.setAccessTokenCookie()
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
 
     })

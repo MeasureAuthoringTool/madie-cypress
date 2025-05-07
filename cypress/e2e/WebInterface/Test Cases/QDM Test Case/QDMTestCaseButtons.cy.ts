@@ -1,6 +1,6 @@
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage"
@@ -28,11 +28,21 @@ const testCase2: TestCase = {
     json: TestCaseJson.tcJSON_QDM_Value
 }
 
+const measureData: CreateMeasureOptions = {}
+
 describe('Test case list page - Action Center icons for measure owner', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measure.name, measure.cqlLibraryName, 'Proportion', false, measure.cql, null, false, '2025-01-01', '2025-12-31')
+        measureData.ecqmTitle = measure.name
+        measureData.cqlLibraryName = measure.cqlLibraryName
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measure.cql
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase2.json,)
         TestCasesPage.CreateQDMTestCaseAPI(testCase2.title, testCase2.group, testCase2.description, testCase2.json, true)
 
@@ -137,7 +147,15 @@ describe('Test case list page - Action Center icons for versioned measure', () =
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measure.name, measure.cqlLibraryName, 'Proportion', false, measure.cql, null, false, '2025-01-01', '2025-12-31')
+        measureData.ecqmTitle = measure.name
+        measureData.cqlLibraryName = measure.cqlLibraryName
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measure.cql
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase2.json,)
         TestCasesPage.CreateQDMTestCaseAPI(testCase2.title, testCase2.group, testCase2.description, testCase2.json, true)
 
@@ -224,7 +242,15 @@ describe('Test case list page - Action Center icons for non-owner', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measure.name, measure.cqlLibraryName, 'Proportion', false, measure.cql, null, false, '2025-01-01', '2025-12-31')
+        measureData.ecqmTitle = measure.name
+        measureData.cqlLibraryName = measure.cqlLibraryName
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measure.cql
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, testCase2.json,)
         TestCasesPage.CreateQDMTestCaseAPI(testCase2.title, testCase2.group, testCase2.description, testCase2.json, true)
 

@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, CreateMeasureOptions } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
@@ -14,6 +14,7 @@ let altCqlLibraryName = ''
 let measureCQL = MeasureCQL.SBTEST_CQL
 let measureScoring = 'Cohort'
 
+const measureData: CreateMeasureOptions = {}
 
 describe('Measure Ownership Validations for QDM Measures', () => {
 
@@ -27,8 +28,16 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         cy.clearLocalStorage()
         // OktaLogin.AltLogin()
         cy.setAccessTokenCookieALT()
+
+        measureData.ecqmTitle = altMeasureName
+        measureData.cqlLibraryName = altCqlLibraryName
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
+        measureData.altUser = true
+
         //Create QDM Measure, PC and Test Case with ALT user
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, measureScoring, true, measureCQL, null, true)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp')
         OktaLogin.Login()
 

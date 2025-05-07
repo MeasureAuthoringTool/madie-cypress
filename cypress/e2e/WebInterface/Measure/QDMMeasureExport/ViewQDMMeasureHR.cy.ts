@@ -1,4 +1,4 @@
-import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
+import {CreateMeasurePage, CreateMeasureOptions} from "../../../../Shared/CreateMeasurePage"
 import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
 import {Utilities} from "../../../../Shared/Utilities"
 import {OktaLogin} from "../../../../Shared/OktaLogin"
@@ -11,6 +11,8 @@ let qdmManifestTestCQL = MeasureCQL.qdmCQLManifestTest
 let measureQDM = ''
 let qdmCQLLibrary = ''
 
+const measureData: CreateMeasureOptions = {}
+
 describe('View Human Readable for QDM Measure', () => {
 
     before(() => {
@@ -22,8 +24,16 @@ describe('View Human Readable for QDM Measure', () => {
         const date = Date.now()
         measureQDM = 'QDMExportMeasure' + date
         qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 3 + randValue
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureQDM, qdmCQLLibrary, 'Proportion', false, qdmManifestTestCQL, null, false,
-            '2025-01-01', '2025-12-31')
+
+        measureData.ecqmTitle = measureQDM
+        measureData.cqlLibraryName = qdmCQLLibrary
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmManifestTestCQL
+        measureData.mpStartDate = '2025-01-01'
+        measureData.mpEndDate = '2025-12-31'
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
     })

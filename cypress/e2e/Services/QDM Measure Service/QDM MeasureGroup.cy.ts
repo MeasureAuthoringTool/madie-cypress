@@ -1,5 +1,5 @@
 import { Utilities } from "../../../Shared/Utilities"
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
@@ -12,12 +12,20 @@ let cqlLibraryName = 'TestLibrary' + Date.now()
 let measureScoring = 'Cohort'
 let booleanPatientBasisQDM_CQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 
+const measureData: CreateMeasureOptions = {}
+
 describe('Validations: Population Criteria: Return Types -- Boolean', () => {
     beforeEach('Create Measure and save CQL, in the UI', () => {
 
         cy.setAccessTokenCookie()
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, true, booleanPatientBasisQDM_CQL)
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = cqlLibraryName
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'true'
+        measureData.measureCql = booleanPatientBasisQDM_CQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -79,7 +87,13 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
 
         cy.setAccessTokenCookie()
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, measureScoring, false, booleanPatientBasisQDM_CQL)
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = cqlLibraryName
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'false'
+        measureData.measureCql = booleanPatientBasisQDM_CQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter("edit")

@@ -1,5 +1,5 @@
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
@@ -145,7 +145,7 @@ const measureCQLPatient = 'library ICFQDMTEST000001 version \'0.0.000\'\n' +
     'define "October 1 Two Years Prior to the Measurement Period":\n' +
     '  DateTime((year from start of "Measurement Period" - 2), 10, 1, 0, 0, 0, 0, 0)\n' +
     '  '
-
+const measureData: CreateMeasureOptions = {}
 
 describe('Create and Update QDM Test Case', () => {
 
@@ -154,8 +154,14 @@ describe('Create and Update QDM Test Case', () => {
 
     beforeEach('Create measure and login', () => {
 
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCQLLibraryName
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQLPatient
+
         //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, measureScoring, true, measureCQLPatient)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
 
@@ -273,8 +279,14 @@ describe('Non Boolean Test case Expected Values', () => {
 
     beforeEach('Create measure and login', () => {
 
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCQLLibraryName
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measureCQLWithElements
+
         //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, measureScoring, false, measureCQLWithElements)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'SDE Ethnicity')
         OktaLogin.Login()
 

@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
@@ -18,6 +18,8 @@ let measureName = 'TestMeasure' + Date.now() + randValue
 let cqlLibraryName = 'TestCql' + Date.now() + randValue
 let measureCQL = MeasureCQL.SBTEST_CQL
 let qdmMeasureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
+
+const measureData: CreateMeasureOptions = {}
 
 describe('Measure Service: View Human Readable for Qi Core Draft Measure', () => {
 
@@ -107,7 +109,13 @@ describe('Measure Service: View Human Readable for Draft QDM Measure', () => {
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, 'Cohort', true, qdmMeasureCQL)
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = cqlLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = qdmMeasureCQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         cy.setAccessTokenCookie()
     })
@@ -146,7 +154,14 @@ describe('Measure Service: View Human readable for Versioned QDM Measure', () =>
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', false, qdmMeasureCQLVm)
+
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCQLLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmMeasureCQLVm
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -208,7 +223,13 @@ describe('Measure Service: Verify error message when there is no Population Crit
 
     beforeEach('Create Measure and Set Access Token', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, cqlLibraryName, 'Cohort', true, qdmMeasureCQL)
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = cqlLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = qdmMeasureCQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         cy.setAccessTokenCookie()
     })
 

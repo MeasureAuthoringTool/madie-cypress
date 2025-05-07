@@ -1,5 +1,5 @@
 import { Utilities } from "../../../Shared/Utilities"
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, CreateMeasureOptions } from "../../../Shared/CreateMeasurePage"
 import { Environment } from "../../../Shared/Environment"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
@@ -14,6 +14,8 @@ let harpUserALT = Environment.credentials().harpUserALT
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCQLLibraryName = ''
+
+const measureData: CreateMeasureOptions = {}
 
 let measureCQL = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
     'using QDM version \'5.6\'\n' +
@@ -91,7 +93,15 @@ describe('Measure Versioning', () => {
         sessionStorage.clear()
         cy.clearAllCookies()
         cy.clearLocalStorage()
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true, measureCQL)
+
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCQLLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -165,7 +175,13 @@ describe('Measure Version : Non Measure owner validation', () => {
         newMeasureName = measureName + 5 + randValue
         newCQLLibraryName = cqlLibraryName + 5 + randValue
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true, measureCQL)
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCQLLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
     })
 
@@ -201,7 +217,13 @@ describe('Version Measure without CQL', () => {
         newMeasureName = measureName + 2 + randValue
         newCQLLibraryName = cqlLibraryName + 2 + randValue
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true)
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCQLLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = null
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
@@ -245,8 +267,14 @@ describe('Version Measure with invalid CQL', () => {
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
 
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCQLLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL_WithParsingAndVSACErrors
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true, measureCQL_WithParsingAndVSACErrors)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()

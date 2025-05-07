@@ -40,6 +40,14 @@ let updatedMeasureCQL = 'library TestLibrary1685544523170534 version \'0.0.000\'
     'define "n":\n' +
     '\ttrue'
 
+const measureData: CreateMeasureOptions = {
+    measureCql: qdmMeasureCQL,
+    ecqmTitle: measureName,
+    cqlLibraryName: CqlLibraryName,
+    measureScoring: 'Cohort',
+    patientBasis: 'false'
+}
+
     /*
         Tests below all involve failures of the export process.
         EditMeasurePage.actionCenter() assumes success, so we can't use it
@@ -102,11 +110,11 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
 
     beforeEach('Create New Measure and Login', () => {
 
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
+        measureData.ecqmTitle = measureName + randValue
+        measureData.cqlLibraryName = CqlLibraryName + randValue
 
         cy.setAccessTokenCookie()
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
 
         OktaLogin.Login()
@@ -167,11 +175,11 @@ describe('Error Message on Measure Export when the Measure does not have Populat
 
     before('Create New Measure and Login', () => {
 
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
+        measureData.ecqmTitle = measureName + randValue
+        measureData.cqlLibraryName = CqlLibraryName + randValue
 
         cy.setAccessTokenCookie()
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -209,11 +217,11 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
     before('Create New Measure and Login', () => {
 
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
+        measureData.ecqmTitle = measureName + randValue
+        measureData.cqlLibraryName = CqlLibraryName + randValue
 
         cy.setAccessTokenCookie()
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCqlLibraryName, 'Cohort', false, qdmMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Numerator')
 
         OktaLogin.Login()
