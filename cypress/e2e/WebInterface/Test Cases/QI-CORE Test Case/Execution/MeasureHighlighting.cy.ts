@@ -776,6 +776,9 @@ describe('Measure Highlighting', () => {
     })
 
     it('Execute single Test Case and verify Measure highlighting', () => {
+
+        cy.intercept('/api/terminology/value-sets/expansion/fhir').as('expansion')
+
         let measureGroupPath = 'cypress/fixtures/groupId'
         let measurePath = 'cypress/fixtures/measureId'
         OktaLogin.Login()
@@ -824,6 +827,26 @@ describe('Measure Highlighting', () => {
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
+        /* 
+            added for https://jira.cms.gov/browse/MAT-8567
+            1. intercept valueset expansion
+            2. examine set of codes in each valueset
+            3. verify no duplicates are occuring on that single valueset
+        */
+       // 1
+        cy.wait('@expansion', { timeout: 35000 }).then(expansion => {
+
+            for(let valueset of expansion.response.body) {
+                // 2
+                const codes: Array<string> = valueset.expansion.contains.map(a => a.code)
+
+                let duplicates = codes.filter((value, index) => 
+                    codes.indexOf(value) !== index && codes.lastIndexOf(value) === index);
+                // 3
+                expect(duplicates).to.be.empty
+            }
+        })
+
         //Navigate to test case detail / edit page
         TestCasesPage.clickEditforCreatedTestCase()
 
@@ -839,6 +862,8 @@ describe('Measure Highlighting', () => {
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
         cy.get(TestCasesPage.runTestButton).click()
+
+        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 25500)
 
         //navigate to the highlighting sub tab
         cy.get(TestCasesPage.tcHighlightingTab).should('exist')
