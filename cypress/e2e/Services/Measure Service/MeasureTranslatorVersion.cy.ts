@@ -19,8 +19,8 @@ const now = require('dayjs')
 const mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
 const mpEndDate = now().format('YYYY-MM-DD')
 
-const expectedQiCoreVersion = '3.22.0'
-const oldQiCoreVersion = '3.20.0'
+const expectedQiCoreVersion = '3.24.0'
+const oldQiCoreVersion = '3.22.0'
 const expectedQdmVersion = '3.14.0'
 
 const measureData: CreateMeasureOptions = {}
@@ -30,11 +30,29 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
 
     beforeEach('Create QI-Core Measure and Set Access Token', () => {
 
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
+        cy.clearAllLocalStorage()
+        cy.clearAllSessionStorage()
         cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQICoreMeasureAPI(qicoreMeasureName, qicoreCqlLibraryName, qicoreMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(EditMeasurePage.measureDetailsTab).click()
+        cy.log('Updated CQL name, on measure, is ' + qicoreCqlLibraryName)
+        OktaLogin.Logout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllLocalStorage()
+        cy.clearAllSessionStorage()
         cy.setAccessTokenCookie()
 
     })
