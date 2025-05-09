@@ -94,6 +94,10 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         //
         // cy.readFile(filePath).should('exist').then((fileContents) => {
         //     cy.get('[data-testid="cqlLibrary-expanded-' + fileContents + '"]').should('be.visible')
+        //     cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-version-content"]').should('contain.text', '1.0.000')
+        //     cy.get('[data-testid="cqlLibrary-button-' + fileContents + '-content"]').should('contain.text', CqlLibraryOne)
+        //     cy.get('[data-testid="view-cql-library-button-' + fileContents + '"]').should('be.visible')
+        //     cy.get('[data-testid="view-cql-library-button-' + fileContents + '"]').should('be.enabled')
         // })
 
         //This check will need to be removed once epic https://jira.cms.gov/browse/MAT-5119 is ready for deployment
