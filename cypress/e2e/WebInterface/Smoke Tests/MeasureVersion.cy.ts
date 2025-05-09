@@ -40,7 +40,6 @@ describe('QDM Measure Versioning', () => {
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureOpts)
-       // CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true, QDMMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
@@ -125,7 +124,6 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
     beforeEach('Create Measure and Login', () => {
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureOpts)
-      //  CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', false, qdmCMSMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Qualifying Encounters')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
