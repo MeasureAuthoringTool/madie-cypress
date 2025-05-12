@@ -2,24 +2,31 @@ import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+import { EditMeasureActions, EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-let measureCQLPFTests = MeasureCQL.CQL_Populations
-let measureCQLDFUTests = MeasureCQL.CQLDFN_value
-let measureCQLResults = MeasureCQL.CQLHLResults_value
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+
+
+const now = Date.now()
+let measureName = 'TestMeasure' + now
+let CqlLibraryName = 'TestLibrary' + now
 let testCaseTitle = 'test case title'
-let testCaseDescription = 'DENOMFail' + Date.now()
+let testCaseDescription = 'DENOMFail' + now
 let testCaseSeries = 'SBTestSeries'
-let testCaseJson = TestCaseJson.TestCaseJson_Valid
-let tcDFNJson = TestCaseJson.tcJson_value
-let tcResultJson = TestCaseJson.tcResultsJson
+const measureCQLPFTests = MeasureCQL.CQL_Populations
+const measureCQLDFUTests = MeasureCQL.CQLDFN_value
+const measureCQLResults = MeasureCQL.CQLHLResults_value
+const testCaseJson = TestCaseJson.TestCaseJson_Valid
+const tcDFNJson = TestCaseJson.tcJson_value
+const tcResultJson = TestCaseJson.tcResultsJson
+const measureGroupPath = 'cypress/fixtures/groupId'
+const measureSecondGroupPath = 'cypress/fixtures/groupId2'
+const measurePath = 'cypress/fixtures/measureId'
+
 let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 version \'0.0.000\'\n' +
     '\n' +
     'using QICore version \'4.1.1\'\n' +
@@ -779,8 +786,6 @@ describe('Measure Highlighting', () => {
 
         cy.intercept('/api/terminology/value-sets/expansion/fhir').as('expansion')
 
-        let measureGroupPath = 'cypress/fixtures/groupId'
-        let measurePath = 'cypress/fixtures/measureId'
         OktaLogin.Login()
 
         //Click on Edit Measure
@@ -907,8 +912,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
     })
 
     it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with a single PC', () => {
-        let measureGroupPath = 'cypress/fixtures/groupId'
-        let measurePath = 'cypress/fixtures/measureId'
+
         OktaLogin.Login()
 
         //Click on Edit Measure
@@ -1022,9 +1026,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
     })
 
     it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with multiple PCs', () => {
-        let measureGroupPath = 'cypress/fixtures/groupId'
-        let measureSecondGroupPath = 'cypress/fixtures/groupId2'
-        let measurePath = 'cypress/fixtures/measureId'
+
         OktaLogin.Login()
 
         //Click on Edit Measure
@@ -1198,8 +1200,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
 
 
     it('QI Core Measure: New Highlighting Left Navigation panel is displayed & Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
-        let measureGroupPath = 'cypress/fixtures/groupId'
-        let measurePath = 'cypress/fixtures/measureId'
+        
         OktaLogin.Login()
 
         //Click on Edit Measure
@@ -1339,8 +1340,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
     })
 
     it('QI Core Measure: New Highlighting Left Navigation panel sections includes auto-expanded Result section with content and Result section can be collapsed', () => {
-        let measureGroupPath = 'cypress/fixtures/groupId'
-        let measurePath = 'cypress/fixtures/measureId'
+
         OktaLogin.Login()
 
         //Click on Edit Measure
@@ -1477,8 +1477,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
     })
 
     it('QI Core Measure: New Highlighting Left Navigation panel is displayed & highlighting is as expected for a measure with same Definition in the included library', () => {
-        let measureGroupPath = 'cypress/fixtures/measureGroupId'
-        let measurePath = 'cypress/fixtures/measureId'
+
         OktaLogin.Login()
 
         //Click on Edit Measure
@@ -1541,5 +1540,172 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
                 '      union "Encounter with No VTE Prophylaxis Due to Patient Refusal"')
             cy.get('[data-ref-id="1176"]').should('have.color', '#20744C')
         })
+    })
+})
+
+/*
+ discovered this gap in coverage on https://jira.cms.gov/browse/MAT-8585
+ unable to verify this test scenario until completion of MAT-8587
+ */
+describe.skip('Verify highlighting occurs on a newly versioned measure', () => {
+
+        beforeEach('Create measure and login', () => {
+
+            CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+            MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+            TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
+            OktaLogin.Login()
+            MeasuresPage.actionCenter('edit')
+            cy.get(EditMeasurePage.cqlEditorTab).click()
+            cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+            cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+            cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+            //wait for alert / successful save message to appear
+            Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+            cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        })
+    
+        afterEach('Logout and Clean up Measures', () => {
+    
+            OktaLogin.Logout()
+            Utilities.deleteMeasure(measureName, CqlLibraryName)
+        })
+    
+        it('Execute Test Case on a newly versioned measure; verify Measure highlighting happens', () => {
+    
+            OktaLogin.Login()
+    
+            //Click on Edit Measure
+            MeasuresPage.actionCenter('edit')
+    
+            //Create Measure Group
+            cy.get(EditMeasurePage.measureGroupsTab).click()
+    
+            cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
+            cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
+            cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+            cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
+                if ($ele.text() == "Text") {
+                    cy.wrap($ele).should('exist')
+                    cy.wrap($ele).focus()
+                    cy.wrap($ele).click()
+                }
+            })
+            cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
+    
+            cy.get(MeasureGroupPage.QDMPopCriteria1Desc).click()
+    
+            Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
+            Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
+            Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Initial Population')
+            Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Initial PopulationOne')
+    
+            //intercept group id once update to the measure group is saved
+            cy.readFile(measurePath).should('exist').then((fileContents) => {
+                cy.intercept('PUT', '/api/measures/' + fileContents + '/groups').as('group')
+            })
+            cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+            Utilities.waitForElementVisible(MeasureGroupPage.updateMeasureGroupConfirmationBtn, 35000)
+            Utilities.waitForElementEnabled(MeasureGroupPage.updateMeasureGroupConfirmationBtn, 35000)
+            cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
+            cy.wait('@group', { timeout: 60000 }).then((request) => {
+                cy.writeFile(measureGroupPath, request.response.body.id)
+            })
+    
+            //validation successful update message
+            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+            //version
+            EditMeasurePage.actionCenter(EditMeasureActions.version)
+
+            //Navigate to Test Case page
+            cy.get(EditMeasurePage.testCasesTab).click()
+    
+            //Navigate to test case detail / edit page
+            TestCasesPage.clickEditforCreatedTestCase()
+    
+            //Navigate to the Expected / Actual sub tab
+            Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
+            cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click({ force: true })
+    
+            //check checkboxes to get a passing result from running the test case
+            Utilities.waitForElementVisible(TestCasesPage.testCaseIPPExpected, 35000)
+            cy.get(TestCasesPage.testCaseIPPExpected).scrollIntoView().check({ force: true })
+    
+            //run test case
+            cy.get(TestCasesPage.runTestButton).should('be.visible')
+            cy.get(TestCasesPage.runTestButton).should('be.enabled')
+            cy.get(TestCasesPage.runTestButton).click()
+    
+            Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 25500)
+    
+            //navigate to the highlighting sub tab
+            cy.get(TestCasesPage.tcHighlightingTab).should('exist')
+            cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
+            cy.get(TestCasesPage.tcHighlightingTab).click()
+    
+            cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
+                cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
+                Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
+                cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Initial PopulationOne":\ntrue\n')
+                cy.get('[data-ref-id="330"]').should('have.color', '#20744C')
+            })
+        })
+})
+
+describe('Verify highlighting occurs on an old versioned measure', () => {
+
+    const originalMeasure = {
+        CMSid: 'CMS646FHIR',
+        title: 'Intravesical Bacillus-Calmette-Guerin for Non-Muscle Invasive Bladder CancerFHIR'
+    }
+
+    beforeEach('Create measure and login', () => {
+
+        OktaLogin.Login()
+       
+        // switch to all measure tab, search for original measure, view
+        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
+        cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
+        cy.wait('@searchDone')
+        cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
+
+        // need to select correct version (1.4.000P) of the measure with .eq(2)
+        cy.get('[data-testid="row-item"]').eq(2).contains('View').click()
+    })
+
+    afterEach('Logout and Clean up Measures', () => {
+
+        OktaLogin.Logout()
+    })
+
+    it('Execute Test Case on an old versioned measure; verify Measure highlighting happens', () => {
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        // select test case on top of list
+        cy.contains('View').click()
+
+        //run test case
+        cy.get(TestCasesPage.runTestButton).should('be.visible')
+        cy.get(TestCasesPage.runTestButton).should('be.enabled')
+        cy.get(TestCasesPage.runTestButton).click()
+
+        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 25500)
+
+        //navigate to the highlighting sub tab
+        cy.get(TestCasesPage.tcHighlightingTab).should('exist')
+        cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
+        cy.get(TestCasesPage.tcHighlightingTab).click()
+
+        // select NUMER tab
+        cy.contains('button', 'NUMER').click()
+        Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
+        cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\n//placeholder\n  \ndefine "Numerator":\n')
+        cy.get('[data-ref-id="426"]').should('have.color', '#a63b12')
     })
 })
