@@ -100,11 +100,11 @@ export class QDMElements {
         cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).scrollIntoView()
         Utilities.waitForElementVisible(TestCasesPage.ExpandedOSSDetailCardTabCodes, 700000)
         cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
-        cy.get('[id="code-system-selector"]').click()
+        cy.get(TestCasesPage.codeSystemSelector).click()
         Utilities.waitForElementVisible('[data-testid="code-system-option-' + codeSystem + '"]', 700000)
         cy.get('[data-testid="code-system-option-' + codeSystem + '"]').click()
 
-        cy.get('[id="code-selector"]').click()
+        cy.get(TestCasesPage.codeSelector).click()
         cy.get('[data-testid="code-option-' + code + '"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
     }
@@ -113,17 +113,17 @@ export class QDMElements {
 
         cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
 
-        cy.get('[id="attribute-select"]').click()
+        cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid="option-' + attribute + '"]').click()
 
-        cy.get('[id="type-select"]').click()
+        cy.get(TestCasesPage.attributeType).click()
         cy.get('[data-testid="option-' + type + '"]').click()
 
     }
 
     public static enterQuantity(quantity: string, unit: string): void {
 
-        cy.get('[data-testid="quantity-value-input-quantity"]').type(quantity)
+        cy.get(TestCasesPage.quantityValueInput).type(quantity)
         cy.get('[id="quantity-unit-input-quantity"]').type(unit)
 
     }

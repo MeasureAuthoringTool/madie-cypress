@@ -34,7 +34,6 @@ export class CQLEditorPage {
     public static readonly codeSystemVersionDropdown = '[id="code-system-version-selector"]'
     public static readonly codeSystemVersionOption = '[data-value="version 1"]'
     public static readonly codeText = '[data-testid="code-text-input"]'
-    public static readonly codeSystemDropdown = '[id="code-system-selector"]'
     public static readonly codeSystemOption = '[data-value="Code System 1"]'
     public static readonly codeSystemSearchBtn = '[data-testid="codes-search-btn"]'
     public static readonly codeSystemClearBtn = '[data-testid="clear-codes-btn"]'

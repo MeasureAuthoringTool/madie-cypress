@@ -1,4 +1,4 @@
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
@@ -161,7 +161,7 @@ describe('Practitioner Attribute', () => {
         cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
         cy.get('[data-testid=option-Performer]').click()
-        cy.get('[id="type-select"]').click()
+        cy.get(TestCasesPage.attributeType).click()
         cy.get('[data-testid=option-Practitioner]').click()
         cy.get('[data-testid="identifier-input-field-Naming System"]').type('TestIdentifier')
         cy.get('[data-testid="identifier-value-input-field-Value"]').type('TestValue')

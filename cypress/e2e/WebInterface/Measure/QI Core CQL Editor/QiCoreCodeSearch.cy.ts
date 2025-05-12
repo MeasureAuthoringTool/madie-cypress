@@ -108,7 +108,7 @@ describe('Qi Core Code Search fields', () => {
         cy.get(CQLEditorPage.codeText).should('not.be.enabled')
 
         //Assert when the Code is Active in VSAC
-        cy.get(CQLEditorPage.codeSystemDropdown).type('SNOMEDCT')
+        cy.get(TestCasesPage.codeSystemSelector).type('SNOMEDCT')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('SNOMEDCT').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
         cy.get('[data-testid="http://snomed.info/sct/731000124108/version/20240301-option"]').click()
@@ -128,7 +128,7 @@ describe('Qi Core Code Search fields', () => {
         cy.get(CQLEditorPage.clearCodeBtn).click()
 
         //Assert when the Code is inactive in VSAC
-        cy.get(CQLEditorPage.codeSystemDropdown).type('SNOMEDCT')
+        cy.get(TestCasesPage.codeSystemSelector).type('SNOMEDCT')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('SNOMEDCT').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
         cy.get('[data-testid="http://snomed.info/sct/731000124108/version/20240301-option"]').click()
@@ -143,7 +143,7 @@ describe('Qi Core Code Search fields', () => {
         cy.get(CQLEditorPage.clearCodeBtn).click()
 
         //Assert when the Code is unavailable (not able to determine active/inactive)
-        cy.get(CQLEditorPage.codeSystemDropdown).type('CPT')
+        cy.get(TestCasesPage.codeSystemSelector).type('CPT')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('CPT').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
         cy.get('[data-testid="2024-option"]').click()
@@ -162,7 +162,7 @@ describe('Qi Core Code Search fields', () => {
         cy.get(CQLEditorPage.codesTab).click()
 
         //Search for the Code
-        cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
+        cy.get(TestCasesPage.codeSystemSelector).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
         cy.get('[data-testid="2023-02-01-option"]').click()
@@ -190,7 +190,7 @@ describe('Qi Core Code Search fields', () => {
         //Assert toast message while trying to apply the same code again
         cy.get(CQLEditorPage.expandCQLBuilder).click()
         cy.get(CQLEditorPage.codesTab).click()
-        cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
+        cy.get(TestCasesPage.codeSystemSelector).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
         cy.get('[data-testid="2023-02-01-option"]').click()
@@ -219,7 +219,7 @@ describe('Qi Core Code Search fields', () => {
         cy.get(CQLEditorPage.codesTab).click()
 
         //Search for the Code
-        cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
+        cy.get(TestCasesPage.codeSystemSelector).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
         cy.get('[data-testid="2023-02-01-option"]').click()
@@ -257,7 +257,7 @@ describe('Qi Core Code Search fields', () => {
         cy.get(CQLEditorPage.codesTab).click()
 
         //Search for the Code
-        cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
+        cy.get(TestCasesPage.codeSystemSelector).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
         cy.get('[data-testid="2023-02-01-option"]').click()
@@ -380,7 +380,7 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
         cy.get(CQLEditorPage.codesTab).click()
 
         //Search for the Code
-        cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
+        cy.get(TestCasesPage.codeSystemSelector).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
         cy.get('[data-testid="2023-02-01-option"]').click()
@@ -433,7 +433,7 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
         cy.get(CQLEditorPage.codesTab).click()
 
         //Search for the Code
-        cy.get(CQLEditorPage.codeSystemDropdown).type('ActCode')
+        cy.get(TestCasesPage.codeSystemSelector).type('ActCode')
         cy.get(CQLEditorPage.codeSystemOptionListBox).contains('ActCode').click()
         cy.get(CQLEditorPage.codeSystemVersionDropdown).click()
         cy.get('[data-testid="2023-02-01-option"]').click()
