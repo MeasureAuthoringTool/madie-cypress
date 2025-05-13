@@ -1,4 +1,4 @@
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
@@ -161,9 +161,9 @@ describe('Measure Creation: Patient Based: Ratio measure with multiple groups wi
         cy.get(TestCasesPage.EncounterOSCard).click()
         QDMElements.addTimingRelevantPeriodDateTime('03/07/2023 08:00 AM', '03/08/2023 08:15 AM')
         cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
-        cy.get('[id="code-system-selector"]').click()
+        cy.get(TestCasesPage.codeSystemSelector).click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
+        cy.get(TestCasesPage.codeSelector).click()
         cy.get('[data-testid="code-option-448951000124107"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
 
@@ -344,9 +344,9 @@ describe('Measure Creation: Non-patient based: Ratio measure with multiple group
         cy.get(TestCasesPage.EncounterOSCard).click()
         QDMElements.addTimingRelevantPeriodDateTime('03/07/2023 08:00 AM', '03/08/2023 08:15 AM')
         cy.get(TestCasesPage.ExpandedOSSDetailCardTabCodes).click()
-        cy.get('[id="code-system-selector"]').click()
+        cy.get(TestCasesPage.codeSystemSelector).click()
         cy.get('[data-testid="code-system-option-SNOMEDCT"]').click()
-        cy.get('[id="code-selector"]').click()
+        cy.get(TestCasesPage.codeSelector).click()
         cy.get('[data-testid="code-option-448951000124107"]').click()
         cy.get('[data-testid="add-code-concept-button"]').click()
 

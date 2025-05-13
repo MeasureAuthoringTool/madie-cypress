@@ -242,6 +242,10 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
             expect(bodyText).to.include(
                 'Identifier\t3502'
             )
+            //measureDefinitions value
+            expect(bodyText).to.include(
+                'ThisIsTheDefinitionTermValue Definition\tThisIsTheDefinitionDefValue'
+            )
 
             //Measure Population Criteria
             expect(bodyText).to.include('Measure Population Criteria (ID: Group_1)\n' +
@@ -476,6 +480,11 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
             //Version Number
             expect(bodyText).to.include('Version Number\t1.0.000')
+
+            //measureDefinitions value
+            expect(bodyText).to.include(
+                'ThisIsTheDefinitionTermValue Definition\tThisIsTheDefinitionDefValue'
+            )
 
             //Measure Population Criteria
             expect(bodyText).to.include('Measure Population Criteria (ID: Group_1)\n' +

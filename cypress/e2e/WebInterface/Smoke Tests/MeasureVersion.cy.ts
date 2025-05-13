@@ -1,6 +1,6 @@
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
-import { CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
@@ -8,7 +8,6 @@ import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 import { MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from "../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { Utilities } from "../../../Shared/Utilities"
-import {LandingPage} from "../../../Shared/LandingPage";
 import { Header } from "../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
@@ -24,14 +23,23 @@ let QiCoreMeasureCQL = MeasureCQL.SBTEST_CQL
 let QiCoreTestCaseJson = TestCaseJson.CohortEpisodeEncounter_PASS
 let qdmCMSMeasureCQL = MeasureCQL.QDM_CQL_withLargeIncludedLibrary
 
+
 describe('QDM Measure Versioning', () => {
 
     newMeasureName = measureName + randValue + 1
     newCQLLibraryName = cqlLibraryName + randValue + 1
 
+    const measureOpts: CreateMeasureOptions = {
+       ecqmTitle: newMeasureName, 
+       cqlLibraryName: newCQLLibraryName, 
+       measureScoring: 'Cohort', 
+       patientBasis: 'true', 
+       measureCql: QDMMeasureCQL
+    }
+
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', true, QDMMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureOpts)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
@@ -105,9 +113,17 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
     newMeasureName = measureName + randValue + 2
     newCQLLibraryName = cqlLibraryName + randValue + 2
 
+    const measureOpts: CreateMeasureOptions = {
+        ecqmTitle: newMeasureName, 
+        cqlLibraryName: newCQLLibraryName, 
+        measureScoring: 'Cohort', 
+        patientBasis: 'false', 
+        measureCql: qdmCMSMeasureCQL
+     }
+
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(newMeasureName, newCQLLibraryName, 'Cohort', false, qdmCMSMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureOpts)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Qualifying Encounters')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()

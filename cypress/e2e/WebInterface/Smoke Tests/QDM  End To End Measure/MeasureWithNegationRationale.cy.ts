@@ -277,8 +277,8 @@ describe('Measure with Negation Rationale', () => {
         // Enter attribute and its type
         cy.get(TestCasesPage.ExpandedOSSDetailCardTabAttributes).click()
         cy.get(TestCasesPage.selectAttributeDropdown).click()
-        cy.get('[data-testid="option-Result"]').click()
-        cy.get('[id="type-select"]').click()
+        cy.get(TestCasesPage.resultAttribute).click()
+        cy.get(TestCasesPage.attributeType).click()
         cy.get('[data-testid="option-Code"]').click()
         cy.get('[id="value-set-selector"]').click()
         cy.get('[data-testid="custom-vs"]').click()
