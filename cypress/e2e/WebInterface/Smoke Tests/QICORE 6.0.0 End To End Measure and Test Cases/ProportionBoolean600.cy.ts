@@ -107,27 +107,22 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
         //after versioning, there should be no change to test results or coverage
 
-        //commenting this out until it works, the following stories need to be completed
-        //https://jira.cms.gov/browse/MAT-8585
-        //https://jira.cms.gov/browse/MAT-8586
-        //https://jira.cms.gov/browse/MAT-8587
+        EditMeasurePage.actionCenter(EditMeasureActions.version)
 
-        // EditMeasurePage.actionCenter(EditMeasureActions.version)
-        //
-        // Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 65000)
-        // Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 65000)
-        // cy.get(TestCasesPage.executeTestCaseButton).click()
-        //
-        // //verify Passing Tab's text after Versioning
-        // cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
-        // cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
-        // cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '100%')
-        // cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(49/49)')
-        //
-        // //Verify Coverage percentage after versioning
-        // cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
-        // cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        // cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '99%')
+        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 65000)
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 65000)
+        cy.get(TestCasesPage.executeTestCaseButton).click()
+
+        //verify Passing Tab's text after Versioning
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('exist')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('be.visible')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '100%')
+        cy.get(TestCasesPage.testCaseListPassingPercTab).should('contain.text', '(49/49)')
+
+        //Verify Coverage percentage after versioning
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '99%')
 
     })
 })
