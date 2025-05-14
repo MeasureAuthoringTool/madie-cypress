@@ -21,7 +21,7 @@ const mpEndDate = now().format('YYYY-MM-DD')
 
 const expectedQiCoreVersion = '3.24.0'
 const oldQiCoreVersion = '3.22.0'
-const expectedQdmVersion = '3.14.0'
+const expectedQdmVersion = '3.24.0'
 
 const measureData: CreateMeasureOptions = {}
 
