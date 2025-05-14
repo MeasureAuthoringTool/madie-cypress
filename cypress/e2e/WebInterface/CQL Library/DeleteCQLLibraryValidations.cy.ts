@@ -1,18 +1,19 @@
-import {CQLLibraryPage, EditLibraryActions} from "../../../Shared/CQLLibraryPage"
+import { CQLLibraryPage, EditLibraryActions } from "../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { Environment } from "../../../Shared/Environment"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { Header } from "../../../Shared/Header"
-import {MadieObject, PermissionActions, Utilities} from "../../../Shared/Utilities"
+import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utilities"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
-let filePath = 'cypress/fixtures/cqlLibraryId'
 let CQLLibraryName = ''
-let CQLLibraryPublisher = 'SemanticBits'
-let harpUserALT = Environment.credentials().harpUserALT
-let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
+const CQLLibraryPublisher = 'SemanticBits'
+const harpUserALT = Environment.credentials().harpUserALT
+const measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 const adminApiKey = Environment.credentials().adminApiKey
+const versionNumber = '1.0.000'
+const filePath = 'cypress/fixtures/cqlLibraryId'
 
 describe('Delete CQL Library Validations - Library List page', () => {
 
@@ -98,23 +99,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
-                cy.request({
-                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                    method: 'PUT',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    }
+        CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql("1.0.000")
-
-                })
-
-            })
-        })
         //Login as Regular User
         cy.clearCookies()
         cy.clearLocalStorage()
@@ -130,23 +116,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
     it('Delete CQL Library - Versioned Library - user has had the Library transferred to them', () => {
         //Version Library
         cy.setAccessTokenCookie()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
-                cy.request({
-                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                    method: 'PUT',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    }
+        CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql("1.0.000")
-
-                })
-
-            })
-        })
         //Transfer Library to ALT User
         cy.clearCookies()
         cy.clearLocalStorage()
@@ -179,23 +150,8 @@ describe('Delete CQL Library Validations - Library List page', () => {
     it('Delete CQL Library - Versioned Library - user has had the Library shared with them', () => {
         //Version Library
         cy.setAccessTokenCookie()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
-                cy.request({
-                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                    method: 'PUT',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    }
+        CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql("1.0.000")
-
-                })
-
-            })
-        })
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
@@ -295,23 +251,8 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
-                cy.request({
-                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                    method: 'PUT',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    }
+        CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql("1.0.000")
-
-                })
-
-            })
-        })
         //Login as Regular User
         cy.clearCookies()
         cy.clearLocalStorage()
@@ -327,23 +268,8 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
     it('Delete CQL Library - Versioned Library - user has had the Library transferred to them', () => {
         //Version Library
         cy.setAccessTokenCookie()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
-                cy.request({
-                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                    method: 'PUT',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    }
+        CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql("1.0.000")
-
-                })
-
-            })
-        })
         //Transfer Library to ALT User
         cy.clearCookies()
         cy.clearLocalStorage()
@@ -375,23 +301,8 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
     it('Delete CQL Library - Versioned Library - user has had the Library shared with them', () => {
         //Version Library
         cy.setAccessTokenCookie()
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
-                cy.request({
-                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                    method: 'PUT',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    }
+        CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql("1.0.000")
-
-                })
-
-            })
-        })
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User

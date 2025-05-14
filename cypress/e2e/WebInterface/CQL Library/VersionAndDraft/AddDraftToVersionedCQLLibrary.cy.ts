@@ -11,32 +11,13 @@ const versionNumber = '1.0.000'
 const filePath = 'cypress/fixtures/cqlLibraryId'
 const filePath2 = 'cypress/fixtures/cqlLibraryId2'
 
-
-
-
 describe('Action Center Buttons - Add Draft to CQL Library', () => {
 
     beforeEach('Create CQL Library and Login', () => {
 
         CqlLibraryOne = 'DraftingLibrary' + Date.now()
         CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
-
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile(filePath).should('exist').then((cqlLibraryId) => {
-                cy.request({
-                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                    method: 'PUT',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    }
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql(versionNumber)
-
-                })
-            })
-        })
+        CQLLibraryPage.versionLibraryAPI(versionNumber)
     })
 
     afterEach('Logout', () => {
@@ -44,14 +25,11 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         OktaLogin.Logout()
     })
 
+    // just this 1st test has been prepped for when FF LibrarySearch = true, see references to MAT-5119
+    // as of right now, this version should fail in DEV but pass in TEST
     it('Add Draft to the versioned Library from My Libraries', () => {
 
         //Add Draft to Versioned Library
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
-
-        cy.setAccessTokenCookie()
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.cqlLibraryActionCenter('draft')

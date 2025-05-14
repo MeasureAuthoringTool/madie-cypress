@@ -13,6 +13,7 @@ export enum EditLibraryActions {
     share
 }
 
+const filePath = 'cypress/fixtures/cqlLibraryId'
 
 export class CQLLibraryPage {
     public static readonly measureCQLGenericErrorsList = '[data-testid="generic-errors-text-list"]'
@@ -414,6 +415,26 @@ export class CQLLibraryPage {
             .parent('tr')
             .find('input[type="checkbox"]')
             .check()
+    }
+
+    public static versionLibraryAPI(expectedVersionNumber: string) {
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(filePath).should('exist').then((cqlLibraryId) => {
+                cy.request({
+                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
+                    method: 'PUT',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    }
+
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.version).to.eql(expectedVersionNumber)
+
+                })
+            })
+        })
     }
 
     public static actionCenter(action: EditLibraryActions): void {
