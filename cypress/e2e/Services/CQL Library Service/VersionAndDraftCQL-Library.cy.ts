@@ -5,10 +5,11 @@ import { v4 as uuidv4 } from 'uuid'
 let CqlLibraryOne = ''
 let CqlLibraryTwo = ''
 let updatedCqlLibraryName = 'UpdatedTestLibrary' + Date.now()
-let harpUser = Environment.credentials().harpUser
-let harpUserALT = Environment.credentials().harpUserALT
-let model = 'QI-Core v4.1.1'
-let CQLLibraryPublisher = 'SemanticBits'
+const harpUser = Environment.credentials().harpUser
+const harpUserALT = Environment.credentials().harpUserALT
+const model = 'QI-Core v4.1.1'
+const CQLLibraryPublisher = 'SemanticBits'
+const versionNumber = '1.0.000'
 
 describe('Version and Draft CQL Library', () => {
 
@@ -31,23 +32,7 @@ describe('Version and Draft CQL Library', () => {
 
     it('Add Version to the CQL Library', () => {
 
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
-                cy.request({
-                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                    method: 'PUT',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    }
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql("1.0.000")
-
-                })
-
-            })
-        })
+        CQLLibraryPage.versionLibraryAPI(versionNumber)
     })
 
     it('User can not draft CQL Library if the CQL Library naming validations fail', () => {
@@ -165,23 +150,7 @@ describe('Draft and Version Validations', () => {
     it('Verify the CQL Library updates are restricted after Version is created', () => {
 
         //Add Version to the CQL Library
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
-                cy.request({
-                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                    method: 'PUT',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    }
-
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql("1.0.000")
-
-                })
-
-            })
-        })
+        CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Edit Library Name after versioned
         cy.getCookie('accessToken').then((accessToken) => {
@@ -210,23 +179,8 @@ describe('Draft and Version Validations', () => {
 
     it('Elm data is generated on the fly per GET versioned library request', () => {
         //Add Version to the CQL Library
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
-                cy.request({
-                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                    method: 'PUT',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    }
+        CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql("1.0.000")
-
-                })
-
-            })
-        })
         //hit the cql-library-service versioned end point and validate that elm data is returned / generated
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
@@ -246,8 +200,6 @@ describe('Draft and Version Validations', () => {
 })
 
 describe('Version CQL Library without CQL', () => {
-
-    let CQLLibraryPublisher = 'SemanticBits'
 
     before('Set Access Token and create CQL Library', () => {
 

@@ -114,24 +114,10 @@ describe('Un Share CQL Library using Action Center buttons - Multiple instances'
 
     it('Verify all instances of the CQL Library (Version and Draft) are shared to the user', () => {
 
+        const versionNumber = '1.0.000'
         //Version CQL Library
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
-                cy.request({
-                    url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                    method: 'PUT',
-                    headers: {
-                        authorization: 'Bearer ' + accessToken.value
-                    }
+        CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-                }).then((response) => {
-                    expect(response.status).to.eql(200)
-                    expect(response.body.version).to.eql("1.0.000")
-
-                })
-
-            })
-        })
         //Draft Library
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {

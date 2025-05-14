@@ -8,6 +8,7 @@ let harpUserALT = Environment.credentials().harpUserALT
 let measureCQLAlt = MeasureCQL.ICFCleanTestQICore
 let harpUser = Environment.credentials().harpUser
 const adminApiKey = Environment.credentials().adminApiKey
+const versionNumber = '1.0.000'
 
 describe('Delete CQL Library: Tests covering Libraries that are in draft and versioned states as well as when user is the owner, when user has had Library transferred to them, and when the user is neither the owner nor has had the Library transferred to them', () => {
 
@@ -106,23 +107,8 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookie()
-            cy.getCookie('accessToken').then((accessToken) => {
-                cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
-                    cy.request({
-                        url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                        method: 'PUT',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        }
+            CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.version).to.eql("1.0.000")
-
-                    })
-
-                })
-            })
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookieALT()
@@ -146,23 +132,8 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookie()
-            cy.getCookie('accessToken').then((accessToken) => {
-                cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
-                    cy.request({
-                        url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                        method: 'PUT',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        }
+           CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.version).to.eql("1.0.000")
-
-                    })
-
-                })
-            })
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookie()
@@ -204,23 +175,8 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
                 cy.clearAllCookies()
                 cy.clearLocalStorage()
                 cy.setAccessTokenCookieALT()
-                cy.getCookie('accessToken').then((accessToken) => {
-                    cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
-                        cy.request({
-                            url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                            method: 'PUT',
-                            headers: {
-                                authorization: 'Bearer ' + accessToken.value
-                            }
+               CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-                        }).then((response) => {
-                            expect(response.status).to.eql(200)
-                            expect(response.body.version).to.eql("1.0.000")
-
-                        })
-
-                    })
-                })
                 cy.clearAllCookies()
                 cy.clearLocalStorage()
                 cy.setAccessTokenCookieALT()
@@ -246,22 +202,8 @@ describe('Delete CQL Library: Tests covering Libraries that are in draft and ver
             cy.clearAllCookies()
             cy.clearLocalStorage()
             cy.setAccessTokenCookie()
-            cy.getCookie('accessToken').then((accessToken) => {
-                cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
-                    cy.request({
-                        url: '/api/cql-libraries/version/' + cqlLibraryId + '?isMajor=true',
-                        method: 'PUT',
-                        headers: {
-                            authorization: 'Bearer ' + accessToken.value
-                        }
+            CQLLibraryPage.versionLibraryAPI(versionNumber)
 
-                    }).then((response) => {
-                        expect(response.status).to.eql(200)
-                        expect(response.body.version).to.eql("1.0.000")
-
-                    })
-                })
-            })
             //Draft Versioned Library
             cy.getCookie('accessToken').then((accessToken) => {
                 cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((cqlLibraryId) => {
