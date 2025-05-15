@@ -1,17 +1,19 @@
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { QdmCql } from "../../../../Shared/QDMMeasuresCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { MeasureActionOptions, MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
-import { Header } from "../../../../Shared/Header";
+import { Header } from "../../../../Shared/Header"
 
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 const qdmMeasureCQL = QdmCql.severeObstetricComplications
+
+const measureData: CreateMeasureOptions = {}
 
 describe('Successful QDM Measure Export with Info', () => {
 
@@ -25,8 +27,13 @@ describe('Successful QDM Measure Export with Info', () => {
 
     before('Create New Measure and Login', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Proportion',
-            false, qdmMeasureCQL, 0, false, '2026-01-01', '2026-12-31')
+        measureData.ecqmTitle = qdmMeasureName
+        measureData.cqlLibraryName = qdmCqlLibraryName
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmMeasureCQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population',
             '', '', 'Numerator 1 Delivery Encounters With Severe Obstetric Complications', '', 'Denominator')
 
@@ -86,8 +93,13 @@ describe('Successful QDM Measure Export for Publish', () => {
 
     before('Create New Measure and Login', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasureName, qdmCqlLibraryName, 'Proportion',
-            false, qdmMeasureCQL, 0, false, '2026-01-01', '2026-12-31')
+        measureData.ecqmTitle = qdmMeasureName
+        measureData.cqlLibraryName = qdmCqlLibraryName
+        measureData.measureScoring = 'Proportion'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmMeasureCQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population',
             '', '', 'Numerator 1 Delivery Encounters With Severe Obstetric Complications', '', 'Denominator')
 

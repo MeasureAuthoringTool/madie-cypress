@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
@@ -17,13 +17,20 @@ let testCaseDescription = 'DENOMFail' + Date.now()
 let testCaseSeries = 'SBTestSeries'
 let measureCQL = MeasureCQL.QDM4TestCaseElementsAttributes
 
+const measureData: CreateMeasureOptions = {}
 
 describe('Quantity Attribute -- Adding multiple attributes', () => {
 
     beforeEach('Create measure and login', () => {
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = measureScoring
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measureCQL
+
         //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoring, false, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()

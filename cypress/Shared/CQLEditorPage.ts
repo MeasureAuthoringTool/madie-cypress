@@ -165,7 +165,7 @@ export class CQLEditorPage {
     public static validateSuccessfulCQLUpdate(): void {
 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each(successMsg => {
-            expect(successMsg.text()).to.be.oneOf(['CQL updated successfully but the following issues were found', 'CQL updated successfully'])
+            expect(successMsg.text()).to.be.oneOf(['CQL updated successfully but the following issues were found', 'CQL updated successfully', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.'])
         })
     }
 

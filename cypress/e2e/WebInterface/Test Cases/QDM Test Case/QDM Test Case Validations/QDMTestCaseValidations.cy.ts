@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
 import { Header } from "../../../../../Shared/Header"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
@@ -28,6 +28,8 @@ const qdmMeasureCQLwInvalidValueset = QdmCql.simpleQDM_CQL_invalid_valueset
 const qdmMeasureCQLwNonVsacValueset = QdmCql.QDMTestCaseCQLNonVsacValueset
 const measureQDMCQL = QdmCql.QDM4TestCaseElementsAttributes
 
+const measureData: CreateMeasureOptions = {}
+
 describe('Test Case Ownership Validations for QDM Measures', () => {
 
     beforeEach('Create measure and login', () => {
@@ -36,8 +38,16 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
         altMeasureName = measureName + altRandValue
         altCqlLibraryName = CqlLibraryName + altRandValue
 
+        measureData.ecqmTitle = altMeasureName
+        measureData.cqlLibraryName = altCqlLibraryName
+        measureData.measureScoring = 'Ratio'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measureQDMCQL
+        measureData.measureNumber = null
+        measureData.altUser = true
+
         //Create QDM Measure, PC and Test Case with ALT user
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(altMeasureName, altCqlLibraryName, 'Ratio', false, measureQDMCQL, null, true)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, true, 'Initial Population', 'Initial Population', 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, true)
         OktaLogin.Login()
@@ -280,8 +290,15 @@ describe('Edit Test Case Validations', () => {
 describe('Dirty Check Validations', () => {
 
     beforeEach('Create QDM Measure, Test Case and Login', () => {
+
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = 'Ratio'
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measureQDMCQL
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Ratio', false, measureQDMCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -376,8 +393,14 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
 
     beforeEach('Create measure, group and login', () => {
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = measureScoringCohort
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measureQDMCQL
+
         //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringCohort, false, measureQDMCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -471,8 +494,15 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
 describe('QDM CQM-Execution failure error validations: CQL Errors and missing group', () => {
 
     beforeEach('Create Measure, and Test Case', () => {
+
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = measureScoringCohort
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureQDMCQL
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringCohort, true, qdmMeasureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
     })
 
@@ -568,8 +598,15 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
 describe('QDM CQM-Execution failure error validations: Valueset not found in Vsac', () => {
 
     beforeEach('Create Measure, and Test Case', () => {
+
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = measureScoringCohort
+        measureData.patientBasis = 'true'
+        measureData.measureCql = qdmMeasureCQLwInvalidValueset
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringCohort, true, qdmMeasureCQLwInvalidValueset)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
         //log into MADiE
@@ -632,8 +669,15 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
 describe('QDM CQM-Execution failure error validations: Data transformation- MADiE Measure to CQMMeasure', () => {
 
     beforeEach('Create Measure, and Test Case', () => {
+
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = measureScoringCohort
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmMeasureCQLwNonVsacValueset
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringCohort, false, qdmMeasureCQLwNonVsacValueset)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
         //log into MADiE
@@ -718,8 +762,15 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
 describe('Non Boolean Population basis Expected values', () => {
 
     beforeEach('Create Measure, and Test Case', () => {
+
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = measureScoringCohort
+        measureData.patientBasis = 'false'
+        measureData.measureCql = qdmMeasureCQLwNonVsacValueset
+
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringCohort, false, qdmMeasureCQLwNonVsacValueset)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Denominator', '', 'Numerator')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
         OktaLogin.Login()
