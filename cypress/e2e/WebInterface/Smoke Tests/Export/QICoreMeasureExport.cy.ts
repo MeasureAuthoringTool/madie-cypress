@@ -45,8 +45,7 @@ describe('QI-Core Measure Export', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -180,8 +179,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         cy.get(Header.mainMadiePageButton).click()
 
@@ -395,8 +393,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         cy.get(Header.mainMadiePageButton).click()
 

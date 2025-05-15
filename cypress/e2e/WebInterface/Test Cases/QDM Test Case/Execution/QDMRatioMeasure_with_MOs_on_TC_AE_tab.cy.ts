@@ -282,8 +282,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //fill out group details
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -382,9 +381,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //fill out group details
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -507,10 +504,7 @@ describe('QDM Measure: Test Case: with Observations: Expected / Actual results',
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-
+        CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 
     afterEach('Clean up', () => {

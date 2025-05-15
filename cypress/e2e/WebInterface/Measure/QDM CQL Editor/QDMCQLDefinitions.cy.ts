@@ -312,8 +312,7 @@ describe('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.deleteCQLDefinitions).click()
         cy.get(CQLEditorPage.deleteContinueButton).click()
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 60000)
-
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Navigate to Saved Definitions again and assert if the Definition is removed from Saved Definitions
         cy.get(CQLEditorPage.expandCQLBuilder).click()

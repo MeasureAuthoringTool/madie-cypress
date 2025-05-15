@@ -122,7 +122,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
 
     afterEach('Cleanup', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
     it('Verify error message on Measure Export when the Measure does not have CQL', () => {
@@ -131,7 +131,7 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(EditMeasurePage.CQLMessageSuccess).should('contain.text', 'CQL updated successfully')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         cy.get(Header.measures).click()
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {

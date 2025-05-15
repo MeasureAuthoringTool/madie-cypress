@@ -97,8 +97,7 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 
     it('Verify that Definition Version is disabled until OID/URL field is selected', () => {
@@ -212,8 +211,6 @@ describe('QiCore Value Set Search fields, filter and apply the filter to CQL', (
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 })

@@ -49,10 +49,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes validate /
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-
+        CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -141,9 +138,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-
+        CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -243,9 +238,7 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
     })
 
@@ -353,8 +346,7 @@ describe('QDM Measure:: Test Case Highlighting Left navigation panel: Highlighti
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
     })
 

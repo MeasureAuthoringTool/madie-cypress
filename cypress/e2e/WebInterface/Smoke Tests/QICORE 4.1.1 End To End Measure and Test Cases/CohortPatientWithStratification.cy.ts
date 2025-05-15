@@ -79,8 +79,7 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 30000)
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Create Measure Group
         cy.get(EditMeasurePage.measureGroupsTab).click()
