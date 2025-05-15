@@ -102,17 +102,18 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
 
         cy.get(Header.measures).click()
 
+        //version measure
         MeasuresPage.actionCenter('version')
-
-        cy.get(MeasuresPage.versionMeasuresSelectionButton).click()
-        cy.get(MeasuresPage.measureVersionMajor).should('exist')
-        cy.get(MeasuresPage.measureVersionMajor).click()
-
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).should('exist').wait(1000)
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
+        cy.get(MeasuresPage.measureVersionMajor).click().wait(1000)
+        Utilities.waitForElementVisible(MeasuresPage.confirmMeasureVersionNumber, 7000)
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get('.MuiDialogActions-root').click()
+
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
+
         cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber('1.0.000')
         cy.log('Version Created Successfully')
