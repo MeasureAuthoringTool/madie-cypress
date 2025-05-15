@@ -3,7 +3,7 @@ import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMea
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import {EditMeasureActions, EditMeasurePage} from "../../../../Shared/EditMeasurePage"
+import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
@@ -25,11 +25,10 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         OktaLogin.Login()
     })
 
-    after('Clean up', () => {
+    after('Logout', () => {
 
         OktaLogin.Logout()
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('End to End Proportion Episode Measure, Pass Result', () => {
