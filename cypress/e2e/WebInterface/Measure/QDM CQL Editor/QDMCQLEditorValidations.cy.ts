@@ -203,10 +203,9 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
-
+        CQLEditorPage.validateSuccessfulCQLUpdate()
     })
+
     it('Verify error message when there is no using statement in the CQL', () => {
 
         //Click on Edit Measure

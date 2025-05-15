@@ -43,9 +43,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditPublisher).type('{downArrow}').type('{enter}')
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).contains(apiCQLLibraryName)
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).contains('version \'0.0.000\'')
@@ -77,9 +75,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
         //save the value in the CQL Editor
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -134,9 +130,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor after saving
         cy.scrollTo('top')
@@ -159,9 +153,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
         //save the value in the CQL Editor
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
         cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'FHIRHelpers was incorrectly aliased. MADiE has overwritten the alias with \'FHIRHelpers\'.')
     })
 
@@ -172,9 +164,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/CQLWithDefNoName.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -191,9 +181,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/CQLWithDefReservedKeyword.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -210,10 +198,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/CQLWithoutCodeSystemName.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
-
+        CQLEditorPage.validateSuccessfulCQLUpdate()
         cy.get(CQLLibraryPage.umlsErrorMessage).should('not.be.visible')
 
         //Validate error(s) in CQL Editor window
@@ -233,9 +218,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/QiCoreCQLWithoutIncludedLibraryVersion.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -252,8 +235,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/QiCoreLibraryPrivateAccessModifier.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -269,8 +251,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/CQLWithPractitionerContext.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -332,9 +313,7 @@ describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditPublisher).type('{downArrow}').type('{enter}')
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 
     it('Value Set Invalid', () => {
@@ -357,9 +336,7 @@ describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         cy.get(CQLLibraryPage.umlsErrorMessage).should('not.be.visible')
 

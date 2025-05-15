@@ -3,6 +3,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
 
 let apiCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -42,8 +43,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
 
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).contains(apiCQLLibraryName)
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).contains('version \'0.0.000\'')
@@ -73,8 +73,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         //save the value in the CQL Editor
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
 
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -92,9 +91,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/QDMNoNameDefCQL.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
         
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -111,9 +108,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/QDMKeywordDefCQL.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
         
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -130,9 +125,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/QDMCQLRetrieve_WithoutFilter.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -149,9 +142,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/QDMCQLWithoutIncludedLibraryVersion.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -168,9 +159,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/QDMPractitionerContext.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -217,9 +206,8 @@ describe('CQL Library: CQL Editor: QDM valueSet', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditPublisher).type('{downArrow}').type('{enter}')
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
     })
 
     it('Value Set Invalid', () => {
@@ -242,9 +230,7 @@ describe('CQL Library: CQL Editor: QDM valueSet', () => {
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         cy.get(CQLLibraryPage.umlsErrorMessage).should('not.be.visible')
 

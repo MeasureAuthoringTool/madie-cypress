@@ -4,6 +4,7 @@ import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
+import {CQLEditorPage} from "../../../Shared/CQLEditorPage";
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let CQLLibraryPublisher = 'ICF'
@@ -70,7 +71,7 @@ describe('QDM CQL Library Validations', () => {
 
         cy.get(CQLLibraryPage.currentCQLLibName).clear().type(updatedCQLLibraryName)
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
     })
 

@@ -3,6 +3,7 @@ import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import {Header} from "../../../../Shared/Header"
 import {Utilities} from "../../../../Shared/Utilities"
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
 
 let CqlLibraryOne = ''
 let CqlLibraryOther = ''
@@ -108,9 +109,7 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.cqlLibraryActionCenter('version')

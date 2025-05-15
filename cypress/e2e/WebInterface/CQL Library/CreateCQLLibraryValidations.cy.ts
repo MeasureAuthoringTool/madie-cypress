@@ -5,6 +5,7 @@ import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { Utilities } from "../../../Shared/Utilities"
 import { Global } from "../../../Shared/Global"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
+import {CQLEditorPage} from "../../../Shared/CQLEditorPage";
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 
@@ -306,8 +307,7 @@ describe('CQL Library Validations', () => {
         Utilities.typeFileContents('cypress/fixtures/AdultOutpatientEncountersQICore4Entry.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        cy.get(CQLLibraryPage.genericSuccessMessage).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()

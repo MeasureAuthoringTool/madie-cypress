@@ -75,9 +75,7 @@ describe('QDM Code Search fields', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully but the following issues were found')
-        cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
 
     })
@@ -185,8 +183,7 @@ describe('QDM Code Search fields', () => {
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
-
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Assert toast message while trying to apply the same code again
         cy.get(CQLEditorPage.expandCQLBuilder).click()
@@ -249,7 +246,7 @@ describe('QDM Code Search fields', () => {
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 
     it('Edit Code with Suffix and Version from Saved Codes Grid', () => {
@@ -302,7 +299,7 @@ describe('QDM Code Search fields', () => {
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 
     it('Remove Code from Saved Codes Grid', () => {
