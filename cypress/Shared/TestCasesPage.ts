@@ -593,6 +593,7 @@ export class TestCasesPage {
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
         }
+        cy.wait(1500)
     }
 
     public static enterErroneousJson(err_TestCaseJson: string): void {

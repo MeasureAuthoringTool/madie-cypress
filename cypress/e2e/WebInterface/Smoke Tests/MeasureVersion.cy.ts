@@ -30,11 +30,11 @@ describe('QDM Measure Versioning', () => {
     newCQLLibraryName = cqlLibraryName + randValue + 1
 
     const measureOpts: CreateMeasureOptions = {
-       ecqmTitle: newMeasureName, 
-       cqlLibraryName: newCQLLibraryName, 
-       measureScoring: 'Cohort', 
-       patientBasis: 'true', 
-       measureCql: QDMMeasureCQL
+        ecqmTitle: newMeasureName,
+        cqlLibraryName: newCQLLibraryName,
+        measureScoring: 'Cohort',
+        patientBasis: 'true',
+        measureCql: QDMMeasureCQL
     }
 
     beforeEach('Create Measure and Login', () => {
@@ -42,6 +42,15 @@ describe('QDM Measure Versioning', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureOpts)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
         OktaLogin.Login()
     })
 
@@ -114,12 +123,12 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
     newCQLLibraryName = cqlLibraryName + randValue + 2
 
     const measureOpts: CreateMeasureOptions = {
-        ecqmTitle: newMeasureName, 
-        cqlLibraryName: newCQLLibraryName, 
-        measureScoring: 'Cohort', 
-        patientBasis: 'false', 
+        ecqmTitle: newMeasureName,
+        cqlLibraryName: newCQLLibraryName,
+        measureScoring: 'Cohort',
+        patientBasis: 'false',
         measureCql: qdmCMSMeasureCQL
-     }
+    }
 
     beforeEach('Create Measure and Login', () => {
 
@@ -127,6 +136,16 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Qualifying Encounters')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
+        MeasuresPage.actionCenter("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
+        OktaLogin.Login()
+
     })
 
     afterEach('Logout and delete Measure', () => {
@@ -208,6 +227,16 @@ describe('QI-Core Measure Versioning', () => {
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.boolean, MeasureScoring.Proportion, populations)
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QiCoreTestCaseJson)
         OktaLogin.Login()
+        MeasuresPage.actionCenter("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
+        OktaLogin.Login()
+
     })
 
     after('Logout and cleanup', () => {

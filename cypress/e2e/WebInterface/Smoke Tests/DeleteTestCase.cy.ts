@@ -34,6 +34,16 @@ describe('Delete Test Case', () => {
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null,
             null, null, 'Procedure')
         OktaLogin.Login()
+        MeasuresPage.actionCenter("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
+        OktaLogin.Login()
+
     })
 
     afterEach('Logout and Clean up Measures', () => {
