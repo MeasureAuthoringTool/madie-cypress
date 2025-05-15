@@ -1,4 +1,4 @@
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
@@ -94,13 +94,20 @@ let measureCQL = 'library Library5749 version \'0.0.000\'\n' +
     '      union ["Symptom": "Neurologic impairment"] //Symptom\n' +
     '      union ["Assessment, Performed": "Falls Screening"] //Assessment '
 
+const measureData: CreateMeasureOptions = {}
 
 describe('Test Case Attributes', () => {
 
     beforeEach('Create measure and login', () => {
 
+        measureData.ecqmTitle = measureName
+        measureData.cqlLibraryName = CqlLibraryName
+        measureData.measureScoring = measureScoringProportion
+        measureData.patientBasis = 'false'
+        measureData.measureCql = measureCQL
+
         //Create QDM Measure
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, measureScoringProportion, false, measureCQL)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
