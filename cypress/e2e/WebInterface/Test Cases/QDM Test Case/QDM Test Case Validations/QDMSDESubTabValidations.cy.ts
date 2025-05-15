@@ -1,6 +1,6 @@
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { CQLLibraryPage } from "../../../../../Shared/CQLLibraryPage"
-import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
@@ -20,7 +20,15 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
 
     beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureName, CqlLibraryName, 'Cohort', false, qdmMeasureCQL)
+        const createMeasure: CreateMeasureOptions = {
+            ecqmTitle: measureName,
+            cqlLibraryName: CqlLibraryName,
+            measureScoring: 'Cohort',
+            patientBasis: 'false',
+            measureCql: qdmMeasureCQL
+        }
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(createMeasure)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
 
