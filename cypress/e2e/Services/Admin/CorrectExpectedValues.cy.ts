@@ -6,12 +6,16 @@ import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { v4 as uuidv4 } from 'uuid'
 import { QiCore4Cql } from "../../../Shared/FHIRMeasuresCQL"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
+import { OktaLogin } from "../../../Shared/OktaLogin"
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { MeasuresPage } from "../../../Shared/MeasuresPage"
+import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { Measure, TestCase, GroupPopulation, PopulationType } from '@madie/madie-models'
 const dayjs = require('dayjs')
 
 const now = Date.now()
 const measure = {
-    name:'AdminCorrectExpValues' + now,
+    name: 'AdminCorrectExpValues' + now,
     libraryName: 'ACExpValuesLib' + now,
     ecqmTitle: 'ACEV',
     model: SupportedModels.qiCore4,
@@ -44,9 +48,18 @@ describe('Admin API - Reset test case expected values', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measure.name, measure.libraryName, measureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'boolean')
         TestCasesPage.CreateTestCaseAPI('title', 'series', 'desc', testCase)
-        
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+
         // set expected value "true" on test case
-        let updatedTestCase: TestCase 
+        let updatedTestCase: TestCase
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureId) => {
                 cy.readFile('cypress/fixtures/testCaseId').should('exist').then((tcId) => {
@@ -78,8 +91,8 @@ describe('Admin API - Reset test case expected values', () => {
                             }
 
                             // response.body = original test case, .assign() is TS needed to merge the data into 1 object
-                            updatedTestCase = Object.assign(response.body, {"groupPopulations": [tcExpectedValue]})
-                            
+                            updatedTestCase = Object.assign(response.body, { "groupPopulations": [tcExpectedValue] })
+
                             cy.request({
                                 failOnStatusCode: false,
                                 url: '/api/measures/' + measureId + '/test-cases/' + tcId,
@@ -117,7 +130,7 @@ describe('Admin API - Reset test case expected values', () => {
         // create draft
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((measureAID) => {
-                cy.readFile( 'cypress/fixtures/measureSetId').should('exist').then((mSetId) => {
+                cy.readFile('cypress/fixtures/measureSetId').should('exist').then((mSetId) => {
                     cy.readFile('cypress/fixtures/versionId').should('exist').then((mVersionId) => {
                         cy.request({
                             url: '/api/measures/' + measureAID + '/draft',
