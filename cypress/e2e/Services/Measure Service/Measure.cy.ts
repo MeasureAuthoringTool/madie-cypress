@@ -921,6 +921,15 @@ describe('Delete QI-Core Measure with admin API Key', () => {
 
         defaultUser = CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, versionMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
 
     })
 
@@ -1031,7 +1040,7 @@ describe('Delete QI-Core Measure with admin API Key', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('Response could not be completed because the HARP id of ' + harpUserALT + ' passed in does not match the owner of the measure with the measure id of ' + id + '. The owner of the measure is ' +harpUser)
+                    expect(response.body.message).to.eql('Response could not be completed because the HARP id of ' + harpUserALT + ' passed in does not match the owner of the measure with the measure id of ' + id + '. The owner of the measure is ' + harpUser)
                 })
             })
         })
@@ -1173,7 +1182,7 @@ describe('Delete QDM Measure with admin API Key', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(409)
-                    expect(response.body.message).to.eql('Response could not be completed because the HARP id of ' + harpUserALT + ' passed in does not match the owner of the measure with the measure id of ' + id + '. The owner of the measure is ' +harpUser)
+                    expect(response.body.message).to.eql('Response could not be completed because the HARP id of ' + harpUserALT + ' passed in does not match the owner of the measure with the measure id of ' + id + '. The owner of the measure is ' + harpUser)
                 })
             })
         })
