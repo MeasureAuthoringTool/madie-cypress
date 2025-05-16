@@ -164,7 +164,6 @@ export class CQLEditorPage {
 
     public static validateSuccessfulCQLUpdate(): void {
 
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each($msg => {
             expect($msg).to.not.contain('Error')
             cy.wrap($msg)
