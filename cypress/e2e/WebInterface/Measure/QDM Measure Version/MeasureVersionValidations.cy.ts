@@ -1,5 +1,5 @@
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
@@ -16,45 +16,35 @@ let versionMeasureCQL = MeasureCQL.simpleQDM_CQL
 
 
 let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
-
-
-    'using QDM version \'5.6\'\n' +
-    '\n' +
-    'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
-    '\n' +
-    'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\' \n' +
-    '\n' +
-    'valueset "Acute care hospital Inpatient Encounter": \'urn:oid:2.16.840.1.113883.3.666.5.2289\' \n' +
-    'valueset "Bicarbonate lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.139\' \n' +
-    'valueset "Body temperature": \'urn:oid:2.16.840.1.113762.1.4.1045.152\' \n' +
-    'valueset "Body weight": \'urn:oid:2.16.840.1.113762.1.4.1045.159\' \n' +
-    'valueset "Creatinine lab test": \'urn:oid:2.16.840.1.113883.3.666.5.2363\' \n' +
-    'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\' \n' +
-    'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\' \n' +
-    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\' \n' +
-    'valueset "Glucose lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.134\' \n' +
-    'valueset "Heart Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.149\' \n' +
-    'valueset "Hematocrit lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.114\' \n' +
-    'valueset "Medicare Advantage payer": \'urn:oid:2.16.840.1.113762.1.4.1104.12\' \n' +
-    'valueset "Medicare FFS payer": \'urn:oid:2.16.840.1.113762.1.4.1104.10\' \n' +
-    'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\' \n' +
-    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\' \n' +
-    'valueset "Oxygen Saturation by Pulse Oximetry": \'urn:oid:2.16.840.1.113762.1.4.1045.151\' \n' +
-    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\' \n' +
-    '\n' +
-    'valueset "Potassium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.117\' \n' +
-    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\' \n' +
-    'valueset "Respiratory Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.130\' \n' +
-    'valueset "Sodium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.119\' \n' +
-    'valueset "Systolic Blood Pressure": \'urn:oid:2.16.840.1.113762.1.4.1045.163\' \n' +
-    'valueset "White blood cells count lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.129\' \n' +
-    '\n' +
-    'code "Birth date": \'21112-8\' from "LOINC" display \'Birth date\'\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+    'using QDM version \'5.6\'\n\n' +
+    'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n\n' +
+    'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\'\n\n' +
+    'valueset "Acute care hospital Inpatient Encounter": \'urn:oid:2.16.840.1.113883.3.666.5.2289\'\n' +
+    'valueset "Bicarbonate lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.139\'\n' +
+    'valueset "Body temperature": \'urn:oid:2.16.840.1.113762.1.4.1045.152\'\n' +
+    'valueset "Body weight": \'urn:oid:2.16.840.1.113762.1.4.1045.159\'\n' +
+    'valueset "Creatinine lab test": \'urn:oid:2.16.840.1.113883.3.666.5.2363\'\n' +
+    'valueset "Emergency Department Visit": \'urn:oid:2.16.840.1.113883.3.117.1.7.1.292\'\n' +
+    'valueset "Encounter Inpatient": \'urn:oid:2.16.840.1.113883.3.666.5.307\'\n' +
+    'valueset "Ethnicity": \'urn:oid:2.16.840.1.114222.4.11.837\'\n' +
+    'valueset "Glucose lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.134\'\n' +
+    'valueset "Heart Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.149\'\n' +
+    'valueset "Hematocrit lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.114\'\n' +
+    'valueset "Medicare Advantage payer": \'urn:oid:2.16.840.1.113762.1.4.1104.12\'\n' +
+    'valueset "Medicare FFS payer": \'urn:oid:2.16.840.1.113762.1.4.1104.10\'\n' +
+    'valueset "Observation Services": \'urn:oid:2.16.840.1.113762.1.4.1111.143\'\n' +
+    'valueset "ONC Administrative Sex": \'urn:oid:2.16.840.1.113762.1.4.1\'\n' +
+    'valueset "Oxygen Saturation by Pulse Oximetry": \'urn:oid:2.16.840.1.113762.1.4.1045.151\'\n' +
+    'valueset "Payer": \'urn:oid:2.16.840.1.114222.4.11.3591\'\n' +
+    'valueset "Potassium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.117\'\n' +
+    'valueset "Race": \'urn:oid:2.16.840.1.114222.4.11.836\'\n' +
+    'valueset "Respiratory Rate": \'urn:oid:2.16.840.1.113762.1.4.1045.130\'\n' +
+    'valueset "Sodium lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.119\'\n' +
+    'valueset "Systolic Blood Pressure": \'urn:oid:2.16.840.1.113762.1.4.1045.163\'\n' +
+    'valueset "White blood cells count lab test": \'urn:oid:2.16.840.1.113762.1.4.1045.129\'\n\n' +
+    'code "Birth date": \'21112-8\' from "LOINC" display \'Birth date\'\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
+    'context Patient\n\n' +
     'define "Initial Population":\'\'\n' +
     '\t  \'Inpatient Encounters\'\n'
 
@@ -113,6 +103,7 @@ describe('Measure Versioning validations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithErrors)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 9500)
         CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Navigate to Measures Page
@@ -195,7 +186,6 @@ describe('Non Measure owner unable to create Version', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
-
     })
 
     it('Verify Version button is not visible for non Measure owner', () => {
@@ -205,7 +195,6 @@ describe('Non Measure owner unable to create Version', () => {
 
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
@@ -214,7 +203,6 @@ describe('Non Measure owner unable to create Version', () => {
 
             //Verify version button is not visible
             cy.get('[data-testid=create-version-measure-' + fileContents + ']').should('not.exist')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
         })
     })
 })
