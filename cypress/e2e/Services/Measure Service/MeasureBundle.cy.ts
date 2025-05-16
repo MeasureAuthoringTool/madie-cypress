@@ -103,6 +103,14 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
 
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+
         //add meta data, still in progress, needs more work cvasile 2/23/23
         //Utilities.UpdateMeasureAddMetaDataAPI(newMeasureName, newCqlLibraryName, measureCQL)
 
@@ -454,6 +462,15 @@ describe('CV Measure Bundle end point returns expected data with valid Measure C
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, CVmeasureCQL)
 
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+
+
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
                 cy.request({
@@ -749,14 +766,21 @@ describe('Measure Bundle end point returns nothing with Measure CQL missing FHIR
 
 describe('Measure Bundle end point returns measure data regardless whom is requesting a read (GET) of the measure', () => {
 
-    newMeasureName = measureName + randValue
-    newCqlLibraryName = CqlLibraryName + randValue
+    newMeasureName = 'TestMeasureName' + randValue
+    newCqlLibraryName = 'TestCqlLibraryName' + randValue
     let measureCQL = MeasureCQL.CQL_Multiple_Populations
 
     before('Create Measure', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 2, measureCQL, 2, true)
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(2, true, 'Initial Population', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne')
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName + 2, measureCQL, null, true)
+        OktaLogin.AltLogin()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, true, 'Initial Population', '', '', 'Initial PopulationOne', '', 'Initial PopulationOne')
     })
 
     beforeEach('Set Access Token', () => {
@@ -765,21 +789,21 @@ describe('Measure Bundle end point returns measure data regardless whom is reque
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName + 2, true, true, 2)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName + 2, false, true)
 
     })
     it('Get Measure bundle resource will return details of measure, regardless if the request is comfing from the owner / creator of the measure', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
-            cy.readFile('cypress/fixtures/measureId2').should('exist').then((id2) => {
+            cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
                 cy.request({
-                    failOnStatusCode: false,
-                    url: '/api/measures/' + id2 + '/bundle',
+                    url: '/api/measures/' + id + '/bundle',
                     method: 'GET',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     }
                 }).then((response) => {
+                    console.log(response)
                     expect(response.status).to.eql(200)
 
                 })
