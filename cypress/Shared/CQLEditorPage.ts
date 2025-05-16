@@ -164,8 +164,25 @@ export class CQLEditorPage {
 
     public static validateSuccessfulCQLUpdate(): void {
 
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each(successMsg => {
-            expect(successMsg.text()).to.be.oneOf(['CQL updated successfully but the following issues were found', 'CQL updated successfully', 'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.'])
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each($msg => {
+            expect($msg).to.not.contain('Error')
+            cy.wrap($msg)
+                .invoke('text')
+                .then(text => {
+                    const trimmedText = text.trim()
+
+                    const validSubstrings = [
+                        'CQL updated successfully but the following issues were found',
+                        'CQL updated successfully',
+                        'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.'
+                    ]
+
+                    const containsMatch = validSubstrings.some(substring =>
+                        trimmedText.includes(substring)
+                    )
+                    expect(containsMatch).to.be.true
+                })
         })
     }
 
