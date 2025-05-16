@@ -184,8 +184,7 @@ describe('Qi Core Code Search fields', () => {
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
-
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         //Assert toast message while trying to apply the same code again
         cy.get(CQLEditorPage.expandCQLBuilder).click()
@@ -248,7 +247,7 @@ describe('Qi Core Code Search fields', () => {
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 
     it('Code system not removed from CQL when there are multiple codes associated with Code system and one of them removed', () => {
@@ -424,7 +423,7 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
 
         //Save CQL
         cy.get(CQLEditorPage.saveCQLButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
     })
 
     it('Remove Code from Saved Codes Grid', () => {
