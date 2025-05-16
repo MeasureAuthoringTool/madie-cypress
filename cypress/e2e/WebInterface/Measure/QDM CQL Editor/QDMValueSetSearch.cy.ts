@@ -6,7 +6,6 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
@@ -114,9 +113,9 @@ let measureCQL = 'library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedPat
     'define function "AdmitDecisionUsingEncounterOrder"(EncounterInpatient "Encounter, Performed" ):\n' +
     '  /*Captures the decision to admit order and time that occurred during the last ED visit*/\n' +
     '  Last(["Encounter, Order": "Decision to Admit to Hospital Inpatient"] AdmitOrder\n' +
-    '      let LastEDVisit: "LastEDEncounter"(EncounterInpatient)\n' +
-    '      where AdmitOrder.authorDatetime during LastEDVisit.relevantPeriod\n' +
-    '        and AdmitOrder.authorDatetime before or on "EDDepartureTime"(LastEDVisit)\n' +
+    '      let LastED: "LastEDEncounter"(EncounterInpatient)\n' +
+    '      where AdmitOrder.authorDatetime during LastED.relevantPeriod\n' +
+    '        and AdmitOrder.authorDatetime before or on "EDDepartureTime"(LastED)\n' +
     '      sort by authorDatetime\n' +
     '  )\n' +
     '\n' +
@@ -127,10 +126,10 @@ let measureCQL = 'library MedianAdmitDecisionTimetoEDDepartureTimeforAdmittedPat
     'define function "AdmitDecisionUsingAssessment"(EncounterInpatient "Encounter, Performed" ):\n' +
     '  /*Captures the decision to admit assessment, time, and result that was performed during the last ED visit*/\n' +
     '  Last(["Assessment, Performed": "Emergency Department Evaluation"] EDEvaluation\n' +
-    '      let LastEDVisit: "LastEDEncounter"(EncounterInpatient)\n' +
+    '      let LastED: "LastEDEncounter"(EncounterInpatient)\n' +
     '      where EDEvaluation.result in "Admit Inpatient"\n' +
-    '        and Global."NormalizeInterval"(EDEvaluation.relevantDatetime, EDEvaluation.relevantPeriod)starts during LastEDVisit.relevantPeriod\n' +
-    '        and Global."NormalizeInterval"(EDEvaluation.relevantDatetime, EDEvaluation.relevantPeriod)starts before or on "EDDepartureTime"(LastEDVisit)\n' +
+    '        and Global."NormalizeInterval"(EDEvaluation.relevantDatetime, EDEvaluation.relevantPeriod)starts during LastED.relevantPeriod\n' +
+    '        and Global."NormalizeInterval"(EDEvaluation.relevantDatetime, EDEvaluation.relevantPeriod)starts before or on "EDDepartureTime"(LastED)\n' +
     '      sort by start of Global."NormalizeInterval"(relevantDatetime, relevantPeriod)\n' +
     '  )'
 
@@ -162,7 +161,6 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Search, filter and apply Value Set to CQL', () => {
@@ -250,7 +248,6 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         cy.get(CQLEditorPage.valueSetSearchSrchBtn).click()
         Utilities.waitForElementVisible(CQLEditorPage.valueSetSearchResultsTbl, 30000)
         cy.get(CQLEditorPage.valueSetSearchResultsTbl).should('contain.text', 'TitleStewardOIDStatusOffice VisitNCQA PHEMURurn:oid:2.16.840.1.113883.3.464.1003.101.12.1001ACTIVE•••')
-
     })
 
     it('Value set Details screen', () => {
@@ -286,7 +283,6 @@ describe('QDM Value Set Search fields, filter and apply the filter to CQL', () =
         cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"url": "http://cts.nlm.nih.gov' +
             '/fhir/ValueSet/2.16.840.1.113883.3.1444.3.217"')
         cy.get(CQLEditorPage.valueSetDetailsScreen).should('contain.text', '"name": "American Society of Clinical Oncology Author"')
-
     })
 
     it('Edit Value Set with suffix and apply to CQL', () => {
