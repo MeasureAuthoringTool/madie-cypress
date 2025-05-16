@@ -17,10 +17,9 @@ let measureScoring = 'Cohort'
 let booleanPatientBasisQDM_CQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 let simpleQDMMeasureCQL = MeasureCQL.simpleQDM_CQL
 
-const measureData: CreateMeasureOptions = {}
-
 describe('Validate QDM Population Criteria section -- scoring and populations', () => {
 
+    const measureData: CreateMeasureOptions = {}
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
@@ -330,6 +329,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 })
 
 describe('No values in QDM PC fields, when no CQL', () => {
+    
+    const measureData: CreateMeasureOptions = {}
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
@@ -376,6 +377,8 @@ describe('No values in QDM PC fields, when no CQL', () => {
 })
 
 describe('Save Population Criteria on QDM measure', () => {
+    
+    const measureData: CreateMeasureOptions = {}
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
@@ -438,6 +441,7 @@ describe('Save Population Criteria on QDM measure', () => {
 
 describe('Validations: Population Criteria: Return Types -- Boolean', () => {
 
+    const measureData: CreateMeasureOptions = {}
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
@@ -503,6 +507,7 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
 
 describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => {
 
+    const measureData: CreateMeasureOptions = {}
     let randValue = (Math.floor((Math.random() * 1000) + 1))
     newMeasureName = measureName + randValue
     newCqlLibraryName = CqlLibraryName + randValue
