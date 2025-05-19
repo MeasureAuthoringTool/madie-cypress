@@ -41,6 +41,10 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
+
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
@@ -88,6 +92,10 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
+
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
@@ -133,6 +141,10 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
+
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.contain.value')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('not.contain.value')
@@ -147,6 +159,9 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Navigate to Edit Test Case page and assert Measure group
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
 
         //click on Expected / Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -172,6 +187,9 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Navigate to Edit Test Case page and assert Measure group after deletion
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
 
         //click on Expected / Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -218,6 +236,10 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
+
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).should('exist')
@@ -245,6 +267,10 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Navigate to Test cases page and verify Numerator Exclusion check box exists & Denominator Exclusion check box is deleted
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
+
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseDENEXExpected).should('not.exist')
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('exist')
@@ -286,6 +312,10 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Navigate to Test case Expected values tab and verify Measure Observation Expected value exists
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
+
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
@@ -318,6 +348,9 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
+
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('be.enabled')
@@ -337,6 +370,10 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Verify Stratification Expected values before adding stratification
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
+
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('not.exist')
 
@@ -354,6 +391,10 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Verify Stratification Expected values after adding stratification
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
+
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get('[data-testid="strat-row-population-id-measurePopulation"] > :nth-child(2)').should('exist')
     })
@@ -403,6 +444,10 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
+
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
         Utilities.waitForElementVisible(TestCasesPage.testCaseDENOMExpected, 60000)
