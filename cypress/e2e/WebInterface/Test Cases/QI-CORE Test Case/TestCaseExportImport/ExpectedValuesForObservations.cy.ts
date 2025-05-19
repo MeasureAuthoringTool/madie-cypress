@@ -160,7 +160,13 @@ describe('Proportion based measure with no observations', () => {
 
     it('Test Case Export & Import - Persist expected values through the process', () => {
 
+        //Click on Edit Button
         MeasuresPage.actionCenter('edit')
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         // verify populations
         cy.get(EditMeasurePage.measureGroupsTab).click()
