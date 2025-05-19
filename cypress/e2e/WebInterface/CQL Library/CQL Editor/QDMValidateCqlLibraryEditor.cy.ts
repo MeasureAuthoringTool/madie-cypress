@@ -72,8 +72,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
 
         //save the value in the CQL Editor
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -91,7 +90,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/QDMNoNameDefCQL.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
         
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -108,7 +107,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/QDMKeywordDefCQL.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
         
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -125,7 +124,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/QDMCQLRetrieve_WithoutFilter.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -142,7 +141,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/QDMCQLWithoutIncludedLibraryVersion.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -230,7 +229,7 @@ describe('CQL Library: CQL Editor: QDM valueSet', () => {
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(CQLLibraryPage.umlsErrorMessage).should('not.be.visible')
 
