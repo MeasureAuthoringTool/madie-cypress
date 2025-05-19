@@ -740,7 +740,7 @@ export class TestCasesPage {
         return user
     }
 
-    public static CreateQDMTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, twoTestCases?: boolean, altUser?: boolean): string {
+    public static CreateQDMTestCaseAPI(title: string, series: string, description: string, jsonValue?: string, twoTestCases?: boolean, altUser?: boolean, measureNumber?: number): string {
         let user = ''
         let measurePath = 'cypress/fixtures/measureId'
         let testCasePath = ''
@@ -757,6 +757,16 @@ export class TestCasesPage {
         }
         else {
             testCasePath = 'cypress/fixtures/testCaseId'
+        }
+
+        if ((measureNumber === undefined) || (measureNumber === null)) {
+            measureNumber = 0
+            measurePath = 'cypress/fixtures/measureId'
+        }
+
+
+        if (measureNumber > 0) {
+            measurePath = 'cypress/fixtures/measureId' + measureNumber
         }
 
         //Add Test Case to the Measure

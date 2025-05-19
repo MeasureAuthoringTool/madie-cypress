@@ -6,13 +6,15 @@ import { Utilities } from "../../../Shared/Utilities"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
-import { TestCaseJson } from "../../../Shared/TestCaseJson";
+import { TestCaseJson } from "../../../Shared/TestCaseJson"
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
 let testCaseDescription = 'DENOMFail' + Date.now()
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
-let testCaseTitle = 'test case title'
-let testCaseSeries = 'SBTestSeries'
+let testCaseTitle = 'test case title' + Date.now()
+let testCaseSeries = 'SBTestSeries' + Date.now()
+let measureCQLQDM = MeasureCQL.SBTEST_QDM_CQL
 let measureCQL = MeasureCQL.SBTEST_CQL
 let qiCoreMeasureCQL = MeasureCQL.CQL_Populations
 let measureScoring = 'Cohort'
@@ -22,52 +24,73 @@ let secondMeasureName = 'SecondMeasure' + Date.now()
 let secondLibraryName = 'SecondLibrary' + Date.now()
 let testCaseJson = TestCaseJson.TestCaseJson_Valid
 
-const measureData: CreateMeasureOptions = {}
+const measureDataQDM: CreateMeasureOptions = {}
+const measureDataQDM2: CreateMeasureOptions = {}
+
+//const measureDataQiCore: CreateMeasureOptions = {}
+//const measureDataQiCore2: CreateMeasureOptions = {}
 
 describe('Copy QDM Test Cases', () => {
 
-    before('Create measure and login', () => {
+    beforeEach('Create measure and login', () => {
 
         let randValue = (Math.floor((Math.random() * 1000) + 2))
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        measureData.ecqmTitle = newMeasureName
-        measureData.cqlLibraryName = newCqlLibraryName
-        measureData.measureScoring = measureScoring
-        measureData.patientBasis = 'true'
-        measureData.measureCql = measureCQL
+        measureDataQDM.ecqmTitle = newMeasureName
+        measureDataQDM.cqlLibraryName = newCqlLibraryName
+        measureDataQDM.measureScoring = measureScoring
+        measureDataQDM.patientBasis = 'true'
+        measureDataQDM.measureCql = measureCQLQDM
+        measureDataQDM.measureNumber = 1
 
         //Create QDM Measure, PC and Test Case
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureDataQDM)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit', 1)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean', 1)
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, null, false, false, 1)
+
 
         //Create 2nd QDM Measure
+        measureDataQDM2.ecqmTitle = secondMeasureName + randValue
+        measureDataQDM2.cqlLibraryName = secondLibraryName + randValue
+        measureDataQDM2.measureScoring = measureScoring
+        measureDataQDM2.patientBasis = 'true'
+        measureDataQDM2.measureCql = measureCQLQDM
+        measureDataQDM2.measureNumber = 2
 
-        measureData.ecqmTitle = secondMeasureName
-        measureData.cqlLibraryName = secondLibraryName
-        measureData.measureScoring = measureScoring
-        measureData.patientBasis = 'true'
-        measureData.measureCql = measureCQL
-        measureData.measureNumber = 2
-
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureDataQDM2)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit', 2)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         OktaLogin.Login()
 
     })
 
-    after('Logout and Clean up Measures', () => {
+    afterEach('Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-        Utilities.deleteMeasure(secondMeasureName, secondLibraryName, true)
 
     })
     it('Copy QDM Test Case to another QDM Measure', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 1)
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -94,33 +117,57 @@ describe('Copy QDM Test Cases', () => {
 
 describe('Copy Qi Core Test Cases', () => {
 
-    before('Create measure and login', () => {
+    beforeEach('Create measure and login', () => {
 
         let randValue = (Math.floor((Math.random() * 1000) + 5))
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
+        /*         measureDataQiCore.ecqmTitle = newMeasureName
+                measureDataQiCore.cqlLibraryName = newCqlLibraryName
+                measureDataQiCore.measureScoring = measureScoring
+                measureDataQiCore.measureCql = measureCQL
+                measureDataQiCore.measureNumber = 1 */
+
         //Create Qi Core Measure, PC and Test Case
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, qiCoreMeasureCQL)
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, qiCoreMeasureCQL, 1)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean', 1)
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson, false, false, false, 1)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit', 1/*measureDataQiCore.measureNumber*/)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
+
         //Create 2nd Qi Core Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(secondMeasureName, secondLibraryName, qiCoreMeasureCQL, 2)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit', 2)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         OktaLogin.Login()
 
     })
 
-    after('Logout and Clean up Measures', () => {
+    afterEach('Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-        Utilities.deleteMeasure(secondMeasureName, secondLibraryName, true)
+
 
     })
     it('Copy Qi Core Test Case to another Qi Core Measure', () => {
 
         //click on Edit button to edit measure
-        MeasuresPage.actionCenter('edit')
+        MeasuresPage.actionCenter('edit', 1)
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
