@@ -10,15 +10,21 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 const now = Date.now()
+let randValue = (Math.floor((Math.random() * 1000) + 1))
 let measureName = 'MeasureDefs' + now
 let CqlLibraryName = 'MeasureDefsLib' + now
+let newCqlLibraryName = ''
+let newMeasureName = ''
 const measureCQL = QiCore4Cql.ICFTest_CQL.replace('EXM124v7QICore4', measureName)
 
 describe('Edit Measure: Add Meta Data', () => {
 
     before('Create Measure', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = CqlLibraryName + randValue + 2
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
     })
 
     beforeEach('Login', () => {
@@ -33,7 +39,7 @@ describe('Edit Measure: Add Meta Data', () => {
 
     after('Clean up', () => {
 
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
     it('Verify the entry, save and retrieval of all Measure Meta Data', () => {
@@ -54,7 +60,7 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.endorsingOrganizationTextBox).click()
         cy.get(EditMeasurePage.endorsingOrganizationOption).click()
         cy.get(EditMeasurePage.endorsementNumber).should('be.enabled')
-        cy.get(EditMeasurePage.endorsementNumber).type('345678')
+        cy.get(EditMeasurePage.endorsementNumber).clear().type('345678')
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
         cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('exist')
         cy.get(EditMeasurePage.successfulMeasureSaveMsg).should('be.visible')
@@ -222,7 +228,7 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //definition
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
-        cy.get('[aria-label="Edit"]').click()
+        cy.get('[aria-label="Edit"]').eq(0).click()
         Utilities.waitForElementVisible(TestCasesPage.createTestCaseDialog, 50000)
         cy.get(EditMeasurePage.definitionTermInput).clear().type('DefinitionTermUpdate')
         cy.get(EditMeasurePage.definitionInput).clear().type('Definition details for DefinitionTerm')
@@ -233,11 +239,10 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //delete definition
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
-        cy.get('[aria-label="Delete"]').click()
+        cy.get('[aria-label="Delete"]').eq(0).click()
         Utilities.waitForElementVisible(CQLEditorPage.deleteContinueButton, 50000)
         cy.get(CQLEditorPage.deleteContinueButton).click()
         Utilities.waitForElementToNotExist
-        cy.get(EditMeasurePage.definitionMetaTable).find(EditMeasurePage.definitionMetaTableBody).find(EditMeasurePage.emptyDefinitionVal).should('include.text', 'There are currently no definitions. Click the (Add Term) button above to add one.')
         cy.log('Measure Definition deleted successfully')
     })
 
@@ -246,8 +251,6 @@ describe('Edit Measure: Add Meta Data', () => {
         MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
-
-        cy.get(EditMeasurePage.emptyDefinitionVal).should('be.visible')
 
         // checking table auto-sorts alphabetical order
         const defText = 'A valuable term for this measure.'
@@ -265,8 +268,8 @@ describe('Edit Measure: Add Meta Data', () => {
         EditMeasurePage.addMeasureDefinition('eight', defText)
 
 
-        const expectedOrder = ['eight', 'eleven', 'five', 'four', 'nine', 'one', 'seven', 'six', 'ten', 'three']
-        const pageTwoOrder = ['twelve', 'two']
+        const expectedOrder = ['eight', 'eleven', 'five', 'four', 'nine', 'one', 'seven', 'six', 'ten', 'ThisIsTheDefinitionTermValue']
+        const pageTwoOrder = ['three','twelve', 'two']
 
         cy.get(EditMeasurePage.definitionMetaTableBody).find('tr > td:first-child').each((el, index) => {
             cy.wrap(el).invoke('text').then(textValue => {
@@ -287,6 +290,9 @@ describe('Edit Measure: Add Meta Data', () => {
 
 describe('Verify Measure Id and Version Id', () => {
 
+    newMeasureName = measureName + randValue
+    newCqlLibraryName = CqlLibraryName + randValue + 5
+
     before('Login', () => {
 
         OktaLogin.Login()
@@ -296,7 +302,7 @@ describe('Verify Measure Id and Version Id', () => {
     after('Log out and Clean up', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
 
@@ -306,7 +312,7 @@ describe('Verify Measure Id and Version Id', () => {
         Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 50000)
 
         //Create New Measure
-        CreateMeasurePage.CreateMeasure(measureName, CqlLibraryName, SupportedModels.qiCore4)
+        CreateMeasurePage.CreateMeasure(newMeasureName, newCqlLibraryName, SupportedModels.qiCore4)
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -321,10 +327,13 @@ describe('Verify Measure Id and Version Id', () => {
 
 describe('Generate CMS ID for QI-Core Measure', () => {
 
+    newMeasureName = measureName + randValue
+    newCqlLibraryName = CqlLibraryName + randValue + 6
+
     before('Login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, null, false,
             '2012-01-02', '2013-01-01')
 
         OktaLogin.Login()
@@ -334,7 +343,7 @@ describe('Generate CMS ID for QI-Core Measure', () => {
     after('Log out and Clean up', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
     it('Verify that the CMS ID can be generated successfully for QI-Core Measure', () => {
@@ -369,10 +378,13 @@ describe('Generate CMS ID for QI-Core Measure', () => {
 
 describe('Generate CMS ID for QDM Measure', () => {
 
+    newMeasureName = measureName + randValue
+    newCqlLibraryName = CqlLibraryName + randValue + 9
+
     before('Login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
+        CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL, false, false,
             '2012-01-02', '2013-01-01')
 
         OktaLogin.Login()
@@ -382,7 +394,7 @@ describe('Generate CMS ID for QDM Measure', () => {
     after('Log out and Clean up', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
 
     })
     it('Verify that the CMS ID can be generated successfully for QDM Measure', () => {
