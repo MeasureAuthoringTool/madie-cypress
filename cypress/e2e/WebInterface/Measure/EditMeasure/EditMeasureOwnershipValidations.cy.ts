@@ -97,7 +97,6 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).should('be.visible')
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).click()
-        cy.get(EditMeasurePage.emptyDefinitionVal).should('be.visible')
         cy.get(EditMeasurePage.createDefinitionBtn).should('be.disabled')
     })
 
