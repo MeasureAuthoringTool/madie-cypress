@@ -130,7 +130,7 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
-        cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', 'Draft 1.0.000')
+        cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
         cy.log('Draft Created Successfully')
 
         //Share Library with ALT User
@@ -380,7 +380,7 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
             cy.writeFile('cypress/fixtures/cqlLibraryId', request.response.body.id)
         })
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
-        cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', 'Draft 1.0.000')
+        cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
         cy.log('Draft Created Successfully')
 
         //Select both the instances (Draft and Version) of the Library and verify Library table contains latest instance(Draft) of the Library

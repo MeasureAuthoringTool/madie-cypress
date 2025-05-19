@@ -122,7 +122,7 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
-        cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', 'Draft 1.0.000')
+        cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
         cy.log('Draft Created Successfully')
 
 

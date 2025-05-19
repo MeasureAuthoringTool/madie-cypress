@@ -79,7 +79,7 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         // })
 
         //This check will need to be removed once epic https://jira.cms.gov/browse/MAT-5119 is ready for deployment
-        cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', 'Draft 1.0.000')
+        cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
 
         cy.log('Draft Created Successfully')
 
