@@ -17,6 +17,9 @@ valueset "Home Healthcare Services": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.
 {home}define "Initial Population":
   exists "Qualifying Encounters"
 
+{home}define distinct:
+ 	true
+
 {home}define "Qualifying Encounters": (
 	[Encounter: "Office Visit"]
 {home}	union [Encounter: "Annual Wellness Visit"]
@@ -30,6 +33,5 @@ valueset "Home Healthcare Services": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.
 {home}define fluent function "isFinishedEncounter"(Enc Encounter):
 	(Enc E where E.status = 'finished') is not null
 
-{home}define distinct:
-	true
+
 	

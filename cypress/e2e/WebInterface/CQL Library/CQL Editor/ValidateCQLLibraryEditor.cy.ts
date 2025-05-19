@@ -75,7 +75,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
         //save the value in the CQL Editor
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -130,7 +130,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Validate error(s) in CQL Editor after saving
         cy.scrollTo('top')
@@ -153,7 +153,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
 
         //save the value in the CQL Editor
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'FHIRHelpers was incorrectly aliased. MADiE has overwritten the alias with \'FHIRHelpers\'.')
     })
 
@@ -164,7 +164,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/CQLWithDefNoName.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -181,14 +181,14 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/CQLWithDefReservedKeyword.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).click()
         cy.get('#ace-editor-wrapper > div.ace_gutter > div').find(CQLLibraryPage.errorInCQLEditorWindow).should('be.visible')
         cy.get('#ace-editor-wrapper > div.ace_gutter > div > ' + CQLLibraryPage.errorInCQLEditorWindow).invoke('show').click({ force: true, multiple: true })
-        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', " Parse: 7:15 | Definition names must not be a reserved word.")
+        cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "Parse: 7:15 | Definition names must not be a reserved word.")
     })
 
     it('Verify error message when Code System name is missing from Code declaration', () => {
@@ -198,7 +198,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/CQLWithoutCodeSystemName.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLLibraryPage.umlsErrorMessage).should('not.be.visible')
 
         //Validate error(s) in CQL Editor window
@@ -218,7 +218,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/QiCoreCQLWithoutIncludedLibraryVersion.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -228,14 +228,14 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         cy.get('#ace-editor-wrapper > div.ace_tooltip').invoke('show').should('contain.text', "ELM: 1:49 | include MATGlobalCommonFunctions statement is missing version. Please add a version to the include.")
     })
 
-    it('Verify error message on CQL Editor page when CQL contains an access modifer like "private"', () => {
+    it('Verify error message on CQL Editor page when CQL contains an access modifier like "private"', () => {
 
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/QiCoreLibraryPrivateAccessModifier.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -251,7 +251,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/CQLWithPractitionerContext.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -336,7 +336,7 @@ describe('CQL Library: CQL Editor: Qi-Core valueSet', () => {
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(CQLLibraryPage.umlsErrorMessage).should('not.be.visible')
 
