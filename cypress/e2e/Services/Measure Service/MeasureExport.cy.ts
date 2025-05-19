@@ -3,6 +3,10 @@ import { v4 as uuidv4 } from 'uuid'
 import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../Shared/MeasureGroupPage"
+import {OktaLogin} from "../../../Shared/OktaLogin";
+import {MeasuresPage} from "../../../Shared/MeasuresPage";
+import {EditMeasurePage} from "../../../Shared/EditMeasurePage";
+import {CQLEditorPage} from "../../../Shared/CQLEditorPage";
 
 let measureName = 'MeasureExport' + Date.now()
 let CqlLibraryName = 'MeasureExportLibrary' + Date.now()
@@ -71,6 +75,13 @@ describe('QI-Core Measure Export', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((retrievedMeasureID) => {
@@ -446,6 +457,13 @@ describe('QDM Measure Export', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
 
     })
