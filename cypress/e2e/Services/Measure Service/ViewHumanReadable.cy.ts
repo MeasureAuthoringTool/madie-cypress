@@ -7,12 +7,9 @@ import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
-
 let newMeasureName = ''
 let newCQLLibraryName = ''
-
 let qdmMeasureCQLVm = MeasureCQL.CQLQDMObservationRun
-
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let measureName = 'TestMeasure' + Date.now() + randValue
 let cqlLibraryName = 'TestCql' + Date.now() + randValue
@@ -26,6 +23,13 @@ describe('Measure Service: View Human Readable for Qi Core Draft Measure', () =>
     beforeEach('Create Measure and Set Access Token', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
         cy.setAccessTokenCookie()
     })
@@ -60,6 +64,13 @@ describe('Measure Service: View Human Readable for Versioned Qi Core Measure', (
     beforeEach('Create Measure and Set Access Token', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, cqlLibraryName, measureCQL)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp', 'boolean')
         cy.setAccessTokenCookie()
     })
@@ -116,6 +127,13 @@ describe('Measure Service: View Human Readable for Draft QDM Measure', () => {
         measureData.measureCql = qdmMeasureCQL
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         cy.setAccessTokenCookie()
     })
