@@ -50,41 +50,43 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
 
-        measureData.ecqmTitle = measureQDM
-        measureData.cqlLibraryName = measureQDM
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmManifestTestCQL
-        measureData.mpStartDate = '2025-01-01'
-        measureData.mpEndDate = '2025-12-31'
+        const qdmMeasure1 : CreateMeasureOptions = {
+            ecqmTitle: measureQDM,
+            cqlLibraryName: measureQDM,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31'
+        }
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure1)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
         //Create Second QDM Measure
         measureQDM2 = 'QDMMeasure2' + Date.now() + randValue + 6 + randValue
 
-        measureData.ecqmTitle = measureQDM2
-        measureData.cqlLibraryName = measureQDM2
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmManifestTestCQL
-        measureData.mpStartDate = '2025-01-01'
-        measureData.mpEndDate = '2025-12-31'
-        measureData.measureNumber = 2
+        const qdmMeasure2 : CreateMeasureOptions = {
+            ecqmTitle: measureQDM2,
+            cqlLibraryName: measureQDM2,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31',
+            measureNumber: 2
+        }
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure2)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(2, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
-
 
         //Create new QI Core measure
         measureQICore = 'QICoreMeasure' + Date.now() + randValue + 4 + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, measureQICore, measureCQLPFTests, 3)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(3, false, 'Initial Population', '', '',
             'Initial Population', '', 'Initial Population', 'boolean')
-
 
         //Create second QI Core measure
         measureQICore2 = 'QICoreMeasure2' + Date.now() + randValue + 2 + randValue
@@ -99,6 +101,7 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 15500)
 
         cy.get(Header.mainMadiePageButton).click()
 
@@ -107,6 +110,7 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 15500)
 
         cy.get(Header.mainMadiePageButton).click()
 
@@ -115,6 +119,7 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 15500)
 
         cy.get(Header.mainMadiePageButton).click()
 
@@ -123,15 +128,14 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 15500)
 
         cy.get(Header.mainMadiePageButton).click()
-
     })
 
     afterEach('Log Out', () => {
 
         OktaLogin.Logout()
-
     })
 
     it('Association: QDM -> Qi Core measure: Validations', () => {
@@ -152,20 +156,15 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         })
 
-
         //validation test: must be different models
         cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView().trigger('mouseover', { force: true })
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('be.visible')
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'Must select one QDM and one QI-Core measure')
 
-
-
         cy.readFile('cypress/fixtures/measureId4').should('exist').then((measureId) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         })
-
-
 
         //validation test: QDM measure must contain CMS id
 
@@ -209,8 +208,6 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessMsg, 3500000)
         cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         Utilities.waitForElementToNotExist(TestCasesPage.importTestCaseSuccessMsg, 3500000)
-
-
 
         cy.readFile('cypress/fixtures/measureId4').should('exist').then((measureId) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
@@ -323,7 +320,6 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('be.visible')
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'Must own both selected measures')
     })
-
 })
 //Utilizing Qi Core 4.1.1
 describe('Measure Association: Transferring meta data and CMS ID from QDM to QI Core measure, using Qi Core 4.1.1', () => {
@@ -337,16 +333,17 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
 
-        measureData.ecqmTitle = measureQDM
-        measureData.cqlLibraryName = measureQDM
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmManifestTestCQL
-        measureData.mpStartDate = '2025-01-01'
-        measureData.mpEndDate = '2025-12-31'
-        measureData.measureNumber = null
+        const qdmMeasure1 : CreateMeasureOptions = {
+            ecqmTitle: measureQDM,
+            cqlLibraryName: measureQDM,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31'
+        }
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure1)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
@@ -355,7 +352,6 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, measureQICore, measureCQLPFTests, 2)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(3, false, 'Initial Population', '', '',
             'Initial Population', '', 'Initial Population', 'boolean')
-
 
         OktaLogin.Login()
 
@@ -385,7 +381,6 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
         cy.get(EditMeasurePage.mpStart).should('contain.value', QDMmeasurePStartD)
         cy.get(EditMeasurePage.mpEnd).should('contain.value', QDMmeasurePEndD)
-
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
@@ -465,8 +460,8 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
-
     })
+
     it('Association: QDM -> Qi Core measure: Copying meta data and CMS Id from QDM - to - QI Core measure; also validating the \'are you sure\' modal / dialog window', () => {
 
         MeasuresPage.actionCenter('associatemeasure')
@@ -540,7 +535,6 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         //Confirm Clinical Recommendation
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.value', QDMclinicalRecommendation)
-
     })
 })
 //Utilizing Qi Core 6.0.0
@@ -555,32 +549,35 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         //Create New QDM Measure
         measureQDM = 'QDMMeasure4QiCore600' + Date.now() + randValue + 8 + randValue
 
-        measureData.ecqmTitle = measureQDM
-        measureData.cqlLibraryName = measureQDM
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmManifestTestCQL
-        measureData.mpStartDate = '2025-01-01'
-        measureData.mpEndDate = '2025-12-31'
-        measureData.measureNumber = null
+        const qdmMeasure1 : CreateMeasureOptions = {
+            ecqmTitle: measureQDM,
+            cqlLibraryName: measureQDM,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31'
+        }
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure1)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
         //Create Second QDM Measure
         measureQDM2 = 'QDMMeasure24QiCore600' + Date.now() + randValue + 6 + randValue
 
-        measureData.ecqmTitle = measureQDM2
-        measureData.cqlLibraryName = measureQDM
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmManifestTestCQL
-        measureData.mpStartDate = '2025-01-01'
-        measureData.mpEndDate = '2025-12-31'
-        measureData.measureNumber = 2
+        const qdmMeasure2 : CreateMeasureOptions = {
+            ecqmTitle: measureQDM2,
+            cqlLibraryName: measureQDM2,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31',
+            measureNumber: 2
+        }
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure2)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(2, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
@@ -597,7 +594,6 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureQICore2, measureQICore2, SupportedModels.qiCore6, measureData, 4)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', null, 4)
-
 
         OktaLogin.Login()
 
@@ -632,13 +628,11 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
-
     })
 
     afterEach('Log Out', () => {
 
         OktaLogin.Logout()
-
     })
 
     it('Association: QDM -> Qi Core 6.0.0 measure: Validations', () => {
@@ -662,20 +656,15 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         })
 
-
         //validation test: must be different models
         cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView().trigger('mouseover', { force: true })
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('be.visible')
         cy.get('[data-testid="associate-cms-id-tooltip"]').should('have.attr', 'aria-label', 'Must select one QDM and one QI-Core measure')
 
-
-
         cy.readFile('cypress/fixtures/measureId4').should('exist').then((measureId) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
             cy.get('[data-testid="measure-name-' + measureId + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         })
-
-
 
         //validation test: QDM measure must contain CMS id
 
@@ -719,8 +708,6 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessMsg, 3500000)
         cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
         Utilities.waitForElementToNotExist(TestCasesPage.importTestCaseSuccessMsg, 3500000)
-
-
 
         cy.readFile('cypress/fixtures/measureId4').should('exist').then((measureId) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + measureId + '_select"]', 500000)
@@ -849,16 +836,17 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
 
-        measureData.ecqmTitle = measureQDM
-        measureData.cqlLibraryName = measureQDM
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmManifestTestCQL
-        measureData.mpStartDate = '2025-01-01'
-        measureData.mpEndDate = '2025-12-31'
-        measureData.measureNumber = null
+        const qdmMeasure1 : CreateMeasureOptions = {
+            ecqmTitle: measureQDM,
+            cqlLibraryName: measureQDM,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31'
+        }
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure1)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
@@ -869,7 +857,6 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         CreateMeasurePage.CreateMeasureAPI(measureQICore, measureQICore, SupportedModels.qiCore6, measureData, 2)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', null, 2)
-
 
         OktaLogin.Login()
 
@@ -981,6 +968,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(Header.mainMadiePageButton).click()
 
     })
+
     it('Association: QDM -> Qi Core 6.0.0 measure: Copying meta data and CMS Id from QDM - to - QI Core 6.0.0 measure; also validating the \'are you sure\' modal / dialog window', () => {
 
         MeasuresPage.actionCenter('associatemeasure')
@@ -1055,7 +1043,6 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         //Confirm Clinical Recommendation
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.value', QDMclinicalRecommendation)
-
     })
 })
 
