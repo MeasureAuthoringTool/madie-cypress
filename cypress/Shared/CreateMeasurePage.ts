@@ -119,7 +119,7 @@ export class CreateMeasurePage {
     }
 
     public static CreateQICoreMeasureAPI(measureName: string, CqlLibraryName: string, measureCQL?: string,
-        measureNumber?: number, altUser?: boolean, mpStartDate?: string, mpEndDate?: string): string {
+        measureNumber?: number, altUser?: boolean, mpStartDate?: string, mpEndDate?: string, /*CreateMeasureOptions?: CreateMeasureOptions*/): string {
 
         let user = ''
         const now = require('dayjs')
@@ -157,6 +157,33 @@ export class CreateMeasurePage {
             cy.setAccessTokenCookie()
             user = Environment.credentials().harpUser
         }
+        /*         if (CreateMeasureOptions.mpStartDate === undefined) {
+                    CreateMeasureOptions.mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
+                }
+        
+                if (CreateMeasureOptions.mpEndDate === undefined) {
+                    CreateMeasureOptions.mpEndDate = now().format('YYYY-MM-DD')
+                }
+                if ((CreateMeasureOptions.measureNumber === undefined) || (CreateMeasureOptions.measureNumber === null)) {
+                    CreateMeasureOptions.measureNumber = 0
+                }
+        
+                if ((CreateMeasureOptions.description === undefined) || (CreateMeasureOptions.description === null)) {
+                    CreateMeasureOptions.description = 'SemanticBits' + Date.now()
+                }
+        
+                if (CreateMeasureOptions.altUser) {
+                    cy.clearAllCookies()
+                    cy.clearLocalStorage()
+                    cy.setAccessTokenCookieALT()
+                    user = Environment.credentials().harpUserALT
+                }
+                else {
+                    cy.clearAllCookies()
+                    cy.clearLocalStorage()
+                    cy.setAccessTokenCookie()
+                    user = Environment.credentials().harpUser
+                } */
 
         //Create New Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -173,11 +200,11 @@ export class CreateMeasurePage {
                     'model': 'QI-Core v4.1.1',
                     'createdBy': user,
                     "ecqmTitle": ecqmTitle,
-                    'measurementPeriodStart': mpStartDate + "T00:00:00.000Z",
-                    'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z",
+                    'measurementPeriodStart': mpStartDate + "T00:00:00.000Z"/* || CreateMeasureOptions.mpStartDate + "T00:00:00.000Z"*/,
+                    'measurementPeriodEnd': mpEndDate + "T00:00:00.000Z" /*|| CreateMeasureOptions.mpEndDate + "T00:00:00.000Z"*/,
                     'versionId': uuidv4(),
                     'measureSetId': uuidv4(),
-                    'cql': measureCQL,
+                    'cql': measureCQL /*|| CreateMeasureOptions.measureCql*/,
                     'elmJson': elmJson,
                     "testCaseConfiguration": {
                         "id": null,
@@ -387,7 +414,7 @@ export class CreateMeasurePage {
         }
 
         if ((CreateMeasureOptions.description === undefined) || (CreateMeasureOptions.description === null)) {
-            CreateMeasureOptions.description = 'SemanticBits'
+            CreateMeasureOptions.description = 'SemanticBits' + Date.now()
         }
 
         if (CreateMeasureOptions.altUser) {

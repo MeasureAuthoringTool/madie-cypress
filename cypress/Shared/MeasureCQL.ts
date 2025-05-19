@@ -2163,7 +2163,22 @@ export class MeasureCQL {
         'define \"denom\":\n' +
         '\"ipp\"\n' +
         'define \"num\":\n' +
-        'exists [\"Encounter\": \"Office Visit\"] E where E.status ~ \'finished\'\n'
+        'exists [\"Encounter\": \"Office Visit\"] E where E.status ~ \'finished\''
+
+    public static readonly SBTEST_QDM_CQL = 'library SecondLibrary1747662563115 version \'0.0.000\'\n' +
+        'using QDM version \'5.6\'\n' +
+        'include CQMCommonQDM version \'9.0.000\' called Global\n' +
+        'include HospiceQDM version \'7.0.000\' called Hospice\n' +
+        'codesystem "AdministrativeGender": \'urn:oid:2.16.840.1.113883.5.1\'\n' +
+        'codesystem "LOINC": \'urn:oid:2.16.840.1.113883.6.1\'\n' +
+        'codesystem "SNOMEDCT": \'urn:oid:2.16.840.1.113883.6.96\'\n' +
+        'valueset "Office Visit": \'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+        'parameter "Measurement Period" Interval<DateTime>\n' +
+        'context Patient\n' +
+        'define "ipp":\n' +
+        'true\n' +
+        'define "denom":\n' +
+        '"ipp"'
 
     public static readonly CQL_Multiple_Populations = 'library TestLibrary4664 version \'0.0.000\'\n' +
         'using QICore version \'4.1.1\'\n' +
