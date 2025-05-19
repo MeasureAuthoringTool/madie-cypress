@@ -6,6 +6,10 @@ import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { Utilities } from "../../../Shared/Utilities"
 import { v4 as uuidv4 } from 'uuid'
 import { Environment } from "../../../Shared/Environment"
+import {OktaLogin} from "../../../Shared/OktaLogin";
+import {MeasuresPage} from "../../../Shared/MeasuresPage";
+import {EditMeasurePage} from "../../../Shared/EditMeasurePage";
+import {CQLEditorPage} from "../../../Shared/CQLEditorPage";
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestLibrary' + Date.now()
@@ -186,6 +190,13 @@ describe('Test Case import for versioned Measure', () => {
         newCQLLibraryName = cqlLibraryName + randValue + 5
 
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCQLLibraryName, measureCQL)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'ipp', '', '', 'num', '', 'denom')
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
     })
