@@ -7,6 +7,8 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
+import {CQLEditorPage} from "../../../../../Shared/CQLEditorPage";
+import {Header} from "../../../../../Shared/Header";
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -46,6 +48,11 @@ describe('Non Boolean Population Basis Expected values', () => {
     it('Qi Core Test Case search and filter functionality', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
