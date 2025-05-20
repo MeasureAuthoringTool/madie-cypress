@@ -1512,7 +1512,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
         cy.get(TestCasesPage.tcHighlightingTab).click()
 
-        cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
+        cy.readFile('cypress/fixtures/measureGroupId').should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="group-coverage-nav-' + fileContents + '"]', 35000)
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP').click()
             Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 35000)
@@ -1543,11 +1543,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
     })
 })
 
-/*
- discovered this gap in coverage on https://jira.cms.gov/browse/MAT-8585
- unable to verify this test scenario until completion of MAT-8587
- */
-describe.skip('Verify highlighting occurs on a newly versioned measure', () => {
+describe('Verify highlighting occurs on a newly versioned measure', () => {
 
         beforeEach('Create measure and login', () => {
 
@@ -1568,7 +1564,7 @@ describe.skip('Verify highlighting occurs on a newly versioned measure', () => {
         afterEach('Logout and Clean up Measures', () => {
     
             OktaLogin.Logout()
-            Utilities.deleteMeasure(measureName, CqlLibraryName)
+            Utilities.deleteVersionedMeasure(measureName, CqlLibraryName)
         })
     
         it('Execute Test Case on a newly versioned measure; verify Measure highlighting happens', () => {
