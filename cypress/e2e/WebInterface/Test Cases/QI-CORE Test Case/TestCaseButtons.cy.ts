@@ -7,6 +7,7 @@ import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeas
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from "../../../../Shared/MeasureGroupPage"
 import { TestCase, TestCasesPage } from "../../../../Shared/TestCasesPage"
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
 
 const now = Date.now()
 const measure = {
@@ -117,6 +118,13 @@ describe('Test case list page - Action Center icons for versioned measure', () =
     beforeEach('Create measure and login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measure.name, measure.cqlLibraryName, SupportedModels.qiCore4, { measureCql: measure.cql})
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.procedure, MeasureScoring.Proportion, populations)
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.description, testCase1.group, testCase2.json)
         TestCasesPage.CreateTestCaseAPI(testCase2.title, testCase2.description, testCase2.group, testCase2.json, false, true)
@@ -176,6 +184,13 @@ describe('Test case list page - Action Center icons for non-owner', () => {
     beforeEach('Create measure and login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measure.name, measure.cqlLibraryName, SupportedModels.qiCore4, { measureCql: measure.cql})
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.Logout()
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.procedure, MeasureScoring.Proportion, populations)
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.description, testCase1.group)
         TestCasesPage.CreateTestCaseAPI(testCase2.title, testCase2.description, testCase2.group, testCase2.json, false, true)
