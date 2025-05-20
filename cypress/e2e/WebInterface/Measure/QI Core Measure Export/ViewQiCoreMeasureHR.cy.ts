@@ -5,6 +5,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let measureCQLPFTests = MeasureCQL.CQL_Populations
@@ -25,6 +26,15 @@ describe('View Human Readable for Qi Core Measure', () => {
         CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, qiCoreCQLLibrary, measureCQLPFTests)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '',
             'Initial Population', '', 'Initial Population', 'boolean')
+        OktaLogin.Login()
+        MeasuresPage.actionCenter("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        OktaLogin.UILogout()
     })
 
     after(() => {
@@ -41,7 +51,7 @@ describe('View Human Readable for Qi Core Measure', () => {
         Utilities.waitForElementVisible(EditMeasurePage.humanReadablePopup, 60000)
         cy.get(EditMeasurePage.humanReadablePopup).should('contain.text', 'Human Readable')
         cy.get(':nth-child(3) > .content-container').should('contain.text', measureQICore)
-        cy.get(':nth-child(16) > .content-container').should('contain.text', 'eCQMTitle4QICore')
+        cy.get(':nth-child(17) > .content-container').should('contain.text', 'eCQMTitle4QICore')
     })
 
     it('View Human Readable for QiCore 4.1.1 Measure on All Measures page', () => {
@@ -54,7 +64,7 @@ describe('View Human Readable for Qi Core Measure', () => {
         Utilities.waitForElementVisible(EditMeasurePage.humanReadablePopup, 60000)
         cy.get(EditMeasurePage.humanReadablePopup).should('contain.text', 'Human Readable')
         cy.get(':nth-child(3) > .content-container').should('contain.text', measureQICore)
-        cy.get(':nth-child(16) > .content-container').should('contain.text', 'eCQMTitle4QICore')
+        cy.get(':nth-child(17) > .content-container').should('contain.text', 'eCQMTitle4QICore')
     })
 
     it('Export measure from View HR modal', () => {
