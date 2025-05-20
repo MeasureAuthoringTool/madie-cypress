@@ -1727,10 +1727,10 @@ export class MeasureCQL {
         '  "Initial Population"\n' +
 
         'define "Denominator Exclusion":\n' +
-        '  ["Encounter, Performed"] E where (duration in days of E.relevantPeriod) > 10\n' +
+        '  ["Encounter, Performed": "Ethnicity"] E where (duration in days of E.relevantPeriod) > 10\n' +
 
         'define "Numerator":\n' +
-        '  ["Encounter, Performed"] E where E.relevantPeriod starts during day of "Measurement Period"\n' +
+        '  ["Encounter, Performed": "Ethnicity"] E where E.relevantPeriod starts during day of "Measurement Period"\n' +
 
         'define function denomObs(Encounter "Encounter, Performed"):\n' +
         '  duration in seconds of Encounter.relevantPeriod\n' +
@@ -1739,7 +1739,7 @@ export class MeasureCQL {
         '  duration in days of Encounter.relevantPeriod\n' +
 
         'define "IP2":\n' +
-        '    exists ["Encounter, Performed"] E'
+        '    exists ["Encounter, Performed": "Ethnicity"] E'
 
     public static readonly qiCoreTestCQL = 'library TestLibrary51723751438142 version \'0.0.000\'\n' +
         'using QICore version \'4.1.1\'\n' +
