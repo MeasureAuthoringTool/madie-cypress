@@ -236,11 +236,12 @@ describe('Test Case Import validations for versioned Measures', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        OktaLogin.Login()
     })
 
     it('Measure is in VERSIONED status: user is owner: import button is not available', () => {
+
+        //navigate to the main MADiE / measure list page
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Version Measure
         MeasuresPage.actionCenter('version')
@@ -270,6 +271,9 @@ describe('Test Case Import validations for versioned Measures', () => {
     })
 
     it('Measure is in VERSIONED status: measure has been shared with user: import button is not available', () => {
+
+        //navigate to the main MADiE / measure list page
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Version Measure
         MeasuresPage.actionCenter('version')
@@ -347,9 +351,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
 
-        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -360,6 +362,9 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
     })
 
     it('Importing: not a .zip file', () => {
+
+        //navigate to the main MADiE / measure list page
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -382,6 +387,9 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
     })
 
     it('Importing: .zip\'s test case folder does not contain a json file', () => {
+
+        //navigate to the main MADiE / measure list page
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -408,6 +416,9 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
 
     it('Importing: .zip\'s test case folder contains multiple json files', () => {
 
+        //navigate to the main MADiE / measure list page
+        cy.get(Header.mainMadiePageButton).click()
+
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -432,6 +443,9 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
     })
 
     it('Importing: .zip\'s test case folder contains malformed json file', () => {
+
+        //navigate to the main MADiE / measure list page
+        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
