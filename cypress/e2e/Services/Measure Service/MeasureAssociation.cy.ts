@@ -23,8 +23,6 @@ let QDMCqlLibraryName0 = ''
 let measureQDMManifestName1 = ''
 let QDMCqlLibraryName1 = ''
 
-const measureData: CreateMeasureOptions = {}
-
 describe('Measure Association: Validations', () => {
 
     beforeEach('Create Measure', () => {
@@ -36,17 +34,19 @@ describe('Measure Association: Validations', () => {
         measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
         QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
 
-        measureData.ecqmTitle = measureQDMManifestName1
-        measureData.cqlLibraryName = QDMCqlLibraryName1
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmManifestTestCQL
-        measureData.mpStartDate = '2025-01-01'
-        measureData.mpEndDate = '2025-12-31'
+        const qdmMeasure0: CreateMeasureOptions = {
+            ecqmTitle: measureQDMManifestName1,
+            cqlLibraryName: QDMCqlLibraryName1,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31'
+        }
 
         //Create New QDM Measure
         //0
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure0)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -59,18 +59,20 @@ describe('Measure Association: Validations', () => {
         measureQDMManifestName0 = 'QDMManifestTestMN0' + Date.now() + randValue + 6 + randValue
         QDMCqlLibraryName0 = 'QDMManifestTestLN0' + Date.now() + randValue + 7 + randValue
 
-        measureData.ecqmTitle = measureQDMManifestName0
-        measureData.cqlLibraryName = QDMCqlLibraryName0
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmManifestTestCQL
-        measureData.mpStartDate = '2025-01-01'
-        measureData.mpEndDate = '2025-12-31'
-        measureData.measureNumber = 1
+        const qdmMeasure1: CreateMeasureOptions = {
+            ecqmTitle: measureQDMManifestName0,
+            cqlLibraryName: QDMCqlLibraryName0,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31',
+            measureNumber: 1
+        }
 
         //Create Second QDM Measure
         //1
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure1)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit', 1)
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -78,8 +80,8 @@ describe('Measure Association: Validations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
-        TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC0', 'QDMManifestTCGroup0', 'QDMManifestTC0', '', false, false)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
+        TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC0', 'QDMManifestTCGroup0', 'QDMManifestTC0', '', false, false, 1)
 
         cy.clearAllCookies()
         cy.clearLocalStorage()
@@ -102,7 +104,6 @@ describe('Measure Association: Validations', () => {
         OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(2, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
 
-
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
@@ -123,8 +124,6 @@ describe('Measure Association: Validations', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(3, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
-
-
     })
 
     it('Association: QDM -> Qi Core measure: Validations', () => {
@@ -170,7 +169,6 @@ describe('Measure Association: Validations', () => {
 
             })
         })
-
 
         //validation test: QDM measure must contain CMS id
         cy.getCookie('accessToken').then((accessToken) => {
@@ -317,6 +315,7 @@ describe('Measure Association: Validations', () => {
         })
     })
 })
+
 describe('Measure Association: Validations', () => {
 
     beforeEach('Create Measure', () => {
@@ -328,17 +327,19 @@ describe('Measure Association: Validations', () => {
         measureQDMManifestName1 = 'QDMManifestTestMN1' + Date.now() + randValue + 8 + randValue
         QDMCqlLibraryName1 = 'QDMManifestTestLN1' + Date.now() + randValue + 9 + randValue
 
-        measureData.ecqmTitle = measureQDMManifestName1
-        measureData.cqlLibraryName = QDMCqlLibraryName1
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmManifestTestCQL
-        measureData.mpStartDate = '2025-01-01'
-        measureData.mpEndDate = '2025-12-31'
+        const qdmMeasure: CreateMeasureOptions = {
+            ecqmTitle: measureQDMManifestName1,
+            cqlLibraryName: QDMCqlLibraryName1,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31'
+        }
 
         //Create New QDM Measure
         //0
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC1', 'QDMManifestTCGroup1', 'QDMManifestTC1', '', false, false)
         OktaLogin.Login()
@@ -368,13 +369,13 @@ describe('Measure Association: Validations', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(1, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
 
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-
     })
+
     it('Association: QDM -> Qi Core measure: Successful Association', () => {
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
