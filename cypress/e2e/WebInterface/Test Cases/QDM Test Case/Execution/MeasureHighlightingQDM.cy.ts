@@ -9,7 +9,6 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../../Shared/Header"
-import { CQLLibraryPage } from "../../../../../Shared/CQLLibraryPage"
 
 let measureCQLPFTests = MeasureCQL.QDMHighlightingTab_CQL
 let measureCQLDUTest = MeasureCQL.QDMHightlightingTabDefUsed_CQL
@@ -130,7 +129,6 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
         OktaLogin.Login()
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -138,7 +136,9 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson, false, false)
+        OktaLogin.Login()
+
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -209,7 +209,7 @@ describe('QDM: Test Case Highlighting Left navigation panel: Includes Result sub
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Unused').click()
         Utilities.waitForElementVisible('[data-testid="cql-highlighting"] > :nth-child(1)', 35000)
         cy.get('[data-testid="cql-highlighting"] > :nth-child(1)').should('contain.text', 'define "Denominator Exclusion":\n' +
-            '  ["Encounter, Performed"] E where (duration in days of E.relevantPeriod) > 10')
+            '  ["Encounter, Performed": "Ethnicity"] E where (duration in days of E.relevantPeriod) > 10')
 
     })
 })
@@ -238,7 +238,7 @@ describe('QDM Measure: Test Case Highlighting Left navigation panel: Highlightin
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
     })
 
