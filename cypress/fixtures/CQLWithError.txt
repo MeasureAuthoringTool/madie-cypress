@@ -1,0 +1,38 @@
+{home}library SimpleFhirMeasure version '0.0.001'
+
+{home}using FHIR version '4.0.1'
+
+{home}include FHIRHelpers version '4.1.000' called FHIRHelpers
+
+{home}parameter "Measurement Period" Interval<DateTime>
+
+{home}context Patient
+
+{home}define "ipp":
+{home}  true
+
+{home}define "denom":
+{home}  "ipp"
+
+{home}define "num":
+{home}  exists ["Encounter"] E where E.status ~ 'finished'
+
+{home}define "numeratorExclusion":
+{home}    "num"
+
+{home}define "numEnc":
+{home}     ["Encounter"] E where E.status ~ 'finished'
+
+{home}define function ToCode(e Encounter):
+{home}              duration in days of e.period
+
+{home}define function fun(notPascalCase Integer ):
+{home}  true
+
+{home}define function "isFinishedEncounter"(Enc Encounter):
+{home}  true
+{home}  asldk;jfaksdj
+
+{home}define function "booleanFunction"():
+{home}  true
+{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}{del}
