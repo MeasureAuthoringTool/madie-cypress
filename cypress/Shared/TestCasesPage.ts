@@ -110,8 +110,15 @@ export class TestCasesPage {
     public static readonly QDMTcDiscardChangesButton = '[data-testid="ds-btn"]'
 
     //SDE Sub tab
+    public static readonly qdmSDESidNavLink = '[data-testid="nav-link-sde"]'
     public static readonly qdmSDESubTab = '[data-testid="sde-tab"]'
     public static readonly saveSDEOption = '[data-testid="sde-save"]'
+
+    // RAV sub stab
+    public static readonly qdmRAVSideNavLink = '[data-testid="nav-link-rav"]'
+    public static readonly qdmRAVSubTab = '' // coming in next few stories
+    public static readonly saveRAVOption = '[data-testid="rav-save"]'
+    public static readonly discardRavChangesOption = '[data-testid="cancel-button"]'
 
     //Test case QRDA Export
     public static readonly testcaseQRDAExportBtn = '[data-testid="export-action-icon"]'
@@ -185,7 +192,8 @@ export class TestCasesPage {
     public static readonly tcFilterByGroup = '[data-testid="filter-by-Group"]'
     public static readonly tcFilterByDeselect = '[data-testid="filter-by--"]'
     public static readonly testCaseStatus = '[class="MuiBox-root css-0"]'
-    public static readonly qdmSDESidNavLink = '[data-testid="nav-link-sde"]'
+    
+    
     public static readonly createTestCaseTitleInlineError = '[data-testid="create-test-case-title-helper-text"]'
     public static readonly editTestCaseTitleInlineError = '[data-testid="test-case-title-helper-text"]'
     public static readonly testCaseJsonValidationErrorBtn = '[data-testid="show-json-validation-errors-button"]'
