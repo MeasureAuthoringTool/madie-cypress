@@ -1,5 +1,5 @@
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
@@ -8,11 +8,10 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage";
-import { LandingPage } from "../../../../Shared/LandingPage";
+import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
+import { LandingPage } from "../../../../Shared/LandingPage"
 
 const now = Date.now()
-let MeasuresPageOne = ''
 let measureName = 'VersionValidations' + now
 let cqlLibraryName = 'VersionValidationsLib' + now
 let measureCQL = MeasureCQL.SBTEST_CQL
@@ -21,6 +20,8 @@ let testCaseDescription = 'Description' + now
 let testCaseSeries = 'SBTestSeries'
 let invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
 let cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
+let randValue = (Math.floor((Math.random() * 1000) + 1))
+let testCaseJson = TestCaseJson.TestCaseJson_Valid
 
 let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
@@ -101,7 +102,6 @@ describe('Measure Versioning validations', () => {
 
 describe('Measure Versioning when the measure has test case with errors', () => {
 
-    let randValue = (Math.floor((Math.random() * 1000) + 1))
     let newMeasureName = measureName + randValue
     let newCqlLibraryName = cqlLibraryName + randValue + 4
 
@@ -184,11 +184,61 @@ describe('Measure Versioning when the measure has test case with errors', () => 
     })
 })
 
+//Skipping until Feature flag 'EditTestsOnVersionedMeasures' is enabled
+describe.skip('Create, Edit and Clone Test case for Qi Core Versioned Measure', () => {
+
+    beforeEach('Create Measure and Login', () => {
+
+        let newMeasureName = 'TestMeasure' + Date.now() + randValue
+        let newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue + 4
+        //Create New Measure and Measure Group
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        OktaLogin.Login()
+    })
+
+    afterEach('Logout and Clean up', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
+    })
+
+    it('Measure owner able to Add Clone and Import Test cases to Qi Core Versioned Measure', () => {
+
+        //Version the Measure
+        cy.get(Header.measures).click()
+        MeasuresPage.actionCenter('version')
+        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.log('Version Created Successfully')
+
+        //Add Test case
+        MeasuresPage.actionCenter('edit')
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
+
+        //Clone Test case
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterClone).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test case cloned successfully')
+
+        //Verify that the Import Test case button is enabled
+        cy.get(TestCasesPage.importTestCasesBtn).should('be.enabled')
+
+    })
+})
+
 describe('Non Measure owner unable to create Version', () => {
 
     before('Create Measure with regular user and Login as Alt user', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
         let newMeasureName = measureName + randValue
         let newCqlLibraryName = cqlLibraryName + randValue
 
