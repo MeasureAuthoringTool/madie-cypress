@@ -14,10 +14,7 @@ let cqlLibraryName = 'TestCql' + Date.now()
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 let versionMeasureCQL = MeasureCQL.simpleQDM_CQL
 
-
 let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
-
-
     'using QDM version \'5.6\'\n' +
     '\n' +
     'include MATGlobalCommonFunctionsQDM version \'1.0.000\' called Global\n' +
@@ -154,6 +151,64 @@ describe('Measure Versioning validations', () => {
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('3.0.000')
         cy.get('[id="current-version"]').eq(0).click()
         cy.get('[data-testid="confirm-version-helper-text"]').should('contain.text', 'Confirmed Version number must match new version number.')
+    })
+})
+
+//Skipping until Feature flag 'EditTestsOnVersionedMeasures' is enabled
+describe.skip('Create, Edit and Clone Test case for QDM Versioned Measure', () => {
+
+    beforeEach('Create Measure and Login', () => {
+
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let newMeasureName = measureName + randValue
+        let newCqlLibraryName = cqlLibraryName + randValue
+
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        OktaLogin.Login()
+    })
+
+    afterEach('Logout and Clean up', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
+    })
+
+    it('Measure owner able to Add, Clone and Import Test cases to QDM Versioned Measure', () => {
+
+        //Version the Measure
+        cy.get(Header.measures).click()
+        MeasuresPage.actionCenter('version')
+        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.log('Version Created Successfully')
+
+        //Add Test case
+        MeasuresPage.actionCenter('edit')
+        TestCasesPage.createTestCase('TestCase001', 'testCaseSeries', 'testCaseDescription')
+
+        //Clone Test case
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterClone).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test case cloned successfully')
+
+        //Verify that the Import Test case button is enabled
+        cy.get(TestCasesPage.qdmImportTestCasesBtn).should('be.enabled')
+
     })
 })
 
