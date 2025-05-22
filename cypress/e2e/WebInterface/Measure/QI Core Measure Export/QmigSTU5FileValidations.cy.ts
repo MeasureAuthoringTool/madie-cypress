@@ -6,6 +6,8 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Header } from "../../../../Shared/Header"
 import * as path from 'path'
+import {EditMeasurePage} from "../../../../Shared/EditMeasurePage";
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
 
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
@@ -26,6 +28,13 @@ describe('QMIG STU5 Compliance: Proportion Measure Export Validations', () => {
     before('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Qualifying Encounters', '', '', 'Qualifying Encounters', '', 'Qualifying Encounters', 'Encounter')
 
         OktaLogin.Login()
@@ -110,6 +119,15 @@ describe('QMIG STU5 Compliance: Cohort Measure Export Validations', () => {
     before('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
+        OktaLogin.Login()
+
+        MeasuresPage.actionCenter("edit")
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(null, null, 'Qualifying Encounters', 'Encounter')
         OktaLogin.Login()
 
@@ -184,6 +202,13 @@ describe('QMIG STU5 Compliance: Continuous Variable Measure Export Validations',
 
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
         OktaLogin.Login()
+        MeasuresPage.actionCenter("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
+        cy.get(Header.measures).click()
 
         // this function hardcodes a specific CQL
         MeasureGroupPage.createMeasureGroupforContinuousVariableMeasure()
@@ -245,6 +270,13 @@ describe('QMIG STU5 Compliance: Ratio Measure Export Validations', () => {
     before('Create New Measure and Login', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, cqlLibraryName, SupportedModels.qiCore4, measureOptions)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter("edit")
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
         MeasureGroupPage.CreateRatioMeasureGroupAPI(null, false, 'Qualifying Encounters','Qualifying Encounters','Qualifying Encounters', 'Encounter' )
         OktaLogin.Login()
 

@@ -8,9 +8,9 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../Shared/Header"
 import { Global } from "../../../../Shared/Global"
-import {Environment} from "../../../../Shared/Environment"
+import { Environment } from "../../../../Shared/Environment"
 import { LandingPage } from "../../../../Shared/LandingPage"
-import {QdmCql} from "../../../../Shared/QDMMeasuresCQL"
+import { QdmCql } from "../../../../Shared/QDMMeasuresCQL"
 
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
@@ -262,15 +262,17 @@ describe('Export measure on the Edit Measure page', () => {
         measureQDM = 'QDMExportMeasure' + date
         qdmCQLLibrary = 'QDMTestLibrary' + Date.now() + randValue + 3 + randValue
 
-        measureData.ecqmTitle = measureQDM
-        measureData.cqlLibraryName = qdmCQLLibrary
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmManifestTestCQL
-        measureData.mpStartDate = '2025-01-01'
-        measureData.mpEndDate = '2025-12-31'
+        const qdmMeasure: CreateMeasureOptions = {
+            ecqmTitle: measureQDM,
+            cqlLibraryName: qdmCQLLibrary,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31'
+        }
 
-        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(qdmMeasure)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions',
             'Numerator', '', 'Denominator')
 
@@ -295,7 +297,14 @@ describe('Export measure on the Edit Measure page', () => {
 
         MeasuresPage.actionCenter("edit")
 
-        Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 22500)
 
         EditMeasurePage.actionCenter(EditMeasureActions.export)
 
@@ -311,7 +320,14 @@ describe('Export measure on the Edit Measure page', () => {
 
         MeasuresPage.actionCenter("edit", 1)
 
-        Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / succesful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 22500)
 
         EditMeasurePage.actionCenter(EditMeasureActions.export)
 

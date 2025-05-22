@@ -498,7 +498,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = measureScoringCohort
-        measureData.patientBasis = 'true'
+        measureData.patientBasis = 'false'
         measureData.measureCql = measureQDMCQL
 
         //Create New Measure
@@ -514,7 +514,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
 
     it('A message is displayed if there are issues with the CQL', () => {
 
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
 
         //log into MADiE
         OktaLogin.Login()
