@@ -586,12 +586,14 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //
+
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -1008,11 +1010,10 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 32700)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
     })
 
@@ -1293,11 +1294,10 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 42700)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
     })
 
@@ -1724,11 +1724,10 @@ describe('Verify multiple IPs on the highlighting tab', () => {
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
     })
 
