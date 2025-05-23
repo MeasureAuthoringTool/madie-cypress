@@ -6,7 +6,6 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Header } from "../../../../Shared/Header"
-import { Global } from "../../../../Shared/Global"
 
 const now = Date.now()
 let measureName = 'MeasureGroupTabs' + now
@@ -554,7 +553,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         //Click on Discard changes button
         cy.get(MeasureGroupPage.discardChangesBtn).click()
         cy.get(MeasureGroupPage.discardChangesConfirmationMsg).should('contain.text', 'Are you sure you want to discard your changes?')
-        cy.get(Global.discardChangesContinue).click()
+        cy.get(Utilities.discardChangesContinue).click()
     })
 
     it('Add Supplemental data elements to the Measure group', () => {
@@ -612,7 +611,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         //Click on Discard changes button
         cy.get(MeasureGroupPage.discardChangesBtn).click()
         cy.get(MeasureGroupPage.discardChangesConfirmationMsg).should('contain.text', 'Are you sure you want to discard your changes?')
-        cy.get(Global.discardChangesContinue).click()
+        cy.get(Utilities.discardChangesContinue).click()
     })
 })
 

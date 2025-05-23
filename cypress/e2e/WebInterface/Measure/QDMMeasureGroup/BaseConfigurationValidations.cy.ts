@@ -6,7 +6,6 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Header } from "../../../../Shared/Header"
-import { Global } from "../../../../Shared/Global"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
@@ -118,12 +117,12 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
                 .check()
 
             //verify availability of the discard button and the un-availability of the save button
-            cy.get(Global.DiscardCancelBtn).should('be.enabled')
+            cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
             cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.disabled')
 
             //discard current changges
-            cy.get(Global.DiscardCancelBtn).click()
-            Global.clickOnDiscardChanges()
+            cy.get(Utilities.DiscardCancelBtn).click()
+            Utilities.clickOnDiscardChanges()
 
             //validate that 'Yes" radio button is selected / checked
             cy.contains('label', 'Yes')
@@ -139,7 +138,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
 
             //verify availability of the discard button and the un-availability of the save button
-            cy.get(Global.DiscardCancelBtn).should('be.enabled')
+            cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
             cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.disabled')
 
             //validate the values and the selection of the values, for the scoring field
@@ -148,12 +147,12 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
 
             //verify availability of the discard and save buttons
-            cy.get(Global.DiscardCancelBtn).should('be.enabled')
+            cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
             cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
 
             //discard current changes
-            cy.get(Global.DiscardCancelBtn).click()
-            Global.clickOnDiscardChanges()
+            cy.get(Utilities.DiscardCancelBtn).click()
+            Utilities.clickOnDiscardChanges()
 
             //navigate to the main measures page
             cy.get(Header.measures).click()
@@ -170,7 +169,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
 
             //verify availability of the discard and save buttons
-            cy.get(Global.DiscardCancelBtn).should('be.enabled')
+            cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
             cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.disabled')
 
             //validate that a value can be selected for the Type field
@@ -187,7 +186,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
                 .check()
 
             //verify availability of the discard button and the availability of the save button
-            cy.get(Global.DiscardCancelBtn).should('be.enabled')
+            cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
             cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
 
             //click on the save button and confirm save success message
@@ -224,20 +223,20 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
 
         //verify availability of the discard and save buttons
-        cy.get(Global.DiscardCancelBtn).should('be.enabled')
+        cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.disabled')
 
         //click on discard changes button
-        cy.get(Global.DiscardCancelBtn).click()
+        cy.get(Utilities.DiscardCancelBtn).click()
 
         //click on 'No, Keep working' button
-        cy.get(Global.keepWorkingCancel).click()
+        cy.get(Utilities.keepWorkingCancel).click()
 
         //verify state of Base Configuration page is as it was prior to clicking on the Discard button
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
 
         //verify availability of the discard and save buttons
-        cy.get(Global.DiscardCancelBtn).should('be.enabled')
+        cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.disabled')
 
         //validate that a value can be selected for the Type field
@@ -247,21 +246,21 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
 
         //verify availability of the discard button and the availability of the save button
-        cy.get(Global.DiscardCancelBtn).should('be.enabled')
+        cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
 
         //click on discard changes button
-        cy.get(Global.DiscardCancelBtn).click()
+        cy.get(Utilities.DiscardCancelBtn).click()
 
         //click on 'No, Keep working' button
-        cy.get(Global.keepWorkingCancel).click()
+        cy.get(Utilities.keepWorkingCancel).click()
 
         //verify state of Base Configuration page is as it was prior to clicking on the Discard button
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
         cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Appropriate Use Process')
 
         //verify availability of the discard and save buttons
-        cy.get(Global.DiscardCancelBtn).should('be.enabled')
+        cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
 
         //*check* the 'No' radio button
@@ -272,16 +271,16 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             .check()
 
         //verify availability of the discard button and the un-availability of the save button
-        cy.get(Global.DiscardCancelBtn).should('be.enabled')
+        cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
 
         //click on discard changes button
-        Utilities.waitForElementVisible(Global.DiscardCancelBtn, 5000)
-        Utilities.waitForElementEnabled(Global.DiscardCancelBtn, 5000)
-        cy.get(Global.DiscardCancelBtn).click()
+        Utilities.waitForElementVisible(Utilities.DiscardCancelBtn, 5000)
+        Utilities.waitForElementEnabled(Utilities.DiscardCancelBtn, 5000)
+        cy.get(Utilities.DiscardCancelBtn).click()
 
         //click on 'No, Keep working' button
-        cy.get(Global.keepWorkingCancel).click()
+        cy.get(Utilities.keepWorkingCancel).click()
 
         //validate that 'No" radio button is selected / checked
         cy.contains('label', 'No')
@@ -293,7 +292,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         //navigate to main MADiE page and, then, navigate to measure details page
         cy.get(Header.mainMadiePageButton).click()
         //click on 'No, Keep working' button
-        cy.get(Global.discardChangesContinue).click()
+        cy.get(Utilities.discardChangesContinue).click()
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
@@ -310,7 +309,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(MeasureGroupPage.qdmScoring).click({ force: true })
 
         //verify availability of the discard and save buttons
-        cy.get(Global.DiscardCancelBtn).should('be.enabled')
+        cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
 
         //attempt to navigate to the main measures page
@@ -318,13 +317,13 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
 
         //confirm dirty check / discard modal appears
         Utilities.waitForElementVisible(MeasureGroupPage.qdmDirtyCheckDiscardModal, 30000)
-        cy.get(Global.keepWorkingCancel).should('be.visible')
-        cy.get(Global.keepWorkingCancel).should('be.enabled')
-        cy.get(Global.discardChangesContinue).should('be.visible')
-        cy.get(Global.discardChangesContinue).should('be.enabled')
+        cy.get(Utilities.keepWorkingCancel).should('be.visible')
+        cy.get(Utilities.keepWorkingCancel).should('be.enabled')
+        cy.get(Utilities.discardChangesContinue).should('be.visible')
+        cy.get(Utilities.discardChangesContinue).should('be.enabled')
 
         //cancel navigation
-        cy.get(Global.keepWorkingCancel).click()
+        cy.get(Utilities.keepWorkingCancel).click()
 
         //verify state of Base Configuration page is as it was prior to clicking on the Discard button
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Cohort')
@@ -340,7 +339,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(Header.measures).click()
 
         //continue with navigating away from the Base Configuration page
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
 
         //navigate back to the PC -> Base Configuration page
         MeasuresPage.actionCenter('edit')
@@ -406,7 +405,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             .should('not.be.enabled')
 
         //verify the unavailability of the discard and save buttons
-        cy.get(Global.DiscardCancelBtn).should('not.be.enabled')
+        cy.get(Utilities.DiscardCancelBtn).should('not.be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('not.be.enabled')
 
     })
@@ -508,7 +507,7 @@ describe('Updates on Base Configuration page', () => {
         cy.get(MeasureGroupPage.qdmScoring).should('contain.text', 'Proportion')
         cy.get(MeasureGroupPage.qdmTypeValuePill).should('contain.text', 'Process')
         //verify availability of the discard and save buttons
-        cy.get(Global.DiscardCancelBtn).should('be.enabled')
+        cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('be.enabled')
         //validate that 'Yes" radio button is selected / checked
         cy.contains('label', 'Yes')

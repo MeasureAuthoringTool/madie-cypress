@@ -7,9 +7,7 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../Shared/Header"
-import { Global } from "../../../../Shared/Global"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-
 
 const measureData: CreateMeasureOptions = {
     measureCql: MeasureCQL.CQL_BoneDensity_Proportion_Boolean
@@ -468,7 +466,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         cy.get(EditMeasurePage.associateCmsIdDialog).should('include.text', 'NameversionmodelCMS ID')
         cy.get('[id="associate-cms-id-dialog"]').should('include.text', 'Associate CMS ID will copy the CMS ID from your QDM measure to your QI-Core measure. To copy QDM metadata to the QI-Core measure as well please select the checkbox below.')
-        Utilities.waitForElementVisible(Global.DiscardCancelBtn, 35000)
+        Utilities.waitForElementVisible(Utilities.DiscardCancelBtn, 35000)
         Utilities.waitForElementVisible(EditMeasurePage.associateCmsAssociateBtn, 37000)
         cy.get(EditMeasurePage.associateCmsAssociateBtn).click()
         Utilities.waitForElementVisible(EditMeasurePage.sureDialog, 35000)
@@ -537,6 +535,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.value', QDMclinicalRecommendation)
     })
 })
+
 //Utilizing Qi Core 6.0.0
 describe('Measure Association: Validations using Qi Core 6.0.0', () => {
 
@@ -975,7 +974,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         cy.get(EditMeasurePage.associateCmsIdDialog).should('include.text', 'NameversionmodelCMS ID')
         cy.get('[id="associate-cms-id-dialog"]').should('include.text', 'Associate CMS ID will copy the CMS ID from your QDM measure to your QI-Core measure. To copy QDM metadata to the QI-Core measure as well please select the checkbox below.')
-        Utilities.waitForElementVisible(Global.DiscardCancelBtn, 35000)
+        Utilities.waitForElementVisible(Utilities.DiscardCancelBtn, 35000)
         Utilities.waitForElementVisible(EditMeasurePage.associateCmsAssociateBtn, 37000)
         cy.get(EditMeasurePage.associateCmsAssociateBtn).click()
         Utilities.waitForElementVisible(EditMeasurePage.sureDialog, 35000)

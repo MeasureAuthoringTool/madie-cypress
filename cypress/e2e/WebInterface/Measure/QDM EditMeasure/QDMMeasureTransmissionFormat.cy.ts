@@ -4,7 +4,6 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Global } from "../../../../Shared/Global"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
@@ -58,8 +57,8 @@ describe('QDM Measure: Transmission Format', () => {
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelTransmissionFormat).click()
         cy.get(EditMeasurePage.transmissionFormatDescription).type('Test Transmission format')
-        cy.get(Global.DiscardCancelBtn).click()
-        Global.clickOnDiscardChanges()
+        cy.get(Utilities.DiscardCancelBtn).click()
+        Utilities.clickOnDiscardChanges()
         cy.get(EditMeasurePage.transmissionFormatDescription).should('be.empty')
     })
 })

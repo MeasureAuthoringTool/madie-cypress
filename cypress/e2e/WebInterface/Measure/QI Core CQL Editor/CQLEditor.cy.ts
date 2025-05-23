@@ -5,7 +5,6 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
-import { Global } from "../../../../Shared/Global"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
 
@@ -110,7 +109,7 @@ describe('Validate CQL Editor tab sticky footer', () => {
         cy.get(EditMeasurePage.cqlEditorDiscardButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorDiscardButton).click()
 
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
 
         //confirm that CQL Editor object is empty
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', '')

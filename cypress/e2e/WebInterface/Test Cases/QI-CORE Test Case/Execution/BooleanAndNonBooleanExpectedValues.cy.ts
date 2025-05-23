@@ -6,7 +6,6 @@ import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
-import { Global } from "../../../../../Shared/Global"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
 let measureName = 'TestMeasure' + Date.now()
@@ -224,7 +223,7 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //verify that the discard modal appears
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
 
     })
 
@@ -495,7 +494,7 @@ describe('Boolean Population Basis Expected Values', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //verify that the discard modal appears
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
     })
 })
 

@@ -6,7 +6,6 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
 import assert = require("assert")
-import { Global } from "../../../../Shared/Global"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 
@@ -301,17 +300,17 @@ describe('Validate Measure Group -- scoring and populations', () => {
         //Warning Modal displayed when user navigated to another Measure Group without saving changes
         cy.log('Navigate to another Measure Group')
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
-        Global.clickOnKeepWorking()
+        Utilities.clickOnKeepWorking()
 
         //Warning Modal displayed when user navigated to a different tab without saving changes
         cy.log('Navigating to CQL Editor tab')
         cy.get(EditMeasurePage.cqlEditorTab).click()
-        Global.clickOnKeepWorking()
+        Utilities.clickOnKeepWorking()
 
         //Warning Modal displayed when user clicks Discard Changes for that measure group
         cy.log('Click on Discard Changes button')
-        cy.get(Global.discardChangesBtn).click()
-        Global.clickOnDiscardChanges()
+        cy.get(MeasureGroupPage.discardMeasureGroupChanges).click()
+        Utilities.clickOnDiscardChanges()
 
         //Navigate to Groups tab and verify the Measure scoring and population reset to previous values
         cy.get(EditMeasurePage.measureGroupsTab).click()

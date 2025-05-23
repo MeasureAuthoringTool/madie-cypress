@@ -5,7 +5,6 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Global } from "../../../../Shared/Global"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
@@ -143,7 +142,7 @@ describe('Qi-Core Library Includes fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.deleteSavedLibrary, 5000)
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
 
-        Global.clickOnKeepWorking()
+        Utilities.clickOnKeepWorking()
 
         //confirm contents in CQL editor still contains changes and save button is still available
         cy.get(TestCasesPage.tcSearchIcone).click()
@@ -157,7 +156,7 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
         Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
         cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
-        cy.get(Global.discardChangesContinue).click()
+        cy.get(Utilities.discardChangesContinue).click()
 
         //confirm "are you sure" pop up
         Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
@@ -198,7 +197,7 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.deleteSavedLibrary).click()
         Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
         cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
-        cy.get(Global.discardChangesContinue).click()
+        cy.get(Utilities.discardChangesContinue).click()
 
         //confirm "are you sure" pop up
         Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
@@ -292,7 +291,7 @@ describe('Qi-Core Library Includes fields', () => {
         Utilities.waitForElementVisible(CQLEditorPage.editSavedLibrary, 5000)
         cy.get(CQLEditorPage.editSavedLibrary).click()
 
-        Global.clickOnKeepWorking()
+        Utilities.clickOnKeepWorking()
 
         //confirm contents in CQL editor still contains changes and save button is still available
         cy.get(TestCasesPage.tcSearchIcone).click()
@@ -306,16 +305,16 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).click()
         Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
         cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
-        cy.get(Global.discardChangesContinue).click()
+        cy.get(Utilities.discardChangesContinue).click()
 
         //confirm "Details" pop up --
         Utilities.waitForElementVisible(CQLEditorPage.detailsModal, 5000)
         cy.get(CQLEditorPage.detailsModal).should('contain.text', 'Details')
 
         //choose cancel
-        cy.get(Global.DiscardCancelBtn).scrollIntoView()
-        Utilities.waitForElementVisible(Global.DiscardCancelBtn, 5000)
-        cy.get(Global.DiscardCancelBtn).click()
+        cy.get(Utilities.DiscardCancelBtn).scrollIntoView()
+        Utilities.waitForElementVisible(Utilities.DiscardCancelBtn, 5000)
+        cy.get(Utilities.DiscardCancelBtn).click()
 
         //confirm that CQL value is the same as it was prior to change and the save button is not available
         cy.reload()
@@ -348,7 +347,7 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.editSavedLibrary).click()
         Utilities.waitForElementVisible(CQLEditorPage.confirmationModal, 5000)
         cy.get(CQLEditorPage.confirmationModal).should('contain.text', 'Discard Changes?')
-        cy.get(Global.discardChangesContinue).click()
+        cy.get(Utilities.discardChangesContinue).click()
 
         //confirm "Details" pop up
         Utilities.waitForElementVisible(CQLEditorPage.detailsModal, 5000)

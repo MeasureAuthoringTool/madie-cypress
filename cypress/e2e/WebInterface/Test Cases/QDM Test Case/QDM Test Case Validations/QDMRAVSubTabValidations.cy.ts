@@ -1,7 +1,6 @@
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
-import { Global } from "../../../../../Shared/Global"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
@@ -67,7 +66,6 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).find('[aria-label="option Denominator not selected"]').click()
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).find('[aria-label="option Initial Population not selected"]').click()
 
-
         //Save RAV data
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
@@ -84,7 +82,7 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         // patientBasis works for all 2 choice radios
         cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).click()
         cy.get(TestCasesPage.discardRavChangesOption).click()
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
         cy.get(MeasureGroupPage.qdmPatientBasis).eq(1).should('be.checked')
 
         cy.get(TestCasesPage.saveRAVOption).should('be.disabled')
