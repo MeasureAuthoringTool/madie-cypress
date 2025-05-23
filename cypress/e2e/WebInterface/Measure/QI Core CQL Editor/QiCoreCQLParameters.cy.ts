@@ -4,9 +4,6 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-import { Global } from "../../../../Shared/Global";
-
 
 let measureName = 'QiCoreParamsMeasure' + Date.now()
 let CqlLibraryName = 'QiCoreParamsLibrary' + Date.now()
@@ -168,7 +165,7 @@ describe('Qi-Core CQL Parameters', () => {
         cy.get(CQLEditorPage.saveCQLButton).should('be.enabled')
         // and perform discard
         cy.get(CQLEditorPage.discardChanges).should('be.enabled').click()
-        cy.get(Global.discardChangesContinue).click()
+        cy.get(Utilities.discardChangesContinue).click()
 
         // same as above - verify only 1 parameter in cql
         cy.get(CQLEditorPage.mainCqlDocument).find('.ace_line:contains("parameter")').should('have.length', 1)
@@ -268,8 +265,8 @@ describe('Qi-Core CQL Parameters', () => {
         cy.get(CQLEditorPage.editSavedCQLParameters).click()
 
         //Click on Discard changes
-        Global.clickOnDiscardChanges()
-        //cy.get(Global.discardChangesContinue).click()
+        Utilities.clickOnDiscardChanges()
+        //cy.get(Utilities.discardChangesContinue).click()
         cy.get(CQLEditorPage.editParameterNameTextBox).should('be.visible')
     })
 
@@ -340,8 +337,8 @@ describe('Delete Saved Parameters', () => {
 
             cy.get(CQLEditorPage.modalActionWarning).should('have.text', 'This Action cannot be undone.')
 
-            cy.get(Global.discardChangesContinue).should('be.enabled')
-            cy.get(Global.keepWorkingCancel).should('be.enabled').click()
+            cy.get(Utilities.discardChangesContinue).should('be.enabled')
+            cy.get(Utilities.keepWorkingCancel).should('be.enabled').click()
         })
 
         // confirm no action, still 1 saved parameter
@@ -349,7 +346,7 @@ describe('Delete Saved Parameters', () => {
 
         cy.get(CQLEditorPage.deleteSavedCQLParameters).click()
 
-        cy.get(Global.discardChangesContinue).should('be.visible').click()
+        cy.get(Utilities.discardChangesContinue).should('be.visible').click()
 
         // confirm measure is clean
         cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')

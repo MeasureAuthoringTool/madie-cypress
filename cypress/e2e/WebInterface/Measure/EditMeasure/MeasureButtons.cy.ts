@@ -7,7 +7,6 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../Shared/Header"
-import { Global } from "../../../../Shared/Global"
 import { Environment } from "../../../../Shared/Environment"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { QdmCql } from "../../../../Shared/QDMMeasuresCQL"
@@ -574,7 +573,7 @@ describe('Dirty Check Validations', () => {
         cy.get(EditMeasurePage.editMeasureVersionActionBtn).click()
 
         //Validate Dirty check modal
-        cy.get(Global.discardChangesConfirmationModal).should('exist')
+        cy.get(Utilities.discardChangesConfirmationModal).should('exist')
 
     })
 
@@ -593,7 +592,7 @@ describe('Dirty Check Validations', () => {
         cy.get(EditMeasurePage.editMeasureVersionActionBtn).click()
 
         //Validate Dirty check modal
-        cy.get(Global.discardChangesConfirmationModal).should('exist')
+        cy.get(Utilities.discardChangesConfirmationModal).should('exist')
 
     })
 })

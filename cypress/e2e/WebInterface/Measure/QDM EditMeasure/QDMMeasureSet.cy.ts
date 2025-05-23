@@ -4,7 +4,6 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Global } from "../../../../Shared/Global"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
@@ -57,8 +56,8 @@ describe('QDM Measure Set', () => {
         //Navigate to Measure set page
         cy.get(EditMeasurePage.leftPanelMeasureSet).click()
         cy.get(EditMeasurePage.measureSetText).type('Measure Set')
-        cy.get(Global.DiscardCancelBtn).click()
-        Global.clickOnDiscardChanges()
+        cy.get(Utilities.DiscardCancelBtn).click()
+        Utilities.clickOnDiscardChanges()
         cy.get(EditMeasurePage.measureSetText).should('be.empty')
     })
 })

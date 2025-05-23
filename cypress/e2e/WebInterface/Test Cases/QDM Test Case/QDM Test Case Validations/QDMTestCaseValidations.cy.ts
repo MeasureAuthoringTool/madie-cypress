@@ -7,7 +7,6 @@ import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { LandingPage } from "../../../../../Shared/LandingPage"
-import { Global } from "../../../../../Shared/Global"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { CQLLibrariesPage } from "../../../../../Shared/CQLLibrariesPage"
@@ -275,7 +274,7 @@ describe('Edit Test Case Validations', () => {
         Utilities.waitForElementVisible(CQLLibrariesPage.cqlLibraryDirtyCheck, 37000)
 
         //verify that the discard modal appears
-        Global.clickOnKeepWorking()
+        Utilities.clickOnKeepWorking()
 
         //attempt to navigate away from the test case page
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -283,7 +282,7 @@ describe('Edit Test Case Validations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementVisible(CQLLibrariesPage.cqlLibraryDirtyCheck, 37000)
         //verify that the discard modal appears
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
     })
 })
 
@@ -345,7 +344,7 @@ describe('Dirty Check Validations', () => {
         Utilities.waitForElementVisible(CQLLibrariesPage.cqlLibraryDirtyCheck, 37000)
 
         //verify that the discard modal appears
-        Global.clickOnKeepWorking()
+        Utilities.clickOnKeepWorking()
 
         //attempt to navigate away from the test case page
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -353,7 +352,7 @@ describe('Dirty Check Validations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.waitForElementVisible(CQLLibrariesPage.cqlLibraryDirtyCheck, 37000)
         //verify that the discard modal appears
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
     })
 
     it('Validate dirty check on Testcase Expected/Actual tab', () => {
@@ -380,7 +379,7 @@ describe('Dirty Check Validations', () => {
         cy.get(TestCasesPage.QDMTcDiscardChangesButton).click()
 
         //verify discard modal and click on keep working
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.empty')
         cy.get(TestCasesPage.testCaseNUMERExpected).should('be.empty')
@@ -454,7 +453,7 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
         //attempt to navigate away without clicking on the add button (for the attribute)
         cy.get(Header.measures).click()
         Utilities.waitForElementVisible(MeasureGroupPage.popUpConfirmationModal, 35000)
-        Global.clickOnKeepWorking()
+        Utilities.clickOnKeepWorking()
         //user stays on current page
         cy.readFile('cypress/fixtures/measureId').should('exist').then((measureid) => {
             cy.readFile('cypress/fixtures/testCaseId').should('exist').then((testCaseId) => {
@@ -470,7 +469,7 @@ describe.skip('QDM Measure / Test Case: Dirty Check on attribute: Quantity Attri
         //another attempt to navigate away from current page after clicking on the add button
         cy.get(Header.measures).click()
         Utilities.waitForElementVisible(MeasureGroupPage.popUpConfirmationModal, 35000)
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
 
         //user is navigated away from test case page
         cy.location('pathname', { timeout: 60000 }).should('include', '/measures')

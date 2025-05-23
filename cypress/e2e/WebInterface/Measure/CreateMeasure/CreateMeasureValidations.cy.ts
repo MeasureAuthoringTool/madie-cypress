@@ -5,7 +5,6 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { LibraryCQL } from "../../../../Shared/LibraryCQL"
-import { Global } from "../../../../Shared/Global"
 import { Utilities } from "../../../../Shared/Utilities"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
@@ -106,11 +105,11 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         // confirm dirty check window
-        Global.clickOnKeepWorking()
+        Utilities.clickOnKeepWorking()
 
         //discard previous entry
-        cy.get(Global.DiscardCancelBtn).click()
-        cy.get(Global.discardChangesContinue).click()
+        cy.get(Utilities.DiscardCancelBtn).click()
+        cy.get(Utilities.discardChangesContinue).click()
 
         //verify that empty fields
         cy.get(EditMeasurePage.measureStewardDrpDwn).click()
@@ -211,8 +210,8 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('be.visible')
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).type('Some test value')
-        cy.get(Global.DiscardCancelBtn).click()
-        Global.clickOnDiscardChanges()
+        cy.get(Utilities.DiscardCancelBtn).click()
+        Utilities.clickOnDiscardChanges()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('be.empty')
 
         //type some value in the text box and save it
@@ -223,12 +222,12 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('exist')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('be.visible')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('be.enabled')
-        cy.get(Global.DiscardCancelBtn).should('exist')
-        cy.get(Global.DiscardCancelBtn).should('be.visible')
-        cy.get(Global.DiscardCancelBtn).should('be.enabled')
+        cy.get(Utilities.DiscardCancelBtn).should('exist')
+        cy.get(Utilities.DiscardCancelBtn).should('be.visible')
+        cy.get(Utilities.DiscardCancelBtn).should('be.enabled')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).should('be.disabled')
-        cy.get(Global.DiscardCancelBtn).should('be.disabled')
+        cy.get(Utilities.DiscardCancelBtn).should('be.disabled')
 
         //verify save success message
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('exist')
@@ -275,8 +274,8 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('be.visible')
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).type('Some new test value')
-        cy.get(Global.DiscardCancelBtn).click()
-        Global.clickOnDiscardChanges()
+        cy.get(Utilities.DiscardCancelBtn).click()
+        Utilities.clickOnDiscardChanges()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.text', 'Some test value')
     })
 

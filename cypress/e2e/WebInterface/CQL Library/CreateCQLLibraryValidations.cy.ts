@@ -3,7 +3,6 @@ import { Header } from "../../../Shared/Header"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { Utilities } from "../../../Shared/Utilities"
-import { Global } from "../../../Shared/Global"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import {CQLEditorPage} from "../../../Shared/CQLEditorPage";
 
@@ -14,12 +13,11 @@ describe('CQL Library Validations', () => {
     beforeEach('Login', () => {
 
         OktaLogin.Login()
-
     })
+
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
-
     })
 
     it('CQL Library header (breadcrumbs, name, version/draft, model, last update)', () => {
@@ -123,7 +121,7 @@ describe('CQL Library Validations', () => {
         cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('alias')
         cy.get(CQLLibraryPage.discardChanges).click()
 
-        cy.get(Global.dirtCheckModal).should('be.visible')
+        cy.get(Utilities.dirtCheckModal).should('be.visible')
     })
 
     it('CQL Library Name Validations', () => {
@@ -189,7 +187,7 @@ describe('CQL Library Validations', () => {
     })
 
     it('CQL Library Model Validations', () => {
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
+
         //Verify error message for empty CQL Library Model
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
@@ -200,10 +198,12 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.createCQLLibraryBtn).click()
+
         cy.get(CQLLibraryPage.newCQLLibName).should('exist')
         cy.get(CQLLibraryPage.newCQLLibName).should('be.visible')
         cy.get(CQLLibraryPage.newCQLLibName).should('be.enabled')
-        cy.get(CQLLibraryPage.newCQLLibName).type(CQLLibraryName + randValue)
+        cy.get(CQLLibraryPage.newCQLLibName).type(CQLLibraryName)
+
         cy.get(CQLLibraryPage.cqlLibraryModalField).click()
         cy.get(CQLLibraryPage.cqlLibraryCreateForm).click()
         cy.get(TestCasesPage.testCaseStatus).click()
