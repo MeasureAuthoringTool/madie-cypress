@@ -67,7 +67,6 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).find('[aria-label="option Denominator not selected"]').click()
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).find('[aria-label="option Initial Population not selected"]').click()
 
-
         //Save RAV data
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
@@ -99,14 +98,29 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         cy.get(TestCasesPage.saveRAVOption).should('be.disabled')
         cy.get(TestCasesPage.discardRavChangesOption).should('be.disabled')
 
+        cy.intercept('**/cqmmeasure').as('cqm')
+
+        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        //return to test case list page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        // rav's declared here will match selections from MeasureGroupPage.leftPanelRiskAdjustmentTab
+        cy.wait('@cqm').then(cqmMeasure => {
+            const body = cqmMeasure.response.body.population_sets[0]
+            expect(body.risk_adjustment_variables.length).eq(2)
+            // no guarantee - but seems like statement_name sorts by alphatical order
+            expect(body.risk_adjustment_variables[0].statement_name).eq('Denominator')
+            expect(body.risk_adjustment_variables[1].statement_name).eq('Initial Population')
+        })
 
     /*  
         this is all from the SDESubTabValidations test
         everything below will be useful after https://jira.cms.gov/browse/MAT-8630    
 
         //Add Elements to the test case
-        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
-        cy.get(EditMeasurePage.testCasesTab).click()
         //Navigate to Edit Test Case page
         TestCasesPage.clickEditforCreatedTestCase()
 
