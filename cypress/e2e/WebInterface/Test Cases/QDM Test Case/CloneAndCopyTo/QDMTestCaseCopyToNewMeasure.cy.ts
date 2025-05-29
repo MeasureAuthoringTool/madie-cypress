@@ -74,7 +74,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
         // need to select correct version of the measure with .eq(1)
-        cy.get('[data-testid="row-item"]').eq(1).contains('View').click()
+        cy.get('[data-testid="row-item"]').eq(5).contains('View').click()
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -162,7 +162,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         cy.wait('@searchDone')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
-        cy.get('[data-testid="row-item"]').eq(1).contains('View').click()
+        cy.get('[data-testid="row-item"]').eq(5).contains('View').click()
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

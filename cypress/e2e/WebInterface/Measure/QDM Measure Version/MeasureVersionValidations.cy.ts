@@ -13,6 +13,9 @@ let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
 let measureCQL = MeasureCQL.returnBooleanPatientBasedQDM_CQL
 let versionMeasureCQL = MeasureCQL.simpleQDM_CQL
+let testCaseTitle = 'Combo2 ThreeEncounter'
+let testCaseDescription = 'DENOMFail' + Date.now()
+let testCaseSeries = 'SBTestSeries'
 
 let measureCQL_WithErrors = 'library ' + cqlLibraryName + ' version \'0.0.000\'\n' +
     'using QDM version \'5.6\'\n' +
@@ -110,7 +113,8 @@ describe('Measure Versioning validations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithErrors)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
 
         //Navigate to Measures Page
         cy.get(Header.measures).click()
@@ -155,7 +159,7 @@ describe('Measure Versioning validations', () => {
 })
 
 //Skipping until Feature flag 'EditTestsOnVersionedMeasures' is enabled
-describe.skip('Create, Edit and Clone Test case for QDM Versioned Measure', () => {
+describe.skip('Create Test case for QDM Versioned Measure', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -208,6 +212,67 @@ describe.skip('Create, Edit and Clone Test case for QDM Versioned Measure', () =
 
         //Verify that the Import Test case button is enabled
         cy.get(TestCasesPage.qdmImportTestCasesBtn).should('be.enabled')
+
+    })
+})
+
+//Skipping until Feature flag 'EditTestsOnVersionedMeasures' is enabled
+describe.skip('Edit Test case for QDM Versioned Measure', () => {
+
+    beforeEach('Create Measure and Login', () => {
+
+        let randValue = (Math.floor((Math.random() * 1000) + 1))
+        let newMeasureName = measureName + randValue
+        let newCqlLibraryName = cqlLibraryName + randValue
+
+        measureData.ecqmTitle = newMeasureName
+        measureData.cqlLibraryName = newCqlLibraryName
+        measureData.measureScoring = 'Cohort'
+        measureData.patientBasis = 'true'
+        measureData.measureCql = measureCQL
+
+        CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
+        OktaLogin.Login()
+    })
+
+    afterEach('Logout and Clean up', () => {
+
+        OktaLogin.Logout()
+        Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
+    })
+
+    it('Measure owner able to Edit Test case on a QDM Versioned Measure, that was created before Versioning', () => {
+
+        //Version the Measure
+        cy.get(Header.measures).click()
+        MeasuresPage.actionCenter('version')
+        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.log('Version Created Successfully')
+
+        MeasuresPage.actionCenter('edit')
+
+        //Edit Test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //Enter Patient Demographics
+        TestCasesPage.enterPatientDemographics('06/15/1935 12:00 AM', 'Living')
+
+        //Save Test case
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
     })
 })

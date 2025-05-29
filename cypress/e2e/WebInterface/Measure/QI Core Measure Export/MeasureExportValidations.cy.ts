@@ -355,14 +355,13 @@ describe('Error Message on Measure Export for Publish when measure was versioned
 
         // navigate to the all measures tab
         Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.visible')
-        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
 
-        // search for specific measure - it should be 1st on the search result
+        Utilities.waitForElementVisible('.measures-list', 15500)
+
+        // search for specific measure - last on the list
         cy.get(MeasuresPage.searchInputBox).clear().type(specialMeasureName).type('{enter}')
-        cy.contains('View').click()
+        cy.get('[data-testid="row-item"]').last().contains('View').click()
 
         // perform export for publish
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
