@@ -1,11 +1,22 @@
 import { Utilities } from "./Utilities"
 import { TestCasesPage } from "./TestCasesPage"
 import { EditMeasureActions } from "./EditMeasurePage"
+import { SupportedModels } from "./CreateMeasurePage"
 
 export type MeasureActionOptions = {
     exportForPublish?: boolean,
     versionType?: string,
     updateModelVersion?: boolean
+}
+
+export type MeasureRow = {
+    name?: string,
+    version?: string,
+    status?: string,
+    model?: SupportedModels,
+    shared?: boolean,
+    cmsId?: string,
+    updated?: string
 }
 
 export class MeasuresPage {
@@ -45,6 +56,36 @@ export class MeasuresPage {
     //CQL to ELM version field
     public static readonly measureCQLToElmVersionTxtBox = '[data-testid="translator-version-text-field"]'
 
+    public static checkFirstRow(expectedData: MeasureRow) {
+        cy.wait(1100)
+
+        cy.get('.measures-list tr').first().then(firstRow => {
+
+            if (expectedData.name) {
+                cy.wrap(firstRow.children().eq(1)).should('have.text', expectedData.name)
+            }
+            if(expectedData.version) {
+                cy.wrap(firstRow.children().eq(2)).should('have.text', expectedData.version)
+            }
+            if(expectedData.status) {
+                cy.wrap(firstRow.children().eq(3)).should('have.text', expectedData.status)
+            }
+            if(expectedData.model) {
+                cy.wrap(firstRow.children().eq(4)).should('have.text', expectedData.model)
+            }
+            if(expectedData.shared) {
+                cy.wrap(firstRow.children().eq(5)).find('[data-testid="CheckCircleOutlineIcon"]').should('exist')
+            }
+            if(expectedData.cmsId) {
+                cy.wrap(firstRow.children().eq(6)).should('have.text', expectedData.cmsId)
+            }
+            if(expectedData.updated) {
+                cy.wrap(firstRow.children().eq(7)).should('have.text', expectedData.updated)
+            }
+
+        })
+
+    }
 
     public static validateMeasureName(expectedValue: string): void {
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
