@@ -7,7 +7,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import {TestCaseAction, TestCasesPage} from "../../../../Shared/TestCasesPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -274,6 +274,52 @@ describe.skip('Edit Test case for QDM Versioned Measure', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
 
+    })
+
+
+    it('Measure owner unable to Delete Test case on a QDM Versioned Measure, that was created before Versioning', () => {
+
+        //Version the Measure
+        cy.get(Header.measures).click()
+        MeasuresPage.actionCenter('version')
+        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.log('Version Created Successfully')
+
+        MeasuresPage.actionCenter('edit')
+
+        //Edit Test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Select Test case
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterDelete).should('not.be.enabled')
+        cy.get('[data-testid="delete-tooltip"]').trigger('mouseover')
+        cy.get('.MuiTooltip-tooltip').should('contain.text', 'Test cases added prior to versioning cannot be deleted')
+    })
+
+    it('Measure owner able to Delete Test case on a QDM Versioned Measure, that was created after Versioning', () => {
+
+        //Version the Measure
+        cy.get(Header.measures).click()
+        MeasuresPage.actionCenter('version')
+        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.log('Version Created Successfully')
+
+        //Add Test case
+        MeasuresPage.actionCenter('edit')
+        TestCasesPage.createTestCase('SecondTCTitle', 'SecondTCDescription', 'SecondTCSeries')
+
+        //Select Test case
+        TestCasesPage.checkTestCase(2)
+        TestCasesPage.actionCenter(TestCaseAction.delete)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test cases successfully deleted')
     })
 })
 
