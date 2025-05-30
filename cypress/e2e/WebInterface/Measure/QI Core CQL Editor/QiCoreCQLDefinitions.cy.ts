@@ -4,8 +4,6 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
-import { Global } from "../../../../Shared/Global";
 
 const now = Date.now()
 const measureName = 'QiCoreDefinitions' + now
@@ -329,7 +327,7 @@ describe('Qi-Core CQL Definitions Builder', () => {
         cy.get(CQLEditorPage.editCQLDefinitions).click()
 
         //Click on Discard changes
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
         cy.get(CQLEditorPage.expressionEditorTypeDropdown).should('be.visible')
     })
 

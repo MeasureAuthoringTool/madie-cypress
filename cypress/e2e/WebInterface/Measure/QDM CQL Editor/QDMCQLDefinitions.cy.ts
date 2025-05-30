@@ -5,7 +5,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-import { Global } from "../../../../Shared/Global"
+
 let randValue = null
 let measureName = 'QDMTestMeasure' + Date.now()
 let CqlLibraryName = 'QDMLibrary' + Date.now()
@@ -299,7 +299,7 @@ describe('QDM CQL Definitions', () => {
         cy.get(CQLEditorPage.editCQLDefinitions).click()
 
         //Click on Discard changes
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
         cy.get(CQLEditorPage.expressionEditorTypeDropdown).should('be.visible')
     })
 
