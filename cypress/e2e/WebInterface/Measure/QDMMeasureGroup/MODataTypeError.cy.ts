@@ -5,7 +5,6 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 
 let measureName = 'MOError' + Date.now()
 let CqlLibraryName = 'MOError' + Date.now()
@@ -158,7 +157,7 @@ describe('MO datatype Error', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 60000)
 
         //Group Creation
 
