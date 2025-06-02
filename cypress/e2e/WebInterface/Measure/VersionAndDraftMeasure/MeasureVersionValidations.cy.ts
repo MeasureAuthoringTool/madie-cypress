@@ -1,15 +1,15 @@
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
-import { OktaLogin } from "../../../../Shared/OktaLogin"
-import { Utilities } from "../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { Header } from "../../../../Shared/Header"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
-import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { LandingPage } from "../../../../Shared/LandingPage"
+import {MeasureCQL} from "../../../../Shared/MeasureCQL"
+import {CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
+import {OktaLogin} from "../../../../Shared/OktaLogin"
+import {Utilities} from "../../../../Shared/Utilities"
+import {MeasuresPage} from "../../../../Shared/MeasuresPage"
+import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
+import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import {Header} from "../../../../Shared/Header"
+import {TestCaseAction, TestCasesPage} from "../../../../Shared/TestCasesPage"
+import {TestCaseJson} from "../../../../Shared/TestCaseJson"
+import {MeasureGroupPage} from "../../../../Shared/MeasureGroupPage"
+import {LandingPage} from "../../../../Shared/LandingPage"
 
 const now = Date.now()
 let measureName = 'VersionValidations' + now
@@ -210,7 +210,7 @@ describe.skip('Create Test case for Qi Core Versioned Measure', () => {
         Utilities.deleteVersionedMeasure(measureName, cqlLibraryName)
     })
 
-    it('Measure owner able to Add Clone and Import Test cases to Qi Core Versioned Measure', () => {
+    it('Measure owner able to Add, Clone and Import Test cases to Qi Core Versioned Measure', () => {
 
         //Version the Measure
         cy.get(Header.measures).click()
@@ -237,7 +237,7 @@ describe.skip('Create Test case for Qi Core Versioned Measure', () => {
 })
 
 //Skipping until Feature flag 'EditTestsOnVersionedMeasures' is enabled
-describe.skip('Edit Test case for Qi Core Versioned Measure', () => {
+describe.skip('Edit and Delete Test case for Qi Core Versioned Measure', () => {
 
     beforeEach('Create Measure and Login', () => {
 
@@ -293,6 +293,51 @@ describe.skip('Edit Test case for Qi Core Versioned Measure', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully ' +
             'with warnings in JSON')
+    })
+
+    it('Measure owner unable to Delete Test case on a Qi Core Versioned Measure, that was created before Versioning', () => {
+
+        //Version the Measure
+        cy.get(Header.measures).click()
+        MeasuresPage.actionCenter('version')
+        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.log('Version Created Successfully')
+
+        MeasuresPage.actionCenter('edit')
+
+        //Edit Test case
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Select Test case
+        TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterDelete).should('not.be.enabled')
+        cy.get('[data-testid="delete-tooltip"]').trigger('mouseover')
+        cy.get('.MuiTooltip-tooltip').should('contain.text', 'Test cases added prior to versioning cannot be deleted')
+    })
+
+    it('Measure owner able to Delete Test case on a Qi Core Versioned Measure, that was created after Versioning', () => {
+
+        //Version the Measure
+        cy.get(Header.measures).click()
+        MeasuresPage.actionCenter('version')
+        cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.log('Version Created Successfully')
+
+        //Add Test case
+        MeasuresPage.actionCenter('edit')
+        TestCasesPage.createTestCase('SecondTCTitle', 'SecondTCDescription', 'SecondTCSeries')
+
+        //Select Test case
+        TestCasesPage.checkTestCase(2)
+        TestCasesPage.actionCenter(TestCaseAction.delete)
+        cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test cases successfully deleted')
     })
 })
 
