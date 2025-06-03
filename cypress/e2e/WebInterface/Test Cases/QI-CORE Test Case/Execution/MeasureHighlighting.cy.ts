@@ -10,7 +10,6 @@ import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
-
 const now = Date.now()
 let measureName = 'TestMeasure' + now
 let CqlLibraryName = 'TestLibrary' + now
@@ -36,10 +35,8 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     'include FHIRHelpers version \'4.4.000\' called FHIRHelpers\n' +
     'include SupplementalDataElements version \'3.5.000\' called SDE\n' +
     'include TJCOverall version \'8.13.000\' called TJC\n' +
-    'include VTE version \'8.7.000\' called VTE\n' +
-    '\n' +
-    'codesystem "LOINC": \'http://loinc.org\' \n' +
-    '\n' +
+    'include VTE version \'8.7.000\' called VTE\n\n' +
+    'codesystem "LOINC": \'http://loinc.org\'\n\n' +
     'valueset "Application of Graduated Compression Stockings":\'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1110.66\'\n' +
     'valueset "Application of Intermittent Pneumatic Compression Devices": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1110.65\'\n' +
     'valueset "Application of Venous Foot Pumps": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1110.64\'\n' +
@@ -82,10 +79,8 @@ let measureCQL_withDuplicateLibraryDefinition = 'library Library7027567898767 ve
     '\n' +
     'code "Risk for venous thromboembolism": \'72136-5\' from "LOINC" display \'Risk for venous thromboembolism\'\n' +
     '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
+    'context Patient\n\n' +
     'define "SDE Ethnicity":\n' +
     '  SDE."SDE Ethnicity"\n' +
     '\n' +
@@ -879,7 +874,7 @@ describe('Measure Highlighting', () => {
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
             Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
             cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Initial PopulationOne":\ntrue\n')
-            cy.get('[data-ref-id="330"]').should('have.color', '#20744C')
+            cy.get('[data-ref-id="342"]').should('have.color', '#20744C')
         })
     })
 })
@@ -988,13 +983,13 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('DENOM').click()
             Utilities.waitForElementVisible(TestCasesPage.tcDENOMHighlightingDetails, 35000)
             cy.get(TestCasesPage.tcDENOMHighlightingDetails).should('contain.text', '\ndefine "Initial Population":\nexists "Qualifying Encounters"\n')
-            cy.get('[data-ref-id="244"]').should('have.color', '#A63B12')
-            cy.get('[data-ref-id="245"]').should('have.color', '#A63B12')
+            cy.get('[data-ref-id="253"]').should('have.color', '#A63B12')
+            cy.get('[data-ref-id="254"]').should('have.color', '#A63B12')
 
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
             Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
             cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Initial PopulationOne":\ntrue\n')
-            cy.get('[data-ref-id="330"]').should('have.color', '#20744C')
+            cy.get('[data-ref-id="342"]').should('have.color', '#20744C')
         })
     })
 })
@@ -1141,13 +1136,13 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('DENOM').click()
             Utilities.waitForElementVisible(TestCasesPage.tcDENOMHighlightingDetails, 35000)
             cy.get(TestCasesPage.tcDENOMHighlightingDetails).should('contain.text', '\ndefine "Initial Population":\nexists "Qualifying Encounters"\n')
-            cy.get('[data-ref-id="244"]').should('have.color', '#A63B12')
-            cy.get('[data-ref-id="245"]').should('have.color', '#A63B12')
+            cy.get('[data-ref-id="253"]').should('have.color', '#A63B12')
+            cy.get('[data-ref-id="257"]').should('have.color', '#A63B12')
 
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
             Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
             cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Initial PopulationOne":\ntrue\n')
-            cy.get('[data-ref-id="330"]').should('have.color', '#20744C')
+            cy.get('[data-ref-id="342"]').should('have.color', '#20744C')
         })
         cy.get(TestCasesPage.highlightingPCTabSelector).scrollIntoView()
         Utilities.waitForElementVisible(TestCasesPage.highlightingPCTabSelector, 35000)
@@ -1166,8 +1161,8 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
             cy.get('[data-testid="group-coverage-nav-' + secondGroupId + '"]').contains('NUMER').click()
             Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
             cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain', '\ndefine "Initial Population":\nexists "Qualifying Encounters"\n')
-            cy.get('[data-ref-id="244"]').should('have.color', '#A63B12')
-            cy.get('[data-ref-id="245"]').should('have.color', '#A63B12')
+            cy.get('[data-ref-id="253"]').should('have.color', '#A63B12')
+            cy.get('[data-ref-id="257"]').should('have.color', '#A63B12')
         })
     })
 })
@@ -1197,7 +1192,6 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
-
 
     it('QI Core Measure: New Highlighting Left Navigation panel is displayed & Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
         
@@ -1284,8 +1278,8 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
             '    union ["Encounter": "Occupational Therapy Evaluation"]\n' +
             '    union ["Encounter": "Office Visit"]\n' +
             '    union ["Encounter": "Outpatient Consultation"]')
-        cy.get('[data-ref-id="245"]').should('have.color', '#A63B12')
-        cy.get('[data-ref-id="342"]').should('have.color', '#A63B12')
+        cy.get('[data-ref-id="269"]').should('have.color', '#A63B12')
+        cy.get('[data-ref-id="483"]').should('have.color', '#A63B12')
 
         // cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Functions').click()
         // Utilities.waitForElementVisible('[data-statement-name="ToCalendarUnit"]', 35000)
@@ -1518,13 +1512,13 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
             Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 35000)
             cy.get(TestCasesPage.tcIPHighlightingDetails).should('contain.text', 'define "Initial Population":\n' +
                 '  VTE."Encounter with Age Range and without VTE Diagnosis or Obstetrical Conditions"')
-            cy.get('[data-ref-id="340"]').should('have.color', '#20744C')
+            cy.get('[data-ref-id="394"]').should('have.color', '#20744C')
 
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('DENOM').click()
             Utilities.waitForElementVisible(TestCasesPage.tcDENOMHighlightingDetails, 35000)
             cy.get(TestCasesPage.tcDENOMHighlightingDetails).should('contain.text', 'define "Denominator":\n' +
                 '  "Initial Population"')
-            cy.get('[data-ref-id="350"]').should('have.color', '#20744C')
+            cy.get('[data-ref-id="405"]').should('have.color', '#20744C')
 
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
             Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
@@ -1538,7 +1532,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
                 '      union "Encounter with Low Risk for VTE or Anticoagulant Administered"\n' +
                 '      union "Encounter with No VTE Prophylaxis Due to Medical Reason"\n' +
                 '      union "Encounter with No VTE Prophylaxis Due to Patient Refusal"')
-            cy.get('[data-ref-id="1176"]').should('have.color', '#20744C')
+            cy.get('[data-ref-id="1268"]').should('have.color', '#20744C')
         })
     })
 })
@@ -1645,7 +1639,7 @@ describe('Verify highlighting occurs on a newly versioned measure', () => {
                 cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
                 Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
                 cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Initial PopulationOne":\ntrue\n')
-                cy.get('[data-ref-id="330"]').should('have.color', '#20744C')
+                cy.get('[data-ref-id="342"]').should('have.color', '#20744C')
             })
         })
 })
@@ -1663,7 +1657,7 @@ describe('Verify highlighting occurs on an old versioned measure', () => {
        
         // switch to all measure tab, search for original measure, view
         cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30500)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         cy.wait('@searchDone')
