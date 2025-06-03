@@ -19,10 +19,8 @@ const now = require('dayjs')
 const mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
 const mpEndDate = now().format('YYYY-MM-DD')
 
-const expectedQiCoreVersion = '3.24.0'
-const oldQiCoreVersion = '3.22.0'
-const expectedQdmVersion = '3.24.0'
-
+const expectedQiCoreVersion = '3.25.0'
+const expectedQdmVersion = '3.25.0'
 const measureData: CreateMeasureOptions = {}
 
 describe('Measure Service: Translator Version for QI-Core Measure', () => {
@@ -133,7 +131,7 @@ describe('Measure Service: Translator Version for QI-Core Measure', () => {
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body).to.eql(oldQiCoreVersion)
+                    expect(response.body).to.eql(expectedQiCoreVersion)
                 })
             })
         })
