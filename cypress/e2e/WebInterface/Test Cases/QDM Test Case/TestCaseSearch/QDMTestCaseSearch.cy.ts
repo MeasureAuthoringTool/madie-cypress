@@ -7,7 +7,6 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
-import { QDMElements } from "../../../../../Shared/QDMElements";
 import { Header } from "../../../../../Shared/Header";
 
 let testCaseTitle2nd = 'Second TC - Title for Auto Test'
@@ -62,8 +61,8 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
         OktaLogin.Logout()
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
+
     it('QDM Test Case search and filter functionality', () => {
 
         //Navigate to Test Cases page and add Test Case details
@@ -97,30 +96,29 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
         //search for something that is in the description field
         cy.get(TestCasesPage.tcSearchInput).type('Second')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Edit')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate)
         Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
         //search for something that is in the status field
         cy.get(TestCasesPage.tcSearchInput).type('NA')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Edit')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate)
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
         //search for something that is in the group field
         cy.get(TestCasesPage.tcSearchInput).clear().type('SecondTC-SBTestSeries')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Edit')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate)
         Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
         //search for something that is in the title field
         cy.get(TestCasesPage.tcSearchInput).type('QDMManifestTC')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate)
         Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
-
 
         //the filter by field
         cy.get(TestCasesPage.tcFilterInput).scrollIntoView().click()
@@ -132,7 +130,7 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
         cy.get(TestCasesPage.tcSearchInput).type('QDMManifestTC')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate)
         Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
@@ -150,27 +148,23 @@ describe('QDM Test Case Search, Filter, and sorting by Test Case number', () => 
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow, 5000)
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
 
-
         //running test cases on the test case list page runs all test whether they are in the search results or not
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
         cy.get(TestCasesPage.tcSearchInput).type('QDMManifestTC')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate)
         Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
         //clicking on running the test case
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'PassQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'PassQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate)
 
         //clear search to show all test cases
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
 
         //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'PassSecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Edit')
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', 'PassQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
-
-
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', 'PassSecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate)
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', 'PassQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate)
     })
-
 })
