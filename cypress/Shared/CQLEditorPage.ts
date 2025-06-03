@@ -1,5 +1,6 @@
 import { EditMeasurePage } from "./EditMeasurePage"
 import { Utilities } from "./Utilities"
+import { CQLLibraryPage } from "./CQLLibraryPage"
 
 export class CQLEditorPage {
 
@@ -162,9 +163,16 @@ export class CQLEditorPage {
 
     }
 
-    public static validateSuccessfulCQLUpdate(): void {
+    public static validateSuccessfulCQLUpdate(library?: boolean): void {
 
-        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 600000)
+        if (!library || library == null) {
+            library = false
+            Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 600000)
+
+        } else {
+            Utilities.waitForElementDisabled(CQLLibraryPage.updateCQLLibraryBtn, 600000)
+        }
+
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each($msg => {
             expect($msg).to.not.contain('Error')
             cy.wrap($msg)

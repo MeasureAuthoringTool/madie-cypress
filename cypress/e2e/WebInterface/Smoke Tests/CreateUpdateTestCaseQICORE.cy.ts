@@ -9,6 +9,9 @@ import { Utilities } from "../../../Shared/Utilities"
 import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
 
+const utc = require('dayjs/plugin/utc')
+const dayjs = require('dayjs')
+dayjs.extend(utc)
 const timestamp = Date.now()
 const measureName = 'TestMeasure' + timestamp
 const CqlLibraryName = 'TestLibrary' + timestamp
@@ -22,6 +25,10 @@ const testCaseJson = TestCaseJson.TestCaseJson_Valid
 const measureCQL = MeasureCQL.ICFCleanTest_CQL
 const now = require('dayjs')
 const todaysDate = now().format('MM/DD/YYYY')
+// Convert timestamp to UTC
+//const actualTime = dayjs(timestamp).utc().add(40, 'second')
+const utcTime = dayjs(timestamp).utc().format('MM/DD/YYYY HH')
+
 const qiCore6MeasureCQL = 'library QICoreTestLibrary1733500481375 version \'0.0.000\'\n' +
     'using QICore version \'6.0.0\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
@@ -67,6 +74,17 @@ describe('Create and Update Test Case for Qi Core 4 Measure', () => {
         //Edit / update Test Case
         TestCasesPage.clickEditforCreatedTestCase()
         TestCasesPage.updateTestCase(updatedTestCaseTitle, updatedTestCaseDescription, updatedTestCaseSeries)
+    })
+
+
+    it('Verify last saved time stamp for Test case', () => {
+
+        TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries)
+
+        //Verify Last Saved Date on Test case list page
+        cy.get(EditMeasurePage.testCasesTab).click()
+        // Asserting on last saved hour only since there is a difference between time saved and the actual time
+        cy.get(TestCasesPage.lastSavedDate).should('contain', utcTime)
     })
 })
 

@@ -71,7 +71,8 @@ describe('QDM CQL Library Validations', () => {
 
         cy.get(CQLLibraryPage.currentCQLLibName).clear().type(updatedCQLLibraryName)
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
 
     })
 

@@ -5,7 +5,7 @@ import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { Utilities } from "../../../Shared/Utilities"
 import { Global } from "../../../Shared/Global"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage";
+import {CQLEditorPage} from "../../../Shared/CQLEditorPage"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 
@@ -19,7 +19,6 @@ describe('CQL Library Validations', () => {
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
-
     })
 
     it('CQL Library header (breadcrumbs, name, version/draft, model, last update)', () => {
@@ -307,7 +306,7 @@ describe('CQL Library Validations', () => {
         Utilities.typeFileContents('cypress/fixtures/AdultOutpatientEncountersQICore4Entry.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.cqlLibraryTab).should('be.visible')
         cy.get(Header.cqlLibraryTab).click()

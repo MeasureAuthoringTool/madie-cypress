@@ -3,7 +3,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage";
 
 let apiCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -42,8 +42,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditPublisher).type('{downArrow}').type('{enter}')
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.validateSuccessfulCQLUpdate(true)
 
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).contains(apiCQLLibraryName)
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).contains('version \'0.0.000\'')
@@ -88,7 +87,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/QDMNoNameDefCQL.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
-        
+
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -105,7 +104,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/QDMKeywordDefCQL.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
-        
+
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
@@ -152,13 +151,13 @@ describe('Validate QDM CQL on CQL Library page', () => {
     })
 
     it('Verify error message when context is set to anything except Patient', () => {
-        
+
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.clickEditforCreatedLibrary()
         Utilities.typeFileContents('cypress/fixtures/QDMPractitionerContext.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.validateSuccessfulCQLUpdate(true)
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -205,7 +204,7 @@ describe('CQL Library: CQL Editor: QDM valueSet', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditPublisher).type('{downArrow}').type('{enter}')
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.validateSuccessfulCQLUpdate(true)
 
     })
 
