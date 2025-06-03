@@ -592,8 +592,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        //
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
