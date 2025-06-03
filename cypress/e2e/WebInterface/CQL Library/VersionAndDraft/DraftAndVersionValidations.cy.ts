@@ -1,9 +1,9 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
-import {Header} from "../../../../Shared/Header"
-import {Utilities} from "../../../../Shared/Utilities"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage";
+import { Header } from "../../../../Shared/Header"
+import { Utilities } from "../../../../Shared/Utilities"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage";
 
 let CqlLibraryOne = ''
 let CqlLibraryOther = ''
@@ -109,7 +109,7 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.visible')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.enabled')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        CQLEditorPage.validateSuccessfulCQLUpdate(true)
 
         cy.get(Header.cqlLibraryTab).click()
         CQLLibrariesPage.cqlLibraryActionCenter('version')
