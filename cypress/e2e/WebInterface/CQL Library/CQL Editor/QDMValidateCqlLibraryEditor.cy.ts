@@ -42,6 +42,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditPublisher).type('{downArrow}').type('{enter}')
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
+        CQLEditorPage.validateSuccessfulCQLUpdate(true)
 
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).contains(apiCQLLibraryName)
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).contains('version \'0.0.000\'')
@@ -156,26 +157,7 @@ describe('Validate QDM CQL on CQL Library page', () => {
         Utilities.typeFileContents('cypress/fixtures/QDMPractitionerContext.txt', CQLLibraryPage.cqlLibraryEditorTextBox)
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        Utilities.waitForElementDisabled(CQLLibraryPage.updateCQLLibraryBtn, 600000)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each($msg => {
-            expect($msg).to.not.contain('Error')
-            cy.wrap($msg)
-                .invoke('text')
-                .then(text => {
-                    const trimmedText = text.trim()
-
-                    const validSubstrings = [
-                        'CQL updated successfully but the following issues were found',
-                        'CQL updated successfully',
-                        'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.'
-                    ]
-
-                    const containsMatch = validSubstrings.some(substring =>
-                        trimmedText.includes(substring)
-                    )
-                    expect(containsMatch).to.be.true
-                })
-        })
+        CQLEditorPage.validateSuccessfulCQLUpdate(true)
 
         //Validate error(s) in CQL Editor window
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).scrollIntoView()
@@ -222,26 +204,7 @@ describe('CQL Library: CQL Editor: QDM valueSet', () => {
         cy.get(CQLLibraryPage.cqlLibraryEditPublisher).type('{downArrow}').type('{enter}')
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
-        Utilities.waitForElementDisabled(CQLLibraryPage.updateCQLLibraryBtn, 600000)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).each($msg => {
-            expect($msg).to.not.contain('Error')
-            cy.wrap($msg)
-                .invoke('text')
-                .then(text => {
-                    const trimmedText = text.trim()
-
-                    const validSubstrings = [
-                        'CQL updated successfully but the following issues were found',
-                        'CQL updated successfully',
-                        'CQL updated successfully but the following issues were foundLibrary statement was incorrect. MADiE has overwritten it.'
-                    ]
-
-                    const containsMatch = validSubstrings.some(substring =>
-                        trimmedText.includes(substring)
-                    )
-                    expect(containsMatch).to.be.true
-                })
-        })
+        CQLEditorPage.validateSuccessfulCQLUpdate(true)
 
     })
 
