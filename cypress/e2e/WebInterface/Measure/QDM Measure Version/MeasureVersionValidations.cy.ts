@@ -1,5 +1,5 @@
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
@@ -7,7 +7,7 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import {TestCaseAction, TestCasesPage} from "../../../../Shared/TestCasesPage"
+import { TestCaseAction, TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 let measureName = 'TestMeasure' + Date.now()
 let cqlLibraryName = 'TestCql' + Date.now()
@@ -371,7 +371,7 @@ describe('Non Measure owner unable to create Version', () => {
 
         //Navigate to All Measures tab
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
+        //cy.reload()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
