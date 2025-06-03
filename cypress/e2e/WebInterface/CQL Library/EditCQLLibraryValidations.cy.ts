@@ -116,7 +116,7 @@ describe('Edit CQL Library validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.visible')
         cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.enabled')
         cy.get(CQLLibraryPage.cqlLibraryStickySave).click()
-        CQLEditorPage.validateSuccessfulCQLUpdate()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //navigate back to the CQL Library page and navigate to the edit CQL Library page
         cy.get(Header.cqlLibraryTab).should('exist')
