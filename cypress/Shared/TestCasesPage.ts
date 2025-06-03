@@ -646,7 +646,7 @@ export class TestCasesPage {
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 6500)
 
         cy.get(this.successMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
+            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON', 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.'])
         })
 
         cy.get(EditMeasurePage.testCasesTab).click()
