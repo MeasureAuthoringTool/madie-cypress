@@ -5,7 +5,8 @@ import { Utilities } from "../../../../Shared/Utilities";
 const dayjs = require('dayjs')
 const today = dayjs().format('M/D/YYYY')
 
-describe('Measure List Page Sort by Columns', () => {
+// skipping until feature flag measureSearch is enabled
+describe.skip('Measure List Page Sort by Columns', () => {
 
     beforeEach('Login', () => {
 
