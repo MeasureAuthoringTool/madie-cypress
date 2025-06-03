@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
