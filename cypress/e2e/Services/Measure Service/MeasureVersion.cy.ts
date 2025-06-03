@@ -299,11 +299,10 @@ describe('Edit validations for versioned Measure', () => {
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
     })
 
-    beforeEach('Set Access Token', () => {
+    after('Clean up', () => {
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
+        Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
+
     })
 
     it('Verify error messages when user try to edit Measure details, Measure Groups or Test cases for versioned Measure', () => {
@@ -542,8 +541,8 @@ describe('Delete validations for versioned Measure', () => {
                                 'title': testCaseTitle,
                             }
                         }).then((response) => {
-                            expect(response.status).to.eql(409)
-                            expect(response.body.message).to.include('Response could not be completed for measure with ID ' + measureId + ', since the measure is not in a draft status')
+                            expect(response.status).to.eql(400)
+                            expect(response.body.message).to.include('Test case(s) cannot be deleted, please contact the helpdesk')
                         })
                     })
                 })
