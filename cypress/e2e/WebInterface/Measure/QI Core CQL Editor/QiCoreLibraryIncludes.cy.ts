@@ -117,7 +117,7 @@ describe('Qi-Core Library Includes fields', () => {
         cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', 'FHIRHelpers')//Alias
         cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', 'FHIRHelpers')//Name
         cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', '4.1.000')//Version
-        cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', 'julietrubini')//Owner
+        cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', 'abdullah.rafiqi')//Owner
     })
 
     it('Qi Core: Delete Included Libraries functionality -- when changes to the CQL is not saved', () => {
