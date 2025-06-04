@@ -463,7 +463,8 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '1PassQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '1PassQDMManifestTCGroupQDMManifestTCQDMManifestTC')
+            .should('contain.text', '(UTC)Edit')
 
         //navigate to the test case list Expansion page
         cy.get(TestCasesPage.qdmExpansionSubTab).click()
@@ -497,7 +498,8 @@ describe('Validating Expansion -> Manifest selections / navigation functionality
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '1FailQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '1FailQDMManifestTCGroupQDMManifestTCQDMManifestTC')
+            .should('contain.text', '(UTC)Edit')
     })
 
 })
