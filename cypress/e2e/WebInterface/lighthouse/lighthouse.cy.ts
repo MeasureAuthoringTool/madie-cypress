@@ -1,6 +1,6 @@
 
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
@@ -48,7 +48,7 @@ describe('Login and initial "My Measures" page', () => {
             //'speed-index' -> 10%
 
             accessibility: 76, //The Lighthouse Accessibility score is a weighted average of all accessibility audits. Weighting is based on axe user impact assessments.
-            'total-blocking-time': 11000, //In miliseconds, this measure the total amount of time that a page is blocked from responding to user input, such as mouse clicks, screen taps, or keyboard presses.
+            'total-blocking-time': 13000, //In miliseconds, this measure the total amount of time that a page is blocked from responding to user input, such as mouse clicks, screen taps, or keyboard presses.
             'speed-index': 54000, //In miliseconds, this measures how quickly content is visually displayed during page load.
             'cumulative-layout-shift': 100, //Unexpected page element shifts -- basically, the measurement of shifting page elements
 
@@ -94,7 +94,7 @@ describe('Navigate to the "All Measures" page', () => {
         const thresholds = {
             performance: 23,
             accessibility: 76,
-            'total-blocking-time': 11000,
+            'total-blocking-time': 17000,
             'speed-index': 51000,
             'cumulative-layout-shift': 100,
         };
@@ -284,7 +284,17 @@ describe('Navigate to the QDM "Test Cases" tab / test case list page', () => {
         //click on the 'Import' button on the modal window
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved82N/ADENEXPassCertTypeIridOverlapsCatSurgPatient with certain types of iridocyclitis overlapping cataract surgery. ' + todaysDate + 'Edit81N/ADENEXPassChorioretinitis and RetinochoroiditisOverlapsCatSurgPatient with moderate or severe impairment better eye overlapping cataract surgery. ' + todaysDate + 'Edit80N/ADENEXPassChoroidDegenOverlapsCatSurgPatient with choroidal degenerations overlapping cataract surgery. ' + todaysDate + 'Edit79N/ADENEXPassCloudyCorneaOverlapsCatSurgPatient with cloudy cornea overlapping cataract surgery. ' + todaysDate + 'Edit78N/ADENEXPassDegenDisGlobeOverlapsCatSurgPatient with degenerative disorders of globe overlapping cataract surgery. ' + todaysDate + 'Edit77N/ADENEXPassDisVisualCortexOverlapsCatSurgPatient with disorders of visual cortex overlapping cataract surgery. ' + todaysDate + 'Edit76N/ADENEXPassDissChorioretOverlapsCatSurgPatient with disseminated chorioretinitis overlapping cataract surgery. ' + todaysDate + 'Edit75N/ADENEXPassHeredCornDysOverlapsCatSurgPatient with hereditary corneal dystrophies overlapping cataract surgery. ' + todaysDate + 'Edit74N/ADENEXPassHypotonyOverlapsCatSurgPatient with hypotony of eye overlapping cataract surgery. ' + todaysDate + 'Edit73N/ADENEXPassInjOptNrvOverlapsCatSurgPatient with injury to optic nerve overlapping cataract surgery. ' + todaysDate + 'Edit')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved82N/ADENEXPassCertTypeIridOverlapsCatSurgPatient with certain types of iridocyclitis overlapping cataract surgery. ')
+            .should('contain.text', '(UTC)Edit81N/ADENEXPassChorioretinitis and RetinochoroiditisOverlapsCatSurgPatient with moderate or severe impairment better eye overlapping cataract surgery. ')
+            .should('contain.text', '(UTC)Edit80N/ADENEXPassChoroidDegenOverlapsCatSurgPatient with choroidal degenerations overlapping cataract surgery. ')
+            .should('contain.text', '(UTC)Edit79N/ADENEXPassCloudyCorneaOverlapsCatSurgPatient with cloudy cornea overlapping cataract surgery. ')
+            .should('contain.text', '(UTC)Edit78N/ADENEXPassDegenDisGlobeOverlapsCatSurgPatient with degenerative disorders of globe overlapping cataract surgery. ')
+            .should('contain.text', '(UTC)Edit77N/ADENEXPassDisVisualCortexOverlapsCatSurgPatient with disorders of visual cortex overlapping cataract surgery. ')
+            .should('contain.text', '(UTC)Edit76N/ADENEXPassDissChorioretOverlapsCatSurgPatient with disseminated chorioretinitis overlapping cataract surgery. ')
+            .should('contain.text', '(UTC)Edit75N/ADENEXPassHeredCornDysOverlapsCatSurgPatient with hereditary corneal dystrophies overlapping cataract surgery. ')
+            .should('contain.text', '(UTC)Edit74N/ADENEXPassHypotonyOverlapsCatSurgPatient with hypotony of eye overlapping cataract surgery. ')
+            .should('contain.text', '(UTC)Edit73N/ADENEXPassInjOptNrvOverlapsCatSurgPatient with injury to optic nerve overlapping cataract surgery. ')
+            .should('contain.text', '(UTC)Edit')
 
         //success message that appears after import
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 10000)

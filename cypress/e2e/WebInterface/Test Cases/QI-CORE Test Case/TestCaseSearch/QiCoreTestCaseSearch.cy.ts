@@ -7,8 +7,8 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import {CQLEditorPage} from "../../../../../Shared/CQLEditorPage";
-import {Header} from "../../../../../Shared/Header";
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -59,11 +59,13 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.createTestCase(testCaseTitle2nd, testCaseDescription2nd, testCaseSeries2nd, testCaseJson2nd)
-        const expectedTestCaseValue = '2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Edit'
+        const expectedTestCaseValue = '2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd
+        const expectedTestCaseValue2 = '(UTC)Edit'
         //search for something that is in the description field
         cy.get(TestCasesPage.tcSearchInput).type('Second')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
         cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue2)
         Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
@@ -71,11 +73,13 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(TestCasesPage.tcSearchInput).type('NA')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
         cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue2)
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
         //search for something that is in the group field
         cy.get(TestCasesPage.tcSearchInput).clear().type('SecondTC-SBTestSeries')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
         cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue2)
         Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
@@ -83,6 +87,7 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(TestCasesPage.tcSearchInput).type('Second TC - Title')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
         cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue2)
         Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
@@ -98,6 +103,7 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(TestCasesPage.tcSearchInput).type('Second TC - Title')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
         cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue2)
         Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.testCaseResultrow2, 5000)
@@ -121,18 +127,23 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(TestCasesPage.tcSearchInput).type('Second TC - Title')
         cy.get(TestCasesPage.tcTriggerSearch).find(TestCasesPage.tcSearchIcone).click()
         cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue2)
         Utilities.waitForElementToNotExist(TestCasesPage.testCaseResultrow2, 5000)
         //clicking on running the test case
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         //verify the results row
         cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', expectedTestCaseValue2)
 
         //clear search to show all test cases
         cy.get(TestCasesPage.tcClearSearch).find(TestCasesPage.clearIconBtn).click()
 
         //verify the results row
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2PassSecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd + todaysDate + 'Edit')
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1PassSBTestSeriesTitle for Auto Test' + testCaseDescription + todaysDate + 'Edit')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2PassSecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCaseDescription2nd)
+            .should('contain.text', '(UTC)Edit')
+
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1PassSBTestSeriesTitle for Auto Test' + testCaseDescription)
+            .should('contain.text', '(UTC)Edit')
     })
 })
