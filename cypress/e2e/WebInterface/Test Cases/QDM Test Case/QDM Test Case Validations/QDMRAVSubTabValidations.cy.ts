@@ -43,8 +43,9 @@ describe('QDM Test Cases : RAV Sub tab validations', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
+    //Skipping until feature flag 'QDMIncludeRAVValues' is removed
     // taking this test as far as is possible after MAT-8627, leaving outline of future steps in as comments
-    it('RAV sub tab is visible on Edit Test case Highlighting page when RAV is included', () => {
+    it.skip('RAV sub tab is visible on Edit Test case Highlighting page when RAV is included', () => {
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
