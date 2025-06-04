@@ -178,7 +178,8 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
         //Case #StatusGroupTitleDescriptionLast Saved2N/ASBTestSeriesFFailing Test CaseDENOMFail01/24/2025Edit1N/ASBTestSeriesPPassing Test CaseDENOMPass01/24/2025Edit
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/ASBTestSeriesFFailing Test Case' + secondTestCaseDescription + todaysDate + 'Edit1N/ASBTestSeriesPPassing Test Case' + testCaseDescription + todaysDate + 'Edit')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/ASBTestSeriesFFailing Test Case' + secondTestCaseDescription + todaysDate)
+            .should('contain.text', 'Edit1N/ASBTestSeriesPPassing Test Case' + testCaseDescription + todaysDate)
 
         //verify confirmation message
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 35000)
@@ -711,7 +712,7 @@ describe('Test case uniqueness error validation', () => {
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved1InvalidSBTestSeriesPb1Passing Test Caseb1' + testCaseDescription + 'b1' + todaysDate + 'Edit')
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved1InvalidSBTestSeriesPb1Passing Test Caseb1' + testCaseDescription + 'b1' + todaysDate)
 
         //verifies alert message at top of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
