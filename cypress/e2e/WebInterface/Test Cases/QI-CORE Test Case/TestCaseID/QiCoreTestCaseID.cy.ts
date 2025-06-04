@@ -69,17 +69,29 @@ describe('Test Case sorting by Test Case number', () => {
 
         TestCasesPage.createTestCase(testCase2.title, testCase2.description, testCase2.group, testCase2.json)
 
-        const descList = 'Case #StatusGroupTitleDescriptionLast Saved2N/A' + testCase2.group + testCase2.title + testCase2.description + todaysDate + 'Edit1N/A' + testCase1.group + testCase1.title + testCase1.description + todaysDate + 'Edit'
-        const ascList = 'Case #StatusGroupTitleDescriptionLast Saved1N/A' + testCase1.group + testCase1.title + testCase1.description + todaysDate + 'Edit2N/A' + testCase2.group + testCase2.title + testCase2.description + todaysDate + 'Edit'
+        const descList = 'Case #StatusGroupTitleDescriptionLast Saved2N/A' + testCase2.group + testCase2.title + testCase2.description
+        const descList2 = '(UTC)Edit1N/A'
+        const descList3 = testCase1.group + testCase1.title + testCase1.description
+        const descList4 = '(UTC)Edit'
+        const ascList = 'Case #StatusGroupTitleDescriptionLast Saved1N/A' + testCase1.group + testCase1.title + testCase1.description
+        const ascList2 = '(UTC)Edit2N/A'
+        const ascList3 = testCase2.group + testCase2.title + testCase2.description
+        const ascList4 = '(UTC)Edit'
 
         //test case numbers appear and first click sorts list in ascending order based on test case number / ID
         Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 5000)
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', descList)
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', descList2)
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', descList3)
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', descList4)
 
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', ascList)
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', ascList2)
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', ascList3)
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', ascList4)
 
         //second click sorts in descending order
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
