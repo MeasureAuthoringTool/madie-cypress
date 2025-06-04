@@ -5,7 +5,6 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 const path = require('path')
