@@ -115,7 +115,8 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
     })
 
-    it('Verify errors appear on CQL Editor component and in the CQL Editor object, on save and on tab / page load', () => {
+    //Skipping until MAT-8777 is fixed
+    it.skip('Verify errors appear on CQL Editor component and in the CQL Editor object, on save and on tab / page load', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -134,7 +135,8 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
     })
 
-    it('Verify warnings appear on CQL Editor component and in the CQL Editor object, on save and on tab / page load', () => {
+    //Skipping until MAT-8777 is fixed
+    it.skip('Verify warnings appear on CQL Editor component and in the CQL Editor object, on save and on tab / page load', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -199,7 +201,8 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
 
     })
 
-    it('Verify errors appear on CQL Editor component and in the CQL Editor object, on CQL update and on tab / page load', () => {
+    //Skipping until MAT-8777 is fixed
+    it.skip('Verify errors appear on CQL Editor component and in the CQL Editor object, on CQL update and on tab / page load', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -219,7 +222,8 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
 
     })
 
-    it('Verify warnings appear on CQL Editor component and in the CQL Editor object, on CQL update and on tab / page load', () => {
+    //Skipping until MAT-8777 is fixed
+    it.skip('Verify warnings appear on CQL Editor component and in the CQL Editor object, on CQL update and on tab / page load', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')

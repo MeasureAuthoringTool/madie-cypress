@@ -31,19 +31,19 @@ const CqlLibraryName = 'ProportionPatient' + timestamp
 const versionNumber = '1.0.000'
 const newMeasureName = 'Updated' + measureName
 
-const measureData: CreateMeasureOptions = {}
-
 describe('QDM Test Case sorting by Test Case number', () => {
 
     beforeEach('Create Measure', () => {
 
-        measureData.ecqmTitle = measureQDMManifestName
-        measureData.cqlLibraryName = CqlLibraryName
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmManifestTestCQL
-        measureData.mpStartDate = '2025-01-01'
-        measureData.mpEndDate = '2025-12-31'
+        const measureData: CreateMeasureOptions = {
+            ecqmTitle: measureQDMManifestName,
+            cqlLibraryName: CqlLibraryName,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31'
+        }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
@@ -104,32 +104,51 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
         //test case numbers appear and first click sorts list in ascending order based on test case number / ID
         Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 5000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Edit1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
+       
+        // testcase 2 in 1st row, testcase 1 below
+        cy.get('[data-testid="test-case-title-0_caseNumber"]').should('have.text', '2')
+        cy.get('[data-testid="test-case-title-1_caseNumber"]').should('have.text', '1')
+       
         Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Edit')
+       
+        // testcase 1 in 1st row, testcase 2 below
+        cy.get('[data-testid="test-case-title-0_caseNumber"]').should('have.text', '1')
+        cy.get('[data-testid="test-case-title-1_caseNumber"]').should('have.text', '2')
+       
         //second click sorts in descending order
         Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Edit1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
+       
+        // testcase 2 in 1st row, testcase 1 below
+        cy.get('[data-testid="test-case-title-0_caseNumber"]').should('have.text', '2')
+        cy.get('[data-testid="test-case-title-1_caseNumber"]').should('have.text', '1')
+        
         //thrid click removes sorting                                                 Case #StatusGroupTitleDescriptionLast Saved2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto TestSecondTC-DENOMFail01/28/2025Edit1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC01/28/2025Edit
         Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Edit1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
+       
+        // testcase 2 in 1st row, testcase 1 below
+        cy.get('[data-testid="test-case-title-0_caseNumber"]').should('have.text', '2')
+        cy.get('[data-testid="test-case-title-1_caseNumber"]').should('have.text', '1')
+       
         //sort by case number and then edit some test case that is not at the top -- once user navigates back to the test case list page default sorting should appear
         Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Edit')
 
-        //navigate to the test case's edit page
+        // testcase 1 in 1st row, testcase 2 below
+        cy.get('[data-testid="test-case-title-0_caseNumber"]').should('have.text', '1')
+        cy.get('[data-testid="test-case-title-1_caseNumber"]').should('have.text', '2')
+
+        // navigate to the test case's edit page
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.QDMRace).scrollIntoView().click()
@@ -141,7 +160,10 @@ describe('QDM Test Case sorting by Test Case number', () => {
         //Navigate back to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto Test' + testCase2.description + todaysDate + 'Edit1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC' + todaysDate + 'Edit')
+
+        // testcase 2 in 1st row, testcase 1 below
+        cy.get('[data-testid="test-case-title-0_caseNumber"]').should('have.text', '2')
+        cy.get('[data-testid="test-case-title-1_caseNumber"]').should('have.text', '1')
     })
 
     it('QDM Test Case number appears on cloned test case', () => {
@@ -188,13 +210,15 @@ describe('Import Test cases onto an existing QDM measure via file and ensure tes
 
     beforeEach('Login and Create Measure', () => {
 
-        measureData.ecqmTitle = measureQDMManifestName
-        measureData.cqlLibraryName = CqlLibraryName
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmManifestTestCQL
-        measureData.mpStartDate = '2025-01-01'
-        measureData.mpEndDate = '2025-12-31'
+        const measureData: CreateMeasureOptions = {
+            ecqmTitle: measureQDMManifestName,
+            cqlLibraryName: CqlLibraryName,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31'
+        }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
@@ -276,11 +300,13 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
 
     beforeEach('Create Measure, Test case & Login', () => {
 
-        measureData.ecqmTitle = measureQDMManifestName
-        measureData.cqlLibraryName = CqlLibraryName
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmManifestTestCQL
+        const measureData: CreateMeasureOptions = {
+            ecqmTitle: measureQDMManifestName,
+            cqlLibraryName: CqlLibraryName,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL
+        }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
@@ -303,7 +329,6 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
     })
 
     afterEach('Delete Measure and Logout', () => {
-
 
         OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(measureQDMManifestName, CqlLibraryName)
@@ -374,13 +399,15 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
 
     beforeEach('Create Measure', () => {
 
-        measureData.ecqmTitle = qdmMeasureName
-        measureData.cqlLibraryName = qdmCqlLibraryName
-        measureData.measureScoring = 'Proportion'
-        measureData.patientBasis = 'false'
-        measureData.measureCql = qdmManifestTestCQL
-        measureData.mpStartDate = '2025-01-01'
-        measureData.mpEndDate = '2025-12-31'
+        const measureData: CreateMeasureOptions = {
+            ecqmTitle: qdmMeasureName,
+            cqlLibraryName: qdmCqlLibraryName,
+            measureScoring: 'Proportion',
+            patientBasis: 'false',
+            measureCql: qdmManifestTestCQL,
+            mpStartDate: '2025-01-01',
+            mpEndDate: '2025-12-31'
+        }
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')

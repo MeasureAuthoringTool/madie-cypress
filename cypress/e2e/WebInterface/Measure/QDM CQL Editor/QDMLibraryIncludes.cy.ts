@@ -137,10 +137,11 @@ describe('QDM Library Includes fields', () => {
 
         //Navigate to Saved Libraries tab
         cy.get(CQLEditorPage.savedLibrariesTab).click()
-        cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', 'Common')//Alias
-        cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', 'MATGlobalCommonFunctionsQDM')//Name
-        cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', '8.0.000')//Version
-        cy.get(CQLEditorPage.savedLibrariesTable).should('contain.text', 'julietrubini')//Owner
+
+        cy.get('[data-test-id="row-0"]').children().first().should('contain.text', 'Common')
+        cy.get('[data-test-id="row-0"]').children().eq(1).should('contain.text', 'MATGlobalCommonFunctionsQDM')
+        cy.get('[data-test-id="row-0"]').children().eq(2).should('contain.text', '8.0.000')
+        cy.get('[data-test-id="row-0"]').children().eq(3).should('contain.text', 'abdullah.rafiqi')
     })
 
     it('QDM: Delete Included Libraries functionality -- when changes to the CQL is not saved', () => {
