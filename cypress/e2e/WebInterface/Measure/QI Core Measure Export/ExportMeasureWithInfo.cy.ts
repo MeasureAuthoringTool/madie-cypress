@@ -5,7 +5,6 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
-import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
 const path = require('path')
@@ -80,7 +79,7 @@ describe('QI-Core Measure Export with Info', () => {
                 // assert details for the expected warning
                 expect(elm.library.annotation[1].errorSeverity).to.eq('warning')
                 expect(elm.library.annotation[1].type).to.eq('CqlToElmError')
-                expect(elm.library.annotation[1].message).to.eq('An alias identifier [IP] is hiding another identifier of the same name.')
+                expect(elm.library.annotation[1].message).to.eq('An alias identifier IP is hiding another identifier of the same name.')
             })
         })
     })
