@@ -23,13 +23,12 @@ const failingTestCase: TestCase = {
     description: 'TCwE',
     group: 'ICFTCwESeries'
 }
-let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
-let invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
-let warningTestCaseJson = TestCaseJson.TestCaseJson_with_warnings
-let errorTestCaseJSON_no_ResourceID = TestCaseJson.TestCaseJson_missingResourceIDs
-let err_and_warningTestCaseJson = TestCaseJson.TestCaseJson_with_warning_and_error
-let measureCQL = MeasureCQL.CQL_Multiple_Populations
-let measureCQLPFTests = MeasureCQL.CQL_Populations
+const validTestCaseJson = TestCaseJson.TestCaseJson_Valid
+const invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
+const warningTestCaseJson = TestCaseJson.TestCaseJson_with_warnings
+const errorTestCaseJSON_no_ResourceID = TestCaseJson.TestCaseJson_missingResourceIDs
+const measureCQL = MeasureCQL.CQL_Multiple_Populations
+const measureCQLPFTests = MeasureCQL.CQL_Populations
 
 describe('Run / Execute Test Case button validations', () => {
 
@@ -550,12 +549,12 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
             Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
             cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Initial Population":\nexists "Qualifying Encounters"\nResultsFALSE (false) ')
-            cy.get('[data-ref-id="244"]').should('have.color', '#A63B12')
+            cy.get('[data-ref-id="253"]').should('have.color', '#A63B12')
         })
 
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Definitions').click()
         Utilities.waitForElementVisible(TestCasesPage.tcDEFINITIONSHighlightingDetails, 35000)
-        cy.get('[data-ref-id="247"]').should('have.color', '#A63B12')
+        cy.get('[data-ref-id="257"]').should('have.color', '#A63B12')
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('exist')
@@ -591,7 +590,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
