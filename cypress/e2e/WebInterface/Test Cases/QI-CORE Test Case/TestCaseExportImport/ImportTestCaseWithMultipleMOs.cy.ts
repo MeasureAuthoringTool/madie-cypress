@@ -31,7 +31,7 @@ describe('Import test case with 2 MOs using QMIG STU5 group name structures', ()
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        CQLEditorPage.validateSuccessfulCQLUpdate()
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
