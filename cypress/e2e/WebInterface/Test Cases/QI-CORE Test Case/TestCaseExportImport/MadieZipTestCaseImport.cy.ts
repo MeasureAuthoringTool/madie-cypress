@@ -59,22 +59,22 @@ describe('MADIE Zip Test Case Import', () => {
 
     it('MADIE Zip Test Case Import', () => {
 
-        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
+        //Click on Edit Button
+        MeasuresPage.actionCenter("edit")
 
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible')
-        cy.get(Header.mainMadiePageButton).click()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to the edit page for the second test case
         TestCasesPage.clickEditforCreatedTestCase(true)
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
 
         //edit second test case so that it will fail
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -100,6 +100,9 @@ describe('MADIE Zip Test Case Import', () => {
 
         //navigate to the edit page for the second test case
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
 
         //edit second test case so that it will fail
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -167,14 +170,22 @@ describe('MADIE Zip Test Case Import', () => {
 
     it('Copy Warning message while importing Test cases', () => {
 
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+        //Click on Edit Button
+        MeasuresPage.actionCenter("edit")
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //navigate to the edit page for the second test case
         TestCasesPage.clickEditforCreatedTestCase(true)
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
 
         //edit second test case so that it will fail
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -198,6 +209,9 @@ describe('MADIE Zip Test Case Import', () => {
 
         //navigate to the edit page for the second test case
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000 })
 
         //edit second test case so that it will fail
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -247,8 +261,8 @@ describe('MADIE Zip Test Case Import', () => {
         cy.contains('ICU LOS < 1 day').should('be.visible')
 
         //Click on the Copy button and verify success msg
-        cy.get('[data-testid="copy-button-tooltip"]').should('exist')
-        cy.get('[data-testid="copy-button-tooltip"]').click()
+        cy.get('[data-testid="copy-button"]').should('exist')
+        cy.get('[data-testid="copy-button"]').click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Copied to clipboard!')
     })
 })
