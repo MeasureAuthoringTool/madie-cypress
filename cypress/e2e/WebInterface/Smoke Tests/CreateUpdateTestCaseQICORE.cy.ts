@@ -26,8 +26,7 @@ const measureCQL = MeasureCQL.ICFCleanTest_CQL
 const now = require('dayjs')
 const todaysDate = now().format('MM/DD/YYYY')
 // Convert timestamp to UTC
-//const actualTime = dayjs(timestamp).utc().add(40, 'second')
-const utcTime = dayjs(timestamp).utc().format('MM/DD/YYYY HH')
+const utcTime = dayjs(timestamp).utc().format('MM/DD/YYYYHH')
 
 const qiCore6MeasureCQL = 'library QICoreTestLibrary1733500481375 version \'0.0.000\'\n' +
     'using QICore version \'6.0.0\'\n' +
@@ -84,7 +83,8 @@ describe('Create and Update Test Case for Qi Core 4 Measure', () => {
         //Verify Last Saved Date on Test case list page
         cy.get(EditMeasurePage.testCasesTab).click()
         // Asserting on last saved hour only since there is a difference between time saved and the actual time
-        cy.get(TestCasesPage.lastSavedDate).should('contain', utcTime)
+        cy.get(TestCasesPage.lastSavedDate).should('contain.text', utcTime)
+        cy.get(TestCasesPage.lastSavedDate).should('contain.text', 'UTC')
     })
 })
 

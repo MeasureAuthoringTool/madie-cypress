@@ -10,6 +10,7 @@ import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { Global } from "../../../../../Shared/Global"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { Environment } from "../../../../../Shared/Environment"
+import { Header } from "../../../../../Shared/Header"
 
 const harpUserALT = Environment.credentials().harpUserALT
 const now = Date.now()
@@ -881,8 +882,17 @@ describe('Duplicate Test Case Title and Group validations', () => {
     beforeEach('Create Measure, Test case and Login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Procedure')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+        Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
+
+        cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Cleanup and Logout', () => {
@@ -954,7 +964,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type('SecondTestCaseGroup').type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('SecondTestCaseGroup').type('{downArrow}{enter}')
 
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
@@ -964,7 +974,7 @@ describe('Duplicate Test Case Title and Group validations', () => {
         cy.get(TestCasesPage.testCaseTitle).clear().type('{selectall}{backspace}{selectall}{backspace}').type('SecondTestCase'.toString())
         cy.get(TestCasesPage.testCaseSeriesTextBox).should('exist')
         cy.get(TestCasesPage.testCaseSeriesTextBox).should('be.visible')
-        cy.get(TestCasesPage.testCaseSeriesTextBox).clear().type('SecondTestCaseGroup').type('{enter}')
+        cy.get(TestCasesPage.testCaseSeriesTextBox).clear().type('SecondTestCaseGroup').type('{downArrow}{enter}')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
