@@ -135,6 +135,7 @@ export class MeasureGroupPage {
     public static readonly measureScoringRatio = '[data-testid="group-scoring-option-RATIO"]'
     public static readonly measureScoringCV = '[data-testid="group-scoring-option-CONTINUOUS_VARIABLE"]'
     public static readonly saveMeasureGroupDetails = '[data-testid="group-form-submit-btn"]'
+    public static readonly discardMeasureGroupChanges = '[data-testid="group-form-discard-btn"]'
 
     //Populations
     public static readonly initialPopulationSelect = '[id="population-select-initial-population-select"]'

@@ -7,7 +7,6 @@ import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
-import { Global } from "../../../../../Shared/Global"
 
 const now = Date.now()
 let measureName = 'MOExpectedValues' + now
@@ -171,7 +170,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //verify that the discard modal appears
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
     })
 })
 

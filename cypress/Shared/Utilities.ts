@@ -20,6 +20,26 @@ export enum MadieObject {
 
 export class Utilities {
 
+    public static readonly dirtCheckModal = '.MuiDialogContent-root'
+    public static readonly discardChangesContinue = '[data-testid="discard-dialog-continue-button"]'
+    public static readonly discardChangesConfirmationModal = '.MuiBox-root'
+    public static readonly keepWorkingCancel = '[data-testid="discard-dialog-cancel-button"]'
+    public static readonly DiscardCancelBtn = '[data-testid="cancel-button"]'
+
+    public static clickOnDiscardChanges(): void {
+
+        cy.get(this.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
+        cy.get(TestCasesPage.discardChangesConfirmationBody).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(this.discardChangesContinue).click()
+    }
+
+    public static clickOnKeepWorking(): void {
+
+        cy.get(this.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
+        cy.get(TestCasesPage.discardChangesConfirmationBody).should('contain.text', 'Are you sure you want to discard your changes?')
+        cy.get(this.keepWorkingCancel).click()
+    }
+
     public static UpdateMeasureAddMetaDataAPI(measureName: string, CqlLibraryName: string, measureCQL: string): void {
 
         const now = require('dayjs')

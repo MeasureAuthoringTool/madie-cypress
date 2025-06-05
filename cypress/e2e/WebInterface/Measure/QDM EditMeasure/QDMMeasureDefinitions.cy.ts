@@ -4,7 +4,6 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Global } from "../../../../Shared/Global"
 
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
@@ -57,8 +56,8 @@ describe('QDM Measure Definition', () => {
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelDefinition).click()
         cy.get(EditMeasurePage.definitionInputTextbox).type('Measure Definition')
-        cy.get(Global.DiscardCancelBtn).click()
-        Global.clickOnDiscardChanges()
+        cy.get(Utilities.DiscardCancelBtn).click()
+        Utilities.clickOnDiscardChanges()
 
     })
 })

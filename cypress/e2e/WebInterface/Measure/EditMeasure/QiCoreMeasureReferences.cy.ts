@@ -3,7 +3,6 @@ import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
-import { Global } from "../../../../Shared/Global"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
@@ -64,7 +63,7 @@ describe('Qi Core Measure Reference', () => {
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.documentationOption).click()
         cy.get(EditMeasurePage.measureReferenceText).type('Measure Reference')
-        cy.get(Global.DiscardCancelBtn).click()
+        cy.get(Utilities.DiscardCancelBtn).click()
         cy.get(TestCasesPage.createTestCaseDialog).should('not.exist')
     })
 

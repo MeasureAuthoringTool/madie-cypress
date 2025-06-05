@@ -9,7 +9,6 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
-import { Global } from "../../../../Shared/Global"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -272,17 +271,17 @@ describe('Warning modal on Test Case JSON Editor', () => {
 
         //Warning Modal displayed when user navigated to Measure Group tab without saving changes
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
+        cy.get(Utilities.discardChangesConfirmationModal).should('contain.text', 'Discard Changes?')
         cy.get(TestCasesPage.discardChangesConfirmationBody).should('contain.text', 'Are you sure you want to discard your changes?')
-        cy.get(Global.keepWorkingCancel).click()
+        cy.get(Utilities.keepWorkingCancel).click()
 
         //Click on details tab & the warning modal should not display
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(Global.discardChangesConfirmationModal).should('not.exist')
+        cy.get(Utilities.discardChangesConfirmationModal).should('not.exist')
 
         //Click on Test Cases tab and discard all changes
         cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(Global.discardChangesContinue).click()
+        cy.get(Utilities.discardChangesContinue).click()
         cy.get(TestCasesPage.newTestCaseButton).should('exist')
     })
 })

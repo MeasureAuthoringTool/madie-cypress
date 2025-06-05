@@ -7,7 +7,6 @@ import { MadieObject, PermissionActions, Utilities } from "../../../../../Shared
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-import { Global } from "../../../../../Shared/Global"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { Environment } from "../../../../../Shared/Environment"
 import { Header } from "../../../../../Shared/Header"
@@ -813,7 +812,7 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //verify that the discard modal appears
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
     })
 
     it('Validate dirty check on the test case description, in the test case details tab', () => {
@@ -843,7 +842,7 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //verify that the discard modal appears
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
     })
 
     it('Validate dirty check on the test case series, in the test case details tab', () => {
@@ -873,7 +872,7 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //verify that the discard modal appears
-        Global.clickOnDiscardChanges()
+        Utilities.clickOnDiscardChanges()
     })
 })
 

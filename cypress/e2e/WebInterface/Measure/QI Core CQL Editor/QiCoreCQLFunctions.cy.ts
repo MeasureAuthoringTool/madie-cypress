@@ -4,7 +4,6 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Utilities } from "../../../../Shared/Utilities"
-import { Global } from "../../../../Shared/Global"
 
 const date = Date.now()
 let measureName = 'QiCoreCQLFunctions' + date
@@ -173,20 +172,20 @@ describe('Qi Core CQL Functions', () => {
         cy.get(CQLEditorPage.editSavedFunctions).click()
 
         //Click on Discard changes
-        cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard changes?')
+        cy.get(Utilities.discardChangesConfirmationModal).should('contain.text', 'Discard changes?')
         cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to discard your changes in the CQL and edit the Function in the CQL?')
-        cy.get(Global.keepWorkingCancel).click()
+        cy.get(Utilities.keepWorkingCancel).click()
         /*
         Note: should be
-        Global.clickOnKeepWorking()
+        Utilities.clickOnKeepWorking()
         but this modal title wants Discard changes? instead of Discard Changes?
         */
 
         //Click on Delete button
         cy.get(CQLEditorPage.deleteSavedFunctions).click()
-        cy.get(Global.discardChangesConfirmationModal).should('contain.text', 'Discard changes?')
+        cy.get(Utilities.discardChangesConfirmationModal).should('contain.text', 'Discard changes?')
         cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to discard your changes in the CQL and delete the Function from the CQL?')
-        cy.get(Global.discardChangesContinue).click()
+        cy.get(Utilities.discardChangesContinue).click()
         cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete this Function?')
     })
 
