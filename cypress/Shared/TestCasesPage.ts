@@ -116,7 +116,7 @@ export class TestCasesPage {
 
     // RAV sub stab
     public static readonly qdmRAVSideNavLink = '[data-testid="nav-link-rav"]'
-    public static readonly qdmRAVSubTab = '' // coming in next few stories
+    public static readonly qdmRAVSubTab = '[data-testid="rav-tab"]'
     public static readonly saveRAVOption = '[data-testid="rav-save"]'
     public static readonly discardRavChangesOption = '[data-testid="cancel-button"]'
 
