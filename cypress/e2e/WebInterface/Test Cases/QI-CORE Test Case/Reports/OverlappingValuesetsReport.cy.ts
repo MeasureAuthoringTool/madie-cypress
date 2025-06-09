@@ -32,10 +32,11 @@ describe('Generate the Overlapping Valueset report for a QDM measure', () => {
     it('View CMS 334FHIR and generate the Overlapping Valueset report', () => {
 
         // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
+        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
+        cy.wait('@searchDone')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
         cy.get('[data-testid="row-item"]').contains('View').click()
@@ -78,10 +79,11 @@ describe('Generate the Overlapping Valueset report for a QDM measure', () => {
     it('Export Excel version of Overlapping Valuesets report', () => {
 
         // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
+        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
+        cy.wait('@searchDone')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
         cy.get('[data-testid="row-item"]').contains('View').click()
@@ -119,10 +121,11 @@ describe('Generate the Overlapping Valueset report for a QDM measure', () => {
     it('View CMS 1264FHIR and generate an empty Overlapping Valueset report', () => {
 
          // switch to all measure tab, search for original measure, view
-         cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
+         cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
          Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
          cy.get(MeasuresPage.allMeasuresTab).click()
          cy.get(MeasuresPage.searchInputBox).clear().type(measureWithNoOverlap.CMSid).type('{enter}')
+        cy.wait('@searchDone')
          cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', measureWithNoOverlap.title)
  
          cy.get('[data-testid="row-item"]').contains('View').click()

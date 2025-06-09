@@ -41,11 +41,11 @@ describe('Generate the Overlapping Value Set report for a QDM measure', () => {
     it('View CMS 334 and generate the Overlapping Value Set report', () => {
 
         // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
+        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
-        //cy.wait('@searchDone')
+        cy.wait('@searchDone')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
         // need to select correct version of the measure with .eq(1)  -- might be needed?
@@ -88,11 +88,11 @@ describe('Generate the Overlapping Value Set report for a QDM measure', () => {
     it('Export Excel version of Overlapping Value Sets report', () => {
 
         // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
+        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
-        //cy.wait('@searchDone')
+        cy.wait('@searchDone')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
         // need to select correct version of the measure with .eq(1)  -- might be needed?
