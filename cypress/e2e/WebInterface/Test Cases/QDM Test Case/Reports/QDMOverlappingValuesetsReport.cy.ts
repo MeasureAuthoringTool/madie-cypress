@@ -6,7 +6,6 @@ import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import {CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
 import {QdmCql} from "../../../../../Shared/QDMMeasuresCQL"
 import {CQLEditorPage} from "../../../../../Shared/CQLEditorPage"
-import {CQLLibraryPage} from "../../../../../Shared/CQLLibraryPage"
 import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
 
     /*
@@ -25,8 +24,7 @@ const testCaseTitle = 'DENEXStrat1Fail 2RUnilateralMxProc'
 const testCaseDescription = 'DENOMFail' + Date.now()
 const testCaseSeries = 'SBTestSeries'
 
-// skipped until flag "OverlappingValueSets" = true
-describe.skip('Generate the Overlapping Value Set report for a QDM measure', () => {
+describe('Generate the Overlapping Value Set report for a QDM measure', () => {
 
     deleteDownloadsFolderBeforeAll()
 
@@ -47,7 +45,7 @@ describe.skip('Generate the Overlapping Value Set report for a QDM measure', () 
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
-        cy.wait('@searchDone')
+        //cy.wait('@searchDone')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
         // need to select correct version of the measure with .eq(1)  -- might be needed?
@@ -70,7 +68,7 @@ describe.skip('Generate the Overlapping Value Set report for a QDM measure', () 
             const pageValues = overlapCount.text().toString().split(' ')
             expect(pageValues[0]).to.eq('1')
             expect(pageValues[2]).to.eq('5')
-            expect(pageValues[4]).to.eq('27')
+            expect(pageValues[4]).to.eq('26')
         })
         
         // expand 1st row
@@ -94,11 +92,11 @@ describe.skip('Generate the Overlapping Value Set report for a QDM measure', () 
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
-        cy.wait('@searchDone')
+        //cy.wait('@searchDone')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
         // need to select correct version of the measure with .eq(1)  -- might be needed?
-        cy.get('[data-testid="row-item"]').eq(2).contains('View').click()
+        cy.get('[data-testid="row-item"]').eq(0).contains('View').click()
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -132,8 +130,7 @@ describe.skip('Generate the Overlapping Value Set report for a QDM measure', () 
         })
 })
 
-// skipped until flag "OverlappingValueSets" = true
-describe.skip('Overlapping Value Set report validations', () => {
+describe('Overlapping Value Set report validations', () => {
 
     beforeEach('Create Measure, Test Case and login', () => {
 

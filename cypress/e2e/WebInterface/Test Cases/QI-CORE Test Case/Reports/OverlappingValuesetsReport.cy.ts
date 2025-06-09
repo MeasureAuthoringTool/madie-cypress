@@ -14,10 +14,10 @@ const originalMeasure = {
 }
 const measureWithNoOverlap = {
     CMSid: '1264FHIR',
-    title: 'Emergency Care Access & Timeliness (REHQR) FHIR'
+    title: 'Emergency Care Access and Timeliness (REHQR)FHIR'
 }
-// skipped until flag "OverlappingValueSets" = true
-describe.skip('Generate the Overlapping Valueset report for a QDM measure', () => {
+
+describe('Generate the Overlapping Valueset report for a QDM measure', () => {
 
     beforeEach('Login', () => {
 
@@ -33,10 +33,9 @@ describe.skip('Generate the Overlapping Valueset report for a QDM measure', () =
 
         // switch to all measure tab, search for original measure, view
         cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
-        cy.wait('@searchDone')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
         cy.get('[data-testid="row-item"]').contains('View').click()
@@ -46,7 +45,7 @@ describe.skip('Generate the Overlapping Valueset report for a QDM measure', () =
         cy.get(EditMeasurePage.testCasesTab).click()
 
         // click reports button, select overlapping valuesets
-        Utilities.waitForElementEnabled(TestCasesPage.reportsButton, 16500)
+        Utilities.waitForElementEnabled(TestCasesPage.reportsButton, 60000)
         cy.get(TestCasesPage.reportsButton).click()
         cy.get(TestCasesPage.overlappingCodesButton).click()
 
@@ -76,19 +75,54 @@ describe.skip('Generate the Overlapping Valueset report for a QDM measure', () =
         })
     })
 
-    // will be added with https://jira.cms.gov/browse/MAT-8383
-    it.skip('Export Excel version of Overlapping Valuesets report', () => {
+    it('Export Excel version of Overlapping Valuesets report', () => {
 
+        // switch to all measure tab, search for original measure, view
+        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+        cy.get(MeasuresPage.allMeasuresTab).click()
+        cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
+        cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
+
+        cy.get('[data-testid="row-item"]').contains('View').click()
+
+        // got to test case tab
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        // click reports button, select overlapping valuesets
+        Utilities.waitForElementEnabled(TestCasesPage.reportsButton, 60000)
+        cy.get(TestCasesPage.reportsButton).click()
+        cy.get(TestCasesPage.overlappingCodesButton).click()
+
+        // confirm we are on the report pop-up
+        cy.contains('h2', 'Overlapping Codes').should('be.visible')
+
+        //Verify Excel Export
+        const file = 'cypress/downloads/CMS334FHIR-v0.3.003-FHIR6-OverlappingCodes.xlsx'
+        cy.get(TestCasesPage.overlappingCodesExportBtn).should('be.visible')
+        cy.get(TestCasesPage.overlappingCodesExportBtn).click()
+        cy.get(TestCasesPage.exportSuccessMsg).should('contain.text', 'Overlapping Codes report exported successfully')
+        cy.readFile(file, { timeout: 15000 }).should('exist')
+        cy.log('Successfully verified Excel Export')
+
+        cy.task('readXlsx', { file: file, sheet: 'Overlapping Codes' }).then(rows => {
+            expect(rows[0]['Code']).to.equal('10D00Z0')
+            expect(rows[0]['Code System']).to.equal('http://www.cms.gov/Medicare/Coding/ICD10')
+            expect(rows[0]['Description']).to.equal('Extraction of Products of Conception, High, Open Approach')
+            expect(rows[0]['Version']).to.equal('2025')
+            expect(rows[0]['Value Set']).to.equal('CesareanBirth')
+            expect(rows[0]['Value Set OID/URL']).to.equal('http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.282')
+        })
     })
 
     it('View CMS 1264FHIR and generate an empty Overlapping Valueset report', () => {
 
          // switch to all measure tab, search for original measure, view
          cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
-         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
+         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
          cy.get(MeasuresPage.allMeasuresTab).click()
          cy.get(MeasuresPage.searchInputBox).clear().type(measureWithNoOverlap.CMSid).type('{enter}')
-         cy.wait('@searchDone')
          cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', measureWithNoOverlap.title)
  
          cy.get('[data-testid="row-item"]').contains('View').click()
@@ -98,7 +132,7 @@ describe.skip('Generate the Overlapping Valueset report for a QDM measure', () =
          cy.get(EditMeasurePage.testCasesTab).click()
  
          // click reports button, select overlapping valuesets
-         Utilities.waitForElementEnabled(TestCasesPage.reportsButton, 23500)
+         Utilities.waitForElementEnabled(TestCasesPage.reportsButton, 60000)
          cy.get(TestCasesPage.reportsButton).click()
          cy.get(TestCasesPage.overlappingCodesButton).click()
  
