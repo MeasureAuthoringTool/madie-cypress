@@ -7,39 +7,28 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { QiCore4Cql } from "../../../../Shared/FHIRMeasuresCQL"
 
-let measureName = 'TestMeasure' + Date.now() + 1
-let CqlLibraryName = 'TestLibrary' + Date.now() + 1
-let randValue = (Math.floor((Math.random() * 1000) + 1))
-let newMeasureName = measureName + randValue
-let newCqlLibraryName = CqlLibraryName + randValue
-let measureCQL = MeasureCQL.ICFCleanTest_CQL
-
-let measureCQL_valid = 'library ' + newCqlLibraryName + ' version \'0.0.000\'\n' +
-    '\n' +
-    'using FHIR version \'4.0.1\'\n' +
-    '\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    '\n' +
-    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
+const measureName = 'CqlEditorComponent' + Date.now()
+const CqlLibraryName = 'CqlEditorComponentLib' + Date.now()
+const measureCQL = MeasureCQL.ICFCleanTest_CQL
+const measureCQL_WithWarnings = QiCore4Cql.intentionalWarningCql
+const measureCQL_valid = 'library abcde version \'0.0.000\'\n\n' +
+    'using FHIR version \'4.0.1\'\n\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n\n' +
+    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
+    'context Patient\n\n' +
     'define "ipp":\n' +
-    '  exists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period" \n' +
-    '  \n' +
+    '  exists ["Encounter": "Office Visit"] E where E.period.start during "Measurement Period" \n\n' +
     'define "denom":\n' +
-    '    "ipp"\n' +
-    '    \n' +
+    '    "ipp"\n\n' +
     'define "num":\n' +
-    '    exists ["Encounter"] E where E.status ~ \'finished\'\n' +
-    '      \n' +
+    '    exists ["Encounter"] E where E.status ~ \'finished\'\n\n' +
     'define "numeratorExclusion":\n' +
     '    "num"'
 
-let measureCQL_WithErrors = 'library ' + newCqlLibraryName + ' version \'0.0.000\'\n' +
+const measureCQL_WithErrors = 'library qwerty version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
     'valueset "ONC Administrative Sex": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1\' \n' +
@@ -55,48 +44,24 @@ let measureCQL_WithErrors = 'library ' + newCqlLibraryName + ' version \'0.0.000
     'valueset "HPV Test": \'\')\n' +
     'context Patient\n'
 
-let measureCQL_WithWarnings = 'library TestLibrary16969620425371870 version \'0.0.000\'\n' +
-    '\n' +
-    'using QICore version \'4.1.1\'\n' +
-    '\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'include CQMCommon version \'1.0.000\' called CQMCommon\n' +
-    'include SupplementalDataElements version \'3.1.000\' called SDE\n' +
-    'include QICoreCommon version \'1.2.000\' called QICoreCommon\n' +
-    'include Hospice version \'6.1.000\' called Hospice\n' +
-    'include Status version \'1.1.000\' called Status\n' +
-    '\n' +
-    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\' \n' +
-    '\n' +
-    'codesystem "CPT": \'http://www.ama-assn.org/go/cpt\' \n' +
-    '\n' +
-    'code "Office or other outpatient visit for the evaluation and management of an established patient, that may not require the presence of a physician or other qualified health care professional. Usually, the presenting problem(s) are minimal.": \'99211\' from "CPT" display \'Office or other outpatient visit for the evaluation and management of an established patient, that may not require the presence of a physician or other qualified health care professional. Usually, the presenting problem(s) are minimal.\'\n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
-    'define "Qualifying Encounters":\n' +
-    '  ( ["Encounter": "Office Visit"]\n' +
-    '        union ["Encounter": "Office or other outpatient visit for the evaluation and management of an established patient, that may not require the presence of a physician or other qualified health care professional. Usually, the presenting problem(s) are minimal."]\n' +
-    '        ) ValidEncounters\n' +
-    '        where QICoreCommon."ToInterval"(ValidEncounters.period) during day of "Measurement Period"'
-
 describe('Validate errors/warnings/success messages on CQL editor component on save', () => {
+
+    const newMeasureName = measureName + 1
+    const newCqlLibraryName = CqlLibraryName + 1
+    let measureCQLValid = measureCQL_valid.replace('abcde', newCqlLibraryName)
+    let measureCQLErrors = measureCQL_WithErrors.replace('qwerty', newCqlLibraryName)
+    let measureCQLWarnings = measureCQL_WithWarnings.replace('TestLibrary16969620425371870', newCqlLibraryName)
 
     beforeEach('Create measure and login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('Verify success message on CQL editor component, on save and on tab / page load', () => {
@@ -108,7 +73,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_valid)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLValid)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
@@ -124,7 +89,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithErrors)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLErrors)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
@@ -144,7 +109,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
         //Add CQL
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithWarnings)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLWarnings)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
@@ -161,27 +126,22 @@ describe('Validate errors/warnings/success messages on CQL editor component on s
 
 describe('Validate errors/warnings/success messages on CQL editor component on CQL update', () => {
 
+    const newMeasureName = measureName + 2
+    const newCqlLibraryName = CqlLibraryName + 2
+    let measureCQLValid = measureCQL_valid.replace('abcde', newCqlLibraryName)
+    let measureCQLErrors = measureCQL_WithErrors.replace('qwerty', newCqlLibraryName)
+    let measureCQLWarnings = measureCQL_WithWarnings.replace('TestLibrary16969620425371870', newCqlLibraryName)
+
     beforeEach('Create measure and login', () => {
 
-        let randValue = (Math.floor((Math.random() * 1000) + 1))
-        newMeasureName = measureName + randValue
-        newCqlLibraryName = CqlLibraryName + randValue
-
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
-
-        let randValue = (Math.floor((Math.random() * 1000) + 2))
-        let newCqlLibraryName = CqlLibraryName + randValue
-
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('Verify success message on CQL editor component, on CQL update and on tab / page load', () => {
@@ -194,7 +154,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
         //Update text in the CQL Library Editor
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_valid)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLValid)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         CQLEditorPage.validateSuccessfulCQLUpdate()
@@ -212,7 +172,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
         //Update text in the CQL Library Editor that will cause error
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithErrors)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLErrors)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get('[data-testid="library-warning"]').should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
@@ -233,7 +193,7 @@ describe('Validate errors/warnings/success messages on CQL editor component on C
         cy.get(CQLLibraryPage.cqlLibraryEditorTextBox).type('{selectall}{backspace}{selectall}{backspace}')
 
         //Update text in the CQL Library Editor that will cause warning
-        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQL_WithWarnings)
+        cy.get(EditMeasurePage.cqlEditorTextBox).type(measureCQLWarnings)
 
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
