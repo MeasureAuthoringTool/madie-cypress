@@ -158,23 +158,23 @@ export class EditMeasurePage {
     public static readonly measureDevelopersAlertMsg = '[data-testid="developers-helper-text"]'
 
     //Description Page
-    public static readonly measureDescriptionTextBox = '[data-testid="measureDescriptionInput"]'
-    public static readonly measureDescriptionSaveButton = '[data-testid="measureDescriptionSave"]'
+    public static readonly measureDescriptionTextBox = '[data-testid="measure-description-input"]'
+    public static readonly measureDescriptionSaveButton = '[data-testid="measure-description-save"]'
     public static readonly measureDescriptionSuccessMessage = '[data-testid="measureDescriptionSuccess"]'
 
     //Copyright Page
-    public static readonly measureCopyrightTextBox = '[data-testid="measureCopyrightInput"]'
-    public static readonly measureCopyrightSaveButton = '[data-testid="measureCopyrightSave"]'
+    public static readonly measureCopyrightTextBox = '[data-testid="measure-copyright-input"]'
+    public static readonly measureCopyrightSaveButton = '[data-testid="measure-copyright-save"]'
     public static readonly measureCopyrightSuccessMessage = '[data-testid="measureCopyrightSuccess"]'
 
     //Disclaimer Page
-    public static readonly measureDisclaimerTextBox = '[data-testid="measureDisclaimerInput"]'
-    public static readonly measureDisclaimerSaveButton = '[data-testid="measureDisclaimerSave"]'
+    public static readonly measureDisclaimerTextBox = '[data-testid="measure-disclaimer-input"]'
+    public static readonly measureDisclaimerSaveButton = '[data-testid="measure-disclaimer-save"]'
     public static readonly measureDisclaimerSuccessMessage = '[data-testid="measureDisclaimerSuccess"]'
 
     //Rationale Page
-    public static readonly measureRationaleTextBox = '[data-testid="measureRationaleInput"]'
-    public static readonly measureRationaleSaveButton = '[data-testid="measureRationaleSave"]'
+    public static readonly measureRationaleTextBox = '[data-testid="measure-rationale-input"]'
+    public static readonly measureRationaleSaveButton = '[data-testid="measure-rationale-save"]'
     public static readonly measureRationaleSuccessMessage = '[data-testid="measureRationaleSuccess"]'
 
     //Purpose
@@ -183,13 +183,13 @@ export class EditMeasurePage {
     public static readonly measurePurposeSavedMsg = '[data-testid="measurePurposeSuccess"]'
 
     //Guidance Page
-    public static readonly measureGuidanceTextBox = '[data-testid="measureGuidance (Usage)Input"]'
-    public static readonly measureGuidanceSaveButton = '[data-testid="measureGuidance (Usage)Save"]'
+    public static readonly measureGuidanceTextBox = '[data-testid="measure-guidance-usage-input"]'
+    public static readonly measureGuidanceSaveButton = '[data-testid="measure-guidance-usage-save"]'
     public static readonly measureGuidanceSuccessMessage = '[data-testid="measureGuidance (Usage)Success"]'
 
     //Clinical Guidance / Recommendation Page
-    public static readonly measureClinicalRecommendationTextBox = '[data-testid="measureClinical Recommendation StatementInput"]'
-    public static readonly measureClinicalRecommendationSaveButton = '[data-testid="measureClinical Recommendation StatementSave"]'
+    public static readonly measureClinicalRecommendationTextBox = '[data-testid="measure-clinical-recommendation-statement-input"]'
+    public static readonly measureClinicalRecommendationSaveButton = '[data-testid="measure-clinical-recommendation-statement-save"]'
     public static readonly measureClinicalRecommendationSuccessMessage = '[data-testid="measureClinical Recommendation StatementSuccess"]'
 
     public static actionCenter(action: EditMeasureActions, options?: MeasureActionOptions): void {
