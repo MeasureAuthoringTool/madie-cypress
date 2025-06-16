@@ -18,6 +18,12 @@ export class CQLEditorPage {
     //error tooltip container
     public static readonly errorContainer = '#ace-editor-wrapper > div.ace_tooltip'
     public static readonly errorMsg = '[data-testid="generic-errors-text-list"]'
+    public static readonly warningMsg = '[data-testid="generic-warnings-text-list"]'
+    public static readonly minimizeButton = '[data-testid="minimize-button-0"]'
+    public static readonly greenMessageBox = '.madie-alert.success'
+    public static readonly orangeWarningBox = '[data-testid="generic-warning-text-header"]'
+
+    public static readonly minimizedAlertsTab = '[data-testid="minimized-alert"]'
 
     //success save message without errors
     public static readonly successfulCQLSaveNoErrors = '.madie-alert'

@@ -843,6 +843,21 @@ public static readonly ICFCleanTestQICore = 'library SimpleFhirLibrary version \
     '        union ["Encounter": "Office or other outpatient visit for the evaluation and management of an established patient, that may not require the presence of a physician or other qualified health care professional. Usually, the presenting problem(s) are minimal."]\n' +
     '        ) ValidEncounters\n' +
     '        where QICoreCommon."ToInterval"(ValidEncounters.period) during day of "Measurement Period"'
+
+    public static intentionalErrorCql = 'library TestLibrary16969620425371870 version \'0.0.000\'\n\n' +
+    'using QICore version \'4.1.1\'\n\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    'include CQMCommon version \'1.0.000\' called CQMCommon\n' +
+    'include SupplementalDataElements version \'3.1.000\' called SDE\n' +
+    'include QICoreCommon version \'1.2.000\' called QICoreCommon\n' +
+    'include Hospice version \'6.1.000\' called Hospice\n' +
+    'include Status version \'1.1.000\' called Status\n\n' +
+    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n\n' +
+    'codesystem "CPT": \'http://www.ama-assn.org/go/cpt\'\n\n' +
+    'code "Office or other outpatient visit for the evaluation and management of an established patient, that may not require the presence of a physician or other qualified health care professional. Usually, the presenting problem(s) are minimal.": \'99211\' from "CPT" display \'Office or other outpatient visit for the evaluation and management of an established patient, that may not require the presence of a physician or other qualified health care professional. Usually, the presenting problem(s) are minimal.\'\n\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n\n' +
+    'context Patient\n\n' +
+    'define "IP":'
 }
 
 export class QiCore6Cql {
