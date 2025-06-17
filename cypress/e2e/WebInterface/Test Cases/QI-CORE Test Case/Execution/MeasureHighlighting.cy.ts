@@ -756,6 +756,7 @@ describe('Measure Highlighting', () => {
     beforeEach('Create measure and login', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests, null)
+
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -765,7 +766,7 @@ describe('Measure Highlighting', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
         TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
@@ -833,14 +834,14 @@ describe('Measure Highlighting', () => {
             2. examine set of codes in each valueset
             3. verify no duplicates are occuring on that single valueset
         */
-       // 1
+        // 1
         cy.wait('@expansion', { timeout: 35000 }).then(expansion => {
 
-            for(let valueset of expansion.response.body) {
+            for (let valueset of expansion.response.body) {
                 // 2
                 const codes: Array<string> = valueset.expansion.contains.map(a => a.code)
 
-                let duplicates = codes.filter((value, index) => 
+                let duplicates = codes.filter((value, index) =>
                     codes.indexOf(value) !== index && codes.lastIndexOf(value) === index);
                 // 3
                 expect(duplicates).to.be.empty
@@ -1194,7 +1195,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
     })
 
     it('QI Core Measure: New Highlighting Left Navigation panel is displayed & Includes Result sub section as well as Definitions, Functions, and Unused sections', () => {
-        
+
         OktaLogin.Login()
 
         //Click on Edit Measure
@@ -1407,50 +1408,50 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
 
         cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP').click()
-            Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 35000)
+            Utilities.waitForElementVisible(TestCasesPage.tcIPHighlightingDetails, 40000)
             cy.get(TestCasesPage.tcIPHighlightingDetails).should('contain.text', '/***Population Criteria***/\ndefine "Initial Population":\nexists "Dementia Encounter During Measurement Period"\n    and ( Count("Qualifying Encounter During Measurement Period")>= 2 )')
-            Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
+            Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
             cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
-            Utilities.waitForElementToNotExist(TestCasesPage.tcHLResultsSection, 35000)
+            Utilities.waitForElementToNotExist(TestCasesPage.tcHLResultsSection, 40000)
             cy.get(TestCasesPage.tcIPHighlightingDetails).contains('Results').first().scrollIntoView().click()
-            Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
+            Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
             cy.get(TestCasesPage.tcHLResultsSection).should('contain.text', 'FALSE (false)')
 
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('DENOM').click()
-            Utilities.waitForElementVisible(TestCasesPage.tcDENOMHighlightingDetails, 35000)
+            Utilities.waitForElementVisible(TestCasesPage.tcDENOMHighlightingDetails, 40000)
             cy.get(TestCasesPage.tcDENOMHighlightingDetails).should('contain.text', '\ndefine "Denominator":\n"Initial Population"\nResultsUNHIT ')
 
-            Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
+            Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
             cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
-            Utilities.waitForElementToNotExist(TestCasesPage.tcHLResultsSection, 35000)
+            Utilities.waitForElementToNotExist(TestCasesPage.tcHLResultsSection, 40000)
             cy.get(TestCasesPage.tcDENOMHighlightingDetails).contains('Results').first().scrollIntoView().click()
-            Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
+            Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
             cy.get(TestCasesPage.tcHLResultsSection).should('contain.text', 'UNHIT')
 
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
-            Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
+            Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 40000)
             cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Numerator":\nexists "Assessment of Cognition Using Standardized Tools or Alternate Methods"\nResultsUNHIT ')
 
-            Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
+            Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
             cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
-            Utilities.waitForElementToNotExist(TestCasesPage.tcHLResultsSection, 35000)
+            Utilities.waitForElementToNotExist(TestCasesPage.tcHLResultsSection, 40000)
             cy.get(TestCasesPage.tcNUMERHighlightingDetails).contains('Results').first().scrollIntoView().click()
-            Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
+            Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
             cy.get(TestCasesPage.tcHLResultsSection).should('contain.text', 'UNHIT')
         })
 
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Functions').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcFUNCTIONSHighlightingDetails, 35000)
+        Utilities.waitForElementVisible(TestCasesPage.tcFUNCTIONSHighlightingDetails, 40000)
         cy.get(TestCasesPage.tcFUNCTIONSHighlightingDetails).first().should('contain.text', '\n/* Candidates for FHIRCommon */\n\n/*\n@description: Returns true if the given condition has a clinical status of active, recurrence, or relapse\n*/\ndefine fluent function isActive(condition Condition):\n  condition.clinicalStatus ~ \"active\"\n    or condition.clinicalStatus ~ \"recurrence\"\n    or condition.clinicalStatus ~ \"relapse\"\n')
 
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Unused').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcUNUSEDHightlightingDetails, 35000)
+        Utilities.waitForElementVisible(TestCasesPage.tcUNUSEDHightlightingDetails, 40000)
         cy.get(TestCasesPage.tcUNUSEDHightlightingDetails).should('contain.text', 'define "Patient Reason for Not Performing Assessment of Cognition Using Standardized Tools or Alternate Methods": "unavailable"ResultsNA define "Denominator Exceptions": "unavailable"ResultsNA define "SDE Ethnicity": "unavailable"ResultsNA define "SDE Race": "unavailable"ResultsNA define "SDE Sex": "unavailable"ResultsNA define "SDE Payer": "unavailable"ResultsNA ')
 
-        Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
+        Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
         cy.get(TestCasesPage.tcHLCollapseResultBtn).first().click()
         cy.get(TestCasesPage.tcUNUSEDHightlightingDetails).contains('Results').first().scrollIntoView().click()
-        Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 35000)
+        Utilities.waitForElementVisible(TestCasesPage.tcHLResultsSection, 40000)
         cy.get(TestCasesPage.tcHLResultsSection).should('contain.text', 'NA')
     })
 })
@@ -1539,109 +1540,109 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
 
 describe('Verify highlighting occurs on a newly versioned measure', () => {
 
-        beforeEach('Create measure and login', () => {
+    beforeEach('Create measure and login', () => {
 
-            CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
-            MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
-            TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
-            OktaLogin.Login()
-            MeasuresPage.actionCenter('edit')
-            cy.get(EditMeasurePage.cqlEditorTab).click()
-            cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-            cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
-            cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-            //wait for alert / successful save message to appear
-            Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-            cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        })
-    
-        afterEach('Logout and Clean up Measures', () => {
-    
-            OktaLogin.Logout()
-            Utilities.deleteVersionedMeasure(measureName, CqlLibraryName)
-        })
-    
-        it('Execute Test Case on a newly versioned measure; verify Measure highlighting happens', () => {
-    
-            OktaLogin.Login()
-    
-            //Click on Edit Measure
-            MeasuresPage.actionCenter('edit')
-    
-            //Create Measure Group
-            cy.get(EditMeasurePage.measureGroupsTab).click()
-    
-            cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
-            cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
-            cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
-            cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
-                if ($ele.text() == "Text") {
-                    cy.wrap($ele).should('exist')
-                    cy.wrap($ele).focus()
-                    cy.wrap($ele).click()
-                }
-            })
-            cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
-    
-            cy.get(MeasureGroupPage.QDMPopCriteria1Desc).click()
-    
-            Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
-            Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
-            Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Initial Population')
-            Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Initial PopulationOne')
-    
-            //intercept group id once update to the measure group is saved
-            cy.readFile(measurePath).should('exist').then((fileContents) => {
-                cy.intercept('PUT', '/api/measures/' + fileContents + '/groups').as('group')
-            })
-            cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-            Utilities.waitForElementVisible(MeasureGroupPage.updateMeasureGroupConfirmationBtn, 35000)
-            Utilities.waitForElementEnabled(MeasureGroupPage.updateMeasureGroupConfirmationBtn, 35000)
-            cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
-            cy.wait('@group', { timeout: 60000 }).then((request) => {
-                cy.writeFile(measureGroupPath, request.response.body.id)
-            })
-    
-            //validation successful update message
-            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
+        OktaLogin.Login()
+        MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+    })
 
-            //version
-            EditMeasurePage.actionCenter(EditMeasureActions.version)
+    afterEach('Logout and Clean up Measures', () => {
 
-            //Navigate to Test Case page
-            cy.get(EditMeasurePage.testCasesTab).click()
-    
-            //Navigate to test case detail / edit page
-            TestCasesPage.clickEditforCreatedTestCase()
-    
-            //Navigate to the Expected / Actual sub tab
-            Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
-            cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click({ force: true })
-    
-            //check checkboxes to get a passing result from running the test case
-            Utilities.waitForElementVisible(TestCasesPage.testCaseIPPExpected, 35000)
-            cy.get(TestCasesPage.testCaseIPPExpected).scrollIntoView().check({ force: true })
-    
-            //run test case
-            cy.get(TestCasesPage.runTestButton).should('be.visible')
-            cy.get(TestCasesPage.runTestButton).should('be.enabled')
-            cy.get(TestCasesPage.runTestButton).click()
-    
-            Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 25500)
-    
-            //navigate to the highlighting sub tab
-            cy.get(TestCasesPage.tcHighlightingTab).should('exist')
-            cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
-            cy.get(TestCasesPage.tcHighlightingTab).click()
-    
-            cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
-                cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
-                Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
-                cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Initial PopulationOne":\ntrue\n')
-                cy.get('[data-ref-id="342"]').should('have.color', '#20744C')
-            })
+        OktaLogin.Logout()
+        Utilities.deleteVersionedMeasure(measureName, CqlLibraryName)
+    })
+
+    it('Execute Test Case on a newly versioned measure; verify Measure highlighting happens', () => {
+
+        OktaLogin.Login()
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Create Measure Group
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).click()
+        cy.get(MeasureGroupPage.measureGroupTypeCheckbox).each(($ele) => {
+            if ($ele.text() == "Text") {
+                cy.wrap($ele).should('exist')
+                cy.wrap($ele).focus()
+                cy.wrap($ele).click()
+            }
         })
+        cy.get(MeasureGroupPage.measureGroupTypeSelect).type('Process').type('{downArrow}').type('{enter}')
+
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc).click()
+
+        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
+        Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial PopulationOne')
+        Utilities.populationSelect(MeasureGroupPage.denominatorSelect, 'Initial Population')
+        Utilities.populationSelect(MeasureGroupPage.numeratorSelect, 'Initial PopulationOne')
+
+        //intercept group id once update to the measure group is saved
+        cy.readFile(measurePath).should('exist').then((fileContents) => {
+            cy.intercept('PUT', '/api/measures/' + fileContents + '/groups').as('group')
+        })
+        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.waitForElementVisible(MeasureGroupPage.updateMeasureGroupConfirmationBtn, 35000)
+        Utilities.waitForElementEnabled(MeasureGroupPage.updateMeasureGroupConfirmationBtn, 35000)
+        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
+        cy.wait('@group', { timeout: 60000 }).then((request) => {
+            cy.writeFile(measureGroupPath, request.response.body.id)
+        })
+
+        //validation successful update message
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+
+        //version
+        EditMeasurePage.actionCenter(EditMeasureActions.version)
+
+        //Navigate to Test Case page
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Navigate to test case detail / edit page
+        TestCasesPage.clickEditforCreatedTestCase()
+
+        //Navigate to the Expected / Actual sub tab
+        Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
+        cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click({ force: true })
+
+        //check checkboxes to get a passing result from running the test case
+        Utilities.waitForElementVisible(TestCasesPage.testCaseIPPExpected, 35000)
+        cy.get(TestCasesPage.testCaseIPPExpected).scrollIntoView().check({ force: true })
+
+        //run test case
+        cy.get(TestCasesPage.runTestButton).should('be.visible')
+        cy.get(TestCasesPage.runTestButton).should('be.enabled')
+        cy.get(TestCasesPage.runTestButton).click()
+
+        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 25500)
+
+        //navigate to the highlighting sub tab
+        cy.get(TestCasesPage.tcHighlightingTab).should('exist')
+        cy.get(TestCasesPage.tcHighlightingTab).should('be.visible')
+        cy.get(TestCasesPage.tcHighlightingTab).click()
+
+        cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
+            cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
+            Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
+            cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Initial PopulationOne":\ntrue\n')
+            cy.get('[data-ref-id="342"]').should('have.color', '#20744C')
+        })
+    })
 })
 
 describe('Verify highlighting occurs on an old versioned measure', () => {
@@ -1654,14 +1655,17 @@ describe('Verify highlighting occurs on an old versioned measure', () => {
     beforeEach('Create measure and login', () => {
 
         OktaLogin.Login()
-       
+
         // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 30500)
+        //searches?currentUser=true&limit=10&page=0&sort=&direction= -- new url for searching
+        //searches?currentUser=false&limit=10&page=0 -- old url for searching
+        cy.intercept('PUT', '/api/measures/searches?currentUser=true&limit=10&page=0&sort=&direction=').as('searchDone')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 50500)
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
+        cy.get(/*MeasuresPage.searchInputBox*/ MeasuresPage.filterSearchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         cy.wait('@searchDone')
-        cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
+        //changed from nth-child(2) -- old way to find searched for measure
+        cy.get(MeasuresPage.measureListTabelBody/*'[data-testid="row-item"] > :nth-child(2)'*/).should('contain', originalMeasure.title)
 
         // need to select correct version (1.4.000P) of the measure with .eq(2)
         cy.get('[data-testid="row-item"]').eq(2).contains('View').click()

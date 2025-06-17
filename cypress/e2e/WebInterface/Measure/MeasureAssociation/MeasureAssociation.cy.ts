@@ -48,7 +48,7 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
 
-        const qdmMeasure1 : CreateMeasureOptions = {
+        const qdmMeasure1: CreateMeasureOptions = {
             ecqmTitle: measureQDM,
             cqlLibraryName: measureQDM,
             measureScoring: 'Proportion',
@@ -65,7 +65,7 @@ describe('Measure Association: Validations using Qi Core 4.1.1', () => {
         //Create Second QDM Measure
         measureQDM2 = 'QDMMeasure2' + Date.now() + randValue + 6 + randValue
 
-        const qdmMeasure2 : CreateMeasureOptions = {
+        const qdmMeasure2: CreateMeasureOptions = {
             ecqmTitle: measureQDM2,
             cqlLibraryName: measureQDM2,
             measureScoring: 'Proportion',
@@ -331,7 +331,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
 
-        const qdmMeasure1 : CreateMeasureOptions = {
+        const qdmMeasure1: CreateMeasureOptions = {
             ecqmTitle: measureQDM,
             cqlLibraryName: measureQDM,
             measureScoring: 'Proportion',
@@ -548,7 +548,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         //Create New QDM Measure
         measureQDM = 'QDMMeasure4QiCore600' + Date.now() + randValue + 8 + randValue
 
-        const qdmMeasure1 : CreateMeasureOptions = {
+        const qdmMeasure1: CreateMeasureOptions = {
             ecqmTitle: measureQDM,
             cqlLibraryName: measureQDM,
             measureScoring: 'Proportion',
@@ -565,7 +565,7 @@ describe('Measure Association: Validations using Qi Core 6.0.0', () => {
         //Create Second QDM Measure
         measureQDM2 = 'QDMMeasure24QiCore600' + Date.now() + randValue + 6 + randValue
 
-        const qdmMeasure2 : CreateMeasureOptions = {
+        const qdmMeasure2: CreateMeasureOptions = {
             ecqmTitle: measureQDM2,
             cqlLibraryName: measureQDM2,
             measureScoring: 'Proportion',
@@ -835,7 +835,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         //Create New QDM Measure
         measureQDM = 'QDMMeasure' + Date.now() + randValue + 8 + randValue
 
-        const qdmMeasure1 : CreateMeasureOptions = {
+        const qdmMeasure1: CreateMeasureOptions = {
             ecqmTitle: measureQDM,
             cqlLibraryName: measureQDM,
             measureScoring: 'Proportion',
