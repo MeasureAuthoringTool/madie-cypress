@@ -120,7 +120,7 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
 
         MeasuresPage.actionCenter('export')
 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v1.0.000-FHIR4.zip'), { timeout: 500000 }).should('exist')
+        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR4.zip')
         cy.log('Successfully verified zip file export')
         console.log('Successfully verified zip file export')
 
@@ -129,6 +129,8 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
     })
 
     it('Unzip the downloaded file and verify file types', () => {
+
+        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR4.zip')
 
         // unzipping the Measure Export
         cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v1.0.000-FHIR4.zip', path: downloadsFolder })
