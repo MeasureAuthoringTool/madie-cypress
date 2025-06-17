@@ -49,7 +49,8 @@ export class MeasureGroupPage {
     //QDM population criteria
     public static readonly QDMPopulationCriteria1 = '[data-testid="leftPanelMeasureInformation-MeasureGroup1"]'
     public static readonly QDMPopulationCriteria2 = '[data-testid="leftPanelMeasureInformation-MeasureGroup2"]'
-    public static readonly QDMPopCriteria1Desc = '[data-testid="groupDescriptionInput"]'
+    //when the "EnhancedTextFormatting" flag has been removed, switch this variable to point to the commented out value
+    public static readonly QDMPopCriteria1Desc = /*'[data-testid="population-criteria-1-description-rich-text-editor"]'*/'[data-testid="groupDescriptionInput"]'
     public static readonly QDMPopCriteria2IP = '[id="population-select-initial-population-select"]'
     public static readonly QDMPopCriteria1IPDesc = '[data-testid="populations[0].description-description"]'
     public static readonly QDMAddPopCriteriaBtn = '[data-testid="add-measure-group-button"]'
@@ -119,7 +120,8 @@ export class MeasureGroupPage {
     public static readonly rateAggregation = '[data-testid="rateAggregationText"]'
     public static readonly improvementNotationSelect = '[id="improvement-notation-select"]'
     public static readonly improvementNotationDescText = '[data-testid="improvement-notation-description-input"]'
-    public static readonly improvementNotationDescQiCore = '[data-testid="improvement-notation-description"]'
+    // When the flag "EnhancedTextFormatting" is removed, replace the below variable's value with that wheich is commented out
+    public static readonly improvementNotationDescQiCore = '[data-testid="improvement-notation-description"]'/*'[data-testid="improvement-notation-description-rich-text-editor"]'*/
     public static readonly improvementNotationValues = '[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]'
     public static readonly measureReportingSaveBtn = '[data-testid="measure-Reporting-save"]'
 
@@ -249,7 +251,7 @@ export class MeasureGroupPage {
     //Supplemental data elements
     public static readonly supplementalDataDefinitionSelect = '#supplemental-data'
     public static readonly supplementalDataDefinitionDropdown = '#supplemental-data-listbox'
-    public static readonly supplementalDataDefinitionDescriptionTextBox = '[data-testid="supplementalDataDescription"]'
+    public static readonly supplementalDataDefinitionDescriptionTextBox = '[data-testid="supplemental-data-description-text"]'
     public static readonly saveSupplementalDataElements = '[data-testid="measure-Supplemental Data-save"]'
     public static readonly removeCloseDefinitionSelection = '[data-testid="CancelIcon"]'
     public static readonly discardChangesBtn = '[data-testid=cancel-button]'
