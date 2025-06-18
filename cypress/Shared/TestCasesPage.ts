@@ -314,7 +314,7 @@ export class TestCasesPage {
     public static readonly tcImportError = '[data-testid="test-case-import-error-div"]'
     public static readonly testCasesNonBonnieFileImportModal = '[data-testid="test-case-import-content-div"]'
     public static readonly testCasesNonBonnieFileImportFileLineAfterSelectingFile = '[data-testid="test-case-preview-header"]'
-    public static readonly importTestCaseSuccessMsg = '[data-testid="success-toast"]'
+    public static readonly importTestCaseSuccessMsg = '[data-testid="toast-success"]'
     public static readonly importTestCaseSuccessInfo = '[id="content"]'
 
     //Export Test Cases

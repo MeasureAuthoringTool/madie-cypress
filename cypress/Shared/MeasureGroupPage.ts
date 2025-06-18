@@ -121,7 +121,7 @@ export class MeasureGroupPage {
     public static readonly improvementNotationSelect = '[id="improvement-notation-select"]'
     public static readonly improvementNotationDescText = '[data-testid="improvement-notation-description-input"]'
     // When the flag "EnhancedTextFormatting" is removed, replace the below variable's value with that wheich is commented out
-    public static readonly improvementNotationDescQiCore = '[data-testid="improvement-notation-description"]'/*'[data-testid="improvement-notation-description-rich-text-editor"]'*/
+    public static readonly improvementNotationDescQiCore = '[data-testid="improvement-notation-description-text"]'/*'[data-testid="improvement-notation-description-rich-text-editor"]'*/
     public static readonly improvementNotationValues = '[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]'
     public static readonly measureReportingSaveBtn = '[data-testid="measure-Reporting-save"]'
 
@@ -244,7 +244,7 @@ export class MeasureGroupPage {
     public static readonly riskAdjustmentDefinitionDropdown = '[id="risk-adjustment-listbox"]'
     public static readonly riskAdjustmentTextBox = '[class="risk-description"]'
     public static readonly cancelIcon = '[data-testid=CancelIcon]'
-    public static readonly riskAdjustmentDescriptionTextBox = '[class=risk-description]'
+    public static readonly riskAdjustmentDescriptionTextBox = '[data-testid="risk-adjustment-description-text"]'
     public static readonly saveRiskAdjustments = '[data-testid="measure-Risk Adjustment-save"]'
     public static readonly riskAdjDropDown = '[data-testid="risk-adjustment-dropdown"]'
 
