@@ -65,7 +65,6 @@ describe('QI-Core Measure Export', () => {
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionDropdown).eq(0).contains('ipp').click()
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('exist')
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox)
-            .first() // select the first element
             .type('Initial Population Description')
         //select a definition and enter a description for denom
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).eq(0).click()
@@ -123,6 +122,8 @@ describe('QI-Core Measure Export', () => {
     })
 
     it('Unzip the downloaded file and verify file types for QI-Core Measure', () => {
+
+        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR4.zip', { timeout: 15000 })
 
         // unzipping the Measure Export
         cy.task('unzipFile', { zipFile: 'eCQMTitle4QICore-v1.0.000-FHIR4.zip', path: downloadsFolder })
@@ -201,6 +202,8 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
     })
 
     it('Verify content of a Qi Core measure HR file, before versioning', () => {
+
+        cy.verifyDownload('eCQMTitle4QICore-v0.0.000-FHIR4.zip', { timeout: 15000 })
 
         //remove the baseUrl so that we can visit a local file
         Cypress.config('baseUrl', null)
@@ -437,6 +440,8 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
     })
 
     it('Verify the content of the HR file, for a Qi Core Measure, after the measure has been versioned', () => {
+
+        cy.verifyDownload('eCQMTitle4QICore-v1.0.000-FHIR4.zip', { timeout: 15000 })
 
         //remove the baseUrl so that we can visit a local file
         Cypress.config('baseUrl', null)
