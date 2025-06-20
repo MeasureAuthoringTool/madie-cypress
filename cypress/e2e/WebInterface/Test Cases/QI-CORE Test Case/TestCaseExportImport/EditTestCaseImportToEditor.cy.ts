@@ -28,7 +28,6 @@ describe('Import Test Case into the Test Case Editor', () => {
     })
 
     it('Successful Json file Import', () => {
-        const importTestCaseSuccessMsg = '[data-testid="success-toast"]'
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
@@ -38,8 +37,8 @@ describe('Import Test Case into the Test Case Editor', () => {
 
         //Upload valid Json file
         cy.get(TestCasesPage.testCaseFileImport).attachFile(fileToUpload)
-        Utilities.waitForElementVisible(importTestCaseSuccessMsg, 15500)
-        cy.get(importTestCaseSuccessMsg).should('contain.text', 'Test Case JSON copied into editor. QI-Core Defaults have been added. Please review and save your Test Case.')
+        Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessMsg, 15500)
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'Test Case JSON copied into editor. QI-Core Defaults have been added. Please review and save your Test Case.')
 
         //Save uploaded Test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
