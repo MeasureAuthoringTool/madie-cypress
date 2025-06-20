@@ -24,7 +24,7 @@ export class MeasuresPage {
     public static readonly measureListTitles = '[data-testid="measure-list-tbl"]'
     public static readonly allMeasuresTab = '[data-testid="all-measures-tab"]'
     public static readonly filterSearchInputBox = '[data-testid="measure-search-input"]'
-    public static readonly searchInputBox = '[data-testid="searchMeasure-input"]'
+    public static readonly searchInputBox = '[data-testid="measure-search-input"]'
     public static readonly measureListTabelBody = '[class="table-body measures-list"]'
 
     //export
