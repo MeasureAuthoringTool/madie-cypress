@@ -205,7 +205,10 @@ describe('Draftable API end point tests', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(EditMeasurePage.measureDetailsTab).click()
         cy.log('Updated CQL name, on measure, is ' + newCqlLibraryName)
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
         cy.setAccessTokenCookie()
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
     })
@@ -214,11 +217,12 @@ describe('Draftable API end point tests', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
                 cy.request({
-                    url: '/api/measures/draftstatus?measureSetIds=' + mSetId,
+                    url: '/api/measures/draftstatus',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
-                    method: 'GET',
+                    method: 'POST',
+                    body: [mSetId]
 
                 }).then((response) => {
                     expect(response.status).to.eql(201)
@@ -330,11 +334,12 @@ describe('Draftable API end point tests', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
                 cy.request({
-                    url: '/api/measures/draftstatus?measureSetIds=' + mSetId,
+                    url: '/api/measures/draftstatus',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
-                    method: 'GET',
+                    method: 'POST',
+                    body: [mSetId]
 
                 }).then((response) => {
                     expect(response.status).to.eql(201)
@@ -365,11 +370,12 @@ describe('Draftable API end point tests', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
                 cy.request({
-                    url: '/api/measures/draftstatus?measureSetIds=' + mSetId,
+                    url: '/api/measures/draftstatus',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
-                    method: 'GET',
+                    method: 'POST',
+                    body: [mSetId]
 
                 }).then((response) => {
                     expect(response.status).to.eql(201)
@@ -428,11 +434,12 @@ describe('Draftable API end point tests', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
                 cy.request({
-                    url: '/api/measures/draftstatus?measureSetIds=' + mSetId,
+                    url: '/api/measures/draftstatus',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
-                    method: 'GET',
+                    method: 'POST',
+                    body: [mSetId]
 
                 }).then((response) => {
                     expect(response.status).to.eql(201)
@@ -490,11 +497,12 @@ describe('Draftable API end point tests', () => {
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(mSetIdPath).should('exist').then((mSetId) => {
                 cy.request({
-                    url: '/api/measures/draftstatus?measureSetIds=' + mSetId,
+                    url: '/api/measures/draftstatus',
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     },
-                    method: 'GET',
+                    method: 'POST',
+                    body: [mSetId]
 
                 }).then((response) => {
                     expect(response.status).to.eql(201)
