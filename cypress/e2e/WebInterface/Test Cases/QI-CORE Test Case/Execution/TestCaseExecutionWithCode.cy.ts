@@ -82,7 +82,7 @@ describe('Test Case Execution with codes', () => {
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
