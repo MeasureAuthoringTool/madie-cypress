@@ -27,7 +27,7 @@ const testCase2: TestCase = {
     group: 'Test Series 2',
     json: TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
 }
-const testCaseUpdateToast = 'Test case updated successfully with warnings in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.'
+const testCaseUpdateToast = 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.'
 
 describe('MADIE Zip Test Case Import', () => {
 
@@ -90,6 +90,9 @@ describe('MADIE Zip Test Case Import', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
+
+
+
 
         cy.get(TestCasesPage.successMsg).should('have.text', testCaseUpdateToast)
 
