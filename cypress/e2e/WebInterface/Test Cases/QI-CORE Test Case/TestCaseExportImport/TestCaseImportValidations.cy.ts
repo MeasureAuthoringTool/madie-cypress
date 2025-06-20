@@ -125,9 +125,8 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 9500)
-
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         OktaLogin.UILogout()
 
@@ -545,7 +544,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //export test case
-        cy.get(TestCasesPage.testCaseListTable).find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        cy.get(TestCasesPage.testCaseListTable).find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).click()
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })

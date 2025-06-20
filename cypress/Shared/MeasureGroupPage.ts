@@ -50,7 +50,7 @@ export class MeasureGroupPage {
     public static readonly QDMPopulationCriteria1 = '[data-testid="leftPanelMeasureInformation-MeasureGroup1"]'
     public static readonly QDMPopulationCriteria2 = '[data-testid="leftPanelMeasureInformation-MeasureGroup2"]'
     //when the "EnhancedTextFormatting" flag has been removed, switch this variable to point to the commented out value
-    public static readonly QDMPopCriteria1Desc = /*'[data-testid="population-criteria-1-description-rich-text-editor"]'*/'[data-testid="groupDescriptionInput"]'
+    public static readonly QDMPopCriteria1Desc = /*'[data-testid="population-criteria-1-description-rich-text-editor"]'*/'[data-testid="group-description-text"]'
     public static readonly QDMPopCriteria2IP = '[id="population-select-initial-population-select"]'
     public static readonly QDMPopCriteria1IPDesc = '[data-testid="populations[0].description-description"]'
     public static readonly QDMAddPopCriteriaBtn = '[data-testid="add-measure-group-button"]'
