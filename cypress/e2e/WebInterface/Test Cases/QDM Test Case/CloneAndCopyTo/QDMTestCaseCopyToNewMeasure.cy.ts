@@ -66,11 +66,10 @@ describe('Copy test cases from existing measure into new measure', () => {
     it('Measures match population criteria - expected values will copy', () => {
 
         // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
-        cy.wait('@searchDone')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
         // need to select correct version of the measure with .eq(1)
@@ -156,11 +155,10 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
-        cy.wait('@searchDone')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
         cy.get('[data-testid="row-item"]').eq(5).contains('View').click()
 
