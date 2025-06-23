@@ -108,9 +108,9 @@ describe('Delete Test Case', () => {
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).should('not.exist')
         cy.get(TestCasesPage.importTestCaseBtn).should('not.exist')
-        cy.get(TestCasesPage.newTestCaseButton).should('have.attr', 'disabled', 'disabled')
+        cy.get(TestCasesPage.newTestCaseButton).should('not.exist')
 
-        cy.get(TestCasesPage.actionCenterExport).wait(500).should('be.enabled')
+        cy.get(TestCasesPage.actionCenterExport).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.contains('View').should('be.visible')
     })
