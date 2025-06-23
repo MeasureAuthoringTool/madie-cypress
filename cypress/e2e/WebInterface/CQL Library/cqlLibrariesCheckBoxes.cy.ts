@@ -11,7 +11,7 @@ let CQLLibraryPublisher = 'SemanticBits'
 let harpUserALT = Environment.credentials().harpUserALT
 
 //skipping until the LibraryListCheckboxes feature flag is removed
-describe.skip('CQL Library Sharing', () => {
+describe('CQL Library Sharing', () => {
 
     beforeEach('Create CQL Library', () => {
 

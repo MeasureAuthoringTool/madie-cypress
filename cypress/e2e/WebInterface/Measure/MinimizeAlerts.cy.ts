@@ -15,7 +15,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, {measureCql: errorCql})
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: errorCql })
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
 
@@ -35,7 +35,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
     it('On CQL Editor, user can minimize and then maximize the error list', () => {
 
         // CQL save successful, orange box shows with 1 issue
-        cy.get(CQLEditorPage.orangeWarningBox).should('have.length', 1)
+        cy.get(CQLEditorPage.orangeWarningBox).should('have.length', 0)
 
         cy.get(CQLEditorPage.minimizeButton).click()
 
@@ -46,15 +46,14 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         // Click on the Alerts tab
         cy.get(CQLEditorPage.minimizedAlertsTab).click()
 
-        // Alerts tab is gone, orange box shows again
-        cy.get(CQLEditorPage.orangeWarningBox).should('be.visible')
+        // Alerts tab is gone, orange box no longer shows as warnings are only in-line in the CQL Editor
         cy.get(CQLEditorPage.minimizedAlertsTab).should('not.exist')
     })
 
     it('On CQL Editor, after minimzing errors and navigating away; when user returns, the original error list shows', () => {
-    
+
         // CQL save successful, orange box shows with 1 issue
-        cy.get(CQLEditorPage.orangeWarningBox).should('have.length', 1)
+        cy.get(CQLEditorPage.orangeWarningBox).should('have.length', 0)
 
         cy.get(CQLEditorPage.minimizeButton).click()
 
@@ -81,7 +80,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
 
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
-            // click minimize
+        // click minimize
         cy.get(CQLEditorPage.minimizeButton).click()
         cy.wait(2500) // change to wait for alert to disappear
 
@@ -94,7 +93,7 @@ describe('Minimize Alerts - Measure with a CQL error', () => {
         cy.wait(2500)
 
         // verify label gone & error box re-appears
-        cy.get('[data-testid="error-alerts"]').should('be.visible') 
+        cy.get('[data-testid="error-alerts"]').should('be.visible')
             .and('have.text', 'Please complete the CQL Editor process before continuing')
         cy.get('[data-testid="minimized-alert"]').should('not.exist')
 
@@ -106,7 +105,7 @@ describe('Minimize Alerts - Non-owner can also minimize to review the measure', 
 
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, {measureCql: errorCql})
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore4, { measureCql: errorCql })
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
 
