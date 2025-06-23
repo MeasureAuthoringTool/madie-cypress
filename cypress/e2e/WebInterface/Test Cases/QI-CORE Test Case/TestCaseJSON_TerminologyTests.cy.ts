@@ -398,8 +398,10 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with ' +
-            'errors in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.')
+        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Test case updated successfully with ' +
+            'errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All ' +
+            'timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been ' +
+            'defaulted to \'000\'')
 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
@@ -483,8 +485,10 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with ' +
-            'errors in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.')
+        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Test case updated successfully with ' +
+            'errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All ' +
+            'timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been ' +
+            'defaulted to \'000\'')
 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
@@ -566,8 +570,10 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with ' +
-            'errors in JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.')
+        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Test case updated successfully with ' +
+            'errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All ' +
+            'timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been ' +
+            'defaulted to \'000\'')
     })
 
     it('JSON has Resource IDs duplicated for different resources', () => {
@@ -700,10 +706,12 @@ describe('JSON Resource ID tests', () => {
         Utilities.waitForElementVisible(TestCasesPage.editTestCaseSaveButton, 27700)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('exist')
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('be.visible')
-        cy.get('.toast').should('have.text', 'Test case updated successfully with warnings in ' +
-            'JSONMADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.')
+        cy.get(TestCasesPage.successMsg).should('exist')
+        cy.get(TestCasesPage.successMsg).should('be.visible')
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with ' +
+            'warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. ' +
+            'All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been ' +
+            'defaulted to \'000\'.')
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView()
         Utilities.waitForElementVisible(TestCasesPage.detailsTab, 27700)
