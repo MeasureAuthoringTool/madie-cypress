@@ -58,8 +58,8 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Save edited / updated to test case
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
-
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
+      
         //Navigate to Measure group page and update scoring type
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
@@ -109,7 +109,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.detailsTab).click()
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
 
         //Navigate to Measure group page and update scoring type
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -253,8 +253,8 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('not.exist')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.detailsTab).click()
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
-
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
+  
         //Navigate to Measure Group page and add Numerator Exclusion & delete Denominator Exclusion
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'num')
@@ -463,6 +463,6 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         //Save edited / updated to test case
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
     })
 })
