@@ -29,6 +29,8 @@ const warningTestCaseJson = TestCaseJson.TestCaseJson_with_warnings
 const errorTestCaseJSON_no_ResourceID = TestCaseJson.TestCaseJson_missingResourceIDs
 const measureCQL = MeasureCQL.CQL_Multiple_Populations
 const measureCQLPFTests = MeasureCQL.CQL_Populations
+const timezoneErrorMessage = 'Test case updated successfully with errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.'
+const timezoneWarningMessage = 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.'
 
 describe('Run / Execute Test Case button validations', () => {
 
@@ -220,11 +222,10 @@ describe('Run / Execute Test Case button validations', () => {
         //Add json to the test case
         TestCasesPage.enterErroneousJson(invalidTestCaseJson)
 
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+        Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 12500)
+        cy.get('[data-testid="error-toast"]', {timeout: 6500}).should('have.text', 'Test case updated successfully with errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
         cy.log('JSON added to test case successfully')
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -422,8 +423,8 @@ describe('Run / Execute Test Case button validations', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
-
+        cy.get('[data-testid="error-toast"]', {timeout: 6500}).should('have.text', timezoneErrorMessage)
+   
         //Add valid json to the test case and run
         cy.get('#ace-editor-wrapper > .ace_scroller > .ace_content').eq(0).type('{selectall}{backspace}{selectall}{backspace}')
         cy.get('#ace-editor-wrapper > .ace_scroller > .ace_content').eq(0).type(validTestCaseJson, { parseSpecialCharSequences: false })
@@ -531,7 +532,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
 
         Utilities.waitForElementVisible(TestCasesPage.successMsg, 60000)
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneWarningMessage)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
 
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -674,7 +675,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneWarningMessage)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -797,7 +798,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneWarningMessage)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -864,7 +865,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneWarningMessage)
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -969,7 +970,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneWarningMessage)
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -1089,7 +1090,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneErrorMessage)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1225,7 +1226,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+        cy.get('[data-testid="error-toast"]', {timeout: 6500}).should('have.text', timezoneErrorMessage)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1278,7 +1279,6 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         cy.get(TestCasesPage.runTestButton).should('not.be.enabled')
 
     })
-
 })
 
 describe('Verify "Run Test Cases" results based on missing/empty group populations are treated as zeroes', () => {
@@ -1332,7 +1332,6 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
 
-
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
@@ -1381,7 +1380,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneWarningMessage)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1499,7 +1498,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-            TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+            cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneWarningMessage)
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1708,7 +1707,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //confirm no message
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
-        })
+    })
 })
 
 describe('Verify multiple IPs on the highlighting tab', () => {
