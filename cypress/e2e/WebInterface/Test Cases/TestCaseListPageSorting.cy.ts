@@ -8,7 +8,7 @@ import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-import { Header } from "../../../Shared/Header"
+//import { Header } from "../../../Shared/Header"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -21,7 +21,7 @@ let secondTestCaseSeries = 'B Test Series 2'
 let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 const now = require('dayjs')
-let todaysDate = now().format('MM/DD/YYYY')
+//let todaysDate = now().format('MM/DD/YYYY')
 
 describe('Sort by each of the test case list page\'s columns', () => {
 
@@ -83,7 +83,7 @@ describe('Sort by each of the test case list page\'s columns', () => {
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
         cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'MADiE only supports a timezone offset of 0. MADiE has overwritten any timezone offsets that are not zero.')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'MADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -91,64 +91,83 @@ describe('Sort by each of the test case list page\'s columns', () => {
         cy.get(TestCasesPage.tcColumnHeading).contains('Group').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Group').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2' + todaysDate)
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1' + todaysDate)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '(UTC)Edit')
+
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '(UTC)Edit')
 
         //click group to sort ascending
         cy.get(TestCasesPage.tcColumnHeading).contains('Group').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Group').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1' + todaysDate)
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2' + todaysDate)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '(UTC)Edit')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '(UTC)Edit')
 
         //click group to remove sorting
         cy.get(TestCasesPage.tcColumnHeading).contains('Group').click()
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2' + todaysDate)
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1' + todaysDate)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '(UTC)Edit')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '(UTC)Edit')
 
         //click title to sort ascending
         cy.get(TestCasesPage.tcColumnHeading).contains('Title').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Title').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1' + todaysDate)
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2' + todaysDate)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '(UTC)Edit')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '(UTC)Edit')
 
         //click title to sort descending
         cy.get(TestCasesPage.tcColumnHeading).contains('Title').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Title').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2' + todaysDate)
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1' + todaysDate)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '(UTC)Edit')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '(UTC)Edit')
 
         //click title to remove sorting
         cy.get(TestCasesPage.tcColumnHeading).contains('Title').click()
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2' + todaysDate)
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1' + todaysDate)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '(UTC)Edit')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '(UTC)Edit')
 
         //click description to sort ascending
         cy.get(TestCasesPage.tcColumnHeading).contains('Description').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Description').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1' + todaysDate)
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2' + todaysDate)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '(UTC)Edit')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '(UTC)Edit')
 
         //click description to sort descending
         cy.get(TestCasesPage.tcColumnHeading).contains('Description').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Description').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2' + todaysDate)
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1' + todaysDate)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '(UTC)Edit')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '(UTC)Edit')
 
         //click description to remove sorting
         cy.get(TestCasesPage.tcColumnHeading).contains('Description').click()
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2' + todaysDate)
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1' + todaysDate)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2N/AB Test Series 2Be Test Case 2 PassesB Description 2')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '(UTC)Edit')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1N/AA Test Series 1A Test Case 1 FailsA Description 1')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '(UTC)Edit')
 
         //run test case
         cy.get(TestCasesPage.executeTestCaseButton).click()
@@ -157,22 +176,28 @@ describe('Sort by each of the test case list page\'s columns', () => {
         cy.get(TestCasesPage.tcColumnHeading).contains('Status').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Status').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2PassB Test Series 2Be Test Case 2 PassesB Description 2' + todaysDate)
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1FailA Test Series 1A Test Case 1 FailsA Description 1' + todaysDate)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2PassB Test Series 2Be Test Case 2 PassesB Description 2')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '(UTC)Edit')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1FailA Test Series 1A Test Case 1 FailsA Description 1')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '(UTC)Edit')
 
         //click status to sort ascending
         cy.get(TestCasesPage.tcColumnHeading).contains('Status').click()
         Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Status').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '1FailA Test Series 1A Test Case 1 FailsA Description 1' + todaysDate)
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '2PassB Test Series 2Be Test Case 2 PassesB Description 2' + todaysDate)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '1FailA Test Series 1A Test Case 1 FailsA Description 1')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '(UTC)Edit')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '2PassB Test Series 2Be Test Case 2 PassesB Description 2')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '(UTC)Edit')
 
         //click status to remove sorting
         cy.get(TestCasesPage.tcColumnHeading).contains('Status').click()
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
         Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
-        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2PassB Test Series 2Be Test Case 2 PassesB Description 2' + todaysDate)
-        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1FailA Test Series 1A Test Case 1 FailsA Description 1' + todaysDate)
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '2PassB Test Series 2Be Test Case 2 PassesB Description 2')
+        cy.get(TestCasesPage.testCaseResultrow).should('contain.text', '(UTC)Edit')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '1FailA Test Series 1A Test Case 1 FailsA Description 1')
+        cy.get(TestCasesPage.testCaseResultrow2).should('contain.text', '(UTC)Edit')
 
     })
 })
