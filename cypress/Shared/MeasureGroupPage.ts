@@ -117,7 +117,7 @@ export class MeasureGroupPage {
     public static readonly keepGroupModalbtn = '[data-testid="delete-measure-group-modal-cancel-btn"]'
     public static readonly deleteMeasureGroupConfirmationMsg = '.MuiDialogContent-root > div'
     //Reporting tab fields
-    public static readonly rateAggregation = '[data-testid="rateAggregationText"]'
+    public static readonly rateAggregation = '[data-testid="rate-aggregation-text"]'
     public static readonly improvementNotationSelect = '[id="improvement-notation-select"]'
     public static readonly improvementNotationDescText = '[data-testid="improvement-notation-description-input"]'
     // When the flag "EnhancedTextFormatting" is removed, replace the below variable's value with that wheich is commented out
