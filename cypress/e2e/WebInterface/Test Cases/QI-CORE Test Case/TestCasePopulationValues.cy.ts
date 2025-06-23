@@ -385,9 +385,15 @@ describe('Test Case Population dependencies', () => {
 
     it('Verify Test Case population dependencies for Proportion Measures', () => {
 
-        //Click on Edit Measure
+        //Click on Edit Button
         MeasuresPage.actionCenter('edit')
 
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        //navigate to Groups tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExclusionSelect, 'Initial PopulationOne')
         Utilities.dropdownSelect(MeasureGroupPage.denominatorExceptionSelect, 'Initial PopulationOne')
@@ -519,8 +525,15 @@ describe('Test Case Expected Measure Group population values based on initial me
     })
 
     it('Test Case Population value options are limited to those that are defined from Measure Group', () => {
-        //Click on Edit Measure
+
+        //Click on Edit Button
         MeasuresPage.actionCenter('edit')
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.setMeasureGroupType()
