@@ -344,7 +344,7 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('[data-testid="toast-success"]', { timeout: 26500 }).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -353,8 +353,7 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
 
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(newMeasureName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessMsg, 50000)
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
+        cy.get('[data-testid="toast-success"]', { timeout: 11500 }).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
         cy.get('[data-testid="row-item"]').eq(0).contains('Edit').click()
