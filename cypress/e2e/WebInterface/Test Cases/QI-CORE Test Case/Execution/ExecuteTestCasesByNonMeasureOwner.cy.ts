@@ -208,7 +208,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
             cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-            TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+            cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
             Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 37700)
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
@@ -284,7 +284,7 @@ describe('Ability to run valid test cases whether or not the user is the owner o
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        TestCasesPage.checkToastMessageOK(TestCasesPage.successMsg)
+        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
