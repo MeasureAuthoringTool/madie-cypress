@@ -11,10 +11,12 @@ import {MeasureGroupPage} from "../../../../../Shared/MeasureGroupPage"
     /*
         This test scenario does not require creation of a measure.
         We can simply navigate to an existing measure we know will generate this report.
+        6/24/25: switched to a newly created proposed version of the same measure.
+        This ensures a unique name & guarantees that we operate on the correct measure in the test.
     */
 const originalMeasure = {
     CMSid: '334',
-    title: 'Cesarean Birth'
+    title: '2026Cesarean Birth CMS334'
 }
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 let measureName = 'TestMeasure' + Date.now()
@@ -41,15 +43,12 @@ describe('Generate the Overlapping Value Set report for a QDM measure', () => {
     it('View CMS 334 and generate the Overlapping Value Set report', () => {
 
         // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 41500)
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
-        cy.wait('@searchDone')
+        cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.title).type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
-        // need to select correct version of the measure with .eq(1)  -- might be needed?
-        cy.get('[data-testid="row-item"]').eq(2).contains('View').click()
+        cy.get('[data-testid="row-item"]').contains('View').click()
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -68,7 +67,7 @@ describe('Generate the Overlapping Value Set report for a QDM measure', () => {
             const pageValues = overlapCount.text().toString().split(' ')
             expect(pageValues[0]).to.eq('1')
             expect(pageValues[2]).to.eq('5')
-            expect(pageValues[4]).to.eq('26')
+            expect(pageValues[4]).to.eq('27')
         })
         
         // expand 1st row
@@ -88,15 +87,12 @@ describe('Generate the Overlapping Value Set report for a QDM measure', () => {
     it('Export Excel version of Overlapping Value Sets report', () => {
 
         // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 41500)
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
-        cy.wait('@searchDone')
+        cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.title).type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
-        // need to select correct version of the measure with .eq(1)  -- might be needed?
-        cy.get('[data-testid="row-item"]').eq(0).contains('View').click()
+        cy.get('[data-testid="row-item"]').contains('View').click()
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -111,7 +107,7 @@ describe('Generate the Overlapping Value Set report for a QDM measure', () => {
         cy.contains('h2', 'Overlapping Codes').should('be.visible')
 
         //Verify Excel Export
-        const file = 'cypress/downloads/CMS334-v7.1.000-QDM5-OverlappingCodes.xlsx'
+        const file = 'cypress/downloads/PC-334-v0.0.000-QDM5-OverlappingCodes.xlsx'
         cy.get(TestCasesPage.overlappingCodesExportBtn).should('be.visible')
         cy.get(TestCasesPage.overlappingCodesExportBtn).click()
         cy.get(TestCasesPage.exportSuccessMsg).should('contain.text', 'Overlapping Codes report exported successfully')
@@ -127,7 +123,7 @@ describe('Generate the Overlapping Value Set report for a QDM measure', () => {
             expect(rows[0]['Value Set OID/URL']).to.equal('2.16.840.1.113883.3.117.1.7.1.292')
         })
 
-        })
+    })
 })
 
 describe('Overlapping Value Set report validations', () => {
