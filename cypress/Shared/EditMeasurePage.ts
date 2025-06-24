@@ -77,8 +77,8 @@ export class EditMeasurePage {
     public static readonly leftPanelPurpose = '[data-testid="leftPanelMeasurePurpose"]'
 
     //Measure Set
-    public static readonly measureSetText = '[data-testid="measureMeasure SetInput"]'
-    public static readonly measureSetSaveBtn = '[data-testid="measureMeasure SetSave"]'
+    public static readonly measureSetText = '[data-testid="measure-measure-set-input"]'
+    public static readonly measureSetSaveBtn = '[data-testid="measure-measure-set-save"]'
 
     //References page
     public static readonly addReferenceButton = '[data-testid="create-reference-button"]'
