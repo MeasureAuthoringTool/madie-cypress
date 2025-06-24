@@ -56,8 +56,8 @@ describe('Copy test cases from existing measure into new measure', () => {
     it('Measures match population criteria - expected values will copy', () => {
 
         // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
+        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45100)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         cy.wait('@searchDone')
@@ -131,8 +131,8 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0').as('searchDone')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
+        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45100)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         cy.wait('@searchDone')
