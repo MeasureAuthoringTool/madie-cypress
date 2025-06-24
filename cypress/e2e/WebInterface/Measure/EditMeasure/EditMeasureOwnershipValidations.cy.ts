@@ -30,7 +30,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         //wait for alert / succesful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, true, 'Surgical Absence of Cervix', '', '', 'Surgical Absence of Cervix', '', 'Surgical Absence of Cervix', 'Procedure')
 
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCSeries, TCDescription, '', false, false, true)
@@ -76,23 +76,23 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         cy.get(EditMeasurePage.leftPanelDescription).should('be.visible')
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionTextBox).should('have.attr', 'readonly', 'readonly')
+        cy.get(EditMeasurePage.measureDescriptionTextBox).should('have.attr', 'disabled', 'disabled')
 
         cy.get(EditMeasurePage.leftPanelCopyright).should('be.visible')
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureCopyrightTextBox).should('have.attr', 'readonly', 'readonly')
+        cy.get(EditMeasurePage.measureCopyrightTextBox).should('have.attr', 'disabled', 'disabled')
 
         cy.get(EditMeasurePage.leftPanelDisclaimer).should('be.visible')
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureDisclaimerTextBox).should('have.attr', 'readonly', 'readonly')
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).should('have.attr', 'disabled', 'disabled')
 
         cy.get(EditMeasurePage.leftPanelRationale).should('be.visible')
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureRationaleTextBox).should('have.attr', 'readonly', 'readonly')
+        cy.get(EditMeasurePage.measureRationaleTextBox).should('have.attr', 'disabled', 'disabled')
 
         cy.get(EditMeasurePage.leftPanelGuidance).should('be.visible')
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGuidanceTextBox).should('have.attr', 'readonly', 'readonly')
+        cy.get(EditMeasurePage.measureGuidanceTextBox).should('have.attr', 'disabled', 'disabled')
 
 
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).should('be.visible')
