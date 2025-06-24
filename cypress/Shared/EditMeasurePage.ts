@@ -279,7 +279,6 @@ export class EditMeasurePage {
             }
 
             case EditMeasureActions.share: {
-
                 cy.get(this.shareMeasureActionBtn).should('be.visible')
                 cy.get(this.shareMeasureActionBtn).should('be.enabled')
                 cy.get(this.shareMeasureActionBtn).click()
