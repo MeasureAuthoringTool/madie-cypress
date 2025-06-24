@@ -739,7 +739,7 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get('[data-testid="generic-warning-text-header"]').should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get('[data-testid="generic-error-text-header"]').should('contain.text', 'CQL updated successfully but the following issues were found')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
