@@ -25,6 +25,7 @@ export class Utilities {
     public static readonly discardChangesConfirmationModal = '.MuiBox-root'
     public static readonly keepWorkingCancel = '[data-testid="discard-dialog-cancel-button"]'
     public static readonly DiscardCancelBtn = '[data-testid="cancel-button"]'
+    public static readonly DiscardButton = '[data-testid="discard-button"]'
 
     public static clickOnDiscardChanges(): void {
 

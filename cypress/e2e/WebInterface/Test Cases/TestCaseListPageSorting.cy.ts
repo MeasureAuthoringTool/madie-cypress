@@ -8,7 +8,7 @@ import { MeasureCQL } from "../../../Shared/MeasureCQL"
 import { TestCasesPage } from "../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
-//import { Header } from "../../../Shared/Header"
+
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -21,7 +21,7 @@ let secondTestCaseSeries = 'B Test Series 2'
 let validTestCaseJson = TestCaseJson.TestCaseJson_Valid
 let measureCQLPFTests = MeasureCQL.CQL_Populations
 const now = require('dayjs')
-//let todaysDate = now().format('MM/DD/YYYY')
+
 
 describe('Sort by each of the test case list page\'s columns', () => {
 
