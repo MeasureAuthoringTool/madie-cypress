@@ -269,7 +269,7 @@ describe('Edit Measure: Add Meta Data', () => {
 
 
         const expectedOrder = ['eight', 'eleven', 'five', 'four', 'nine', 'one', 'seven', 'six', 'ten', 'ThisIsTheDefinitionTermValue']
-        const pageTwoOrder = ['three','twelve', 'two']
+        const pageTwoOrder = ['three', 'twelve', 'two']
 
         cy.get(EditMeasurePage.definitionMetaTableBody).find('tr > td:first-child').each((el, index) => {
             cy.wrap(el).invoke('text').then(textValue => {
