@@ -178,8 +178,8 @@ export class EditMeasurePage {
     public static readonly measureRationaleSuccessMessage = '[data-testid="measureRationaleSuccess"]'
 
     //Purpose
-    public static readonly measurePurposeTextBox = '[data-testid="measurePurposeInput"]'
-    public static readonly measurePurposeSaveBtn = '[data-testid="measurePurposeSave"]'
+    public static readonly measurePurposeTextBox = '[data-testid="measure-purpose-input"]'
+    public static readonly measurePurposeSaveBtn = '[data-testid="measure-purpose-save"]'
     public static readonly measurePurposeSavedMsg = '[data-testid="measurePurposeSuccess"]'
 
     //Guidance Page
