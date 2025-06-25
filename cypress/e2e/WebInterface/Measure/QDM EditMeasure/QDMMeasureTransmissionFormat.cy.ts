@@ -25,17 +25,14 @@ describe('QDM Measure: Transmission Format', () => {
         measureData.patientBasis = 'true'
         measureData.measureCql = measureCQL
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('Add Transmission Format to the QDM Measure', () => {
@@ -47,7 +44,6 @@ describe('QDM Measure: Transmission Format', () => {
         cy.get(EditMeasurePage.transmissionFormatDescription).type('Test Transmission format')
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Transmission Format Saved Successfully')
-
     })
 
     it('Discard changes button', () => {
@@ -76,17 +72,14 @@ describe('QDM Measure: Transmission format ownership validation', () => {
         measureData.patientBasis = 'true'
         measureData.measureCql = measureCQL
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.AltLogin()
-
     })
 
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('Non Measure owner unable to add Transmission format field', () => {
@@ -98,7 +91,6 @@ describe('QDM Measure: Transmission format ownership validation', () => {
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelTransmissionFormat).click()
         cy.get(EditMeasurePage.transmissionFormatDescription).should('not.be.enabled')
-
     })
 })
 
