@@ -44,6 +44,8 @@ export type MeasureObservations = {
 }
 
 export class MeasureGroupPage {
+
+    public static readonly popBasisField = '[id="populationBasis"]'
     public static readonly pcErrorAlertToast = '[data-testid="population-criteria-error"]'
 
     //QDM population criteria
@@ -331,6 +333,8 @@ export class MeasureGroupPage {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         Utilities.setMeasureGroupType()
+
+        cy.get(MeasureGroupPage.popBasisField).focus()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
 
