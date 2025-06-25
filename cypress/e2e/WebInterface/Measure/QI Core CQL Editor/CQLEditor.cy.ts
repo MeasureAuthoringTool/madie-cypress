@@ -374,7 +374,7 @@ describe('Measure: CQL Editor', () => {
         cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'FHIRHelpers was incorrectly aliased. MADiE has overwritten the alias with \'FHIRHelpers\'.')
     })
 
-    it.only('Verify error message when CQL is missing keyword "Context"', () => {
+    it('Verify error message when CQL is missing keyword "Context"', () => {
 
         MeasuresPage.actionCenter('edit')
 
