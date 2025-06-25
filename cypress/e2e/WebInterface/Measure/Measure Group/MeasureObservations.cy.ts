@@ -681,7 +681,7 @@ describe('Measure Observation - Expected Values', () => {
         cy.get(TestCasesPage.measureObservationRow).should('exist')
     })
 
-    it.only('Verify Expected values for Boolean Type Ratio Measure Observations', () => {
+    it('Verify Expected values for Boolean Type Ratio Measure Observations', () => {
 
         MeasureGroupPage.createMeasureGroupforRatioMeasure()
         //navigate away from measure group page
