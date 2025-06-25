@@ -54,18 +54,18 @@ export class MeasureGroupPage {
     //when the "EnhancedTextFormatting" flag has been removed, switch this variable to point to the commented out value
     public static readonly QDMPopCriteria1Desc = /*'[data-testid="population-criteria-1-description-rich-text-editor"]'*/'[data-testid="group-description-text"]'
     public static readonly QDMPopCriteria2IP = '[id="population-select-initial-population-select"]'
-    public static readonly QDMPopCriteria1IPDesc = '[data-testid="populations[0].description-description"]'
+    public static readonly QDMPopCriteria1IPDesc = '[data-testid="populations-0-description-text"]'
     public static readonly QDMAddPopCriteriaBtn = '[data-testid="add-measure-group-button"]'
     public static readonly QDMIPPCHelperText = '[data-testid="population-select-initial-population-select-helper-text"]'
 
     //QDM Supplemental Data Elements and Risk Adjustment variables
     public static readonly QDMSupplementalDataElementsTab = '[id="sideNavMeasurePopulationsSupplementalData"]'
-    public static readonly QDMSupplementalDataDescriptionTextBox = '[data-testid=supplementalDataDescription]'
+    public static readonly QDMSupplementalDataDescriptionTextBox = '[data-testid=supplemental-data-description-text]'
     public static readonly QDMSupplementalDataDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
     public static readonly QDMSupplementalDataElementsListBox = '[id="supplemental-data-listbox"]'
     public static readonly QDMSaveSupplementalDataElements = '[data-testid="measure-Supplemental Data-save"]'
     public static readonly QDMSupplementalDataDefinitionTextBox = '[id="supplemental-data"]'
-    public static readonly QDMRiskAdjustmentDescriptionTextBox = '[data-testid=riskAdjustmentDescription]'
+    public static readonly QDMRiskAdjustmentDescriptionTextBox = '[data-testid=risk-adjustment-description-text]'
     public static readonly QDMRiskAdjustmentDefinitionTextBox = '[id="risk-adjustment"]'
 
     //mismatch CQL error
@@ -121,7 +121,7 @@ export class MeasureGroupPage {
     //Reporting tab fields
     public static readonly rateAggregation = '[data-testid="rate-aggregation-text"]'
     public static readonly improvementNotationSelect = '[id="improvement-notation-select"]'
-    public static readonly improvementNotationDescText = '[data-testid="improvement-notation-description-input"]'
+    public static readonly improvementNotationDescText = '[data-testid="improvement-notation-description-text"]'
     // When the flag "EnhancedTextFormatting" is removed, replace the below variable's value with that wheich is commented out
     public static readonly improvementNotationDescQiCore = '[data-testid="improvement-notation-description-text"]'/*'[data-testid="improvement-notation-description-rich-text-editor"]'*/
     public static readonly improvementNotationValues = '[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]'
