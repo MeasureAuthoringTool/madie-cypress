@@ -75,12 +75,7 @@ describe('Delete measure on the measure edit page', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
-        OktaLogin.UILogout()
 
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookie()
-        OktaLogin.Login()
     })
 
     afterEach('Log Out', () => {
@@ -163,7 +158,7 @@ describe('Version and Draft QDM Measure on the Edit Measure page', () => {
         Utilities.deleteVersionedMeasure(measureQDM, qdmCQLLibrary)
     })
 
-    it.only('Version and Draft QDM Measure on the edit page for a measure', () => {
+    it('Version and Draft QDM Measure on the edit page for a measure', () => {
 
         //Version Measure
         MeasuresPage.actionCenter('edit')
@@ -374,7 +369,7 @@ describe('Share measure from the Edit Measure page', () => {
         Utilities.deleteMeasure(measureQICore, qiCoreCQLLibrary, false, false, 1)
     })
 
-    it.only('Verify Measure owner can share QDM 5.6 Measure from Edit Measure page Action centre share button and shred user is able to edit Measure', () => {
+    it('Verify Measure owner can share QDM 5.6 Measure from Edit Measure page Action centre share button and shred user is able to edit Measure', () => {
 
         OktaLogin.Login()
 
@@ -445,7 +440,7 @@ describe('Share measure from the Edit Measure page', () => {
 
     })
 
-    it.only('Verify Measure owner can share Qi Core Measure from Edit Measure page Action centre share button and shred user is able to edit Measure', () => {
+    it('Verify Measure owner can share Qi Core Measure from Edit Measure page Action centre share button and shred user is able to edit Measure', () => {
 
         //Login as Regular user and share Measure with ALT user
         OktaLogin.Login()
