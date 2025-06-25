@@ -120,7 +120,7 @@ export class EditMeasurePage {
     public static readonly acceptBtn = '[data-testid="share-confirmation-dialog-accept-button"]'
 
     //Transmission Format page
-    public static readonly transmissionFormatDescription = '[data-testid="measure-transmission-format"]'
+    public static readonly transmissionFormatDescription = '[data-testid="transmission-format-text"]'
 
     //Measure CQL Page
     //warnings / errors in CQL that appear at the top of page
