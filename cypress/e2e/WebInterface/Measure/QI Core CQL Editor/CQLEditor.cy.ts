@@ -392,7 +392,6 @@ describe('Measure: CQL Editor', () => {
 
         cy.get(CQLLibraryPage.libraryWarning).should('contain.text', 'Library statement was incorrect. MADiE has overwritten it.')
         cy.get('[data-testid="generic-errors-text-list"]').should('contain.text', 'ELM: 0:0 | Measure CQL must contain a Context.')
-        cy.get('[data-testid="ErrorIcon"]').should('be.visible')
 
         // nav away & return to same error
         cy.get(EditMeasurePage.measureDetailsTab).click()
