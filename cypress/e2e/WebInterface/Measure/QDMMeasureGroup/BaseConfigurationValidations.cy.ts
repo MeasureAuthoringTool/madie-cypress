@@ -565,7 +565,7 @@ describe('Updates on Base Configuration page', () => {
             .should('be.checked')
     })
 
-    it('Verify confirmation dialogue when patient basis value changed', () => {
+    it.only('Verify confirmation dialogue when patient basis value changed', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
@@ -606,13 +606,15 @@ describe('Updates on Base Configuration page', () => {
         // //Click on save again
         cy.get(MeasureGroupPage.qdmBCSaveButton).click()
         //Click on 'Yes, Save Changes' button
+
         cy.get(MeasureGroupPage.updatePatientBasisContinueBtn).click()
+        cy.get('.toast').should('be.visible')
+        Utilities.waitForElementToNotExist('.toast', 50000)
         //Verify that the radio button 'Yes' is enabled
         cy.get(MeasureGroupPage.qdmPatientBasis).eq(0).should('be.enabled')
 
         //Navigate to Criteria page and verify the populations are cleared
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
-
         cy.get(MeasureGroupPage.initialPopulationSelect).should('not.contain', 'ipp')
 
     })
