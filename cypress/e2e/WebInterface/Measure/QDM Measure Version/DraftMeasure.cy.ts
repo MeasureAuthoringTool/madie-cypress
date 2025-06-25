@@ -10,7 +10,6 @@ import { TestCaseJson } from "../../../../Shared/TestCaseJson"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
-let MeasuresPageOne = ''
 let updatedMeasuresPageName = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
@@ -28,8 +27,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
-        newMeasureName = 'TestMeasure' + Date.now() + randValue
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+        newMeasureName = 'QDMDraft' + Date.now() + randValue
+        newCqlLibraryName = 'QDMDraftLib' + Date.now() + randValue
 
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCqlLibraryName
@@ -39,22 +38,19 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         //Create New Measure and Measure Group
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        OktaLogin.Login()
-
+        cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
-
     })
 
     it('Add Draft to the versioned measure', () => {
@@ -69,14 +65,14 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
 
         cy.log('Draft Created Successfully')
     })
@@ -93,15 +89,14 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
-
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             cy.reload(true)
@@ -119,13 +114,12 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
     })
 })
 
-
 describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
     beforeEach('Create Measure, Group, Test case and Login', () => {
 
-        newMeasureName = 'TestMeasure' + Date.now() + randValue
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+        newMeasureName = 'QDMDraft2' + Date.now() + randValue
+        newCqlLibraryName = 'QDMDraft2Lib' + Date.now() + randValue
 
         measureData.ecqmTitle = newMeasureName
         measureData.cqlLibraryName = newCqlLibraryName
@@ -133,23 +127,16 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         measureData.patientBasis = 'true'
         measureData.measureCql = measureCQL
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-
-        //CreateCohortMeasureGroupAPI
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
-        //Create Test case
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, testCaseJson)
-
-        OktaLogin.Login()
-
+        cy.get(Header.mainMadiePageButton).click()
     })
 
     afterEach('Clean up and Logout', () => {
@@ -163,7 +150,6 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
         cy.get(EditMeasurePage.successfulMeasureDeleteMsg).should('contain.text', 'Measure successfully deleted')
         OktaLogin.Logout()
-
     })
 
     it('Verify Draft measure CQL, Group and Test case', () => {
@@ -180,8 +166,8 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessMsg, 100000)
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        Utilities.waitForElementVisible('[data-testid="toast-success"]', 18500)
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New version of measure is Successfully created')
 
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
@@ -198,7 +184,7 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
 
         CreateMeasurePage.clickCreateDraftButton()
 
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
+        cy.get('[data-testid="toast-success"]', { timeout: 18500 }).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
         //verify CQL after draft
@@ -215,6 +201,5 @@ describe('Draft and Version Validations -- CQL and Group are correct', () => {
         Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTextBox, 100000)
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
         cy.get(EditMeasurePage.cqlEditorTextBox).should('contain.text', 'library ' + newCqlLibraryName)
-
     })
 })
