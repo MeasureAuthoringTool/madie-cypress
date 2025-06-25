@@ -92,6 +92,8 @@ describe('Measure Populations', () => {
 
         Utilities.setMeasureGroupType()
 
+        cy.get(MeasureGroupPage.popBasisField).focus()
+
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringRatio)
 
         //measure group description
@@ -170,6 +172,8 @@ describe('Measure Populations', () => {
 
         Utilities.setMeasureGroupType()
 
+        cy.get(MeasureGroupPage.popBasisField).focus()
+
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
 
         //measure group description
@@ -213,6 +217,8 @@ describe('Measure Populations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         Utilities.setMeasureGroupType()
+
+        cy.get(MeasureGroupPage.popBasisField).focus()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
 
