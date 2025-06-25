@@ -82,7 +82,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
     })
 
     it('Placing definition back into CQL and saving resolves the alert.', () => {
-      
+
         cy.get(Header.measures).click()
         MeasuresPage.actionCenter('edit')
         //navigate to the PC page / tab
@@ -180,7 +180,7 @@ describe('Validations between Risk Adjustments with the CQL definitions', () => 
         cy.get(MeasureGroupPage.riskAdjustmentDescriptionTextBox).should('contain.text', 'Initial Population Description')
 
         cy.get(MeasureGroupPage.riskAdjustmentDefinitionSelect).eq(0).click()
-        cy.get(MeasureGroupPage.cancelIcon).eq(1).click()
+        cy.get(MeasureGroupPage.cancelIcon).eq(0).click()
         cy.get(MeasureGroupPage.saveRiskAdjustments).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Risk Adjustments have been Saved Successfully')
         Utilities.waitForElementDisabled(MeasureGroupPage.saveRiskAdjustments, 16500)
