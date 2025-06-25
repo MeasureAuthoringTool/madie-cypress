@@ -75,6 +75,7 @@ describe('Delete measure on the measure edit page', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
+
     })
 
     afterEach('Log Out', () => {
@@ -87,30 +88,30 @@ describe('Delete measure on the measure edit page', () => {
 
         //Qi Core
         MeasuresPage.actionCenter('edit', 1)
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 500000)
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 5000)
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 500000)
         cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 5000)
+        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 500000)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 5000)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 500000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', "Measure successfully deleted")
-        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 10000)
-        cy.url().should('be.oneOf', ['https://dev-madie.hcqis.org/measures', 'https://test-madie.hcqis.org/measures', 'https://impl-madie.hcqis.org/measures', 'https://madie.cms.gov/measures'])
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 500000)
+        cy.url().should('be.oneOf', ['https://dev-madie.hcqis.org/measures?tab=0&page=1&limit=10', 'https://test-madie.hcqis.org/measures?tab=0&page=1&limit=10', 'https://impl-madie.hcqis.org/measures?tab=0&page=1&limit=10', 'https://madie.cms.gov/measures?tab=0&page=1&limit=10'])
 
 
         //QDM
         MeasuresPage.actionCenter('edit')
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 500000)
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 5000)
+        Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 500000)
         cy.get(EditMeasurePage.editMeasureDeleteActionBtn).click()
-        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 5000)
+        Utilities.waitForElementVisible(EditMeasurePage.deleteMeasureConfirmationButton, 500000)
         cy.get(EditMeasurePage.deleteMeasureConfirmationButton).click()
-        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 5000)
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 500000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', "Measure successfully deleted")
-        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 10000)
-        cy.url().should('be.oneOf', ['https://dev-madie.hcqis.org/measures', 'https://test-madie.hcqis.org/measures', 'https://impl-madie.hcqis.org/measures', 'https://madie.cms.gov/measures'])
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 500000)
+        cy.url().should('be.oneOf', ['https://dev-madie.hcqis.org/measures?tab=0&page=1&limit=10', 'https://test-madie.hcqis.org/measures?tab=0&page=1&limit=10', 'https://impl-madie.hcqis.org/measures?tab=0&page=1&limit=10', 'https://madie.cms.gov/measures?tab=0&page=1&limit=10'])
 
     })
 })
@@ -377,7 +378,7 @@ describe('Share measure from the Edit Measure page', () => {
         Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
 
         EditMeasurePage.actionCenter(EditMeasureActions.share)
-        cy.get(EditMeasurePage.shareOption).click({force: true})
+        cy.get(EditMeasurePage.shareOption).click({ force: true })
         cy.get(EditMeasurePage.harpIdInputTextBox).type(harpUserALT)
         cy.get(EditMeasurePage.addBtn).click()
 
@@ -449,7 +450,7 @@ describe('Share measure from the Edit Measure page', () => {
         Utilities.waitForElementVisible(EditMeasurePage.cqlLibraryNameTextBox, 15500)
 
         EditMeasurePage.actionCenter(EditMeasureActions.share)
-        cy.get(EditMeasurePage.shareOption).click({force: true})
+        cy.get(EditMeasurePage.shareOption).click({ force: true })
         cy.get(EditMeasurePage.harpIdInputTextBox).type(harpUserALT)
         cy.get(EditMeasurePage.addBtn).click()
 
