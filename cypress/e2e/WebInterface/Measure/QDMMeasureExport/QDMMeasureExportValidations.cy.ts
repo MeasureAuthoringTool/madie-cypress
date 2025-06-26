@@ -263,7 +263,7 @@ describe('Error Message on Measure Export for Publish when measure was versioned
 
     // this test will rely on PROD data being available in the lower environments
     // this measure must have been versioned prior to Madie 2.2.0 (4/9/2025)
-    const specialMeasureName = 'Antithrombotic Therapy by End of Hospital Day 2'
+    const specialMeasureName = 'Antithrombotic Therapy By End of Hospital Day 2FHIR'
     
     it('Verify error message when not able to perform Export for Publish', () => {
 
@@ -277,8 +277,11 @@ describe('Error Message on Measure Export for Publish when measure was versioned
         cy.get(LandingPage.allMeasuresTab).click()
 
         // search for specific measure - it should be 1st on the search result
-        cy.get(MeasuresPage.searchInputBox).clear().type(specialMeasureName).type('{enter}')
-        cy.contains('View').click()
+        cy.get(MeasuresPage.searchInputBox).should('be.visible', 100000)
+        cy.get(MeasuresPage.searchInputBox).clear().type(specialMeasureName)
+        cy.get('[data-testid="search-icon"]').click()
+
+        cy.get('[data-testid="measure-action-64f0d9e456d636294b157ea0"]').click()
 
         // perform export for publish
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
