@@ -61,14 +61,14 @@ describe('Verify Library usage and Delete Library', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
-                url: '/api/measures/library/usage?libraryName=MATGlobalCommonFunctionsQDM',
+                url: '/api/measures/library/usage?libraryName=AlaraCommonFunctions',
                 method: 'GET',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value
                 }
             }).then((response) => {
                 expect(response.status).to.eql(200)
-                expect(response.body[0].name).to.eql('MyCMS826')
+                expect(response.body[0].name).to.include('Excessive Radiation Dose or Inadequate Image Quality for Diagnostic Computed Tomography in Adults')
             })
         })
     })
