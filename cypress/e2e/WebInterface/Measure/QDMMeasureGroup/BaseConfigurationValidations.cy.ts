@@ -565,7 +565,7 @@ describe('Updates on Base Configuration page', () => {
             .should('be.checked')
     })
 
-    it.only('Verify confirmation dialogue when patient basis value changed', () => {
+    it('Verify confirmation dialogue when patient basis value changed', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
