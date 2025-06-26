@@ -97,9 +97,8 @@ describe('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Requested measure cannot be versioned')
+        cy.get('[data-testid="toast-danger"]').should('contain.text', 'Requested measure cannot be versioned')
         cy.get(MeasuresPage.measureVersionHelperText).should('contain.text', 'Please include valid CQL in the CQL editor to version before versioning this measure')
-
     })
 
     it('User can not Version if the Measure CQL has errors', () => {
@@ -129,9 +128,8 @@ describe('Measure Versioning validations', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Requested measure cannot be versioned')
+        cy.get('[data-testid="toast-danger"]').should('contain.text', 'Requested measure cannot be versioned')
         cy.get(MeasuresPage.measureVersionHelperText).should('contain.text', 'Please include valid CQL in the CQL editor to version before versioning this measure')
-
     })
 
     it('Error message on popup screen when the confirmed version number does not match new version number', () => {
@@ -361,7 +359,6 @@ describe('Non Measure owner unable to create Version', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, cqlLibraryName)
-
     })
 
     it('Verify Version button is not visible for non Measure owner', () => {
