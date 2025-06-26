@@ -20,10 +20,8 @@ describe('Validate Measure Group', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -34,7 +32,6 @@ describe('Validate Measure Group', () => {
         let newCqlLibraryName = CqlLibraryName + randValue
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('All population selections are saved to the database', () => {
@@ -69,6 +66,7 @@ describe('Validate Measure Group', () => {
 
         //select a group type
         Utilities.setMeasureGroupType()
+        cy.get(MeasureGroupPage.popBasisField).focus()
 
         //select scoring unit on measure
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
@@ -119,7 +117,6 @@ describe('Validate Measure Group', () => {
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationMsg).contains('Are you sure you want to Save Changes?')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
-
     })
 
     it('Validate that required populations have to have a selected value before measure group can be saved', () => {
@@ -143,7 +140,6 @@ describe('Validate Measure Group', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -154,6 +150,7 @@ describe('Validate Measure Group', () => {
 
         //select a group type
         Utilities.setMeasureGroupType()
+        cy.get(MeasureGroupPage.popBasisField).focus()
 
         //select scoring unit on measure
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
@@ -190,7 +187,6 @@ describe('Validate Measure Group', () => {
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
-
     })
 
     it('Validate that non-required populations do not need to be selected before saving', () => {
@@ -214,7 +210,6 @@ describe('Validate Measure Group', () => {
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -225,6 +220,7 @@ describe('Validate Measure Group', () => {
 
         //select a group type
         Utilities.setMeasureGroupType()
+        cy.get(MeasureGroupPage.popBasisField).focus()
 
         //select scoring unit on measure
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
@@ -282,7 +278,6 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -297,14 +292,12 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
             'Surgical Absence of Cervix', 'Surgical Absence of Cervix',
             'Surgical Absence of Cervix', 'Procedure')
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('Validate that when an second Initial Population is added, associations appear for IP1 and IP2', () => {
@@ -337,8 +330,8 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         cy.get(MeasureGroupPage.rdioSecondNum).should('be.visible')
 
         cy.get(MeasureGroupPage.rdioSecondNum).should('be.checked')
-
     })
+
     it('Validate that when the association for IP1 changes, IP2 associations also change', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -387,9 +380,8 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
         //validate read only property
         cy.get(MeasureGroupPage.rdioSecondDenom).should('be.disabled')
         cy.get(MeasureGroupPage.rdioSecondNum).should('be.disabled')
-
-
     })
+
     it('Validate that save can occur once a value has been indicated for IP2', () => {
 
         //Click on Edit Measure
@@ -454,6 +446,7 @@ describe('Adding an Initial Population to group -- Ratio score only', () => {
 
         //save
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+        Utilities.waitForElementDisabled(MeasureGroupPage.saveMeasureGroupDetails, 18500)
 
         //change association only
         //change value of first IP association
@@ -491,7 +484,6 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -504,15 +496,14 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         OktaLogin.Logout()
         MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Surgical Absence of Cervix', 'Procedure')
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
+
     it('Validate that when an second Initial Population is deleted / removed, the associations are removed', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -553,8 +544,8 @@ describe('Delete second Initial Population -- Ratio score only', () => {
 
         //save
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
-
     })
+
     it('Validate that when an second Initial Population is added, a delete / remove button becomes available', () => {
 
         //Click on Edit Measure
@@ -577,7 +568,6 @@ describe('Delete second Initial Population -- Ratio score only', () => {
         //verify that the delete button for the second initial population is available
         cy.get(MeasureGroupPage.deleteSecondInitialPopulation).should('exist')
         cy.get(MeasureGroupPage.deleteSecondInitialPopulation).should('be.visible')
-
     })
 
     it('Validate that when the delete / remove button is clicked, for the second IP, the IP is removed', () => {
