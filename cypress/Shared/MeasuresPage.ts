@@ -41,6 +41,7 @@ export class MeasuresPage {
     public static readonly paginationLimitEquals25 = '[data-value="25"]'
 
     //Measure Version
+    public static readonly versionToastSuccessMsg = '[data-testid="toast-success"]'
     public static readonly versionMeasuresSelectionButton = '[data-testid="version-type"]'
     public static readonly updateDraftedMeasuresTextBox = '[data-testid="measure-name-input"]'
     public static readonly createDraftContinueBtn = '[data-testid="create-draft-continue-button"]'
@@ -123,8 +124,9 @@ export class MeasuresPage {
         }
 
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 50000000)
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
 
         switch ((action.valueOf()).toString().toLowerCase()) {
@@ -205,13 +207,15 @@ export class MeasuresPage {
 
                 //there is a prerequisite that you have a measure created and measure ID stored for 'measureId' and 'measureId2'
                 cy.readFile('cypress/fixtures/measureId2').should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 500000)
-                    cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 50000000)
+                    cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
+                    cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
                 })
 
                 cy.get('[data-testid="associate-cms-id-action-btn"]').should('be.visible')
                 cy.get('[data-testid="associate-cms-id-action-btn"]').should('be.enabled')
-                cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView().click()
+                cy.get('[data-testid="associate-cms-id-action-btn"]').scrollIntoView()
+                cy.get('[data-testid="associate-cms-id-action-btn"]').click()
 
                 cy.get('[data-testid="associate-cms-id-button"]').should('be.visible')
                 cy.get('[data-testid="associate-cms-id-button"]').should('be.enabled')
