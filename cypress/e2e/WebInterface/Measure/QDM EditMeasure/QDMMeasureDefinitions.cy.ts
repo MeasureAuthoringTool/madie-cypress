@@ -25,17 +25,14 @@ describe('QDM Measure Definition', () => {
         measureData.patientBasis = 'true'
         measureData.measureCql = measureCQL
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('Add QDM Measure Definitions', () => {
@@ -46,7 +43,6 @@ describe('QDM Measure Definition', () => {
         cy.get(EditMeasurePage.definitionInputTextbox).type('Measure Definition')
         cy.get(EditMeasurePage.saveMeasureDefinition).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Definition Information Saved Successfully')
-
     })
 
     it('Discard changes button', () => {
@@ -56,9 +52,8 @@ describe('QDM Measure Definition', () => {
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelDefinition).click()
         cy.get(EditMeasurePage.definitionInputTextbox).type('Measure Definition')
-        cy.get(Utilities.DiscardCancelBtn).click()
+        cy.get(Utilities.DiscardButton).click()
         Utilities.clickOnDiscardChanges()
-
     })
 })
 
@@ -75,17 +70,14 @@ describe('QDM Measure Definition ownership validation', () => {
         measureData.patientBasis = 'true'
         measureData.measureCql = measureCQL
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.AltLogin()
-
     })
 
     afterEach('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('Non Measure owner unable to add Measure Definition', () => {
@@ -96,8 +88,7 @@ describe('QDM Measure Definition ownership validation', () => {
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelDefinition).click()
-        cy.get(EditMeasurePage.definitionInputTextbox).should('have.attr', 'readonly')
-
+        cy.get(EditMeasurePage.definitionInputTextbox).should('have.attr', 'disabled')
     })
 })
 

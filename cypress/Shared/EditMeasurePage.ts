@@ -98,8 +98,8 @@ export class EditMeasurePage {
     public static deleteQiCoreReference = '[aria-label="Delete"]'
 
     //Definition(Terms) page
-    public static readonly definitionInputTextbox = '[data-testid="measureDefinitionInput"]'
-    public static readonly saveMeasureDefinition = '[data-testid="measureDefinitionSave"]'
+    public static readonly definitionInputTextbox = '[data-testid="measure-definition-input"]'
+    public static readonly saveMeasureDefinition = '[data-testid="measure-definition-save"]'
     public static readonly createDefinitionBtn = '[data-testid="create-definition-button"]'
     public static readonly definitionTermInput = '[data-testid="measure-definition-term-input"]'
     public static readonly definitionInput = '[data-testid="measure-definition"]'
