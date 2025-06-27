@@ -41,9 +41,6 @@ describe('Delete Test Case', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
@@ -54,12 +51,10 @@ describe('Delete Test Case', () => {
 
     it('Delete single Test Case - Success scenario', () => {
 
-        MeasuresPage.actionCenter("edit")
+        TestCasesPage.createTestCase(testCase1.title, testCase1.description, testCase1.group)
 
         cy.get(TestCasesPage.deleteAllTestCasesBtn).should('not.exist')
         cy.get(TestCasesPage.exportTestCasesBtn).should('not.exist')
-
-        TestCasesPage.createTestCase(testCase1.title, testCase1.description, testCase1.group)
 
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterDelete).click()
@@ -71,8 +66,6 @@ describe('Delete Test Case', () => {
     })
 
     it('Delete multiple Test Cases - Success scenario', () => {
-
-        MeasuresPage.actionCenter("edit")
 
         TestCasesPage.createTestCase(testCase1.title, testCase1.description, testCase1.group)
         TestCasesPage.createTestCase(testCase2.title, testCase2.description, testCase2.group)
@@ -90,8 +83,6 @@ describe('Delete Test Case', () => {
 
     it('Verify Non owner of the Measure unable to delete Test Case', () => {
 
-        MeasuresPage.actionCenter("edit")
-
         TestCasesPage.createTestCase(testCase1.title, testCase1.description, testCase1.group, testCase1.json)
 
         OktaLogin.Logout()
@@ -106,12 +97,18 @@ describe('Delete Test Case', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         TestCasesPage.checkTestCase(1)
+        cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
         cy.get(TestCasesPage.actionCenterDelete).should('not.exist')
         cy.get(TestCasesPage.importTestCaseBtn).should('not.exist')
         cy.get(TestCasesPage.newTestCaseButton).should('not.exist')
 
         cy.get(TestCasesPage.actionCenterExport).should('be.enabled')
-        cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
+        cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled')
+
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        cy.get(TestCasesPage.reportsButton).should('be.visible')
+
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 21500)
         cy.contains('View').should('be.visible')
     })
 })
