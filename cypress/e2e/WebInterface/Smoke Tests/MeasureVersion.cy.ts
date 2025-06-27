@@ -58,7 +58,6 @@ describe('QDM Measure Versioning', () => {
 
         OktaLogin.Logout()
         Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
-
     })
 
     it('Add Major Version to the QDM Measure and verify that the versioned Measure is in read only', () => {
@@ -85,19 +84,19 @@ describe('QDM Measure Versioning', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('[data-testid="toast-success"]').should('contain.text', 'New version of measure is Successfully created')
         cy.log('Major Version Created Successfully')
 
         //Verify that the fields on Measure details page, CQL Editor page and Test case page are read only
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Measure details page
-        cy.get(EditMeasurePage.measureNameTextBox).should('not.be.enabled')
-        cy.get(EditMeasurePage.cqlLibraryNameTextBox).should('not.be.enabled')
+        cy.get(EditMeasurePage.readOnlyMeasureName).should('have.attr', 'readonly')
+        cy.get(EditMeasurePage.readOnlyLibraryName).should('have.attr', 'readonly')
 
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
-        cy.get(CreateMeasurePage.measurementPeriodStartDate).should('not.be.enabled')
-        cy.get(CreateMeasurePage.measurementPeriodEndDate).should('not.be.enabled')
+        cy.get(CreateMeasurePage.readOnlyPeriodStartDate).should('have.attr', 'readonly')
+        cy.get(CreateMeasurePage.readOnlyPeriodEndDate).should('have.attr', 'readonly')
 
         //Navigate to CQL Editor page
         CQLEditorPage.clickCQLEditorTab()
@@ -106,14 +105,13 @@ describe('QDM Measure Versioning', () => {
 
         //Navigate to Population Criteria page
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.qdmPatientBasis).should('not.be.enabled')
-        cy.get(MeasureGroupPage.measureScoringSelect).should('not.be.enabled')
+        cy.get(MeasureGroupPage.readOnlyPatientBasis).should('have.attr', 'readonly')
+        cy.get(MeasureGroupPage.measureScoringSelect).should('have.attr', 'readonly')
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('not.be.enabled')
 
         //Verify that the Delete Measure button is disabled
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
         cy.get(EditMeasurePage.editMeasureDeleteActionBtn).should('not.exist')
-
     })
 })
 
@@ -178,19 +176,19 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('[data-testid="toast-success"]').should('contain.text', 'New version of measure is Successfully created')
         cy.log('Major Version Created Successfully')
 
         //Verify that the fields on Measure details page, CQL Editor page and Test case page are read only
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Measure details page
-        cy.get(EditMeasurePage.measureNameTextBox).should('not.be.enabled')
-        cy.get(EditMeasurePage.cqlLibraryNameTextBox).should('not.be.enabled')
+        cy.get(EditMeasurePage.readOnlyMeasureName).should('have.attr', 'readonly')
+        cy.get(EditMeasurePage.readOnlyLibraryName).should('have.attr', 'readonly')
 
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
-        cy.get(CreateMeasurePage.measurementPeriodStartDate).should('not.be.enabled')
-        cy.get(CreateMeasurePage.measurementPeriodEndDate).should('not.be.enabled')
+        cy.get(CreateMeasurePage.readOnlyPeriodStartDate).should('have.attr', 'readonly')
+        cy.get(CreateMeasurePage.readOnlyPeriodEndDate).should('have.attr', 'readonly')
 
         //Navigate to CQL Editor page
         CQLEditorPage.clickCQLEditorTab()
@@ -199,14 +197,13 @@ describe('QDM Measure Version for CMS Measure with huge included Library', () =>
 
         //Navigate to Population Criteria page
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.qdmPatientBasis).should('not.be.enabled')
-        cy.get(MeasureGroupPage.measureScoringSelect).should('not.be.enabled')
+        cy.get(MeasureGroupPage.readOnlyPatientBasis).should('have.attr', 'readonly')
+        cy.get(MeasureGroupPage.measureScoringSelect).should('have.attr', 'readonly')
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('not.be.enabled')
 
         //Verify that the Delete Measure button is disabled
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
         cy.get(EditMeasurePage.editMeasureDeleteActionBtn).should('not.exist')
-
     })
 })
 
@@ -236,14 +233,12 @@ describe('QI-Core Measure Versioning', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
         OktaLogin.Login()
-
     })
 
     after('Logout and cleanup', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(newMeasureName, newCQLLibraryName)
-
     })
 
     it('Add Major Version to the Qi-Core Measure and verify that the versioned Measure is in read only', () => {
@@ -265,7 +260,7 @@ describe('QI-Core Measure Versioning', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('[data-testid="toast-success"]').should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber('1.0.000')
         cy.log('Major Version Created Successfully')
 
@@ -273,12 +268,12 @@ describe('QI-Core Measure Versioning', () => {
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Measure details page
-        cy.get(EditMeasurePage.measureNameTextBox).should('not.be.enabled')
-        cy.get(EditMeasurePage.cqlLibraryNameTextBox).should('not.be.enabled')
+        cy.get(EditMeasurePage.readOnlyMeasureName).should('have.attr', 'readonly')
+        cy.get(EditMeasurePage.readOnlyLibraryName).should('have.attr', 'readonly')
 
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
-        cy.get(CreateMeasurePage.measurementPeriodStartDate).should('not.be.enabled')
-        cy.get(CreateMeasurePage.measurementPeriodEndDate).should('not.be.enabled')
+        cy.get(CreateMeasurePage.readOnlyPeriodStartDate).should('have.attr', 'readonly')
+        cy.get(CreateMeasurePage.readOnlyPeriodEndDate).should('have.attr', 'readonly')
 
         //Navigate to CQL Editor page
         CQLEditorPage.clickCQLEditorTab()
@@ -287,9 +282,9 @@ describe('QI-Core Measure Versioning', () => {
 
         //Navigate to Population Criteria page
         cy.get(EditMeasurePage.measureGroupsTab).click()
-        cy.get(MeasureGroupPage.popBasis).should('not.be.enabled')
-        cy.get(MeasureGroupPage.measureScoringSelect).should('not.be.enabled')
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).should('not.be.enabled')
+        cy.get(MeasureGroupPage.readonlyPopBasis).should('have.attr', 'readonly')
+        cy.get(MeasureGroupPage.measureScoringSelect).should('have.attr', 'readonly')
+        cy.get(MeasureGroupPage.readOnlyScoringUnit).should('have.attr', 'readonly')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('not.exist')
 
         //Navigate to Test cases page
@@ -298,13 +293,12 @@ describe('QI-Core Measure Versioning', () => {
         cy.get(TestCasesPage.aceEditor).should('not.be.enabled')
         //Navigate to Details tab
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseTitle).should('not.be.enabled')
+        cy.get(TestCasesPage.testCaseTitle).should('be.enabled')
         Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 50000)
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('not.exist')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
 
         //Verify that the Delete Measure button is disabled
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
         cy.get(EditMeasurePage.editMeasureDeleteActionBtn).should('not.exist')
-
     })
 })
