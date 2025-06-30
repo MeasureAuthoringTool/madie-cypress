@@ -133,7 +133,7 @@ export class MeasureGroupPage {
     public static readonly measureGroupTypeDropdownBtn = '[class="MuiBackdrop-root MuiBackdrop-invisible css-esi9ax"]'
 
     //Scoring drop-down box
-    public static readonly measureScoringSelect = '#scoring-select'//'[id="scoring-select"]'
+    public static readonly measureScoringSelect = '#scoring-select'
     public static readonly measureScoringCohort = '[data-testid="group-scoring-option-COHORT"]'
     public static readonly measureScoringProportion = '[data-testid="group-scoring-option-PROPORTION"]'
     public static readonly measureScoringRatio = '[data-testid="group-scoring-option-RATIO"]'
@@ -159,6 +159,7 @@ export class MeasureGroupPage {
 
     //UCUM scoring unit
     public static readonly ucumScoringUnitSelect = '[data-testid="scoring-unit-text-input"]'
+    public static readonly readOnlyScoringUnit = '#scoring-unit-text-input'
 
     //Measure Observations
     public static readonly addDenominatorObservationLink = '[data-testid="add-measure-observation-denominator"]'
@@ -201,6 +202,7 @@ export class MeasureGroupPage {
 
     //population basis
     public static readonly popBasis = '[data-testid="populationBasis"]'
+    public static readonly readonlyPopBasis = '#populationBasis'
     public static readonly popBasisOption = '#populationBasis-option-0'
 
     //Measure group description
@@ -223,6 +225,7 @@ export class MeasureGroupPage {
     public static readonly qdmScoringProportion = '[data-testid="scoring-option-PROPORTION"]'
     public static readonly qdmType = '[id="base-configuration-types"]'
     public static readonly qdmPatientBasis = 'input[type="radio"]'
+    public static readonly readOnlyPatientBasis = '#patient-basis'
     public static readonly qdmSDERadioButtons = '[data-testid="sde-option-radio-buttons-group"]'
     public static readonly qdmTypeOptionZero = '[id="base-configuration-types-option-0"]'
     public static readonly qdmTypeValuePill = '[class="MuiChip-label MuiChip-labelSmall css-b9zgoq"]'

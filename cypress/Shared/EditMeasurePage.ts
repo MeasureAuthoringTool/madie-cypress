@@ -42,7 +42,9 @@ export class EditMeasurePage {
 
     //Measurement Information
     public static readonly measureNameTextBox = '[data-testid="measure-name-input"]'
+    public static readonly readOnlyMeasureName = '[data-testid="measure-name-text-field"]'
     public static readonly cqlLibraryNameTextBox = '[data-testid="cql-library-name-input"]'
+    public static readonly readOnlyLibraryName = '[data-testid="cql-library-name"]'
     public static readonly measurementInformationSaveButton = '[data-testid="measurement-information-save-button"]'
     public static readonly measureNameFieldLevelError = '[data-testid="measureName-helper-text"]'
     public static readonly measureId = '[data-testid="measure-id-input"]'
