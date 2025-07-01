@@ -370,6 +370,10 @@ export class TestCasesPage {
     // copy to modal
     public static readonly copyToSave = '[data-testid="copy-test-cases-continue-button"]'
 
+    // left nav expand (means we are already collapsed)/collapse (means we are expanded/normal)
+    public static readonly leftNavCollapse = '[data-testid="test-case-sidebar-collapse-icon"]'
+    public static readonly leftNavExpand = '[data-testid="test-case-sidebar-expand-icon"]'
+
     //This function grabs the data-testid value off of the view button and extracts the id out of it.
     //Then, it puts that id in a file. For added control, the optional "eleTableEntry" parameter can be
     //used to specify which entry we are wanting to grab the id off of. For example, if you have two entries
