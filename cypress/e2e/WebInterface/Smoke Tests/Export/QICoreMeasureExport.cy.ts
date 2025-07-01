@@ -7,7 +7,6 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 
 const now = require('dayjs')
 const url = Cypress.config('baseUrl')
@@ -108,7 +107,7 @@ describe('QI-Core Measure Export', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
 
         MeasuresPage.validateVersionNumber('1.0.000')
         cy.log('Version Created Successfully')
@@ -216,125 +215,73 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
 
             const bodyText = doc.body.innerText;
             //meta details
-            expect(bodyText).to.include('Knowledge Artifact Metadata\n' +
-                'Name (machine-readable)\t' + CqlLibraryNameFC + '\n' +
-                'Title (human-readable)\t' + measureNameFC + '\n' +
-                'Status\tdraft\n' +
-                'Experimental\tfalse\n' +
-                'Description\tSemanticBits\n' +
-                'Purpose\tthis is a meta purpose value\n' +
-                'Clinical Usage\tthis is a meta guidance (usage) value -- for the \'Clinical Usage\' field\n' +
-                'Effective Period\t' + mpStartDate + '..' + mpEndDate + '\n' +
+            expect(bodyText).to.include('Metadata\nTitle\t' + measureNameFC + '\nVersion\tDraft based on 0.0.000' +
+                '\nShort Name\teCQMTitle4QICore')
 
-                'Measure Developer\tAcademy of Nutrition and Dietetics\n' +
-                'Measure Steward\tSemanticBits\n' +
-                'Copyright\tUNKNOWN')
+            expect(bodyText).to.include('CMS Consensus Based Entity Identifier\t3502\nEffective Period\t2023-07-01 ' +
+                'through 2025-07-01\nStatus\tdraft\nSteward (Publisher)\tSemanticBits\nDeveloper\tAcademy of Nutrition ' +
+                'and Dietetics\nDescription\tSemanticBits\nPurpose\tthis is a meta purpose value\nCopyright\tUNKNOWN\n' +
+                'Disclaimer\tUNKNOWN\nCitation\tCitation - Text 1\nDocumentation\tCitation: Documentation - Text 2\n' +
+                'Justification\tCitation: Justification - Text 3\nDefinition\tThisIsTheDefinitionTermValue: ' +
+                'ThisIsTheDefinitionDefValue\nGuidance (Usage)\tthis is a meta guidance (usage) value -- for the \'Clinical ' +
+                'Usage\' field')
 
-            //References
-            expect(bodyText).to.include('Citation\tCitation: Citation - Text 1\n' +
-                'Documentation\tCitation: Documentation - Text 2\n' +
-                'Justification\tCitation: Justification - Text 3')
-
-            //Short Name Identifier
-            expect(bodyText).to.include('Measure Metadata\n' +
-                'Short Name Identifier\teCQMTitle4QICore')
-
-            //CBE Number / Identifier
-            expect(bodyText).to.include(
-                'Identifier\t3502'
-            )
-            //measureDefinitions value
-            expect(bodyText).to.include(
-                'ThisIsTheDefinitionTermValue Definition\tThisIsTheDefinitionDefValue'
-            )
-
-            //Measure Population Criteria
-            expect(bodyText).to.include('Measure Population Criteria (ID: Group_1)\n' +
+            //measure group meta data
+            expect(bodyText).to.include('Measure Group (Rate) (ID: Group_1)\n' +
+                'Basis\tEncounter\n' +
+                'Scoring\t[http://terminology.hl7.org/CodeSystem/measure-scoring#proportion: \'Proportion\']\n' +
+                'Scoring Unit\t[https://clinicaltables.nlm.nih.gov/#ml: \'ml milliLiters\']\n' +
+                'Type\t[http://terminology.hl7.org/CodeSystem/measure-type#outcome: \'Outcome\']\n' +
+                'Improvement Notation\t[http://terminology.hl7.org/CodeSystem/measure-improvement-notation#increase: \'Increased score indicates improvement\']\n' +
                 'Initial Population\tID: InitialPopulation_1\n' +
                 'Description: No description provided Logic Definition: Qualifying Encounters\n' +
                 'Denominator\tID: Denominator_1\n' +
                 'Description: No description provided Logic Definition: Qualifying Encounters\n' +
                 'Numerator\tID: Numerator_1\n' +
-                'Description: No description provided Logic Definition: Qualifying Encounters')
+                'Description: No description provided Logic Definition: Qualifying Encounters\n' +
+                'Measure Logic\n' +
+                'Primary Library\thttps://madie.cms.gov/Library/' + CqlLibraryNameFC + '\n' +
+                'Contents\tPopulation Criteria\n' +
+                'Logic Definitions\n' +
+                'Terminology\n' +
+                'Dependencies\n' +
+                'Data Requirements')
 
-            //Population Basis, Scoring, Type, Improvement Notation
-            expect(bodyText).to.include('Population Basis\tEncounter\n' +
-                'Scoring\t[http://terminology.hl7.org/CodeSystem/measure-scoring#proportion: \'Proportion\']\n' +
-                'Scoring Unit\t[https://clinicaltables.nlm.nih.gov/#ml: \'ml milliLiters\']\n' +
-                'Type\t[http://terminology.hl7.org/CodeSystem/measure-type#outcome: \'Outcome\']\n' +
-                'Improvement Notation\t[http://terminology.hl7.org/CodeSystem/measure-improvement-notation#increase: \'Increased score indicates improvement\']')
+            //Population Criteria
+            expect(bodyText).to.include('Population Criteria\n' +
+                'Measure Group (Rate) (ID: Group_1)\n' +
+                'Initial Population\n' +
+                '\n' +
+                'define "Qualifying Encounters":\n' +
+                '  ( [Encounter: "Office Visit"]\n' +
+                '    union [Encounter: "Annual Wellness Visit"]\n' +
+                '    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
+                '    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
+                '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
+                '    where ValidEncounter.period during "Measurement Period"\n' +
+                '\n' +
+                'Denominator\n' +
+                '\n' +
+                'define "Qualifying Encounters":\n' +
+                '  ( [Encounter: "Office Visit"]\n' +
+                '    union [Encounter: "Annual Wellness Visit"]\n' +
+                '    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
+                '    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
+                '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
+                '    where ValidEncounter.period during "Measurement Period"\n' +
+                '\n' +
+                'Numerator\n' +
+                '\n' +
+                'define "Qualifying Encounters":\n' +
+                '  ( [Encounter: "Office Visit"]\n' +
+                '    union [Encounter: "Annual Wellness Visit"]\n' +
+                '    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
+                '    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
+                '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
+                '    where ValidEncounter.period during "Measurement Period"')
 
-            //Dependencies
-            expect(bodyText).to.include('Dependency\tDescription: Library FHIRHelpers\n' +
-                'Resource: https://madie.cms.gov/Library/FHIRHelpers|4.1.000\n' +
-                'Canonical URL: https://madie.cms.gov/Library/FHIRHelpers|4.1.000\n' +
-                'Dependency\tDescription: Value set Office Visit\n' +
-                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\n' +
-                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\n' +
-                'Dependency\tDescription: Value set Annual Wellness Visit\n' +
-                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\n' +
-                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\n' +
-                'Dependency\tDescription: Value set Preventive Care Services - Established Office Visit, 18 and Up\n' +
-                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\n' +
-                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\n' +
-                'Dependency\tDescription: Value set Preventive Care Services-Initial Office Visit, 18 and Up\n' +
-                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\n' +
-                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\n' +
-                'Dependency\tDescription: Value set Home Healthcare Services\n' +
-                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\n' +
-                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
-
-            //Parameters
-            expect(bodyText).to.include('Parameter\tName: Measurement Period\n' +
-                'Use: in\n' +
-                'Min Cardinality: 0\n' +
-                'Max Cardinality: 1\n' +
-                'Type: Period\n' +
-                'Parameter\tName: Qualifying Encounters\n' +
-                'Use: out\n' +
-                'Min Cardinality: 0\n' +
-                'Max Cardinality: *\n' +
-                'Type: Resource')
-
-            //Measure Logic Data Requirements
-            expect(bodyText).to.include('Measure Logic Data Requirements\n' +
-                'Data Requirement\tType: Encounter\n' +
-                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
-                'Must Support Elements: type, period\n' +
-                'Code Filter(s):\n' +
-                'Path: type\n' +
-                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001')
-
-            expect(bodyText).to.include('Data Requirement\tType: Encounter\n' +
-                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
-                'Must Support Elements: type, period\n' +
-                'Code Filter(s):\n' +
-                'Path: type\n' +
-                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240')
-
-            expect(bodyText).to.include('Data Requirement\tType: Encounter\n' +
-                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
-                'Must Support Elements: type, period\n' +
-                'Code Filter(s):\n' +
-                'Path: type\n' +
-                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025')
-
-            expect(bodyText).to.include('Data Requirement\tType: Encounter\n' +
-                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
-                'Must Support Elements: type, period\n' +
-                'Code Filter(s):\n' +
-                'Path: type\n' +
-                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023')
-
-            expect(bodyText).to.include('Data Requirement\tType: Encounter\n' +
-                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
-                'Must Support Elements: type, period\n' +
-                'Code Filter(s):\n' +
-                'Path: type\n' +
-                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
-
-            //Measure Logic Definitions and Liquid template version
-            expect(bodyText).to.include('Measure Logic Definitions\n' +
+            //logic definitions
+            expect(bodyText).to.include('Logic Definitions\n' +
                 'Logic Definition\tLibrary Name: ' + CqlLibraryNameFC + '\n' +
                 '\n' +
                 'define "Qualifying Encounters":\n' +
@@ -354,9 +301,70 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 '        if period."start" is null then\n' +
                 '            Interval(period."start".value, period."end".value]\n' +
                 '        else\n' +
-                '            Interval[period."start".value, period."end".value]\n' +
+                '            Interval[period."start".value, period."end".value]')
+
+            //Terminology
+            expect(bodyText).to.include('Terminology\n' +
+                'Value Set\tDescription: Value set Office Visit\n' +
+                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\n' +
+                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\n' +
+                'Value Set\tDescription: Value set Annual Wellness Visit\n' +
+                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\n' +
+                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\n' +
+                'Value Set\tDescription: Value set Preventive Care Services - Established Office Visit, 18 and Up\n' +
+                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\n' +
+                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\n' +
+                'Value Set\tDescription: Value set Preventive Care Services-Initial Office Visit, 18 and Up\n' +
+                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\n' +
+                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\n' +
+                'Value Set\tDescription: Value set Home Healthcare Services\n' +
+                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\n' +
+                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
+
+            //Dependencies
+            expect(bodyText).to.include('Dependencies\n' +
+                'Dependency\tDescription: Library FHIRHelpers\n' +
+                'Resource: https://madie.cms.gov/Library/FHIRHelpers|4.1.000\n' +
+                'Canonical URL: https://madie.cms.gov/Library/FHIRHelpers|4.1.000')
+
+            //Data Requirements
+            expect(bodyText).to.include('Data Requirements\n' +
+                'Data Requirement\tType: Encounter\n' +
+                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
+                'Must Support Elements: type, period\n' +
+                'Code Filter(s):\n' +
+                'Path: type\n' +
+                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\n' +
                 '\n' +
-                'Generated using version 0.4.7 of the sample-content-ig Liquid templates')
+                'Data Requirement\tType: Encounter\n' +
+                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
+                'Must Support Elements: type, period\n' +
+                'Code Filter(s):\n' +
+                'Path: type\n' +
+                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\n' +
+                '\n' +
+                'Data Requirement\tType: Encounter\n' +
+                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
+                'Must Support Elements: type, period\n' +
+                'Code Filter(s):\n' +
+                'Path: type\n' +
+                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\n' +
+                '\n' +
+                'Data Requirement\tType: Encounter\n' +
+                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
+                'Must Support Elements: type, period\n' +
+                'Code Filter(s):\n' +
+                'Path: type\n' +
+                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\n' +
+                '\n' +
+                'Data Requirement\tType: Encounter\n' +
+                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
+                'Must Support Elements: type, period\n' +
+                'Code Filter(s):\n' +
+                'Path: type\n' +
+                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\n' +
+                '\n' +
+                'Generated using version 0.4.8 of the sample-content-ig Liquid templates')
         })
     })
 })
@@ -423,7 +431,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Major Version Created Successfully')
 
@@ -453,130 +461,74 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
         cy.document().then((doc) => {
 
             const bodyText = doc.body.innerText;
-
             //meta details
-            expect(bodyText).to.include('Knowledge Artifact Metadata\n' +
-                'Name (machine-readable)\t' + CqlLibraryNameFC + '\n' +
-                'Title (human-readable)\t' + measureNameFC + '\n' +
-                'Status\tactive\n' +
-                'Experimental\tfalse\n' +
-                'Description\tSemanticBits\n' +
-                'Purpose\tthis is a meta purpose value\n' +
-                'Clinical Usage\tthis is a meta guidance (usage) value -- for the \'Clinical Usage\' field\n' +
-                'Effective Period\t' + mpStartDate + '..' + mpEndDate + '\n' +
-                'Measure Developer\tAcademy of Nutrition and Dietetics\n' +
-                'Measure Steward\tSemanticBits\n' +
-                'Copyright\tUNKNOWN')
+            expect(bodyText).to.include('Metadata\nTitle\t' + measureNameFC + '\nVersion\t1.0.000' +
+                '\nShort Name\teCQMTitle4QICore')
 
+            expect(bodyText).to.include('CMS Consensus Based Entity Identifier\t3502\nEffective Period\t2023-07-01 ' +
+                'through 2025-07-01\nSteward (Publisher)\tSemanticBits\nDeveloper\tAcademy of Nutrition ' +
+                'and Dietetics\nDescription\tSemanticBits\nPurpose\tthis is a meta purpose value\nCopyright\tUNKNOWN\n' +
+                'Disclaimer\tUNKNOWN\nCitation\tCitation - Text 1\nDocumentation\tCitation: Documentation - Text 2\n' +
+                'Justification\tCitation: Justification - Text 3\nDefinition\tThisIsTheDefinitionTermValue: ' +
+                'ThisIsTheDefinitionDefValue\nGuidance (Usage)\tthis is a meta guidance (usage) value -- for the \'Clinical ' +
+                'Usage\' field')
 
-            //References
-            expect(bodyText).to.include('Citation\tCitation: Citation - Text 1\n' +
-                'Documentation\tCitation: Documentation - Text 2\n' +
-                'Justification\tCitation: Justification - Text 3')
-
-            //Short Name Identifier
-            expect(bodyText).to.include('Short Name Identifier\teCQMTitle4QICore')
-
-            //CBE Number / Identifier
-            expect(bodyText).to.include(
-                'Identifier\t3502'
-            )
-
-            //Version Number
-            expect(bodyText).to.include('Version Number\t1.0.000')
-
-            //measureDefinitions value
-            expect(bodyText).to.include(
-                'ThisIsTheDefinitionTermValue Definition\tThisIsTheDefinitionDefValue'
-            )
-
-            //Measure Population Criteria
-            expect(bodyText).to.include('Measure Population Criteria (ID: Group_1)\n' +
+            //measure group meta data
+            expect(bodyText).to.include('Measure Group (Rate) (ID: Group_1)\n' +
+                'Basis\tEncounter\n' +
+                'Scoring\t[http://terminology.hl7.org/CodeSystem/measure-scoring#proportion: \'Proportion\']\n' +
+                'Scoring Unit\t[https://clinicaltables.nlm.nih.gov/#ml: \'ml milliLiters\']\n' +
+                'Type\t[http://terminology.hl7.org/CodeSystem/measure-type#outcome: \'Outcome\']\n' +
+                'Improvement Notation\t[http://terminology.hl7.org/CodeSystem/measure-improvement-notation#increase: \'Increased score indicates improvement\']\n' +
                 'Initial Population\tID: InitialPopulation_1\n' +
                 'Description: No description provided Logic Definition: Qualifying Encounters\n' +
                 'Denominator\tID: Denominator_1\n' +
                 'Description: No description provided Logic Definition: Qualifying Encounters\n' +
                 'Numerator\tID: Numerator_1\n' +
-                'Description: No description provided Logic Definition: Qualifying Encounters')
+                'Description: No description provided Logic Definition: Qualifying Encounters\n' +
+                'Measure Logic\n' +
+                'Primary Library\thttps://madie.cms.gov/Library/' + CqlLibraryNameFC + '\n' +
+                'Contents\tPopulation Criteria\n' +
+                'Logic Definitions\n' +
+                'Terminology\n' +
+                'Dependencies\n' +
+                'Data Requirements')
 
-            //Population Basis, Scoring, Type, Improvement Notation
-            expect(bodyText).to.include('Population Basis\tEncounter\n' +
-                'Scoring\t[http://terminology.hl7.org/CodeSystem/measure-scoring#proportion: \'Proportion\']\n' +
-                'Scoring Unit\t[https://clinicaltables.nlm.nih.gov/#ml: \'ml milliLiters\']\n' +
-                'Type\t[http://terminology.hl7.org/CodeSystem/measure-type#outcome: \'Outcome\']\n' +
-                'Improvement Notation\t[http://terminology.hl7.org/CodeSystem/measure-improvement-notation#increase: \'Increased score indicates improvement\']')
+            //Population Criteria
+            expect(bodyText).to.include('Population Criteria\n' +
+                'Measure Group (Rate) (ID: Group_1)\n' +
+                'Initial Population\n' +
+                '\n' +
+                'define "Qualifying Encounters":\n' +
+                '  ( [Encounter: "Office Visit"]\n' +
+                '    union [Encounter: "Annual Wellness Visit"]\n' +
+                '    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
+                '    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
+                '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
+                '    where ValidEncounter.period during "Measurement Period"\n' +
+                '\n' +
+                'Denominator\n' +
+                '\n' +
+                'define "Qualifying Encounters":\n' +
+                '  ( [Encounter: "Office Visit"]\n' +
+                '    union [Encounter: "Annual Wellness Visit"]\n' +
+                '    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
+                '    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
+                '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
+                '    where ValidEncounter.period during "Measurement Period"\n' +
+                '\n' +
+                'Numerator\n' +
+                '\n' +
+                'define "Qualifying Encounters":\n' +
+                '  ( [Encounter: "Office Visit"]\n' +
+                '    union [Encounter: "Annual Wellness Visit"]\n' +
+                '    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
+                '    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
+                '    union [Encounter: "Home Healthcare Services"] ) ValidEncounter\n' +
+                '    where ValidEncounter.period during "Measurement Period"')
 
-            //Dependencies
-            expect(bodyText).to.include('Dependency\tDescription: Library FHIRHelpers\n' +
-                'Resource: https://madie.cms.gov/Library/FHIRHelpers|4.1.000\n' +
-                'Canonical URL: https://madie.cms.gov/Library/FHIRHelpers|4.1.000\n' +
-                'Dependency\tDescription: Value set Office Visit\n' +
-                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\n' +
-                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\n' +
-                'Dependency\tDescription: Value set Annual Wellness Visit\n' +
-                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\n' +
-                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\n' +
-                'Dependency\tDescription: Value set Preventive Care Services - Established Office Visit, 18 and Up\n' +
-                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\n' +
-                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\n' +
-                'Dependency\tDescription: Value set Preventive Care Services-Initial Office Visit, 18 and Up\n' +
-                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\n' +
-                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\n' +
-                'Dependency\tDescription: Value set Home Healthcare Services\n' +
-                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\n' +
-                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
-
-            //Parameters
-            expect(bodyText).to.include('Parameter\tName: Measurement Period\n' +
-                'Use: in\n' +
-                'Min Cardinality: 0\n' +
-                'Max Cardinality: 1\n' +
-                'Type: Period\n' +
-                'Parameter\tName: Qualifying Encounters\n' +
-                'Use: out\n' +
-                'Min Cardinality: 0\n' +
-                'Max Cardinality: *\n' +
-                'Type: Resource')
-
-            //Measure Logic Data Requirements
-            expect(bodyText).to.include('Measure Logic Data Requirements\n' +
-                'Data Requirement\tType: Encounter\n' +
-                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
-                'Must Support Elements: type, period\n' +
-                'Code Filter(s):\n' +
-                'Path: type\n' +
-                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001')
-
-            expect(bodyText).to.include('Data Requirement\tType: Encounter\n' +
-                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
-                'Must Support Elements: type, period\n' +
-                'Code Filter(s):\n' +
-                'Path: type\n' +
-                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240')
-
-            expect(bodyText).to.include('Data Requirement\tType: Encounter\n' +
-                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
-                'Must Support Elements: type, period\n' +
-                'Code Filter(s):\n' +
-                'Path: type\n' +
-                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025')
-
-            expect(bodyText).to.include('Data Requirement\tType: Encounter\n' +
-                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
-                'Must Support Elements: type, period\n' +
-                'Code Filter(s):\n' +
-                'Path: type\n' +
-                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023')
-
-            expect(bodyText).to.include('Data Requirement\tType: Encounter\n' +
-                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
-                'Must Support Elements: type, period\n' +
-                'Code Filter(s):\n' +
-                'Path: type\n' +
-                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
-
-            //Measure Logic Definitions and Liquid template version
-            expect(bodyText).to.include('Measure Logic Definitions\n' +
+            //logic definitions
+            expect(bodyText).to.include('Logic Definitions\n' +
                 'Logic Definition\tLibrary Name: ' + CqlLibraryNameFC + '\n' +
                 '\n' +
                 'define "Qualifying Encounters":\n' +
@@ -596,9 +548,70 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 '        if period."start" is null then\n' +
                 '            Interval(period."start".value, period."end".value]\n' +
                 '        else\n' +
-                '            Interval[period."start".value, period."end".value]\n' +
+                '            Interval[period."start".value, period."end".value]')
+
+            //Terminology
+            expect(bodyText).to.include('Terminology\n' +
+                'Value Set\tDescription: Value set Office Visit\n' +
+                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\n' +
+                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\n' +
+                'Value Set\tDescription: Value set Annual Wellness Visit\n' +
+                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\n' +
+                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\n' +
+                'Value Set\tDescription: Value set Preventive Care Services - Established Office Visit, 18 and Up\n' +
+                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\n' +
+                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\n' +
+                'Value Set\tDescription: Value set Preventive Care Services-Initial Office Visit, 18 and Up\n' +
+                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\n' +
+                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\n' +
+                'Value Set\tDescription: Value set Home Healthcare Services\n' +
+                'Resource: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\n' +
+                'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
+
+            //Dependencies
+            expect(bodyText).to.include('Dependencies\n' +
+                'Dependency\tDescription: Library FHIRHelpers\n' +
+                'Resource: https://madie.cms.gov/Library/FHIRHelpers|4.1.000\n' +
+                'Canonical URL: https://madie.cms.gov/Library/FHIRHelpers|4.1.000')
+
+            //Data Requirements
+            expect(bodyText).to.include('Data Requirements\n' +
+                'Data Requirement\tType: Encounter\n' +
+                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
+                'Must Support Elements: type, period\n' +
+                'Code Filter(s):\n' +
+                'Path: type\n' +
+                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\n' +
                 '\n' +
-                'Generated using version 0.4.7 of the sample-content-ig Liquid templates')
+                'Data Requirement\tType: Encounter\n' +
+                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
+                'Must Support Elements: type, period\n' +
+                'Code Filter(s):\n' +
+                'Path: type\n' +
+                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\n' +
+                '\n' +
+                'Data Requirement\tType: Encounter\n' +
+                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
+                'Must Support Elements: type, period\n' +
+                'Code Filter(s):\n' +
+                'Path: type\n' +
+                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\n' +
+                '\n' +
+                'Data Requirement\tType: Encounter\n' +
+                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
+                'Must Support Elements: type, period\n' +
+                'Code Filter(s):\n' +
+                'Path: type\n' +
+                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\n' +
+                '\n' +
+                'Data Requirement\tType: Encounter\n' +
+                'Profile(s): http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter\n' +
+                'Must Support Elements: type, period\n' +
+                'Code Filter(s):\n' +
+                'Path: type\n' +
+                'ValueSet: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\n' +
+                '\n' +
+                'Generated using version 0.4.8 of the sample-content-ig Liquid templates')
         })
     })
 })
