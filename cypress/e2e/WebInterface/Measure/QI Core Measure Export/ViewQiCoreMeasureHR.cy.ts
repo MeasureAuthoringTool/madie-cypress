@@ -50,8 +50,8 @@ describe('View Human Readable for Qi Core Measure', () => {
 
         Utilities.waitForElementVisible(EditMeasurePage.humanReadablePopup, 60000)
         cy.get(EditMeasurePage.humanReadablePopup).should('contain.text', 'Human Readable')
-        cy.get(':nth-child(3) > .content-container').should('contain.text', measureQICore)
-        cy.get(':nth-child(17) > .content-container').should('contain.text', 'eCQMTitle4QICore')
+        cy.get(':nth-child(2) > .content-container').should('contain.text', measureQICore)
+        cy.get(':nth-child(4) > .content-container').should('contain.text', 'eCQMTitle4QICore')
     })
 
     it('View Human Readable for QiCore 4.1.1 Measure on All Measures page', () => {
@@ -63,8 +63,8 @@ describe('View Human Readable for Qi Core Measure', () => {
 
         Utilities.waitForElementVisible(EditMeasurePage.humanReadablePopup, 60000)
         cy.get(EditMeasurePage.humanReadablePopup).should('contain.text', 'Human Readable')
-        cy.get(':nth-child(3) > .content-container').should('contain.text', measureQICore)
-        cy.get(':nth-child(17) > .content-container').should('contain.text', 'eCQMTitle4QICore')
+        cy.get(':nth-child(2) > .content-container').should('contain.text', measureQICore)
+        cy.get(':nth-child(4) > .content-container').should('contain.text', 'eCQMTitle4QICore')
     })
 
     it('Export measure from View HR modal', () => {
