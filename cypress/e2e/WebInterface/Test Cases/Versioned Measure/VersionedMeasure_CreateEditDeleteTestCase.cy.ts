@@ -54,10 +54,11 @@ let measureCQL = 'library ProportionEpisodeMeasure version \'0.0.000\'\n' +
     '          })'
 
 
-//will skip this until https://jira.cms.gov/browse/MAT-6751 feature is complete and feature flag is turned on
-describe.skip('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => {
+describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => {
 
-    before('Create Measure, Test Case and Login', () => {
+    beforeEach('Create Measure, Test Case and Login', () => {
+
+        CqlLibraryName = 'ProportionEpisode' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL, null, false,
             '2023-01-01', '2023-12-31')
@@ -176,7 +177,7 @@ describe.skip('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', (
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
             cy.writeFile(filePath, request.response.body.id)
         })
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
+        cy.get('.toast').should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
         //navigate back to the main MADiE / measure list page
@@ -199,7 +200,6 @@ describe.skip('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', (
 
     })
 
-    //this test will fail until https://jira.cms.gov/browse/MAT-8839 is fixed
     it('Versioned Measure: Edit Test Case, delete is disabled', () => {
 
         //Click on Edit Button
@@ -229,9 +229,9 @@ describe.skip('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', (
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.successMsg).should('contain.text', 'Test case updated successfully with ' +
-            'errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. ' +
+            'warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. ' +
             'All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been ' +
-            'defaulted to \'000')
+            'defaulted to')
 
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -264,7 +264,7 @@ describe.skip('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', (
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
             cy.writeFile(filePath, request.response.body.id)
         })
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
+        cy.get('.toast').should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
         //navigate back to the main MADiE / measure list page
