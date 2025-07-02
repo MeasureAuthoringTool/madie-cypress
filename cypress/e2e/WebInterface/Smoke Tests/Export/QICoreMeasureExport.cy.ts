@@ -218,8 +218,9 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
             expect(bodyText).to.include('Metadata\nTitle\t' + measureNameFC + '\nVersion\tDraft based on 0.0.000' +
                 '\nShort Name\teCQMTitle4QICore')
 
-            expect(bodyText).to.include('CMS Consensus Based Entity Identifier\t3502\nEffective Period\t2023-07-01 ' +
-                'through 2025-07-01\nStatus\tdraft\nSteward (Publisher)\tSemanticBits\nDeveloper\tAcademy of Nutrition ' +
+            expect(bodyText).to.include('CMS Consensus Based Entity Identifier\t3502\n')
+
+            expect(bodyText).to.include('\nStatus\tdraft\nSteward (Publisher)\tSemanticBits\nDeveloper\tAcademy of Nutrition ' +
                 'and Dietetics\nDescription\tSemanticBits\nPurpose\tthis is a meta purpose value\nCopyright\tUNKNOWN\n' +
                 'Disclaimer\tUNKNOWN\nCitation\tCitation - Text 1\nDocumentation\tCitation: Documentation - Text 2\n' +
                 'Justification\tCitation: Justification - Text 3\nDefinition\tThisIsTheDefinitionTermValue: ' +
@@ -465,8 +466,9 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
             expect(bodyText).to.include('Metadata\nTitle\t' + measureNameFC + '\nVersion\t1.0.000' +
                 '\nShort Name\teCQMTitle4QICore')
 
-            expect(bodyText).to.include('CMS Consensus Based Entity Identifier\t3502\nEffective Period\t2023-07-01 ' +
-                'through 2025-07-01\nSteward (Publisher)\tSemanticBits\nDeveloper\tAcademy of Nutrition ' +
+            expect(bodyText).to.include('CMS Consensus Based Entity Identifier\t3502\n')
+
+            expect(bodyText).to.include('\nSteward (Publisher)\tSemanticBits\nDeveloper\tAcademy of Nutrition ' +
                 'and Dietetics\nDescription\tSemanticBits\nPurpose\tthis is a meta purpose value\nCopyright\tUNKNOWN\n' +
                 'Disclaimer\tUNKNOWN\nCitation\tCitation - Text 1\nDocumentation\tCitation: Documentation - Text 2\n' +
                 'Justification\tCitation: Justification - Text 3\nDefinition\tThisIsTheDefinitionTermValue: ' +

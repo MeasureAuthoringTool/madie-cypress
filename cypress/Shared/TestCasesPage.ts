@@ -178,6 +178,7 @@ export class TestCasesPage {
     public static readonly aceEditor = '[data-testid="test-case-json-editor"]'
     public static readonly aceEditorJsonInput = '[data-testid="test-case-json-editor-input"]'
     public static readonly testCaseTitle = '[data-testid="test-case-title"]'
+    public static readonly roTestCaseTitle = '[id="test-case-title"]'
     public static readonly reportsButton = '[data-testid="reports-button"]'
     public static readonly executeTestCaseButton = '[data-testid="execute-test-cases-button"]'
     public static readonly overlappingCodesButton = '[data-testid="overlapping-codes"]'
