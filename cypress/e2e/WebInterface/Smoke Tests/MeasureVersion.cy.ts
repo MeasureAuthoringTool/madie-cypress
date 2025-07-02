@@ -293,9 +293,9 @@ describe('QI-Core Measure Versioning', () => {
         cy.get(TestCasesPage.aceEditor).should('not.be.enabled')
         //Navigate to Details tab
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseTitle).should('be.enabled')
+        cy.get(TestCasesPage.roTestCaseTitle).should('have.attr', 'readonly', 'readonly')
         Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 50000)
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('not.exist')
 
         //Verify that the Delete Measure button is disabled
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()

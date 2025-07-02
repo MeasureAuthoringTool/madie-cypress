@@ -30,7 +30,7 @@ export class CQLLibraryPage {
     public static readonly libraryListTitles = '[data-testid="cqlLibrary-list"]'
     public static readonly allLibrariesBtn = '[data-testid="all-cql-libraries-tab"]'
     public static readonly myLibrariesBtn = '[data-testid="my-cql-libraries-tab"]'
-    public static readonly LibFilterTextField = '[data-testid="library-filter-input"]'
+    public static readonly LibFilterTextField = '[data-testid="library-search-input"]'//filter
     public static readonly LibFilterSubmitBtn = '[data-testid="library-filter-submit"]'
     public static readonly LibFilterLabel = '[id="mui-2-label"]'
     public static readonly LibTableRows = '[data-testid="row-item"]'
