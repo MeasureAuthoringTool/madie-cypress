@@ -339,26 +339,27 @@ export class Utilities {
             valueDataElement == MeasureGroupPage.qdmScoringRatio
 
         ) {
-            cy.get(dropdownDataElement).wait(250).click()
-            cy.get(valueDataElement).wait(250).click()
+            cy.get(dropdownDataElement).wait(250).click().wait(1000)
+            cy.get(valueDataElement).wait(250).click().wait(1000)
         }
         else if (dropdownDataElement == '[id="improvement-notation-select"]' ||
             dropdownDataElement == MeasureGroupPage.initialPopulationSelect
         ) {
             cy.get(dropdownDataElement)
-                .wait(250)
+                .wait(500)
                 .click()
                 .get('ul > li[data-value="' + valueDataElement + '"]')
-                .wait(250)
+                .wait(500)
                 .click()
+                .wait(500)
         }
         else {
             Utilities.waitForElementVisible(dropdownDataElement, 50000)
             cy.get(dropdownDataElement)
-                .wait(250)
+                .wait(500)
                 .click()
                 .get('ul > li[data-value="' + valueDataElement + '"]')
-                .wait(250)
+                .wait(500)
                 .click()
         }
     }
@@ -400,6 +401,7 @@ export class Utilities {
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('exist')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('be.visible')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).wait(100).type('Process').wait(100).type('{downArrow}').wait(100).type('{enter}')
+        cy.get('[data-testid="populationBasis"]').click()
 
     }
 
