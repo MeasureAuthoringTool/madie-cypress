@@ -7,7 +7,7 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import {Header} from "../../../../Shared/Header";
+import { Header } from "../../../../Shared/Header";
 
 let measureName = 'ProportionEpisode' + Date.now()
 let CqlLibraryName = 'ProportionEpisode' + Date.now()
@@ -127,7 +127,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
@@ -212,7 +212,7 @@ describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => 
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')

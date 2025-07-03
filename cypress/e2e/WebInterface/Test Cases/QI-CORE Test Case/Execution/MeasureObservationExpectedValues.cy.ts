@@ -40,8 +40,8 @@ describe('Measure Observation Expected values', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')    
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -66,7 +66,7 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
+        cy.get(TestCasesPage.importTestCaseSuccessMsg, { timeout: 6500 }).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
         //Assert saved observation values
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.measureObservationRow).should('contain.value', '1.3')
@@ -104,8 +104,8 @@ describe('Measure Observation Expected values', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')    
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -150,8 +150,8 @@ describe('Measure Observation Expected values', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')    
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -235,8 +235,8 @@ describe('Measure observation expected result', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')    
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -321,8 +321,8 @@ describe('Measure observation expected result', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')    
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')

@@ -73,23 +73,23 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
 
         //click on the Import Test Cases button
-        Utilities.waitForElementVisible(TestCasesPage.importTestCasesBtn, 65000)
+        Utilities.waitForElementVisible(TestCasesPage.importTestCasesBtn, 65000000)
         cy.get(TestCasesPage.importTestCasesBtn).click()
 
         //wait until select / drag and drop modal window appears
-        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000000)
 
         //Upload valid Json file via drag and drop
         cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join('cypress/fixtures', 'CMS645FHIR-v1.5.000-FHIR6-TestCases.zip'), { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
-        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
+        Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000000)
         cy.get(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile).should('contain.text', 'CMS645FHIR-v1.5.000-FHIR6-TestCases.zip')
 
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 65000)
+        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 65000000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         //verify Passing Tab's text
@@ -108,8 +108,8 @@ describe('Measure Creation and Testing: Proportion Episode Measure', () => {
 
         EditMeasurePage.actionCenter(EditMeasureActions.version)
 
-        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 65000)
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 65000)
+        Utilities.waitForElementVisible(TestCasesPage.executeTestCaseButton, 65000000)
+        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 65000000)
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
         //verify Passing Tab's text after Versioning

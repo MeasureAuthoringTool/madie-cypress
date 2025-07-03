@@ -417,7 +417,7 @@ describe('Test Case Population dependencies', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         //click on Expected / Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')

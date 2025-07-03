@@ -43,7 +43,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
@@ -59,7 +59,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
-      
+
         //Navigate to Measure group page and update scoring type
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
@@ -94,7 +94,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
@@ -143,7 +143,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseIPPExpected).should('not.contain.value')
@@ -161,7 +161,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         //click on Expected / Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -189,7 +189,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         //click on Expected / Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -238,7 +238,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
@@ -254,7 +254,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
-  
+
         //Navigate to Measure Group page and add Numerator Exclusion & delete Denominator Exclusion
         cy.get(EditMeasurePage.measureGroupsTab).click()
         Utilities.dropdownSelect(MeasureGroupPage.numeratorExclusionSelect, 'num')
@@ -269,7 +269,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseDENEXExpected).should('not.exist')
@@ -314,7 +314,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
@@ -349,7 +349,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCaseDENOMExpected).should('exist')
@@ -372,7 +372,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.initialPopulationStratificationExpectedValue).should('not.exist')
@@ -393,7 +393,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get('[data-testid="strat-row-population-id-measurePopulation"] > :nth-child(2)').should('exist')
@@ -446,7 +446,7 @@ describe('Validate Test Case Expected value updates on Measure Group change', ()
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')

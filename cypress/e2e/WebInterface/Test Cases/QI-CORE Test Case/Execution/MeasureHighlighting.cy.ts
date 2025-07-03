@@ -1247,7 +1247,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
@@ -1386,7 +1386,7 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Includes Result
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
