@@ -22,11 +22,14 @@ describe('Edit Measure', () => {
     })
 
     it('Edit CQL Library Name and verify the library is updated on CQL Library page', () => {
-
+        cy.reload()
         //Edit CQL Library Name
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
-
+        cy.get('[id="measures-main-nav-bar-tab"]').click()
+        //Edit CQL Library Name
+        CQLLibrariesPage.clickEditforCreatedLibrary()
+        cy.reload()
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).wait(1000).clear()
         cy.get(CQLLibraryPage.cqlLibraryNameTextbox).type(updatedCQLLibraryName)
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()

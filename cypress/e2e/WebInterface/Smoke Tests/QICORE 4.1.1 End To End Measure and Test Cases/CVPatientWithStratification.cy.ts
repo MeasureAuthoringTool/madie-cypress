@@ -107,6 +107,7 @@ describe('Measure Creation and Testing: CV Patient Measure With Stratification',
         Utilities.setMeasureGroupType()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, 'Continuous Variable')
+        cy.get(MeasureGroupPage.initialPopulationSelect).focus()
         Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population 1')
         Utilities.dropdownSelect(MeasureGroupPage.measurePopulationSelect, 'Measure Population')
         Utilities.dropdownSelect(MeasureGroupPage.cvMeasureObservation, 'Measure Observation')

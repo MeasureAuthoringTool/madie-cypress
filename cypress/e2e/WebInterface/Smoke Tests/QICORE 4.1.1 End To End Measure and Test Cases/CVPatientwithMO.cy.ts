@@ -51,7 +51,9 @@ describe('Measure Creation and Testing: CV Patient With MO', () => {
         Utilities.setMeasureGroupType()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCV)
+        cy.get(MeasureGroupPage.initialPopulationSelect).focus()
         Utilities.populationSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population 1')
+        cy.get(MeasureGroupPage.measurePopulationSelect).focus()
         Utilities.populationSelect(MeasureGroupPage.measurePopulationSelect, 'Initial Population 1')
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
         cy.get('[data-value="Measure Observation"]').click()
