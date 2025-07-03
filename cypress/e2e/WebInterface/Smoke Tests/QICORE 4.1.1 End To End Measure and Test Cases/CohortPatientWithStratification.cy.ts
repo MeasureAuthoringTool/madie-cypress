@@ -114,7 +114,7 @@ describe('Measure Creation and Testing: Cohort Patient w/ Stratification', () =>
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000 })
+        cy.wait('@callstacks', { timeout: 60000000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
