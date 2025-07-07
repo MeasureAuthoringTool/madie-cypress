@@ -74,7 +74,7 @@ describe('MADIE Zip Test Case Import', () => {
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000000 })
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //edit second test case so that it will fail
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -105,7 +105,7 @@ describe('MADIE Zip Test Case Import', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000000 })
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //edit second test case so that it will fail
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -188,7 +188,7 @@ describe('MADIE Zip Test Case Import', () => {
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000000 })
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //edit second test case so that it will fail
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -214,7 +214,7 @@ describe('MADIE Zip Test Case Import', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000000 })
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //edit second test case so that it will fail
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
