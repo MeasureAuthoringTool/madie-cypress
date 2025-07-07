@@ -119,7 +119,7 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000000 })
+        cy.wait('@callstacks', { timeout: 120000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')
@@ -168,7 +168,7 @@ describe('Measure Creation and Testing: Ratio Episode Single IP w/o MO', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000000 })
+        cy.wait('@callstacks', { timeout: 120000 })
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.testCasePopulationList).should('be.visible')

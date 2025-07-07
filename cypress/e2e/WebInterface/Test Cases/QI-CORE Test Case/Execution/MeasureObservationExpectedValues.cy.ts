@@ -41,7 +41,7 @@ describe('Measure Observation Expected values', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000000 })
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -105,7 +105,7 @@ describe('Measure Observation Expected values', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000000 })
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -151,7 +151,7 @@ describe('Measure Observation Expected values', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000000 })
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -236,7 +236,7 @@ describe('Measure observation expected result', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000000 })
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -322,7 +322,7 @@ describe('Measure observation expected result', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
-        cy.wait('@callstacks', { timeout: 60000000 })
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
