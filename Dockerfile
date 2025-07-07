@@ -1,4 +1,4 @@
-FROM cypress/base:20.5.0
+FROM cypress/base:22.17.0
 
 WORKDIR /app
 
@@ -16,6 +16,9 @@ RUN wget https://mirrors.edge.kernel.org/ubuntu/pool/main/g/gcc-10/libgcc-s1_10-
 
 # install Chrome browser
 RUN \
+  apt-get update && \
+  apt-get install -y gnupg && \
+  apt-get install -y dbus && \
  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
   echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
   apt-get update && apt-get install -y gnupg && \
@@ -23,10 +26,7 @@ RUN \
   rm -rf /var/lib/apt/lists/*
 
 # install aws cli
-RUN \
-  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-  unzip awscliv2.zip && \
-  ./aws/install
+RUN apt-get update && apt-get install -y awscli
 
 COPY ./cypress ./cypress
 COPY ./cypress.config.ts ./cypress.config.ts
