@@ -27,8 +27,7 @@ RUN \
   rm -rf /var/lib/apt/lists/*
 
 # install aws cli
-RUN \
-  apt-get install -y awscli
+RUN apt-get update && apt-get install -y awscli
 
 COPY ./cypress ./cypress
 COPY ./cypress.config.ts ./cypress.config.ts
