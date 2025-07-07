@@ -13,8 +13,6 @@ RUN npx cypress verify
 # Install essential packages and dependencies
 RUN apt-get update && \
     apt-get install -y \
-    openjdk-11-jdk \
-    maven \
     wget \
     unzip \
     xvfb \
@@ -22,7 +20,8 @@ RUN apt-get update && \
     libgconf-2-4 \
     gnupg \
     curl \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+
 
 # Fetch the latest stable Chrome version and install Chrome and ChromeDriver
 RUN CHROME_VERSION=$(curl -sSL https://googlechromelabs.github.io/chrome-for-testing/ | awk -F 'Version:' '/Stable/ {print $2}' | awk '{print $1}' | sed 's/<code>//g; s/<\/code>//g') && \
