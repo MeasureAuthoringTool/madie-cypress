@@ -10,20 +10,29 @@ COPY package-lock.json package-lock.json
 RUN npm install
 RUN npx cypress verify
 
-# install deps
-RUN wget https://mirrors.edge.kernel.org/ubuntu/pool/main/g/gcc-10/gcc-10-base_10-20200411-0ubuntu1_amd64.deb && dpkg -i gcc-10-base_10-20200411-0ubuntu1_amd64.deb
-RUN wget https://mirrors.edge.kernel.org/ubuntu/pool/main/g/gcc-10/libgcc-s1_10-20200411-0ubuntu1_amd64.deb && dpkg -i libgcc-s1_10-20200411-0ubuntu1_amd64.deb
+# Install essential packages and dependencies
+RUN apt-get update && \
+    apt-get install -y \
+    openjdk-11-jdk \
+    maven \
+    wget \
+    unzip \
+    xvfb \
+    libxi6 \
+    libgconf-2-4 \
+    gnupg \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-# install Chrome browser
-RUN \
-  apt-get update && \
-  apt-get install -y gnupg && \
-  apt-get install -y dbus && \
- wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-  echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
-  apt-get update && apt-get install -y gnupg && \
-  dbus-x11 google-chrome-stable && \
-  rm -rf /var/lib/apt/lists/*
+# Fetch the latest stable Chrome version and install Chrome and ChromeDriver
+RUN CHROME_VERSION=$(curl -sSL https://googlechromelabs.github.io/chrome-for-testing/ | awk -F 'Version:' '/Stable/ {print $2}' | awk '{print $1}' | sed 's/<code>//g; s/<\/code>//g') && \
+    CHROME_URL="https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chrome-linux64.zip" && \
+    echo "Fetching Chrome version: ${CHROME_VERSION}" && \
+    curl -sSL ${CHROME_URL} -o /tmp/chrome-linux64.zip && \
+    mkdir -p /opt/google/chrome && \
+    mkdir -p /usr/local/bin && \
+    unzip -q /tmp/chrome-linux64.zip -d /opt/google/chrome && \
+    rm /tmp/chrome-linux64.zip
 
 # install aws cli
 RUN apt-get update && apt-get install -y awscli
