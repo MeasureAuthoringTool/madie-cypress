@@ -64,6 +64,7 @@ export class CQLLibrariesPage {
             })
 
         })
+       cy.get('[data-testid="CQL Library Details"]').click()
     }
 
     public static clickViewforCreatedLibrary(secondLibrary?: boolean, altUserAction?: boolean): void {
