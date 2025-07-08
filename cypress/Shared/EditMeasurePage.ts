@@ -123,6 +123,7 @@ export class EditMeasurePage {
 
     //Transmission Format page
     public static readonly transmissionFormatDescription = '[data-testid="transmission-format-text"]'
+    public static readonly readOnlyTFDesc = '#transmissionFormat'
 
     //Measure CQL Page
     //warnings / errors in CQL that appear at the top of page
