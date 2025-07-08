@@ -61,11 +61,14 @@ export class MeasureGroupPage {
     //QDM Supplemental Data Elements and Risk Adjustment variables
     public static readonly QDMSupplementalDataElementsTab = '[id="sideNavMeasurePopulationsSupplementalData"]'
     public static readonly QDMSupplementalDataDescriptionTextBox = '[data-testid=supplemental-data-description-text]'
+    public static readonly readOnlyQDMSDEDescription = 'supplementalDataDescription'
     public static readonly QDMSupplementalDataDefinitionSelect = '[data-testid=ArrowDropDownIcon]'
+    public static readonly readOnlyQDMSDEDefinition = '#supplemental-data'
     public static readonly QDMSupplementalDataElementsListBox = '[id="supplemental-data-listbox"]'
     public static readonly QDMSaveSupplementalDataElements = '[data-testid="measure-Supplemental Data-save"]'
     public static readonly QDMSupplementalDataDefinitionTextBox = '[id="supplemental-data"]'
     public static readonly QDMRiskAdjustmentDescriptionTextBox = '[data-testid=risk-adjustment-description-text]'
+    public static readonly readOnlyQDMRiskAdjDescription = '#riskAdjustmentDescription'
     public static readonly QDMRiskAdjustmentDefinitionTextBox = '[id="risk-adjustment"]'
 
     //mismatch CQL error
@@ -120,8 +123,10 @@ export class MeasureGroupPage {
     public static readonly deleteMeasureGroupConfirmationMsg = '.MuiDialogContent-root > div'
     //Reporting tab fields
     public static readonly rateAggregation = '[data-testid="rate-aggregation-text"]'
+    public static readonly readOnlyRateAggregation = '#rateAggregation'
     public static readonly improvementNotationSelect = '[id="improvement-notation-select"]'
     public static readonly improvementNotationDescText = '[data-testid="improvement-notation-description-text"]'
+    public static readonly readOnlyImpNotationDescription = '#improvementNotationDescription'
     // When the flag "EnhancedTextFormatting" is removed, replace the below variable's value with that wheich is commented out
     public static readonly improvementNotationDescQiCore = '[data-testid="improvement-notation-description-text"]'/*'[data-testid="improvement-notation-description-rich-text-editor"]'*/
     public static readonly improvementNotationValues = '[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]'
