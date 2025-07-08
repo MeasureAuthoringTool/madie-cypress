@@ -90,10 +90,13 @@ describe('CQL Library Service: Create CQL Library', () => {
         cy.setAccessTokenCookie()
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
-                url: '/api/cql-libraries',
-                method: 'GET',
+                url: '/api/cql-libraries/searches',
+                method: 'PUT',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value
+                },
+                body: {
+                    'searchField': "", optionalSearchProperties: [""]  //can be ["libraryName", "version"]
                 }
             }).then((response) => {
                 expect(response.status).to.eql(200)
@@ -134,10 +137,13 @@ describe('CQL Library Service: Create CQL Library', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.request({
-                url: '/api/cql-libraries?currentUser=true',
-                method: 'GET',
+                url: '/api/cql-libraries/searches?currentUser=true',
+                method: 'PUT',
                 headers: {
                     authorization: 'Bearer ' + accessToken.value
+                },
+                body: {
+                    'searchField': "", optionalSearchProperties: [""]  //can be ["libraryName", "version"]
                 }
             }).then((response) => {
                 expect(response.status).to.eql(200)

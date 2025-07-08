@@ -53,7 +53,7 @@ export class EditMeasurePage {
     public static readonly generateCmsIdButton = '[data-testid="generate-cms-id-button"]'
     public static readonly cmsIDDialogCancel = '[data-testid="cms-identifier-dialog-cancel-button"]'
     public static readonly cmsIDDialogContinue = '[data-testid="cms-identifier-dialog-continue-button"]'
-    public static readonly cmsIdInput = '[data-testid="cms-id-input"]'
+    public static readonly cmsIdInput = '[data-testid="cms-id-text-field"]'
     public static readonly successfulMeasureSaveMsg = '[data-testid="edit-measure-information-success-text"]'
 
     //Endorser fields

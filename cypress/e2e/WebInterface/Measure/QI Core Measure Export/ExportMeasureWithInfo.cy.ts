@@ -11,16 +11,16 @@ const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 const expCql = 'library FMPW version \'0.0.000\'\n' +
-'include FHIRHelpers version \'4.4.000\' called FHIRHelpers\n' +
-'using QICore version \'6.0.0\'\n' +
-'parameter "Measurement Period" Interval<DateTime>\n' +
-'context Patient\n' +
-'define "IP":\n' +
-'  exists ["QICore Condition Encounter Diagnosis"]\n' +
-'  and exists "Encounter"\n' +
-'define "Encounter":\n' + 
-'  [Encounter] IP\n' +
-'  where IP.class is not null'
+    'include FHIRHelpers version \'4.4.000\' called FHIRHelpers\n' +
+    'using QICore version \'6.0.0\'\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'context Patient\n' +
+    'define "IP":\n' +
+    '  exists ["QICore Condition Encounter Diagnosis"]\n' +
+    '  and exists "Encounter"\n' +
+    'define "Encounter":\n' +
+    '  [Encounter] IP\n' +
+    '  where IP.class is not null'
 
 describe('QI-Core Measure Export with Info', () => {
 
@@ -34,7 +34,7 @@ describe('QI-Core Measure Export with Info', () => {
 
     before('Create New Measure and Login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {measureCql: expCql})
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: expCql })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'IP', 'boolean')
 
         OktaLogin.Login()
@@ -50,10 +50,10 @@ describe('QI-Core Measure Export with Info', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('export', null, exportOptions)
-        cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR6.zip', {timeout: 5500})
+        cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR6.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', {zipFile: 'AutoTestTitle-v0.0.000-FHIR6.zip', path: downloadsFolder})
+        cy.task('unzipFile', { zipFile: 'AutoTestTitle-v0.0.000-FHIR6.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
                 cy.wait(1000)
@@ -68,7 +68,7 @@ describe('QI-Core Measure Export with Info', () => {
     it('Validate CQL info appears as annotations on the library JSON', () => {
 
         const elmFile = path.join(downloadsFolder, 'resources', 'library-' + CqlLibraryName + '-0.0.000.json')
-        
+
         cy.readFile(elmFile).then(fileContents => {
 
             // the data we need is encoded - below will fetch, decode, and check for details
@@ -79,7 +79,7 @@ describe('QI-Core Measure Export with Info', () => {
                 // assert details for the expected warning
                 expect(elm.library.annotation[1].errorSeverity).to.eq('warning')
                 expect(elm.library.annotation[1].type).to.eq('CqlToElmError')
-                expect(elm.library.annotation[1].message).to.eq('An alias identifier IP is hiding another identifier of the same name.')
+                expect(elm.library.annotation[1].message).to.eq('An alias identifier [IP] is hiding another identifier of the same name.')
             })
         })
     })
@@ -97,7 +97,7 @@ describe('QI-Core Measure Export for Publish', () => {
 
     before('Create New Measure and Login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, {measureCql: expCql})
+        CreateMeasurePage.CreateMeasureAPI(measureName, CqlLibraryName, SupportedModels.qiCore6, { measureCql: expCql })
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'IP', 'boolean')
 
         OktaLogin.Login()
@@ -113,10 +113,10 @@ describe('QI-Core Measure Export for Publish', () => {
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('export', null, exportOptions)
-        cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR6.zip', {timeout: 5500})
+        cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR6.zip', { timeout: 5500 })
         cy.log('Successfully verified zip file export')
 
-        cy.task('unzipFile', {zipFile: 'AutoTestTitle-v0.0.000-FHIR6.zip', path: downloadsFolder})
+        cy.task('unzipFile', { zipFile: 'AutoTestTitle-v0.0.000-FHIR6.zip', path: downloadsFolder })
             .then(results => {
                 cy.log('unzipFile Task finished')
                 cy.wait(1000)
@@ -131,7 +131,7 @@ describe('QI-Core Measure Export for Publish', () => {
     it('Validate CQL info appears as annotations on the library JSON', () => {
 
         const elmFile = path.join(downloadsFolder, 'resources', 'library-' + CqlLibraryName + '-0.0.000.json')
-        
+
         cy.readFile(elmFile).then(fileContents => {
 
             // the data we need is encoded - below will fetch, decode, and check for details
