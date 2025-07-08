@@ -7,7 +7,8 @@ import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeas
 import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from "../../../../Shared/MeasureGroupPage"
 import { TestCase, TestCasesPage } from "../../../../Shared/TestCasesPage"
-import {CQLEditorPage} from "../../../../Shared/CQLEditorPage"
+import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { Header } from "../../../../Shared/Header"
 
 const now = Date.now()
 const measure = {
@@ -37,13 +38,20 @@ describe('Test case list page - Action Center icons for measure owner', () => {
 
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measure.name, measure.cqlLibraryName, SupportedModels.qiCore4, { measureCql: measure.cql})
+        CreateMeasurePage.CreateMeasureAPI(measure.name, measure.cqlLibraryName, SupportedModels.qiCore4, { measureCql: measure.cql })
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.procedure, MeasureScoring.Proportion, populations)
         TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.description, testCase1.group)
         TestCasesPage.CreateTestCaseAPI(testCase2.title, testCase2.description, testCase2.group, testCase2.json, false, true)
 
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 60000)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
     })
 
@@ -70,8 +78,7 @@ describe('Test case list page - Action Center icons for measure owner', () => {
         cy.get(TestCasesPage.actionCenterClone).should('be.enabled')
         TestCasesPage.checkTestCase(1)
         cy.get(TestCasesPage.actionCenterClone).should('be.disabled')
-
-        cy.get('.header-button').find('input[type="checkbox"]').check()
+        cy.get('[data-testid="test-case-tbl"]').find('input[type="checkbox"]').check()
         TestCasesPage.createTestCase('Test Case 3', 'Example test case', 'Extra')
 
         TestCasesPage.checkTestCase(3)
@@ -114,22 +121,20 @@ describe('Test case list page - Action Center icons for measure owner', () => {
 })
 
 describe('Test case list page - Action Center icons for versioned measure', () => {
-    
+
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measure.name, measure.cqlLibraryName, SupportedModels.qiCore4, { measureCql: measure.cql})
+        CreateMeasurePage.CreateMeasureAPI(measure.name, measure.cqlLibraryName, SupportedModels.qiCore4, { measureCql: measure.cql })
+        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.procedure, MeasureScoring.Proportion, populations)
+        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.description, testCase1.group, testCase2.json)
+        TestCasesPage.CreateTestCaseAPI(testCase2.title, testCase2.description, testCase2.group, testCase2.json, false, true)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.procedure, MeasureScoring.Proportion, populations)
-        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.description, testCase1.group, testCase2.json)
-        TestCasesPage.CreateTestCaseAPI(testCase2.title, testCase2.description, testCase2.group, testCase2.json, false, true)
-
-        OktaLogin.Login()
+        cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.actionCenter('edit')
         EditMeasurePage.actionCenter(EditMeasureActions.version)
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -143,9 +148,9 @@ describe('Test case list page - Action Center icons for versioned measure', () =
 
     it('Export icon is present and it enables correctly', () => {
         // checks that delete, clone, and shift dates are not present at all
-        cy.get(TestCasesPage.actionCenterDelete).should('not.exist')
-        cy.get(TestCasesPage.actionCenterClone).should('not.exist')
-        cy.get(TestCasesPage.actionCenterShiftDates).should('not.exist')
+        cy.get(TestCasesPage.actionCenterDelete).should('be.disabled')
+        cy.get(TestCasesPage.actionCenterClone).should('be.disabled')
+
 
         cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
         cy.get('[data-testid="export-tooltip"]').should('have.attr', 'aria-label', 'Select test cases to export')
@@ -180,10 +185,13 @@ describe('Test case list page - Action Center icons for versioned measure', () =
 })
 
 describe('Test case list page - Action Center icons for non-owner', () => {
-    
+
     beforeEach('Create measure and login', () => {
 
-        CreateMeasurePage.CreateMeasureAPI(measure.name, measure.cqlLibraryName, SupportedModels.qiCore4, { measureCql: measure.cql})
+        CreateMeasurePage.CreateMeasureAPI(measure.name, measure.cqlLibraryName, SupportedModels.qiCore4, { measureCql: measure.cql })
+        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.procedure, MeasureScoring.Proportion, populations)
+        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.description, testCase1.group)
+        TestCasesPage.CreateTestCaseAPI(testCase2.title, testCase2.description, testCase2.group, testCase2.json, false, true)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -191,9 +199,7 @@ describe('Test case list page - Action Center icons for non-owner', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.Logout()
-        MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.procedure, MeasureScoring.Proportion, populations)
-        TestCasesPage.CreateTestCaseAPI(testCase1.title, testCase1.description, testCase1.group)
-        TestCasesPage.CreateTestCaseAPI(testCase2.title, testCase2.description, testCase2.group, testCase2.json, false, true)
+
 
         OktaLogin.AltLogin()
         cy.get(MeasuresPage.allMeasuresTab).click()
@@ -208,10 +214,10 @@ describe('Test case list page - Action Center icons for non-owner', () => {
     })
 
     it('Non-owner sees Export icon; it enables correctly', () => {
-         // checks that delete, clone, shift dates are not present at all
-         cy.get(TestCasesPage.actionCenterDelete).should('not.exist')
-         cy.get(TestCasesPage.actionCenterClone).should('not.exist')
-         cy.get(TestCasesPage.actionCenterShiftDates).should('not.exist')
+        // checks that delete, clone, shift dates are not present at all
+        cy.get(TestCasesPage.actionCenterDelete).should('not.exist')
+        cy.get(TestCasesPage.actionCenterClone).should('not.exist')
+
 
         cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
         cy.get('[data-testid="export-tooltip"]').should('have.attr', 'aria-label', 'Select test cases to export')

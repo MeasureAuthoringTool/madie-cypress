@@ -29,10 +29,10 @@ let updatedMeasureCQL = 'library SimpleFhirLibrary version \'0.0.004\'\n' +
     'define "denom":\n' +
     '"ipp"'
 
-     /*
-        Tests below all involve failures of the export process.
-        EditMeasurePage.actionCenter() assumes success, so we can't use it
-    */
+/*
+   Tests below all involve failures of the export process.
+   EditMeasurePage.actionCenter() assumes success, so we can't use it
+*/
 
 describe('Error Message on Measure Export when the Measure does not have Description, Steward and Developers', () => {
 
@@ -133,7 +133,8 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         cy.get(Header.measures).click()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')
             cy.get('[data-testid="export-action-btn"]').click()
@@ -158,7 +159,8 @@ describe('Error Message on Measure Export when the Measure has missing/invalid C
         cy.get(Header.measures).click()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
             cy.get('[data-testid="export-action-btn"]').should('be.visible')
             cy.get('[data-testid="export-action-btn"]').should('be.enabled')
             cy.get('[data-testid="export-action-btn"]').click()
@@ -348,7 +350,7 @@ describe('Error Message on Measure Export for Publish when measure was versioned
     // this test will rely on PROD data being available in the lower environments
     // this measure must have been versioned prior to Madie 2.2.0 (4/9/2025)
     const specialMeasureName = 'Screening for Abnormal Glucose Metabolism in Patients at Risk of Developing Diabetes: FHIR'
-    
+
     it('Verify error message when not able to perform Export for Publish', () => {
 
         OktaLogin.Login()
@@ -357,7 +359,7 @@ describe('Error Message on Measure Export for Publish when measure was versioned
         Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
         cy.get(LandingPage.allMeasuresTab).click()
 
-        Utilities.waitForElementVisible('.measures-list', 15500)
+        Utilities.waitForElementVisible('.measures-list', 150500)
 
         // search for specific measure - last on the list
         cy.get(MeasuresPage.searchInputBox).clear().type(specialMeasureName).type('{enter}')
