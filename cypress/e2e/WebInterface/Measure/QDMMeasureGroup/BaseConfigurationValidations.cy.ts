@@ -8,8 +8,8 @@ import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Header } from "../../../../Shared/Header"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+let measureName = 'BaseConfig' + Date.now()
+let CqlLibraryName = 'BaseConfigLib' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let altMeasureName = ''
@@ -69,7 +69,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
     afterEach('Logout and Clean up Measures', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
+        Utilities.deleteMeasure(altMeasureName, altCqlLibraryName, false, true, 1)
     })
 
     it('Verify that the Base Configuration fields are present, contain values when necessary, and, if required, ' +
@@ -359,7 +359,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             .should('have.attr', 'type', 'radio')  // confirm it's type radio
             .should('be.checked')
     })
-    //non-owner of measure cannot edit Base Configuration fields
+    
     it('Non-owner of measure cannot edit any of the Base Configuration fields', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
@@ -389,25 +389,15 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
         cy.get(MeasureGroupPage.leftPanelBaseConfigTab).click()
 
         //fields are unavailable to edit due to user not having owner or shared permissions
-        cy.get(MeasureGroupPage.qdmScoring).should('not.be.enabled')
-        cy.get(MeasureGroupPage.qdmType).should('not.be.enabled')
+        cy.get(MeasureGroupPage.qdmScoring).should('have.attr', 'readonly')
+        cy.get(MeasureGroupPage.qdmType).should('have.attr', 'readonly')
 
-        cy.contains('label', 'No')
-            .prevAll() // select the prev element
-            .get(MeasureGroupPage.qdmPatientBasis)
-            .should('have.attr', 'type', 'radio')  // confirm it's type radio
-            .should('not.be.enabled')
-
-        cy.contains('label', 'Yes')
-            .nextAll() // select the next element
-            .get(MeasureGroupPage.qdmPatientBasis)
-            .should('have.attr', 'type', 'radio')  // confirm it's type radio
-            .should('not.be.enabled')
+        cy.get(MeasureGroupPage.readOnlyPatientBasis).should('contain.text', 'Yes')
+            .and('have.attr', 'readonly')
 
         //verify the unavailability of the discard and save buttons
         cy.get(Utilities.DiscardCancelBtn).should('not.be.enabled')
         cy.get(MeasureGroupPage.qdmBCSaveButton).should('not.be.enabled')
-
     })
 })
 
@@ -440,7 +430,6 @@ describe('Updates on Base Configuration page', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
         OktaLogin.Logout()
-
     })
 
     it('Changing the scoring elcits the Change Scoring prompt', () => {
@@ -616,6 +605,5 @@ describe('Updates on Base Configuration page', () => {
         //Navigate to Criteria page and verify the populations are cleared
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
         cy.get(MeasureGroupPage.initialPopulationSelect).should('not.contain', 'ipp')
-
     })
 })

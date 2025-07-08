@@ -90,7 +90,7 @@ describe('QDM Measure: Transmission format ownership validation', () => {
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelTransmissionFormat).click()
-        cy.get(EditMeasurePage.transmissionFormatDescription).should('not.be.enabled')
+        cy.get(EditMeasurePage.readOnlyTFDesc).should('have.attr', 'readonly')
     })
 })
 
