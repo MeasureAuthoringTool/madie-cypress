@@ -26,7 +26,6 @@ describe('Measure Ownership Validations for QDM Measures', () => {
 
         cy.clearCookies()
         cy.clearLocalStorage()
-        // OktaLogin.AltLogin()
         cy.setAccessTokenCookieALT()
 
         measureData.ecqmTitle = altMeasureName
@@ -40,14 +39,12 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, true, 'ipp')
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(altMeasureName, altCqlLibraryName, false, true)
-
     })
 
     it('Fields on Population criteria page are not editable by Non Measure Owner', () => {
@@ -71,23 +68,23 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         //navigate to the criteria section of the PC
         cy.get(MeasureGroupPage.QDMPopulationCriteria1).click()
 
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).should('not.be.enabled')
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('not.be.enabled')
+        cy.get(MeasureGroupPage.readOnlyScoringUnit).should('have.attr', 'readonly')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('have.attr', 'readonly')
 
         //Navigate to Supplemental data elements tab
         cy.get(MeasureGroupPage.QDMSupplementalDataElementsTab).click()
-        cy.get(MeasureGroupPage.QDMSupplementalDataDefinitionTextBox).should('not.be.enabled')
-        cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox).should('not.be.enabled')
+        cy.get(MeasureGroupPage.QDMSupplementalDataDefinitionTextBox).should('have.attr', 'readonly')
+        cy.get(MeasureGroupPage.readOnlyQDMSDEDefinition).should('have.attr', 'readonly')
 
         //Navigate to Risk Adjustment Variables tab
         cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
-        cy.get(MeasureGroupPage.QDMRiskAdjustmentDefinitionTextBox).should('not.be.enabled')
-        cy.get(MeasureGroupPage.QDMRiskAdjustmentDescriptionTextBox).should('not.be.enabled')
+        cy.get(MeasureGroupPage.QDMRiskAdjustmentDefinitionTextBox).should('have.attr', 'readonly')
+        cy.get(MeasureGroupPage.readOnlyQDMRiskAdjDescription).should('have.attr', 'readonly')
 
         //Navigate to Reporting tab
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
-        cy.get(MeasureGroupPage.rateAggregation).should('not.be.enabled')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('not.be.enabled')
-
+        cy.get(MeasureGroupPage.readOnlyRateAggregation).should('have.attr', 'readonly')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('have.attr', 'readonly')
+        cy.get(MeasureGroupPage.readOnlyImpNotationDescription).should('have.attr', 'readonly')
     })
 })
