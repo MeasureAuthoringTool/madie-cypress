@@ -63,36 +63,36 @@ describe('Read only for measure, measure group, and test cases that user does no
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
 
-        cy.get(CreateMeasurePage.measurementPeriodStartDate).should('not.be.enabled')
-        cy.get(CreateMeasurePage.measurementPeriodEndDate).should('not.be.enabled')
+        cy.get('[id="measurement-period-start"]').should('have.attr', 'readonly', 'readonly')
+        cy.get('[id="measurement-period-end"]').should('have.attr', 'readonly', 'readonly')
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('be.visible')
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
 
-        cy.get(EditMeasurePage.measureStewardDrpDwn).should('not.be.enabled')
-        cy.get(EditMeasurePage.measureDeveloperDrpDwn).should('not.be.enabled')
+        cy.get('[id="steward"]').should('have.attr', 'readonly', 'readonly')
+        cy.get('[id="developers"]').should('have.attr', 'readonly', 'readonly')
 
         cy.get(EditMeasurePage.leftPanelDescription).should('be.visible')
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionTextBox).should('have.attr', 'disabled', 'disabled')
+        cy.get(EditMeasurePage.measureDescriptionTextBox).should('have.attr', 'readonly', 'readonly')
 
         cy.get(EditMeasurePage.leftPanelCopyright).should('be.visible')
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureCopyrightTextBox).should('have.attr', 'disabled', 'disabled')
+        cy.get(EditMeasurePage.measureCopyrightTextBox).should('have.attr', 'readonly', 'readonly')
 
         cy.get(EditMeasurePage.leftPanelDisclaimer).should('be.visible')
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureDisclaimerTextBox).should('have.attr', 'disabled', 'disabled')
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).should('have.attr', 'readonly', 'readonly')
 
         cy.get(EditMeasurePage.leftPanelRationale).should('be.visible')
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureRationaleTextBox).should('have.attr', 'disabled', 'disabled')
+        cy.get(EditMeasurePage.measureRationaleTextBox).should('have.attr', 'readonly', 'readonly')
 
         cy.get(EditMeasurePage.leftPanelGuidance).should('be.visible')
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGuidanceTextBox).should('have.attr', 'disabled', 'disabled')
+        cy.get(EditMeasurePage.measureGuidanceTextBox).should('have.attr', 'readonly', 'readonly')
 
 
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).should('be.visible')
@@ -150,8 +150,9 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         //confirm that the text boxes, for the test case fields are not visible
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseTitle).should('have.attr', 'disabled', 'disabled')
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).should('have.attr', 'disabled', 'disabled')
+        //<textarea rows="1" readonly="" id="test-case-title" placeholder="Test Case Title" name="title" style="color: rgb(51, 51, 51); font-family: Rubik; font-size: 14px; font-style: normal; font-weight: 400; line-height: 24px; border: none; resize: none; padding: 0px; outline: none; box-shadow: none; height: 24px; overflow: hidden;">test case title</textarea>
+        cy.get('[id="test-case-title"]').should('have.attr', 'readonly', 'readonly')
+        cy.get(TestCasesPage.testCaseDescriptionTextBox).should('have.attr', 'readonly', 'readonly')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('have.attr', 'disabled', 'disabled')
     })
 
@@ -178,33 +179,35 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(MeasureGroupPage.addMeasureGroupButton).should('not.exist')
 
         //Group Type, Population Basis fields are read only
-        cy.get(MeasureGroupPage.measureGroupTypeSelect).should('not.be.enabled')
-        cy.get(MeasureGroupPage.popBasis).should('not.be.enabled')
-        cy.get(MeasureGroupPage.measureScoringSelect).should('not.be.enabled')
-        cy.get(MeasureGroupPage.ucumScoringUnitSelect).should('not.be.enabled')
+        cy.get('[id="measure-group-type"]').should('have.attr', 'readonly', 'readonly')
+        cy.get('[id="populationBasis"]').should('have.attr', 'readonly', 'readonly')
+        cy.get('[id="scoring-select"]').should('have.attr', 'readonly', 'readonly')
+        //<textarea rows="1" readonly="" id="scoring-unit-text-input" placeholder="UCUM Code or Name" style="color: rgb(51, 51, 51); font-family: Rubik; font-size: 14px; font-style: normal; font-weight: 400; line-height: 24px; border: none; resize: none; padding: 0px; outline: none; box-shadow: none; height: 24px; overflow: hidden;">ml</textarea>
+        cy.get('[id="scoring-unit-text-input"]').should('have.attr', 'readonly', 'readonly')
 
         //Population fields are read only
-        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Surgical Absence of Cervix').should('not.be.enabled')
-        cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', 'Surgical Absence of Cervix').should('not.be.enabled')
-        cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'Surgical Absence of Cervix').should('not.be.enabled')
-        cy.get(MeasureGroupPage.denominatorExceptionSelect).should('not.be.enabled')
-        cy.get(MeasureGroupPage.denominatorExclusionSelect).should('not.be.enabled')
-        cy.get(MeasureGroupPage.numeratorExclusionSelect).should('not.be.enabled')
+        cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Surgical Absence of Cervix').should('have.attr', 'readonly', 'readonly')
+        cy.get(MeasureGroupPage.denominatorSelect).should('contain.text', 'Surgical Absence of Cervix').should('have.attr', 'readonly', 'readonly')
+        cy.get(MeasureGroupPage.numeratorSelect).should('contain.text', 'Surgical Absence of Cervix').should('have.attr', 'readonly', 'readonly')
+        cy.get(MeasureGroupPage.denominatorExceptionSelect).should('have.attr', 'readonly', 'readonly')
+        cy.get(MeasureGroupPage.denominatorExclusionSelect).should('have.attr', 'readonly', 'readonly')
+        cy.get(MeasureGroupPage.numeratorExclusionSelect).should('have.attr', 'readonly', 'readonly')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('not.exist')
         cy.get(MeasureGroupPage.deleteGroupbtn).should('not.exist')
 
         //Stratification fields are read only
         cy.get(MeasureGroupPage.stratificationTab).click()
-        cy.get(MeasureGroupPage.stratOne).should('not.be.enabled')
-        cy.get(MeasureGroupPage.stratAssociationOne).should('not.be.enabled')
-        cy.get(MeasureGroupPage.stratDescOne).should('not.be.enabled')
-        cy.get(MeasureGroupPage.stratTwo).should('not.be.enabled')
-        cy.get(MeasureGroupPage.stratAssociationTwo).should('not.be.enabled')
-        cy.get(MeasureGroupPage.stratDescTwo).should('not.be.enabled')
+        cy.get(MeasureGroupPage.stratOne).should('have.attr', 'readonly', 'readonly')
+        cy.get(MeasureGroupPage.stratAssociationOne).should('have.attr', 'readonly', 'readonly')
+        cy.get(MeasureGroupPage.stratDescOne).should('have.attr', 'readonly', 'readonly')
+        cy.get(MeasureGroupPage.stratTwo).should('have.attr', 'readonly', 'readonly')
+        cy.get(MeasureGroupPage.stratAssociationTwo).should('have.attr', 'readonly', 'readonly')
+        cy.get(MeasureGroupPage.stratDescTwo).should('have.attr', 'readonly', 'readonly')
 
         //Reporting fields are read only
         cy.get(MeasureGroupPage.reportingTab).click()
-        cy.get(MeasureGroupPage.rateAggregation).should('not.be.enabled')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('not.be.enabled')
+        //<textarea rows="1" readonly="" id="rateAggregation" name="rateAggregation" placeholder="-" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="color: rgb(51, 51, 51); font-family: Rubik; font-size: 14px; font-style: normal; font-weight: 400; line-height: 24px; border: none; resize: none; padding: 0px; outline: none; box-shadow: none; height: 24px; overflow: hidden;">-</textarea>
+        cy.get('[id="rateAggregation"]').should('have.attr', 'readonly', 'readonly')
+        cy.get(MeasureGroupPage.improvementNotationSelect).should('have.attr', 'readonly', 'readonly')
     })
 })
