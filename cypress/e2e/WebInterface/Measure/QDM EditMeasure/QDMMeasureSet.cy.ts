@@ -89,6 +89,6 @@ describe('QDM Measure Set - ownership validations', () => {
 
         //Navigate to Measure set page
         cy.get(EditMeasurePage.leftPanelMeasureSet).click()
-        cy.get(EditMeasurePage.measureSetText).should('have.attr', 'disabled', 'disabled')
+        cy.get(EditMeasurePage.measureSetText).should('have.attr', 'readonly')
     })
 })

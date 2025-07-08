@@ -88,7 +88,7 @@ describe('QDM Measure Definition ownership validation', () => {
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelDefinition).click()
-        cy.get(EditMeasurePage.definitionInputTextbox).should('have.attr', 'disabled')
+        cy.get(EditMeasurePage.definitionInputTextbox).should('have.attr', 'readonly')
     })
 })
 
