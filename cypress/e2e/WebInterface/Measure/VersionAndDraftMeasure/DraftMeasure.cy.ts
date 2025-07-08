@@ -15,16 +15,16 @@ let updatedMeasuresPageNameSecond = ''
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
-let cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
-let cohortMeasureCQLSix = MeasureCQL.CQL_For_Cohort_Six
-
+const cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
+const cohortMeasureCQLSix = MeasureCQL.CQL_For_Cohort_Six
+const filePath = 'cypress/fixtures/measureId'
 
 describe('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
-        newMeasureName = 'TestMeasure' + Date.now() + randValue
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+        newMeasureName = 'DraftVersionValidations' + Date.now() + randValue
+        newCqlLibraryName = 'DraftVersionValidationsLib' + Date.now() + randValue
         //Create New Measure and Measure Group
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
@@ -39,20 +39,17 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         cy.get(Header.mainMadiePageButton).click()
         cy.get(LandingPage.newMeasureButton).should('be.visible')
-
     })
 
     afterEach('Logout', () => {
 
         OktaLogin.UILogout()
-
     })
 
     it('Add Draft to the versioned measure', () => {
 
         let versionNumber = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
-        let filePath = 'cypress/fixtures/measureId'
 
         MeasuresPage.actionCenter('version')
 
@@ -132,9 +129,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
             cy.get('[data-testid=measure-action-' + fileContents + ']').scrollIntoView()
             cy.get('[data-testid=measure-action-' + fileContents + ']').click()
 
-            //Verify version button is not visible
+            //Verify draft button is not visible
             cy.get('[data-testid=draft-measure-' + fileContents + ']').should('not.exist')
-
         })
     })
 
@@ -254,8 +250,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
-        newMeasureName = 'TestMeasure' + Date.now() + randValue
-        newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
+        newMeasureName = 'DVValidations' + Date.now() + randValue
+        newCqlLibraryName = 'DVValidationsLib' + Date.now() + randValue
         //Create New Measure and Measure Group
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
@@ -270,22 +266,19 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         cy.get(Header.mainMadiePageButton).click()
         cy.get(LandingPage.newMeasureButton).should('be.visible')
-
     })
 
     afterEach('Logout', () => {
 
         OktaLogin.UILogout()
-
     })
+
     it('Tooltip appears and user is unable to draft a 4.1.1 of a measure that has a 6.0.0 on measureSet', () => {
 
-        let filePath = 'cypress/fixtures/measureId'
         let versionNumberFirst = '1.0.000'
-        updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
+        updatedMeasuresPageName = 'updatedDVValidations' + Date.now()
 
         let versionNumberSecond = '2.0.000'
-        updatedMeasuresPageNameSecond = 'UpdatedTestMeasures2' + Date.now()
 
         MeasuresPage.actionCenter('version')
 
@@ -353,9 +346,9 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         MeasuresPage.validateVersionNumber(versionNumberSecond)
         cy.log('Major Version Created Successfully')
 
-        //Search for the Measure using Measure name
+        //Search for the Measure using original 4.1.1 Measure name
         cy.log('Search Measure with measure name')
-        cy.get(MeasuresPage.searchInputBox).type(newMeasureName).type('{enter}')
+        cy.get(MeasuresPage.searchInputBox).clear().type(newMeasureName).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
 
         cy.get('[class="px-1"]').find('[class=" cursor-pointer"]').eq(0).click()
