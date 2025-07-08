@@ -9,7 +9,9 @@ var CQLLibraryName = ""
 let CQLLibraryPublisher = 'ICFer'
 var CQLLibraryNameAlt = ""
 let CQLLibraryPublisherAlt = 'ICFerALTUser'
-describe('CQL Library Search Validations', () => {
+
+//skipping until LibrarySearch feature flag is turned on
+describe.skip('CQL Library Search Validations', () => {
 
     beforeEach('Login', () => {
         var randValue = (Math.floor((Math.random() * 1000) + 1))
@@ -23,6 +25,7 @@ describe('CQL Library Search Validations', () => {
         OktaLogin.Logout()
 
     })
+
 
     it('Filter text box and button appears on each tab ("My Libraries" and "All Libraries"), on the Libraries page', () => {
         //navigate to the main CQL Library list page
@@ -175,7 +178,9 @@ describe('CQL Library Search Validations', () => {
 
     })
 })
-describe('CQL Library Search Validations -- User ownership', () => {
+
+//skipping until LibrarySearch feature flag is turned on
+describe.skip('CQL Library Search Validations -- User ownership', () => {
 
     beforeEach('Login', () => {
         var randValue = (Math.floor((Math.random() * 1000) + 1))
