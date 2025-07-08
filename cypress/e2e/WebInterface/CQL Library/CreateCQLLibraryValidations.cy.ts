@@ -103,7 +103,8 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('exist')
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('be.visible')
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('SemanticBits')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('{downArrow}').type('{enter}')
+        cy.get('#publisher-option-0').click()
+
 
         //save the new CQL Library
         CQLLibraryPage.clickCreateLibraryButton()
@@ -296,7 +297,7 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('exist')
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('be.visible')
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('SemanticBits')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('{downArrow}').type('{enter}')
+        cy.get('#publisher-option-0').click()
 
         CQLLibraryPage.clickCreateLibraryButton()
 
