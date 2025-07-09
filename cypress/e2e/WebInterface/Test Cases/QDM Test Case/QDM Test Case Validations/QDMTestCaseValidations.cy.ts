@@ -1,4 +1,4 @@
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { Header } from "../../../../../Shared/Header"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
@@ -76,17 +76,16 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
 
 
         TestCasesPage.clickEditforCreatedTestCase()
-
-        cy.get(TestCasesPage.QDMDob).should('be.disabled')
-        cy.get(TestCasesPage.QDMLivingStatus).should('not.be.enabled')
-        cy.get(TestCasesPage.QDMRace).should('not.be.enabled')
-        cy.get(TestCasesPage.QDMGender).should('not.be.enabled')
-        cy.get(TestCasesPage.QDMEthnicity).should('not.be.enabled')
+        cy.get('[id="date-of-birth"]').should('have.attr', 'readonly', 'readonly')
+        cy.get('[id="demographics-living-status-select-id"]').should('have.attr', 'readonly', 'readonly')
+        cy.get('[id="demographics-race-select-id"]').should('have.attr', 'readonly', 'readonly')
+        cy.get('[id="demographics-gender-select-id"]').should('have.attr', 'readonly', 'readonly')
+        cy.get('[id="demographics-ethnicity-select-id"]').should('have.attr', 'readonly', 'readonly')
 
         //Navigate to Details tab
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseTitle).should('not.be.enabled')
-        cy.get(TestCasesPage.testCaseDescriptionTextBox).should('not.be.enabled')
+        cy.get('[id="test-case-title"]').should('have.attr', 'readonly', 'readonly')
+        cy.get('[id="test-case-description"]').should('have.attr', 'readonly', 'readonly')
         cy.get(TestCasesPage.testCaseSeriesTextBox).should('not.be.enabled')
 
         //Navigate to Expected/Actual tab
@@ -298,6 +297,8 @@ describe('Dirty Check Validations', () => {
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
+        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population')
+        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -307,14 +308,11 @@ describe('Dirty Check Validations', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateRatioMeasureGroupAPI(false, false, 'Initial Population', 'Initial Population', 'Initial Population')
-        TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseSeries, testCaseDescription, QDMTCJson)
-        OktaLogin.Login()
+        cy.get(Header.mainMadiePageButton).click().wait(3000)
     })
 
     afterEach('Logout and cleanup', () => {
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
