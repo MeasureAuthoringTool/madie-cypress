@@ -28,7 +28,7 @@ describe('QDM CQL Library Validations', () => {
         OktaLogin.Logout()
     })
 
-    it.only('Verify _ is allowed while creating QDM CQL Library', () => {
+    it('Verify _ is allowed while creating QDM CQL Library', () => {
 
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
