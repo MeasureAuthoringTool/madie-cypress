@@ -55,7 +55,7 @@ describe('Edit Measure: Add Meta Data', () => {
         MeasuresPage.actionCenter('edit')
 
         //Verify that the Endorsement Number field is disabled before adding Endorsement Organization
-        cy.get(EditMeasurePage.endorsementNumber).should('be.disabled')
+        cy.get('[data-testid="endorsement-number-text-field"]').should('have.attr', 'readonly', 'readonly')
         //Save Endorsement Organization
         cy.get(EditMeasurePage.endorsingOrganizationTextBox).click()
         cy.get(EditMeasurePage.endorsingOrganizationOption).click()
@@ -156,12 +156,8 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
 
         //Endorsing Organization and number on Name, Version & ID page
-        cy.get(EditMeasurePage.endorsingOrganizationTextBox).invoke('val').then(endorsingOrg => {
-            cy.get(EditMeasurePage.endorsementNumber).invoke('val').then(endorsementNumber => {
-                expect(endorsingOrg).to.eql('CMS Consensus Based Entity')
-                expect(endorsementNumber).to.eql('345678')
-            })
-        })
+        cy.get(EditMeasurePage.endorsingOrganizationTextBox).should('have.value', 'CMS Consensus Based Entity')
+        cy.get('[data-testid="endorsement-number-text-field"]').should('have.value', '345678')
         cy.log('Endorsing Organization and number added successfully')
 
         //steward
@@ -316,12 +312,11 @@ describe('Verify Measure Id and Version Id', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
+        cy.get('[data-testid="measure-id-text-field"]').should('exist')
+        cy.get('[data-testid="measure-id-text-field"]').should('have.attr', 'readonly', 'readonly')
 
-        cy.get(EditMeasurePage.measureId).should('exist')
-        cy.get(EditMeasurePage.measureId).should('have.attr', 'readonly', 'readonly')
-
-        cy.get(EditMeasurePage.versionId).should('exist')
-        cy.get(EditMeasurePage.versionId).should('have.attr', 'readonly', 'readonly')
+        cy.get('[data-testid="version-id-text-field"]').should('exist')
+        cy.get('[data-testid="version-id-text-field"]').should('have.attr', 'readonly', 'readonly')
     })
 })
 
