@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../Shared/OktaLogin"
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../Shared/Utilities"
@@ -213,8 +213,8 @@ describe('Measure Association: Validations', () => {
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
 
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        Utilities.waitForElementVisible(TestCasesPage.importTestCaseSuccessMsg, 35000)
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        Utilities.waitForElementVisible('.toast', 35000)
+        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
         Utilities.waitForElementToNotExist(TestCasesPage.importTestCaseSuccessMsg, 35000)
         OktaLogin.UILogout()
         cy.getCookie('accessToken').then((accessToken) => {
