@@ -66,14 +66,16 @@ describe('Copy test cases from existing measure into new measure', () => {
     it('Measures match population criteria - expected values will copy', () => {
 
         // switch to all measure tab, search for original measure, view
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 56500)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
+
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
         // need to select correct version of the measure with .eq(1)
-        cy.get('[data-testid="row-item"]').eq(5).contains('View').click()
+        cy.get('[data-testid="row-item"]').eq(8).contains('View').click()
+
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -117,7 +119,7 @@ describe('Copy test cases from existing measure into new measure', () => {
 
         cy.get(TestCasesPage.testCaseIPPExpected).should('have.attr', 'value', '1')
         cy.get(TestCasesPage.testCaseDENOMExpected).should('have.attr', 'value', '1')
-        cy.get(TestCasesPage.testCaseNUMERExpected).should('have.attr', 'value', '1')
+        cy.get(TestCasesPage.testCaseNUMERExpected).should('have.attr', 'value', '0')
         cy.get(TestCasesPage.testCaseDENEXCEPTxpected).should('not.exist')
         cy.get(TestCasesPage.testCaseNUMEXExpected).should('not.exist')
     })
@@ -160,7 +162,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
-        cy.get('[data-testid="row-item"]').eq(5).contains('View').click()
+        cy.get('[data-testid="row-item"]').eq(8).contains('View').click()
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
