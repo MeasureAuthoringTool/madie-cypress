@@ -76,6 +76,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         // need to select correct version of the measure with .eq(1)
         cy.get('[data-testid="row-item"]').eq(8).contains('View').click()
 
+
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
