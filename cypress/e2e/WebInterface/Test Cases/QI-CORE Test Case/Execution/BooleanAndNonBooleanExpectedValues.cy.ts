@@ -60,6 +60,9 @@ describe('Non Boolean Population Basis Expected values', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 120000 })
+
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
@@ -141,6 +144,9 @@ describe('Non Boolean Population Basis Expected values', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 120000 })
+
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
@@ -197,6 +203,9 @@ describe('Non Boolean Population Basis Expected values', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 120000 })
+
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
@@ -239,6 +248,9 @@ describe('Non Boolean Population Basis Expected values', () => {
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -366,6 +378,9 @@ describe('Boolean Population Basis Expected Values', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 120000 })
+
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('be.visible')
@@ -460,6 +475,9 @@ describe('Boolean Population Basis Expected Values', () => {
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
@@ -569,6 +587,9 @@ describe('Expected values for second initial population', () => {
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
 
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //click on Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).should('exist')
