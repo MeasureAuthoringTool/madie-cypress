@@ -16,7 +16,6 @@ describe('QDM CQL Library Validations', () => {
     before('Create QDM Library', () => {
 
         CQLLibraryPage.createQDMCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
-
     })
 
     beforeEach('Login', () => {
@@ -27,10 +26,9 @@ describe('QDM CQL Library Validations', () => {
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
-
     })
 
-    it('Verify _ is allowed while creating QDM CQL Library', () => {
+    it.only('Verify _ is allowed while creating QDM CQL Library', () => {
 
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
@@ -55,8 +53,7 @@ describe('QDM CQL Library Validations', () => {
         //enter / select a publisher value
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('exist')
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('be.visible')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('SemanticBits')
-        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('{downArrow}').type('{enter}')
+        cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('SemanticBits{downArrow}{enter}')
 
         CQLLibraryPage.clickCreateLibraryButton()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Cql Library successfully created')
@@ -73,7 +70,5 @@ describe('QDM CQL Library Validations', () => {
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('contain.text', 'CQL updated successfully')
-
     })
-
 })
