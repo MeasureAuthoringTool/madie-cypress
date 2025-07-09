@@ -321,10 +321,10 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(TestCasesPage.saveSDEOption).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Configuration Updated Successfully')
 
-        
+
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-        
+
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter specific values for dob, race, and gender
@@ -340,18 +340,18 @@ describe('QDM Test Cases : SDE Sub tab validations', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
 
         cy.wait(3500)
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{command}a{backspace}')
-        
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{selectAll}{backspace}')
+
         Utilities.typeFileContents('cypress/fixtures/QDMSDEMeasureAfterChanges.txt', EditMeasurePage.cqlEditorTextBox)
-        
+
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 12500)
-        
+
         // back to test case, edit same one, update affected fields
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-        
+
         TestCasesPage.clickEditforCreatedTestCase()
 
         TestCasesPage.enterPatientDemographics('', '', '', 'Male (finding)', 'Colombian')
