@@ -66,12 +66,12 @@ describe('Test case list page - Action Center icons for measure owner', () => {
     it('Clone icon is present and enables correctly', () => {
 
         cy.get(TestCasesPage.actionCenterClone).should('be.disabled')
-        TestCasesPage.checkTestCase(2)
-        cy.get(TestCasesPage.actionCenterClone).should('be.enabled')
         TestCasesPage.checkTestCase(1)
+        cy.get(TestCasesPage.actionCenterClone).should('be.enabled')
+        TestCasesPage.checkTestCase(2)
         cy.get(TestCasesPage.actionCenterClone).should('be.disabled')
 
-        cy.get('.header-button').find('input[type="checkbox"]').check()
+        cy.get('tr > :nth-child(1) > input').check()
         TestCasesPage.createTestCase('Test Case 3', 'Example test case', 'Extra')
 
         TestCasesPage.checkTestCase(3)

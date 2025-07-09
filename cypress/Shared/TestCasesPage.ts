@@ -871,10 +871,13 @@ export class TestCasesPage {
     // input the visible "Case #" value to have that test case's checkbox toggled from its current status
     public static checkTestCase(testCaseNumber: number): void {
 
-        cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
-            .parent('tr')
-            .find('input[type="checkbox"]')
-            .check()
+        // cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
+        //     .parent('tr')
+        //     .find('input[type="checkbox"]')
+        //     .check()
+        let number = testCaseNumber - 1
+        cy.get('[data-testid="test-case-title-' + number + '_select"]').click()
+
     }
 
     /*
