@@ -58,7 +58,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
 
     })
-    it.only('Import new test case onto an existing measure', () => {
+    it('Import new test case onto an existing measure', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
