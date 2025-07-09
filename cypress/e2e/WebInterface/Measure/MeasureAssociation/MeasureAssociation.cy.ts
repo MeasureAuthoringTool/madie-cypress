@@ -517,7 +517,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Confirm Endorsement Organization value
         cy.get(EditMeasurePage.endorsingOrganizationTextBox).should('contain.value', 'CMS Consensus Based Entity')
-        cy.get(EditMeasurePage.endorsementNumber).should('contain.value', QDMendorsingNumber)
+        cy.get('[id="endorsementId"]').should('contain.value', QDMendorsingNumber)
 
         //confirm measure period start and end dates
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
@@ -1049,7 +1049,8 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Confirm Endorsement Organization value
         cy.get(EditMeasurePage.endorsingOrganizationTextBox).should('contain.value', 'CMS Consensus Based Entity')
-        cy.get(EditMeasurePage.endorsementNumber).should('contain.value', QDMendorsingNumber)
+        //data-testid="endorsement-number-text-field"
+        cy.get('[data-testid="endorsement-number-text-field"]').should('contain.value', QDMendorsingNumber)
 
         //confirm measure period start and end dates
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
