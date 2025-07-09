@@ -22,7 +22,6 @@ describe('Measure Observations', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -32,7 +31,6 @@ describe('Measure Observations', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
-
     })
 
     afterEach(' Clean up and Logout', () => {
@@ -42,7 +40,6 @@ describe('Measure Observations', () => {
 
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
         OktaLogin.Logout()
-
     })
 
     it('Add Measure Observations for Ratio Measure', () => {
@@ -99,7 +96,6 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.denominatorAggregateFunction).contains('Count')
         cy.get(MeasureGroupPage.numeratorObservation).contains('booleanFunction')
         cy.get(MeasureGroupPage.numeratorAggregateFunction).contains('Maximum')
-
     })
 
     it('Add Measure Observations for Continuous Variable Measure', () => {
@@ -124,7 +120,6 @@ describe('Measure Observations', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
@@ -237,10 +232,9 @@ describe('Measure Observations', () => {
         cy.get(Header.mainMadiePageButton).click()
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
-        cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         //navigate back to the measure group page
         MeasuresPage.actionCenter('edit')
+
         //Click on the measure group tab
         cy.get(EditMeasurePage.measureGroupsTab).click()
         //verify the saved Measure Observations
@@ -260,7 +254,6 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.removeNumeratorObservation).click()
         cy.get(MeasureGroupPage.numeratorObservation).should('not.exist')
         cy.get(MeasureGroupPage.numeratorAggregateFunction).should('not.exist')
-
     })
 
     it('Verify drop down values for Measure observation aggregate function', () => {
@@ -275,16 +268,12 @@ describe('Measure Observations', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
-        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
         Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
@@ -300,7 +289,6 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.cvAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionDropdownList).each(($ele) => {
             expect($ele.text()).to.be.eq('AverageCountMaximumMedianMinimumSum')
-
         })
     })
 })
@@ -313,7 +301,6 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -323,7 +310,6 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         cy.get(Header.mainMadiePageButton).click()
-
     })
 
     afterEach(' Clean up and Logout', () => {
@@ -333,7 +319,6 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-
     })
 
     it('Non-owner of measure cannot change measure observation', () => {
@@ -354,13 +339,13 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('exist')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).should('be.visible')
         cy.get(MeasureGroupPage.addDenominatorObservationLink).click()
-        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'booleanFunction') // select booleanFunction
+        Utilities.dropdownSelect(MeasureGroupPage.denominatorObservation, 'booleanFunction')
         cy.get(MeasureGroupPage.denominatorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
         //Add Numerator Observation
         cy.get(MeasureGroupPage.addNumeratorObservationLink).click()
-        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'booleanFunction') // select booleanFunction
+        Utilities.dropdownSelect(MeasureGroupPage.numeratorObservation, 'booleanFunction')
         cy.get(MeasureGroupPage.numeratorAggregateFunction).click()
         cy.get(MeasureGroupPage.aggregateFunctionMaximum).click()
 
@@ -398,12 +383,10 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(Header.mainMadiePageButton).click()
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
-        cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+
         cy.get(MeasuresPage.allMeasuresTab).should('exist')
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
 
         //enter edit page
         MeasuresPage.actionCenter('edit')
@@ -414,19 +397,19 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         //verify that measure observation cannot be changed
         cy.get(MeasureGroupPage.denominatorObservation).should('exist')
         cy.get(MeasureGroupPage.denominatorObservation).should('be.visible')
-        cy.get(MeasureGroupPage.denominatorObservation).should('not.be.enabled')
+        cy.get(MeasureGroupPage.denominatorObservation).should('have.attr', 'readonly')
 
         cy.get(MeasureGroupPage.denominatorAggregateFunction).should('exist')
         cy.get(MeasureGroupPage.denominatorAggregateFunction).should('be.visible')
-        cy.get(MeasureGroupPage.denominatorAggregateFunction).should('not.be.enabled')
+        cy.get(MeasureGroupPage.denominatorAggregateFunction).should('have.attr', 'readonly')
 
         cy.get(MeasureGroupPage.numeratorObservation).should('exist')
         cy.get(MeasureGroupPage.numeratorObservation).should('be.visible')
-        cy.get(MeasureGroupPage.numeratorObservation).should('not.be.enabled')
+        cy.get(MeasureGroupPage.numeratorObservation).should('have.attr', 'readonly')
 
         cy.get(MeasureGroupPage.numeratorAggregateFunction).should('exist')
         cy.get(MeasureGroupPage.numeratorAggregateFunction).should('be.visible')
-        cy.get(MeasureGroupPage.numeratorAggregateFunction).should('not.be.enabled')
+        cy.get(MeasureGroupPage.numeratorAggregateFunction).should('have.attr', 'readonly')
     })
 
     it('Measure Observations and stratification cannot be changed by non-owner', () => {
@@ -451,7 +434,6 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
@@ -520,12 +502,9 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(Header.mainMadiePageButton).click()
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
-        cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).should('exist')
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
 
         //enter edit page
         MeasuresPage.actionCenter('edit')
@@ -536,11 +515,11 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         //verify that measure observation cannot be changed
         cy.get(MeasureGroupPage.cvMeasureObservation).should('exist')
         cy.get(MeasureGroupPage.cvMeasureObservation).should('be.visible')
-        cy.get(MeasureGroupPage.cvMeasureObservation).should('not.be.enabled')
+        cy.get(MeasureGroupPage.cvMeasureObservation).should('have.attr', 'readonly')
 
         cy.get(MeasureGroupPage.cvAggregateFunction).should('exist')
         cy.get(MeasureGroupPage.cvAggregateFunction).should('be.visible')
-        cy.get(MeasureGroupPage.cvAggregateFunction).should('not.be.enabled')
+        cy.get(MeasureGroupPage.cvAggregateFunction).should('have.attr', 'readonly')
 
         //navigate to stratification tab
         cy.get(MeasureGroupPage.stratificationTab).should('exist')
@@ -548,13 +527,13 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.stratificationTab).click()
 
         //verify that stratification fields cannot be changed / updated
-        cy.get(MeasureGroupPage.stratOne).should('not.be.enabled')
+        cy.get(MeasureGroupPage.stratOne).should('have.attr', 'readonly')
 
-        cy.get(MeasureGroupPage.stratAssociationOne).should('not.be.enabled')
+        cy.get(MeasureGroupPage.stratAssociationOne).should('have.attr', 'readonly')
 
-        cy.get(MeasureGroupPage.stratTwo).should('not.be.enabled')
+        cy.get(MeasureGroupPage.stratTwo).should('have.attr', 'readonly')
 
-        cy.get(MeasureGroupPage.stratAssociationTwo).should('not.be.enabled')
+        cy.get(MeasureGroupPage.stratAssociationTwo).should('have.attr', 'readonly')
     })
 })
 
@@ -566,7 +545,6 @@ describe('Measure Observation - Expected Values', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -608,7 +586,6 @@ describe('Measure Observation - Expected Values', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
@@ -794,7 +771,6 @@ describe('Validate Measure Observation Parameters', () => {
         newMeasureName = measureName + randValue
         newCqlLibraryName = CqlLibraryName + randValue
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -865,6 +841,5 @@ describe('Validate Measure Observation Parameters', () => {
         cy.get('[data-testid="measure-observation-cv-obs-helper-text"]').should('contain.text', 'Selected function must have exactly one parameter of type Encounter')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
-
     })
 })
