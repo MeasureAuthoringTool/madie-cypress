@@ -10,31 +10,25 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { Header } from "../../../../../Shared/Header"
 import { Environment } from "../../../../../Shared/Environment"
-
+const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 const now = require('dayjs')
-let todaysDate = now().format('MM/DD/YYYY')
-let harpUserALT = Environment.credentials().harpUserALT
-let versionNumber = '1.0.000'
-const path = require('path')
-const downloadsFolder = Cypress.config('downloadsFolder')
-const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let testCaseTitle = 'Passing Test Case'
-let secondTestCaseTitle = 'Failing Test Case'
-let testCaseDescription = 'DENOMPass'
-let secondTestCaseDescription = 'DENOMFail'
-let testCaseSeries = 'SBTestSeriesP'
-let secondTestCaseSeries = 'SBTestSeriesF'
-let validTestCaseJsonLizzy = TestCaseJson.TestCaseJson_Valid
-let validTestCaseJsonBobby = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
-let measureCQLPFTests = MeasureCQL.CQL_Populations
-let validFileToUpload = downloadsFolder.toString()
-let invalidFileToUpload = 'cypress/fixtures'
+const todaysDate = now().format('MM/DD/YYYY')
+const harpUserALT = Environment.credentials().harpUserALT
+
+const measureName = 'ImportValidations' + Date.now()
+let CqlLibraryName = 'ImportValidationsLib' + Date.now()
 let firstMeasureName = ''
 let updatedCQLLibraryName = ''
-
+const testCaseTitle = 'Passing Test Case'
+const secondTestCaseTitle = 'Failing Test Case'
+const testCaseDescription = 'DENOMPass'
+const secondTestCaseDescription = 'DENOMFail'
+const testCaseSeries = 'SBTestSeriesP'
+const secondTestCaseSeries = 'SBTestSeriesF'
+const validTestCaseJsonLizzy = TestCaseJson.TestCaseJson_Valid
+const validTestCaseJsonBobby = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
+const measureCQLPFTests = MeasureCQL.CQL_Populations
+const versionNumber = '1.0.000'
 
 describe('Test Case Import: functionality tests', () => {
 
@@ -43,7 +37,7 @@ describe('Test Case Import: functionality tests', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
-        CqlLibraryName = 'TestLibrary5' + Date.now()
+        CqlLibraryName = 'ImportValidation1Lib' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
@@ -77,7 +71,6 @@ describe('Test Case Import: functionality tests', () => {
     it('Measure is not owned by nor shared with user: import button is not available', () => {
 
         OktaLogin.AltLogin()
-        cy.reload()
 
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 45000)
         cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
@@ -95,13 +88,6 @@ describe('Test Case Import: functionality tests', () => {
     it('Measure is in DRAFT status: measure has been shared with user: import button is available, import can occur, import can be cancelled and modal will close, upon cancelling', () => {
 
         OktaLogin.Login()
-        Utilities.waitForElementVisible(Header.cqlLibraryTab, 35000)
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible')
-        cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -138,9 +124,7 @@ describe('Test Case Import: functionality tests', () => {
 
         //navigating to the All Measures tab
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 35000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -148,17 +132,16 @@ describe('Test Case Import: functionality tests', () => {
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //export test case
-        cy.get(TestCasesPage.testCaseListTable).find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        // export test cases - select all
+        cy.get('input[type="checkbox"]').first().check() 
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
-        cy.reload()
         cy.get(EditMeasurePage.testCasesTab).click()
         //click on the Import Test Cases button
         cy.get(TestCasesPage.importTestCasesBtn).click()
@@ -167,7 +150,7 @@ describe('Test Case Import: functionality tests', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -177,24 +160,23 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
         //Case #StatusGroupTitleDescriptionLast Saved2N/ASBTestSeriesFFailing Test CaseDENOMFail01/24/2025Edit1N/ASBTestSeriesPPassing Test CaseDENOMPass01/24/2025Edit
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved2N/ASBTestSeriesFFailing Test Case' + secondTestCaseDescription + todaysDate)
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction2N/ASBTestSeriesFFailing Test Case' + secondTestCaseDescription + todaysDate)
             .should('contain.text', 'Edit1N/ASBTestSeriesPPassing Test Case' + testCaseDescription + todaysDate)
 
         //verify confirmation message
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 35000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', '(2) Test cases imported successfully')
 
-        //export test case
-        cy.get(TestCasesPage.testCaseListTable).find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        // export test cases - select all
+        cy.get('input[type="checkbox"]').first().check() 
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
-        cy.reload()
         cy.get(EditMeasurePage.testCasesTab).click()
         //click on the Import Test Cases button
         cy.get(TestCasesPage.importTestCasesBtn).click()
@@ -203,7 +185,7 @@ describe('Test Case Import: functionality tests', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -222,7 +204,7 @@ describe('Test Case Import validations for versioned Measures', () => {
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
-        CqlLibraryName = 'TestLibrary5' + Date.now()
+        CqlLibraryName = 'ImportValidation2Lib' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
@@ -236,9 +218,6 @@ describe('Test Case Import validations for versioned Measures', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-    })
-
-    it('Measure is in VERSIONED status: user is owner: import button is not available', () => {
 
         //navigate to the main MADiE / measure list page
         cy.get(Header.mainMadiePageButton).click()
@@ -249,16 +228,18 @@ describe('Test Case Import validations for versioned Measures', () => {
         //Version measure and verify that it was versioned
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
         cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumber)
 
         cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         Utilities.waitForElementEnabled(MeasuresPage.measureVersionContinueBtn, 60000)
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.enabled')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
+    })
+
+    it('Measure is in VERSIONED status: user is owner: import button is available', () => {
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -266,31 +247,13 @@ describe('Test Case Import validations for versioned Measures', () => {
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //confirm that the import button is disabled / not available
-        Utilities.waitForElementToNotExist(TestCasesPage.importTestCasesBtn, 35000)
+        Utilities.waitForElementVisible(TestCasesPage.paginationLimitSelect, 16500)
+
+        // confirm that the import button is present & enabled
+        cy.get(TestCasesPage.importTestCasesBtn).should('be.enabled')
     })
 
-    it('Measure is in VERSIONED status: measure has been shared with user: import button is not available', () => {
-
-        //navigate to the main MADiE / measure list page
-        cy.get(Header.mainMadiePageButton).click()
-
-        //Click on Version Measure
-        MeasuresPage.actionCenter('version')
-
-        //Version measure and verify that it was versioned
-        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
-        cy.get(MeasuresPage.measureVersionMajor).click()
-        cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
-
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
-        Utilities.waitForElementEnabled(MeasuresPage.measureVersionContinueBtn, 60000)
-        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.enabled')
-        cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(versionNumber)
-        cy.log('Version Created Successfully')
+    it('Measure is in VERSIONED status: measure has been shared with user: import button is available', () => {
 
         OktaLogin.UILogout()
         cy.clearCookies()
@@ -305,19 +268,6 @@ describe('Test Case Import validations for versioned Measures', () => {
 
         //navigating to the All Measures tab
         Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 45000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
-        cy.get(MeasuresPage.allMeasuresTab).click()
-
-        Utilities.waitForElementVisible(Header.cqlLibraryTab, 45000)
-        cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.get(Header.cqlLibraryTab).click()
-
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 45000)
-        cy.get(Header.mainMadiePageButton).should('be.visible')
-        cy.get(Header.mainMadiePageButton).click()
-
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 45000)
-        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
         cy.get(MeasuresPage.allMeasuresTab).click()
 
         //Click on Edit Measure
@@ -326,8 +276,10 @@ describe('Test Case Import validations for versioned Measures', () => {
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //confirm that the import button is disabled / not available
-        Utilities.waitForElementToNotExist(TestCasesPage.importTestCasesBtn, 35000)
+        Utilities.waitForElementVisible(TestCasesPage.paginationLimitSelect, 16500)
+
+        // confirm that the import button is present & enabled
+        cy.get(TestCasesPage.importTestCasesBtn).should('be.enabled')
     })
 })
 
@@ -337,7 +289,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
 
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
-        CqlLibraryName = 'TestLibrary5' + Date.now()
+        CqlLibraryName = 'ImportValidation3Lib' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
@@ -351,14 +303,12 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
     })
 
     afterEach('Logout and Clean up Measures', () => {
 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
         OktaLogin.Logout()
-
     })
 
     it('Importing: not a .zip file', () => {
@@ -379,7 +329,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(invalidFileToUpload, 'CQLCsNoVersionVSACExists.txt'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/fixtures/CQLCsNoVersionVSACExists.txt', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.tcImportError, 35000)
@@ -404,7 +354,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(invalidFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases (4).zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/fixtures/eCQMTitle-v0.0.000-FHIR4-TestCases (4).zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -432,7 +382,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(invalidFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases (3).zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/fixtures/eCQMTitle-v0.0.000-FHIR4-TestCases (3).zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -460,7 +410,7 @@ describe('Test Case Import: File structure Not Accurate validation tests', () =>
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(invalidFileToUpload, 'eCQMTitle-v0.0.000-FHIR4-TestCases (5).zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/fixtures/eCQMTitle-v0.0.000-FHIR4-TestCases (5).zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -477,7 +427,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
         firstMeasureName = measureName + 'a'
-        updatedCQLLibraryName = 'TestLibrary5' + Date.now()
+        updatedCQLLibraryName = 'ImportValidation4Lib' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
@@ -509,6 +459,9 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         CqlLibraryName = 'TestLibrary6' + Date.now()
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName + 'b', CqlLibraryName, measureCQLPFTests, 2)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean', 2)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(true, false, 'Initial PopulationOne', 'boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonLizzy, true)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit', 2)
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -518,13 +471,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(true, false, 'Initial PopulationOne', 'boolean')
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonLizzy, true)
-        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle + 'b2', secondTestCaseSeries + 'b2', secondTestCaseDescription + 'b2', validTestCaseJsonBobby, true, true)
-        OktaLogin.Login()
 
-        MeasuresPage.actionCenter('edit', 2)
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.QDMPopCriteria1Desc)
             .click()
@@ -533,30 +480,21 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 35000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group updated successfully.')
 
-        Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible')
-        cy.get(Header.mainMadiePageButton).click()
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit', 2)
-
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //export test case
-        cy.get(TestCasesPage.testCaseListTable).find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).click()
+        // export test cases - select all
+        cy.get('input[type="checkbox"]').first().check() 
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
-        cy.reload()
         cy.get(EditMeasurePage.testCasesTab).click()
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
-        cy.get(Header.mainMadiePageButton).should('be.visible')
         cy.get(Header.mainMadiePageButton).click()
 
         //Click on Edit Measure
@@ -572,7 +510,7 @@ describe('Test Case Import: New Test cases on measure validations: uniqueness te
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), {
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', {
             action: 'drag-drop',
             force: true
         })
@@ -602,7 +540,7 @@ describe('Test case uniqueness error validation', () => {
     beforeEach('Create measure, and create group', () => {
 
         firstMeasureName = measureName + 'a'
-        updatedCQLLibraryName = 'TestLibrary5' + Date.now()
+        updatedCQLLibraryName = 'ImportValidation5Lib' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
@@ -630,7 +568,6 @@ describe('Test case uniqueness error validation', () => {
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
-        CqlLibraryName = 'TestLibrary6' + Date.now()
 
         TestCasesPage.CreateTestCaseAPI(testCaseTitle + 'b1', testCaseSeries + 'b1', testCaseDescription + 'b1', validTestCaseJsonBobby, false, false, false)
 
@@ -642,14 +579,14 @@ describe('Test case uniqueness error validation', () => {
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //export test case
-        cy.get(TestCasesPage.testCaseListTable).find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        // export test cases - select all
+        cy.get('input[type="checkbox"]').first().check() 
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
         //delete test case
@@ -667,7 +604,6 @@ describe('Test case uniqueness error validation', () => {
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
-        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 30000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 30000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle + 'b1')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
@@ -682,7 +618,6 @@ describe('Test case uniqueness error validation', () => {
 
         TestCasesPage.clickCreateTestCaseButton()
 
-        cy.reload()
         cy.get(EditMeasurePage.testCasesTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
@@ -702,7 +637,7 @@ describe('Test case uniqueness error validation', () => {
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
@@ -711,14 +646,13 @@ describe('Test case uniqueness error validation', () => {
         //import the tests cases from selected / dragged and dropped .zip file
         cy.get(TestCasesPage.importTestCaseBtnOnModal).click()
 
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved1InvalidSBTestSeriesPb1Passing Test Caseb1' + testCaseDescription + 'b1' + todaysDate)
+        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast SavedAction1InvalidSBTestSeriesPb1Passing Test Caseb1' + testCaseDescription + 'b1' + todaysDate)
 
         //verifies alert message at top of page informing user that no test case was imported
         Utilities.waitForElementVisible(TestCasesPage.importTestCaseAlertMessage, 35000)
         cy.get(TestCasesPage.importTestCaseAlertMessage).find(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', '(0) test case(s) were imported. The following (1) test case(s) could not be imported. Please ensure that your formatting is correct and try again.')
         cy.get(TestCasesPage.importTestCaseSuccessInfo).find('[data-testid="failed-test-cases"]').find('span').should('contain.text', 'Reason: The Test Case Group and Title are already used in another test case on this measure. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
     })
-
 })
 
 describe('Test Case Import: New Test cases on measure validations: PC does not match between measures', () => {
@@ -728,7 +662,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
     beforeEach('Create measure, login and update CQL, create group, and login', () => {
 
         firstMeasureName = measureName + 'a'
-        updatedCQLLibraryName = 'TestLibrary5' + Date.now()
+        updatedCQLLibraryName = 'ImportValidation6Lib' + Date.now()
 
         CreateMeasurePage.CreateQICoreMeasureAPI(firstMeasureName, updatedCQLLibraryName, measureCQLPFTests)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial PopulationOne', 'boolean')
@@ -770,17 +704,16 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        //export test case
-        cy.get(TestCasesPage.testCaseListTable).find('[class="TestCaseTable___StyledThead-sc-1faw1su-0 dGIzIy"]').find('[class="header-button"]').eq(0).scrollIntoView().click()
+        // export test cases - select all
+        cy.get('input[type="checkbox"]').first().check() 
         cy.get(TestCasesPage.testcaseQRDAExportBtn).click()
         Utilities.waitForElementVisible(TestCasesPage.exportCollectionTypeOption, 35000)
         cy.get(TestCasesPage.exportCollectionTypeOption).scrollIntoView().click({ force: true })
 
         //verify that the export occurred 
-        cy.readFile(path.join(downloadsFolder, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip')).should('exist')
+        cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
 
-        cy.reload()
         cy.get(EditMeasurePage.testCasesTab).click()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 35000)
@@ -800,7 +733,7 @@ describe('Test Case Import: New Test cases on measure validations: PC does not m
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportModal, 35000)
 
         //Upload valid Json file via drag and drop
-        cy.get(TestCasesPage.filAttachDropBox).selectFile(path.join(validFileToUpload, 'eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip'), { action: 'drag-drop', force: true })
+        cy.get(TestCasesPage.filAttachDropBox).selectFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip', { action: 'drag-drop', force: true })
 
         //verifies the section at the bottom of the modal, after file has been, successfully, dragged and dropped in modal
         Utilities.waitForElementVisible(TestCasesPage.testCasesNonBonnieFileImportFileLineAfterSelectingFile, 35000)
