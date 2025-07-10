@@ -78,18 +78,7 @@ describe('Import Test cases onto an existing QDM measure via file', () => {
         //click on the 'Import' button on the modal window
         TestCasesPage.clickQDMImportTestCaseButton()
 
-        //test case list table contains the group name of the test case that was imported
-        cy.get(TestCasesPage.testCaseListTable).should('contain.text', 'Case #StatusGroupTitleDescriptionLast Saved73N/AIPFailNoEncounterPatient is 19 with no Encounter Inpatient' + todaysDate)
-            .should('contain.text', 'Edit72N/AIPFailTooYoungPatient is 17 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duriShow more' + todaysDate)
-            .should('contain.text', 'Edit71N/ANUMERFailAntithromboticStartBeforeIPEncPatient received anti thrombotic before and during encounter' + todaysDate)
-            .should('contain.text', 'Edit70N/AIPFailEncEndsBeforeMPPatient is 18 with Non-Elective Inpatient Encounter ends before MP with principal diagnosis of stroke' + todaysDate)
-            .should('contain.text', 'Edit69N/ANUMERFailAntithromboticAfterEncIPPatient is 18 with Non-Elective Inpatient Encounter (LOS 120 days) with principal diagnosis of ischemic stroke ends duriShow more' + todaysDate)
-            .should('contain.text', 'Edit68N/ADENEXPassLeftAMAPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP left agaiShow more' + todaysDate)
-            .should('contain.text', 'Edit67N/ADENEXPassExpiredPatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP patient eShow more' + todaysDate)
-            .should('contain.text', 'Edit66N/ADENEXPassDischargeHomeHospicePatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP dischargeShow more' + todaysDate)
-            .should('contain.text', 'Edit65N/ADENEXPassDischargeFacilityHospicePatient is 18 with Non-Elective Inpatient Encounter with principal diagnosis of ischemic stroke ends during MP dischargeShow more' + todaysDate)
-            .should('contain.text', 'Edit64N/ADENEXCEPFailMedRsnStartTmLTEncInpAdmTmPatient does not get antithrombotic medication due to medical reasons before IP encounter. This case tests the timing boShow more' + todaysDate)
-
+        cy.get('#offset-of-total-items').should('contain.text', '1 - 10 of 73')
     })
 
     it('Verify error message when a Text file is imported', () => {

@@ -167,7 +167,7 @@ describe('Measure Transfer - Multiple instances', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumber)
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
         cy.log('Version Created Successfully')
         cy.reload()
 
@@ -176,7 +176,7 @@ describe('Measure Transfer - Multiple instances', () => {
 
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(randomMeasureName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
+        cy.get('.toast').should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
         OktaLogin.UILogout()

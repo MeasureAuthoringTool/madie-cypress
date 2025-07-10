@@ -851,6 +851,9 @@ describe('Measure Highlighting', () => {
         //Navigate to test case detail / edit page
         TestCasesPage.clickEditforCreatedTestCase()
 
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 120000 })
+
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
         cy.get(TestCasesPage.tctExpectedActualSubTab).scrollIntoView().click({ force: true })
@@ -957,6 +960,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
 
         //Navigate to test case detail / edit page
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
@@ -1110,6 +1116,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
 
         //Navigate to test case detail / edit page
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)
@@ -1497,6 +1506,9 @@ describe('QI-Core: Test Case Highlighting Left navigation panel: Highlighting ac
         //Navigate to test case detail / edit page
         TestCasesPage.clickEditforCreatedTestCase()
 
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 120000 })
+
         //run test case
         cy.get(TestCasesPage.runTestButton).should('be.visible')
         cy.get(TestCasesPage.runTestButton).should('be.enabled')
@@ -1615,6 +1627,9 @@ describe('Verify highlighting occurs on a newly versioned measure', () => {
 
         //Navigate to test case detail / edit page
         TestCasesPage.clickEditforCreatedTestCase()
+
+        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
+        cy.wait('@callstacks', { timeout: 120000 })
 
         //Navigate to the Expected / Actual sub tab
         Utilities.waitForElementVisible(TestCasesPage.tctExpectedActualSubTab, 35000)

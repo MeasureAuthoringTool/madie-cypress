@@ -225,7 +225,7 @@ describe('Run / Execute Test Case button validations', () => {
         //Save edited / updated to test case
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 12500)
-        cy.get('[data-testid="error-toast"]', {timeout: 6500}).should('have.text', 'Test case updated successfully with errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
+        cy.get('[data-testid="error-toast"]', { timeout: 6500 }).should('have.text', 'Test case updated successfully with errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
         cy.log('JSON added to test case successfully')
 
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -396,7 +396,7 @@ describe('Run / Execute Test Case button validations', () => {
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+        cy.get(TestCasesPage.createTestCaseDescriptionInput).wait(3000).focus()
         cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCase.description)
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
@@ -423,8 +423,8 @@ describe('Run / Execute Test Case button validations', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get('[data-testid="error-toast"]', {timeout: 6500}).should('have.text', timezoneErrorMessage)
-   
+        cy.get('[data-testid="error-toast"]', { timeout: 6500 }).should('have.text', timezoneErrorMessage)
+
         //Add valid json to the test case and run
         cy.get('#ace-editor-wrapper > .ace_scroller > .ace_content').eq(0).type('{selectall}{backspace}{selectall}{backspace}')
         cy.get('#ace-editor-wrapper > .ace_scroller > .ace_content').eq(0).type(validTestCaseJson, { parseSpecialCharSequences: false })
@@ -448,7 +448,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 50000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
     })
 
@@ -532,7 +532,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
 
         Utilities.waitForElementVisible(TestCasesPage.successMsg, 60000)
-        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneWarningMessage)
+        cy.get(TestCasesPage.importTestCaseSuccessMsg, { timeout: 6500 }).should('have.text', timezoneWarningMessage)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
 
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -556,7 +556,6 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Definitions').click()
         Utilities.waitForElementVisible(TestCasesPage.tcDEFINITIONSHighlightingDetails, 35000)
         cy.get('[data-ref-id="257"]').should('have.color', '#A63B12')
-
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('exist')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -571,7 +570,8 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
         //Check Test Execution for second Population criteria
-        cy.contains('Population Criteria 2').click()
+        cy.contains('Population Criteria 2').click().wait(3000)
+        cy.reload()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Fail')
     })
@@ -675,7 +675,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneWarningMessage)
+        cy.get('.toast', { timeout: 6500 }).should('have.text', timezoneWarningMessage)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -798,7 +798,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneWarningMessage)
+        cy.get('.toast', { timeout: 6500 }).should('have.text', timezoneWarningMessage)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -865,7 +865,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneWarningMessage)
+        cy.get('.toast', { timeout: 6500 }).should('have.text', timezoneWarningMessage)
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -970,7 +970,7 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneWarningMessage)
+        cy.get('.toast', { timeout: 6500 }).should('have.text', timezoneWarningMessage)
 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -1082,15 +1082,16 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         TestCasesPage.clickEditforCreatedTestCase()
 
         //Add json to the test case
-        TestCasesPage.enterErroneousJson(warningTestCaseJson)
+        TestCasesPage.enterErroneousJson(errorTestCaseJSON_no_ResourceID)
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click()
 
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
+        cy.get(TestCasesPage.detailsTab).scrollIntoView()
+        cy.get(TestCasesPage.detailsTab).click()
 
-        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneErrorMessage)
+        cy.get('.toast', { timeout: 6500 }).should('have.text', timezoneErrorMessage)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1118,6 +1119,30 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
+
+        TestCasesPage.clickEditforCreatedTestCase()
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 37700)
+        Utilities.waitForElementWriteEnabled(TestCasesPage.aceEditor, 37700)
+        cy.get(TestCasesPage.aceEditor).should('exist')
+        cy.get(TestCasesPage.aceEditor).should('be.visible')
+        cy.get(TestCasesPage.aceEditorJsonInput).should('exist').wait(2000)
+        cy.get(TestCasesPage.aceEditor).type('{selectAll}{backspace}')
+        cy.get(TestCasesPage.aceEditor).type(warningTestCaseJson, { parseSpecialCharSequences: false })
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+        cy.get(TestCasesPage.editTestCaseSaveButton).wait(1000).click()
+
+        cy.get(TestCasesPage.detailsTab).scrollIntoView()
+        cy.get(TestCasesPage.detailsTab).click()
+
+        cy.get('.toast', { timeout: 6500 }).should('have.text', timezoneWarningMessage)
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
+        //Click on Execute Test Case button on Edit Test Case page
+        cy.get(EditMeasurePage.testCasesTab).should('be.visible')
+        cy.get(EditMeasurePage.testCasesTab).click()
+
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
@@ -1226,7 +1251,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get('[data-testid="error-toast"]', {timeout: 6500}).should('have.text', timezoneErrorMessage)
+        cy.get('.toast'/*'[data-testid="error-toast"]'*/, { timeout: 6500 }).should('have.text', timezoneErrorMessage)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1380,7 +1405,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneWarningMessage)
+        cy.get('.toast', { timeout: 6500 }).should('have.text', timezoneWarningMessage)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1498,7 +1523,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
 
-            cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', timezoneWarningMessage)
+            cy.get('.toast', { timeout: 6500 }).should('have.text', timezoneWarningMessage)
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1707,7 +1732,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //confirm no message
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
-    })
+        })
 })
 
 describe('Verify multiple IPs on the highlighting tab', () => {
@@ -1807,8 +1832,9 @@ describe('Verify multiple IPs on the highlighting tab', () => {
         cy.get(TestCasesPage.tcHighlightingTab).click()
 
         cy.readFile(measureGroupPath).should('exist').then((fileContents) => {
-            cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP 1').click()
-            cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP 2').click()
+            Utilities.waitForElementVisible('[data-testid="group-coverage-nav-' + fileContents + '"]', 50000)
+            cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP 1').wait(3000).click()
+            cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('IP 2').wait(3000).click()
         })
     })
 })

@@ -53,7 +53,8 @@ describe('Measure Sharing', () => {
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
         cy.reload()
-        cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 50000)
+        cy.get(MeasuresPage.measureListTitles).wait(3000).should('contain', newMeasureName)
     })
 
     it('Verify Measure can be edited by the shared user', () => {
@@ -117,7 +118,7 @@ describe('Measure Sharing', () => {
         OktaLogin.Login()
 
         MeasuresPage.actionCenter('share')
-        cy.get(EditMeasurePage.shareOption).click({force: true})
+        cy.get(EditMeasurePage.shareOption).click({ force: true })
         cy.get(EditMeasurePage.harpIdInputTextBox).type(harpUserALT)
         cy.get(EditMeasurePage.addBtn).click()
 
@@ -132,7 +133,8 @@ describe('Measure Sharing', () => {
         OktaLogin.AltLogin()
         cy.get(LandingPage.myMeasuresTab).click()
         cy.reload()
-        cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 50000)
+        cy.get(MeasuresPage.measureListTitles).wait(3000).should('contain', newMeasureName)
 
         //Delete button disabled for shared owner
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
@@ -267,7 +269,7 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -287,7 +289,7 @@ describe('Measure Sharing - Multiple instances', () => {
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
             cy.writeFile(filePath, request.response.body.id)
         })
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
+        cy.get('.toast').should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
         cy.clearCookies()

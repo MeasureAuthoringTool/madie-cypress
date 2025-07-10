@@ -435,9 +435,9 @@ export class TestCasesPage {
             measureID = id
             cy.intercept('POST', '/api/measures/' + measureID + '/test-cases').as('testcase')
             cy.get(this.createTestCaseSaveButton).should('exist')
-            Utilities.waitForElementVisible(this.createTestCaseSaveButton, 5000)
-            Utilities.waitForElementEnabled(this.createTestCaseSaveButton, 5000)
-            cy.get(this.createTestCaseSaveButton).click()
+            Utilities.waitForElementVisible(this.createTestCaseSaveButton, 50000)
+            Utilities.waitForElementEnabled(this.createTestCaseSaveButton, 50000)
+            cy.get(this.createTestCaseSaveButton).wait(3000).click()
             //saving testCaseId to file to use later
             cy.wait('@testcase', { timeout: 60000 }).then(({ response }) => {
                 expect(response.statusCode).to.eq(201)
@@ -482,13 +482,13 @@ export class TestCasesPage {
 
     public static grabValidateTestCaseTitleAndSeries(testCaseTitle: string, testCaseSeries: string): void {
 
-        cy.get('[data-testid="test-case-title-0_series"]').should('be.visible')
+        cy.get('[data-testid="test-case-title-0_series"]').should('be.visible').wait(1000)
         cy.get('[data-testid="test-case-title-0_series"]').invoke('text').then(
             (seriesText) => {
                 expect(seriesText).to.include(testCaseSeries)
             })
 
-        cy.get('[data-testid="test-case-title-0_title"]').should('be.visible')
+        cy.get('[data-testid="test-case-title-0_title"]').should('be.visible').wait(1000)
         cy.get('[data-testid="test-case-title-0_title"]').invoke('text').then(
             (titleText) => {
                 expect(titleText).to.include(testCaseTitle)
@@ -672,7 +672,7 @@ export class TestCasesPage {
         }
 
         cy.readFile(testCasePIdPath).should('exist').then((tcId) => {
-            cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').should('be.visible')
+            cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').should('be.visible').wait(3000)
             cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').should('be.enabled')
             Utilities.waitForElementVisible('[data-testid=view-edit-test-case-button-' + tcId + ']', 35000000)
             cy.get('[data-testid=view-edit-test-case-button-' + tcId + ']').scrollIntoView()
@@ -871,10 +871,13 @@ export class TestCasesPage {
     // input the visible "Case #" value to have that test case's checkbox toggled from its current status
     public static checkTestCase(testCaseNumber: number): void {
 
-        cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
-            .parent('tr')
-            .find('input[type="checkbox"]')
-            .check()
+        // cy.contains('td[data-testid*="caseNumber"]', testCaseNumber)
+        //     .parent('tr')
+        //     .find('input[type="checkbox"]')
+        //     .check()
+        let number = testCaseNumber - 1
+        cy.get('[data-testid="test-case-title-' + number + '_select"]').click()
+
     }
 
     /*

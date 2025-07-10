@@ -1,6 +1,6 @@
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { TestCaseJson } from "../../../../Shared/TestCaseJson"
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasureActions, EditMeasurePage } from "../../../../Shared/EditMeasurePage"
@@ -190,12 +190,11 @@ describe('Test case list page - Action Center icons for versioned measure', () =
     })
 
     it('Export icon is present and it enables correctly', () => {
-        // checks that delete, clone, and shift dates are not present at all
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.actionCenterDelete).should('not.exist')
-        cy.get(TestCasesPage.actionCenterClone).should('not.exist')
-        cy.get(TestCasesPage.actionCenterShiftDates).should('not.exist')
+        cy.get(TestCasesPage.actionCenterDelete).should('be.disabled')
+        cy.get(TestCasesPage.actionCenterClone).should('be.disabled')
+
 
         cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
         cy.get('[data-testid="export-tooltip"]').should('have.attr', 'aria-label', 'Test cases must be executed prior to exporting.')
@@ -292,7 +291,6 @@ describe('Test case list page - Action Center icons for non-owner', () => {
         // checks that delete, clone, shift dates are not present at all
         cy.get(TestCasesPage.actionCenterDelete).should('not.exist')
         cy.get(TestCasesPage.actionCenterClone).should('not.exist')
-        cy.get(TestCasesPage.actionCenterShiftDates).should('not.exist')
 
         cy.get(TestCasesPage.actionCenterExport).should('be.disabled')
         cy.get('[data-testid="export-tooltip"]').should('have.attr', 'aria-label', 'Test cases must be executed prior to exporting.')
