@@ -21,7 +21,7 @@ const measureCQLPFTests = MeasureCQL.CQL_Populations
 const testCaseJson = TestCaseJson.TestCaseJson_CohortPatientBoolean_PASS
 const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
-describe.skip('QI-Core: Export Bundle options for Non Measure Owner: Transaction or Collection', () => {
+describe('QI-Core: Export Bundle options for Non Measure Owner: Transaction or Collection', () => {
 
     deleteDownloadsFolderBeforeEach()
 
