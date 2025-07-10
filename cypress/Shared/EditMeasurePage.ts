@@ -18,6 +18,10 @@ export class EditMeasurePage {
     public static readonly dirtCheckModal = '[class="MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthSm MuiDialog-paperFullWidth css-aa4ov7 react-draggable"]'
 
     //Edit Measure tab menu
+    public static readonly readOnlyMPStartDt = '[id="measurement-period-start"]'
+    public static readonly readOnlyMPEndDt = '[id="measurement-period-end"]'
+    public static readonly readOnlySteward = '[id="steward"]'
+    public static readonly readOnlyDevelopers = '[id="developers"]'
     public static readonly measureDetailsTab = '[data-testid=measure-details-tab]'
     public static readonly cqlEditorTab = '[data-testid=cql-editor-tab]'
     public static readonly measureGroupsTab = '[data-testid=groups-tab]'

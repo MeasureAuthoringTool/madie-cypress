@@ -63,16 +63,16 @@ describe('Read only for measure, measure group, and test cases that user does no
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.leftPanelModelAndMeasurementPeriod).click()
 
-        cy.get('[id="measurement-period-start"]').should('have.attr', 'readonly', 'readonly')
-        cy.get('[id="measurement-period-end"]').should('have.attr', 'readonly', 'readonly')
+        cy.get(EditMeasurePage.readOnlyMPStartDt).should('have.attr', 'readonly', 'readonly')
+        cy.get(EditMeasurePage.readOnlyMPEndDt).should('have.attr', 'readonly', 'readonly')
 
         //navigate to the Steward & Developers page
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('exist')
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).should('be.visible')
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
 
-        cy.get('[id="steward"]').should('have.attr', 'readonly', 'readonly')
-        cy.get('[id="developers"]').should('have.attr', 'readonly', 'readonly')
+        cy.get(EditMeasurePage.readOnlySteward).should('have.attr', 'readonly', 'readonly')
+        cy.get(EditMeasurePage.readOnlyDevelopers).should('have.attr', 'readonly', 'readonly')
 
         cy.get(EditMeasurePage.leftPanelDescription).should('be.visible')
         cy.get(EditMeasurePage.leftPanelDescription).click()
