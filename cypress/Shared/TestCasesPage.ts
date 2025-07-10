@@ -208,7 +208,6 @@ export class TestCasesPage {
     public static readonly testCaseListCoverageHighlighting = '[data-testid="code-coverage-highlighting"]'
     public static readonly testCaseListTable = '[data-testid="test-case-tbl"]'
     public static readonly testCaseAction0Btn = '[data-testid="test-case-title-0_action"]'
-    public static readonly tcPopulationCriteriaNavLink = '[data-testid="test-case-pop-criteria-nav"]'
     public static readonly tcCoverageTabIPpop = '[data-testid="Initial Population-population"]'
     public static readonly tcCoverageTabDenompop = '[data-testid="Denominator-population"]'
     public static readonly tcCoverageTabDenomExcludepop = '[data-testid="Denominator Exclusion-population"]'
@@ -374,6 +373,7 @@ export class TestCasesPage {
     // left nav expand (means we are already collapsed)/collapse (means we are expanded/normal)
     public static readonly leftNavCollapse = '[data-testid="test-case-sidebar-collapse-icon"]'
     public static readonly leftNavExpand = '[data-testid="test-case-sidebar-expand-icon"]'
+    public static readonly leftNavMenuList = '[data-testid="test-case-sidebar"]'
 
     //This function grabs the data-testid value off of the view button and extracts the id out of it.
     //Then, it puts that id in a file. For added control, the optional "eleTableEntry" parameter can be
