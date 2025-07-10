@@ -3,6 +3,7 @@ import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
+const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
     /*
         This test scenario does not require creation of a measure.
@@ -19,6 +20,8 @@ const measureWithNoOverlap = {
 
 describe('Generate the Overlapping Valueset report for a QDM measure', () => {
 
+    deleteDownloadsFolderBeforeEach()
+
     beforeEach('Login', () => {
 
         OktaLogin.Login()
@@ -26,14 +29,14 @@ describe('Generate the Overlapping Valueset report for a QDM measure', () => {
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     it('View CMS 334FHIR and generate the Overlapping Valueset report', () => {
 
         // switch to all measure tab, search for original measure, view
         cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 75100)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         cy.wait('@searchDone')
@@ -80,7 +83,7 @@ describe('Generate the Overlapping Valueset report for a QDM measure', () => {
 
         // switch to all measure tab, search for original measure, view
         cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 75100)
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         cy.wait('@searchDone')
@@ -101,7 +104,7 @@ describe('Generate the Overlapping Valueset report for a QDM measure', () => {
         cy.contains('h2', 'Overlapping Codes').should('be.visible')
 
         //Verify Excel Export
-        const file = 'cypress/downloads/CMS334FHIR-v0.4.000-FHIR6-OverlappingCodes.xlsx'
+        const file = 'cypress/downloads/CMS0334FHIR-v0.6.000-FHIR6-OverlappingCodes.xlsx'
         cy.get(TestCasesPage.overlappingCodesExportBtn).should('be.visible')
         cy.get(TestCasesPage.overlappingCodesExportBtn).click()
         cy.get(TestCasesPage.exportSuccessMsg).should('contain.text', 'Overlapping Codes report exported successfully')
@@ -122,7 +125,7 @@ describe('Generate the Overlapping Valueset report for a QDM measure', () => {
 
          // switch to all measure tab, search for original measure, view
          cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
-         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 75100)
          cy.get(MeasuresPage.allMeasuresTab).click()
          cy.get(MeasuresPage.searchInputBox).clear().type(measureWithNoOverlap.CMSid).type('{enter}')
         cy.wait('@searchDone')
