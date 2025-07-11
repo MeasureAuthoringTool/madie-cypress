@@ -9,22 +9,24 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
-let randValue = (Math.floor((Math.random() * 1000) + 1))
-let testCaseTitle = 'Title for Auto Test'
-let secondTestCaseTitle = 'Second Test case'
-let testCaseDescription = 'DENOMFail' + Date.now()
-let testCaseSeries = 'SBTestSeries'
-let validTestCaseJson = TestCaseJson.TestCaseJson_Valid_w_All_Encounter
-let newMeasureName = measureName + randValue
-let newCqlLibraryName = CqlLibraryName + randValue
-let measureCQL = MeasureCQL.CQL_Multiple_Populations
+const measureName = 'PCCTCList' + Date.now()
+const CqlLibraryName = 'PCCTCListLib' + Date.now()
+const testCaseTitle = 'Title for Auto Test'
+const secondTestCaseTitle = 'Second Test case'
+const testCaseDescription = 'DENOMFail' + Date.now()
+const testCaseSeries = 'SBTestSeries'
+const validTestCaseJson = TestCaseJson.TestCaseJson_Valid_w_All_Encounter
+const measureCQL = MeasureCQL.CQL_Multiple_Populations
 
 describe('Code Coverage Highlighting', () => {
 
     beforeEach('Create Measure', () => {
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false,
+            'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'Boolean')
+        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
+        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson, false, true)
+
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).should('exist')
@@ -38,26 +40,14 @@ describe('Code Coverage Highlighting', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false,
-            'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'Boolean')
-
-        TestCasesPage.CreateTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson)
-        TestCasesPage.CreateTestCaseAPI(secondTestCaseTitle, testCaseDescription, testCaseSeries, validTestCaseJson, false, true)
-
-        OktaLogin.Login()
     })
 
     afterEach('Logout', () => {
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Validate Passing and Code Coverage tabs contain the initial "-" value, and displays a percentage when Test Case is ran', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //navigate to the test case list page
         cy.get(EditMeasurePage.testCasesTab).should('exist')
@@ -94,11 +84,7 @@ describe('Code Coverage Highlighting', () => {
 
     })
 
-
     it('Verify Measure highlighting for multiple Measure groups on test case list page', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Add second Measure group
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -138,8 +124,8 @@ describe('Code Coverage Highlighting', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
-        cy.get(TestCasesPage.tcPopulationCriteriaNavLink).should('contain', 'Population Criteria 1')
-        cy.get(TestCasesPage.tcPopulationCriteriaNavLink).should('contain', 'Population Criteria 2')
+        cy.get(TestCasesPage.leftNavMenuList).should('contain', 'Population Criteria 1')
+        cy.get(TestCasesPage.leftNavMenuList).should('contain', 'Population Criteria 2')
 
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
         cy.get(TestCasesPage.executeTestCaseButton).should('be.enabled')
@@ -159,7 +145,7 @@ describe('Code Coverage Highlighting', () => {
             'exists "Qualifying Encounters"')
 
         //Verify Highlighting for second Measure group
-        cy.get(TestCasesPage.tcPopulationCriteriaNavLink).contains('Population Criteria 2').click()
+        cy.get(TestCasesPage.leftNavMenuList).contains('Population Criteria 2').click()
 
         //verify percentage number appears in tabs heading
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
@@ -172,6 +158,5 @@ describe('Code Coverage Highlighting', () => {
 
         cy.get(TestCasesPage.testCaseListCoverageHighlighting).should('not.contain.text', 'define "Initial Population":\n' +
             'exists "Qualifying Encounters"')
-
     })
 })
