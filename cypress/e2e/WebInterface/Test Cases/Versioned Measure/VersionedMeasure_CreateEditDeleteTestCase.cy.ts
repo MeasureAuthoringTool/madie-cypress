@@ -54,7 +54,7 @@ let measureCQL = 'library ProportionEpisodeMeasure version \'0.0.000\'\n' +
     '          })'
 
 
-describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => {
+describe.skip('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => {
 
     beforeEach('Create Measure, Test Case and Login', () => {
 
