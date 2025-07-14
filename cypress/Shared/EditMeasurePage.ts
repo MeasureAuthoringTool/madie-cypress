@@ -90,8 +90,9 @@ export class EditMeasurePage {
     public static readonly addReferenceButton = '[data-testid="create-reference-button"]'
     public static readonly selectMeasureReference = '.chevron-container > [data-testid="ExpandMoreIcon"]'
     public static readonly referenceTypeDropdown = '[id="measure-referenceType"]'
-    public static readonly documentationOption = '[data-testid="Documentation-option"]'
+    public static readonly citationOption = '[data-testid="Citation-option"]'
     public static readonly justificationOption = '[data-testid="Justification-option"]'
+    public static readonly unknownOption = '[data-testid="Unknown-option"]'
     public static readonly measureReferenceText = '[data-testid="measure-referenceText"]'
     public static readonly saveButton = '[data-testid="save-button"]'
     public static readonly successMessage = '[class="toast success"]'
@@ -101,7 +102,7 @@ export class EditMeasurePage {
     public static readonly searchReferenceTextBox = '[data-testid="measure-reference-search-input"]'
     public static readonly searchReferenceIcon = '[data-testid="SearchIcon"]'
     public static readonly editQiCoreReference = '[aria-label="Edit"]'
-    public static deleteQiCoreReference = '[aria-label="Delete"]'
+    public static readonly deleteQiCoreReference = '[aria-label="Delete"]'
 
     //Definition(Terms) page
     public static readonly definitionInputTextbox = '[data-testid="measure-definition-input"]'
