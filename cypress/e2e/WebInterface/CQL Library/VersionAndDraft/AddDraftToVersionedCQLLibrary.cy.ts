@@ -145,9 +145,6 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
 
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click().wait(1000)
-        cy.get(Header.mainMadiePageButton).click().wait(1000)
-        cy.get(Header.cqlLibraryTab).click().wait(1000)
-        cy.reload()
         cy.get(CQLLibraryPage.allLibrariesBtn).wait(2000).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 600000)
@@ -159,8 +156,8 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         //Verify that Non Measure owner unable to edit Library
         CQLLibrariesPage.clickViewforCreatedLibrary(null, true)
         cy.get(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'You are not the owner of the CQL Library. Only owner can edit it.')
-        cy.get(CQLLibraryPage.cqlLibraryNameTextbox).should('have.attr', 'disabled', 'disabled')
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('have.attr', 'disabled', 'disabled')
+        cy.get(CQLLibraryPage.readOnlyCqlLibraryName).should('have.attr', 'readonly')
+        cy.get(CQLLibraryPage.cqlLibraryDesc).should('have.attr', 'readonly')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.disabled')
 
         OktaLogin.UILogout()

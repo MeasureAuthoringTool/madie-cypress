@@ -85,7 +85,6 @@ describe('Edit CQL Library validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryDesc).click()
         cy.get(CQLLibraryPage.cqlLibPubHelperText).should('contain.text', 'Publisher is required.')
         cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.disabled')
-
     })
 
     it('CQL Library Edit page validation that the "Experimental" check box can be checked or unchecked -- not required', () => {
@@ -138,23 +137,22 @@ describe('Edit CQL Library validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryStickySave).should('exist')
         cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.visible')
         cy.get(CQLLibraryPage.cqlLibraryStickySave).should('be.enabled')
-
     })
 })
+
 describe('CQL Library Validations -- User ownership', () => {
 
     beforeEach('Login', () => {
         var randValue = (Math.floor((Math.random() * 1000) + 1))
         CQLLibraryNameAlt = 'TestLibrary' + Date.now() + randValue
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryNameAlt, CQLLibraryPublisherAlt, false, true)
-
-
     })
+
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
-
     })
+
     it('Owner is the same as current user, library will appear in, both, "All Libraries" and "My Libraries" default / stand-alone lists', () => {
         //log in as user that does not own the Library
         OktaLogin.AltLogin()
@@ -178,8 +176,8 @@ describe('CQL Library Validations -- User ownership', () => {
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
-
     })
+
     it('Owner is not the user and the library details are viewed via a View button and Library cannot be edited', () => {
         //log in as user that does not own the Library
         OktaLogin.Login()
@@ -206,8 +204,7 @@ describe('CQL Library Validations -- User ownership', () => {
 
         })
 
-        cy.get(CQLLibraryPage.cqlLibraryDesc).should('be.disabled')
-
+        cy.contains('You are not the owner of the CQL Library. Only owner can edit it.').should('be.visible')
+        cy.get(CQLLibraryPage.cqlLibraryDesc).should('have.attr', 'readonly')
     })
-
 })

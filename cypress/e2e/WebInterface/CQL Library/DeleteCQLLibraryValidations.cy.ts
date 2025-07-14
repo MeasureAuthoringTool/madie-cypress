@@ -191,8 +191,9 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
 
         CQLLibrariesPage.clickViewforCreatedLibrary()
 
-        Utilities.waitForElementVisible(CQLLibraryPage.cqlLibraryNameTextbox, 11500)
+        Utilities.waitForElementVisible(CQLLibraryPage.readOnlyCqlLibraryName, 11500)
 
+        cy.contains('You are not the owner of the CQL Library. Only owner can edit it.').should('be.visible')
         cy.get(CQLLibraryPage.actionCenterButton).should('not.exist')
     })
 
