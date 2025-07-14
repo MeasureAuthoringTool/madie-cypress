@@ -25,6 +25,7 @@ export class CQLLibraryPage {
     public static readonly cqlLibSearchResultsTable = '[data-testid="table-body"]'
     public static readonly createCQLLibraryBtn = '[data-testid="create-new-cql-library-button"]'
     public static readonly cqlLibraryNameTextbox = '[data-testid="cql-library-name-text-field-input"]'
+    public static readonly readOnlyCqlLibraryName = '[data-testid="cql-library-name-text-field"]'
     public static readonly cqlLibraryModelDropdown = '[data-testid="cql-library-model-select"]'
     public static readonly cqlLibraryStickySave = '[data-testid="cql-library-save-button"]'
     public static readonly libraryListTitles = '[data-testid="cqlLibrary-list"]'
