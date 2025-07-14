@@ -54,7 +54,7 @@ let measureCQL = 'library ProportionEpisodeMeasure version \'0.0.000\'\n' +
     '          })'
 
 
-describe.skip('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => {
+describe('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', () => {
 
     beforeEach('Create Measure, Test Case and Login', () => {
 
@@ -157,8 +157,10 @@ describe.skip('Test Cases: Versioned Measure: Create, Edit, Delete Test Case', (
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
 
+
         //verify user can delete newly created test case after versioning
         TestCasesPage.checkTestCase(2)
+
         cy.get(TestCasesPage.actionCenterDelete).should('be.enabled')
 
         //Draft should keep all changes made to test cases after versioning
