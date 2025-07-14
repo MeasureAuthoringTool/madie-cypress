@@ -11,17 +11,17 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 const now = require('dayjs')
 const url = Cypress.config('baseUrl')
 const path = require('path')
-let mpStartDate = null
-let mpEndDate = null
-let versionNumber = '1.0.000'
+const mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
+const mpEndDate = now().format('YYYY-MM-DD')
+const versionNumber = '1.0.000'
 let measureName = 'TestMeasure' + Date.now()
 let measureNameFC = ''
 let CqlLibraryName = 'TestLibrary' + Date.now()
 let CqlLibraryNameFC = ''
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-let measureCQLContent = MeasureCQL.stndBasicQICoreCQL
-let measureCQL = MeasureCQL.zipfileExportQICore
+const measureCQLContent = MeasureCQL.stndBasicQICoreCQL
+const measureCQL = MeasureCQL.zipfileExportQICore
 
 describe('QI-Core Measure Export', () => {
 
@@ -163,8 +163,6 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
     deleteDownloadsFolderBeforeAll()
 
     before('Create New Measure and Login', () => {
-        mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
-        mpEndDate = now().format('YYYY-MM-DD')
         measureNameFC = 'HRExport1' + Date.now()
         CqlLibraryNameFC = 'HRExport1Lib' + Date.now()
 
@@ -220,10 +218,9 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
 
             expect(bodyText).to.include('CMS Consensus Based Entity Identifier\t3502\n')
 
-            expect(bodyText).to.include('\nStatus\tdraft\nSteward (Publisher)\tSemanticBits\nDeveloper\tAcademy of Nutrition ' +
+            expect(bodyText).to.include('\nSteward (Publisher)\tSemanticBits\nDeveloper\tAcademy of Nutrition ' +
                 'and Dietetics\nDescription\tSemanticBits\nPurpose\tthis is a meta purpose value\nCopyright\tUNKNOWN\n' +
-                'Disclaimer\tUNKNOWN\nCitation\tCitation - Text 1\nDocumentation\tCitation: Documentation - Text 2\n' +
-                'Justification\tCitation: Justification - Text 3\nDefinition\tThisIsTheDefinitionTermValue: ' +
+                'Disclaimer\tUNKNOWN\nCitation\tText 1\nJustification\tDescription: Text 3\nDefinition\tThisIsTheDefinitionTermValue: ' +
                 'ThisIsTheDefinitionDefValue\nGuidance (Usage)\tthis is a meta guidance (usage) value -- for the \'Clinical ' +
                 'Usage\' field')
 
@@ -323,7 +320,10 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, be
                 'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
 
             //Dependencies
-            expect(bodyText).to.include('Dependencies\n' +
+            expect(bodyText).to.include('Dependencies\n' + 
+                'Dependency\tDescription: QICore model information\n' +
+                'Resource: http://hl7.org/fhir/Library/QICore-ModelInfo\n' +
+                'Canonical URL: http://hl7.org/fhir/Library/QICore-ModelInfo\n' +
                 'Dependency\tDescription: Library FHIRHelpers\n' +
                 'Resource: https://madie.cms.gov/Library/FHIRHelpers|4.1.000\n' +
                 'Canonical URL: https://madie.cms.gov/Library/FHIRHelpers|4.1.000')
@@ -377,8 +377,6 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
     before('Create New Measure and Login', () => {
         Cypress.config('baseUrl', url)
         cy.wait(1000)
-        mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
-        mpEndDate = now().format('YYYY-MM-DD')
 
         measureNameFC = 'HRExport2' + Date.now()
         CqlLibraryNameFC = 'HRExport2Lib' + Date.now()
@@ -470,8 +468,7 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
 
             expect(bodyText).to.include('\nSteward (Publisher)\tSemanticBits\nDeveloper\tAcademy of Nutrition ' +
                 'and Dietetics\nDescription\tSemanticBits\nPurpose\tthis is a meta purpose value\nCopyright\tUNKNOWN\n' +
-                'Disclaimer\tUNKNOWN\nCitation\tCitation - Text 1\nDocumentation\tCitation: Documentation - Text 2\n' +
-                'Justification\tCitation: Justification - Text 3\nDefinition\tThisIsTheDefinitionTermValue: ' +
+                'Disclaimer\tUNKNOWN\nCitation\tText 1\nJustification\tDescription: Text 3\nDefinition\tThisIsTheDefinitionTermValue: ' +
                 'ThisIsTheDefinitionDefValue\nGuidance (Usage)\tthis is a meta guidance (usage) value -- for the \'Clinical ' +
                 'Usage\' field')
 
@@ -571,7 +568,10 @@ describe('QI-Core Measure Export: Validating contents of Human Readable file, af
                 'Canonical URL: http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016')
 
             //Dependencies
-            expect(bodyText).to.include('Dependencies\n' +
+            expect(bodyText).to.include('Dependencies\n' + 
+                'Dependency\tDescription: QICore model information\n' +
+                'Resource: http://hl7.org/fhir/Library/QICore-ModelInfo\n' +
+                'Canonical URL: http://hl7.org/fhir/Library/QICore-ModelInfo\n' +
                 'Dependency\tDescription: Library FHIRHelpers\n' +
                 'Resource: https://madie.cms.gov/Library/FHIRHelpers|4.1.000\n' +
                 'Canonical URL: https://madie.cms.gov/Library/FHIRHelpers|4.1.000')
