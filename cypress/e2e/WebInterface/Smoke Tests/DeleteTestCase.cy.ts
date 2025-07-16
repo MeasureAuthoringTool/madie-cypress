@@ -83,9 +83,9 @@ describe('Delete Test Case', () => {
 
     it('Verify Non owner of the Measure unable to delete Test Case', () => {
 
-        TestCasesPage.createTestCase(testCase1.title, testCase1.description, testCase1.group, testCase1.json)
+        TestCasesPage.createTestCase(testCase1.title, testCase1.description, testCase1.group)
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
 
         //Login as Alt User
         OktaLogin.AltLogin()
@@ -107,8 +107,8 @@ describe('Delete Test Case', () => {
 
         cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
         cy.get(TestCasesPage.reportsButton).should('be.visible')
-
-        Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 21500)
+        cy.get(TestCasesPage.executeTestCaseButton).should('be.visible')
+        
         cy.contains('View').should('be.visible')
     })
 })
