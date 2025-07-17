@@ -640,7 +640,6 @@ describe('Test Case Validations', () => {
         cy.get(TestCasesPage.createTestCaseSaveButton).should('be.disabled')
     })
 
-
     it('Edit Test Case: Description more than 250 characters', () => {
 
         //Click on Edit Measure
@@ -701,7 +700,7 @@ describe('Test Case Validations', () => {
 
         //Update Test Case Description with more than 250 characters
         cy.get(TestCasesPage.testCaseTitle).type(twoFiftyTwoCharacters, { delay: 0 })
-        cy.get(TestCasesPage.testCaseSeriesTextBox).click()
+        cy.get(TestCasesPage.createTestCaseGroupInput).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.editTestCaseTitleInlineError).contains('Test Case Title cannot be more ' +
             'than 250 characters.')
@@ -739,6 +738,7 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(TestCasesPage.createTestCaseSaveButton).should('not.be.enabled')
     })
 
+
     it('Edit and update test case to have no title', () => {
 
         //Click on Edit Measure
@@ -772,8 +772,8 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
         cy.get(TestCasesPage.testCaseDescriptionTextBox).type(updatedTestCaseDescription)
         //Update Test Case Series
-        cy.get(TestCasesPage.testCaseSeriesTextBox).clear()
-        cy.get(TestCasesPage.testCaseSeriesTextBox).type(updatedTestCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).clear()
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(updatedTestCaseSeries).type('{enter}')
 
         //save button to save the test case is not available
         cy.get(TestCasesPage.editTestCaseSaveButton).should('not.be.enabled')
@@ -863,8 +863,9 @@ describe('Attempting to create a test case without a title', () => {
         cy.get(TestCasesPage.detailsTab).click()
 
         //Update Test Case Series
-        cy.get(TestCasesPage.testCaseSeriesTextBox).clear()
-        cy.get(TestCasesPage.testCaseSeriesTextBox).type(updatedTestCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).clear()
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(updatedTestCaseSeries)
+        cy.contains('Add "' + updatedTestCaseSeries + '"').click()
 
         //attempt to navigate away from the test case page
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -971,9 +972,9 @@ describe('Duplicate Test Case Title and Group validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.testCaseTitle).clear().type('{selectall}{backspace}{selectall}{backspace}').type('SecondTestCase'.toString())
-        cy.get(TestCasesPage.testCaseSeriesTextBox).should('exist')
-        cy.get(TestCasesPage.testCaseSeriesTextBox).should('be.visible')
-        cy.get(TestCasesPage.testCaseSeriesTextBox).clear().type('SecondTestCaseGroup').type('{downArrow}{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+        cy.get(TestCasesPage.createTestCaseGroupInput).clear().type('SecondTestCaseGroup').type('{downArrow}{enter}')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'The Test Case Group and Title combination is not unique. The combination must be unique (case insensitive, spaces ignored) across all test cases associated with the measure.')
