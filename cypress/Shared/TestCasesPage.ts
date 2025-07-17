@@ -643,8 +643,8 @@ export class TestCasesPage {
         cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
         cy.get(TestCasesPage.testCaseDescriptionTextBox).type(updatedTestCaseDescription)
         //Update Test Case Series
-        cy.get(TestCasesPage.testCaseSeriesTextBox).clear()
-        cy.get(TestCasesPage.testCaseSeriesTextBox).type(updatedTestCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).clear()
+        cy.get(TestCasesPage.createTestCaseGroupInput).type(updatedTestCaseSeries).type('{enter}')
 
         //Save edited / updated to test case
         cy.get(this.editTestCaseSaveButton).click()
