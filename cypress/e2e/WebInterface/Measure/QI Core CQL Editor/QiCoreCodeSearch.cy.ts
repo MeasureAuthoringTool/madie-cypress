@@ -80,6 +80,8 @@ describe('Qi Core Code Search fields', () => {
 
     beforeEach('Create Measure and Login', () => {
 
+        CqlLibraryName = 'QiCoreCodeSearchLib' + Date.now()
+
         //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.Login()
