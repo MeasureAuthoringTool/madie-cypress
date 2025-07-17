@@ -7,8 +7,6 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { Utilities } from "../../../../../Shared/Utilities"
-import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
-
 
 const now = Date.now()
 const measureName = 'QICoreSDETests' + now
@@ -17,13 +15,14 @@ const qiCoreMeasureCQL = MeasureCQL.QiCoreCQLSDE.replace('QiCoreCQLLibrary173998
 let firstTestCaseTitle = 'PDxNotPsych60Mins'
 let testCaseDescription = 'IPPStrat1Pass'
 let testCaseSeries = 'SBTestSeries'
-let TCJsonRace = TestCaseJson.TCJsonRaceOMBRaceDetailed
 
 describe('QiCore Test Cases : SDE Sub tab validations', () => {
 
     beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, qiCoreMeasureCQL)
+        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patients Age 20 or Older at Start of Measurement Period')
+        TestCasesPage.CreateTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -33,10 +32,6 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
-        MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patients Age 20 or Older at Start of Measurement Period')
-        TestCasesPage.CreateTestCaseAPI(firstTestCaseTitle, testCaseSeries, testCaseDescription)
-        OktaLogin.Login()
     })
 
     afterEach('Log out and Clean up', () => {
@@ -47,11 +42,8 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
 
     it('SDE sub tab is visible on Edit Test case Highlighting page when SDE is included', () => {
 
-        MeasuresPage.actionCenter('edit')
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
-        cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Add Supplemental Data Elements
@@ -86,19 +78,14 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //add json to test case
-        cy.wait(1500) // need this for editor to load data
-        cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
-
-        //save the Test Case
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
-        })
+        cy.wait(3000) // need this for editor to load data
+        TestCasesPage.ImportTestCaseFile('TCJsonRaceOMBRaceDetailed.json')
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         //Execute test case
+        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 16500)
         cy.get(TestCasesPage.runTestButton).click()
-        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 9500)
+        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 16500)
 
         //Navigate to Highlighting tab
         cy.get(TestCasesPage.tcHighlightingTab).click()
@@ -118,8 +105,6 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
     })
 
     it('SDE sub tab is not visible on Edit Test case Highlighting page when SDE is not included', () => {
-
-        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -155,14 +140,8 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //add json to test case
-        cy.wait(1500) // need this for editor to load data
-        cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
-
-        //save the Test Case
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
-        })
+        cy.wait(3000) // need this for editor to load data
+        TestCasesPage.ImportTestCaseFile('TCJsonRaceOMBRaceDetailed.json')
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         //Execute test case
@@ -176,8 +155,6 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
     })
 
     it('Test Case Coverage Percentage updated based on the SDE selection', () => {
-
-        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -204,19 +181,14 @@ describe('QiCore Test Cases : SDE Sub tab validations', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //add json to test case
-        cy.wait(1500) // need this for editor to load data
-        cy.get(TestCasesPage.aceEditor).type(TCJsonRace, { parseSpecialCharSequences: false })
-
-        //Save edited / updated to test case
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).each(msg => {
-            expect(msg.text()).to.be.oneOf(['Test case updated successfully!', 'Test case updated successfully with errors in JSON', 'Test case updated successfully with warnings in JSON'])
-        })
+        cy.wait(3000) // need this for editor to load data
+        TestCasesPage.ImportTestCaseFile('TCJsonRaceOMBRaceDetailed.json')
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         //Execute test case
+        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 16500)
         cy.get(TestCasesPage.runTestButton).click()
-        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 9500)
+        Utilities.waitForElementEnabled(TestCasesPage.runTestButton, 16500)
 
         //Navigate to test case page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
