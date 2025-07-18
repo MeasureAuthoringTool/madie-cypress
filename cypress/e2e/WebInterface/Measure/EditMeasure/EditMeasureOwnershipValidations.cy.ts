@@ -153,7 +153,7 @@ describe('Read only for measure, measure group, and test cases that user does no
         //<textarea rows="1" readonly="" id="test-case-title" placeholder="Test Case Title" name="title" style="color: rgb(51, 51, 51); font-family: Rubik; font-size: 14px; font-style: normal; font-weight: 400; line-height: 24px; border: none; resize: none; padding: 0px; outline: none; box-shadow: none; height: 24px; overflow: hidden;">test case title</textarea>
         cy.get('[id="test-case-title"]').should('have.attr', 'readonly', 'readonly')
         cy.get(TestCasesPage.testCaseDescriptionTextBox).should('have.attr', 'readonly', 'readonly')
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('have.attr', 'disabled', 'disabled')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('have.attr', 'readonly', 'readonly')
     })
 
     it('Fields on Measure Group page are not editable', () => {
