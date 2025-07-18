@@ -48,159 +48,7 @@ let CQLForCVMeasure = 'library SimpleFhirMeasure version \'0.0.001\'\n' +
     '  true'
 
 let measureCQLCardTests = MeasureCQL.zipfileExportQICore
-
-let dupResourceIDTCJson = '{\n' +
-    '  "resourceType": "Bundle",\n' +
-    '  "id": "ip-pass-InpatientEncounter",\n' +
-    '  "meta": {\n' +
-    '    "versionId": "3",\n' +
-    '    "lastUpdated": "2022-09-14T12:38:39.889+00:00"\n' +
-    '  },\n' +
-    '  "type": "collection",\n' +
-    '  "entry": [\n' +
-    '    {\n' +
-    '      "fullUrl": "https://madie.cms.gov/Patient/27b358b4-d520-422b-8ed7-a5b14f3d2a46",\n' +
-    '      "resource": {\n' +
-    '        "id": "27b358b4-d520-422b-8ed7-a5b14f3d2a46",\n' +
-    '        "resourceType": "Patient",\n' +
-    '        "meta": {\n' +
-    '          "profile": [\n' +
-    '            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"\n' +
-    '          ]\n' +
-    '        },\n' +
-    '        "identifier": [\n' +
-    '          {\n' +
-    '            "type": {\n' +
-    '              "coding": [\n' +
-    '                {\n' +
-    '                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",\n' +
-    '                  "code": "MR"\n' +
-    '                }\n' +
-    '              ]\n' +
-    '            },\n' +
-    '            "system": "http://myGoodHealthcare.com/MRN",\n' +
-    '            "value": "8065dc8d26797064d8766be71f2bf020"\n' +
-    '          }\n' +
-    '        ],\n' +
-    '        "active": true,\n' +
-    '        "name": [\n' +
-    '          {\n' +
-    '            "use": "usual",\n' +
-    '            "family": "IPPass",\n' +
-    '            "given": [\n' +
-    '              "Inpatient Encounter"\n' +
-    '            ]\n' +
-    '          }\n' +
-    '        ],\n' +
-    '        "gender": "male",\n' +
-    '        "birthDate": "1954-02-10"\n' +
-    '      }\n' +
-    '    },\n' +
-    '    {\n' +
-    '      "fullUrl": "https://madie.cms.gov/Encounter/4989ju789fn93bvy562loe87c",\n' +
-    '      "resource": {\n' +
-    '        "id": "4989ju789fn93bvy562loe87c",\n' +
-    '        "meta": {\n' +
-    '          "profile": [\n' +
-    '            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"\n' +
-    '          ]\n' +
-    '        },\n' +
-    '        "resourceType": "Encounter",\n' +
-    '        "status": "finished",\n' +
-    '        "class": {\n' +
-    '          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",\n' +
-    '          "code": "IMP",\n' +
-    '          "display": "inpatient encounter"\n' +
-    '        },\n' +
-    '        "type": [\n' +
-    '          {\n' +
-    '            "coding": [\n' +
-    '              {\n' +
-    '                "system": "http://snomed.info/sct",\n' +
-    '                "code": "183452005",\n' +
-    '                "display": "Emergency hospital admission (procedure)"\n' +
-    '              }\n' +
-    '            ]\n' +
-    '          }\n' +
-    '        ],\n' +
-    '        "subject": {\n' +
-    '          "reference": "Patient/27b358b4-d520-422b-8ed7-a5b14f3d2a46"\n' +
-    '        },\n' +
-    '        "priority": {\n' +
-    '          "coding": [\n' +
-    '            {\n' +
-    '              "system": "http://snomed.info/sct",\n' +
-    '              "code": "103391001",\n' +
-    '              "display": "Urgency"\n' +
-    '            }\n' +
-    '          ]\n' +
-    '        },\n' +
-    '        "period": {\n' +
-    '          "start": "2012-07-15T08:00:00+00:00",\n' +
-    '          "end": "2012-07-16T09:00:00+00:00"\n' +
-    '        },\n' +
-    '        "length": {\n' +
-    '          "value": 1,\n' +
-    '          "unit": "days"\n' +
-    '        },\n' +
-    '        "location": [\n' +
-    '          {\n' +
-    '            "location": {\n' +
-    '              "reference": "Location/4989ju789fn93bvy562loe87c",\n' +
-    '              "display": "Holy Family Hospital Inpatient"\n' +
-    '            },\n' +
-    '            "period": {\n' +
-    '              "start": "2012-07-15T08:00:00+00:00",\n' +
-    '              "end": "2012-07-16T09:00:00+00:00"\n' +
-    '            }\n' +
-    '          }\n' +
-    '        ]\n' +
-    '      }\n' +
-    '    },\n' +
-    '    {\n' +
-    '      "fullUrl": "https://madie.cms.gov/Location/489juh6757h87j03jhy73mv7",\n' +
-    '      "resource": {\n' +
-    '        "id": "489juh6757h87j03jhy73mv7",\n' +
-    '        "resourceType": "Location",\n' +
-    '        "meta": {\n' +
-    '          "profile": [\n' +
-    '            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-location"\n' +
-    '          ]\n' +
-    '        },\n' +
-    '        "identifier": [\n' +
-    '          {\n' +
-    '            "use": "official",\n' +
-    '            "system": "http://holycrosshospital.com/location",\n' +
-    '            "value": "489juh6757h87j03jhy73mv7"\n' +
-    '          }\n' +
-    '        ],\n' +
-    '        "status": "active",\n' +
-    '        "name": "South Wing, second floor"\n' +
-    '      }\n' +
-    '    },\n' +
-    '    {\n' +
-    '      "fullUrl": "https://madie.cms.gov/Location/4989ju789fn93bvy562loe87c",\n' +
-    '      "resource": {\n' +
-    '        "id": "4989ju789fn93bvy562loe87c",\n' +
-    '        "resourceType": "Location",\n' +
-    '        "meta": {\n' +
-    '          "profile": [\n' +
-    '            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-location"\n' +
-    '          ]\n' +
-    '        },\n' +
-    '        "identifier": [\n' +
-    '          {\n' +
-    '            "use": "official",\n' +
-    '            "system": "http://holycrosshospital.com/location",\n' +
-    '            "value": "4989ju789fn93bvy562loe87c"\n' +
-    '          }\n' +
-    '        ],\n' +
-    '        "status": "active",\n' +
-    '        "name": "North Wing, second floor"\n' +
-    '      }\n' +
-    '    }\n' +
-    '  ]\n' +
-    '}'
+let dupResourceIDTCJson = TestCaseJson.TCJsonTerminologyTsts
 
 describe('Warning modal on Test Case JSON Editor', () => {
 
@@ -299,7 +147,8 @@ describe('JSON Resource ID tests', () => {
         cy.get(EditMeasurePage.cqlEditorTab).click()
         Utilities.waitForElementVisible(EditMeasurePage.cqlEditorTextBox, 27700)
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
+        cy.get(EditMeasurePage.cqlEditorTextBox).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 27700)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
@@ -308,7 +157,7 @@ describe('JSON Resource ID tests', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Initial Population', '', 'Initial Population', 'boolean')
         OktaLogin.Login()
     })
@@ -377,6 +226,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('{upArrow}{enter}')
 
         TestCasesPage.clickCreateTestCaseButton()
 
@@ -413,88 +263,88 @@ describe('JSON Resource ID tests', () => {
     it('JSON missing Resource IDs; the fullUrl value will automatically update with an ending ' +
         'slash and should result with an update but with errors', () => {
 
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
+            //Click on Edit Measure
+            MeasuresPage.actionCenter('edit')
 
-        //Add second Measure Group with return type as Boolean
-        cy.get(EditMeasurePage.measureGroupsTab).click()
+            //Add second Measure Group with return type as Boolean
+            cy.get(EditMeasurePage.measureGroupsTab).click()
 
-        Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
-        cy.get(MeasureGroupPage.popBasis).should('exist')
-        cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).click()
-        cy.get(MeasureGroupPage.popBasis).type('boolean')
-        cy.get(MeasureGroupPage.popBasisOption).click()
+            Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
+            cy.get(MeasureGroupPage.popBasis).should('exist')
+            cy.get(MeasureGroupPage.popBasis).should('be.visible')
+            cy.get(MeasureGroupPage.popBasis).click()
+            cy.get(MeasureGroupPage.popBasis).type('boolean')
+            cy.get(MeasureGroupPage.popBasisOption).click()
 
-        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
+            Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'Initial Population')
 
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
+            cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
+            cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
+            cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
+            cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
-        cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
+            cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
+            cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
+            cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
+            cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
 
 
-        //validation successful save message
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
-        cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
+            //validation successful save message
+            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
+            cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
 
-        //Navigate to Test Cases page and add Test Case details
-        cy.get(EditMeasurePage.testCasesTab).click()
-        cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
-        cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
-        cy.get(TestCasesPage.newTestCaseButton).click()
+            //Navigate to Test Cases page and add Test Case details
+            cy.get(EditMeasurePage.testCasesTab).click()
+            cy.get(TestCasesPage.newTestCaseButton).should('be.visible')
+            cy.get(TestCasesPage.newTestCaseButton).should('be.enabled')
+            cy.get(TestCasesPage.newTestCaseButton).click()
 
-        cy.get(TestCasesPage.createTestCaseDialog).should('exist')
-        cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
+            cy.get(TestCasesPage.createTestCaseDialog).should('exist')
+            cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
-        cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
-        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
-        Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
-        cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
-        cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
-        cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
+            cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
+            Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
+            Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
+            cy.get(TestCasesPage.createTestCaseTitleInput).type(testCaseTitle.toString())
+            cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
+            cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.visible')
+            cy.get(TestCasesPage.createTestCaseDescriptionInput).should('be.enabled')
+            cy.get(TestCasesPage.createTestCaseDescriptionInput).focus()
+            cy.get(TestCasesPage.createTestCaseDescriptionInput).type(testCaseDescription)
+            cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
+            cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
+            cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
+            cy.get(TestCasesPage.createTestCaseGroupInput).type('{upArrow}{enter}')
+            TestCasesPage.clickCreateTestCaseButton()
 
-        TestCasesPage.clickCreateTestCaseButton()
+            //Verify created test case Title and Series exists on Test Cases Page
+            TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
 
-        //Verify created test case Title and Series exists on Test Cases Page
-        TestCasesPage.grabValidateTestCaseTitleAndSeries(testCaseTitle, testCaseSeries)
+            TestCasesPage.clickEditforCreatedTestCase()
 
-        TestCasesPage.clickEditforCreatedTestCase()
+            //Add json to the test case
+            Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
+            cy.get(TestCasesPage.aceEditor).should('exist')
+            cy.get(TestCasesPage.aceEditor).should('be.visible')
+            cy.wait(2000)
+            cy.get(TestCasesPage.aceEditor).type(missingResourceIDTCJsonButHasFullUrlExt, { parseSpecialCharSequences: false })
 
-        //Add json to the test case
-        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
-        cy.get(TestCasesPage.aceEditor).should('exist')
-        cy.get(TestCasesPage.aceEditor).should('be.visible')
-        cy.wait(2000)
-        cy.get(TestCasesPage.aceEditor).type(missingResourceIDTCJsonButHasFullUrlExt, { parseSpecialCharSequences: false })
+            cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
+            cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
+            cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
-        cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
-        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+            cy.get(TestCasesPage.errorToastMsg).should('exist')
+            cy.get(TestCasesPage.errorToastMsg).should('be.visible')
+            cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Test case updated successfully with ' +
+                'errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All ' +
+                'timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been ' +
+                'defaulted to \'000\'')
 
-        cy.get(TestCasesPage.errorToastMsg).should('exist')
-        cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Test case updated successfully with ' +
-            'errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All ' +
-            'timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been ' +
-            'defaulted to \'000\'')
-
-        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
-        cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: HAPI-1821: [element="id"] Invalid attribute value "": Attribute value must not be empty ("")')
-    })
+            cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
+            cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
+            cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
+            cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: HAPI-1821: [element="id"] Invalid attribute value "": Attribute value must not be empty ("")')
+        })
 
     it('JSON missing Resource IDs', () => {
 
@@ -549,7 +399,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
-
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('{upArrow}{enter}')
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
@@ -628,7 +478,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
-
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('{upArrow}{enter}')
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
@@ -642,8 +492,8 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.aceEditor).should('be.visible')
         Utilities.waitForElementVisible(TestCasesPage.aceEditor, 30700)
         cy.get(TestCasesPage.aceEditor).click()
-        cy.wait(2000)
-        cy.get(TestCasesPage.aceEditor).type(dupResourceIDTCJson)
+        Utilities.waitForElementVisible(TestCasesPage.aceEditor, 3500)
+        cy.get(TestCasesPage.aceEditor).wait(1500).type(dupResourceIDTCJson, { parseSpecialCharSequences: false })
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -651,8 +501,9 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(TestCasesPage.errorToastMsg).should('have.text', 'Test case updated successfully with errors in JSON')
+        cy.get('.toast').should('include.text', 'Test case updated successfully with errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'')
 
+        cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: All resources in bundle must have unique ID regardless of type. Multiple resources detected with ID [4989ju789fn93bvy562loe87c]')
@@ -686,7 +537,7 @@ describe('JSON Resource ID tests', () => {
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
-
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('{upArrow}{enter}')
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
@@ -813,7 +664,7 @@ describe('JSON Resource ID tests - Proportion Score Type', () => {
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
-
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('{upArrow}{enter}')
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
@@ -922,7 +773,7 @@ describe('JSON Resource ID tests -- CV', () => {
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseGroupInput).type(testCaseSeries)
-
+        cy.get(TestCasesPage.createTestCaseGroupInput).type('{upArrow}{enter}')
         TestCasesPage.clickCreateTestCaseButton()
 
         //Verify created test case Title and Series exists on Test Cases Page
