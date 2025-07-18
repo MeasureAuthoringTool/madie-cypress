@@ -9,10 +9,6 @@ import { QiCore4Cql } from "../../../../../Shared/FHIRMeasuresCQL"
 import { Header } from "../../../../../Shared/Header"
 
 const now = Date.now()
-const originalMeasure = {
-    CMSid: '645FHIR',
-    title: 'Bone Density Evaluation for Patients with Prostate Cancer and Receiving Androgen Deprivation TherapyFHIR'
-}
 const measureName = 'CopyTo' + now
 const cqlLibraryName = 'CopyToLib' + now
 const testCase: TestCase = {
@@ -28,6 +24,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         Using the static measure as our basis - assuming this will always be in MADiE
         Bone Density Evaluation for Patients with Prostate Cancer and Receiving Androgen Deprivation TherapyFHIR 
         CMS id: 645FHIR
+        We navigate straight to the measure in this test since the URL should always be the same (except for obvious env. differences)
     */
 
     const measureOptions: CreateMeasureOptions = {
@@ -55,16 +52,8 @@ describe('Copy test cases from existing measure into new measure', () => {
 
     it('Measures match population criteria - expected values will copy', () => {
 
-        // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45100)
-        cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
-        cy.wait('@searchDone')
-        cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
-
-        // need to select correct version of the measure with .eq(2)
-        cy.get('[data-testid="row-item"]').eq(2).contains('View').click()
+        // go to last 4.1.1 version of 645FHIR 
+        cy.visit('/measures/6500d9bfda013638e7b3dbcf/edit/details/')
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -128,16 +117,8 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('exist')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
 
-        cy.get(Header.mainMadiePageButton).click()
-
-        // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45100)
-        cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
-        cy.wait('@searchDone')
-        cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
-        cy.get('[data-testid="row-item"]').eq(2).contains('View').click()
+        // go to last 4.1.1 version of 645FHIR 
+        cy.visit('/measures/6500d9bfda013638e7b3dbcf/edit/details/')
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
