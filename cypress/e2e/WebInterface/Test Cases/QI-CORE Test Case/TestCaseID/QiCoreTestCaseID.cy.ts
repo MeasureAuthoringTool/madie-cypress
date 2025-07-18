@@ -114,7 +114,6 @@ describe('Test Case sorting by Test Case number', () => {
 
         TestCasesPage.clickEditforCreatedTestCase()
 
-    //    cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
         cy.wait('@callstacks', { timeout: 120000 })
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
