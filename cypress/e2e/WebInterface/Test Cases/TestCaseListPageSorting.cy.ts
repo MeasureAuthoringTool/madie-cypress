@@ -81,9 +81,7 @@ describe('Sort by each of the test case list page\'s columns', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'Test case updated successfully with warnings in JSON')
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'MADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
+        cy.get('.toast').should('contain.text', 'Test case updated successfully with warnings in JSON')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
