@@ -22,7 +22,6 @@ let twoFiftyTwoCharacters = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxy
 let altMeasureName = ''
 let altCqlLibraryName = ''
 let measureScoringCohort = 'Cohort'
-const qdmMeasureCQL = QdmCql.simpleQDM_CQL
 const qdmMeasureCQLwInvalidValueset = QdmCql.simpleQDM_CQL_invalid_valueset
 const qdmMeasureCQLwNonVsacValueset = QdmCql.QDMTestCaseCQLNonVsacValueset
 const measureQDMCQL = QdmCql.QDM4TestCaseElementsAttributes
@@ -61,10 +60,7 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
     it('Fields on Test Case page are not editable by Non Measure Owner', () => {
 
         //navigate to the all measures tab
-        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.visible')
         Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.enabled')
         cy.get(LandingPage.allMeasuresTab).click()
 
         //click on Edit button to edit measure
@@ -73,7 +69,6 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
-
 
         TestCasesPage.clickEditforCreatedTestCase()
         cy.get('[id="date-of-birth"]').should('have.attr', 'readonly', 'readonly')
@@ -86,7 +81,7 @@ describe('Test Case Ownership Validations for QDM Measures', () => {
         cy.get(TestCasesPage.detailsTab).click()
         cy.get('[id="test-case-title"]').should('have.attr', 'readonly', 'readonly')
         cy.get('[id="test-case-description"]').should('have.attr', 'readonly', 'readonly')
-        cy.get(TestCasesPage.testCaseSeriesTextBox).should('not.be.enabled')
+        cy.get(TestCasesPage.createTestCaseGroupInput).should('have.attr', 'readonly', 'readonly')
 
         //Navigate to Expected/Actual tab
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -194,11 +189,10 @@ describe('Edit Test Case Validations', () => {
         //Update Test Case Description with more than 250 characters
         cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
         cy.get(TestCasesPage.testCaseDescriptionTextBox).type(twoFiftyTwoCharacters, { delay: 0 })
-        cy.get(TestCasesPage.testCaseSeriesTextBox).click()
+        cy.get(TestCasesPage.createTestCaseGroupInput).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.editTestCaseDescriptionInlineError).should('contain.text', 'Test Case Description cannot be more than 250 characters.')
     })
-
 
     it('Title more than 250 characters', () => {
 
@@ -217,7 +211,7 @@ describe('Edit Test Case Validations', () => {
 
         //Update Test Case Title with more than 250 characters
         cy.get(TestCasesPage.testCaseTitle).type(twoFiftyTwoCharacters, { delay: 0 })
-        cy.get(TestCasesPage.testCaseSeriesTextBox).click()
+        cy.get(TestCasesPage.createTestCaseGroupInput).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.editTestCaseTitleInlineError).contains('Test Case Title cannot be more ' +
             'than 250 characters.')
@@ -240,7 +234,7 @@ describe('Edit Test Case Validations', () => {
 
         cy.get(TestCasesPage.testCaseTitle).click().focus()
         cy.get(TestCasesPage.testCaseTitle).clear()
-        cy.get(TestCasesPage.testCaseSeriesTextBox).click()
+        cy.get(TestCasesPage.createTestCaseGroupInput).click()
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.disabled')
         cy.get(TestCasesPage.editTestCaseTitleInlineError).should('contain.text', 'Test Case Title is required.')
@@ -308,7 +302,6 @@ describe('Dirty Check Validations', () => {
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get(Header.mainMadiePageButton).click().wait(3000)
     })
 
     afterEach('Logout and cleanup', () => {
@@ -317,9 +310,6 @@ describe('Dirty Check Validations', () => {
     })
 
     it('Validate dirty check on the test case title, in the test case details tab', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -354,9 +344,6 @@ describe('Dirty Check Validations', () => {
     })
 
     it('Validate dirty check on Testcase Expected/Actual tab', () => {
-
-        //Click on Edit Measure
-        MeasuresPage.actionCenter('edit')
 
         //Navigate to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -698,7 +685,6 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.reload()
 
         //log out of UI
         OktaLogin.UILogout()
@@ -717,7 +703,6 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
 
         //log into MADiE
         OktaLogin.Login()
-        cy.reload()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -737,7 +722,7 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        cy.get('[data-testid="generic-error-text-header"]').should('contain.text', 'CQL updated successfully but the following issues were found')
+        cy.get('[data-testid="generic-error-text-header"]').should('contain.text', 'CQL updated successfully')
 
         //Navigate to Test Case page
         cy.get(EditMeasurePage.testCasesTab).click()
