@@ -643,11 +643,11 @@ export class TestCasesPage {
         cy.get(TestCasesPage.testCaseDescriptionTextBox).clear()
         cy.get(TestCasesPage.testCaseDescriptionTextBox).type(updatedTestCaseDescription)
         //Update Test Case Series
+        Utilities.waitForElementVisible(TestCasesPage.createTestCaseGroupInput, 3500)
         cy.get(TestCasesPage.createTestCaseGroupInput).clear()
-        cy.get(TestCasesPage.createTestCaseGroupInput).type(updatedTestCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).wait(1000).type(updatedTestCaseSeries).type('{enter}')
 
-        //Save edited / updated to test case
-        cy.get(this.editTestCaseSaveButton).click()
+        //Wait for the save button to become unavailable
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 6500)
 
         cy.get(this.successMsg).each(msg => {
