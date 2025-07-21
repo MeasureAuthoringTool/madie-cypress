@@ -1,7 +1,7 @@
 import { CreateMeasurePage } from "../../../../../Shared/CreateMeasurePage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasureGroupPage, MeasureGroups, MeasureScoring, MeasureType, PopulationBasis } from "../../../../../Shared/MeasureGroupPage"
+import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { TestCase, TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
@@ -9,6 +9,7 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { Header } from "../../../../../Shared/Header"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { Toasts } from "../../../../../Shared/Toasts"
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
 const timestamp = Date.now()
@@ -69,11 +70,11 @@ describe('Test Case sorting by Test Case number', () => {
 
         TestCasesPage.createTestCase(testCase2.title, testCase2.description, testCase2.group, testCase2.json)
 
-        const descList = 'Case #StatusGroupTitleDescriptionLast Saved2N/A' + testCase2.group + testCase2.title + testCase2.description
+        const descList = 'Case #StatusGroupTitleDescriptionLast SavedAction2N/A' + testCase2.group + testCase2.title + testCase2.description
         const descList2 = '(UTC)Edit1N/A'
         const descList3 = testCase1.group + testCase1.title + testCase1.description
         const descList4 = '(UTC)Edit'
-        const ascList = 'Case #StatusGroupTitleDescriptionLast Saved1N/A' + testCase1.group + testCase1.title + testCase1.description
+        const ascList = 'Case #StatusGroupTitleDescriptionLast SavedAction1N/A' + testCase1.group + testCase1.title + testCase1.description
         const ascList2 = '(UTC)Edit2N/A'
         const ascList3 = testCase2.group + testCase2.title + testCase2.description
         const ascList4 = '(UTC)Edit'
@@ -111,10 +112,8 @@ describe('Test Case sorting by Test Case number', () => {
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', ascList)
 
-
         TestCasesPage.clickEditforCreatedTestCase()
 
-        cy.intercept('put', '/api/fhir/cql/callstacks').as('callstacks')
         cy.wait('@callstacks', { timeout: 120000 })
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
@@ -134,7 +133,6 @@ describe('Test Case sorting by Test Case number', () => {
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
         cy.get(TestCasesPage.testCaseListTable).should('contain.text', descList)
-
     })
 })
 
@@ -191,8 +189,6 @@ describe('Import Test cases onto an existing Qi Core measure via file and ensure
         //verify that the export occurred
         cy.readFile('cypress/downloads/eCQMTitle4QICore-v0.0.000-FHIR4-TestCases.zip').should('exist')
         cy.log('Successfully verified zip file export')
-
-        cy.reload()
 
         Utilities.waitForElementVisible(Header.mainMadiePageButton, 45500)
         cy.get(Header.mainMadiePageButton).click()
@@ -288,7 +284,7 @@ describe('Qi Core Measure - Test case number on a Draft Measure', () => {
         cy.get(MeasuresPage.versionMeasuresSelectionButton).eq(0).type('{enter}')
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumber)
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New version of measure is Successfully created')
+        cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -297,10 +293,8 @@ describe('Qi Core Measure - Test case number on a Draft Measure', () => {
 
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(measureName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg).should('contain.text', 'New draft created successfully.')
+        cy.get(Toasts.generalToast).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
-
-        cy.reload()
 
         cy.get('[data-testid="row-item"]').eq(0).contains('Edit').click()
         //Navigate to Test Cases page and add Test Case details
@@ -325,6 +319,7 @@ describe('Qi Core Measure - Test case number on a Draft Measure', () => {
         cy.get(TestCasesPage.createTestCaseGroupInput).should('exist')
         cy.get(TestCasesPage.createTestCaseGroupInput).should('be.visible')
         cy.get(TestCasesPage.createTestCaseGroupInput).type(testCase2.group)
+        cy.contains(testCase2.group).click()
 
         cy.get(TestCasesPage.createTestCaseSaveButton).click()
 
@@ -332,7 +327,6 @@ describe('Qi Core Measure - Test case number on a Draft Measure', () => {
         cy.get(EditMeasurePage.testCasesTab).click()
         //Validate Test case ID for Draft Measure
         TestCasesPage.grabValidateTestCaseNumber(2)
-
     })
 })
 
