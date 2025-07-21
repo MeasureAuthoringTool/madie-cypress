@@ -56,15 +56,15 @@ export class CQLLibrariesPage {
 
             cy.get('[data-testid=edit-cql-library-button-' + fileContents + ']').should('exist')
             cy.get('[data-testid=edit-cql-library-button-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=edit-cql-library-button-' + fileContents + ']', 3500)
-            cy.get('[data-testid=edit-cql-library-button-' + fileContents + ']').click()
+            Utilities.waitForElementEnabled('[data-testid=edit-cql-library-button-' + fileContents + ']', 4500)
+            cy.get('[data-testid=edit-cql-library-button-' + fileContents + ']').wait(2000).click()
 
             cy.wait('@cqlLibrary').then(({ response }) => {
                 expect(response.statusCode).to.eq(200)
             })
 
         })
-       cy.get('[data-testid="CQL Library Details"]').click()
+        cy.get('[data-testid="CQL Library Details"]').click()
     }
 
     public static clickViewforCreatedLibrary(secondLibrary?: boolean, altUserAction?: boolean): void {
