@@ -19,8 +19,8 @@ const now = require('dayjs')
 const mpStartDate = now().subtract('2', 'year').format('YYYY-MM-DD')
 const mpEndDate = now().format('YYYY-MM-DD')
 
-const expectedQiCoreVersion = '3.26.0'
-const expectedQdmVersion = '3.26.0'
+const expectedQiCoreVersion = '3.27.0'
+const expectedQdmVersion = '3.27.0'
 const measureData: CreateMeasureOptions = {}
 
 describe('Measure Service: Translator Version for QI-Core Measure', () => {
