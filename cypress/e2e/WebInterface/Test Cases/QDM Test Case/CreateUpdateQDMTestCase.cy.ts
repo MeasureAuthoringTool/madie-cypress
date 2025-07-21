@@ -209,7 +209,7 @@ describe('Create and Update QDM Test Case', () => {
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.testCaseTitle).clear().type(updatedTestCaseTitle)
         cy.get(TestCasesPage.testCaseDescriptionTextBox).clear().type(updatedTestCaseDescription)
-        cy.get(TestCasesPage.testCaseSeriesTextBox).clear().type(updatedTestCaseSeries).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).clear().type(updatedTestCaseSeries).type('{enter}')
 
         //save the Test Case
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
@@ -461,7 +461,7 @@ describe('Create and update QDM Test case validations', () => {
 
         //Navigate to Details tab and Edit
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.testCaseSeriesTextBox).clear().type(testCaseSeriesWithSpecialChar).type('{enter}')
+        cy.get(TestCasesPage.createTestCaseGroupInput).clear().type(testCaseSeriesWithSpecialChar).type('{enter}')
 
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
