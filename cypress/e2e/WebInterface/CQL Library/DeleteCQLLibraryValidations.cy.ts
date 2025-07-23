@@ -175,15 +175,22 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
 
         CQLLibraryName = 'TestCqlLibrary' + Date.now()
 
-        cy.setAccessTokenCookie()
-
         //Create CQL Library with Regular User
         CQLLibraryPage.createCQLLibraryAPIOptionalCQL(CQLLibraryName, CQLLibraryPublisher, measureCQLAlt)
+    })
+    afterEach('Clear cache', () => {
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
     })
 
     it('Delete CQL Library - Draft Library - user does not own nor has Library been shared with user', () => {
 
         //Login as ALT User
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.allLibrariesBtn).click()
@@ -218,6 +225,10 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
                 })
             })
         })
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookieALT()
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
@@ -236,8 +247,10 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
 
@@ -249,14 +262,18 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
 
     it('Delete CQL Library - Versioned Library - user is the owner of the Library', () => {
         //Version Library
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+
         cy.setAccessTokenCookie()
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Login as Regular User
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
 
@@ -291,6 +308,10 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
             })
         })
         //Login as ALT User
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
 
@@ -301,14 +322,19 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
 
     it('Delete CQL Library - Versioned Library - user has had the Library shared with them', () => {
         //Version Library
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
         cy.setAccessTokenCookie()
         CQLLibraryPage.versionLibraryAPI(versionNumber)
 
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
         //Login as ALT User
-        cy.clearCookies()
+        cy.clearAllCookies()
         cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
 
