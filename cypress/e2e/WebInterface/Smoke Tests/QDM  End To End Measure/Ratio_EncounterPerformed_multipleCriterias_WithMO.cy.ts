@@ -7,7 +7,6 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { QDMElements } from "../../../../Shared/QDMElements"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage";
 
 const now = Date.now()
 const measureName = 'RatioEncounterPerformedMultipleCriteriasWithMO' + now
