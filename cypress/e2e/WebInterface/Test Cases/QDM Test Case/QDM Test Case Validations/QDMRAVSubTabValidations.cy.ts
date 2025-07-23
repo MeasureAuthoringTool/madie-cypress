@@ -17,8 +17,7 @@ const testCase: TestCase = {
     group: 'SBTestSeries'
 }
 
-//Skipping until feature flag 'QDMIncludeRAVValues' is removed
-describe.skip('QDM Test Cases : RAV Sub tab validations', () => {
+describe('QDM Test Cases : RAV Sub tab validations', () => {
 
     beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
 

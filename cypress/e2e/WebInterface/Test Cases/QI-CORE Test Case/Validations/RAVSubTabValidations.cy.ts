@@ -20,8 +20,7 @@ const testCase: TestCase = {
 const qiCoreMeasureCQL = MeasureCQL.QiCoreCQLSDE.replace('QiCoreCQLLibrary1739988331418', measureName)
 const testCaseLizzyHealth = TestCaseJson.TestCaseJson_Valid_not_Lizzy_Health
 
-//Skipping until feature flag 'QiCoreIncludeRAVValues' is removed
-describe.skip('QiCore Test Cases : RAV Sub tab validations', () => {
+describe('QiCore Test Cases : RAV Sub tab validations', () => {
 
     beforeEach('Create Measure, Measure Group, Test case and Log in', () => {
 
