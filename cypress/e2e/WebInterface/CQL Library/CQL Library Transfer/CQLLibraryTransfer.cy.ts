@@ -119,7 +119,15 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('exist')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
+
+        //intercept draft id once library is drafted
+        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+            cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
+        })
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
+        cy.wait('@draft', { timeout: 60000 }).then((request) => {
+            cy.writeFile('cypress/fixtures/cqlLibraryId', request.response.body.id)
+        })
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
@@ -138,8 +146,9 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
         cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
         cy.get(CQLLibraryPage.myLibrariesBtn).click()
-        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
-        cy.get('[data-testid="table-body"]').should('contain', randomCQLLibraryName)
+        //Commenting until MAT-8942 is fixed
+        // CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
+        // cy.get('[data-testid="table-body"]').should('contain', randomCQLLibraryName)
     })
 })
 

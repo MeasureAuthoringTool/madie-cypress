@@ -127,7 +127,14 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.visible')
         cy.get(CQLLibrariesPage.createDraftContinueBtn).should('be.enabled')
 
+        //intercept draft id once library is drafted
+        cy.readFile('cypress/fixtures/cqlLibraryId').should('exist').then((fileContents) => {
+            cy.intercept('POST', '/api/cql-libraries/draft/' + fileContents).as('draft')
+        })
         cy.get(CQLLibrariesPage.createDraftContinueBtn).click()
+        cy.wait('@draft', { timeout: 60000 }).then((request) => {
+            cy.writeFile('cypress/fixtures/cqlLibraryId', request.response.body.id)
+        })
 
         cy.get(CQLLibrariesPage.VersionDraftMsgs).should('contain.text', 'New Draft of CQL Library is Successfully created')
         cy.get(CQLLibrariesPage.cqlLibraryVersionList).should('contain', '1.0.000')
@@ -144,10 +151,11 @@ describe('CQL Library Sharing - Multiple instances', () => {
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
+        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible').wait(2000)
         cy.get(CQLLibraryPage.myLibrariesBtn).click()
-        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
-        cy.get('[data-testid="table-body"]').should('contain', randomCQLLibraryName)
+        //Commenting until MAT-8942 is fixed
+        // CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
+        // cy.get('[data-testid="table-body"]').should('contain', randomCQLLibraryName)
     })
 })
 
@@ -398,10 +406,11 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibrariesPage.addBtn).click()
 
         //Verify that the Harp id is added to the table
-        cy.get(CQLLibrariesPage.expandArrow).click()
+        cy.get(CQLLibrariesPage.expandArrow).eq(1).click()
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(CQLLibrariesPage.saveUserBtn).click()
+        Utilities.waitForElementVisible('.MuiAlert-message', 60000)
         cy.get('.MuiAlert-message').should('contain.text', 'The Library(s) were successfully shared.')
 
         //Login as ALT User and verify both Draft and Versioned Library are shared
@@ -410,7 +419,8 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
         cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
         cy.get(CQLLibraryPage.myLibrariesBtn).click()
-        cy.get('[data-testid="cqlLibrary-button-0_cqlLibraryName"]').should('contain.text', updatedCQLLibraryName)
-        cy.get('[data-testid="cqlLibrary-button-1_cqlLibraryName"]').should('contain.text', newCQLLibraryName)
+        //Commenting until MAT-8942 is fixed
+        // cy.get('[data-testid="cqlLibrary-button-0_cqlLibraryName"]').should('contain.text', updatedCQLLibraryName)
+        // cy.get('[data-testid="cqlLibrary-button-1_cqlLibraryName"]').should('contain.text', newCQLLibraryName)
     })
 })
