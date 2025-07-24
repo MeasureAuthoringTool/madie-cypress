@@ -80,10 +80,7 @@ describe('Edit Measure Validations', () => {
         MeasuresPage.actionCenter('edit')
 
         //Add invalid Endorser Number
-        cy.get(EditMeasurePage.endorsingOrganizationTextBox).click()
-        cy.get(EditMeasurePage.endorsingOrganizationTextBox).type('CMS', { delay: 50 })
-        cy.get('#endorser-listbox').contains('CMS Consensus Based Entity').click()
-        cy.get(EditMeasurePage.endorsementNumber).type('23!@$')
+        cy.get(EditMeasurePage.endorsementNumber).clear().type('23!@$')
         cy.get(EditMeasurePage.measurementInformationSaveButton).click()
 
         cy.get(EditMeasurePage.errorMessage).should('contain.text', 'Endorser Number must be alpha numeric')

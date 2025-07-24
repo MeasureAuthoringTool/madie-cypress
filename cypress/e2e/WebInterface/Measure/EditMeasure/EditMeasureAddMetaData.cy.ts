@@ -54,8 +54,6 @@ describe('Edit Measure: Add Meta Data', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
-        //Verify that the Endorsement Number field is disabled before adding Endorsement Organization
-        cy.get('[data-testid="endorsement-number-text-field"]').should('have.attr', 'readonly', 'readonly')
         //Save Endorsement Organization
         cy.get(EditMeasurePage.endorsingOrganizationTextBox).click()
         cy.get(EditMeasurePage.endorsingOrganizationOption).click()
@@ -157,7 +155,7 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //Endorsing Organization and number on Name, Version & ID page
         cy.get(EditMeasurePage.endorsingOrganizationTextBox).should('have.value', 'CMS Consensus Based Entity')
-        cy.get('[data-testid="endorsement-number-text-field"]').should('have.value', '345678')
+        cy.get('[data-testid="endorsement-number-input"]').should('have.value', '345678')
         cy.log('Endorsing Organization and number added successfully')
 
         //steward
