@@ -1662,29 +1662,18 @@ describe('Verify highlighting occurs on a newly versioned measure', () => {
 
 describe('Verify highlighting occurs on an old versioned measure', () => {
 
-    const originalMeasure = {
-        CMSid: 'CMS646FHIR',
-        title: 'Intravesical Bacillus-Calmette-Guerin for Non-Muscle Invasive Bladder CancerFHIR'
-    }
+    /*
+    'Intravesical Bacillus-Calmette-Guerin for Non-Muscle Invasive Bladder CancerFHIR' mode QiCore 4.1.1 v.1.4.000
+    CMS646FHIR 
+    We navigate straight to the measure in this test since the URL should always be the same (except for obvious env. differences)
+    */
 
     beforeEach('Create measure and login', () => {
 
         OktaLogin.Login()
 
-        // switch to all measure tab, search for original measure, view
-        //searches?currentUser=true&limit=10&page=0&sort=&direction= -- new url for searching
-        //searches?currentUser=false&limit=10&page=0 -- old url for searching
-        cy.intercept('PUT', '/api/measures/searches?currentUser=true&limit=10&page=0&sort=&direction=').as('searchDone')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 50500)
-        cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.get(/*MeasuresPage.searchInputBox*/ MeasuresPage.filterSearchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
-        cy.wait('@searchDone')
-        //changed from nth-child(2) -- old way to find searched for measure
-        cy.get(MeasuresPage.measureListTabelBody/*'[data-testid="row-item"] > :nth-child(2)'*/).should('contain', originalMeasure.title)
-
-        // need to select correct version (1.4.000P) of the measure with .eq(2)
-        cy.get('[data-testid="row-item"]').eq(2).contains('View').click()
-    })
+        cy.visit('/measures/6500d7b2da013638e7b3dba0/edit/details/')
+     })
 
     afterEach('Logout and Clean up Measures', () => {
 
