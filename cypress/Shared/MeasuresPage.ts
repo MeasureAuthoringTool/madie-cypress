@@ -124,7 +124,7 @@ export class MeasuresPage {
         }
         cy.reload()
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 175000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
@@ -160,15 +160,15 @@ export class MeasuresPage {
                 cy.get('[data-testid="export-action-btn"]').click()
 
                 if (exportForPublish) {
-                    Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 150000)
+                    Utilities.waitForElementVisible(MeasuresPage.exportPublishingOption, 90000)
                     cy.get(MeasuresPage.exportPublishingOption).should('contain.text', 'Export for Publishing').click()
                 } else {
-                    Utilities.waitForElementVisible(MeasuresPage.exportNonPublishingOption, 150000)
+                    Utilities.waitForElementVisible(MeasuresPage.exportNonPublishingOption, 90000)
                     cy.get(MeasuresPage.exportNonPublishingOption).should('contain.text', 'Export').click()
                 }
 
                 cy.get(MeasuresPage.exportingDialog).should('exist').should('be.visible')
-                Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 225000)
+                Utilities.waitForElementVisible(MeasuresPage.exportFinishedCheck, 90000)
                 cy.get(TestCasesPage.successMsg).should('contain.text', 'Measure exported successfully')
                 cy.get(TestCasesPage.QDMTcDiscardChangesButton).click()
 
@@ -207,7 +207,7 @@ export class MeasuresPage {
 
                 //there is a prerequisite that you have a measure created and measure ID stored for 'measureId' and 'measureId2'
                 cy.readFile('cypress/fixtures/measureId2').should('exist').then((fileContents) => {
-                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 190000)
+                    Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
                     cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
                     cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
                 })
