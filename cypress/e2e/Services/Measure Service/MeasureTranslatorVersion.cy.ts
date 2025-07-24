@@ -148,6 +148,11 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
         measureData.patientBasis = 'true'
         measureData.measureCql = qdmMeasureCQL
 
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllLocalStorage()
+        cy.clearAllSessionStorage()
+        cy.setAccessTokenCookie()
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -159,6 +164,10 @@ describe('Measure Service: Translator Version for QDM Measure', () => {
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
         OktaLogin.UILogout()
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Patient16To23')
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllLocalStorage()
+        cy.clearAllSessionStorage()
         cy.setAccessTokenCookie()
 
     })

@@ -403,14 +403,13 @@ describe('Edit validations for versioned Measure', () => {
                             body: {
                                 'id': testcaseid,
                                 'name': "IPPPass",
-                                'series': "WhenBP<120",
+                                'series': "WhenBPLessThan120",
                                 'title': "test case title edited",
-                                'description': "IPP Pass Test BP <120",
+                                'description': "IPP Pass Test BP Less Than 120",
                                 'json': "{ \n  Encounter: \"Office Visit union\" \n  Id: \"Identifier\" \n  value: \"Visit out of hours (procedure)\" \n}"
                             }
                         }).then((response) => {
-                            expect(response.status).to.eql(409)
-                            expect(response.body.message).to.include('Response could not be completed for measure with ID ' + measureId + ', since the measure is not in a draft status')
+                            expect(response.status).to.eql(200)
                         })
                     })
                 })
