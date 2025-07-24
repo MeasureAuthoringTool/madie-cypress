@@ -201,7 +201,7 @@ describe('Test Case import for versioned Measure', () => {
         TestCasesPage.CreateTestCaseAPI(TCTitle, TCDescription, TCSeries, TCJson)
     })
 
-    it("Unable to Import Test Cases for Versioned Measures", () => {
+    it("Able to Import Test Cases for Versioned Measures", () => {
 
         //Version Measure
         cy.getCookie('accessToken').then((accessToken) => {
@@ -239,8 +239,7 @@ describe('Test Case import for versioned Measure', () => {
                         }]
                     }).then((response) => {
                         expect(response.status).to.eql(200)
-                        expect(response.body[0].message).to.eql('Response could not be completed for measure with ID ' + id + ', since the measure is not in a draft status')
-                        expect(response.body[0].successful).to.eql(false)
+                        expect(response.body[0].successful).to.eql(true)
                     })
                 })
             })
