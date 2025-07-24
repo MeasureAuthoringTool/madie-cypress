@@ -30,6 +30,8 @@ describe('Delete CQL Library - Library List Page', () => {
 
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibSearchResultsTable, 11500)
 
+        cy.wait(8500)
+
         // also checks for counts on tabs - https://jira.cms.gov/browse/MAT-8360
         cy.get(CQLLibraryPage.myLibrariesBtn).invoke('text').then(displayText => {
 
