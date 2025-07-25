@@ -1,7 +1,7 @@
 import { Utilities } from "./Utilities"
 import { TestCasesPage } from "./TestCasesPage"
-import { EditMeasureActions } from "./EditMeasurePage"
 import { SupportedModels } from "./CreateMeasurePage"
+import { LandingPage } from "./LandingPage"
 
 export type MeasureActionOptions = {
     exportForPublish?: boolean,
@@ -123,6 +123,8 @@ export class MeasuresPage {
             filePath = 'cypress/fixtures/measureId' + measureNumber
         }
         cy.reload()
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 60000)
         cy.readFile(filePath).should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
