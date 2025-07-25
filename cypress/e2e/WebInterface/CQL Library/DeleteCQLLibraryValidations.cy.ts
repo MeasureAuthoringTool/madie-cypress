@@ -6,6 +6,7 @@ import { Header } from "../../../Shared/Header"
 import { MadieObject, PermissionActions, Utilities } from "../../../Shared/Utilities"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { CQLEditorPage } from "../../../Shared/CQLEditorPage"
+import { SupportedModels } from "../../../Shared/CreateMeasurePage"
 
 let CQLLibraryName = ''
 const CQLLibraryPublisher = 'SemanticBits'
@@ -24,7 +25,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.setAccessTokenCookie()
 
         //Create CQL Library with Regular User
-        CQLLibraryPage.createCQLLibraryAPIOptionalCQL(CQLLibraryName, CQLLibraryPublisher, measureCQLAlt)
+       CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: measureCQLAlt })
     })
 
     it('Delete CQL Library - Draft Library - user does not own nor has Library been shared with user', () => {
@@ -91,7 +92,6 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
-
     })
 
     it('Delete CQL Library - Versioned Library - user is the owner of the Library', () => {
@@ -165,7 +165,6 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
 
         Utilities.waitForElementDisabled(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
-
     })
 })
 
@@ -176,8 +175,9 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         CQLLibraryName = 'TestCqlLibrary' + Date.now()
 
         //Create CQL Library with Regular User
-        CQLLibraryPage.createCQLLibraryAPIOptionalCQL(CQLLibraryName, CQLLibraryPublisher, measureCQLAlt)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: measureCQLAlt })
     })
+
     afterEach('Clear cache', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
@@ -257,7 +257,6 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         CQLLibrariesPage.clickEditforCreatedLibrary()
         cy.get(CQLLibraryPage.actionCenterButton).click()
         Utilities.waitForElementToNotExist(CQLLibrariesPage.actionCenterDeleteBtn, 50000)
-
     })
 
     it('Delete CQL Library - Versioned Library - user is the owner of the Library', () => {
@@ -280,7 +279,6 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         CQLLibrariesPage.clickViewforCreatedLibrary()
         cy.get(CQLLibraryPage.actionCenterButton).click()
         cy.get(CQLLibrariesPage.actionCenterDeleteBtn).should('not.exist')
-
     })
 
     it('Delete CQL Library - Versioned Library - user has had the Library transferred to them', () => {
@@ -341,6 +339,5 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         CQLLibrariesPage.clickViewforCreatedLibrary()
         cy.get(CQLLibraryPage.actionCenterButton).click()
         cy.get(CQLLibrariesPage.actionCenterDeleteBtn).should('not.exist')
-
     })
 })
