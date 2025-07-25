@@ -1,6 +1,8 @@
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
+import { SupportedModels } from "../../../Shared/CreateMeasurePage"
 import { Environment } from "../../../Shared/Environment"
 import { v4 as uuidv4 } from 'uuid'
+import { LibraryCQL } from "../../../Shared/LibraryCQL"
 
 let CqlLibraryOne = ''
 let CqlLibraryTwo = ''
@@ -10,6 +12,7 @@ const harpUserALT = Environment.credentials().harpUserALT
 const model = 'QI-Core v4.1.1'
 const CQLLibraryPublisher = 'SemanticBits'
 const versionNumber = '1.0.000'
+const invalidLibraryCql = LibraryCQL.invalidFhir4Lib
 
 describe('Version and Draft CQL Library', () => {
 
@@ -55,7 +58,6 @@ describe('Version and Draft CQL Library', () => {
                 }).then((response) => {
                     expect(response.status).to.eql(400)
                     expect(response.body.validationErrors.cqlLibraryName).to.eql("Library name must start with an upper case letter, followed by alpha-numeric character(s) and must not contain spaces or other special characters.")
-
                 })
             })
         })
@@ -106,7 +108,6 @@ describe('Version and Draft CQL Library', () => {
                 }).then((response) => {
                     expect(response.status).to.eql(201)
                     expect(response.body.draft).to.eql(true)
-
                 })
             })
         })
@@ -130,7 +131,6 @@ describe('Version and Draft CQL Library', () => {
                 }).then((response) => {
                     expect(response.status).to.eql(403)
                     expect(response.body.message).to.eql('User ' + harpUserALT + ' cannot modify resource CQL Library with id: ' + cqlLibraryId2)
-
                 })
             })
         })
@@ -196,7 +196,6 @@ describe('Draft and Version Validations', () => {
             })
         })
     })
-
 })
 
 describe('Version CQL Library without CQL', () => {
@@ -207,7 +206,6 @@ describe('Version CQL Library without CQL', () => {
 
         CqlLibraryOne = 'CQLLibraryWithoutCQL' + Date.now()
         CQLLibraryPage.createCQLLibraryAPI(CqlLibraryOne, CQLLibraryPublisher)
-
     })
 
     it('User can not version CQL Library if there is no CQL', () => {
@@ -222,13 +220,10 @@ describe('Version CQL Library without CQL', () => {
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     }
-
                 }).then((response) => {
                     expect(response.status).to.eql(400)
                     expect(response.body.message).to.eql('User ' + harpUser + ' cannot version resource CQL Library with id: ' + cqlLibraryId + ' as there is no associated Cql with this library')
-
                 })
-
             })
         })
     })
@@ -242,8 +237,7 @@ describe('Version CQL Library with invalid CQL', () => {
         cy.setAccessTokenCookie()
 
         CqlLibraryOne = 'CQLLibraryWithInvalidCQL' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithInvalidCQL(CqlLibraryOne, CQLLibraryPublisher)
-
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOne, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: invalidLibraryCql, cqlErrors: true})           
     })
 
     it('User can not version the CQL library if the CQL has errors', () => {
@@ -258,16 +252,12 @@ describe('Version CQL Library with invalid CQL', () => {
                     headers: {
                         authorization: 'Bearer ' + accessToken.value
                     }
-
                 }).then((response) => {
                     expect(response.status).to.eql(400)
                     expect(response.body.message).to.eql('User ' + harpUser + ' cannot version resource CQL Library with id: ' + cqlLibraryId + ' as the Cql has errors in it')
-
                 })
-
             })
         })
     })
-
 })
 

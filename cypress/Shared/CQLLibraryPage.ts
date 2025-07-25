@@ -4,6 +4,7 @@ import { Utilities } from "./Utilities"
 import { v4 as uuidv4 } from 'uuid'
 import { CQLLibrariesPage } from "./CQLLibrariesPage"
 import { CQLEditorPage } from "./CQLEditorPage"
+import { SupportedModels } from "./CreateMeasurePage"
 
 export enum EditLibraryActions {
 
@@ -11,6 +12,15 @@ export enum EditLibraryActions {
     version,
     draft,
     share
+}
+
+export type CreateLibraryOptions = {
+    cql?: string,
+    cqlErrors?: boolean, 
+    description?: string,
+    altUser?: boolean,
+    libraryNumber?: number,
+    publisher?: string
 }
 
 const filePath = 'cypress/fixtures/cqlLibraryId'
@@ -112,52 +122,6 @@ export class CQLLibraryPage {
         cy.log('QI-Core CQL Library Created Successfully')
     }
 
-    public static createQDMCQLLibraryAPI(CqlLibraryName: string, CQLLibraryPublisher: string, twoLibraries?: boolean, altUser?: boolean): string {
-        let user = ''
-
-        if (altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
-
-        //Create New CQL Library
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/cql-libraries',
-                headers: {
-                    authorization: 'Bearer ' + accessToken.value
-                },
-                method: 'POST',
-                body: {
-                    'cqlLibraryName': CqlLibraryName,
-                    'model': 'QDM v5.6',
-                    'createdBy': user,
-                    "librarySetId": uuidv4(),
-                    "description": "description",
-                    "publisher": CQLLibraryPublisher,
-                    'cql': "",
-                    "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
-                }
-            }).then((response) => {
-                expect(response.status).to.eql(201)
-                expect(response.body.id).to.be.exist
-                expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
-                if (twoLibraries === true) {
-                    cy.writeFile('cypress/fixtures/cqlLibraryId2', response.body.id)
-                }
-                else {
-                    cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
-                }
-
-            })
-        })
-        return user
-    }
-
     public static clickCreateLibraryButton(): void {
 
         let alias = 'library' + (Date.now().valueOf() + 1).toString()
@@ -170,51 +134,6 @@ export class CQLLibraryPage {
             expect(response.statusCode).to.eq(201)
             cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
         })
-    }
-    public static createCQLLibraryAPIOptionalCQL(CqlLibraryName: string, CQLLibraryPublisher: string, cQlValue?: string, twoLibraries?: boolean, altUser?: boolean): string {
-        let user = ''
-
-        if (altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
-
-        //Create New CQL Library
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/cql-libraries',
-                headers: {
-                    authorization: 'Bearer ' + accessToken.value
-                },
-                method: 'POST',
-                body: {
-                    'cqlLibraryName': CqlLibraryName,
-                    'model': 'QI-Core v4.1.1',
-                    'createdBy': user,
-                    "librarySetId": uuidv4(),
-                    "description": "description",
-                    "publisher": CQLLibraryPublisher,
-                    'cql': cQlValue,
-                    "programUseContext": { "code": "a", "display": "b", "codeSystem": "c" }
-                }
-            }).then((response) => {
-                expect(response.status).to.eql(201)
-                expect(response.body.id).to.be.exist
-                expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
-                if (twoLibraries === true) {
-                    cy.writeFile('cypress/fixtures/cqlLibraryId2', response.body.id)
-                }
-                else {
-                    cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
-                }
-
-            })
-        })
-        return user
     }
 
     public static createCQLLibraryAPI(CqlLibraryName: string, CQLLibraryPublisher: string, twoLibraries?: boolean, altUser?: boolean, cql?: string): string {
@@ -376,40 +295,7 @@ export class CQLLibraryPage {
         return user
     }
 
-    public static createAPICQLLibraryWithInvalidCQL(CqlLibraryName: string, CQLLibraryPublisher: string): void {
-
-        cy.setAccessTokenCookie()
-
-        //Create New CQL Library
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/cql-libraries',
-                headers: {
-                    authorization: 'Bearer ' + accessToken.value
-                },
-                method: 'POST',
-                body: {
-                    'cqlLibraryName': CqlLibraryName,
-                    'model': 'QI-Core v4.1.1',
-                    'cql': "library TESTMEASURE0000000003 version '0.0.000'\nusing FHIR version '4.0.1'\ninclude FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\ninclude MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\nparameter \"Measurement Period\" Interval<DateTimeTest>\ncontext Patient\ndefine \"SDE Ethnicity\":\nSDE.\"SDE Ethnicity\"\ndefine \"SDE Payer\":\nSDE.\"SDE Payer\"\ndefine \"SDE Race\":\nSDE.\"SDE Race\"\ndefine \"SDE Sex\":\nSDE.\"SDE Sex\"",
-                    "description": "description",
-                    "librarySetId": uuidv4(),
-                    "publisher": CQLLibraryPublisher,
-                    'cqlErrors': true
-                }
-            }).then((response) => {
-                expect(response.status).to.eql(201)
-                expect(response.body.id).to.be.exist
-                expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
-                expect(response.body.cqlErrors).to.eql(true)
-
-                cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
-            })
-        })
-
-    }
-
-    //input the library that is on page to check it's checkbos (ie: if it is the first library that we want checked, enter 0)
+    //input the library that is on page to check it's checkbox (ie: if it is the first library that we want checked, enter 0)
     public static checkLibrary(libraryOnPage: number): void {
 
         cy.get('[data-testid*="cqlLibrary-button-' + libraryOnPage + '_select"]')
@@ -495,4 +381,69 @@ export class CQLLibraryPage {
         }
     }
 
+    public static createLibraryAPI(libraryName: string, model: SupportedModels, options: CreateLibraryOptions) {
+
+        let user: string, description: string, publisher: string, cql: string, cqlErrors = false
+
+        if (options &&  options.altUser) {
+            cy.setAccessTokenCookieALT()
+            user = Environment.credentials().harpUserALT
+        }
+        else {
+            cy.setAccessTokenCookie()
+            user = Environment.credentials().harpUser
+        }
+        if (options && options.description) {
+            description = options.description
+        }
+        else {
+            description = 'testing library functionality'
+        }
+        if (options && options.publisher) {
+            publisher = options.publisher
+        }
+        else {
+            publisher = 'ICF'
+        }
+        if (options && options.cql) {
+            cql = options.cql
+        }
+        else {
+            cql = ''
+        }
+        if (options && options.cqlErrors) {
+            cqlErrors = true
+        }
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.request({
+                url: '/api/cql-libraries',
+                headers: {
+                    authorization: 'Bearer ' + accessToken.value
+                },
+                method: 'POST',
+                body: {
+                    'cqlLibraryName': libraryName,
+                    'model': model,
+                    'createdBy': user,
+                    "librarySetId": uuidv4(),
+                    "description": description,
+                    "publisher": publisher,
+                    'cql': cql,
+                    'cqlErrors': cqlErrors
+                }
+            }).then((response) => {
+                expect(response.status).to.eql(201)
+                expect(response.body.id).to.be.exist
+                expect(response.body.cqlLibraryName).to.eql(libraryName)
+                if (options && options.libraryNumber) {
+                    cy.writeFile('cypress/fixtures/cqlLibraryId' + options.libraryNumber, response.body.id)
+                }
+                else {
+                    cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
+                }
+            })
+        })
+        return user
+    }
 }

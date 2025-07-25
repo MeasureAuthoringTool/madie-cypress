@@ -4,7 +4,8 @@ import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { OktaLogin } from "../../../Shared/OktaLogin"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
 import { EditMeasurePage } from "../../../Shared/EditMeasurePage"
-import {CQLEditorPage} from "../../../Shared/CQLEditorPage";
+import { CQLEditorPage } from "../../../Shared/CQLEditorPage";
+import { SupportedModels } from "../../../Shared/CreateMeasurePage"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let CQLLibraryPublisher = 'ICF'
@@ -15,7 +16,7 @@ describe('QDM CQL Library Validations', () => {
 
     before('Create QDM Library', () => {
 
-        CQLLibraryPage.createQDMCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CQLLibraryName, SupportedModels.QDM, { publisher: CQLLibraryPublisher })           
     })
 
     beforeEach('Login', () => {

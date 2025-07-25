@@ -4,18 +4,21 @@ import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../../Shared/Header"
 import { Utilities } from "../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage";
+import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
+import { LibraryCQL } from "../../../../Shared/LibraryCQL"
 
 let CqlLibraryOne = ''
 let CqlLibraryOther = ''
 let updatedCqlLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
+const invalidLibraryCql = LibraryCQL.invalidFhir4Lib
 
 describe('Action Center Buttons - Draft and Version Validations', () => {
 
     before('Create CQL Library', () => {
         //create a single use CQL Library
         CqlLibraryOther = 'Another' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithInvalidCQL(CqlLibraryOther, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOther, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: invalidLibraryCql, cqlErrors: true})
     })
 
     beforeEach('Craete CQL Library and Login', () => {
@@ -24,13 +27,11 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
         CQLLibraryPage.createAPICQLLibraryWithValidCQL(CqlLibraryOne, CQLLibraryPublisher)
 
         OktaLogin.Login()
-
     })
 
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
-
     })
 
     it('User cannot create a draft of a draft that already exists, while the version is still open', () => {
@@ -57,7 +58,6 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
         cy.get(CQLLibrariesPage.actionCenterDraftBtn).should('be.disabled')
-
     })
 
     it('Verify the CQL Library updates are restricted after Version is created', () => {
@@ -119,5 +119,4 @@ describe('Action Center Buttons - Draft and Version Validations', () => {
         //Click on cancel version button
         cy.get(CQLLibrariesPage.versionCancelBtn).click()
     })
-
 })

@@ -25,4 +25,12 @@ export class LibraryCQL {
         "using QICore version '4.1.1'\n" +
         "\n" +
         "valueset \"ONC Administrative Sex\": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1'"
-}
+
+    public static readonly invalidFhir4Lib = "library TESTMEASURE0000000003 version '0.0.000'\nusing FHIR version '4.0.1'\n" +
+        "include FHIRHelpers version '4.1.000' called FHIRHelpers\ninclude SupplementalDataElementsFHIR4 version '2.0.000' called SDE\n" +
+        "include MATGlobalCommonFunctionsFHIR4 version '6.1.000' called Global\nparameter \"Measurement Period\" Interval<DateTimeTest>\n" +
+        "context Patient\ndefine \"SDE Ethnicity\":\nSDE.\"SDE Ethnicity\"\ndefine \"SDE Payer\":\nSDE.\"SDE Payer\"\ndefine \"SDE Race\":\n" +
+        "SDE.\"SDE Race\"\ndefine \"SDE Sex\":\nSDE.\"SDE Sex\""
+
+
+    }
