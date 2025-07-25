@@ -9,6 +9,8 @@ import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 const date = Date.now()
 let measureName = 'QiCoreCodeSearch' + date
 let CqlLibraryName = 'QiCoreCodeSearchLib' + date
+let randValue = (Math.floor((Math.random() * 1000) + 1))
+let newCqlLibraryName = ''
 let measureCQL = 'library QiCoreLibrary1723824228401 version \'0.0.000\'\n' +
     'using QICore version \'4.1.1\'\n' +
     'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
@@ -78,12 +80,14 @@ let measureCQLWithCode = 'library QiCoreLibrary1723824228401 version \'0.0.000\'
 
 describe('Qi Core Code Search fields', () => {
 
+    newCqlLibraryName = CqlLibraryName + randValue + 2
+
     beforeEach('Create Measure and Login', () => {
 
         CqlLibraryName = 'QiCoreCodeSearchLib' + Date.now()
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
 
         //Click on Edit Button
@@ -96,7 +100,7 @@ describe('Qi Core Code Search fields', () => {
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, newCqlLibraryName)
 
     })
 
@@ -308,10 +312,12 @@ describe('Qi Core Code Search fields', () => {
 
 describe('Error Message on Codes tab', () => {
 
+    newCqlLibraryName = CqlLibraryName + randValue + 5
+
     beforeEach('Create Measure and Login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQLWithCode)
+        CreateMeasurePage.CreateQDMMeasureAPI(measureName, newCqlLibraryName, measureCQLWithCode)
         OktaLogin.Login()
 
         //Click on Edit Button
@@ -326,7 +332,7 @@ describe('Error Message on Codes tab', () => {
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, newCqlLibraryName)
 
     })
 
@@ -355,10 +361,12 @@ describe('Error Message on Codes tab', () => {
 
 describe('Edit and Delete Codes from Saved Codes grid', () => {
 
+    newCqlLibraryName = CqlLibraryName + randValue + 3
+
     beforeEach('Create Measure and Login', () => {
 
         //Create New Measure
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
 
         //Click on Edit Button
@@ -371,7 +379,7 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, newCqlLibraryName)
 
     })
 
@@ -476,16 +484,18 @@ describe('Edit and Delete Codes from Saved Codes grid', () => {
 
 describe('Qi-Core Code Search - Measure ownership Validations', () => {
 
+    newCqlLibraryName = CqlLibraryName + randValue + 4
+
     beforeEach('Create Measure and Login', () => {
 
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQLWithCode)
+        CreateMeasurePage.CreateQICoreMeasureAPI(measureName, newCqlLibraryName, measureCQLWithCode)
         OktaLogin.AltLogin()
     })
 
     afterEach('Clean up and Logout', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure(measureName, newCqlLibraryName)
     })
 
     it('Verify Non Measure owner unable to Edit/Delete saved Qi Core Codes', () => {
