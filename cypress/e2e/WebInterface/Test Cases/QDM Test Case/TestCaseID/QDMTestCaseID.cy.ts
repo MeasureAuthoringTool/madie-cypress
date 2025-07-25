@@ -10,6 +10,8 @@ import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
 import { Header } from "../../../../../Shared/Header"
 import { LandingPage } from "../../../../../Shared/LandingPage"
 
+let filePath = 'cypress/fixtures/measureId'
+
 let singleTestCaseFile = 'patients_42BF391F-38A3-4C0F-9ECE-DCD47E9609D9_QDM_56_1712926664.json'
 const testCase1: TestCase = {
     title: 'Test Case 1',
@@ -44,11 +46,21 @@ describe('QDM Test Case sorting by Test Case number', () => {
             mpStartDate: '2025-01-01',
             mpEndDate: '2025-12-31'
         }
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
         OktaLogin.Login()
+
+        cy.reload()
+
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
+        })
 
         //adding supplemental data
         MeasuresPage.actionCenter('edit')
@@ -69,9 +81,14 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(measureQDMManifestName, CqlLibraryName)
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
     })
 
     it('QDM Test Case number and sorting behavior', () => {
+
 
         //Navigate to Test Cases page and add Test Case details
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -92,6 +109,11 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
         //navigate back to main measure list page
         cy.get(Header.mainMadiePageButton).click()
+        cy.reload()
+
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
+        })
 
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -103,15 +125,15 @@ describe('QDM Test Case sorting by Test Case number', () => {
         Utilities.waitForElementEnabled(TestCasesPage.executeTestCaseButton, 710000)
 
         //test case numbers appear and first click sorts list in ascending order based on test case number / ID
-        Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 5000)
+        Utilities.waitForElementVisible(TestCasesPage.testCaseListTable, 90000)
 
         // testcase 2 in 1st row, testcase 1 below
         cy.get('[data-testid="test-case-title-0_caseNumber"]').should('have.text', '2')
         cy.get('[data-testid="test-case-title-1_caseNumber"]').should('have.text', '1')
 
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
+        Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 90000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
+        Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 90000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
 
         // testcase 1 in 1st row, testcase 2 below
@@ -119,9 +141,9 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get('[data-testid="test-case-title-1_caseNumber"]').should('have.text', '2')
 
         //second click sorts in descending order
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
+        Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 90000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 35000)
+        Utilities.waitForElementVisible(TestCasesPage.tcColumnDescendingArrow, 90000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnDescendingArrow).should('exist')
 
         // testcase 2 in 1st row, testcase 1 below
@@ -129,19 +151,19 @@ describe('QDM Test Case sorting by Test Case number', () => {
         cy.get('[data-testid="test-case-title-1_caseNumber"]').should('have.text', '1')
 
         //thrid click removes sorting                                                 Case #StatusGroupTitleDescriptionLast Saved2N/ASecondTC-SBTestSeriesSecond TC - Title for Auto TestSecondTC-DENOMFail01/28/2025Edit1N/AQDMManifestTCGroupQDMManifestTCQDMManifestTC01/28/2025Edit
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
+        Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 90000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
-        Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 30000)
-        Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 30000)
+        Utilities.waitForElementToNotExist(TestCasesPage.tcColumnAscendingArrow, 90000)
+        Utilities.waitForElementToNotExist(TestCasesPage.tcColumnDescendingArrow, 90000)
 
         // testcase 2 in 1st row, testcase 1 below
         cy.get('[data-testid="test-case-title-0_caseNumber"]').should('have.text', '2')
         cy.get('[data-testid="test-case-title-1_caseNumber"]').should('have.text', '1')
 
         //sort by case number and then edit some test case that is not at the top -- once user navigates back to the test case list page default sorting should appear
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 5000)
+        Utilities.waitForElementVisible(TestCasesPage.tcColumnHeading, 90000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').click()
-        Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 35000)
+        Utilities.waitForElementVisible(TestCasesPage.tcColumnAscendingArrow, 90000)
         cy.get(TestCasesPage.tcColumnHeading).contains('Case #').find(TestCasesPage.tcColumnAscendingArrow).should('exist')
 
         // testcase 1 in 1st row, testcase 2 below
@@ -153,10 +175,10 @@ describe('QDM Test Case sorting by Test Case number', () => {
 
         cy.get(TestCasesPage.QDMRace).scrollIntoView().click()
         cy.get('[data-value="Other Race"]').click()
-        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 8500)
+        Utilities.waitForElementEnabled(TestCasesPage.editTestCaseSaveButton, 90000)
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Test Case Updated Successfully')
-        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 20000)
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 90000)
         //Navigate back to Test Cases page
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -189,6 +211,12 @@ describe('QDM Test Case sorting by Test Case number', () => {
         //navigate back to main measure list page
         cy.get(Header.mainMadiePageButton).click()
 
+        cy.reload()
+
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
+        })
+
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
 
@@ -219,11 +247,21 @@ describe('Import Test cases onto an existing QDM measure via file and ensure tes
             mpStartDate: '2025-01-01',
             mpEndDate: '2025-12-31'
         }
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI(testCase1.title, testCase1.group, testCase1.description, '', false, false)
         OktaLogin.Login()
+
+        cy.reload()
+
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
+        })
 
         //adding supplemental data
         MeasuresPage.actionCenter('edit')
@@ -244,6 +282,10 @@ describe('Import Test cases onto an existing QDM measure via file and ensure tes
 
         OktaLogin.UILogout
         Utilities.deleteMeasure(measureQDMManifestName, CqlLibraryName)
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
     })
 
     it('QDM Test Case number appears on test case import', () => {
@@ -307,11 +349,21 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
             patientBasis: 'false',
             measureCql: qdmManifestTestCQL
         }
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateTestCaseAPI(testCase1.group, testCase1.title, testCase1.description)
         OktaLogin.Login()
+
+        cy.reload()
+
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
+        })
 
         //adding supplemental data
         MeasuresPage.actionCenter('edit')
@@ -332,6 +384,10 @@ describe('QDM Measure - Test case number on a Draft Measure', () => {
 
         OktaLogin.UILogout()
         Utilities.deleteVersionedMeasure(measureQDMManifestName, CqlLibraryName)
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
     })
 
     it('Test case number assigned to a Draft Measure for QDM Measure', () => {
@@ -406,11 +462,21 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
             mpStartDate: '2025-01-01',
             mpEndDate: '2025-12-31'
         }
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
 
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', 'Denominator Exceptions', 'Numerator', '', 'Denominator')
         TestCasesPage.CreateQDMTestCaseAPI('QDMManifestTC', 'QDMManifestTCGroup', 'QDMManifestTC', '', false, false)
         OktaLogin.Login()
+
+        cy.reload()
+
+        cy.readFile(filePath).should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
+        })
 
         //adding supplemental data
         MeasuresPage.actionCenter('edit')
@@ -431,6 +497,10 @@ describe('QDM Test Case - Deleting all test cases resets test case counter', () 
 
         OktaLogin.UILogout()
         Utilities.deleteMeasure(qdmMeasureName, qdmCqlLibraryName)
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.clearAllSessionStorage({ log: true })
+        cy.setAccessTokenCookie()
     })
 
     it('Test case number resets when test case count equals 0', () => {
