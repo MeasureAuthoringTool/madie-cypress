@@ -7,7 +7,6 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { QDMElements } from "../../../../../Shared/QDMElements"
-import { CQLLibraryPage } from "../../../../../Shared/CQLLibraryPage"
 import { QdmCql } from "../../../../../Shared/QDMMeasuresCQL"
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
 
@@ -39,6 +38,8 @@ describe('QDM Test Case Excel Export', () => {
     })
 
     it('Successful Excel Export for QDM Test Cases', () => {
+
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
