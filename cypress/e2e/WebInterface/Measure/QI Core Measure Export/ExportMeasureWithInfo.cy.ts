@@ -6,6 +6,7 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
+import { LandingPage } from "../../../../Shared/LandingPage"
 
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
@@ -48,6 +49,9 @@ describe('QI-Core Measure Export with Info', () => {
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
 
         cy.get(Header.mainMadiePageButton).click()
+
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 60000)
 
         MeasuresPage.actionCenter('export', null, exportOptions)
         cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR6.zip', { timeout: 5500 })
@@ -111,6 +115,9 @@ describe('QI-Core Measure Export for Publish', () => {
         Utilities.waitForElementDisabled(EditMeasurePage.cqlEditorSaveButton, 16500)
 
         cy.get(Header.mainMadiePageButton).click()
+
+        //wait until page / tabs loads
+        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 60000)
 
         MeasuresPage.actionCenter('export', null, exportOptions)
         cy.verifyDownload('AutoTestTitle-v0.0.000-FHIR6.zip', { timeout: 5500 })
