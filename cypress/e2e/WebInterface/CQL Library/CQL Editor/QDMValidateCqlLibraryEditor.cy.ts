@@ -4,6 +4,7 @@ import { Header } from "../../../../Shared/Header"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage";
+import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
 
 let apiCQLLibraryName = ''
 let CQLLibraryPublisher = 'SemanticBits'
@@ -13,8 +14,8 @@ describe('Validate QDM CQL on CQL Library page', () => {
     beforeEach('Create CQL library', () => {
 
         apiCQLLibraryName = 'QdmValidationsLib' + Date.now()
-
-        CQLLibraryPage.createQDMCQLLibraryAPI(apiCQLLibraryName, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(apiCQLLibraryName, SupportedModels.QDM, { publisher: CQLLibraryPublisher })           
+        
         OktaLogin.Login()
     })
 
@@ -173,8 +174,8 @@ describe('CQL Library: CQL Editor: QDM valueSet', () => {
     beforeEach('Create CQL library', () => {
 
         apiCQLLibraryName = 'QDMValueSetLib' + Date.now()
-        CQLLibraryPage.createQDMCQLLibraryAPI(apiCQLLibraryName, CQLLibraryPublisher)
-
+        CQLLibraryPage.createLibraryAPI(apiCQLLibraryName, SupportedModels.QDM, { publisher: CQLLibraryPublisher })           
+       
         OktaLogin.Login()
     })
 
@@ -205,7 +206,6 @@ describe('CQL Library: CQL Editor: QDM valueSet', () => {
 
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         CQLEditorPage.validateSuccessfulCQLUpdate(true)
-
     })
 
     it('Value Set Invalid', () => {

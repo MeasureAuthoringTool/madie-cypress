@@ -8,7 +8,8 @@ const now = require('dayjs')
 export enum SupportedModels {
     QDM = 'QDM v5.6',
     qiCore4 = 'QI-Core v4.1.1',
-    qiCore6 = 'QI-Core v6.0.0'
+    qiCore6 = 'QI-Core v6.0.0',
+    qiCore7 = 'QI-Core v7.0.0'
 }
 
 export type CreateMeasureOptions = {

@@ -3,10 +3,13 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
 import { Header } from "../../../../Shared/Header"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
-import {EditMeasurePage} from "../../../../Shared/EditMeasurePage"
+import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import { SupportedModels } from "../../../../Shared/CreateMeasurePage"
+import { LibraryCQL } from "../../../../Shared/LibraryCQL"
 
 let CqlLibraryOther = ''
 let CQLLibraryPublisher = 'SemanticBits'
+const invalidLibraryCql = LibraryCQL.invalidFhir4Lib
 
 describe('Version CQL Library with errors', () => {
 
@@ -14,17 +17,15 @@ describe('Version CQL Library with errors', () => {
 
         //Create CQL Library
         CqlLibraryOther = 'CQLLibraryWithErrors' + Date.now()
-        CQLLibraryPage.createAPICQLLibraryWithInvalidCQL(CqlLibraryOther, CQLLibraryPublisher)
+        CQLLibraryPage.createLibraryAPI(CqlLibraryOther, SupportedModels.qiCore4, { publisher: CQLLibraryPublisher, cql: invalidLibraryCql, cqlErrors: true})
 
         OktaLogin.Login()
-
     })
 
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
         Utilities.deleteLibrary(CqlLibraryOther)
-
     })
 
     it('User can not version the CQL library if the CQL has ELM translation errors', () => {
@@ -46,7 +47,6 @@ describe('Version CQL Library with errors', () => {
 
         //Click on cancel version button
         cy.get(CQLLibrariesPage.versionCancelBtn).click()
-
     })
 
     it('User can not version the CQL library if the CQL has parsing errors', () => {
@@ -84,5 +84,4 @@ describe('Version CQL Library with errors', () => {
         //Click on cancel version button
         cy.get(CQLLibrariesPage.versionCancelBtn).click()
     })
-
 })
