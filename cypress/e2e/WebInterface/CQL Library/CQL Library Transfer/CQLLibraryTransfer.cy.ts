@@ -146,9 +146,8 @@ describe('CQL Library Transfer - Multiple instances', () => {
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
         cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
         cy.get(CQLLibraryPage.myLibrariesBtn).click()
-        //Commenting until MAT-8942 is fixed
-        // CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
-        // cy.get('[data-testid="table-body"]').should('contain', randomCQLLibraryName)
+        CQLLibrariesPage.validateCQLLibraryName(randomCQLLibraryName)
+        cy.get('[data-testid="table-body"]').should('contain', newCQLLibraryName)
     })
 })
 
