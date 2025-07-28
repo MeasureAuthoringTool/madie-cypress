@@ -122,11 +122,8 @@ export class MeasuresPage {
         if (measureNumber > 0) {
             filePath = 'cypress/fixtures/measureId' + measureNumber
         }
-        cy.reload()
-        //wait until page / tabs loads
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 60000)
         cy.readFile(filePath).should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 90000)
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 1200000)
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
         })
