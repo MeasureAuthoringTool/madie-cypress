@@ -98,6 +98,7 @@ describe('CQL Library Sharing - Multiple instances', () => {
     afterEach('LogOut', () => {
 
         OktaLogin.Logout()
+        Utilities.deleteLibrary(randomCQLLibraryName)
     })
 
     it('Verify all instances in the Library set (Version and Draft) are Shared to the new owner', () => {
@@ -153,9 +154,8 @@ describe('CQL Library Sharing - Multiple instances', () => {
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
         cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible').wait(2000)
         cy.get(CQLLibraryPage.myLibrariesBtn).click()
-        //Commenting until MAT-8942 is fixed
-        // CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
-        // cy.get('[data-testid="table-body"]').should('contain', randomCQLLibraryName)
+        CQLLibrariesPage.validateCQLLibraryName(randomCQLLibraryName)
+        cy.get('[data-testid="table-body"]').should('contain', newCQLLibraryName)
     })
 })
 
@@ -406,7 +406,7 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibrariesPage.addBtn).click()
 
         //Verify that the Harp id is added to the table
-        cy.get(CQLLibrariesPage.expandArrow).eq(1).click()
+        cy.get(CQLLibrariesPage.expandArrow).click()
         cy.get(CQLLibrariesPage.sharedUserTable).should('contain.text', harpUserALT)
 
         cy.get(CQLLibrariesPage.saveUserBtn).click()
@@ -419,8 +419,7 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
         cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
         cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
         cy.get(CQLLibraryPage.myLibrariesBtn).click()
-        //Commenting until MAT-8942 is fixed
-        // cy.get('[data-testid="cqlLibrary-button-0_cqlLibraryName"]').should('contain.text', updatedCQLLibraryName)
-        // cy.get('[data-testid="cqlLibrary-button-1_cqlLibraryName"]').should('contain.text', newCQLLibraryName)
+        cy.get('[data-testid="cqlLibrary-button-0_cqlLibraryName"]').should('contain.text', updatedCQLLibraryName)
+        cy.get('[data-testid="cqlLibrary-button-1_cqlLibraryName"]').should('contain.text', newCQLLibraryName)
     })
 })
