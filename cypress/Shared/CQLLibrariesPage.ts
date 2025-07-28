@@ -39,11 +39,11 @@ export class CQLLibrariesPage {
     public static readonly unshareCheckBox = '.PrivateSwitchBase-input'
     public static readonly acceptBtn = '[data-testid="share-confirmation-dialog-accept-button"]'
 
-    public static clickEditforCreatedLibrary(secondLibrary?: boolean): void {
+    public static clickEditforCreatedLibrary(libraryNumber?: number): void {
         let filePath = 'cypress/fixtures/cqlLibraryId'
 
-        if (secondLibrary === true) {
-            filePath = 'cypress/fixtures/cqlLibraryId2'
+        if (libraryNumber) {
+            filePath = 'cypress/fixtures/cqlLibraryId' + libraryNumber
         }
         //Navigate to CQL Library Page
         cy.get(Header.cqlLibraryTab).should('exist')
@@ -66,12 +66,12 @@ export class CQLLibrariesPage {
         })
         cy.get('[data-testid="CQL Library Details"]').click()
     }
-
-    public static clickViewforCreatedLibrary(secondLibrary?: boolean, altUserAction?: boolean): void {
+    
+    public static clickViewforCreatedLibrary(libraryNumber?: number, altUserAction?: boolean): void {
         let filePath = 'cypress/fixtures/cqlLibraryId'
 
-        if (secondLibrary === true) {
-            filePath = 'cypress/fixtures/cqlLibraryId2'
+        if (libraryNumber) {
+            filePath = 'cypress/fixtures/cqlLibraryId' + libraryNumber
         }
         if (altUserAction === true) {
             //Navigate to CQL Library Page
