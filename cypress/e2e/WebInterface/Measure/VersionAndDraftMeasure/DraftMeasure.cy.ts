@@ -1,14 +1,15 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { Utilities } from "../../../../Shared/Utilities"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { LandingPage } from "../../../../Shared/LandingPage";
+import { LandingPage } from "../../../../Shared/LandingPage"
+import { Toasts } from "../../../../Shared/Toasts"
 
 let updatedMeasuresPageName = ''
 let updatedMeasuresPageNameSecond = ''
@@ -18,6 +19,8 @@ let newCqlLibraryName = ''
 const cohortMeasureCQL = MeasureCQL.CQL_For_Cohort
 const cohortMeasureCQLSix = MeasureCQL.CQL_For_Cohort_Six
 const filePath = 'cypress/fixtures/measureId'
+const versionNumberFirst = '1.0.000'
+const versionNumberSecond = '2.0.000'
 
 describe('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
 
@@ -57,7 +60,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
+        cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -85,7 +88,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.wait('@draft', { timeout: 60000 }).then((request) => {
             cy.writeFile(filePath, request.response.body.id)
         })
-        cy.get('.toast').should('contain.text', 'New draft created successfully.')
+        cy.get(Toasts.generalToast).should('contain.text', 'New draft created successfully.')
         cy.log('Draft Created Successfully')
 
         //navigate back to the main MADiE / measure list page
@@ -108,7 +111,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionMajor).click()
         cy.get(MeasuresPage.confirmMeasureVersionNumber).type('1.0.000')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
-        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
+        cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumber)
         cy.log('Version Created Successfully')
 
@@ -116,30 +119,105 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(Header.mainMadiePageButton).click()
         cy.get(LandingPage.newMeasureButton).should('be.visible')
 
+        cy.intercept('POST', '**/draft').as('newDraft')
+
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
         cy.get(MeasuresPage.createDraftContinueBtn).click()
-        cy.get('.toast').should('contain.text', 'New draft created successfully.')
 
-        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
-            Utilities.waitForElementVisible('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.visible')
-            Utilities.waitForElementEnabled('[data-testid=measure-action-' + fileContents + ']', 30000)
-            cy.get('[data-testid=measure-action-' + fileContents + ']').should('be.enabled')
-            cy.get('[data-testid=measure-action-' + fileContents + ']').scrollIntoView()
-            cy.get('[data-testid=measure-action-' + fileContents + ']').click()
+        // capture measureId for new draft
+        let draftId      
+        cy.wait('@newDraft', {timeout: 25000 }).then(int => {
+            draftId = int.response.body.id
+        
+        Utilities.waitForElementVisible('[data-testid=measure-action-' + draftId + ']', 30000)
+        Utilities.waitForElementEnabled('[data-testid=measure-action-' + draftId + ']', 30000)
+        cy.get('[data-testid=measure-action-' + draftId + ']').scrollIntoView()
+        cy.get('[data-testid=measure-action-' + draftId + ']').click()
 
-            //Verify draft button is not visible
-            cy.get('[data-testid=draft-measure-' + fileContents + ']').should('not.exist')
+        //Verify draft button is not visible
+        cy.get('[data-testid=draft-measure-' + draftId + ']').should('not.exist')
         })
+    })
+
+    it('Tooltip appears and user is unable to draft a 4.1.1 of a measure that has a 6.0.0 on measureSet', () => {
+
+        updatedMeasuresPageName = 'updatedDVValidations' + Date.now()
+
+        MeasuresPage.actionCenter('version')
+
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
+        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumberFirst)
+
+        cy.get('.MuiDialogContent-root').click()
+
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+
+        cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
+        MeasuresPage.validateVersionNumber(versionNumberFirst)
+        cy.log('Major Version Created Successfully')
+
+        MeasuresPage.actionCenter('draft')
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.visible')
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.enabled')
+        cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageName)
+
+        cy.get(MeasuresPage.createDraftContinueBtn).should('exist')
+        cy.get(MeasuresPage.createDraftContinueBtn).should('be.visible')
+        cy.get(MeasuresPage.createDraftContinueBtn).should('be.enabled')
+
+        cy.get(MeasuresPage.draftModalSelectionBox).click()
+        Utilities.waitForElementVisible(MeasuresPage.draftModalVersionSix, 5000)
+        cy.get(MeasuresPage.draftModalVersionSix).click()
+
+        CreateMeasurePage.clickCreateDraftButton()
+
+        cy.get(Toasts.generalToast).should('contain.text', 'New draft created successfully.')
+        cy.log('Draft Created Successfully')
+
+        Utilities.waitForElementToNotExist(TestCasesPage.importTestCaseSuccessMsg, 100000)
+
+        // allow for measures to load, if not already done
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 45000)
+
+        //Search for the Measure using Measure name
+        cy.log('Search Measure with measure name')
+        cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).type('{enter}')
+        cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
+
+        MeasuresPage.actionCenter('version')
+
+        cy.get(MeasuresPage.measureVersionTypeDropdown).click()
+        cy.get(MeasuresPage.measureVersionMajor).click()
+        cy.get(MeasuresPage.confirmMeasureVersionNumber).type(versionNumberSecond)
+
+        cy.get('.MuiDialogContent-root').click()
+
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('exist')
+        cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
+        cy.get(MeasuresPage.measureVersionContinueBtn).click()
+
+        cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
+        MeasuresPage.validateVersionNumber(versionNumberSecond)
+        cy.log('Major Version Created Successfully')
+
+        //Search for the Measure using original 4.1.1 Measure name
+        cy.log('Search Measure with measure name')
+        cy.get(MeasuresPage.searchInputBox).clear().type(newMeasureName).type('{enter}')
+        cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
+
+        cy.get('[class="px-1"]').find('[class=" cursor-pointer"]').eq(0).click()
+        cy.wait(2000)
+        cy.get('[data-testid="draft-action-tooltip"]').should('have.attr', 'aria-label', 'You cannot draft a 4.1.1 measure when a 6.0.0 version is available')
     })
 
     it('Change / update model from v4.1.1 - to - v6.0.0 with versioning and drafting but cannot draft from 6.0.0 - to - 4.1.1', () => {
 
-        let versionNumberFirst = '1.0.000'
         updatedMeasuresPageName = 'UpdatedTestMeasures1' + Date.now()
-
-        let versionNumberSecond = '2.0.000'
         updatedMeasuresPageNameSecond = 'UpdatedTestMeasures2' + Date.now()
 
         MeasuresPage.actionCenter('version')
@@ -154,9 +232,9 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
+        cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumberFirst)
-        cy.log('Major Version Created Successfully')
+        cy.log('v4.1.1 Major Version Created Successfully')
 
         //navigate back to the main MADiE / measure list page
         cy.get(Header.mainMadiePageButton).click()
@@ -178,8 +256,8 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
 
         CreateMeasurePage.clickCreateDraftButton()
 
-        cy.get('.toast').should('contain.text', 'New draft created successfully.')
-        cy.log('Draft Created Successfully')
+        cy.get(Toasts.generalToast).should('contain.text', 'New draft created successfully.')
+        cy.log('v6 Draft Created Successfully')
 
         Utilities.waitForElementToNotExist(TestCasesPage.importTestCaseSuccessMsg, 100000)
 
@@ -192,9 +270,6 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
         MeasuresPage.actionCenter('edit')
-
-        //verify that the CQL to ELM version is not empty
-        cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
 
         //verify that the CQL to ELM version is not empty
         cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
@@ -226,9 +301,9 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
+        cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumberSecond)
-        cy.log('Major Version Created Successfully')
+        cy.log('v6 Major Version Created Successfully')
 
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
@@ -246,14 +321,14 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
     })
 })
 
-describe('Draft and Version Validations -- add and cannot create draft of a draft that already exists tests', () => {
+describe('Draft and Version Validations - upgrade QiCore v6.0.0 to v7.0.0', () => {
 
     beforeEach('Create Measure, add Cohort group and Login', () => {
 
-        newMeasureName = 'DVValidations' + Date.now() + randValue
-        newCqlLibraryName = 'DVValidationsLib' + Date.now() + randValue
+        newMeasureName = 'DraftTo7Measure' + Date.now()
+        newCqlLibraryName = 'DraftTo7Lib' + Date.now()
         //Create New Measure and Measure Group
-        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, cohortMeasureCQL)
+        CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCqlLibraryName, SupportedModels.qiCore6, { measureCql: cohortMeasureCQLSix})
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
 
         OktaLogin.Login()
@@ -273,13 +348,11 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         OktaLogin.UILogout()
     })
 
-    it('Tooltip appears and user is unable to draft a 4.1.1 of a measure that has a 6.0.0 on measureSet', () => {
+    it('Change model from v6.0.0 - to - v7.0.0 with vbersioning and drafting but cannot draft from 7.0.0 back down', () => {
 
-        let versionNumberFirst = '1.0.000'
-        updatedMeasuresPageName = 'updatedDVValidations' + Date.now()
+        updatedMeasuresPageName = 'upgradedTo7' + Date.now()
 
-        let versionNumberSecond = '2.0.000'
-
+        // version 1.0.000
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -292,14 +365,11 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
+        cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
         MeasuresPage.validateVersionNumber(versionNumberFirst)
-        cy.log('Major Version Created Successfully')
+        cy.log('v6 Major Version Created Successfully')
 
-        //navigate back to the main MADiE / measure list page
-        cy.get(Header.mainMadiePageButton).click()
-        cy.get(LandingPage.newMeasureButton).should('be.visible')
-
+        // draft to v7
         MeasuresPage.actionCenter('draft')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
         cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.visible')
@@ -311,25 +381,35 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.createDraftContinueBtn).should('be.enabled')
 
         cy.get(MeasuresPage.draftModalSelectionBox).click()
-        Utilities.waitForElementVisible(MeasuresPage.draftModalVersionSix, 5000)
-        cy.get(MeasuresPage.draftModalVersionSix).click()
+        Utilities.waitForElementVisible(MeasuresPage.draftModalVersionSeven, 5000)
+        cy.get(MeasuresPage.draftModalVersionSeven).click()
 
         CreateMeasurePage.clickCreateDraftButton()
 
-        cy.get('.toast').should('contain.text', 'New draft created successfully.')
-        cy.log('Draft Created Successfully')
+        cy.get(Toasts.generalToast).should('contain.text', 'New draft created successfully.')
+        cy.log('v7 Draft Created Successfully')
 
+        // version to 2.0.000
         Utilities.waitForElementToNotExist(TestCasesPage.importTestCaseSuccessMsg, 100000)
-
-        //navigate back to the main MADiE / measure list page
-        cy.get(Header.mainMadiePageButton).click()
-        cy.get(LandingPage.newMeasureButton).should('be.visible')
 
         //Search for the Measure using Measure name
         cy.log('Search Measure with measure name')
         cy.get(MeasuresPage.searchInputBox).type(updatedMeasuresPageName).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', updatedMeasuresPageName)
+        MeasuresPage.actionCenter('edit')
 
+        //verify that the CQL to ELM version is not empty
+        Utilities.waitForElementVisible(MeasuresPage.measureCQLToElmVersionTxtBox, 8500)
+        cy.get(MeasuresPage.measureCQLToElmVersionTxtBox).should('not.be.empty')
+
+        /*
+            the 4.1.1 -> 6 version of this test changes & validates the CQL at this point
+            As of 7/29/25 we don't have that level of support for STU7 yet
+            We can add extra steps later when we do
+        */
+
+        //navigate to main measure list page and version and draft to put measure back on 4.1.1 modal version
+        cy.get(Header.mainMadiePageButton).click()
         MeasuresPage.actionCenter('version')
 
         cy.get(MeasuresPage.measureVersionTypeDropdown).click()
@@ -342,16 +422,31 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.measureVersionContinueBtn).should('be.visible')
         cy.get(MeasuresPage.measureVersionContinueBtn).click()
 
-        cy.get('.toast').should('contain.text', 'New version of measure is Successfully created')
-        MeasuresPage.validateVersionNumber(versionNumberSecond)
-        cy.log('Major Version Created Successfully')
+        // this is end-state as of 7/29/25. STU7 CQL is not fully functional & this error is unavoidable for the test process
+        cy.get(Toasts.dangerToast).should('have.text', 'CQL-ELM translator found errors in the CQL for measure ' + updatedMeasuresPageName + '!')
 
-        //Search for the Measure using original 4.1.1 Measure name
-        cy.log('Search Measure with measure name')
-        cy.get(MeasuresPage.searchInputBox).clear().type(newMeasureName).type('{enter}')
-        cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
+        cy.get(MeasuresPage.measureVersionHelperText).should('have.text', 'An unexpected error has occurred. Please contact the help desk.')
 
-        cy.get('[class="px-1"]').find('[class=" cursor-pointer"]').eq(0).click()
-        cy.get('[data-testid="draft-action-tooltip"]').should('have.attr', 'aria-label', 'You cannot draft a 4.1.1 measure when a 6.0.0 version is available')
+        // after STU7 CQL works, remove the 2 previous lines & uncomment everything below
+        // it should work, with possible minor updates
+
+        // cy.get(Toasts.generalToast).should('contain.text', 'New version of measure is Successfully created')
+        // MeasuresPage.validateVersionNumber(versionNumberSecond)
+        // cy.log('v7 Major Version Created Successfully')
+
+        // // attempt draft back to v6
+        // MeasuresPage.actionCenter('draft')
+        // cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('exist')
+        // cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.visible')
+        // cy.get(MeasuresPage.updateDraftedMeasuresTextBox).should('be.enabled')
+        // cy.get(MeasuresPage.updateDraftedMeasuresTextBox).clear().type(updatedMeasuresPageNameSecond)
+
+        // cy.get(MeasuresPage.createDraftContinueBtn).should('exist')
+        // cy.get(MeasuresPage.createDraftContinueBtn).should('be.visible')
+        // cy.get(MeasuresPage.createDraftContinueBtn).should('be.enabled')
+
+        // cy.get(MeasuresPage.draftModalSelectionBox).click()
+        // cy.get(MeasuresPage.draftModalSelectionBox).should('not.contain.text', 'QI-Core v4.1.1')
+        // cy.get(MeasuresPage.draftModalSelectionBox).should('not.contain.text', 'QI-Core v6.0.0')
     })
 })
