@@ -148,6 +148,19 @@ export class EditMeasurePage {
     public static readonly successfulMeasureDeleteMsg = '[data-testid=edit-measure-information-success-text]'
 
     //Measure MetaData
+
+    //RTE field button(s)
+    public static readonly rteToolBar = '[data-testid="rich-text-editor-toolbar"]'
+    public static readonly unDoBtn = '[data-testid="UndoIcon"]'
+    public static readonly reDoBtn = '[data-testid="RedoIcon"]'
+    public static readonly frmtBoldBtn = '[data-testid="FormatBoldIcon"]'
+    public static readonly frmtItalicizeBtn = '[data-testid="FormatItalicIcon"]'
+    public static readonly frmtUnderlineBtn = '[data-testid="FormatUnderlinedIcon"]'
+    public static readonly frmtStrikeThroughBtn = '[data-testid="StrikethroughSIcon"]'
+    public static readonly nmbrdListBtn = '[data-testid="FormatListNumberedIcon"]'
+    public static readonly bulletedListBtn = '[data-testid="FormatListBulletedIcon"]'
+    public static readonly embdTableBtn = '[data-testid="TableChartIcon"]'
+
     //Model & Measurement Start and End date(s)
     public static readonly mpStart = '[data-testid="measurement-period-start-input"]'
     public static readonly mpEnd = '[data-testid="measurement-period-end-input"]'
@@ -167,6 +180,7 @@ export class EditMeasurePage {
 
     //Description Page
     public static readonly measureDescriptionTextBox = '[data-testid="measure-description-input"]'
+    public static readonly measureDescriptionRTETextBox = '[data-testid="rich-text-editor-content"]'
     public static readonly measureDescriptionSaveButton = '[data-testid="measure-description-save"]'
     public static readonly measureDescriptionSuccessMessage = '[data-testid="measureDescriptionSuccess"]'
 
