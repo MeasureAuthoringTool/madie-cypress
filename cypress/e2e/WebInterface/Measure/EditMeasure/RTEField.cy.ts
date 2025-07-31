@@ -14,7 +14,7 @@ let newCqlLibraryName = ''
 let newMeasureName = ''
 const measureCQL = QiCore4Cql.ICFTest_CQL.replace('EXM124v7QICore4', measureName)
 
-describe('Edit Measure: Add Meta Data', () => {
+describe('Edit Measure: Add content to an Rich Text field and use formatting buttons', () => {
 
     beforeEach('Login', () => {
         newMeasureName = measureName + randValue
@@ -120,5 +120,80 @@ describe('Edit Measure: Add Meta Data', () => {
         cy.get(EditMeasurePage.measureDescriptionRTETextBox).wait(1500).click()
         cy.get(EditMeasurePage.measureDescriptionRTETextBox).focus()
         cy.get(EditMeasurePage.measureDescriptionRTETextBox).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p><strong><em><del><u>description</u></del></em></strong></p><p><br class="ProseMirror-trailingBreak"></p><div class="tableWrapper"><table style="min-width: 75px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr></tbody></table></div></div>')
+    })
+})
+
+describe('Edit Measure: Add embedded table to Rich Text field and use the various buttons to manage the table', () => {
+
+    beforeEach('Login', () => {
+        newMeasureName = measureName + randValue
+        newCqlLibraryName = CqlLibraryName + randValue + 2
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+
+        OktaLogin.Login()
+    })
+
+    afterEach('Logout', () => {
+
+        OktaLogin.UILogout()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+    })
+
+    it('Verify the ability to embed a table into a RTE field as well as to add and remove columns and rows', () => {
+
+        let description = 'description'
+
+        //Click on Edit Measure
+        MeasuresPage.actionCenter('edit')
+
+        //Description
+        cy.get(EditMeasurePage.leftPanelDescription).click()
+
+        //add embedded table
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).click()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).wait(1500).clear()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).wait(1500).type('{selectAll}{backspace}')
+        cy.get(EditMeasurePage.measureDescriptionSaveButton).wait(1500).click()
+        cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
+        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 90000)
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).click()
+        cy.get(EditMeasurePage.embdTableBtn).click()
+
+        cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
+        cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
+        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 90000)
+
+
+        //confirm html formatting that is in the field
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).wait(1500).click()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).focus()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>SemanticBits</p><div class="tableWrapper"><table style="min-width: 75px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr></tbody></table></div></div>')
+
+        //add row above, row below, column left, column right and confirm
+        cy.get(EditMeasurePage.embdTableAddRowAboveBtn).wait(1500).click()
+        cy.get(EditMeasurePage.embdTableAddRowBelowBtn).wait(1500).click()
+        cy.get(EditMeasurePage.embdTableAddColLeftBtn).wait(1500).click()
+        cy.get(EditMeasurePage.embdTableAddColRightBtn).wait(1500).click()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).focus()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>SemanticBits</p><div class="tableWrapper"><table style="min-width: 125px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr></tbody></table></div></div>')
+
+        //remove two rows, remove two columns and confirm
+        cy.get(EditMeasurePage.embdTableRemoveRowBtn).wait(1500).click()
+        cy.get(EditMeasurePage.embdTableRemoveRowBtn).wait(1500).click()
+        cy.get(EditMeasurePage.embdTableRemoveColBtn).wait(1500).click()
+        cy.get(EditMeasurePage.embdTableRemoveColBtn).wait(1500).click()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).focus()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>SemanticBits</p><div class="tableWrapper"><table style="min-width: 75px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th><th colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></th></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr><tr><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td><td colspan="1" rowspan="1"><p><br class="ProseMirror-trailingBreak"></p></td></tr></tbody></table></div></div>')
+
+        //remove embedded table, entirely
+        cy.get(EditMeasurePage.embdTableRemoveTblBtn).wait(1500).click()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).focus()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>SemanticBits</p></div>')
+
+        //save
+        cy.get(EditMeasurePage.measureDescriptionSaveButton).wait(1500).click()
+        cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
+        Utilities.waitForElementToNotExist(EditMeasurePage.measureDescriptionSuccessMessage, 90000)
     })
 })
