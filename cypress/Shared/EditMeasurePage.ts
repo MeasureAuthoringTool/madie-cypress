@@ -161,6 +161,15 @@ export class EditMeasurePage {
     public static readonly bulletedListBtn = '[data-testid="FormatListBulletedIcon"]'
     public static readonly embdTableBtn = '[data-testid="TableChartIcon"]'
 
+    //RTE Embedded table button(s)
+    public static readonly embdTableAddRowAboveBtn = '[data-testid="add-row-above-tooltip"]'
+    public static readonly embdTableAddRowBelowBtn = '[data-testid="add-row-below-tooltip"]'
+    public static readonly embdTableRemoveRowBtn = '[data-testid="remove-row-tooltip"]'
+    public static readonly embdTableAddColLeftBtn = '[data-testid="add-column-left-tooltip"]'
+    public static readonly embdTableAddColRightBtn = '[data-testid="add-column-right-tooltip"]'
+    public static readonly embdTableRemoveColBtn = '[data-testid="remove-column-tooltip"]'
+    public static readonly embdTableRemoveTblBtn = '[data-testid="remove-table-tooltip"]'
+
     //Model & Measurement Start and End date(s)
     public static readonly mpStart = '[data-testid="measurement-period-start-input"]'
     public static readonly mpEnd = '[data-testid="measurement-period-end-input"]'
