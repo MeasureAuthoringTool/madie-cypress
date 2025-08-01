@@ -6,6 +6,7 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../../Shared/MeasureGroupPage"
+import { Toasts } from "../../../../../Shared/Toasts"
 
 const now = Date.now()
 let measureName = 'TestMeasure' + now
@@ -82,8 +83,8 @@ describe('Test Case Execution with codes', () => {
         cy.get(TestCasesPage.detailsTab).should('be.visible')
         cy.get(TestCasesPage.detailsTab).click()
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
-
+        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+       
         cy.get(EditMeasurePage.testCasesTab).click()
 
         cy.get(TestCasesPage.executeTestCaseButton).should('exist')

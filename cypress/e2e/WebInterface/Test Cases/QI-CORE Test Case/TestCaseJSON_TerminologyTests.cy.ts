@@ -9,6 +9,7 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header"
+import { Toasts } from "../../../../Shared/Toasts"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -248,10 +249,7 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Test case updated successfully with ' +
-            'errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All ' +
-            'timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been ' +
-            'defaulted to \'000\'')
+        cy.get(Toasts.errorToast).should('have.text', Toasts.errorOffsetText)
 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
@@ -335,16 +333,13 @@ describe('JSON Resource ID tests', () => {
 
             cy.get(TestCasesPage.errorToastMsg).should('exist')
             cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-            cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Test case updated successfully with ' +
-                'errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All ' +
-                'timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been ' +
-                'defaulted to \'000\'')
+            cy.get(Toasts.errorToast).should('have.text', Toasts.errorOffsetText)
 
             cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('be.visible')
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'Error: HAPI-1821: [element="id"] Invalid attribute value "": Attribute value must not be empty ("")')
-        })
+    })
 
     it('JSON missing Resource IDs', () => {
 
@@ -372,7 +367,6 @@ describe('JSON Resource ID tests', () => {
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.visible')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).should('be.enabled')
         cy.get(MeasureGroupPage.updateMeasureGroupConfirmationBtn).click()
-
 
         //validation successful save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
@@ -420,10 +414,7 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get(TestCasesPage.errorToastMsg).should('contain.text', 'Test case updated successfully with ' +
-            'errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All ' +
-            'timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been ' +
-            'defaulted to \'000\'')
+        cy.get(Toasts.errorToast).should('have.text', Toasts.errorOffsetText)
     })
 
     it('JSON has Resource IDs duplicated for different resources', () => {
@@ -501,7 +492,7 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.errorToastMsg).should('exist')
         cy.get(TestCasesPage.errorToastMsg).should('be.visible')
-        cy.get('.toast').should('include.text', 'Test case updated successfully with errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'')
+        cy.get(Toasts.errorToast).should('have.text', Toasts.errorOffsetText)
 
         cy.get(TestCasesPage.testCaseJsonValidationErrorBtn).click()
         cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('exist')
@@ -559,10 +550,7 @@ describe('JSON Resource ID tests', () => {
 
         cy.get(TestCasesPage.successMsg).should('exist')
         cy.get(TestCasesPage.successMsg).should('be.visible')
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with ' +
-            'warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. ' +
-            'All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been ' +
-            'defaulted to \'000\'.')
+        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)     
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView()
         Utilities.waitForElementVisible(TestCasesPage.detailsTab, 27700)
@@ -690,7 +678,6 @@ describe('JSON Resource ID tests - Proportion Score Type', () => {
 
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Initial Population')
     })
-
 })
 
 describe('JSON Resource ID tests -- CV', () => {
@@ -789,7 +776,6 @@ describe('JSON Resource ID tests -- CV', () => {
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Population')
         cy.get(TestCasesPage.testCasePopulationValuesTable).should('contain.text', 'Measure Population Exclusion')
     })
-
 })
 
 describe('Tests around cardinality violations', () => {
