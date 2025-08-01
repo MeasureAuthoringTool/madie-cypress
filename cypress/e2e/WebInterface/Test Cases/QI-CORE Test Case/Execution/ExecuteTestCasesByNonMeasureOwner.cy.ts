@@ -9,6 +9,7 @@ import { LandingPage } from "../../../../../Shared/LandingPage"
 import { TestCaseJson } from "../../../../../Shared/TestCaseJson"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { Toasts } from "../../../../../Shared/Toasts"
 
 let measureName = 'TestMeasure' + Date.now()
 let CqlLibraryName = 'TestLibrary' + Date.now()
@@ -208,8 +209,8 @@ describe('Ability to run valid test cases whether or not the user is the owner o
             cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
             cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-
-            cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
+            cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+       
             Utilities.waitForElementVisible(EditMeasurePage.testCasesTab, 37700)
             cy.get(EditMeasurePage.testCasesTab).should('be.visible')
             cy.get(EditMeasurePage.testCasesTab).click()
@@ -284,8 +285,8 @@ describe('Ability to run valid test cases whether or not the user is the owner o
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-
-        cy.get(TestCasesPage.importTestCaseSuccessMsg, {timeout: 6500}).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
+        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+            
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 

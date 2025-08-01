@@ -10,6 +10,7 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { Header } from "../../../../../Shared/Header"
 import { Environment } from "../../../../../Shared/Environment"
+import { Toasts } from "../../../../../Shared/Toasts"
 const { deleteDownloadsFolderBeforeAll, deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 const now = require('dayjs')
 const todaysDate = now().format('MM/DD/YYYY')
@@ -111,7 +112,7 @@ describe('Test Case Import: functionality tests', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.successMsg).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
+        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 9500)
 
         OktaLogin.UILogout()
