@@ -1,12 +1,12 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { LandingPage } from "../../../../Shared/LandingPage"
-import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage, SupportedModels } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 import { LibraryCQL } from "../../../../Shared/LibraryCQL"
 import { Utilities } from "../../../../Shared/Utilities"
-import { CQLLibraryPage } from "../../../../Shared/CQLLibraryPage"
+import { CQLLibraryPage, CreateLibraryOptions } from "../../../../Shared/CQLLibraryPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 
 let newCQLLibraryName = ''
@@ -16,10 +16,6 @@ let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let ratioMeasureCQL = MeasureCQL.ICFCleanTest_CQL
-let LibCQLQDMVal = LibraryCQL.validCQL4QDMLib
-let LibQICoreVal = LibraryCQL.validCQL4QICORELib
-let QICoreModel = 'QI-Core v4.1.1'
-let QDMModel = 'QDM v5.6'
 
 describe('Validations on Measure Details page', () => {
 
@@ -27,7 +23,6 @@ describe('Validations on Measure Details page', () => {
 
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
         OktaLogin.Login()
     })
@@ -135,7 +130,6 @@ describe('Validations on Measure Details page', () => {
         //confirm dirty check window
         cy.get(MeasureGroupPage.qdmDirtyCheckDiscardModal).should('exist')
         cy.get(MeasureGroupPage.qdmDirtyCheckDiscardModal).should('be.visible')
-
     })
 
     it('Validate success message once both fields have value and are saved', () => {
@@ -278,7 +272,6 @@ describe('Validations on Measure Details page', () => {
         Utilities.clickOnDiscardChanges()
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.text', 'Some test value')
     })
-
 })
 
 describe('Create Measure validations', () => {
@@ -287,7 +280,6 @@ describe('Create Measure validations', () => {
 
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, ratioMeasureCQL)
         OktaLogin.Login()
     })
@@ -335,7 +327,6 @@ describe('Create Measure validations', () => {
 
         //Click on cancel button
         cy.get(CreateMeasurePage.cancelButton).click()
-
     })
 
     //CQL Library Name Validations
@@ -415,7 +406,6 @@ describe('Create Measure validations', () => {
 
         cy.get(CreateMeasurePage.serverErrorMsgCloseIcon).click()
         cy.get(CreateMeasurePage.cancelButton).click()
-
     })
 
     //Measure Model Validations
@@ -437,7 +427,6 @@ describe('Create Measure validations', () => {
         cy.get(CreateMeasurePage.createMeasureButton).should('be.disabled')
 
         cy.get(CreateMeasurePage.cancelButton).click()
-
     })
 
     //eCQM Abbreviated title validations
@@ -446,7 +435,7 @@ describe('Create Measure validations', () => {
         let measureName = 'TestMeasure' + Date.now()
         let CqlLibraryName = 'TestLibrary' + Date.now()
 
-        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 30000)
+        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 60000)
         //Click on New Measure Button
         Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
         Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
@@ -503,7 +492,6 @@ describe('Measurement Period Validations', () => {
         cy.get(CreateMeasurePage.measurementPeriodEndDateError).should('contain.text', 'Measurement period end date ' +
             'should be greater than measurement period start date.')
         cy.get(CreateMeasurePage.cancelButton).click()
-
     })
 
     it('Verify error message when the Measurement Period start and end dates are empty', () => {
@@ -545,7 +533,7 @@ describe('Measurement Period Validations', () => {
 
     it('Verify error message when the Measurement Period start and end date format is not valid', () => {
 
-        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 30000)
+        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 60000)
         Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
         Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
         cy.get(LandingPage.newMeasureButton).click()
@@ -560,12 +548,11 @@ describe('Measurement Period Validations', () => {
         cy.get(CreateMeasurePage.measurementPeriodStartDate).click()
         cy.get(CreateMeasurePage.measurementPeriodEndDateError).should('contain.text', 'Invalid date format. (mm/dd/yyyy)')
         cy.get(CreateMeasurePage.cancelButton).click()
-
     })
 
     it('Verify error message when the Measurement Period start and end dates are same', () => {
 
-        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 30000)
+        Utilities.waitForElementVisible(MeasuresPage.searchInputBox, 60000)
         Utilities.waitForElementVisible(LandingPage.newMeasureButton, 3000)
         Utilities.waitForElementEnabled(LandingPage.newMeasureButton, 3000)
         cy.get(LandingPage.newMeasureButton).click()
@@ -580,7 +567,6 @@ describe('Measurement Period Validations', () => {
         cy.get(CreateMeasurePage.measurementPeriodEndDateError).should('contain.text', 'Measurement period end date should be greater than measurement period start date.')
         cy.get(CreateMeasurePage.cancelButton).click()
     })
-
 })
 
 describe('CQL Library Validations -- Attempting to use a QDM Library in a QI Core measure CQL', () => {
@@ -590,20 +576,21 @@ describe('CQL Library Validations -- Attempting to use a QDM Library in a QI Cor
         newCQLLibraryName = "NewCQLLibName" + randValue
         newMeasureName = "NewMeasureName" + randValue
         measureCQLLibName = newCQLLibraryName + 'InMeasure' + Date.now() + randValue
-
-        CQLLibraryPage.createAPILibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher, QDMModel, LibCQLQDMVal, false, false)
-        //Create New Measure
+        const opts: CreateLibraryOptions = {
+            publisher: CQLLibraryPublisher,
+            cql: LibraryCQL.validCQL4QDMLib
+        }
+        CQLLibraryPage.createLibraryAPI(newCQLLibraryName, SupportedModels.QDM, opts)
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, measureCQLLibName, null, null, false)
         OktaLogin.Login()
-
-
     })
+
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(newMeasureName, measureCQLLibName)
-
     })
+
     it('Proper error appears when attempting to use a QDM Library in a QI Core measure CQL', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')
@@ -644,19 +631,21 @@ describe('CQL Library Validations -- Attempting to use a QI Core Library in a QD
         newCQLLibraryName = "NewCQLLibName" + randValue
         newMeasureName = "NewMeasureName" + randValue
         measureCQLLibName = newCQLLibraryName + 'InMeasure' + Date.now() + randValue
-        CQLLibraryPage.createAPILibraryWithValidCQL(newCQLLibraryName, CQLLibraryPublisher, QICoreModel, LibQICoreVal, false, false)
-
-        //Create New Measure
+        const opts: CreateLibraryOptions = {
+            publisher: CQLLibraryPublisher,
+            cql: LibraryCQL.validCQL4QICORELib
+        }
+        CQLLibraryPage.createLibraryAPI(newCQLLibraryName, SupportedModels.qiCore4, opts)
         CreateMeasurePage.CreateQDMMeasureAPI(newMeasureName, measureCQLLibName, null, false, false)
         OktaLogin.Login()
-
     })
+
     afterEach('Logout', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(newMeasureName, measureCQLLibName)
-
     })
+
     it('Proper error appears when attempting to use a QI Core Library in a QDM measure CQL', () => {
         //Click on Edit Measure
         MeasuresPage.actionCenter('edit')

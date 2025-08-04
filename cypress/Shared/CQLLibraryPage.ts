@@ -234,67 +234,6 @@ export class CQLLibraryPage {
         return user
     }
 
-    public static createAPILibraryWithValidCQL(CqlLibraryName: string, CQLLibraryPublisher: string, ModelType?: string, LibraryCQLVal?: string, twoLibraries?: boolean, altUser?: boolean): string {
-        let user = ''
-        let CQLVal = ''
-        let model = ''
-
-        if (ModelType == undefined || ModelType == null || ModelType == '') {
-            model = 'QI-Core v4.1.1'
-        }
-        else {
-            model = ModelType
-        }
-
-        if (LibraryCQLVal == undefined || LibraryCQLVal == null || LibraryCQLVal == '') {
-            CQLVal = ""
-        }
-        else {
-            CQLVal = LibraryCQLVal
-        }
-
-        if (altUser) {
-            cy.setAccessTokenCookieALT()
-            user = Environment.credentials().harpUserALT
-        }
-        else {
-            cy.setAccessTokenCookie()
-            user = Environment.credentials().harpUser
-        }
-
-        //Create New CQL Library
-        cy.getCookie('accessToken').then((accessToken) => {
-            cy.request({
-                url: '/api/cql-libraries',
-                headers: {
-                    authorization: 'Bearer ' + accessToken.value
-                },
-                method: 'POST',
-                body: {
-                    'cqlLibraryName': CqlLibraryName,
-                    'model': model,
-                    'cql': CQLVal,
-                    "librarySetId": uuidv4(),
-                    "description": "description",
-                    "publisher": CQLLibraryPublisher,
-                    'createdBy': user
-                }
-            }).then((response) => {
-                expect(response.status).to.eql(201)
-                expect(response.body.id).to.be.exist
-                expect(response.body.cqlLibraryName).to.eql(CqlLibraryName)
-                if (twoLibraries === true) {
-                    cy.writeFile('cypress/fixtures/cqlLibraryId2', response.body.id)
-                }
-                else {
-                    cy.writeFile('cypress/fixtures/cqlLibraryId', response.body.id)
-                }
-
-            })
-        })
-        return user
-    }
-
     //input the library that is on page to check it's checkbox (ie: if it is the first library that we want checked, enter 0)
     public static checkLibrary(libraryOnPage: number): void {
 
