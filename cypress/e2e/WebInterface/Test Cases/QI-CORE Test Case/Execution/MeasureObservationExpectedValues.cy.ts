@@ -7,6 +7,7 @@ import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
+import { Toasts } from "../../../../../Shared/Toasts"
 
 const now = Date.now()
 let measureName = 'MOExpectedValues' + now
@@ -66,7 +67,8 @@ describe('Measure Observation Expected values', () => {
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
         cy.get(TestCasesPage.detailsTab).click()
-        cy.get(TestCasesPage.importTestCaseSuccessMsg, { timeout: 6500 }).should('have.text', 'Test case updated successfully with warnings in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.')
+        cy.get(Toasts.otherSuccessToast).should('have.text', Toasts.warningOffsetText)
+               
         //Assert saved observation values
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
         cy.get(TestCasesPage.measureObservationRow).should('contain.value', '1.3')
