@@ -64,8 +64,7 @@ const measureCQLStrat = 'library CohortPatientWithStrartification version \'0.0.
     'define "Stratification 1":\n' +
     'true'
 const measureCQLPFTests = MeasureCQL.CQL_Populations
-const timezoneErrorMessage = 'Test case updated successfully with errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.'
-const timezoneWarningMessage = 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
+
 
 describe('Run / Execute Test Case button validations', () => {
 
