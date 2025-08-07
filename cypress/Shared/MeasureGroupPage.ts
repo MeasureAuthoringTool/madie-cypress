@@ -448,36 +448,58 @@ export class MeasureGroupPage {
                         "id": fileContents,
                         "scoring": measureScoring,
                         "populationBasis": popBasis,
+                        "rateAggregation": "<p>test rA</p>",
+                        "groupDescription": "<p>test gD</p>",
                         "populations": [
                             {
+                                "description": "<p>test IP P</p>",
                                 "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPopP
                             },
                             {
+                                "description": "<p>test d P</p>",
                                 "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": PopDenomP
                             },
                             {
+                                "description": "<p>test dE P</p>",
                                 "id": uuidv4(),
                                 "name": "denominatorExclusion",
                                 "definition": DenomExcl
                             },
                             {
+                                "description": "<p>test dEx P</p>",
                                 "id": uuidv4(),
                                 "name": "denominatorException",
                                 "definition": DenomExcep
                             },
                             {
+                                "description": "<p>test n P</p>",
                                 "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": PopNumP
                             },
                             {
+                                "description": "<p>test nE P</p>",
                                 "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": NumerExcl
+                            }
+                        ],
+                        "stratifications": [
+                            {
+                                "id": uuidv4(),
+                                "description": "<p>test strat ip</p>",
+                                "cqlDefinition": 'Stratification 1',
+                                "associations": ["initialPopulation"]
+                            },
+                            {
+                                "id": uuidv4(),
+                                "description": "<p>test strat d</p>",
+                                "cqlDefinition": 'Stratification 1',
+                                "associations": ["denominator"]
                             }
                         ],
                         "scoringUnit": {
@@ -492,9 +514,8 @@ export class MeasureGroupPage {
                         "measureGroupTypes": [
                             "Outcome"
                         ],
-                        "stratifications": [
-                        ],
-                        "improvementNotation": "Increased score indicates improvement"
+                        "improvementNotation": "Increased score indicates improvement",
+                        "improvementNotationDescription": "<p>test iND</p>"
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)
@@ -636,8 +657,11 @@ export class MeasureGroupPage {
                         "id": fileContents,
                         "scoring": measureScoring,
                         "populationBasis": popBasis,
+                        "rateAggregation": "<p>test ra</p>",
+                        "groupDescription": "<p>test gd</p>",
                         "populations": [
                             {
+                                "description": "<p>test pd</p>",
                                 "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPopP
@@ -647,8 +671,21 @@ export class MeasureGroupPage {
                             "Outcome"
                         ],
                         "stratifications": [
+                            {
+                                "id": uuidv4(),
+                                "description": "<p>test strat 1</p>",
+                                "cqlDefinition": "Initial Population",
+                                "associations": ["initialPopulation"]
+                            },
+                            {
+                                "id": uuidv4(),
+                                "description": "<p>test strat 2</p>",
+                                "cqlDefinition": "Initial Population",
+                                "associations": ["denominator"]
+                            }
                         ],
-                        "improvementNotation": "Increased score indicates improvement"
+                        "improvementNotation": "Increased score indicates improvement",
+                        "improvementNotationDescription": "<p>test iND</p>"
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)

@@ -29,7 +29,43 @@ const invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
 const warningTestCaseJson = TestCaseJson.TestCaseJson_with_warnings
 const errorTestCaseJSON_no_ResourceID = TestCaseJson.TestCaseJson_missingResourceIDs
 const measureCQL = MeasureCQL.CQL_Multiple_Populations
+const measureCQLStrat = 'library CohortPatientWithStrartification version \'0.0.000\'\n' +
+    'using QICore version \'4.1.1\'\n' +
+    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
+    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
+    'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
+    'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
+    'valueset "Preventive Care Services-Initial Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\'\n' +
+    'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
+    'valueset "End Stage Renal Disease": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.353\' \n' +
+    '\n' +
+    'parameter "Measurement Period" Interval<DateTime>\n' +
+    'default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
+    '\n' +
+    'context Patient\n' +
+    '\n' +
+    'define "Initial Population":\n' +
+    '   true\n' +
+    ' \n' +
+    'define "Qualifying Encounters":\n' +
+    '(\n' +
+    '[Encounter: "Office Visit"]\n' +
+    'union [Encounter: "Annual Wellness Visit"]\n' +
+    'union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
+    'union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
+    'union [Encounter: "Home Healthcare Services"]\n' +
+    ') ValidEncounter\n' +
+    'where ValidEncounter.period during "Measurement Period"\n' +
+    'and ValidEncounter.isFinishedEncounter()\n' +
+    '\n' +
+    'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
+    '(Enc E where E.status = \'finished\') is not null\n' +
+    '\n' +
+    'define "Stratification 1":\n' +
+    'true'
 const measureCQLPFTests = MeasureCQL.CQL_Populations
+const timezoneErrorMessage = 'Test case updated successfully with errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.'
+const timezoneWarningMessage = 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
 
 describe('Run / Execute Test Case button validations', () => {
 
@@ -447,8 +483,8 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         MeasuresPage.actionCenter('edit', null)
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click().wait(1500)
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 50000)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
@@ -1744,7 +1780,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //confirm no message
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
-    })
+        })
 })
 
 describe('Verify multiple IPs on the highlighting tab', () => {
