@@ -3396,4 +3396,301 @@ export class TestCaseJson {
         '    ]' +
         '  }'
 
+    public static readonly experimentalTestCase = `{
+    "resourceType": "Bundle",
+    "id": "63ec09a3ccb3770120fea8f3",
+    "type": "collection",
+    "entry": [
+        {
+        "fullUrl": "https://madie.cms.gov/Patient/54150016-594d-4755-9a95-be91f761d2b1",
+        "resource": {
+            "resourceType": "Patient",
+            "id": "54150016-594d-4755-9a95-be91f761d2b1",
+            "meta": {
+            "profile": [
+                "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"
+            ]
+            },
+            "text": {
+            "status": "generated"
+            },
+            "extension": [
+            {
+                "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race",
+                "extension": [
+                {
+                    "url": "ombCategory",
+                    "valueCoding": {
+                    "system": "urn:oid:2.16.840.1.113883.6.238",
+                    "code": "2106-3",
+                    "display": "White",
+                    "userSelected": true
+                    }
+                },
+                {
+                    "url": "text",
+                    "valueString": "White"
+                }
+                ]
+            },
+            {
+                "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity",
+                "extension": [
+                {
+                    "url": "ombCategory",
+                    "valueCoding": {
+                    "system": "urn:oid:2.16.840.1.113883.6.238",
+                    "code": "2186-5",
+                    "display": "Not Hispanic or Latino",
+                    "userSelected": true
+                    }
+                },
+                {
+                    "url": "text",
+                    "valueString": "Not Hispanic or Latino"
+                }
+                ]
+            },
+            {
+                "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-sex",
+                "valueCode": "248152002"
+            }
+            ],
+            "identifier": [
+            {
+                "type": {
+                "coding": [
+                    {
+                    "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                    "code": "MR"
+                    }
+                ]
+                },
+                "system": "https://bonnie-fhir.healthit.gov/",
+                "value": "63ec09a3ccb3770120fea8f3"
+            }
+            ],
+            "active": true,
+            "name": [
+            {
+                "use": "usual",
+                "family": "RespiratoryRatePass",
+                "given": [
+                "RespirationsAtStartOfEnc"
+                ]
+            }
+            ],
+            "gender": "female",
+            "birthDate": "1948-06-15"
+        }
+        },
+        {
+        "fullUrl": "https://madie.cms.gov/Coverage/5f99692fb977ef0000c02d22",
+        "resource": {
+            "resourceType": "Coverage",
+            "id": "5f99692fb977ef0000c02d22",
+            "meta": {
+            "profile": [
+                "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-coverage"
+            ]
+            },
+            "status": "active",
+            "type": {
+            "coding": [
+                {
+                "system": "https://nahdo.org/sopt",
+                "version": "1.0.1",
+                "code": "1",
+                "display": "Medicare",
+                "userSelected": true
+                }
+            ]
+            },
+            "policyHolder": {
+            "reference": "Patient/54150016-594d-4755-9a95-be91f761d2b1"
+            },
+            "beneficiary": {
+            "reference": "Patient/54150016-594d-4755-9a95-be91f761d2b1"
+            },
+            "subscriberId": "AB9876",
+            "relationship": {
+            "coding": [
+                {
+                "system": "http://terminology.hl7.org/CodeSystem/subscriber-relationship",
+                "code": "self"
+                }
+            ]
+            },
+            "dependent": "0",
+            "period": {
+            "start": "2026-07-01T06:00:00.000+00:00",
+            "end": "2026-09-01T11:06:01.000+00:00"
+            },
+            "payor": [
+            {
+                "reference": "Organization/123456"
+            }
+            ]
+        }
+        },
+        {
+        "fullUrl": "https://madie.cms.gov/Encounter/5dc2db4f831f330000d74219",
+        "resource": {
+            "resourceType": "Encounter",
+            "id": "5dc2db4f831f330000d74219",
+            "meta": {
+            "profile": [
+                "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"
+            ]
+            },
+            "status": "finished",
+            "class": {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+            "code": "ACUTE",
+            "display": "Acute",
+            "userSelected": true
+            },
+            "type": [
+            {
+                "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "183452005"
+                }
+                ]
+            }
+            ],
+            "subject": {
+            "reference": "Patient/54150016-594d-4755-9a95-be91f761d2b1"
+            },
+            "period": {
+            "start": "2026-08-21T08:00:00.000+00:00",
+            "end": "2026-08-22T08:15:00.000+00:00"
+            }
+        }
+        },
+        {
+        "fullUrl": "https://madie.cms.gov/Observation/5b7c5511b84846299c81a50f",
+        "resource": {
+            "resourceType": "Observation",
+            "id": "5b7c5511b84846299c81a50f",
+            "meta": {
+            "profile": [
+                "http://hl7.org/fhir/us/core/StructureDefinition/us-core-respiratory-rate"
+            ]
+            },
+            "status": "final",
+            "category": [
+            {
+                "coding": [
+                {
+                    "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                    "code": "vital-signs",
+                    "display": "Vital Signs",
+                    "userSelected": true
+                }
+                ]
+            }
+            ],
+            "code": {
+            "coding": [
+                {
+                "system": "http://loinc.org",
+                "code": "9279-1",
+                "display": "Respiratory rate"
+                }
+            ]
+            },
+            "subject": {
+            "reference": "Patient/54150016-594d-4755-9a95-be91f761d2b1"
+            },
+            "effectiveDateTime": "2026-08-21T08:01:00.000+00:00",
+            "issued": "2026-08-21T08:01:00.000+00:00",
+            "valueQuantity": {
+            "value": 16,
+            "unit": "/min",
+            "system": "http://unitsofmeasure.org",
+            "code": "/min"
+            }
+        }
+        },
+        {
+        "fullUrl": "https://madie.cms.gov/Organization/123456",
+        "resource": {
+            "resourceType": "Organization",
+            "id": "123456",
+            "meta": {
+            "profile": [
+                "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-organization"
+            ]
+            },
+            "identifier": [
+            {
+                "use": "temp",
+                "system": "urn:oid:2.16.840.1.113883.4.4",
+                "value": "21-3259825"
+            }
+            ],
+            "active": true,
+            "type": [
+            {
+                "coding": [
+                {
+                    "system": "http://terminology.hl7.org/CodeSystem/organization-type",
+                    "code": "pay",
+                    "display": "Payer"
+                }
+                ]
+            }
+            ],
+            "name": "Blue Cross Blue Shield of Texas",
+            "telecom": [
+            {
+                "system": "phone",
+                "value": "(+1) 972-766-6900"
+            }
+            ],
+            "address": [
+            {
+                "use": "billing",
+                "type": "postal",
+                "line": [
+                "P.O. Box 660044"
+                ],
+                "city": "Dallas",
+                "state": "TX",
+                "postalCode": "75266-0044",
+                "country": "USA"
+            }
+            ]
+        }
+        },
+        {
+        "fullUrl": "https://madie.cms.gov/Practitioner/practitioner-123456",
+        "resource": {
+            "resourceType": "Practitioner",
+            "id": "practitioner-123456",
+            "meta": {
+            "profile": [
+                "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-practitioner"
+            ]
+            },
+            "identifier": [
+            {
+                "system": "http://hl7.org/fhir/sid/us-npi",
+                "value": "0723660813"
+            }
+            ],
+            "name": [
+            {
+                "family": "Evil",
+                "prefix": [
+                "Dr"
+                ]
+            }
+            ]
+        }
+        }
+    ]
+    }`
 }
