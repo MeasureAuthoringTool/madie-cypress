@@ -1089,33 +1089,41 @@ describe('Measure Stratifications', () => {
                         "id": fileContents,
                         "scoring": measureScoring,
                         "populationBasis": "Boolean",
+                        "groupDescription": "<p>test gD P</p>",
+                        "rateAggregation": "<p>test rA P</p>",
                         "populations": [
                             {
+                                "description": "<p>test ip P</p>",
                                 "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": 'ipp'
                             },
                             {
+                                "description": "<p>test d P</p>",
                                 "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": 'denom'
                             },
                             {
+                                "description": "<p>test dExcl P</p>",
                                 "id": uuidv4(),
                                 "name": "denominatorExclusion",
                                 "definition": ""
                             },
                             {
+                                "description": "<p>test dExc P</p>",
                                 "id": uuidv4(),
                                 "name": "denominatorException",
                                 "definition": ""
                             },
                             {
+                                "description": "<p>test n P</p>",
                                 "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": 'num'
                             },
                             {
+                                "description": "<p>test nExcl</p>",
                                 "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": ""
@@ -1123,21 +1131,24 @@ describe('Measure Stratifications', () => {
                         ],
                         "stratifications": [
                             {
-                                "id": "",
-                                "description": "",
+                                "id": uuidv4(),
+                                "description": "<p>test ip strat</p>",
                                 "cqlDefinition": 'ipp',
-                                "association": "initialPopulation"
+                                "associations": ["initialPopulation"]
                             },
                             {
-                                "id": "",
-                                "description": "",
+                                "id": uuidv4(),
+                                "description": "<p>test d strat</p>",
                                 "cqlDefinition": 'denom',
-                                "association": "denominator"
+                                "associations": ["denominator"]
                             }
                         ],
                         "measureGroupTypes": [
                             "Outcome"
-                        ]
+                        ],
+                        "improvementNotation": "Increased score indicates improvement",
+                        "improvementNotationDescription": "<p>test iND</p>"
+
                     }
                 }).then((response) => {
                     console.log(response)
