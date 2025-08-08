@@ -128,7 +128,7 @@ export class MeasureGroupPage {
     public static readonly improvementNotationDescText = '[data-testid="improvement-notation-description-text"]'
     public static readonly readOnlyImpNotationDescription = '#improvementNotationDescription'
     // When the flag "EnhancedTextFormatting" is removed, replace the below variable's value with that wheich is commented out
-    public static readonly improvementNotationDescQiCore = '[data-testid="improvement-notation-description-text"]'/*'[data-testid="improvement-notation-description-rich-text-editor"]'*/
+    public static readonly improvementNotationDescQiCore = '[data-testid="improvement-notation-description-rich-text-editor"]'
     public static readonly improvementNotationValues = '[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]'
     public static readonly measureReportingSaveBtn = '[data-testid="measure-Reporting-save"]'
 
@@ -254,14 +254,14 @@ export class MeasureGroupPage {
     public static readonly riskAdjustmentDefinitionDropdown = '[id="risk-adjustment-listbox"]'
     public static readonly riskAdjustmentTextBox = '[class="risk-description"]'
     public static readonly cancelIcon = '[data-testid=CancelIcon]'
-    public static readonly riskAdjustmentDescriptionTextBox = '[data-testid="risk-adjustment-description-text"]'
+    public static readonly riskAdjustmentDescriptionTextBox = '[data-testid="rich-text-editor-content"]'
     public static readonly saveRiskAdjustments = '[data-testid="measure-Risk Adjustment-save"]'
     public static readonly riskAdjDropDown = '[data-testid="risk-adjustment-dropdown"]'
 
     //Supplemental data elements
     public static readonly supplementalDataDefinitionSelect = '#supplemental-data'
     public static readonly supplementalDataDefinitionDropdown = '#supplemental-data-listbox'
-    public static readonly supplementalDataDefinitionDescriptionTextBox = '[data-testid="supplemental-data-description-text"]'
+    public static readonly supplementalDataDefinitionDescriptionTextBox = '[data-testid="rich-text-editor-content"]'
     public static readonly saveSupplementalDataElements = '[data-testid="measure-Supplemental Data-save"]'
     public static readonly removeCloseDefinitionSelection = '[data-testid="CancelIcon"]'
     public static readonly discardChangesBtn = '[data-testid=cancel-button]'
@@ -448,58 +448,36 @@ export class MeasureGroupPage {
                         "id": fileContents,
                         "scoring": measureScoring,
                         "populationBasis": popBasis,
-                        "rateAggregation": "<p>test rA</p>",
-                        "groupDescription": "<p>test gD</p>",
                         "populations": [
                             {
-                                "description": "<p>test IP P</p>",
                                 "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPopP
                             },
                             {
-                                "description": "<p>test d P</p>",
                                 "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": PopDenomP
                             },
                             {
-                                "description": "<p>test dE P</p>",
                                 "id": uuidv4(),
                                 "name": "denominatorExclusion",
                                 "definition": DenomExcl
                             },
                             {
-                                "description": "<p>test dEx P</p>",
                                 "id": uuidv4(),
                                 "name": "denominatorException",
                                 "definition": DenomExcep
                             },
                             {
-                                "description": "<p>test n P</p>",
                                 "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": PopNumP
                             },
                             {
-                                "description": "<p>test nE P</p>",
                                 "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": NumerExcl
-                            }
-                        ],
-                        "stratifications": [
-                            {
-                                "id": uuidv4(),
-                                "description": "<p>test strat ip</p>",
-                                "cqlDefinition": 'Stratification 1',
-                                "associations": ["initialPopulation"]
-                            },
-                            {
-                                "id": uuidv4(),
-                                "description": "<p>test strat d</p>",
-                                "cqlDefinition": 'Stratification 1',
-                                "associations": ["denominator"]
                             }
                         ],
                         "scoringUnit": {
@@ -514,8 +492,9 @@ export class MeasureGroupPage {
                         "measureGroupTypes": [
                             "Outcome"
                         ],
-                        "improvementNotation": "Increased score indicates improvement",
-                        "improvementNotationDescription": "<p>test iND</p>"
+                        "stratifications": [
+                        ],
+                        "improvementNotation": "Increased score indicates improvement"
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(201)
