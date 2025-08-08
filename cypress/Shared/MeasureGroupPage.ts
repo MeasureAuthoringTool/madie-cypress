@@ -674,13 +674,13 @@ export class MeasureGroupPage {
                             {
                                 "id": uuidv4(),
                                 "description": "<p>test strat 1</p>",
-                                "cqlDefinition": "Initial Population",
+                                "cqlDefinition": PopIniPopP,
                                 "associations": ["initialPopulation"]
                             },
                             {
                                 "id": uuidv4(),
                                 "description": "<p>test strat 2</p>",
-                                "cqlDefinition": "Initial Population",
+                                "cqlDefinition": PopIniPopP,
                                 "associations": ["denominator"]
                             }
                         ],

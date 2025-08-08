@@ -214,14 +214,14 @@ export class CreateMeasurePage {
                         "sdeIncluded": null
                     },
                     'measureMetaData': {
-                        "guidance": "this is a meta guidance (usage) value -- for the 'Clinical Usage' field",
-                        "description": "SemanticBits",
-                        "purpose": "this is a meta purpose value",
+                        "guidance": "<p>this is a meta guidance (usage) value -- for the 'Clinical Usage' field</p>",
+                        "description": "<p>SemanticBits</p>",
+                        "purpose": "<p>this is a meta purpose value</p>",
                         "measureDefinitions": [
                             {
                                 "id": "e764840c-d859-40b2-b701-6f114e5c8bb9",
                                 "term": "ThisIsTheDefinitionTermValue",
-                                "definition": "ThisIsTheDefinitionDefValue"
+                                "definition": "<p>ThisIsTheDefinitionDefValue</p>"
                             }
                         ],
                         "endorsements": [
@@ -248,12 +248,12 @@ export class CreateMeasurePage {
                         "references": [
                             {
                                 "id": "759dbdc8-3cea-4f4b-bc5c-e9773889e347",
-                                "referenceText": "Text 1",
+                                "referenceText": "<p>Text 1</p>",
                                 "referenceType": "Citation"
                             },
                             {
                                 "id": "02496e27-73ec-4f26-9a15-84a433d5b0cc",
-                                "referenceText": "Text 3",
+                                "referenceText": "<p>Text 3</p>",
                                 "referenceType": "Justification"
                             }
                         ]
@@ -343,7 +343,7 @@ export class CreateMeasurePage {
                     'elmJson': elmJson,
                     'measureMetaData': {
                         "experimental": false,
-                        "description": "SemanticBits",
+                        "description": "<p>SemanticBits</p>",
                         "steward": {
                             "name": "SemanticBits",
                             "id": "64120f265de35122e68dac40",
@@ -557,7 +557,7 @@ export class CreateMeasurePage {
         } else {
             measureMetadata = {
                 "experimental": false,
-                "description": "SemanticBits",
+                "description": "<p>SemanticBits</p>",
                 "steward": {
                     "name": "SemanticBits",
                     "id": "64120f265de35122e68dac40",
