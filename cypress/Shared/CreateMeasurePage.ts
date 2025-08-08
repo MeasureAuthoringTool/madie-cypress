@@ -215,7 +215,7 @@ export class CreateMeasurePage {
                     },
                     'measureMetaData': {
                         "guidance": "<p>this is a meta guidance (usage) value -- for the 'Clinical Usage' field</p>",
-                        "description": "<table class=\"rich-text-table\" style=\"min-width: 75px\"><colgroup><col style=\"min-width: 25px\"><col style=\"min-width: 25px\"><col style=\"min-width: 25px\"></colgroup><tbody><tr><th colspan=\"1\" rowspan=\"1\"><p>test</p></th><th colspan=\"1\" rowspan=\"1\"><p>test</p></th><th colspan=\"1\" rowspan=\"1\"><p>test</p></th></tr><tr><td colspan=\"1\" rowspan=\"1\"><ol><li><p>SemanticBits</p></li><li><p>SemanticBits2</p></li><li><p>SemanticBits3</p></li><li><p>SemanticBits4</p></li></ol></td><td colspan=\"1\" rowspan=\"1\"><p></p></td><td colspan=\"1\" rowspan=\"1\"><p></p></td></tr><tr><td colspan=\"1\" rowspan=\"1\"><p></p></td><td colspan=\"1\" rowspan=\"1\"><p></p></td><td colspan=\"1\" rowspan=\"1\"><p></p></td></tr></tbody></table><p>This is a test</p>",
+                        "description": "<p>SemanticBits</p>",
                         "purpose": "<p>this is a meta purpose value</p>",
                         "measureDefinitions": [
                             {
@@ -343,7 +343,7 @@ export class CreateMeasurePage {
                     'elmJson': elmJson,
                     'measureMetaData': {
                         "experimental": false,
-                        "description": "SemanticBits",
+                        "description": "<p>SemanticBits</p>",
                         "steward": {
                             "name": "SemanticBits",
                             "id": "64120f265de35122e68dac40",
@@ -557,7 +557,7 @@ export class CreateMeasurePage {
         } else {
             measureMetadata = {
                 "experimental": false,
-                "description": "SemanticBits",
+                "description": "<p>SemanticBits</p>",
                 "steward": {
                     "name": "SemanticBits",
                     "id": "64120f265de35122e68dac40",

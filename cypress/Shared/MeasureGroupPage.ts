@@ -448,33 +448,41 @@ export class MeasureGroupPage {
                         "id": fileContents,
                         "scoring": measureScoring,
                         "populationBasis": popBasis,
+                        "rateAggregation": "<p>test rA</p>",
+                        "groupDescription": "<p>test gD</p>",
                         "populations": [
                             {
+                                "description": "<p>test IP P</p>",
                                 "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPopP
                             },
                             {
+                                "description": "<p>test d P</p>",
                                 "id": uuidv4(),
                                 "name": "denominator",
                                 "definition": PopDenomP
                             },
                             {
+                                "description": "<p>test dE P</p>",
                                 "id": uuidv4(),
                                 "name": "denominatorExclusion",
                                 "definition": DenomExcl
                             },
                             {
+                                "description": "<p>test dEx P</p>",
                                 "id": uuidv4(),
                                 "name": "denominatorException",
                                 "definition": DenomExcep
                             },
                             {
+                                "description": "<p>test n P</p>",
                                 "id": uuidv4(),
                                 "name": "numerator",
                                 "definition": PopNumP
                             },
                             {
+                                "description": "<p>test nE P</p>",
                                 "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": NumerExcl
