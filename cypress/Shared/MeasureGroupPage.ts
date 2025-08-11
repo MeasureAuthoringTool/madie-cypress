@@ -101,10 +101,10 @@ export class MeasureGroupPage {
     public static readonly stratAssociationThree = '[id="association-select-3"]'
     public static readonly stratAssociationFour = '[id="association-select-4"]'
 
-    public static readonly stratDescOne = '[name="stratifications[0].description"]'
-    public static readonly stratDescTwo = '[name="stratifications[1].description"]'
-    public static readonly stratDescThree = '[name="stratifications[2].description"]'
-    public static readonly stratDescFour = '[name="stratifications[3].description"]'
+    public static readonly stratDescOne = '[id="stratifications[0].description"]'
+    public static readonly stratDescTwo = '[id="stratifications[1].description"]'
+    public static readonly stratDescThree = '[id="stratifications[2].description"]'
+    public static readonly stratDescFour = '[id="stratifications[3].description"]'
 
     public static readonly addStratButton = '[data-testid="add-strat-button"]'
     public static readonly removeStratButton = '[data-testid="remove-strat-button"]'
