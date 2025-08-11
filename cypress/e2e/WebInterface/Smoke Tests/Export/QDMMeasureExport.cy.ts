@@ -6,7 +6,7 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../Shared/Utilities"
-import { Header } from "../../../../Shared/Header";
+import { Header } from "../../../../Shared/Header"
 
 const url = Cypress.config('baseUrl')
 let qdmMeasureName = 'QDMTestMeasure' + Date.now()
@@ -14,7 +14,6 @@ let qdmCqlLibraryName = 'QDMLibrary' + Date.now()
 const path = require('path')
 const downloadsFolder = Cypress.config('downloadsFolder')
 const { deleteDownloadsFolderBeforeAll } = require('cypress-delete-downloads-folder')
-let qdmMeasureCQL = MeasureCQL.QDM_CQL_withDRC
 let qdmCMSMeasureCQL = MeasureCQL.QDM_CQL_withLargeIncludedLibrary
 
 const measureData: CreateMeasureOptions = {
@@ -110,14 +109,10 @@ describe('Successful QDM Measure Export', () => {
             expect(bodyText).to.include('Measure Type\tProcess')
             expect(bodyText).to.include('Stratification\t\n' +
                 'None')
-            expect(bodyText).to.include('Initial Population\t\n' +
-                'None')
-            expect(bodyText).to.include('Denominator\t\n' +
-                'None')
-            expect(bodyText).to.include('Denominator Exclusions\t\n' +
-                'None')
-            expect(bodyText).to.include('Numerator\t\n' +
-                'None')
+            expect(bodyText).to.include('Initial Population\t\n\ntest IP P')
+            expect(bodyText).to.include('Denominator\t\n\ntest d P')
+            expect(bodyText).to.include('Denominator Exclusions\t\n\ntest dE P')
+            expect(bodyText).to.include('Numerator\t\n\ntest n P')
             expect(bodyText).to.include('Numerator Exclusions\t\n' +
                 'None')
             expect(bodyText).to.include('Denominator Exceptions\t\n' +
