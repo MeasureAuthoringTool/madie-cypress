@@ -926,7 +926,7 @@ export class MeasureGroupPage {
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 50000)
     }
 
-    public static addStratificationData(stratificationData: Array<Stratification>) {
+    public static addStratificationDataAPI(stratificationData: Array<Stratification>) {
         const measurePath = 'cypress/fixtures/measureId'
 
         cy.getCookie('accessToken').then((accessToken) => {
