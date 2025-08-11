@@ -3396,7 +3396,7 @@ export class TestCaseJson {
         '    ]' +
         '  }'
 
-    public static readonly experimentalTestCase = `{
+    public static readonly fromCMS529IPP = `{
     "resourceType": "Bundle",
     "id": "63ec09a3ccb3770120fea8f3",
     "type": "collection",
@@ -3693,4 +3693,1040 @@ export class TestCaseJson {
         }
     ]
     }`
+
+    public static readonly fromCMS1017NumPass = `{
+  "resourceType": "Bundle",
+  "id": "tests-NumerPass-RVBMI-bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "fullUrl": "https://madie.cms.gov/Patient/65163106-0b19-4548-a994-f44b35e162e0",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "65163106-0b19-4548-a994-f44b35e162e0",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"
+          ]
+        },
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race",
+            "extension": [
+              {
+                "url": "ombCategory",
+                "valueCoding": {
+                  "system": "urn:oid:2.16.840.1.113883.6.238",
+                  "code": "2106-3",
+                  "display": "White"
+                }
+              },
+              {
+                "url": "text",
+                "valueString": "White"
+              }
+            ]
+          },
+          {
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity",
+            "extension": [
+              {
+                "url": "ombCategory",
+                "valueCoding": {
+                  "system": "urn:oid:2.16.840.1.113883.6.238",
+                  "code": "2135-2",
+                  "display": "Hispanic or Latino"
+                }
+              },
+              {
+                "url": "text",
+                "valueString": "Hispanic or Latino"
+              }
+            ]
+          },
+          {
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-sex",
+            "valueCode": "248153007"
+          }
+        ],
+        "identifier": [
+          {
+            "system": "http://hospital.smarthealthit.org",
+            "value": "999999999"
+          }
+        ],
+        "name": [
+          {
+            "family": "Example",
+            "given": [
+              "Patient"
+            ]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1956-01-01"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/65163106-0b19-4548-a994-f44b35e162e0"
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Encounter/Encounter-2",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "Encounter-2",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"
+          ]
+        },
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "IMP",
+          "display": "inpatient encounter"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "183452005",
+                "display": "Emergency hospital admission (procedure)"
+              }
+            ]
+          }
+        ],
+        "subject": {
+          "reference": "Patient/65163106-0b19-4548-a994-f44b35e162e0"
+        },
+        "period": {
+          "start": "2026-10-19T08:30:00.000+00:00",
+          "end": "2026-10-21T08:15:00.000+00:00"
+        },
+        "reasonCode": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "14047009"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "64859006"
+              }
+            ]
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Encounter/Encounter-2"
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Encounter/Encounter-1",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "Encounter-1",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"
+          ]
+        },
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "EMER",
+          "display": "emergency encounter"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "4525004",
+                "display": "Emergency department patient visit (procedure)"
+              }
+            ]
+          }
+        ],
+        "subject": {
+          "reference": "Patient/65163106-0b19-4548-a994-f44b35e162e0"
+        },
+        "period": {
+          "start": "2026-10-18T09:15:00.000+00:00",
+          "end": "2026-10-19T08:15:00.000+00:00"
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Encounter/Encounter-1"
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Claim/Claim-1",
+      "resource": {
+        "resourceType": "Claim",
+        "id": "Claim-1",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-claim"
+          ]
+        },
+        "status": "active",
+        "type": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/claim-type",
+              "code": "professional",
+              "display": "Professional"
+            }
+          ]
+        },
+        "use": "claim",
+        "patient": {
+          "reference": "Patient/65163106-0b19-4548-a994-f44b35e162e0"
+        },
+        "created": "2026-10-22",
+        "priority": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/processpriority",
+              "code": "normal"
+            }
+          ]
+        },
+        "diagnosis": [
+          {
+            "sequence": 1,
+            "diagnosisCodeableConcept": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "14047009"
+                }
+              ]
+            }
+          }
+        ],
+        "item": [
+          {
+            "sequence": 1,
+            "diagnosisSequence": [
+              1,
+              2
+            ],
+            "encounter": [
+              {
+                "reference": "Encounter/Encounter-2"
+              }
+            ],
+            "productOrService": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/ex-USCLS",
+                  "code": "1101"
+                }
+              ]
+            }
+          }
+        ],
+        "insurance": [
+          {
+            "sequence": 1,
+            "focal": true,
+            "coverage": {
+              "reference": "Coverage/coverage-1"
+            }
+          }
+        ],
+        "provider": {
+          "reference": "Practitioner/practitioner-1"
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Claim/Claim-1"
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Claim/Claim-2",
+      "resource": {
+        "resourceType": "Claim",
+        "id": "Claim-2",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-claim"
+          ]
+        },
+        "status": "active",
+        "type": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/claim-type",
+              "code": "institutional",
+              "display": "Institutional"
+            }
+          ]
+        },
+        "use": "claim",
+        "patient": {
+          "reference": "Patient/65163106-0b19-4548-a994-f44b35e162e0"
+        },
+        "created": "2026-11-01",
+        "priority": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/processpriority",
+              "code": "normal"
+            }
+          ]
+        },
+        "diagnosis": [
+          {
+            "sequence": 1,
+            "diagnosisCodeableConcept": {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/sid/icd-10-cm",
+                  "code": "M80.00XA",
+                  "display": "Age-related osteoporosis with current pathological fracture, unspecified site, initial encounter for fracture"
+                }
+              ]
+            }
+          }
+        ],
+        "item": [
+          {
+            "sequence": 1,
+            "diagnosisSequence": [
+              1,
+              2
+            ],
+            "encounter": [
+              {
+                "reference": "Encounter/Encounter-2"
+              }
+            ],
+            "productOrService": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/ex-USCLS",
+                  "code": "1101"
+                }
+              ]
+            }
+          }
+        ],
+        "insurance": [
+          {
+            "sequence": 1,
+            "focal": true,
+            "coverage": {
+              "reference": "Coverage/coverage-1"
+            }
+          }
+        ],
+        "provider": {
+          "reference": "Practitioner/practitioner-1"
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Claim/Claim-2"
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Observation/BMI-Observation-1",
+      "resource": {
+        "resourceType": "Observation",
+        "id": "BMI-Observation-1",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-bmi"
+          ]
+        },
+        "status": "final",
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+                "code": "vital-signs",
+                "display": "Vital Signs"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "39156-5",
+              "display": "Body mass index (BMI) [Ratio]"
+            }
+          ],
+          "text": "BMI"
+        },
+        "subject": {
+          "reference": "Patient/65163106-0b19-4548-a994-f44b35e162e0"
+        },
+        "effectiveDateTime": "2026-10-20T08:00:00.000+00:00",
+        "valueQuantity": {
+          "value": 28.3,
+          "unit": "kg/m2",
+          "system": "http://unitsofmeasure.org",
+          "code": "kg/m2"
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Observation/BMI-Observation-1"
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Practitioner/Practitioner-1",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "Practitioner-1",
+        "identifier": [
+          {
+            "system": "http://www.cms.gov/identifiers/pracitioners",
+            "value": "P12345"
+          }
+        ],
+        "qualification": [
+          {
+            "identifier": [
+              {
+                "system": "http://hl7.org/fhir/sid/us-npi",
+                "value": "1234567890"
+              }
+            ],
+            "code": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MD",
+                  "display": "Medical License number"
+                }
+              ]
+            }
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Smith",
+            "given": [
+              "John"
+            ]
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Practitioner/Practitioner-1"
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Coverage/Coverage-1",
+      "resource": {
+        "resourceType": "Coverage",
+        "id": "Coverage-1",
+        "status": "active",
+        "beneficiary": {
+          "reference": "Patient/65163106-0b19-4548-a994-f44b35e162e0"
+        },
+        "payor": [
+          {
+            "reference": "Organization/Organization-1"
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Coverage/Coverage-1"
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Organization/Organization-1",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "Organization-1",
+        "name": "Aetna Insurance",
+        "identifier": [
+          {
+            "system": "http://cms.gov/insurance-ids",
+            "value": "AET12345"
+          }
+        ],
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/organization-type",
+                "code": "prov",
+                "display": "Healthcare Provider"
+              }
+            ]
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "+1-800-123-4567"
+          }
+        ],
+        "address": [
+          {
+            "line": [
+              "123 Main Street"
+            ],
+            "city": "Cityville",
+            "state": "CA",
+            "postalCode": "12345",
+            "country": "USA"
+          }
+        ]
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Organization/Organization-1"
+      }
+    }
+  ]
+}`
+
+    public static readonly fromCMS1272Strata1 = `{
+  "resourceType": "Bundle",
+  "id": "MSRPOPStrat1MsrObs125-BothStrataAtSameTime",
+  "type": "transaction",
+  "entry": [
+    {
+      "fullUrl": "https://madie.cms.gov/Patient/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-00",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "MSRPOPStrat1MsrObs125-BothStrataAtSameTime-00",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-patient"
+          ]
+        },
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race",
+            "extension": [
+              {
+                "url": "ombCategory",
+                "valueCoding": {
+                  "system": "urn:oid:2.16.840.1.113883.6.238",
+                  "code": "2054-5",
+                  "display": "Black or African American"
+                }
+              },
+              {
+                "url": "text",
+                "valueString": "Black or African American"
+              }
+            ]
+          },
+          {
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity",
+            "extension": [
+              {
+                "url": "ombCategory",
+                "valueCoding": {
+                  "system": "urn:oid:2.16.840.1.113883.6.238",
+                  "code": "2135-2",
+                  "display": "Hispanic or Latino"
+                }
+              },
+              {
+                "url": "text",
+                "valueString": "Hispanic or Latino"
+              }
+            ]
+          },
+          {
+            "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-sex",
+            "valueCode": "248153007"
+          }
+        ],
+        "identifier": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MR"
+                }
+              ]
+            },
+            "system": "https://bonnie-fhir.healthit.gov/",
+            "value": "01959127-5df5-7193-85e7-2fe2e01d3528"
+          }
+        ],
+        "name": [
+          {
+            "family": "MSRPOPStrat1MsrObs125",
+            "given": [
+              "BothStrataSimultaneously"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1991-10-12"
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Encounter/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-01",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "MSRPOPStrat1MsrObs125-BothStrataAtSameTime-01",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-encounter"
+          ]
+        },
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "EMER",
+          "display": "emergency"
+        },
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "http://www.ama-assn.org/go/cpt",
+                "code": "99284",
+                "display": "Emergency department visit for the evaluation and management of a patient, which requires a medically appropriate history and/or examination and moderate level of medical decision making"
+              }
+            ]
+          }
+        ],
+        "subject": {
+          "reference": "Patient/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-00"
+        },
+        "period": {
+          "start": "2026-05-05T08:00:00Z",
+          "end": "2026-05-05T14:00:00+00:00"
+        }
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Practitioner/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-71",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "MSRPOPStrat1MsrObs125-BothStrataAtSameTime-71",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-practitioner"
+          ]
+        },
+        "identifier": [
+          {
+            "system": "http://hl7.org/fhir/sid/us-npi",
+            "value": "1649898909"
+          }
+        ],
+        "active": true,
+        "name": [
+          {
+            "family": "Jojo",
+            "given": [
+              "Mojo"
+            ],
+            "prefix": [
+              "Dr"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Organization/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-98",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "MSRPOPStrat1MsrObs125-BothStrataAtSameTime-98",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-organization"
+          ]
+        },
+        "identifier": [
+          {
+            "use": "temp",
+            "system": "urn:oid:2.16.840.1.113883.4.4",
+            "value": "21-3259825"
+          }
+        ],
+        "active": true,
+        "type": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/organization-type",
+                "code": "pay",
+                "display": "Payer"
+              }
+            ],
+            "text": "Healthcare Payer"
+          }
+        ],
+        "name": "The Insurance Guys",
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "(+1) 800-867-5309"
+          },
+          {
+            "system": "email",
+            "value": "TheInsuranceGuys@hotmail.com"
+          }
+        ],
+        "address": [
+          {
+            "line": [
+              "1601 Big Bucks Avenue"
+            ],
+            "city": "Indianapolis",
+            "state": "IN",
+            "postalCode": "46237",
+            "country": "USA"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Coverage/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-61",
+      "resource": {
+        "resourceType": "Coverage",
+        "id": "MSRPOPStrat1MsrObs125-BothStrataAtSameTime-61",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-coverage"
+          ]
+        },
+        "identifier": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MB"
+                }
+              ]
+            }
+          }
+        ],
+        "status": "active",
+        "type": {
+          "coding": [
+            {
+              "system": "https://nahdo.org/sopt",
+              "code": "59",
+              "display": "Other Private Insurance"
+            }
+          ]
+        },
+        "beneficiary": {
+          "reference": "Patient/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-00"
+        },
+        "relationship": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/subscriber-relationship",
+              "code": "self"
+            }
+          ]
+        },
+        "period": {
+          "start": "2024-01-01T00:00:00Z",
+          "end": "2029-01-01T00:00:00.000+00:00"
+        },
+        "payor": [
+          {
+            "reference": "Organization/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-98"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Condition/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-05",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "MSRPOPStrat1MsrObs125-BothStrataAtSameTime-05",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-condition-encounter-diagnosis"
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "encounter-diagnosis",
+                "display": "Encounter Diagnosis"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "D57.00",
+              "display": "Hb-SS disease with crisis, unspecified"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-00"
+        },
+        "encounter": {
+          "reference": "Encounter/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-01"
+        },
+        "onsetDateTime": "2026-05-05T08:00:00Z"
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Medication/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-21",
+      "resource": {
+        "resourceType": "Medication",
+        "id": "MSRPOPStrat1MsrObs125-BothStrataAtSameTime-21",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-medication"
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "1806382",
+              "display": "Once-Daily gabapentin 600 MG Oral Tablet"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/MedicationAdministration/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-21-1",
+      "resource": {
+        "resourceType": "MedicationAdministration",
+        "id": "MSRPOPStrat1MsrObs125-BothStrataAtSameTime-21-1",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-medicationadministration"
+          ]
+        },
+        "status": "completed",
+        "medicationReference": {
+          "reference": "Medication/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-21"
+        },
+        "subject": {
+          "reference": "Patient/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-00"
+        },
+        "context": {
+          "reference": "Encounter/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-01"
+        },
+        "supportingInformation": [
+          {
+            "reference": "Condition/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-05"
+          }
+        ],
+        "effectivePeriod": {
+          "start": "2026-05-05T10:05:00Z",
+          "end": "2026-05-05T10:10:00.000+00:00"
+        },
+        "dosage": {
+          "route": {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "26643006",
+                "display": "Oral route (qualifier value)"
+              }
+            ]
+          },
+          "dose": {
+            "value": 600,
+            "unit": "mg",
+            "system": "http://unitsofmeasure.org",
+            "code": "mg"
+          }
+        }
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/Medication/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-22",
+      "resource": {
+        "resourceType": "Medication",
+        "id": "MSRPOPStrat1MsrObs125-BothStrataAtSameTime-22",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-medication"
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "1731537",
+              "display": "20 ML morphine sulfate 50 MG/ML Injection"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/MedicationAdministration/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-22-1",
+      "resource": {
+        "resourceType": "MedicationAdministration",
+        "id": "MSRPOPStrat1MsrObs125-BothStrataAtSameTime-22-1",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-medicationadministration"
+          ]
+        },
+        "status": "completed",
+        "medicationReference": {
+          "reference": "Medication/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-22"
+        },
+        "subject": {
+          "reference": "Patient/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-00"
+        },
+        "context": {
+          "reference": "Encounter/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-01"
+        },
+        "supportingInformation": [
+          {
+            "reference": "Condition/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-05"
+          }
+        ],
+        "effectivePeriod": {
+          "start": "2026-05-05T10:05:00Z",
+          "end": "2026-05-05T12:00:00+00:00"
+        },
+        "dosage": {
+          "route": {
+            "coding": [
+              {
+                "system": "http://snomed.info/sct",
+                "code": "47625008",
+                "display": "Intravenous route (qualifier value)"
+              }
+            ]
+          },
+          "dose": {
+            "value": 20,
+            "unit": "ml",
+            "system": "http://unitsofmeasure.org",
+            "code": "ml"
+          }
+        }
+      }
+    },
+    {
+      "fullUrl": "https://madie.cms.gov/claim/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-62",
+      "resource": {
+        "resourceType": "Claim",
+        "id": "MSRPOPStrat1MsrObs125-BothStrataAtSameTime-62",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/us/qicore/StructureDefinition/qicore-claim"
+          ]
+        },
+        "status": "active",
+        "type": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/claim-type",
+              "code": "institutional"
+            }
+          ]
+        },
+        "use": "claim",
+        "patient": {
+          "reference": "Patient/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-00"
+        },
+        "created": "2026-05-08",
+        "provider": {
+          "reference": "Practitioner/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-71"
+        },
+        "priority": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/processpriority",
+              "code": "normal"
+            }
+          ]
+        },
+        "diagnosis": [
+          {
+            "sequence": 1,
+            "type": [
+              {
+                "coding": [
+                  {
+                    "system": "http://terminology.hl7.org/CodeSystem/ex-diagnosistype",
+                    "code": "principal"
+                  }
+                ]
+              }
+            ],
+            "diagnosisCodeableConcept": {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/sid/icd-10-cm",
+                  "code": "D57.00"
+                }
+              ]
+            }
+          }
+        ],
+        "insurance": [
+          {
+            "sequence": 1,
+            "focal": true,
+            "coverage": {
+              "reference": "Coverage/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-61"
+            }
+          }
+        ],
+        "item": [
+          {
+            "sequence": 1,
+            "diagnosisSequence": [
+              1
+            ],
+            "productOrService": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/ex-USCLS",
+                  "code": "1205",
+                  "display": "Exam, emergency"
+                }
+              ]
+            },
+            "encounter": [
+              {
+                "reference": "Encounter/MSRPOPStrat1MsrObs125-BothStrataAtSameTime-01"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}`
 }

@@ -5,6 +5,7 @@ import { Environment } from "./Environment"
 import { Utilities } from "./Utilities"
 import { TestCasesPage } from "./TestCasesPage"
 import { v4 as uuidv4 } from 'uuid'
+import { Stratification } from "@madie/madie-models"
 
 export enum MeasureType {
     outcome = 'Outcome',
@@ -25,6 +26,7 @@ export enum MeasureScoring {
     Proportion = 'Proportion',
     Ratio = 'Ratio'
 }
+// valid for proportion, cohort, ratio
 export type MeasureGroups = {
     initialPopulation: string,
     denominator: string,
@@ -34,7 +36,12 @@ export type MeasureGroups = {
     denomException?: string,
     denomObservation?: string,
     numObservation?: string
-
+}
+export type CVGroups = {
+    initialPopulation: string,
+    measurePopulation: string,
+    measurePopExclusion?: string,
+    observation?: MeasureObservations
 }
 export type MeasureObservations = {
     aggregateMethod: string,
@@ -752,7 +759,8 @@ export class MeasureGroupPage {
         populations: MeasureGroups,
         altUser?: boolean,
         denominatorObservation?: MeasureObservations,
-        numeratorObservation?: MeasureObservations
+        numeratorObservation?: MeasureObservations,
+        cvPopulations?: CVGroups
     ): string {
         let user = ''
         let observations = []
@@ -808,6 +816,32 @@ export class MeasureGroupPage {
                 "name": "denominatorException",
                 "definition": populations.denomException
             })
+        }
+        // need this bc CV populations structure is different
+        if (cvPopulations) {
+            const measureUuid = uuidv4()
+            popsArray = [
+            {
+                "id": uuidv4(),
+                "name": "initialPopulation",
+                "definition": cvPopulations.initialPopulation
+            },
+            {
+                "id": measureUuid,
+                "name": "measurePopulation",
+                "definition": cvPopulations.measurePopulation
+            },
+            {
+                "id": uuidv4(),
+                "name": "measurePopulationExclusion",
+                "definition": cvPopulations.measurePopExclusion ? cvPopulations.measurePopExclusion : '' 
+            }
+            ]
+            if (cvPopulations.observation) {
+                cvPopulations.observation.id = uuidv4()
+                cvPopulations.observation.criteriaReference = measureUuid
+                observations.push(cvPopulations.observation)
+            }
         }
 
         if (altUser) {
@@ -890,6 +924,40 @@ export class MeasureGroupPage {
         Utilities.waitForElementVisible(EditMeasurePage.successMessage, 50000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
         Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 50000)
+    }
 
+    public static addStratificationData(stratificationData: Array<Stratification>) {
+        const measurePath = 'cypress/fixtures/measureId'
+
+        cy.getCookie('accessToken').then((accessToken) => {
+            cy.readFile(measurePath).should('exist').then((fileContents) => {
+                 // get starting data for the group
+                cy.request({
+                    url: '/api/measures/' + fileContents + '/groups',
+                    method: 'GET',
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    }
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    // add stratifications to existing group
+                    let groupWithAddedStrats = response.body[0]
+                    groupWithAddedStrats.stratifications = stratificationData
+
+                    // send update with strats added
+                    cy.request({
+                        url: '/api/measures/' + fileContents + '/groups',
+                        method: 'POST',
+                        headers: {
+                            authorization: 'Bearer ' + accessToken.value
+                        },
+                        body: groupWithAddedStrats
+                    }).then((response) => {
+                        cy.log('success start add')
+                        expect(response.status).to.eql(201)
+                    })
+                })
+            })
+        })
     }
 }
