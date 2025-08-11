@@ -48,25 +48,25 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionTextBox).clear().type('Percentage of cataract surgeries for patients aged 18 and older with a diagnosis of uncomplicated cataract and no significant ocular conditions impacting the visual outcome of surgery and had best-corrected visual acuity of 20/40 or better (distance or near) achieved in the operative eye within 90 days following the cataract surgery')
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).clear().type('Percentage of cataract surgeries for patients aged 18 and older with a diagnosis of uncomplicated cataract and no significant ocular conditions impacting the visual outcome of surgery and had best-corrected visual acuity of 20/40 or better (distance or near) achieved in the operative eye within 90 days following the cataract surgery')
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
 
         //Copyright
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureCopyrightTextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
+        cy.get(EditMeasurePage.measureCopyrightRTETextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
         cy.get(EditMeasurePage.measureCopyrightSaveButton).click()
         cy.get(EditMeasurePage.measureCopyrightSuccessMessage).should('be.visible')
 
         //Disclaimer
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureDisclaimerTextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
+        cy.get(EditMeasurePage.measureDisclaimerRTETextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
         cy.get(EditMeasurePage.measureDisclaimerSaveButton).click()
         cy.get(EditMeasurePage.measureDisclaimerSuccessMessage).should('be.visible')
 
         //Rationale
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureRationaleTextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
+        cy.get(EditMeasurePage.measureRationaleRTETextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
         cy.get(EditMeasurePage.measureRationaleSaveButton).click()
         cy.get(EditMeasurePage.measureRationaleSuccessMessage).should('be.visible')
 
@@ -90,13 +90,13 @@ describe('FHIR Measure Export for Proportion Patient Measure with QI-Core Profil
 
         //Guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGuidanceTextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
+        cy.get(EditMeasurePage.measureGuidanceRTETextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
         cy.get(EditMeasurePage.measureGuidanceSaveButton).click()
         cy.get(EditMeasurePage.measureGuidanceSuccessMessage).should('be.visible')
 
         //Clinical Recommendation
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
+        cy.get(EditMeasurePage.measureClinicalRecommendationRTETextBox).clear().type('Test!@#$%^&*()_+-={}|`~[]\:"<>?;\',./~`')
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
 

@@ -195,16 +195,19 @@ export class EditMeasurePage {
 
     //Copyright Page
     public static readonly measureCopyrightTextBox = '[data-testid="measure-copyright-input"]'
+    public static readonly measureCopyrightRTETextBox = '[data-testid="rich-text-editor-content"]'
     public static readonly measureCopyrightSaveButton = '[data-testid="measure-copyright-save"]'
     public static readonly measureCopyrightSuccessMessage = '[data-testid="measureCopyrightSuccess"]'
 
     //Disclaimer Page
     public static readonly measureDisclaimerTextBox = '[data-testid="measure-disclaimer-input"]'
+    public static readonly measureDisclaimerRTETextBox = '[data-testid="rich-text-editor-content"]'
     public static readonly measureDisclaimerSaveButton = '[data-testid="measure-disclaimer-save"]'
     public static readonly measureDisclaimerSuccessMessage = '[data-testid="measureDisclaimerSuccess"]'
 
     //Rationale Page
     public static readonly measureRationaleTextBox = '[data-testid="measure-rationale-input"]'
+    public static readonly measureRationaleRTETextBox = '[data-testid="rich-text-editor-content"]'
     public static readonly measureRationaleSaveButton = '[data-testid="measure-rationale-save"]'
     public static readonly measureRationaleSuccessMessage = '[data-testid="measureRationaleSuccess"]'
 
@@ -215,11 +218,13 @@ export class EditMeasurePage {
 
     //Guidance Page
     public static readonly measureGuidanceTextBox = '[data-testid="measure-guidance-usage-input"]'
+    public static readonly measureGuidanceRTETextBox = '[data-testid="rich-text-editor-content"]'
     public static readonly measureGuidanceSaveButton = '[data-testid="measure-guidance-usage-save"]'
     public static readonly measureGuidanceSuccessMessage = '[data-testid="measureGuidance (Usage)Success"]'
 
     //Clinical Guidance / Recommendation Page
     public static readonly measureClinicalRecommendationTextBox = '[data-testid="measure-clinical-recommendation-statement-input"]'
+    public static readonly measureClinicalRecommendationRTETextBox = '[data-testid="rich-text-editor-content"]'
     public static readonly measureClinicalRecommendationSaveButton = '[data-testid="measure-clinical-recommendation-statement-save"]'
     public static readonly measureClinicalRecommendationSuccessMessage = '[data-testid="measureClinical Recommendation StatementSuccess"]'
 
