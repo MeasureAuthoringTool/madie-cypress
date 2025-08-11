@@ -17,7 +17,7 @@ const testCase: TestCase = {
     title: 'cohortEnc',
     description: 'testing test cases',
     group: 'IPPass',
-    json: TestCaseJson.experimentalTestCase
+    json: TestCaseJson.fromCMS529IPP
 }
 const opts: CreateMeasureOptions = {
     measureCql: QiCore6Cql.cqlCMS529, // test measure based on CMS529FHIR

@@ -9,5 +9,6 @@ export class Toasts {
 
     public static readonly errorOffsetText = 'Test case updated successfully with errors in JSONTimezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
     public static readonly warningOffsetText = 'Test case updated successfully with warnings in JSONTimezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
+    public static readonly successOffsetText = 'Test case updated successfully!Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
 
 }
