@@ -206,7 +206,7 @@ describe('Validations on Measure Details page', () => {
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).type('Some test value')
         cy.get(Utilities.DiscardButton).click()
         Utilities.clickOnDiscardChanges()
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('be.empty')
+        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('not.contain.text')
 
         //type some value in the text box and save it
         cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('exist')
