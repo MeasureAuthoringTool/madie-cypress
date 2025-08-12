@@ -254,7 +254,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
         })
     })
 
-    it.only('Get Measure bundle data from madie-fhir-service and confirm Measure meta data is present', () => {
+    it('Get Measure bundle data from madie-fhir-service and confirm Measure meta data is present', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -354,7 +354,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
         })
     })
 
-    it.only('Get Measure bundle data from madie-fhir-service and confirm Library.identifier, Library.publisher, and Library.title are present', () => {
+    it('Get Measure bundle data from madie-fhir-service and confirm Library.identifier, Library.publisher, and Library.title are present', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -1068,7 +1068,7 @@ describe('Measure bundle end point returns Measure Population Description', () =
 
     })
 
-    it.only('Get Measure bundle data and verify that the description fields for Measure Population criteria are added', () => {
+    it('Get Measure bundle data and verify that the description fields for Measure Population criteria are added', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
