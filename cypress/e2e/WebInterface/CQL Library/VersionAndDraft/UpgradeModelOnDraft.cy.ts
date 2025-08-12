@@ -19,7 +19,9 @@ const lib2Options: CreateLibraryOptions = {
     cql: QiCore6Cql.CQL_For_Cohort_Six,
     libraryNumber: 1
 }
-describe('Upgrade QiCore CQL Library model during draft process', () => {
+
+//Skipping until feature flag qiCore7 is removed
+describe.skip('Upgrade QiCore CQL Library model during draft process', () => {
 
     afterEach('Delete Libraries', () => {
 
