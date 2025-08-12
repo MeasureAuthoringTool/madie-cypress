@@ -76,23 +76,23 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         cy.get(EditMeasurePage.leftPanelDescription).should('be.visible')
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionRTETextBox).should('have.attr', 'readonly', 'readonly')
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).should('not.exist')
 
         cy.get(EditMeasurePage.leftPanelCopyright).should('be.visible')
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureCopyrightTextBox).should('have.attr', 'readonly', 'readonly')
+        cy.get(EditMeasurePage.measureCopyrightTextBox).should('not.exist')
 
         cy.get(EditMeasurePage.leftPanelDisclaimer).should('be.visible')
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureDisclaimerTextBox).should('have.attr', 'readonly', 'readonly')
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).should('not.exist')
 
         cy.get(EditMeasurePage.leftPanelRationale).should('be.visible')
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureRationaleTextBox).should('have.attr', 'readonly', 'readonly')
+        cy.get(EditMeasurePage.measureRationaleTextBox).should('not.exist')
 
         cy.get(EditMeasurePage.leftPanelGuidance).should('be.visible')
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGuidanceTextBox).should('have.attr', 'readonly', 'readonly')
+        cy.get(EditMeasurePage.measureGuidanceTextBox).should('not.exist')
 
 
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).should('be.visible')
@@ -199,15 +199,15 @@ describe('Read only for measure, measure group, and test cases that user does no
         cy.get(MeasureGroupPage.stratificationTab).click()
         cy.get(MeasureGroupPage.stratOne).should('have.attr', 'readonly', 'readonly')
         cy.get(MeasureGroupPage.stratAssociationOne).should('have.attr', 'readonly', 'readonly')
-        cy.get(MeasureGroupPage.stratDescOne).should('have.attr', 'readonly', 'readonly')
+        cy.get(MeasureGroupPage.stratDescOne).should('not.exist')
         cy.get(MeasureGroupPage.stratTwo).should('have.attr', 'readonly', 'readonly')
         cy.get(MeasureGroupPage.stratAssociationTwo).should('have.attr', 'readonly', 'readonly')
-        cy.get(MeasureGroupPage.stratDescTwo).should('have.attr', 'readonly', 'readonly')
+        cy.get(MeasureGroupPage.stratDescTwo).should('not.exist')
 
         //Reporting fields are read only
         cy.get(MeasureGroupPage.reportingTab).click()
         //<textarea rows="1" readonly="" id="rateAggregation" name="rateAggregation" placeholder="-" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="color: rgb(51, 51, 51); font-family: Rubik; font-size: 14px; font-style: normal; font-weight: 400; line-height: 24px; border: none; resize: none; padding: 0px; outline: none; box-shadow: none; height: 24px; overflow: hidden;">-</textarea>
-        cy.get('[id="rateAggregation"]').should('have.attr', 'readonly', 'readonly')
+        cy.get('[data-testid="rich-text-editor-content"]').should('not.exist')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('have.attr', 'readonly', 'readonly')
     })
 })
