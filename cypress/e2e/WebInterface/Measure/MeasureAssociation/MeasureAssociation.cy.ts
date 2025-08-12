@@ -409,7 +409,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionTextBox).clear().type(QDMdescription)
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).clear().type(QDMdescription)
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
 
@@ -529,7 +529,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Confirm Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionTextBox).should('contain.value', QDMdescription)
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).should('contain.value', QDMdescription)
 
         //Confirm Copyright
         cy.get(EditMeasurePage.leftPanelCopyright).click()
@@ -942,7 +942,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionTextBox).clear().type(QDMdescription)
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).clear().type(QDMdescription)
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
 
@@ -1065,7 +1065,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Confirm Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionTextBox).should('contain.value', QDMdescription)
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).should('contain.value', QDMdescription)
 
         //Confirm Copyright
         cy.get(EditMeasurePage.leftPanelCopyright).click()
