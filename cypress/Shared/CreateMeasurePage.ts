@@ -215,7 +215,7 @@ export class CreateMeasurePage {
                     },
                     'measureMetaData': {
                         "guidance": "<p>this is a meta guidance (usage) value -- for the 'Clinical Usage' field</p>",
-                        "description": "<p>SemanticBits</p>",
+                        "description": "<p>Description</p><table class=\"rich-text-table\" style=\"min-width: 75px\"><colgroup><col style=\"min-width: 25px\"><col style=\"min-width: 25px\"><col style=\"min-width: 25px\"></colgroup><tbody><tr><th colspan=\"1\" rowspan=\"1\"><p>TEST1</p></th><th colspan=\"1\" rowspan=\"1\"><p>TEST2</p></th><th colspan=\"1\" rowspan=\"1\"><p>TEST3</p></th></tr><tr><td colspan=\"1\" rowspan=\"1\"><p></p></td><td colspan=\"1\" rowspan=\"1\"><p></p></td><td colspan=\"1\" rowspan=\"1\"><ol><li><p>line1</p></li><li><p>line2</p></li><li><p>line3</p></li></ol></td></tr><tr><td colspan=\"1\" rowspan=\"1\"><p>TESTING</p></td><td colspan=\"1\" rowspan=\"1\"><p></p></td><td colspan=\"1\" rowspan=\"1\"><p></p></td></tr></tbody></table><p><strong><em><u>This is another test</u></em></strong></p>",
                         "purpose": "<p>this is a meta purpose value</p>",
                         "measureDefinitions": [
                             {
