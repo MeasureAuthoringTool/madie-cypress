@@ -7,27 +7,24 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 
 let filePath = 'cypress/fixtures/measureId'
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName1 = 'TestLibrary' + Date.now()
+let measureName = 'AddMeasureGroup' + Date.now()
+let CqlLibraryName1 = 'AddMeasureGroupLib' + Date.now()
 let measureCQL = MeasureCQL.ICFCleanTest_CQL
 
 describe('Validate Measure Group additions', () => {
 
     beforeEach('Create Measure, Measure Group and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName1, measureCQL)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, null, null, null, null, null, null,
             null, 'Procedure')
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Cleanup', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName1)
-
     })
 
     it('Able to add complete group to a measure whom already has a group and previous group is not affected', () => {
@@ -70,7 +67,6 @@ describe('Validate Measure Group additions', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
@@ -98,6 +94,5 @@ describe('Validate Measure Group additions', () => {
 
         cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Cohort')
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Surgical Absence of Cervix')
-
     })
 })
