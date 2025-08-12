@@ -166,30 +166,22 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionRTETextBox).invoke('val').then(val => {
-            expect(val).to.eql(description)
-        })
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).should('contain.text', description)
         cy.log('Measure Description added successfully')
 
         //copyright
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureCopyrightTextBox).invoke('val').then(val => {
-            expect(val).to.eql(copyright)
-        })
+        cy.get(EditMeasurePage.measureCopyrightTextBox).should('contain.text', copyright)
         cy.log('Measure Copyright added successfully')
 
         //disclaimer
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureDisclaimerTextBox).invoke('val').then(val => {
-            expect(val).to.eql(disclaimer)
-        })
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).should('contain.text', disclaimer)
         cy.log('Measure Disclaimer added successfully')
 
         //rationale
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureRationaleTextBox).invoke('val').then(val => {
-            expect(val).to.eql(rationale)
-        })
+        cy.get(EditMeasurePage.measureRationaleTextBox).should('contain.text', rationale)
         cy.log('Measure Rationale added successfully')
 
         //Purpose
@@ -208,16 +200,12 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGuidanceTextBox).invoke('val').then(val => {
-            expect(val).to.eql(guidance)
-        })
+        cy.get(EditMeasurePage.measureGuidanceTextBox).should('contain.text', guidance)
         cy.log('Measure Guidance added successfully')
 
         //Clinical Recommendation
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).invoke('val').then(val => {
-            expect(val).to.eql(clinicalRecommendation)
-        })
+        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.text', clinicalRecommendation)
         cy.log('Measure Clinical Recommendation added successfully')
 
         //definition
