@@ -5,12 +5,11 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
-import assert = require("assert")
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+let measureName = 'CreateMeasureGroup' + Date.now()
+let CqlLibraryName = 'CreateMeasureGroupLib' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureCQL = 'library CQLLibrary5170 version \'0.0.000\'\n' +
@@ -46,7 +45,6 @@ describe('Validate Measure Group -- scoring and populations', () => {
 
     beforeEach('Create Measure and login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
     })
@@ -54,8 +52,8 @@ describe('Validate Measure Group -- scoring and populations', () => {
     afterEach('Clean up and Logout', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
         OktaLogin.Logout()
-
     })
+
     it('"Please complete the CQL Editor process before continuing" appears when there are issues with entered CQL', () => {
 
         //click on Edit button to edit measure
@@ -122,7 +120,6 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
@@ -146,15 +143,12 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //verify All data persists
-        cy.get(MeasureGroupPage.popBasis).then(($text) => {
-            assert($text.text(), 'Boolean')
+        cy.get(MeasureGroupPage.popBasis).find('input').invoke('val').then(val => {
+            expect(val).to.eq('boolean')
         })
         cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Cohort')
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Initial Population')
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox)
-            .then(($message) => {
-                expect($message.val().toString()).to.equal('MeasureGroup Description value')
-            })
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).find('[role="textbox"]').should('contain.text', 'MeasureGroup Description value')
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).should('contain.value', 'mL')
         cy.get(MeasureGroupPage.measureGroupTypeSelect).should('contain.text', 'Process')
     })
@@ -187,7 +181,6 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
@@ -228,7 +221,6 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.measureScoringSelect).should('contain.text', 'Ratio')
         cy.get(MeasureGroupPage.firstInitialPopulationSelect).should('contain.text', 'Initial Population')
         cy.get(MeasureGroupPage.secondInitialPopulationSelect).should('contain.text', 'Initial Population2')
-
     })
 
     it('Verify warning modal when Measure Group has unsaved changes', () => {
@@ -260,7 +252,6 @@ describe('Validate Measure Group -- scoring and populations', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
@@ -410,7 +401,6 @@ describe('Validate Population Basis', () => {
 
     beforeEach('Create Measure and login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
         OktaLogin.Login()
     })
@@ -418,7 +408,6 @@ describe('Validate Population Basis', () => {
     afterEach('Clean up and Logout', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
         OktaLogin.Logout()
-
     })
 
     it('Verify default Value and if no value is selected for Population Basis, the save button is unavailable', () => {
@@ -437,8 +426,8 @@ describe('Validate Population Basis', () => {
 
         cy.get(MeasureGroupPage.popBasis).should('exist')
         cy.get(MeasureGroupPage.popBasis).should('be.visible')
-        cy.get(MeasureGroupPage.popBasis).then(($text) => {
-            assert($text.text(), 'Boolean')
+        cy.get(MeasureGroupPage.popBasis).find('input').invoke('val').then(val => {
+            expect(val).to.eq('boolean')
         })
 
         cy.get(MeasureGroupPage.popBasis).type('{del}').type('{esc}')
@@ -457,7 +446,6 @@ describe('Validate Population Basis', () => {
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
-
     })
 
     it('Verify error message if Negative Integer is Added to the Scoring Precision on a Measure Group', () => {
@@ -499,7 +487,5 @@ describe('Validate Population Basis', () => {
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
-
     })
-
 })

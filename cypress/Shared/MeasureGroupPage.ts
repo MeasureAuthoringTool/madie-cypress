@@ -129,7 +129,7 @@ export class MeasureGroupPage {
     public static readonly keepGroupModalbtn = '[data-testid="delete-measure-group-modal-cancel-btn"]'
     public static readonly deleteMeasureGroupConfirmationMsg = '.MuiDialogContent-root > div'
     //Reporting tab fields
-    public static readonly rateAggregation = '[data-testid="rate-aggregation-text"]'
+    public static readonly rateAggregation = '[data-testid="rate-aggregation-rich-text-editor"]'
     public static readonly readOnlyRateAggregation = '#rateAggregation'
     public static readonly improvementNotationSelect = '[id="improvement-notation-select"]'
     public static readonly improvementNotationDescText = '[data-testid="improvement-notation-description-text"]'
@@ -218,7 +218,7 @@ export class MeasureGroupPage {
     public static readonly popBasisOption = '#populationBasis-option-0'
 
     //Measure group description
-    public static readonly measureGroupDescriptionBox = '[name="groupDescription"]'
+    public static readonly measureGroupDescriptionBox = '[data-testid="group-description-rich-text-editor"]'
 
     //saved message
     public static readonly successfulSaveMeasureGroupMsg = '[data-testid="population-criteria-success"]'
