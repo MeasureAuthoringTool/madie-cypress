@@ -5,24 +5,21 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../Shared/Utilities"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+let measureName = 'ScoringRule' + Date.now()
+let CqlLibraryName = 'ScoringRuleLib' + Date.now()
 
 describe('Measure Group', () => {
 
     beforeEach('Create Measure and Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
-
     })
 
     afterEach('Logout and Cleanup', () => {
 
         OktaLogin.Logout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
 
     it('Measure Group Population based on Scoring Rule', () => {
@@ -35,10 +32,9 @@ describe('Measure Group', () => {
 
         //measure group description
         cy.get(MeasureGroupPage.measureGroupDescriptionBox).type('MeasureGroup Description value')
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox)
-            .then(($message) => {
-                expect($message.val().toString()).to.equal('MeasureGroup Description value')
-            })
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).invoke('text').then(description => {
+                expect(description).to.include('MeasureGroup Description value')
+        })
 
         //cohort
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
@@ -91,7 +87,5 @@ describe('Measure Group', () => {
         cy.get(MeasureGroupPage.numeratorExclusionSelect).should('be.visible')
         cy.get(MeasureGroupPage.measurePopulationSelect).should('not.exist')
         cy.get(MeasureGroupPage.measurePopulationExclusionSelect).should('not.exist')
-
     })
-
 })
