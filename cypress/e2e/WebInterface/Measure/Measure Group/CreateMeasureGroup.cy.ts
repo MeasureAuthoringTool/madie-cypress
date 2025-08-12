@@ -5,7 +5,6 @@ import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
-import assert = require("assert")
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 
