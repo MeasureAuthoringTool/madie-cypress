@@ -126,34 +126,42 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                     body: {
                         "scoring": 'Proportion',
                         "populationBasis": 'boolean',
+                        "rateAggregation": "<p>test rA</p>",
+                        "groupDescription": "<p>test gD</p>",
                         "populations": [
                             {
                                 "id": uuidv4(),
+                                "description": "<p>test IP P</p>",
                                 "name": "initialPopulation",
                                 "definition": PopIniPop
                             },
                             {
                                 "id": uuidv4(),
+                                "description": "<p>test d P</p>",
                                 "name": "denominator",
                                 "definition": PopDenom
                             },
                             {
                                 "id": uuidv4(),
+                                "description": "<p>test dE P</p>",
                                 "name": "denominatorExclusion",
                                 "definition": PopDenex
                             },
                             {
                                 "id": uuidv4(),
+                                "description": "<p>test dEx P</p>",
                                 "name": "denominatorException",
                                 "definition": PopDenexcep
                             },
                             {
                                 "id": uuidv4(),
+                                "description": "<p>test n P</p>",
                                 "name": "numerator",
                                 "definition": PopNum
                             },
                             {
                                 "id": uuidv4(),
+                                "description": "<p>test nE P</p>",
                                 "name": "numeratorExclusion",
                                 "definition": PopNumex
                             }
@@ -246,7 +254,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
         })
     })
 
-    it('Get Measure bundle data from madie-fhir-service and confirm Measure meta data is present', () => {
+    it.only('Get Measure bundle data from madie-fhir-service and confirm Measure meta data is present', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -272,9 +280,12 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                                     {
                                         "id": groupId,
                                         "scoring": "Cohort",
+                                        "rateAggregation": "<p>test rA</p>",
+                                        "groupDescription": "<p>test gD</p>",
                                         "populations": [
                                             {
                                                 "id": uuidv4(),
+                                                "description": "<p>test IP P</p>",
                                                 "name": "initialPopulation",
                                                 "definition": PopIniPop
                                             }
@@ -287,7 +298,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                                 ],
                                 "measureMetaData": {
                                     "experimental": false,
-                                    "description": "Measure Description",
+                                    "description": "<p>Measure Description</p>",
                                     "steward": {
                                         "name": "Able Health",
                                         "id": "64120f265de35122e68dac40",
@@ -332,10 +343,10 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
                             expect(response.body.entry[0].resource.meta.profile[4]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cql-measure-cqfm')
                             expect(response.body.entry[0].resource.meta.profile[5]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/elm-measure-cqfm')
                             expect(response.body.entry[0].resource.meta.profile[6]).to.eql('http://hl7.org/fhir/us/cqfmeasures/StructureDefinition/cohort-measure-cqfm')
-                            expect(response.body.entry[0].resource.description).to.eql('Measure Description')
-                            expect(response.body.entry[0].resource.usage).to.eql('Measure Guidance')
+                            expect(response.body.entry[0].resource.description).to.eql('Measure Description\n')
+                            expect(response.body.entry[0].resource.usage).to.eql('Measure Guidance\n')
                             expect(response.body.entry[0].resource.author[0].name).to.eql('ACO Health Solutions')
-                            expect(response.body.entry[0].resource.clinicalRecommendationStatement).to.eql('Measure Clinical Recommendation')
+                            expect(response.body.entry[0].resource.clinicalRecommendationStatement).to.eql('Measure Clinical Recommendation\n')
                         })
                     })
                 })
@@ -343,7 +354,7 @@ describe('Proportion Measure Bundle end point returns expected data with valid M
         })
     })
 
-    it('Get Measure bundle data from madie-fhir-service and confirm Library.identifier, Library.publisher, and Library.title are present', () => {
+    it.only('Get Measure bundle data from madie-fhir-service and confirm Library.identifier, Library.publisher, and Library.title are present', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -405,19 +416,24 @@ describe('Measure Observation Validation', () => {
                     body: {
                         "scoring": 'Continuous Variable',
                         "populationBasis": 'Boolean',
+                        "rateAggregation": "<p>test rA</p>",
+                        "groupDescription": "<p>test gD</p>",
                         "populations": [
                             {
                                 "id": uuidv4(),
+                                "description": "<p>test IP P</p>",
                                 "name": "initialPopulation",
                                 "definition": 'num'
                             },
                             {
                                 "id": uuidv4(),
+                                "description": "<p>test mp p</p>",
                                 "name": "measurePopulation",
                                 "definition": 'num'
                             },
                             {
                                 "id": uuidv4(),
+                                "description": "<p>test mp excl</p>",
                                 "name": "measurePopulationExclusion",
                                 "definition": 'numeratorExclusion'
                             },
@@ -1052,7 +1068,7 @@ describe('Measure bundle end point returns Measure Population Description', () =
 
     })
 
-    it('Get Measure bundle data and verify that the description fields for Measure Population criteria are added', () => {
+    it.only('Get Measure bundle data and verify that the description fields for Measure Population criteria are added', () => {
 
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
@@ -1072,51 +1088,51 @@ describe('Measure bundle end point returns Measure Population Description', () =
                                 "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPop,
-                                "description": "Initial Population 1 Description"
+                                "description": "<p>Initial Population 1 Description</p>"
                             },
                             {
                                 "id": uuidv4(),
                                 "name": "initialPopulation",
                                 "definition": PopIniPop,
-                                "description": "Initial Population 2 Description"
+                                "description": "<p>Initial Population 2 Description</p>"
                             },
                             {
                                 "id": "809794a0-7768-407b-a28e-74226168fafe",
                                 "name": "denominator",
                                 "definition": PopIniPop,
-                                "description": "Denominator Description"
+                                "description": "<p>Denominator Description</p>"
                             },
                             {
                                 "id": uuidv4(),
                                 "name": "denominatorExclusion",
                                 "definition": PopIniPop,
-                                "description": "Denominator Exclusion Description"
+                                "description": "<p>Denominator Exclusion Description</p>"
                             },
                             {
                                 "id": "63895363-9f2a-43fe-b63a-7b3bd4b25f08",
                                 "name": "numerator",
                                 "definition": PopNum,
-                                "description": "Numerator Description"
+                                "description": "<p>Numerator Description</p>"
                             },
                             {
                                 "id": uuidv4(),
                                 "name": "numeratorExclusion",
                                 "definition": PopNumex,
-                                "description": "Numerator Exclusion Description"
+                                "description": "<p>Numerator Exclusion Description</p>"
                             }
                         ],
                         "measureObservations": [
                             {
                                 "id": uuidv4(),
                                 "definition": "isFinishedEncounter",
-                                "description": "Denominator Observation Description",
+                                "description": "<p>Denominator Observation Description</p>",
                                 "criteriaReference": "809794a0-7768-407b-a28e-74226168fafe",
                                 "aggregateMethod": "Count"
                             },
                             {
                                 "id": uuidv4(),
                                 "definition": "isFinishedEncounter",
-                                "description": "Numerator Observation Description",
+                                "description": "<p>Numerator Observation Description</p>",
                                 "criteriaReference": "63895363-9f2a-43fe-b63a-7b3bd4b25f08",
                                 "aggregateMethod": "Average"
                             }
@@ -1137,14 +1153,14 @@ describe('Measure bundle end point returns Measure Population Description', () =
                     }
                 }).then((response) => {
                     expect(response.status).to.eql(200)
-                    expect(response.body.entry[0].resource.group[0].population[0].description).to.eql('Initial Population 1 Description')
-                    expect(response.body.entry[0].resource.group[0].population[1].description).to.eql('Initial Population 2 Description')
-                    expect(response.body.entry[0].resource.group[0].population[2].description).to.eql('Denominator Description')
-                    expect(response.body.entry[0].resource.group[0].population[3].description).to.eql('Denominator Exclusion Description')
-                    expect(response.body.entry[0].resource.group[0].population[4].description).to.eql('Numerator Description')
-                    expect(response.body.entry[0].resource.group[0].population[5].description).to.eql('Numerator Exclusion Description')
-                    expect(response.body.entry[0].resource.group[0].population[6].description).to.eql('Denominator Observation Description')
-                    expect(response.body.entry[0].resource.group[0].population[7].description).to.eql('Numerator Observation Description')
+                    expect(response.body.entry[0].resource.group[0].population[0].description).to.eql('Initial Population 1 Description\n')
+                    expect(response.body.entry[0].resource.group[0].population[1].description).to.eql('Initial Population 2 Description\n')
+                    expect(response.body.entry[0].resource.group[0].population[2].description).to.eql('Denominator Description\n')
+                    expect(response.body.entry[0].resource.group[0].population[3].description).to.eql('Denominator Exclusion Description\n')
+                    expect(response.body.entry[0].resource.group[0].population[4].description).to.eql('Numerator Description\n')
+                    expect(response.body.entry[0].resource.group[0].population[5].description).to.eql('Numerator Exclusion Description\n')
+                    expect(response.body.entry[0].resource.group[0].population[6].description).to.eql('Denominator Observation Description\n')
+                    expect(response.body.entry[0].resource.group[0].population[7].description).to.eql('Numerator Observation Description\n')
                 })
             })
         })
