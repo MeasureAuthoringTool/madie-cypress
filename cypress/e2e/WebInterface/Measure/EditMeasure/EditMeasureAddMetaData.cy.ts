@@ -66,7 +66,7 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionTextBox).clear().type(description)
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).clear().type(description)
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
 
@@ -166,7 +166,7 @@ describe('Edit Measure: Add Meta Data', () => {
 
         //description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionTextBox).invoke('val').then(val => {
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).invoke('val').then(val => {
             expect(val).to.eql(description)
         })
         cy.log('Measure Description added successfully')
