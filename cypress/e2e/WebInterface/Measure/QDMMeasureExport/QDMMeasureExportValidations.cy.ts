@@ -7,10 +7,9 @@ import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Header } from "../../../../Shared/Header"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { LandingPage } from "../../../../Shared/LandingPage"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+let measureName = 'QDMExportValidations' + Date.now()
+let CqlLibraryName = 'QDMExportValidationsLib' + Date.now()
 let randValue = (Math.floor((Math.random() * 1000) + 1))
 let newMeasureName = ''
 let newCqlLibraryName = ''
@@ -69,6 +68,7 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
             blankMetadata: true
         }
         CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCqlLibraryName, SupportedModels.QDM, measureOptions)
+        MeasureGroupPage.CreateCohortMeasureGroupWithoutTypeAPI(false, false, 'Initial Population', 'Encounter')
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.cqlEditorTab).click()
@@ -78,9 +78,6 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        MeasureGroupPage.CreateCohortMeasureGroupWithoutTypeAPI(false, false, 'Initial Population', 'Encounter')
-        OktaLogin.Login()
     })
 
     after('Cleanup', () => {
@@ -89,6 +86,9 @@ describe('Error Message on Measure Export when the Measure does not have Descrip
     })
 
     it('Verify error message on Measure Export when the Measure does not have Description, Steward, Developers, and Type', () => {
+
+        //return to measures list
+        cy.get(Header.measures).click()
 
         cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
             cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
@@ -193,7 +193,7 @@ describe('Error Message on Measure Export when the Measure does not have Populat
 
     after('Cleanup', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
     it('Verify error message on Measure Export when the Measure does not have Population Criteria', () => {
@@ -229,7 +229,7 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
     after('Cleanup', () => {
 
-        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+        Utilities.deleteMeasure(measureData.ecqmTitle, measureData.cqlLibraryName)
     })
 
     it('Verify error message on Measure Export when the Population Criteria does not match with CQL', () => {
@@ -261,27 +261,19 @@ describe('Error Message on Measure Export when the Population Criteria does not 
 
 describe('Error Message on Measure Export for Publish when measure was versioned before Madie 2.2.0', () => {
 
-    // this test will rely on PROD data being available in the lower environments
-    // this measure must have been versioned prior to Madie 2.2.0 (4/9/2025)
-    const specialMeasureName = 'Antithrombotic Therapy By End of Hospital Day 2FHIR'
+    /* 
+        this test will rely on PROD data being available in the lower environments
+        this measure must have been versioned prior to Madie 2.2.0 (4/9/2025)
+        used below:
+        'Antithrombotic Therapy By End of Hospital Day 2FHIR'
+        QiCore 4.1.1 v0.7.001
+    */
     
     it('Verify error message when not able to perform Export for Publish', () => {
 
         OktaLogin.Login()
 
-        // navigate to the all measures tab
-        Utilities.waitForElementVisible(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.visible')
-        Utilities.waitForElementEnabled(LandingPage.allMeasuresTab, 30000)
-        cy.get(LandingPage.allMeasuresTab).should('be.enabled')
-        cy.get(LandingPage.allMeasuresTab).click()
-
-        // search for specific measure - it should be 1st on the search result
-        cy.get(MeasuresPage.searchInputBox).should('be.visible', 100000)
-        cy.get(MeasuresPage.searchInputBox).clear().type(specialMeasureName)
-        cy.get('[data-testid="search-icon"]').click()
-
-        cy.get('[data-testid="measure-action-64f0d9e456d636294b157ea0"]').click()
+        cy.visit('/measures/64f0d9e456d636294b157ea0/edit/details/')
 
         // perform export for publish
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
