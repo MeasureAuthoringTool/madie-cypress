@@ -79,12 +79,12 @@ describe('Measure Ownership Validations for QDM Measures', () => {
         //Navigate to Risk Adjustment Variables tab
         cy.get(MeasureGroupPage.leftPanelRiskAdjustmentTab).click()
         cy.get(MeasureGroupPage.QDMRiskAdjustmentDefinitionTextBox).should('have.attr', 'readonly')
-        cy.get(MeasureGroupPage.readOnlyQDMRiskAdjDescription).should('have.attr', 'readonly')
+        cy.get('[data-testid="riskAdjustmentDescription-value"]').should('contain.text', '-')
 
         //Navigate to Reporting tab
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
-        cy.get(MeasureGroupPage.readOnlyRateAggregation).should('have.attr', 'readonly')
-        cy.get(MeasureGroupPage.improvementNotationSelect).should('have.attr', 'readonly')
-        cy.get(MeasureGroupPage.readOnlyImpNotationDescription).should('have.attr', 'readonly')
+        cy.get('[data-testid="rateAggregation-value"]').should('contain.text', '-')
+        cy.get('[data-testid="improvement-notation-select"]').should('contain.text', '-')
+        cy.get('[data-testid="improvementNotationDescription-value"]').should('contain.text', '-')
     })
 })
