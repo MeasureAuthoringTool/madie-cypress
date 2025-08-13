@@ -96,7 +96,6 @@ describe('CQL Changes and how that impacts test cases, observations and populati
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
 
         //Click on RunTest Button
-        cy.get(TestCasesPage.testCaseMSRPOPLExpected).click()
         cy.get(TestCasesPage.testCaseMSRPOPLExpected).type('1')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
         cy.get(TestCasesPage.runTestButton).should('exist')
