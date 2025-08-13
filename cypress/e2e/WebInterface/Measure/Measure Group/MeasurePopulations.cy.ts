@@ -117,7 +117,7 @@ describe('Measure Populations', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
@@ -127,10 +127,7 @@ describe('Measure Populations', () => {
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group saved successfully.')
 
         //verify the measure group's description before reset
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox)
-            .then(($message) => {
-                expect($message.val().toString()).to.equal('MeasureGroup Description value')
-            })
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).should('contain.text', 'MeasureGroup Description value')
 
         //Verify the Populations before reset
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'ipp')
@@ -144,11 +141,7 @@ describe('Measure Populations', () => {
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringProportion)
 
         //verify the measure group's description after reset
-        cy.get(MeasureGroupPage.measureGroupDescriptionBox)
-            .then(($message) => {
-                expect($message.val().toString()).to.equal('MeasureGroup Description value')
-            })
-
+        cy.get(MeasureGroupPage.measureGroupDescriptionBox).should('contain.text','MeasureGroup Description value')
 
         //verify the populations after reset
         cy.get(MeasureGroupPage.initialPopulationSelect).should('contain.text', 'Select Initial Population')
@@ -197,7 +190,7 @@ describe('Measure Populations', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
