@@ -374,7 +374,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Create new QI Core measure
         measureQICore = 'QICoreMeasure' + Date.now() + randValue + 4 + randValue
-        CreateMeasurePage.CreateQICoreMeasureAPI(measureQICore, measureQICore, measureCQLPFTests, 2)
+        CreateMeasurePage.CreateQICoreMeasureAPIWithSimpleDesc(measureQICore, measureQICore, measureCQLPFTests, 2)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(3, false, 'Initial Population', '', '',
             'Initial Population', '', 'Initial Population', 'boolean')
 
@@ -409,25 +409,34 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionRTETextBox).clear().type(QDMdescription)
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).find(EditMeasurePage.RTEContentField).type('{selectAll}{backspace}')
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).find(EditMeasurePage.RTEContentField).clear()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).find(EditMeasurePage.RTEContentField).click()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).find(EditMeasurePage.RTEContentField).wait(500).type(QDMdescription).wait(2000)
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
 
         //Copyright
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureCopyrightTextBox).clear().type(QDMcopyright)
+        cy.get(EditMeasurePage.measureCopyrightTextBox).find(EditMeasurePage.RTEContentField).clear()
+        cy.get(EditMeasurePage.measureCopyrightTextBox).find(EditMeasurePage.RTEContentField).click()
+        cy.get(EditMeasurePage.measureCopyrightTextBox).find(EditMeasurePage.RTEContentField).type(QDMcopyright)
         cy.get(EditMeasurePage.measureCopyrightSaveButton).click()
         cy.get(EditMeasurePage.measureCopyrightSuccessMessage).should('be.visible')
 
         //Disclaimer
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureDisclaimerTextBox).clear().type(QDMdisclaimer)
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).find(EditMeasurePage.RTEContentField).clear()
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).find(EditMeasurePage.RTEContentField).click()
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).find(EditMeasurePage.RTEContentField).type(QDMdisclaimer)
         cy.get(EditMeasurePage.measureDisclaimerSaveButton).click()
         cy.get(EditMeasurePage.measureDisclaimerSuccessMessage).should('be.visible')
 
         //Rationale
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureRationaleTextBox).clear().type(QDMrationale)
+        cy.get(EditMeasurePage.measureRationaleTextBox).find(EditMeasurePage.RTEContentField).clear()
+        cy.get(EditMeasurePage.measureRationaleTextBox).find(EditMeasurePage.RTEContentField).click()
+        cy.get(EditMeasurePage.measureRationaleTextBox).find(EditMeasurePage.RTEContentField).type(QDMrationale)
         cy.get(EditMeasurePage.measureRationaleSaveButton).click()
         cy.get(EditMeasurePage.measureRationaleSuccessMessage).should('be.visible')
 
@@ -455,13 +464,17 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGuidanceTextBox).clear().type(QDMguidance)
+        cy.get(EditMeasurePage.measureGuidanceTextBox).find(EditMeasurePage.RTEContentField).clear()
+        cy.get(EditMeasurePage.measureGuidanceTextBox).find(EditMeasurePage.RTEContentField).click()
+        cy.get(EditMeasurePage.measureGuidanceTextBox).find(EditMeasurePage.RTEContentField).type(QDMguidance)
         cy.get(EditMeasurePage.measureGuidanceSaveButton).click()
         cy.get(EditMeasurePage.measureGuidanceSuccessMessage).should('be.visible')
 
         //Clinical Recommendation
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).clear().type(QDMclinicalRecommendation)
+        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).find(EditMeasurePage.RTEContentField).clear()
+        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).find(EditMeasurePage.RTEContentField).click()
+        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).find(EditMeasurePage.RTEContentField).type(QDMclinicalRecommendation)
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
 
@@ -529,19 +542,27 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Confirm Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionRTETextBox).should('contain.value', QDMdescription)
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).find(EditMeasurePage.RTEContentField).click()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).find(EditMeasurePage.RTEContentField).focus()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMdescription + '</p></div>')
 
         //Confirm Copyright
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureCopyrightTextBox).should('contain.value', QDMcopyright)
+        cy.get(EditMeasurePage.measureCopyrightTextBox).find(EditMeasurePage.RTEContentField).click()
+        cy.get(EditMeasurePage.measureCopyrightTextBox).find(EditMeasurePage.RTEContentField).focus()
+        cy.get(EditMeasurePage.measureCopyrightTextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMcopyright + '</p></div>')
 
         //Confirm Disclaimer
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureDisclaimerTextBox).should('contain.value', QDMdisclaimer)
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).find(EditMeasurePage.RTEContentField).click()
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).find(EditMeasurePage.RTEContentField).focus()
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMdisclaimer + '</p></div>')
 
         //Confirm Rationale
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureRationaleTextBox).should('contain.value', QDMrationale)
+        cy.get(EditMeasurePage.measureRationaleTextBox).find(EditMeasurePage.RTEContentField).click()
+        cy.get(EditMeasurePage.measureRationaleTextBox).find(EditMeasurePage.RTEContentField).focus()
+        cy.get(EditMeasurePage.measureRationaleTextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMrationale + '</p></div>')
 
         //Confirm Steward & Developers
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
@@ -555,11 +576,15 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Confirm Guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGuidanceTextBox).should('contain.value', QDMguidance)
+        cy.get(EditMeasurePage.measureGuidanceTextBox).find(EditMeasurePage.RTEContentField).click()
+        cy.get(EditMeasurePage.measureGuidanceTextBox).find(EditMeasurePage.RTEContentField).focus()
+        cy.get(EditMeasurePage.measureGuidanceTextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMguidance + '</p></div>')
 
         //Confirm Clinical Recommendation
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.value', QDMclinicalRecommendation)
+        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).find(EditMeasurePage.RTEContentField).click()
+        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).find(EditMeasurePage.RTEContentField).focus()
+        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMclinicalRecommendation + '</p></div>')
     })
 })
 
@@ -942,25 +967,25 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionRTETextBox).clear().type(QDMdescription)
+        cy.get(EditMeasurePage.RTEContentField).clear().type(QDMdescription)
         cy.get(EditMeasurePage.measureDescriptionSaveButton).click()
         cy.get(EditMeasurePage.measureDescriptionSuccessMessage).should('be.visible')
 
         //Copyright
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureCopyrightTextBox).clear().type(QDMcopyright)
+        cy.get(EditMeasurePage.RTEContentField).clear().type(QDMcopyright)
         cy.get(EditMeasurePage.measureCopyrightSaveButton).click()
         cy.get(EditMeasurePage.measureCopyrightSuccessMessage).should('be.visible')
 
         //Disclaimer
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureDisclaimerTextBox).clear().type(QDMdisclaimer)
+        cy.get(EditMeasurePage.RTEContentField).clear().type(QDMdisclaimer)
         cy.get(EditMeasurePage.measureDisclaimerSaveButton).click()
         cy.get(EditMeasurePage.measureDisclaimerSuccessMessage).should('be.visible')
 
         //Rationale
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureRationaleTextBox).clear().type(QDMrationale)
+        cy.get(EditMeasurePage.RTEContentField).clear().type(QDMrationale)
         cy.get(EditMeasurePage.measureRationaleSaveButton).click()
         cy.get(EditMeasurePage.measureRationaleSuccessMessage).should('be.visible')
 
@@ -988,13 +1013,13 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGuidanceTextBox).clear().type(QDMguidance)
+        cy.get(EditMeasurePage.RTEContentField).clear().type(QDMguidance)
         cy.get(EditMeasurePage.measureGuidanceSaveButton).click()
         cy.get(EditMeasurePage.measureGuidanceSuccessMessage).should('be.visible')
 
         //Clinical Recommendation
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).clear().type(QDMclinicalRecommendation)
+        cy.get(EditMeasurePage.RTEContentField).clear().type(QDMclinicalRecommendation)
         cy.get(EditMeasurePage.measureClinicalRecommendationSaveButton).click()
         cy.get(EditMeasurePage.measureClinicalRecommendationSuccessMessage).should('be.visible')
 
@@ -1042,6 +1067,10 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.associateCmsAssociateBtn).click()
         cy.get(EditMeasurePage.sureDialogContinueBtn).click()
 
+        cy.pause()
+
+        cy.get(Header.mainMadiePageButton).click()
+
         MeasuresPage.actionCenter('edit', 2)
 
         //confirming the cms id on the QI Core measure
@@ -1065,19 +1094,23 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Confirm Description
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionRTETextBox).should('contain.value', QDMdescription)
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).find(EditMeasurePage.RTEContentField).focus()
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMdescription + '</p></div>')
 
         //Confirm Copyright
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureCopyrightTextBox).should('contain.value', QDMcopyright)
+        cy.get(EditMeasurePage.measureCopyrightTextBox).find(EditMeasurePage.RTEContentField).focus()
+        cy.get(EditMeasurePage.measureCopyrightTextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMcopyright + '</p></div>')
 
         //Confirm Disclaimer
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureDisclaimerTextBox).should('contain.value', QDMdisclaimer)
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).find(EditMeasurePage.RTEContentField).focus()
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMdisclaimer + '</p></div>')
 
         //Confirm Rationale
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureRationaleTextBox).should('contain.value', QDMrationale)
+        cy.get(EditMeasurePage.measureRationaleTextBox).find(EditMeasurePage.RTEContentField).focus()
+        cy.get(EditMeasurePage.measureRationaleTextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMrationale + '</p></div>')
 
         //Confirm Steward & Developers
         cy.get(EditMeasurePage.leftPanelStewardDevelopers).click()
@@ -1091,11 +1124,13 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         //Confirm Guidance
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGuidanceTextBox).should('contain.value', QDMguidance)
+        cy.get(EditMeasurePage.measureGuidanceTextBox).find(EditMeasurePage.RTEContentField).focus()
+        cy.get(EditMeasurePage.measureGuidanceTextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMguidance + '</p></div>')
 
         //Confirm Clinical Recommendation
         cy.get(EditMeasurePage.leftPanelMClinicalGuidanceRecommendation).click()
-        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).should('contain.value', QDMclinicalRecommendation)
+        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).find(EditMeasurePage.RTEContentField).focus()
+        cy.get(EditMeasurePage.measureClinicalRecommendationTextBox).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>' + QDMclinicalRecommendation + '</p></div>')
     })
 })
 
