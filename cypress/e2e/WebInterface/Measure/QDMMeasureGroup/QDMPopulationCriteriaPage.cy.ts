@@ -9,8 +9,8 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+let measureName = 'QDMPopCriteriaPage' + Date.now()
+let CqlLibraryName = 'QDMPopCriteriaPageLib' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
 let measureScoring = 'Cohort'
@@ -40,18 +40,14 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        OktaLogin.Login()
     })
 
     afterEach('Clean up and Logout', () => {
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-        OktaLogin.Logout()
-
     })
-    it('Verify Population Criteria page is properly populated, per Scoring type.', () => {
 
-        MeasuresPage.actionCenter('edit')
+    it('Verify Population Criteria page is properly populated, per Scoring type.', () => {
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
@@ -71,14 +67,9 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.measurePopulationOption).should('contain.text', 'SDE Payer')
         cy.get(MeasureGroupPage.measurePopulationOption).should('contain.text', 'SDE Race')
         cy.get(MeasureGroupPage.measurePopulationOption).should('contain.text', 'SDE Sex')
-
-        cy.get(MeasureGroupPage.QDMPopCriteria1IPDesc).should('be.visible')
-
     })
 
     it('Confirm that a new Population Criteria can be added', () => {
-
-        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -98,13 +89,9 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         cy.get(MeasureGroupPage.QDMPopCriteria2IP).should('be.visible')
         cy.get(MeasureGroupPage.QDMPopCriteria2IP).should('contain.text', 'Select Initial Population')
-
     })
 
     it('Add UCUM Scoring Unit to Population Criteria', () => {
-
-        //click on Edit button to edit measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
@@ -119,8 +106,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.ucumScoringUnitSelect).type('mL')
 
         //Add Initial Population
-        cy.get(MeasureGroupPage.initialPopulationSelect).wait(2000).click()
-        cy.get('ul > li[data-value="ipp"]').wait(2000).click()
+        Utilities.dropdownSelect(MeasureGroupPage.initialPopulationSelect, 'ipp')
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
@@ -156,9 +142,6 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
     //Reporting tab fields
     it('Add Rate Aggregation and Improvement Notation to Population Criteria', () => {
 
-        //click on Edit button to edit measure
-        MeasuresPage.actionCenter('edit')
-
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
@@ -170,8 +153,9 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
         cy.get(MeasureGroupPage.rateAggregation).type('Aggregation')
 
         //Add Improvement Notation --'Increased score indicates improvement'
+        cy.get(MeasureGroupPage.improvementNotationDescText).find('[role="textbox"]').should('have.attr', 'contenteditable', 'false')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
-        Utilities.waitForElementEnabled(MeasureGroupPage.improvementNotationDescText, 30000)
+        cy.get(MeasureGroupPage.improvementNotationDescText).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.visible')
@@ -192,12 +176,12 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //Assert Rate Aggregation and Improvement Notation text box
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
-        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Aggregation')
+        cy.get(MeasureGroupPage.rateAggregation).should('contain.text', 'Aggregation')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
 
         //Add Improvement Notation --'Decreased score indicates improvement'
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Decreased score indicates improvement')
-        Utilities.waitForElementEnabled(MeasureGroupPage.improvementNotationDescText, 30000)
+        cy.get(MeasureGroupPage.improvementNotationDescText).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
 
         //save population definition with scoring unit
         cy.get(MeasureGroupPage.measureReportingSaveBtn).should('be.visible')
@@ -218,12 +202,12 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //Assert Rate Aggregation and Improvement Notation text box
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
-        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Aggregation')
+        cy.get(MeasureGroupPage.rateAggregation).should('contain.text', 'Aggregation')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Decreased score indicates improvement')
 
         //Add Improvement Notation --'Other'
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Other')
-        Utilities.waitForElementEnabled(MeasureGroupPage.improvementNotationDescText, 30000)
+        cy.get(MeasureGroupPage.improvementNotationDescText).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
 
         Utilities.waitForElementDisabled(MeasureGroupPage.measureReportingSaveBtn, 30000)
 
@@ -248,16 +232,13 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //Assert Rate Aggregation and Improvement Notation text box
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
-        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Aggregation')
+        cy.get(MeasureGroupPage.rateAggregation).should('contain.text', 'Aggregation')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Other')
-        cy.get(MeasureGroupPage.improvementNotationDescText).should('contain.value', 'This is the required text when IN is set to \"Other\"')
+        cy.get(MeasureGroupPage.improvementNotationDescText).should('contain.text', 'This is the required text when IN is set to \"Other\"')
     })
 
     //Reporting tab fields
     it('Add Improvement Notation (Other) to Population Criteria', () => {
-
-        //click on Edit button to edit measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
@@ -291,15 +272,12 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //Assert Rate Aggregation and Improvement Notation text box
         cy.get(MeasureGroupPage.qdmMeasureReportingTab).click()
-        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Aggregation')
+        cy.get(MeasureGroupPage.rateAggregation).should('contain.text', 'Aggregation')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Other')
-        cy.get(MeasureGroupPage.improvementNotationDescText).should('contain.value', 'Improvement Notation Text')
+        cy.get(MeasureGroupPage.improvementNotationDescText).should('contain.text', 'Improvement Notation Text')
     })
 
     it('Add Risk Adjustment Variables and Supplemental Data Elements to Population Criteria', () => {
-
-        //click on Edit button to edit measure
-        MeasuresPage.actionCenter('edit')
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
@@ -342,15 +320,13 @@ describe('No values in QDM PC fields, when no CQL', () => {
         measureData.measureScoring = measureScoring
         measureData.patientBasis = 'false'
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
     })
 
     afterEach('Clean up and Logout', () => {
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-        OktaLogin.Logout()
-
     })
 
     //no definitions in CQL -- no values for PC fields
@@ -372,7 +348,7 @@ describe('No values in QDM PC fields, when no CQL', () => {
 
         cy.get('[class="MuiList-root MuiList-padding MuiMenu-list css-ubifyk"]').should('be.empty')
 
-        cy.get(MeasureGroupPage.QDMPopCriteria1IPDesc).should('be.visible')
+        cy.get(MeasureGroupPage.QDMPopCriteria1Desc).should('be.visible')
     })
 })
 
@@ -391,7 +367,6 @@ describe('Save Population Criteria on QDM measure', () => {
         measureData.patientBasis = 'false'
         measureData.measureCql = simpleQDMMeasureCQL
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -399,15 +374,13 @@ describe('Save Population Criteria on QDM measure', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        OktaLogin.Login()
     })
 
     afterEach('Clean up and Logout', () => {
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-        OktaLogin.Logout()
-
     })
+
     it('Confirm that initial and new Population Criteria can have values saved', () => {
 
         MeasuresPage.actionCenter('edit')
@@ -435,7 +408,6 @@ describe('Save Population Criteria on QDM measure', () => {
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group saved successfully.')
-
     })
 })
 
@@ -454,7 +426,6 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         measureData.patientBasis = 'true'
         measureData.measureCql = booleanPatientBasisQDM_CQL
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -462,14 +433,11 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        OktaLogin.Login()
     })
 
     afterEach('Clean up and Logout', () => {
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-        OktaLogin.Logout()
-
     })
 
     it('Validations when the Patient Basis is set to "Yes" and return type should be boolean', () => {
@@ -501,7 +469,6 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
         //helper text / error message should appear
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('be.visible')
         cy.get(MeasureGroupPage.QDMIPPCHelperText).should('contain.text', 'For Patient-based Measures, selected definitions must return a Boolean.')
-
     })
 })
 
@@ -520,7 +487,6 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         measureData.patientBasis = 'false'
         measureData.measureCql = booleanPatientBasisQDM_CQL
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         OktaLogin.Login()
         MeasuresPage.actionCenter('edit')
@@ -528,14 +494,11 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        OktaLogin.UILogout()
-        OktaLogin.Login()
     })
 
     afterEach('Clean up and Logout', () => {
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-        OktaLogin.Logout()
-
     })
 
     it('Validations when the Patient Basis is set to "No" and return type should be Non-boolean', () => {
@@ -561,6 +524,5 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
 
         //select a value that will return the correct boolean type
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.disabled')
-
     })
 })
