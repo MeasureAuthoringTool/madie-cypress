@@ -14,6 +14,10 @@ describe('Qi Core Measure Reference', () => {
 
     beforeEach('Create Measure and Login', () => {
 
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        cy.clearAllSessionStorage({ log: true })
         newMeasureName = 'TestMeasure' + Date.now() + randValue
         newCqlLibraryName = 'MeasureTypeTestLibrary' + Date.now() + randValue
         CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName)
@@ -22,7 +26,7 @@ describe('Qi Core Measure Reference', () => {
 
     afterEach('Logout and cleanup', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
     })
 
@@ -34,22 +38,39 @@ describe('Qi Core Measure Reference', () => {
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.citationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).type('Measure Reference')
+        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="rich-text-editor-content"]').type('Measure Reference')
+
+        //intercept reference id once reference is created
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            cy.intercept('PUT', '/api/measures/' + fileContents).as('references')
+        })
         cy.get(EditMeasurePage.saveButton).click()
+        cy.wait('@references', { timeout: 60000 }).then((request) => {
+            cy.writeFile('cypress/fixtures/referenceId', request.response.body.measureMetaData.references[0].id)
+        })
+
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Citation')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Measure Reference')
 
         //Edit Measure reference
         // .editReference will work as long as there is only 1 item on the table
-        cy.get(EditMeasurePage.editQiCoreReference).eq(1).click()
+        Utilities.waitForElementVisible(EditMeasurePage.deleteQiCoreReference, 90000)
+        cy.get(EditMeasurePage.deleteQiCoreReference).eq(1).click()
+        cy.get(CQLEditorPage.deleteContinueButton).click()
+        cy.get(EditMeasurePage.deleteQiCoreReference).eq(1).click()
+        cy.get(CQLEditorPage.deleteContinueButton).click()
+        cy.readFile('cypress/fixtures/referenceId').should('exist').then((fileContents) => {
+            cy.get('[data-testid="edit-measure-reference-' + fileContents).click()
+        })
+
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.justificationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).clear().type('Updated Measure Reference')
+        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="rich-text-editor-content"]').clear().type('Updated Measure Reference').wait(2000)
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Justification')
-        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Updated Measure Reference')
+        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'JustificationUpdated Measure Reference')
     })
 
     it('Discard changes button', () => {
@@ -75,16 +96,16 @@ describe('Qi Core Measure Reference', () => {
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.citationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).type('Measure Reference')
+        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="rich-text-editor-content"]').type('Measure Reference')
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Citation')
-        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Measure Reference')
+        cy.get(EditMeasurePage.measureReferenceTable).should('include.text', 'Measure Reference')
 
         //Delete Measure Reference
         // .deleteReference will work as long as there is only 1 item on the table
         cy.get(EditMeasurePage.deleteQiCoreReference).eq(1).click()
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete Text 1?')
+        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete <p>Text 1</p>?')
         cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure reference deleted successfully')
     })
@@ -97,27 +118,27 @@ describe('Qi Core Measure Reference', () => {
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.citationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).type('Measure Reference')
+        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="rich-text-editor-content"]').type('Measure Reference')
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Citation')
-        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Measure Reference')
+        cy.get(EditMeasurePage.measureReferenceTable).should('include.text', 'Measure Reference')
 
         //Add second Reference
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.justificationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).type('Test')
+        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="rich-text-editor-content"]').type('Test')
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Justification')
-        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Test')
+        cy.get(EditMeasurePage.measureReferenceTable).should('include.text', 'Test')
 
         //Search for Reference
         cy.get(EditMeasurePage.searchReferenceTextBox).type('Test')
         cy.get(EditMeasurePage.searchReferenceIcon).click()
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Justification')
-        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Test')
+        cy.get(EditMeasurePage.measureReferenceTable).should('include.text', 'Test')
         cy.get(EditMeasurePage.measureReferenceTable).should('not.contain', 'Measure Reference')
 
     })
@@ -168,11 +189,11 @@ describe('Delete or Edit Qi Core Measure Reference - Ownership validation', () =
         cy.get(EditMeasurePage.addReferenceButton).click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.citationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).type('Measure Reference')
+        cy.get(EditMeasurePage.measureReferenceText).find('[data-testid="rich-text-editor-content"]').type('Measure Reference')
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Citation')
-        cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Measure Reference')
+        cy.get(EditMeasurePage.measureReferenceTable).should('include.text', 'Measure Reference')
         OktaLogin.UILogout()
     })
 
