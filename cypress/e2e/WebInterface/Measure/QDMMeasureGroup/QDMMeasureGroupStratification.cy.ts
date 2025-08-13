@@ -7,8 +7,8 @@ import { Utilities } from "../../../../Shared/Utilities"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { Header } from "../../../../Shared/Header";
 
-let measureName = 'ProportionPatient' + Date.now()
-let CqlLibraryName = 'ProportionPatient' + Date.now()
+let measureName = 'QDMGroupStratification' + Date.now()
+let CqlLibraryName = 'QDMGroupStratificationLib' + Date.now()
 let measureCQL = 'library BreastCancerScreening version \'12.0.000\'\n' +
     '\n' +
     'using QDM version \'5.6\'\n' +
@@ -131,7 +131,6 @@ describe('Validating Stratification tabs', () => {
 
     beforeEach('Create Measure', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQDMMeasureAPI(measureName, CqlLibraryName, measureCQL, false, false,
             '2023-01-01', '2024-01-01')
 
@@ -141,21 +140,15 @@ describe('Validating Stratification tabs', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-        //OktaLogin.Login()
     })
 
     afterEach('Clean up', () => {
 
-        OktaLogin.Logout()
-
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(measureName, CqlLibraryName)
-
     })
-    it('Stratification tab includes new fields and those fields have expected values', () => {
 
-        //Click on Edit Measure
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('edit')
+    it('Stratification tab includes new fields and those fields have expected values', () => {
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
@@ -227,10 +220,6 @@ describe('Validating Stratification tabs', () => {
 
     it('Add multiple stratifications and stratification description to the measure group', () => {
 
-        //Click on Edit Measure
-        cy.get(Header.measures).click()
-        MeasuresPage.actionCenter('edit')
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -294,7 +283,7 @@ describe('Validating Stratification tabs', () => {
         Utilities.dropdownSelect(MeasureGroupPage.stratTwo, 'Numerator')
         cy.get(MeasureGroupPage.stratDescTwo).type('Stratification Two Description')
 
-        //Add Stratification 3
+        // Add Stratification 3
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratThree, 'Denominator')
         cy.get(MeasureGroupPage.stratDescThree).type('Stratification Three Description')
@@ -303,6 +292,8 @@ describe('Validating Stratification tabs', () => {
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratFour, 'Initial Population')
         cy.get(MeasureGroupPage.stratDescFour).type('Stratification Four Description')
+
+        cy.get(MeasureGroupPage.ucumScoringUnitSelect).click()
 
         Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 30700)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
