@@ -40,7 +40,7 @@ describe('QDM Measure Definition', () => {
         MeasuresPage.actionCenter('edit')
 
         cy.get(EditMeasurePage.leftPanelDefinition).click()
-        cy.get(EditMeasurePage.definitionInputTextbox).type('Measure Definition')
+        cy.get(EditMeasurePage.definitionInput).type('Measure Definition')
         cy.get(EditMeasurePage.saveMeasureDefinition).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Definition Information Saved Successfully')
     })
@@ -51,7 +51,7 @@ describe('QDM Measure Definition', () => {
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelDefinition).click()
-        cy.get(EditMeasurePage.definitionInputTextbox).type('Measure Definition')
+        cy.get(EditMeasurePage.definitionInput).type('Measure Definition')
         cy.get(Utilities.DiscardButton).click()
         Utilities.clickOnDiscardChanges()
     })
@@ -88,7 +88,7 @@ describe('QDM Measure Definition ownership validation', () => {
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelDefinition).click()
-        cy.get(EditMeasurePage.definitionInputTextbox).should('have.attr', 'readonly')
+        cy.get('[data-testid="genericField-value"]').should('contain.text', '-')
     })
 })
 
