@@ -295,7 +295,7 @@ describe('Validating Stratification tabs', () => {
         //Add Stratification 4
         cy.get(MeasureGroupPage.addStratButton).click()
         Utilities.dropdownSelect(MeasureGroupPage.stratFour, 'denom')
-        cy.get(MeasureGroupPage.stratDescFour).type('StratificationFour')
+        cy.get(MeasureGroupPage.stratDescFour).type('StratificationFour').wait(1000)
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click({ force: true })
 
@@ -303,43 +303,12 @@ describe('Validating Stratification tabs', () => {
 
         //Remove Stratifications
         Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
-        cy.get(MeasureGroupPage.stratificationTab).should('exist')
-        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-        cy.get(MeasureGroupPage.stratificationTab).click()
-        cy.get('body').then((body) => {
-            if ((body.find(MeasureGroupPage.stratAssociationOne).length != 0)) {
-                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 30700)
-                cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
-                cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
-            } else {
-                Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
-                cy.get(MeasureGroupPage.stratificationTab).should('exist')
-                cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-                cy.get(MeasureGroupPage.stratificationTab).click()
-            }
-        })
 
+        cy.get(MeasureGroupPage.stratificationTab).click()
+        cy.get(MeasureGroupPage.stratDescFour).should('contain.text', 'StratificationFour')
         //Remove Stratification 1 and 2
         cy.get(MeasureGroupPage.removeStratButton).eq(0).click()
         cy.get(MeasureGroupPage.removeStratButton).eq(0).click()
-
-        //Click on Stratification tab
-        Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
-        cy.get(MeasureGroupPage.stratificationTab).should('exist')
-        cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-        cy.get(MeasureGroupPage.stratificationTab).click()
-        cy.get('body').then((body) => {
-            if ((body.find(MeasureGroupPage.stratAssociationOne).length != 0)) {
-                Utilities.waitForElementVisible(MeasureGroupPage.stratAssociationOne, 30700)
-                cy.get(MeasureGroupPage.stratAssociationOne).should('exist')
-                cy.get(MeasureGroupPage.stratAssociationOne).should('be.visible')
-            } else {
-                Utilities.waitForElementVisible(MeasureGroupPage.stratificationTab, 30700)
-                cy.get(MeasureGroupPage.stratificationTab).should('exist')
-                cy.get(MeasureGroupPage.stratificationTab).should('be.visible')
-                cy.get(MeasureGroupPage.stratificationTab).click()
-            }
-        })
 
         //Verify Stratifications after removing 1 and 2
         cy.get(MeasureGroupPage.stratOne).should('contain.text', 'ipp')
