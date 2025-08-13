@@ -93,7 +93,7 @@ export class EditMeasurePage {
     public static readonly citationOption = '[data-testid="Citation-option"]'
     public static readonly justificationOption = '[data-testid="Justification-option"]'
     public static readonly unknownOption = '[data-testid="Unknown-option"]'
-    public static readonly measureReferenceText = '[data-testid="measure-referenceText"]'
+    public static readonly measureReferenceText = '[data-testid="reference-text-rich-text-editor"]'
     public static readonly saveButton = '[data-testid="save-button"]'
     public static readonly successMessage = '[class="toast success"]'
     public static readonly measureReferenceTable = '[data-testid="measure-references-table-body"]'
