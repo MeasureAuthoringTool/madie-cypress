@@ -55,7 +55,7 @@ describe('QDM Measure: Transmission Format', () => {
         cy.get(EditMeasurePage.transmissionFormatDescription).type('Test Transmission format')
         cy.get(Utilities.DiscardCancelBtn).click()
         Utilities.clickOnDiscardChanges()
-        cy.get(EditMeasurePage.transmissionFormatDescription).should('be.empty')
+        cy.get(EditMeasurePage.transmissionFormatDescription).should('not.contain.text')
     })
 })
 
@@ -90,7 +90,7 @@ describe('QDM Measure: Transmission format ownership validation', () => {
 
         //Navigate to References page
         cy.get(EditMeasurePage.leftPanelTransmissionFormat).click()
-        cy.get(EditMeasurePage.readOnlyTFDesc).should('have.attr', 'readonly')
+        cy.get(EditMeasurePage.transmissionFormatDescription).find('p').should('have.class', 'rich-text-editor_read_only')
     })
 })
 
