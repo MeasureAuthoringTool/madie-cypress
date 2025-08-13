@@ -54,7 +54,7 @@ describe('QDM Measure Set', () => {
         cy.get(EditMeasurePage.measureSetText).type('Measure Set')
         cy.get(Utilities.DiscardButton).click()
         Utilities.clickOnDiscardChanges()
-        cy.get(EditMeasurePage.measureSetText).should('be.empty')
+        cy.get(EditMeasurePage.measureSetText).should('not.contain.text')
     })
 })
 
@@ -84,11 +84,10 @@ describe('QDM Measure Set - ownership validations', () => {
     it('Non Measure owner unable to add Measure Set', () => {
 
         cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.reload()
         MeasuresPage.actionCenter('edit')
 
         //Navigate to Measure set page
         cy.get(EditMeasurePage.leftPanelMeasureSet).click()
-        cy.get(EditMeasurePage.measureSetText).should('have.attr', 'readonly')
+        cy.get(EditMeasurePage.measureSetText).find('p').should('have.class', 'rich-text-editor_read_only')
     })
 })

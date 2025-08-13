@@ -83,7 +83,7 @@ export class EditMeasurePage {
     public static readonly leftPanelPurpose = '[data-testid="leftPanelMeasurePurpose"]'
 
     //Measure Set
-    public static readonly measureSetText = '[data-testid="measure-measure-set-input"]'
+    public static readonly measureSetText = '[data-testid="generic-field-rich-text-editor"]'
     public static readonly measureSetSaveBtn = '[data-testid="measure-measure-set-save"]'
 
     //References page
@@ -127,7 +127,7 @@ export class EditMeasurePage {
     public static readonly acceptBtn = '[data-testid="share-confirmation-dialog-accept-button"]'
 
     //Transmission Format page
-    public static readonly transmissionFormatDescription = '[data-testid="transmission-format-text"]'
+    public static readonly transmissionFormatDescription = '[data-testid="transmission-format-rich-text-editor"]'
     public static readonly readOnlyTFDesc = '#transmissionFormat'
 
     //Measure CQL Page
