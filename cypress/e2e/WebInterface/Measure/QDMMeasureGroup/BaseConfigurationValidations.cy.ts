@@ -1,5 +1,5 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
@@ -194,7 +194,7 @@ describe('Validating Population tabs and fields, specific to QDM', () => {
             Utilities.waitForElementVisible(MeasureGroupPage.qdmBCSaveButtonSuccessMsg, 30000)
             cy.get(MeasureGroupPage.qdmBCSaveButtonSuccessMsg).should('contain.text', 'Measure Base Configuration Updated Successfully')
 
-        })
+    })
 
     it('Dirty check validation', () => {
         //navigate to the main measures page
@@ -432,7 +432,7 @@ describe('Updates on Base Configuration page', () => {
         OktaLogin.Logout()
     })
 
-    it('Changing the scoring elcits the Change Scoring prompt', () => {
+    it('Changing the scoring elicits the Change Scoring prompt', () => {
         //navigate to the main measures page
         cy.get(Header.measures).click()
 
