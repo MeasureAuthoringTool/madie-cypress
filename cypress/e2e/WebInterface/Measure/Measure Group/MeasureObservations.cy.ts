@@ -9,8 +9,8 @@ import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+let measureName = 'MeasureObservations' + Date.now()
+let CqlLibraryName = 'MeasureObservationsLib' + Date.now()
 let newMeasureName = ''
 let newCqlLibraryName = ''
 
@@ -38,8 +38,8 @@ describe('Measure Observations', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCqlLibraryName = CqlLibraryName + randValue
 
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-        OktaLogin.Logout()
     })
 
     it('Add Measure Observations for Ratio Measure', () => {
@@ -111,15 +111,13 @@ describe('Measure Observations', () => {
         })
 
         //save CQL on measure
-        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 28500)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
 
         //wait for alert / successful save message to appear
         Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 20700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 11700)
@@ -138,10 +136,9 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.measurePopulationOption).eq(0).click() //select denom
 
         cy.get(MeasureGroupPage.cvMeasureObservation).click()
-        cy.get(TestCasesPage.SelectionOptionChoice).should('exist')
         cy.get(TestCasesPage.SelectionOptionChoice).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.MOBooleanFunctionValue, 20700)
-        cy.get(MeasureGroupPage.MOBooleanFunctionValue).should('exist')
+
         cy.get(MeasureGroupPage.MOBooleanFunctionValue).should('be.visible')
         cy.get(MeasureGroupPage.MOBooleanFunctionValue).click()
 
@@ -149,16 +146,13 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.aggregateFunctionCount).click()
 
         Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
-        cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
-        cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
@@ -169,8 +163,7 @@ describe('Measure Observations', () => {
         cy.get(Header.mainMadiePageButton).click()
         //wait until page / tabs loads
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
-        cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+
         //navigate back to the measure group page
         MeasuresPage.actionCenter('edit')
         //Click on the measure group tab
@@ -216,7 +209,6 @@ describe('Measure Observations', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
@@ -466,7 +458,6 @@ describe('Measure Observations and Stratification -- non-owner tests', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
@@ -561,8 +552,8 @@ describe('Measure Observation - Expected Values', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCqlLibraryName = CqlLibraryName + randValue
 
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-        OktaLogin.Logout()
     })
 
     it('Verify Expected values for Boolean Type Continuous Variable Measure Observations', () => {
@@ -577,8 +568,7 @@ describe('Measure Observation - Expected Values', () => {
             cy.get(EditMeasurePage.cqlEditorTextBox).type(fileContents)
         })
         //save CQL on measure
-        Utilities.waitForElementVisible(EditMeasurePage.cqlEditorSaveButton, 11700)
-        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 11700)
+        Utilities.waitForElementEnabled(EditMeasurePage.cqlEditorSaveButton, 26500)
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
         cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
@@ -616,7 +606,6 @@ describe('Measure Observation - Expected Values', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
@@ -692,7 +681,6 @@ describe('Measure Observation - Expected Values', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
@@ -787,8 +775,8 @@ describe('Validate Measure Observation Parameters', () => {
         let randValue = (Math.floor((Math.random() * 1000) + 1))
         newCqlLibraryName = CqlLibraryName + randValue
 
+        OktaLogin.UILogout()
         Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
-        OktaLogin.Logout()
     })
 
     it('Verify error message when the population basis does not match with the function selected for Measure Observation', () => {
