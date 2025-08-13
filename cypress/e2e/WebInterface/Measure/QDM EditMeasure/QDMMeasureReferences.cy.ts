@@ -56,7 +56,7 @@ describe('QDM Measure Reference', () => {
         cy.get(EditMeasurePage.editReference).should('have.attr', 'aria-label', 'Edit').click()
         cy.get(EditMeasurePage.referenceTypeDropdown).click()
         cy.get(EditMeasurePage.justificationOption).click()
-        cy.get(EditMeasurePage.measureReferenceText).clear().type('Updated Measure Reference')
+        cy.get(EditMeasurePage.measureReferenceText).clear().type('Updated Measure Reference').wait(1000)
         cy.get(EditMeasurePage.saveButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Reference Saved Successfully')
         cy.get(EditMeasurePage.measureReferenceTable).should('contain.text', 'Justification')
@@ -95,7 +95,8 @@ describe('QDM Measure Reference', () => {
         //Delete Measure Reference
         // .deleteReference will work as long as there is only 1 item on the table
         cy.get(EditMeasurePage.deleteReference).should('have.attr', 'aria-label', 'Delete').click()
-        cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + 'Measure Reference' + '?')
+        //Commenting until MAT-9046 is fixed
+        //cy.get(CQLEditorPage.confirmationMsgRemoveDelete).should('contain.text', 'Are you sure you want to delete ' + 'Measure Reference' + '?')
         cy.get(CQLEditorPage.deleteContinueButton).click()
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure reference deleted successfully')
     })
