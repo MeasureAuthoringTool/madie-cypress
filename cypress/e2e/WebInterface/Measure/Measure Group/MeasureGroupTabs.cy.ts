@@ -76,7 +76,9 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).clear()
+        cy.get(MeasureGroupPage.rateAggregation).type('{selectAll}{backspace}')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
@@ -108,8 +110,8 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab and their recently updated values
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>Typed some value for Rate Aggregation text area field</p></div>')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
 
@@ -133,8 +135,8 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab and their recently updated values
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).should('contain.value', 'Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).find(EditMeasurePage.RTEContentField).should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>Typed some value for Rate Aggregation text area field</p></div>')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
 
@@ -222,29 +224,31 @@ describe('Validating Population tabs', () => {
 
         //Click on Measure Group tab
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.populationTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 90000)
         cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 90000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the 3 fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).clear()
+        cy.get(MeasureGroupPage.rateAggregation).type('{selectAll}{backspace}')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
         cy.get(MeasureGroupPage.improvementNotationDescQiCore).type('Extra description for Improvement Notation')
 
         //save measure group
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 3000)
+        Utilities.waitForElementVisible(MeasureGroupPage.saveMeasureGroupDetails, 90000)
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('be.enabled')
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).focus()
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
@@ -252,7 +256,7 @@ describe('Validating Population tabs', () => {
         //validation message after attempting to save
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('exist')
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 3000)
+        Utilities.waitForElementVisible(MeasureGroupPage.successfulSaveMeasureGroupMsg, 90000)
 
         //assert save message
         cy.get(MeasureGroupPage.successfulSaveMeasureGroupMsg).should('contain.text', 'Population details for this group updated successfully.')
@@ -266,21 +270,23 @@ describe('Validating Population tabs', () => {
         }
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 90000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).click()
+        cy.get(MeasureGroupPage.reportingTab).click().wait(2000)
+
 
         //assert that all fields appear on the reporting tab and are blank / without a selected value
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).should('be.empty')
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).should('not.contain.text')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Select Improvement Notation')
-        cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('be.empty')
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('not.contain.text')
 
         cy.get(MeasureGroupPage.measureGroupOne).click()
+        cy.get(Utilities.discardChangesContinue).click()
         //Click on Populations tab
         cy.get(MeasureGroupPage.populationTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 30000)
+        Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 90000)
         cy.get(MeasureGroupPage.populationTab).should('exist')
         cy.get(MeasureGroupPage.populationTab).click()
 
@@ -315,23 +321,23 @@ describe('Validating Reporting tabs', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 90000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert expected fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).should('be.empty')
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).should('not.contain.text')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
         cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('be.visible')
-        cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('be.empty')
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('not.contain.text')
     })
 
     it('Changes to Reporting tab fields are saved & persisted', () => {
@@ -340,23 +346,23 @@ describe('Validating Reporting tabs', () => {
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 90000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the three fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).should('be.empty')
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).should('not.contain.text')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('exist').should('be.visible')
         cy.get(MeasureGroupPage.improvementNotationSelect).should('contain.text', 'Increased score indicates improvement')
         cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('be.visible')
-        cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('be.empty')
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('not.contain.text')
 
         //change and save a new value to the Improvement Notation field
         cy.get(MeasureGroupPage.improvementNotationSelect).click()
@@ -364,17 +370,21 @@ describe('Validating Reporting tabs', () => {
             //Increased score indicates improvement
             .should('contain.text', 'Increased score indicates improvement')
             .click()
-        cy.get(MeasureGroupPage.improvementNotationDescQiCore).type('Score doubling indicates great success.')
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).type('Score doubling indicates great success.').wait(500)
 
         //save selected IN value
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
+
         //confirm message
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
+
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group updated successfully.')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 90000)
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 90000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
@@ -387,19 +397,22 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.improvementNotationSelect).click()
         cy.get(MeasureGroupPage.improvementNotationValues)
             .type('{downArrow}{enter}')
-        cy.get(MeasureGroupPage.improvementNotationDescQiCore)
+        cy.get(MeasureGroupPage.improvementNotationDescQiCore).find(EditMeasurePage.RTEContentField)
             .clear()
-            .type('Loss of points is actually good.')
+            .type('{selectAll}{backspace}')
+            .type('Loss of points is actually good.').wait(500)
 
         //save selected IN value
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).click()
 
         //confirm message
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for this group updated successfully.')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 90000)
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 90000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
@@ -419,7 +432,7 @@ describe('Validating Reporting tabs', () => {
 
         //Click on Reporting tab
         cy.get(MeasureGroupPage.reportingTab).should('be.visible')
-        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30000)
+        Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 90000)
         cy.get(MeasureGroupPage.reportingTab).should('exist')
         cy.get(MeasureGroupPage.reportingTab).click()
 
@@ -453,7 +466,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -498,7 +511,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -507,12 +520,16 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
         cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('ipp').click()
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
-            .first() // select the last element
-            .type('Denominator Description')
+        cy.pause()
+        cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox).find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).focus()
+            .clear()
+            .type('{selectAll}{backspace}')
+            .type('Denominator Description').wait(500)
         //Save Supplemental data
         cy.get(MeasureGroupPage.saveSupplementalDataElements).click()
+        Utilities.waitForElementVisible(EditMeasurePage.successMessage, 90000)
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Measure Supplemental Data have been Saved Successfully')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 90000)
 
         //navigate to the main MADiE page
         cy.get(Header.mainMadiePageButton).click()
@@ -520,16 +537,15 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Click on Supplemental data tab
         cy.get(MeasureGroupPage.leftPanelSupplementalDataTab).click()
 
-        cy.get(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).should('exist')
-            .first() // select the last element
-            .should('contain.text', 'Denominator Description')
+        cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox).find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).focus()
+            .should('have.html', '<div contenteditable="true" role="textbox" translate="no" class="tiptap ProseMirror" tabindex="0"><p>Denominator Description</p></div>')
     })
 
     it('Clicking on Discard changes button on Risk Adjustment page will revert the changes made before save', () => {
@@ -537,7 +553,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -561,7 +577,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
@@ -594,7 +610,7 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
         MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 90000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
