@@ -263,6 +263,11 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.testCaseIPPExpected).should('be.visible')
         cy.get(TestCasesPage.testCaseIPPExpected).check()
 
+        cy.get('[data-testid="test-population-Strata-1 -expected-0"]').check()
+        cy.get('[data-testid="strat-test-population-initialPopulation-expected-0"]').eq(0).check()
+        cy.get('[data-testid="test-population-Strata-2 -expected-0"]').check()
+        cy.get('[data-testid="strat-test-population-initialPopulation-expected-0"]').eq(1).check()
+
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.visible')
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
@@ -507,7 +512,6 @@ describe('Run / Execute Test case and verify passing percentage and coverage', (
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Fail')
     })
 })
-
 
 describe('Run / Execute QDM Test Case button validations', () => {
 
