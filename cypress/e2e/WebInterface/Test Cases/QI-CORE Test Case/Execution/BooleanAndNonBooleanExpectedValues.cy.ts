@@ -123,8 +123,11 @@ describe('Non Boolean Population Basis Expected values', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).find(EditMeasurePage.RTEContentField)
+            .clear()
+            .type('{selectAll}{backspace}')
+            .type('Typed some value for Rate Aggregation text area field').wait(500)
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
@@ -357,8 +360,11 @@ describe('Boolean Population Basis Expected Values', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).find(EditMeasurePage.RTEContentField)
+            .clear()
+            .type('{selectAll}{backspace}')
+            .type('Typed some value for Rate Aggregation text area field').wait(500)
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
@@ -455,8 +461,11 @@ describe('Boolean Population Basis Expected Values', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).find(EditMeasurePage.RTEContentField)
+            .clear()
+            .type('{selectAll}{backspace}')
+            .type('Typed some value for Rate Aggregation text area field').wait(500)
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         cy.get(MeasureGroupPage.saveMeasureGroupDetails).should('exist')
@@ -567,8 +576,11 @@ describe('Expected values for second initial population', () => {
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
-        cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
+        cy.get(MeasureGroupPage.rateAggregation).find('[role="textbox"]').should('have.attr', 'contenteditable', 'true')
+        cy.get(MeasureGroupPage.rateAggregation).find(EditMeasurePage.RTEContentField)
+            .clear()
+            .type('{selectAll}{backspace}')
+            .type('Typed some value for Rate Aggregation text area field').wait(500)
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
         //save Measure group
