@@ -520,7 +520,6 @@ describe('Supplemental data elements and Risk Adjustment variables on Measure gr
 
         cy.get(MeasureGroupPage.supplementalDataDefinitionSelect).click()
         cy.get(MeasureGroupPage.supplementalDataDefinitionDropdown).contains('ipp').click()
-        cy.pause()
         cy.get(MeasureGroupPage.QDMSupplementalDataDescriptionTextBox).find(MeasureGroupPage.supplementalDataDefinitionDescriptionTextBox).focus()
             .clear()
             .type('{selectAll}{backspace}')
