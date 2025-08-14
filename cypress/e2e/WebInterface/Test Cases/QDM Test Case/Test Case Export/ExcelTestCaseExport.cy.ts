@@ -285,7 +285,7 @@ describe('QDM Test Case Excel Export', () => {
             // dynamic SDE - https://jira.cms.gov/browse/MAT-8336
             expect(rows[1]['__EMPTY_11']).to.equal('[Patient Characteristic Ethnicity: Ethnicity\nCODE: CDCREC 2186-5]')
             expect(rows[1]['__EMPTY_13']).to.equal('[Patient Characteristic Race: Race\nCODE: CDCREC 2106-3]')
-            expect(rows[1]['__EMPTY_15']).to.equal('[Patient Characteristic Sex: ONCAdministrativeSex\nCODE: AdministrativeGender M]')
-        });
+            expect(rows[1]['__EMPTY_15']).to.equal('[Patient Characteristic Sex: AdministrativeSexMF\nCODE: AdministrativeGender M]')
+        })
     })
 })
