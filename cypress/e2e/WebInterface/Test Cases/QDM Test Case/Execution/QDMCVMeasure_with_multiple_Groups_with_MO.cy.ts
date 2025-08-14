@@ -9,7 +9,7 @@ import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { QDMElements } from "../../../../../Shared/QDMElements"
 import { umlsLoginForm } from "../../../../../Shared/umlsLoginForm"
-import { Header } from "../../../../../Shared/Header"
+import { Header } from "../../../../../Shared/Header";
 
 let measureName = 'CVListQDMPositiveEncounterPerformedWithMO' + Date.now()
 let CqlLibraryName = 'CVListQDMPositiveEncounterPerformedWithMO' + Date.now()
@@ -121,6 +121,7 @@ describe('Measure Creation: Patient Based: CV measure with multiple groups with 
 
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 60000)
 
         //add second PC / group to measure
         cy.get(MeasureGroupPage.addMeasureGroupButton).should('exist')
@@ -298,6 +299,7 @@ describe('Measure Creation: Non-patient based: CV measure with multiple groups w
 
         cy.get(EditMeasurePage.successMessage).should('contain.text', 'Population details for ' +
             'this group saved successfully.')
+        Utilities.waitForElementToNotExist(EditMeasurePage.successMessage, 60000)
 
         //add second PC / group to measure
         cy.get(MeasureGroupPage.addMeasureGroupButton).should('exist')

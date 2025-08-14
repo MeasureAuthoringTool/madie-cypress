@@ -746,7 +746,7 @@ export class CreateMeasurePage {
         }
 
         if ((CreateMeasureOptions.description === undefined) || (CreateMeasureOptions.description === null)) {
-            CreateMeasureOptions.description = 'SemanticBits' + Date.now()
+            CreateMeasureOptions.description = '<p>SemanticBits</p>'
         }
 
         if (CreateMeasureOptions.altUser) {
