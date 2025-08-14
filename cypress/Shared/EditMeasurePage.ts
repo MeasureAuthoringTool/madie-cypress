@@ -150,6 +150,7 @@ export class EditMeasurePage {
     //Measure MetaData
 
     //RTE field button(s)
+    public static readonly RTEContentField = '[data-testid="rich-text-editor-content"]'
     public static readonly rteToolBar = '[data-testid="rich-text-editor-toolbar"]'
     public static readonly unDoBtn = '[data-testid="UndoIcon"]'
     public static readonly reDoBtn = '[data-testid="RedoIcon"]'
@@ -188,37 +189,37 @@ export class EditMeasurePage {
     public static readonly measureDevelopersAlertMsg = '[data-testid="developers-helper-text"]'
 
     //Description Page
-    public static readonly measureDescriptionRTETextBox = '[data-testid="rich-text-editor-content"]'
+    public static readonly measureDescriptionRTETextBox = '[data-testid="generic-field-rich-text-editor"]'
     public static readonly measureDescriptionSaveButton = '[data-testid="measure-description-save"]'
     public static readonly measureDescriptionSuccessMessage = '[data-testid="measureDescriptionSuccess"]'
 
     //Copyright Page
-    public static readonly measureCopyrightTextBox = '[data-testid="rich-text-editor-content"]'
+    public static readonly measureCopyrightTextBox = '[data-testid="generic-field-rich-text-editor"]'
     public static readonly measureCopyrightSaveButton = '[data-testid="measure-copyright-save"]'
     public static readonly measureCopyrightSuccessMessage = '[data-testid="measureCopyrightSuccess"]'
 
     //Disclaimer Page
-    public static readonly measureDisclaimerTextBox = '[data-testid="rich-text-editor-content"]'
+    public static readonly measureDisclaimerTextBox = '[data-testid="generic-field-rich-text-editor"]'
     public static readonly measureDisclaimerSaveButton = '[data-testid="measure-disclaimer-save"]'
     public static readonly measureDisclaimerSuccessMessage = '[data-testid="measureDisclaimerSuccess"]'
 
     //Rationale Page
-    public static readonly measureRationaleTextBox = '[data-testid="rich-text-editor-content"]'
+    public static readonly measureRationaleTextBox = '[data-testid="generic-field-rich-text-editor"]'
     public static readonly measureRationaleSaveButton = '[data-testid="measure-rationale-save"]'
     public static readonly measureRationaleSuccessMessage = '[data-testid="measureRationaleSuccess"]'
 
     //Purpose
-    public static readonly measurePurposeTextBox = '[data-testid="rich-text-editor-content"]'
+    public static readonly measurePurposeTextBox = '[data-testid="generic-field-rich-text-editor"]'
     public static readonly measurePurposeSaveBtn = '[data-testid="measure-purpose-save"]'
     public static readonly measurePurposeSavedMsg = '[data-testid="measurePurposeSuccess"]'
 
     //Guidance Page
-    public static readonly measureGuidanceTextBox = '[data-testid="rich-text-editor-content"]'
+    public static readonly measureGuidanceTextBox = '[data-testid="generic-field-rich-text-editor"]'
     public static readonly measureGuidanceSaveButton = '[data-testid="measure-guidance-usage-save"]'
     public static readonly measureGuidanceSuccessMessage = '[data-testid="measureGuidance (Usage)Success"]'
 
     //Clinical Guidance / Recommendation Page
-    public static readonly measureClinicalRecommendationTextBox = '[data-testid="rich-text-editor-content"]'
+    public static readonly measureClinicalRecommendationTextBox = '[data-testid="generic-field-rich-text-editor"]'
     public static readonly measureClinicalRecommendationSaveButton = '[data-testid="measure-clinical-recommendation-statement-save"]'
     public static readonly measureClinicalRecommendationSuccessMessage = '[data-testid="measureClinical Recommendation StatementSuccess"]'
 
