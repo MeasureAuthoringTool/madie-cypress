@@ -503,7 +503,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
     afterEach('Logout and Clean up', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName, false, true)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('A message is displayed if there are issues with the CQL', () => {
@@ -511,7 +511,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
 
         //log into MADiE
-        OktaLogin.AltLogin()
+        OktaLogin.Login()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -552,7 +552,7 @@ describe('QDM CQM-Execution failure error validations: CQL Errors and missing gr
     it('A message is displayed if the measure is missing a group', () => {
 
         //log into MADiE
-        OktaLogin.AltLogin()
+        OktaLogin.Login()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -595,7 +595,7 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookieALT()
+        cy.setAccessTokenCookie()
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
@@ -605,48 +605,23 @@ describe('QDM CQM-Execution failure error validations: Valueset not found in Vsa
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookieALT()
+        cy.setAccessTokenCookie()
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'ipp')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
         //log into MADiE
-        OktaLogin.AltLogin()
-
-        //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
-
-        //navigate to the CQL Editor tab, for the measure
-        cy.get(EditMeasurePage.cqlEditorTab).should('exist')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        //log out of UI
-        OktaLogin.UILogout()
+        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName, false, true)
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
-
-        //log into MADiE
-        OktaLogin.AltLogin()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -674,58 +649,29 @@ describe('QDM CQM-Execution failure error validations: Data transformation- MADi
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookieALT()
+        cy.setAccessTokenCookie()
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = measureScoringCohort
         measureData.patientBasis = 'false'
         measureData.measureCql = qdmMeasureCQLwNonVsacValueset
-        measureData.altUser = true
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
         //log into MADiE
-        OktaLogin.AltLogin()
-
-        //Click on Edit Button
-        MeasuresPage.actionCenter('edit')
-
-        //navigate to the CQL Editor tab, for the measure
-        cy.get(EditMeasurePage.cqlEditorTab).should('exist')
-        cy.get(EditMeasurePage.cqlEditorTab).click()
-
-        cy.get(EditMeasurePage.cqlEditorTextBox).scrollIntoView()
-        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
-        cy.get(EditMeasurePage.cqlEditorTextBox).click().type('{enter}')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('exist')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.visible')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).should('be.enabled')
-        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
-
-        //wait for alert / successful save message to appear
-        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 27700)
-        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
-
-        //log out of UI
-        OktaLogin.UILogout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.setAccessTokenCookieALT()
+        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName, false, true)
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it("A message is displayed if the measure's CQL Valueset not found in Vsac", () => {
-
-        //log into MADiE
-        OktaLogin.AltLogin()
 
         //Click on Edit Button
         MeasuresPage.actionCenter('edit')
@@ -770,26 +716,25 @@ describe('Non Boolean Population basis Expected values', () => {
         cy.clearAllCookies()
         cy.clearLocalStorage()
         cy.clearAllSessionStorage({ log: true })
-        cy.setAccessTokenCookieALT()
+        cy.setAccessTokenCookie()
 
         measureData.ecqmTitle = measureName
         measureData.cqlLibraryName = CqlLibraryName
         measureData.measureScoring = measureScoringCohort
         measureData.patientBasis = 'false'
         measureData.measureCql = qdmMeasureCQLwNonVsacValueset
-        measureData.altUser = true
 
         //Create New Measure
         CreateMeasurePage.CreateQDMMeasureWithBaseConfigurationFieldsAPI(measureData)
         MeasureGroupPage.CreateProportionMeasureGroupAPI(null, false, 'Initial Population', '', '', 'Denominator', '', 'Numerator')
         TestCasesPage.CreateQDMTestCaseAPI(testCaseTitle, testCaseDescription, testCaseSeries, QDMTCJson)
-        OktaLogin.AltLogin()
+        OktaLogin.Login()
     })
 
     afterEach('Logout and Clean up', () => {
 
-        OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName, false, true)
+        OktaLogin.Logout()
+        Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
     it('Validate Non Boolean Expected values', () => {
