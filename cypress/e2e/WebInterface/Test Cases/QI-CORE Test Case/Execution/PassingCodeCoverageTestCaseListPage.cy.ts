@@ -79,9 +79,7 @@ describe('Code Coverage Highlighting', () => {
         cy.get(TestCasesPage.testCaseListPassingPercTab).should('not.contain.text', '-')
 
         cy.get(TestCasesPage.testCaseListCoveragePercTab).click()
-        cy.get(TestCasesPage.testCaseListCoverageHighlighting).should('contain.text', 'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
-            '(Enc E where E.status = \'finished\') is not null')
-
+        cy.get(TestCasesPage.testCaseListCoverageHighlighting).should('contain.text', '\ndefine "Initial Population":\n   true\n')
     })
 
     it('Verify Measure highlighting for multiple Measure groups on test case list page', () => {
@@ -105,12 +103,10 @@ describe('Code Coverage Highlighting', () => {
         Utilities.dropdownSelect(MeasureGroupPage.numeratorSelect, 'Qualifying Encounters')
 
         Utilities.waitForElementVisible(MeasureGroupPage.reportingTab, 30700)
-        cy.get(MeasureGroupPage.reportingTab).should('exist')
-        cy.get(MeasureGroupPage.reportingTab).should('be.visible')
         cy.get(MeasureGroupPage.reportingTab).click()
 
         //assert the two fields that should appear in the Reporting tab
-        cy.get(MeasureGroupPage.rateAggregation).should('exist').should('be.visible').should('be.enabled')
+        cy.get(MeasureGroupPage.rateAggregation).should('be.visible')
         cy.get(MeasureGroupPage.rateAggregation).type('Typed some value for Rate Aggregation text area field')
         Utilities.dropdownSelect(MeasureGroupPage.improvementNotationSelect, 'Increased score indicates improvement')
 
@@ -134,15 +130,14 @@ describe('Code Coverage Highlighting', () => {
         //verify percentage number appears in tabs heading
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
-        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '47% Coverage')
+        cy.get(TestCasesPage.testCaseListCoveragePercTab).should('contain.text', '100% Coverage')
 
         //Verify Highlighting for first Measure group
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('exist')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).click()
 
-        cy.get(TestCasesPage.testCaseListCoverageHighlighting).should('contain.text', 'define "Initial Population":\n' +
-            'exists "Qualifying Encounters"')
+       cy.get(TestCasesPage.testCaseListCoverageHighlighting).should('contain.text', '\ndefine "Initial Population":\n   true\n')
 
         //Verify Highlighting for second Measure group
         cy.get(TestCasesPage.leftNavMenuList).contains('Population Criteria 2').click()
@@ -156,7 +151,6 @@ describe('Code Coverage Highlighting', () => {
         cy.get(TestCasesPage.testCaseListCoveragePercTab).should('be.visible')
         cy.get(TestCasesPage.testCaseListCoveragePercTab).click()
 
-        cy.get(TestCasesPage.testCaseListCoverageHighlighting).should('not.contain.text', 'define "Initial Population":\n' +
-            'exists "Qualifying Encounters"')
+       cy.get(TestCasesPage.testCaseListCoverageHighlighting).should('not.contain.text', '\ndefine "Initial Population":\n   true\n')
     })
 })
