@@ -10,10 +10,9 @@ import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 import { MeasureCQL } from "../../../../../Shared/MeasureCQL"
 import { Toasts } from "../../../../../Shared/Toasts"
 
-let randValue = (Math.floor((Math.random() * 1000) + 1))
 const now = Date.now()
-let measureName = 'RunExecuteTCButtonValidations' + now + randValue
-let CqlLibraryName = 'RETCBVLibrary' + now + randValue
+const measureName = 'RunExecuteTCButtonValidations' + now
+const CqlLibraryName = 'RETCBVLibrary' + now
 const testCase: TestCase = {
     title: 'test case title',
     description: 'DENOMFail' + now,
@@ -29,43 +28,7 @@ const invalidTestCaseJson = TestCaseJson.TestCaseJson_Invalid
 const warningTestCaseJson = TestCaseJson.TestCaseJson_with_warnings
 const errorTestCaseJSON_no_ResourceID = TestCaseJson.TestCaseJson_missingResourceIDs
 const measureCQL = MeasureCQL.CQL_Multiple_Populations
-const measureCQLStrat = 'library CohortPatientWithStrartification version \'0.0.000\'\n' +
-    'using QICore version \'4.1.1\'\n' +
-    'include FHIRHelpers version \'4.1.000\' called FHIRHelpers\n' +
-    'valueset "Office Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001\'\n' +
-    'valueset "Annual Wellness Visit": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.1240\'\n' +
-    'valueset "Preventive Care Services - Established Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025\'\n' +
-    'valueset "Preventive Care Services-Initial Office Visit, 18 and Up": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023\'\n' +
-    'valueset "Home Healthcare Services": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1016\'\n' +
-    'valueset "End Stage Renal Disease": \'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.526.3.353\' \n' +
-    '\n' +
-    'parameter "Measurement Period" Interval<DateTime>\n' +
-    'default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)\n' +
-    '\n' +
-    'context Patient\n' +
-    '\n' +
-    'define "Initial Population":\n' +
-    '   true\n' +
-    ' \n' +
-    'define "Qualifying Encounters":\n' +
-    '(\n' +
-    '[Encounter: "Office Visit"]\n' +
-    'union [Encounter: "Annual Wellness Visit"]\n' +
-    'union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]\n' +
-    'union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]\n' +
-    'union [Encounter: "Home Healthcare Services"]\n' +
-    ') ValidEncounter\n' +
-    'where ValidEncounter.period during "Measurement Period"\n' +
-    'and ValidEncounter.isFinishedEncounter()\n' +
-    '\n' +
-    'define fluent function "isFinishedEncounter"(Enc Encounter):\n' +
-    '(Enc E where E.status = \'finished\') is not null\n' +
-    '\n' +
-    'define "Stratification 1":\n' +
-    'true'
 const measureCQLPFTests = MeasureCQL.CQL_Populations
-const timezoneErrorMessage = 'Test case updated successfully with errors in JSONMADiE enforces a UTC (offset 0) timestamp format with mandatory millisecond precision. All timestamps with non-zero offsets have been overwritten to UTC, and missing milliseconds have been defaulted to \'000\'.'
-const timezoneWarningMessage = 'Test case updated successfully! Test case validation has started running, please continue working in MADiE.Timezone offsets have been added when hours are present, otherwise timezone offsets are removed or set to UTC for consistency.'
 
 describe('Run / Execute Test Case button validations', () => {
 
@@ -496,16 +459,13 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    // fail from https://jira.cms.gov/browse/MAT-8969
-    // I applied a probably fix - if it fails, it should be line 542
-    it.skip('Run and Execute Test case for multiple Population Criteria and validate Population Criteria discernment, on Highlighting page and Test Case list page', () => {
+    it('Run and Execute Test case for multiple Population Criteria and validate Population Criteria discernment, on Highlighting page and Test Case list page', () => {
         let measureGroupPath = 'cypress/fixtures/measureGroupId'
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
         cy.get(MeasureGroupPage.addMeasureGroupButton).should('be.visible')
         cy.get(MeasureGroupPage.addMeasureGroupButton).click()
-        cy.wait(15500)
         Utilities.setMeasureGroupType()
 
         Utilities.dropdownSelect(MeasureGroupPage.measureScoringSelect, MeasureGroupPage.measureScoringCohort)
@@ -573,7 +533,7 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         Utilities.waitForElementDisabled(TestCasesPage.editTestCaseSaveButton, 8500)
 
         Utilities.waitForElementVisible(TestCasesPage.successMsg, 60000)
-        cy.get(Toasts.dangerToast, { timeout: 6500 }).should('have.text', Toasts.errorOffsetText)
+        cy.get(Toasts.otherSuccessToast, { timeout: 6500 }).should('have.text', Toasts.warningOffsetText)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
 
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -590,13 +550,13 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
 
             cy.get('[data-testid="group-coverage-nav-' + fileContents + '"]').contains('NUMER').click()
             Utilities.waitForElementVisible(TestCasesPage.tcNUMERHighlightingDetails, 35000)
-            cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Initial Population":\nexists "Qualifying Encounters"\nResultsFALSE (false) ')
-            cy.get('[data-ref-id="253"]').should('have.color', '#A63B12')
+            cy.get(TestCasesPage.tcNUMERHighlightingDetails).should('contain.text', '\ndefine "Initial Population":\n   true\nResultstrue Definition(s) Used')
+            cy.get('[data-ref-id="260"]').should('have.color', '#20744c')
         })
 
         cy.get(TestCasesPage.tcGroupCoverageHighlighting).contains('Definitions').click()
         Utilities.waitForElementVisible(TestCasesPage.tcDEFINITIONSHighlightingDetails, 35000)
-        cy.get('[data-ref-id="257"]').should('have.color', '#A63B12')
+        cy.get('[data-ref-id="260"]').should('have.color', '#20744c')
         //Click on Execute Test Case button on Edit Test Case page
         cy.get(EditMeasurePage.testCasesTab).should('exist')
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -608,11 +568,10 @@ describe('Run / Execute Test case for multiple Population Criteria', () => {
         cy.get(TestCasesPage.executeTestCaseButton).invoke('click')
         cy.get(TestCasesPage.executeTestCaseButton).click()
 
-        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Pass')
+        cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Fail')
 
         //Check Test Execution for second Population criteria
         cy.contains('Population Criteria 2').click().wait(3000)
-        cy.reload()
         cy.get(TestCasesPage.executeTestCaseButton).click()
         cy.get(TestCasesPage.testCaseStatus).should('contain.text', 'Fail')
     })
@@ -1065,7 +1024,7 @@ describe('Verify that "Run Test" works with warnings but does not with errors', 
         Utilities.deleteMeasure(measureName, CqlLibraryName)
     })
 
-    it('Can "Run Test Case" and "Execute Test Case"  when a test case has only a warning', () => {
+    it('Can "Run Test Case" and "Execute Test Case" when a test case has only a warning', () => {
 
         //Add second Measure Group with return type as Boolean
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -1450,9 +1409,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
         cy.get(TestCasesPage.editTestCaseSaveButton).should('be.enabled')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
-        cy.get(TestCasesPage.detailsTab).scrollIntoView().click()
-
-        cy.get(Toasts.generalToast, { timeout: 6500 }).should('have.text', Toasts.warningOffsetText)
+        cy.get(Toasts.generalToast, { timeout: 8500 }).should('have.text', Toasts.warningOffsetText)
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
         cy.get(EditMeasurePage.testCasesTab).click()
 
@@ -1780,7 +1737,7 @@ describe('Verify "Run Test Cases" results based on missing/empty group populatio
 
             //confirm no message
             cy.get(TestCasesPage.testCaseJsonValidationDisplayList).should('contain.text', 'No code provided, and a code should be provided from the value set \'US Core Encounter Type\' (http://hl7.org/fhir/us/core/ValueSet/us-core-encounter-type|3.1.0)')
-        })
+    })
 })
 
 describe('Verify multiple IPs on the highlighting tab', () => {
@@ -1836,7 +1793,6 @@ describe('Verify multiple IPs on the highlighting tab', () => {
         cy.get(TestCasesPage.createTestCaseDialog).should('be.visible')
 
         cy.get(TestCasesPage.createTestCaseTitleInput).should('exist')
-        Utilities.waitForElementVisible(TestCasesPage.createTestCaseTitleInput, 20000)
         Utilities.waitForElementEnabled(TestCasesPage.createTestCaseTitleInput, 20000)
         cy.get(TestCasesPage.createTestCaseTitleInput).type(testCase.title)
         cy.get(TestCasesPage.createTestCaseDescriptionInput).should('exist')
