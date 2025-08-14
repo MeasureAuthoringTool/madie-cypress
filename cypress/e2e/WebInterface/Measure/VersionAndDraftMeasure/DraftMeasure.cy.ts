@@ -126,17 +126,17 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.createDraftContinueBtn).click()
 
         // capture measureId for new draft
-        let draftId      
-        cy.wait('@newDraft', {timeout: 25000 }).then(int => {
+        let draftId
+        cy.wait('@newDraft', { timeout: 25000 }).then(int => {
             draftId = int.response.body.id
-        
-        Utilities.waitForElementVisible('[data-testid=measure-action-' + draftId + ']', 30000)
-        Utilities.waitForElementEnabled('[data-testid=measure-action-' + draftId + ']', 30000)
-        cy.get('[data-testid=measure-action-' + draftId + ']').scrollIntoView()
-        cy.get('[data-testid=measure-action-' + draftId + ']').click()
 
-        //Verify draft button is not visible
-        cy.get('[data-testid=draft-measure-' + draftId + ']').should('not.exist')
+            Utilities.waitForElementVisible('[data-testid=measure-action-' + draftId + ']', 30000)
+            Utilities.waitForElementEnabled('[data-testid=measure-action-' + draftId + ']', 30000)
+            cy.get('[data-testid=measure-action-' + draftId + ']').scrollIntoView()
+            cy.get('[data-testid=measure-action-' + draftId + ']').click()
+
+            //Verify draft button is not visible
+            cy.get('[data-testid=draft-measure-' + draftId + ']').should('not.exist')
         })
     })
 
@@ -210,7 +210,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.searchInputBox).clear().type(newMeasureName).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
 
-        cy.get('[class="px-1"]').find('[class=" cursor-pointer"]').eq(0).click()
+        cy.get('[class="px-1"]').find('[class=" cursor-pointer"]').eq(1).click()
         cy.wait(2000)
         cy.get('[data-testid="draft-action-tooltip"]').should('have.attr', 'aria-label', 'You cannot draft a 4.1.1 measure when a 6.0.0 version is available')
     })
@@ -328,7 +328,7 @@ describe('Draft and Version Validations - upgrade QiCore v6.0.0 to v7.0.0', () =
         newMeasureName = 'DraftTo7Measure' + Date.now()
         newCqlLibraryName = 'DraftTo7Lib' + Date.now()
         //Create New Measure and Measure Group
-        CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCqlLibraryName, SupportedModels.qiCore6, { measureCql: cohortMeasureCQLSix})
+        CreateMeasurePage.CreateMeasureAPI(newMeasureName, newCqlLibraryName, SupportedModels.qiCore6, { measureCql: cohortMeasureCQLSix })
         MeasureGroupPage.CreateCohortMeasureGroupAPI()
 
         OktaLogin.Login()
@@ -347,8 +347,8 @@ describe('Draft and Version Validations - upgrade QiCore v6.0.0 to v7.0.0', () =
 
         OktaLogin.UILogout()
     })
-
-    it('Change model from v6.0.0 - to - v7.0.0 with vbersioning and drafting but cannot draft from 7.0.0 back down', () => {
+    //skipping due to Stu7 not being active / set to true, yet, in PROD
+    it.skip('Change model from v6.0.0 - to - v7.0.0 with versioning and drafting but cannot draft from 7.0.0 back down', () => {
 
         updatedMeasuresPageName = 'upgradedTo7' + Date.now()
 
