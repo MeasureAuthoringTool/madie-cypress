@@ -1067,8 +1067,6 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
         cy.get(EditMeasurePage.associateCmsAssociateBtn).click()
         cy.get(EditMeasurePage.sureDialogContinueBtn).click()
 
-        cy.pause()
-
         cy.get(Header.mainMadiePageButton).click()
 
         MeasuresPage.actionCenter('edit', 2)
