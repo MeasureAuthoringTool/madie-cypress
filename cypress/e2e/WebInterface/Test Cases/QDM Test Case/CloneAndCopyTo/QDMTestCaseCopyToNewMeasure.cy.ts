@@ -7,6 +7,7 @@ import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 import { QdmCql } from "../../../../../Shared/QDMMeasuresCQL"
 import { Header } from "../../../../../Shared/Header"
+import { CQLEditorPage } from "../../../../../Shared/CQLEditorPage"
 
 const now = Date.now()
 const originalMeasure = {
@@ -49,6 +50,14 @@ describe('Copy test cases from existing measure into new measure', () => {
 
         //adding supplemental data
         MeasuresPage.actionCenter('edit')
+
+        cy.get(EditMeasurePage.cqlEditorTab).click()
+        cy.get(EditMeasurePage.cqlEditorTextBox).type('{moveToEnd}{enter}')
+        cy.get(EditMeasurePage.cqlEditorSaveButton).click()
+        //wait for alert / successful save message to appear
+        Utilities.waitForElementVisible(CQLEditorPage.successfulCQLSaveNoErrors, 40700)
+        cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
         // add SDE to test case coverage
         cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -73,8 +82,9 @@ describe('Copy test cases from existing measure into new measure', () => {
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
 
+
         // need to select correct version of the measure with .eq(1)
-        cy.get('[data-testid="row-item"]').eq(8).contains('View').click()
+        cy.get('[data-testid="row-item"]').eq(9).contains('View').click()
 
 
         // got to test case tab
@@ -88,6 +98,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         // select all, copy to, select my new measure, save
         Utilities.checkAll()
 
+
         TestCasesPage.actionCenter(TestCaseAction.copyToMeasure)
 
         // check toast for success, check stay on original measure test cases
@@ -96,6 +107,7 @@ describe('Copy test cases from existing measure into new measure', () => {
 
         // go to new measure, test case tab
         cy.get(Header.mainMadiePageButton).click()
+
 
         MeasuresPage.actionCenter('edit')
 
@@ -112,7 +124,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
 
         // check a copied tc for expected values
-        TestCasesPage.grabTestCaseId(2)
+        TestCasesPage.grabTestCaseId(29)
         TestCasesPage.clickEditforCreatedTestCase()
 
         cy.get(TestCasesPage.tctExpectedActualSubTab).click()
@@ -162,7 +174,7 @@ describe('Copy test cases from existing measure into new measure', () => {
         cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 26500)
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
-        cy.get('[data-testid="row-item"]').eq(8).contains('View').click()
+        cy.get('[data-testid="row-item"]').eq(9).contains('View').click()
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')

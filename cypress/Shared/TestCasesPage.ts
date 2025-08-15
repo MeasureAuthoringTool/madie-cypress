@@ -908,7 +908,10 @@ export class TestCasesPage {
                 cy.get(TestCasesPage.actionCenterCopyToMeasure).should('be.enabled').click()
 
                 cy.readFile('cypress/fixtures/measureId').should('exist').then((id) => {
-                    cy.get('[data-testid="measure-name-' + id + '_select"]').find('input').check()
+                    cy.get('[data-testid="measure-name-' + id + '_select"]')
+                        .find('input')
+                        .focus()
+                        .check()
                 })
                 cy.get(TestCasesPage.copyToSave).scrollIntoView().click()
                 break
