@@ -41,11 +41,13 @@ describe('Ratio based measure with measure observations', () => {
         // all these declared values need to match your CQL definitions and functions
         const obs1: MeasureObservations = {
             aggregateMethod: 'Count',
-            definition: 'daysObs'
+            definition: 'daysObs',
+            description: '<p>obs1</p>'
         }
         const obs2: MeasureObservations = {
             aggregateMethod: 'Count',
-            definition: 'daysObs'
+            definition: 'daysObs',
+            description: '<p>obs2</p>'
         }
         MeasureGroupPage.CreateMeasureGroupAPI(MeasureType.outcome, PopulationBasis.encounter, MeasureScoring.Ratio, pops, false, obs1, obs2)
 
@@ -68,6 +70,13 @@ describe('Ratio based measure with measure observations', () => {
         cy.get(EditMeasurePage.cqlEditorTextBox).type('{enter}')
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
+
+        // verify populations
+        cy.get(EditMeasurePage.measureGroupsTab).click()
+
+        cy.contains('span', 'Outcome').should('have.class', 'MuiChip-label')
+        cy.get('#populationBasis').should('have.value', 'Encounter')
+        cy.get('#scoring-select').should('have.text', 'Ratio')
 
         // got to test case
         cy.get(EditMeasurePage.testCasesTab).click()
@@ -149,7 +158,6 @@ describe('Proportion based measure with no observations', () => {
         OktaLogin.Logout()
         Utilities.deleteMeasure(measure.name, measure.libName)
     })
-
 
     it('Test Case Export & Import - Persist expected values through the process', () => {
 

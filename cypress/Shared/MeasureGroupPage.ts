@@ -47,7 +47,8 @@ export type MeasureObservations = {
     aggregateMethod: string,
     criteriaReference?: uuidv4,
     definition: string,
-    id?: uuidv4
+    id?: uuidv4,
+    description?: string
 }
 
 export class MeasureGroupPage {
@@ -782,38 +783,44 @@ export class MeasureGroupPage {
             {
                 "id": uuidv4(),
                 "name": "initialPopulation",
-                "definition": populations.initialPopulation
+                "definition": populations.initialPopulation,
+                "description": "<p>initial pop</p>"
             },
             {
                 "id": denomUuid,
                 "name": "denominator",
-                "definition": populations.denominator
+                "definition": populations.denominator,
+                "description": "<p>denom</p>"
             },
             {
                 "id": numUuid,
                 "name": "numerator",
-                "definition": populations.numerator
+                "definition": populations.numerator,
+                "description": "<p>num</p>"
             },
         ]
         if (populations.denomExclusion) {
             popsArray.push({
                 "id": uuidv4(),
                 "name": "denominatorExclusion",
-                "definition": populations.denomExclusion
+                "definition": populations.denomExclusion,
+                "description": "<p>denom exc</p>"
             })
         }
         if (populations.numExclusion) {
             popsArray.push({
                 "id": uuidv4(),
                 "name": "numeratorExclusion",
-                "definition": populations.numExclusion
+                "definition": populations.numExclusion,
+                "description": "<p>num exc</p>"
             })
         }
         if (populations.denomException) {
             popsArray.push({
                 "id": uuidv4(),
                 "name": "denominatorException",
-                "definition": populations.denomException
+                "definition": populations.denomException,
+                "description": "<p>denom exception</p>"
             })
         }
         // need this bc CV populations structure is different
@@ -823,17 +830,20 @@ export class MeasureGroupPage {
             {
                 "id": uuidv4(),
                 "name": "initialPopulation",
-                "definition": cvPopulations.initialPopulation
+                "definition": cvPopulations.initialPopulation,
+                "description": "<p>initial pop</p>"
             },
             {
                 "id": measureUuid,
                 "name": "measurePopulation",
-                "definition": cvPopulations.measurePopulation
+                "definition": cvPopulations.measurePopulation,
+                "description": "<p>measure pop</p>"
             },
             {
                 "id": uuidv4(),
                 "name": "measurePopulationExclusion",
-                "definition": cvPopulations.measurePopExclusion ? cvPopulations.measurePopExclusion : '' 
+                "definition": cvPopulations.measurePopExclusion ? cvPopulations.measurePopExclusion : '',
+                "description": "<p>measure exclusion</p>"
             }
             ]
             if (cvPopulations.observation) {
