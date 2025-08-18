@@ -381,7 +381,7 @@ export class CreateMeasurePage {
                     },
                     'measureMetaData': {
                         "guidance": "<p>this is a meta guidance (usage) value -- for the 'Clinical Usage' field</p>",
-                        "description": "<p>Description</p>",
+                        "description": "<p>Test This is part of the content of the measure description</p>",
                         "purpose": "<p>this is a meta purpose value</p>",
                         "measureDefinitions": [
                             {

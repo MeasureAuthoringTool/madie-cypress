@@ -76,23 +76,23 @@ describe('Read only for measure, measure group, and test cases that user does no
 
         cy.get(EditMeasurePage.leftPanelDescription).should('be.visible')
         cy.get(EditMeasurePage.leftPanelDescription).click()
-        cy.get(EditMeasurePage.measureDescriptionRTETextBox).should('not.exist')
+        cy.get(EditMeasurePage.measureDescriptionRTETextBox).find('[class="rich-text-editor_read_only"]').should('exist')
 
         cy.get(EditMeasurePage.leftPanelCopyright).should('be.visible')
         cy.get(EditMeasurePage.leftPanelCopyright).click()
-        cy.get(EditMeasurePage.measureCopyrightTextBox).should('not.exist')
+        cy.get(EditMeasurePage.measureCopyrightTextBox).find('[class="rich-text-editor_read_only"]').should('exist')
 
         cy.get(EditMeasurePage.leftPanelDisclaimer).should('be.visible')
         cy.get(EditMeasurePage.leftPanelDisclaimer).click()
-        cy.get(EditMeasurePage.measureDisclaimerTextBox).should('not.exist')
+        cy.get(EditMeasurePage.measureDisclaimerTextBox).find('[class="rich-text-editor_read_only"]').should('exist')
 
         cy.get(EditMeasurePage.leftPanelRationale).should('be.visible')
         cy.get(EditMeasurePage.leftPanelRationale).click()
-        cy.get(EditMeasurePage.measureRationaleTextBox).should('not.exist')
+        cy.get(EditMeasurePage.measureRationaleTextBox).find('[class="rich-text-editor_read_only"]').should('exist')
 
         cy.get(EditMeasurePage.leftPanelGuidance).should('be.visible')
         cy.get(EditMeasurePage.leftPanelGuidance).click()
-        cy.get(EditMeasurePage.measureGuidanceTextBox).should('not.exist')
+        cy.get(EditMeasurePage.measureGuidanceTextBox).find('[class="rich-text-editor_read_only"]').should('exist')
 
 
         cy.get(EditMeasurePage.leftPanelQiCoreDefinition).should('be.visible')
