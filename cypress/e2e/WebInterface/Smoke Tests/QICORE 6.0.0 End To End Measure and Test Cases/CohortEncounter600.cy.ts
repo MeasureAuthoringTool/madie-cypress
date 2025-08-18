@@ -30,6 +30,7 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
     before('Create Measure and Test Case', () => {
 
         CreateMeasurePage.CreateMeasureAPI(measureName, libraryName, SupportedModels.qiCore6, opts)
+
         MeasureGroupPage.CreateCohortMeasureGroupAPI(false, false, 'Initial Population', 'Encounter')
         TestCasesPage.CreateTestCaseAPI(testCase.title, testCase.group, testCase.description, testCase.json)
 
@@ -53,7 +54,7 @@ describe('Measure Creation and Testing: Cohort Episode Encounter', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        cy.get(EditMeasurePage.testCasesTab).click()
+        cy.get(EditMeasurePage.testCasesTab).wait(2500).click()
 
         TestCasesPage.clickEditforCreatedTestCase()
 
