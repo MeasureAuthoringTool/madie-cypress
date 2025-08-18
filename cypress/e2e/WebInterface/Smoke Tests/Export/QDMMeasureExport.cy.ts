@@ -33,7 +33,8 @@ const measureDataNonPB: CreateMeasureOptions = {
     measureScoring: 'Proportion',
     patientBasis: 'false',
     mpStartDate: '2026-01-01',
-    mpEndDate: '2026-12-31'
+    mpEndDate: '2026-12-31',
+    description: '<p>This is a TEST.</p><table class="rich-text-table" style="min-width: 75px"><colgroup><col style="min-width: 25px"><col style="min-width: 25px"><col style="min-width: 25px"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p>Label 1</p></th><th colspan="1" rowspan="1"><p>Label 2</p></th><th colspan="1" rowspan="1"><p>Label 3</p></th></tr><tr><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><ol><li><p>test 1</p></li><li><p>test 2</p></li><li><p>test 3</p></li></ol></td></tr><tr><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p></p></td><td colspan="1" rowspan="1"><p></p></td></tr></tbody></table><p><strong><em><u>This is another TEST</u></em></strong></p>'
 }
 
 describe('Successful QDM Measure Export', () => {
@@ -99,63 +100,31 @@ describe('Successful QDM Measure Export', () => {
             expect(bodyText).to.include('eCQM Version Number\tDraft based on 0.0.000')
 
             //Various meta data
-            expect(bodyText).to.include('Measurement Period\tJanuary 1, 2026 through December 31, 2026')
-            expect(bodyText).to.include('Measure Steward\tSemanticBits')
-            expect(bodyText).to.include('Measure Developer\tAcademy of Nutrition and Dietetics')
-            expect(bodyText).to.include('Endorsed By\tNone')
-            expect(bodyText).to.include('Description\t\n' +
-                'SemanticBits')
-            expect(bodyText).to.include('Measure Scoring\tProportion')
-            expect(bodyText).to.include('Measure Type\tProcess')
-            expect(bodyText).to.include('Stratification\t\n' +
-                'None')
-            expect(bodyText).to.include('Initial Population\t\n\ntest IP P')
-            expect(bodyText).to.include('Denominator\t\n\ntest d P')
-            expect(bodyText).to.include('Denominator Exclusions\t\n\ntest dE P')
-            expect(bodyText).to.include('Numerator\t\n\ntest n P')
-            expect(bodyText).to.include('Numerator Exclusions\t\n' +
-                'None')
-            expect(bodyText).to.include('Denominator Exceptions\t\n' +
-                'None')
+            expect(bodyText).to.include('Measurement Period\tJanuary 1, 2026 through December 31, 2026\n' +
+                'Measure Steward\tSemanticBits\nMeasure Developer\tAcademy of Nutrition and Dietetics\nEndorsed By\tNone')
 
-            //Population Criteria
-            //Initial Population
-            expect(bodyText).to.include('Initial Population\n' +
-                '  ["Patient Characteristic Payer": "Payer Type"]')
+            expect(bodyText).to.include('Description\t\n\nThis is a TEST.\n\n\n\n\nLabel 1\n\n\t\n\n' +
+                'Label 2\n\n\t\n\nLabel 3\n\n\n\n\n\t\n\n\t\n\ntest 1\n\ntest 2\n\ntest 3' +
+                '\n\n\n\n\n\t\n\n\t\n\n\n\n\nThis is another TEST')
 
-            //Denominator
-            expect(bodyText).to.include('Denominator\n' +
-                '  ["Patient Characteristic Payer": "Payer Type"]')
+            expect(bodyText).to.include('Measure Scoring\tProportion\nMeasure Type\tProcess\nStratification\t\nNone')
 
-            //Denominator Exclusions
-            expect(bodyText).to.include('Denominator Exclusions\n' +
-                '  ["Patient Characteristic Payer": "Payer Type"]')
+            //populations
+            expect(bodyText).to.include('Initial Population\t\n\ntest IP P\n\n\nDenominator\t\n\ntest d P\n\n\n' +
+                'Denominator Exclusions\t\n\ntest dE P\n\n\nNumerator\t\n\ntest n P\n\n\nNumerator Exclusions\t\n' +
+                'None\n\nDenominator Exceptions\t\nNone')
 
-            //Denominator Exceptions
-            expect(bodyText).to.include('Denominator Exceptions\n' +
-                'None')
+            //population criteria
+            expect(bodyText).to.include('Population Criteria\nInitial Population\n  ' +
+                '["Patient Characteristic Payer": "Payer Type"]\n \nDenominator\n  ' +
+                '["Patient Characteristic Payer": "Payer Type"]\n \nDenominator Exclusions\n  ' +
+                '["Patient Characteristic Payer": "Payer Type"]\n \nDenominator Exceptions\nNone\n \n' +
+                'Numerator\n  ["Patient Characteristic Payer": "Payer Type"]\n \nNumerator Exclusions\nNone\n' +
+                ' \nStratification\nNone')
 
-            //Numerator
-            expect(bodyText).to.include('Numerator\n' +
-                '  ["Patient Characteristic Payer": "Payer Type"]')
-
-            //Numerator Exclusions
-            expect(bodyText).to.include('Numerator Exclusions\n' +
-                'None')
-
-            //Stratification
-            expect(bodyText).to.include('Stratification\n' +
-                'None')
-
-            //Definitions
-            expect(bodyText).to.include('SDE Payer\n' +
-                '  ["Patient Characteristic Payer": "Payer Type"]')
-
-            //Terminology
-            expect(bodyText).to.include('valueset "Payer Type" (2.16.840.1.114222.4.11.3591)')
-
-            //Data Criteria (QDM Data Elements)
-            expect(bodyText).to.include('valueset "Payer Type" (2.16.840.1.114222.4.11.3591)')
+            //definitions, functions, terminology, data criteria
+            expect(bodyText).to.include('Functions\nNone\nTerminology\nvalueset "Payer Type" (2.16.840.1.114222.4.11.3591)\n' +
+                'Data Criteria (QDM Data Elements)\n"Patient Characteristic Payer: Payer Type" using "Payer Type (2.16.840.1.114222.4.11.3591)"')
         })
     })
 })
