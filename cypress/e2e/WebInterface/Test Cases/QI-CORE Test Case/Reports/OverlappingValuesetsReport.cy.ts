@@ -1,22 +1,21 @@
 import { TestCasesPage } from "../../../../../Shared/TestCasesPage"
 import { OktaLogin } from "../../../../../Shared/OktaLogin"
 import { Utilities } from "../../../../../Shared/Utilities"
-import { MeasuresPage } from "../../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../../Shared/EditMeasurePage"
 const { deleteDownloadsFolderBeforeEach } = require('cypress-delete-downloads-folder')
 
     /*
         This test scenario does not require creation of a measure.
         We can simply navigate to an existing measure we know will generate this report.
+
+        CMSid: '334FHIR',
+        title: 'Cesarean Birth'
+        version: '0.6.000'
+
+        CMSid: '1264FHIR',
+        title: 'Emergency Care Access and Timeliness (REHQR)FHIR'
+        version: '0.6.000'
     */
-const originalMeasure = {
-    CMSid: '334FHIR',
-    title: 'Cesarean Birth'
-}
-const measureWithNoOverlap = {
-    CMSid: '1264FHIR',
-    title: 'Emergency Care Access and Timeliness (REHQR)FHIR'
-}
 
 describe('Generate the Overlapping Valueset report for a QDM measure', () => {
 
@@ -34,15 +33,7 @@ describe('Generate the Overlapping Valueset report for a QDM measure', () => {
 
     it('View CMS 334FHIR and generate the Overlapping Valueset report', () => {
 
-        // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 75100)
-        cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
-        cy.wait('@searchDone')
-        cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
-
-        cy.get('[data-testid="row-item"]').contains('View').click()
+        cy.visit('/measures/68560f925e2d542578bdbf92/edit/details/')
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -79,17 +70,9 @@ describe('Generate the Overlapping Valueset report for a QDM measure', () => {
         })
     })
 
-    it('Export Excel version of Overlapping Valuesets report', () => {
+    it('Export Excel version of Overlapping Valuesets report for 334FHIR', () => {
 
-        // switch to all measure tab, search for original measure, view
-        cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
-        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 75100)
-        cy.get(MeasuresPage.allMeasuresTab).click()
-        cy.get(MeasuresPage.searchInputBox).clear().type(originalMeasure.CMSid).type('{enter}')
-        cy.wait('@searchDone')
-        cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', originalMeasure.title)
-
-        cy.get('[data-testid="row-item"]').contains('View').click()
+        cy.visit('/measures/68560f925e2d542578bdbf92/edit/details/')
 
         // got to test case tab
         cy.get(EditMeasurePage.testCasesTab).should('be.visible')
@@ -115,7 +98,7 @@ describe('Generate the Overlapping Valueset report for a QDM measure', () => {
             expect(rows[0]['Code']).to.equal('10D00Z0')
             expect(rows[0]['Code System']).to.equal('http://www.cms.gov/Medicare/Coding/ICD10')
             expect(rows[0]['Description']).to.equal('Extraction of Products of Conception, High, Open Approach')
-            expect(rows[0]['Version']).to.equal('2025')
+            expect(rows[0]['Version']).to.equal('2026')
             expect(rows[0]['Value Set']).to.equal('CesareanBirth')
             expect(rows[0]['Value Set OID/URL']).to.equal('http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.282')
         })
@@ -123,15 +106,7 @@ describe('Generate the Overlapping Valueset report for a QDM measure', () => {
 
     it('View CMS 1264FHIR and generate an empty Overlapping Valueset report', () => {
 
-         // switch to all measure tab, search for original measure, view
-         cy.intercept('PUT', '/api/measures/searches?currentUser=false&limit=10&page=0&sort=&direction=').as('searchDone')
-         Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 75100)
-         cy.get(MeasuresPage.allMeasuresTab).click()
-         cy.get(MeasuresPage.searchInputBox).clear().type(measureWithNoOverlap.CMSid).type('{enter}')
-        cy.wait('@searchDone')
-         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', measureWithNoOverlap.title)
- 
-         cy.get('[data-testid="row-item"]').contains('View').click()
+        cy.visit('/measures/68755bf525b3c1414c4f2851/edit/details/')
  
          // got to test case tab
          cy.get(EditMeasurePage.testCasesTab).should('be.visible')
