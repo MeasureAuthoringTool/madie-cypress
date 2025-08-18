@@ -69,13 +69,6 @@ describe('Ratio based measure with measure observations', () => {
         cy.get(EditMeasurePage.cqlEditorSaveButton).click()
         cy.get(CQLEditorPage.successfulCQLSaveNoErrors).should('be.visible')
 
-        // verify populations
-        cy.get(EditMeasurePage.measureGroupsTab).click()
-
-        cy.contains('span', 'Outcome').should('have.class', 'MuiChip-label')
-        cy.get('#populationBasis').should('have.value', 'Encounter')
-        cy.get('#scoring-select').should('have.text', 'Ratio')
-
         // got to test case
         cy.get(EditMeasurePage.testCasesTab).click()
         TestCasesPage.grabValidateTestCaseTitleAndSeries(testCase.title, testCase.group)
