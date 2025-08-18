@@ -72,7 +72,7 @@ describe('QDM Library Includes fields', () => {
         //Search for QDM Libraries
         cy.get(CQLEditorPage.librarySearchTextBox).clear().type('sdoh')
         cy.get(CQLEditorPage.librarySearchBtn).click()
-        cy.get('[data-testid="terminology-section-Library Results-sub-heading"]').find('[class="growing-div open"]').find(CQLEditorPage.librarySearchTable).find('[data-testid="library-results-tbl"]').find('[data-testid="library-results-table-body"]').should('include.text', 'SDOH3.2.000ltj7708View / ApplySDOH3.1.000ltj7708View / ApplySDOH3.0.000ltj7708View / ApplySDOH2.0.000ltj7708View / ApplySDOH1.0.000ltj7708View / Apply')
+        cy.get('[data-testid="terminology-section-Library Results-sub-heading"]').find('[class="growing-div open"]').find(CQLEditorPage.librarySearchTable).find('[data-testid="library-results-tbl"]').find('[data-testid="library-results-table-body"]').should('include.text', 'SDOH4.0.000ltj7708View / ApplySDOH3.2.000ltj7708View / ApplySDOH3.1.000ltj7708View / ApplySDOH3.0.000ltj7708View / ApplySDOH2.0.000ltj7708View / Apply')
     })
 
     it('Apply QDM Included library to the CQL and save', () => {
