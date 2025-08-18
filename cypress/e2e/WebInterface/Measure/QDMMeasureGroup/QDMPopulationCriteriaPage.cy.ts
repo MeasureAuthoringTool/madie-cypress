@@ -383,8 +383,6 @@ describe('Save Population Criteria on QDM measure', () => {
 
     it('Confirm that initial and new Population Criteria can have values saved', () => {
 
-        MeasuresPage.actionCenter('edit')
-
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
@@ -441,9 +439,8 @@ describe('Validations: Population Criteria: Return Types -- Boolean', () => {
     })
 
     it('Validations when the Patient Basis is set to "Yes" and return type should be boolean', () => {
-        MeasuresPage.actionCenter('edit')
 
-        //Click on Measure Group tab
+         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).should('exist')
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -502,8 +499,6 @@ describe('Validations: Population Criteria: Return Types -- Non-Boolean', () => 
     })
 
     it('Validations when the Patient Basis is set to "No" and return type should be Non-boolean', () => {
-
-        MeasuresPage.actionCenter('edit')
 
         //Click on Measure Group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
