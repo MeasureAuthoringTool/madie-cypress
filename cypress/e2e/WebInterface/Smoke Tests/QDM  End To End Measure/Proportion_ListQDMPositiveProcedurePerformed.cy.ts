@@ -273,7 +273,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('08/17/1957 12:00 AM', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('08/17/1957 12:00 AM', 'Living', 'AMERICAN INDIAN OR ALASKA NATIVE', 'Female', 'Not Hispanic or Latino')
 
         //Element - Condition:Diagnosis: Uveitis
         //add Element
@@ -320,7 +320,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('07/28/1977 12:00 AM', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('07/28/1977 12:00 AM', 'Living', 'AMERICAN INDIAN OR ALASKA NATIVE', 'Female', 'Not Hispanic or Latino')
 
         //Element - Condition:Diagnosis: Disorders of Visual Corte
         QDMElements.addElement('condition', 'Diagnosis: Disorders of Visual Cortex')
