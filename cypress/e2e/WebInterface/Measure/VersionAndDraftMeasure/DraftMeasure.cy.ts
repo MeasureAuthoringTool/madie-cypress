@@ -210,7 +210,7 @@ describe('Draft and Version Validations -- add and cannot create draft of a draf
         cy.get(MeasuresPage.searchInputBox).clear().type(newMeasureName).type('{enter}')
         cy.get(MeasuresPage.measureListTitles).should('contain', newMeasureName)
 
-        cy.get('[class="px-1"]').find('[class=" cursor-pointer"]').eq(1).click()
+        cy.get('[class="px-1"]').find('[class=" cursor-pointer"]').eq(0).click()
         cy.wait(2000)
         cy.get('[data-testid="draft-action-tooltip"]').should('have.attr', 'aria-label', 'You cannot draft a 4.1.1 measure when a 6.0.0 version is available')
     })
