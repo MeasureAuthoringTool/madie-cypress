@@ -283,7 +283,6 @@ describe('Validating Population tabs', () => {
         cy.get(MeasureGroupPage.improvementNotationDescQiCore).should('not.contain.text')
 
         cy.get(MeasureGroupPage.measureGroupOne).click()
-        cy.get(Utilities.discardChangesContinue).click()
         //Click on Populations tab
         cy.get(MeasureGroupPage.populationTab).should('be.visible')
         Utilities.waitForElementVisible(MeasureGroupPage.populationTab, 90000)
