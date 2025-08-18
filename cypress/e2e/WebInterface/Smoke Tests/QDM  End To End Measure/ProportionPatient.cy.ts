@@ -214,7 +214,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         TestCasesPage.clickEditforCreatedTestCase()
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('12/31/1966 12:00 AM', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('12/31/1966 12:00 AM', 'Living', 'AMERICAN INDIAN OR ALASKA NATIVE', 'Female', 'Not Hispanic or Latino')
 
         //Element - Encounter:Performed: Annual Wellness Visit
         //add Element
@@ -260,7 +260,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
         TestCasesPage.clickEditforCreatedTestCase(true)
 
         //enter a value of the dob, Race and gender
-        TestCasesPage.enterPatientDemographics('12/31/1946 12:00 AM', 'Living', 'American Indian or Alaska Native', 'Female', 'Not Hispanic or Latino')
+        TestCasesPage.enterPatientDemographics('12/31/1946 12:00 AM', 'Living', 'AMERICAN INDIAN OR ALASKA NATIVE', 'Female', 'Not Hispanic or Latino')
 
         //Element - Encounter:Performed: Preventive Care Services - Established Office Visit, 18 and Up
         //add Element
