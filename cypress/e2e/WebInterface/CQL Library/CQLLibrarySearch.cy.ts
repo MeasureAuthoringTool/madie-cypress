@@ -2,8 +2,7 @@ import { OktaLogin } from "../../../Shared/OktaLogin"
 import { Header } from "../../../Shared/Header"
 import { CQLLibraryPage } from "../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../Shared/CQLLibrariesPage"
-import { TestCasesPage } from "../../../Shared/TestCasesPage"
-import {Utilities} from "../../../Shared/Utilities";
+import { Utilities } from "../../../Shared/Utilities"
 
 var CQLLibraryName = ""
 let CQLLibraryPublisher = 'ICFer'
@@ -18,14 +17,13 @@ describe.skip('CQL Library Search Validations', () => {
         CQLLibraryName = 'TestLibrary' + Date.now() + randValue
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryName, CQLLibraryPublisher)
         OktaLogin.Login()
-
     })
+
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
-
+        OktaLogin.UILogout()
+        Utilities.deleteLibrary(CQLLibraryName)
     })
-
 
     it('Filter text box and button appears on each tab ("My Libraries" and "All Libraries"), on the Libraries page', () => {
         //navigate to the main CQL Library list page
@@ -35,147 +33,107 @@ describe.skip('CQL Library Search Validations', () => {
         cy.get(Header.cqlLibraryTab).click()
         Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
-        //ensure we are on the My Libraries tab
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        //ensure we are on the Owned Libraries tab
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
 
-        //confirm that the filter input box and the filter submit buttons appear on both CQL Libraries tabs ("My Libraries" and "All Libraries")
+        //confirm that the filter by options and search input box appear on all 3 tabs
+        // owned
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('exist')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.visible')
+        cy.get(CQLLibraryPage.filterByDropdown).should('exist')
+        cy.get(CQLLibraryPage.filterByDropdown).should('be.visible')
 
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        //shared 
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
 
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('exist')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.visible')
+        cy.get(CQLLibraryPage.filterByDropdown).should('exist')
+        cy.get(CQLLibraryPage.filterByDropdown).should('be.visible')
+
+        // all
+        cy.get(CQLLibraryPage.allLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
+
+        cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
+        cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
+        cy.get(CQLLibraryPage.filterByDropdown).should('exist')
+        cy.get(CQLLibraryPage.filterByDropdown).should('be.visible')
 
     })
 
-    it('Filter label appears on each tab (My Libraries and All Libraries), on the Libraries page', () => {
+    it('Perform a search based on the Libraries name', () => {
 
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
+        Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
 
         //ensure we are on the My Libraries tab
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
 
-        //confirm that the filter label appears on, both, CQL Libraries tabs ("My Libraries" and "All Libraries")
-        cy.get(CQLLibraryPage.LibFilterLabel).should('exist')
-        cy.get(CQLLibraryPage.LibFilterLabel).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterLabel).should('contain.text', 'Filter Libraries')
+        Utilities.dropdownSelect(CQLLibraryPage.filterByDropdown, 'Library')
 
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        // do a search based on the CQL Library name on "All Libraries" tab
+        cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
+        cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
+        cy.get(CQLLibraryPage.LibFilterTextField).clear().type(CQLLibraryName + '{enter}')
 
-        cy.get(CQLLibraryPage.LibFilterLabel).should('exist')
-        cy.get(CQLLibraryPage.LibFilterLabel).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterLabel).should('contain.text', 'Filter Libraries')
-
+        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
     })
 
-    it('Filter is based on the Libraries name', () => {
+    it('Perform a search based on the Libraries version', () => {
 
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
+        Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
 
         //ensure we are on the My Libraries tab
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
 
-        //do a search based on the CQL Library name on, both, the "My Libraries" and the "All Libraries" tabs
+        Utilities.dropdownSelect(CQLLibraryPage.filterByDropdown, 'Version')
+
+        // do a search based on the CQL Library name on "All Libraries" tab
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterTextField).click()
-        cy.get(CQLLibraryPage.LibFilterTextField).clear()
-        cy.get(CQLLibraryPage.LibFilterTextField).should('be.focused')
-        cy.get(CQLLibraryPage.LibFilterTextField).type(CQLLibraryName)
-
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('exist')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).click()
+        cy.get(CQLLibraryPage.LibFilterTextField).clear().type('0.0.0{enter}')
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
-
-        cy.get(Header.measures).click()
-        cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
-
-        cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
-        cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterTextField).click()
-        cy.get(CQLLibraryPage.LibFilterTextField).clear()
-        cy.get(CQLLibraryPage.LibFilterTextField).should('be.focused')
-        cy.get(CQLLibraryPage.LibFilterTextField).type(CQLLibraryName)
-
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('exist')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).click()
-
-        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
-
     })
 
-    it('Clicking on the "X" closes out the search and page is returned to state that lists all pertinent Libraries', () => {
-
+    it('Perform a search based on the Libraries model', () => {
+        
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
+        Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
 
         //ensure we are on the My Libraries tab
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
 
-        cy.get(CQLLibraryPage.LibTableRows).should('have.length.greaterThan', 1)
+        Utilities.dropdownSelect(CQLLibraryPage.filterByDropdown, 'Model')
 
-        //do a search based on the CQL Library name on, both, the "My Libraries" and the "All Libraries" tabs
+        // do a search based on the CQL Library name on "All Libraries" tab
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterTextField).click()
-        cy.get(CQLLibraryPage.LibFilterTextField).clear()
-        cy.get(CQLLibraryPage.LibFilterTextField).should('be.focused')
-        cy.get(CQLLibraryPage.LibFilterTextField).type(CQLLibraryName)
-
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('exist')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).click()
+        cy.get(CQLLibraryPage.LibFilterTextField).clear().type('QI-Core{enter}')
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
-
-        cy.get(CQLLibraryPage.LibTableRows).should('have.length.lte', 1)
-
-        cy.get(TestCasesPage.clearIconBtn).should('exist')
-        cy.get(TestCasesPage.clearIconBtn).should('be.visible')
-        cy.get(TestCasesPage.clearIconBtn).click()
-
-        cy.get(CQLLibraryPage.LibTableRows).should('have.length.greaterThan', 1)
-
     })
 })
 
@@ -186,13 +144,12 @@ describe.skip('CQL Library Search Validations -- User ownership', () => {
         var randValue = (Math.floor((Math.random() * 1000) + 1))
         CQLLibraryNameAlt = 'TestLibrary' + Date.now() + randValue
         CQLLibraryPage.createCQLLibraryAPI(CQLLibraryNameAlt, CQLLibraryPublisherAlt, false, true)
-
-
     })
+
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
-
+        OktaLogin.UILogout()
+        Utilities.deleteLibrary(CQLLibraryName)
     })
 
     it('Owner is different than current user, library will only appear in "All Libraries" searched list', () => {
@@ -202,50 +159,42 @@ describe.skip('CQL Library Search Validations -- User ownership', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
+        Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
 
-        //ensure we are on the My Libraries tab
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        //ensure we are on the Owned Libraries tab
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
 
-        //do a search based on the CQL Library name on, both, the "My Libraries" and the "All Libraries" tabs
+        // do a search based on the CQL Library name on "All Libraries" tab
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterTextField).click()
-        cy.get(CQLLibraryPage.LibFilterTextField).clear()
-        cy.get(CQLLibraryPage.LibFilterTextField).should('be.focused')
-        cy.get(CQLLibraryPage.LibFilterTextField).type(CQLLibraryNameAlt)
+        cy.get(CQLLibraryPage.LibFilterTextField).clear().type( CQLLibraryNameAlt + '{enter}')
 
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('exist')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).click()
+        cy.get(CQLLibraryPage.cqlLibSearchResultsTable).should('contain.text', 'No results were found')
 
-        cy.get(CQLLibraryPage.cqlLibSearchResultsTable).should('be.empty')
-
-        cy.get(Header.measures).click()
-        cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        // do a search based on the CQL Library name on "Shared Libraries" tab
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
 
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterTextField).click()
-        cy.get(CQLLibraryPage.LibFilterTextField).clear()
-        cy.get(CQLLibraryPage.LibFilterTextField).should('be.focused')
-        cy.get(CQLLibraryPage.LibFilterTextField).type(CQLLibraryNameAlt)
+        cy.get(CQLLibraryPage.LibFilterTextField).clear().type( CQLLibraryNameAlt + '{enter}')
 
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('exist')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).click()
+        cy.get(CQLLibraryPage.cqlLibSearchResultsTable).should('contain.text', 'No results were found')
+
+        // do a search based on the CQL Library name on "all Libraries" tab
+        cy.get(CQLLibraryPage.allLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
+
+        cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
+        cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
+        cy.get(CQLLibraryPage.LibFilterTextField).clear().type( CQLLibraryNameAlt + '{enter}')
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
-
     })
 
     it('Owner is the same as the current user, library will appear in, both, "All Libraries" and "My Libraries" searched lists', () => {
@@ -255,49 +204,41 @@ describe.skip('CQL Library Search Validations -- User ownership', () => {
         //navigate to the main CQL Library list page
         cy.get(Header.cqlLibraryTab).should('exist')
         cy.get(Header.cqlLibraryTab).should('be.visible')
-        cy.intercept('GET', '/api/cql-libraries?currentUser=true').as('libraries')
         cy.get(Header.cqlLibraryTab).click()
-        Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
+        Utilities.waitForElementVisible(CQLLibraryPage.libraryListTitles, 60000)
 
-        //ensure we are on the My Libraries tab
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        //ensure we are on the Owned Libraries tab
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
 
-        //do a search based on the CQL Library name on, both, the "My Libraries" and the "All Libraries" tabs
+        // do a search based on the CQL Library name on "All Libraries" tab
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterTextField).click()
-        cy.get(CQLLibraryPage.LibFilterTextField).clear()
-        cy.get(CQLLibraryPage.LibFilterTextField).should('be.focused')
-        cy.get(CQLLibraryPage.LibFilterTextField).type(CQLLibraryNameAlt)
-
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('exist')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).click()
+        cy.get(CQLLibraryPage.LibFilterTextField).clear().type( CQLLibraryNameAlt + '{enter}')
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
 
-        cy.get(Header.measures).click()
-        cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        // do a search based on the CQL Library name on "Shared Libraries" tab
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
 
         cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
         cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterTextField).click()
-        cy.get(CQLLibraryPage.LibFilterTextField).clear()
-        cy.get(CQLLibraryPage.LibFilterTextField).should('be.focused')
-        cy.get(CQLLibraryPage.LibFilterTextField).type(CQLLibraryNameAlt)
+        cy.get(CQLLibraryPage.LibFilterTextField).clear().type( CQLLibraryNameAlt + '{enter}')
 
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('exist')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.visible')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).should('be.enabled')
-        cy.get(CQLLibraryPage.LibFilterSubmitBtn).click()
+        cy.get(CQLLibraryPage.cqlLibSearchResultsTable).should('contain.text', 'No results were found')
+
+        // do a search based on the CQL Library name on "all Libraries" tab
+        cy.get(CQLLibraryPage.allLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
+
+        cy.get(CQLLibraryPage.LibFilterTextField).should('exist')
+        cy.get(CQLLibraryPage.LibFilterTextField).should('be.visible')
+        cy.get(CQLLibraryPage.LibFilterTextField).clear().type( CQLLibraryNameAlt + '{enter}')
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
-
     })
 })
