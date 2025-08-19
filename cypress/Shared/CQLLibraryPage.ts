@@ -26,6 +26,14 @@ export type CreateLibraryOptions = {
 const filePath = 'cypress/fixtures/cqlLibraryId'
 
 export class CQLLibraryPage {
+    // older 2 tabs
+    public static readonly allLibrariesBtn = '[data-testid="all-cql-libraries-tab"]'
+    public static readonly myLibrariesBtn = '[data-testid="my-cql-libraries-tab"]'
+    // new 3 tabs, with LibrarySearchh = true
+    public static readonly ownedLibrariesTab = '[data-testid="owned-libraries-tab"]'
+    public static readonly sharedLibrariesTab = '[data-testid="shared-libraries-tab"]'
+    public static readonly allLibrariesTab = '[data-testid="all-libraries-tab"]'
+
     public static readonly measureCQLGenericErrorsList = '[data-testid="generic-errors-text-list"]'
     public static readonly cqlLibrarySuccessfulDeleteMsgBox = '[data-testid="cql-library-list-snackBar"]'
     public static readonly applyEditsSavedLibraryBtn = '[data-testid="apply-button"]'
@@ -39,9 +47,8 @@ export class CQLLibraryPage {
     public static readonly cqlLibraryModelDropdown = '[data-testid="cql-library-model-select"]'
     public static readonly cqlLibraryStickySave = '[data-testid="cql-library-save-button"]'
     public static readonly libraryListTitles = '[data-testid="cqlLibrary-list"]'
-    public static readonly allLibrariesBtn = '[data-testid="all-cql-libraries-tab"]'
-    public static readonly myLibrariesBtn = '[data-testid="my-cql-libraries-tab"]'
-    public static readonly LibFilterTextField = '[data-testid="library-search-input"]'//filter
+    public static readonly LibFilterTextField = '[data-testid="library-search-input"]'
+    public static readonly filterByDropdown = '[data-testid="filter-by"]'
     public static readonly LibFilterSubmitBtn = '[data-testid="library-filter-submit"]'
     public static readonly LibFilterLabel = '[id="mui-2-label"]'
     public static readonly LibTableRows = '[data-testid="row-item"]'
