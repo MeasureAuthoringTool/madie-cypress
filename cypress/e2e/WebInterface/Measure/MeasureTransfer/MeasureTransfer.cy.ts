@@ -5,7 +5,7 @@ import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Ut
 import { OktaLogin } from "../../../../Shared/OktaLogin"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
-import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
+import {EditMeasureActions, EditMeasurePage} from "../../../../Shared/EditMeasurePage"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
@@ -107,6 +107,85 @@ describe('Measure Transfer', () => {
         //Create New Test case
         TestCasesPage.createTestCase(testCaseTitle, testCaseDescription, testCaseSeries, testCaseJson)
     })
+})
+
+//Skipping until feature flag TransferMeasure is removed
+describe.skip('Measure Transfer - Action Centre buttons', () => {
+
+    let randValue = (Math.floor((Math.random() * 1000) + 1))
+    let newMeasureName = measureName + randValue + 5
+    let newCqlLibraryName = cqlLibraryName + randValue + 5
+
+    beforeEach('Create Measure and Set Access Token', () => {
+
+        CreateMeasurePage.CreateQICoreMeasureAPI(newMeasureName, newCqlLibraryName, measureCQL)
+    })
+
+    afterEach('Clean up', () => {
+
+        OktaLogin.Logout()
+    })
+
+    it('Verify Measure owner can transfer Measure from Action centre transfer button on My Measures page', () => {
+
+        //Login as Regular user and transfer Measure to ALT user
+        OktaLogin.Login()
+
+        MeasuresPage.actionCenter('transfer')
+
+        //Logout and Delete Measure with ALT user
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookieALT()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, false, true)
+
+    })
+
+    it('Verify Measure owner can transfer Measure from Action centre transfer button on Edit Measure page', () => {
+
+        //Login as Regular user and transfer Measure to ALT user
+        OktaLogin.Login()
+        //Navigate to Edit Measure page
+        MeasuresPage.actionCenter('edit')
+        EditMeasurePage.actionCenter(EditMeasureActions.transfer)
+
+        //Logout and Delete Measure with ALT user
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookieALT()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName, false, true)
+
+    })
+
+    it('Verify Transfer button disabled for non Measure owner', () => {
+
+        //Login as ALT User
+        OktaLogin.AltLogin()
+
+        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 60000)
+        cy.get(MeasuresPage.allMeasuresTab).click()
+
+        //Select the Measure
+        cy.readFile('cypress/fixtures/measureId').should('exist').then((fileContents) => {
+            Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 1200000)
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+        })
+
+        cy.get('[data-testid="transfer-action-tooltip"]').should('not.be.enabled')
+        cy.get('[data-testid="transfer-action-tooltip"]').trigger('mouseover')
+        cy.get('.MuiTooltip-tooltip').should('contain.text', 'You cannot transfer a measure you do not own, you have selected at least 1 measure that you do not own')
+
+        //Logout and Delete Measure with Regular user
+        OktaLogin.UILogout()
+        cy.clearAllCookies()
+        cy.clearLocalStorage()
+        cy.setAccessTokenCookie()
+        Utilities.deleteMeasure(newMeasureName, newCqlLibraryName)
+    })
+
 })
 
 describe('Measure Transfer - Multiple instances', () => {
