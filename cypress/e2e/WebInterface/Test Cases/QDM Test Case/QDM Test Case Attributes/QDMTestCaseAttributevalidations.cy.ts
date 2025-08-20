@@ -180,6 +180,14 @@ describe('QDM Test case Attribute validations', () => {
         cy.get(TestCasesPage.attributeChip).should('not.exist')
         cy.get(TestCasesPage.editTestCaseSaveButton).click()
 
+        // remove ethnicity from Demographics section
+        cy.get(TestCasesPage.QDMEthnicity).click()
+        Utilities.waitForElementVisible('[data-value="Not Hispanic or Latino"]', 60000)
+        cy.get('[data-testid="dash-option"]').click()
+        cy.get(TestCasesPage.editTestCaseSaveButton).click()
+
+        cy.contains('Select an Ethnicity').should('be.visible')
+
         //Commenting until feature flag for JSON tab is removed
         //Navigate to JSON tab and verify the attribute is deleted from tc Json
         // cy.get(TestCasesPage.jsonTab).click()
