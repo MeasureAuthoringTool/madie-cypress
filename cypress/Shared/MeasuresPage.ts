@@ -22,10 +22,12 @@ export type MeasureRow = {
 export class MeasuresPage {
 
     public static readonly measureListTitles = '[data-testid="measure-list-tbl"]'
+    public static readonly ownedMeasures = '[data-testid="owned-measures-tab"]'
+    public static readonly sharedMeasures = '[data-testid="shared-measures-tab"]'
     public static readonly allMeasuresTab = '[data-testid="all-measures-tab"]'
     public static readonly filterSearchInputBox = '[data-testid="measure-search-input"]'
     public static readonly searchInputBox = '[data-testid="measure-search-input"]'
-    public static readonly measureListTabelBody = '[class="table-body measures-list"]'
+    public static readonly filterByDropdown = '[data-testid="filter-by"]'
 
     //export
     public static readonly exportNonPublishingOption = '[data-testid="export-option"]'

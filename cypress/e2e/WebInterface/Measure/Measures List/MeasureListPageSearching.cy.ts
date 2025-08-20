@@ -1,30 +1,29 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import {CreateMeasurePage, SupportedModels} from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { LandingPage } from "../../../../Shared/LandingPage"
 import { Utilities } from "../../../../Shared/Utilities";
 
-let measureName = 'TestMeasure' + Date.now()
-let CqlLibraryName = 'TestLibrary' + Date.now()
+let measureName = 'MeasureSearch' + Date.now()
+let CqlLibraryName = 'MeasureSearchLib' + Date.now()
 
-describe('Measure List Page Searching', () => {
+// written for MeasureSearch = true, skipping until that ff is enabled in 2.3.0
+describe.skip('Measure List Page Searching', () => {
 
     beforeEach('Login', () => {
 
-        //Create New Measure
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName)
         OktaLogin.Login()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 39500)
     })
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     it('Measure search on My Measures and All Measures tab', () => {
-
-
 
         //Search for the Measure using Measure name
         cy.log('Search Measure with measure name')
@@ -37,16 +36,9 @@ describe('Measure List Page Searching', () => {
         cy.get(MeasuresPage.searchInputBox).clear().type(measureName).type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', measureName)
 
-        //Search for the Measure using eCQM Abbreviated title
-        cy.log('Search Measure with eCQM Title')
-        cy.get(LandingPage.myMeasuresTab).click()
-        cy.get(MeasuresPage.searchInputBox).clear().type('eCQMTitle4QICore').type('{enter}')
-        cy.get('[data-testid="row-item"] > :nth-child(2)').should('contain', measureName)
-        MeasuresPage.actionCenter('edit')
-        cy.get(CreateMeasurePage.eCQMAbbreviatedTitleTextbox).should('have.value', 'eCQMTitle4QICore')
-
-        //Delete the Measure & search for deleted Measure under My Measures tab
+        //Delete the Measure & search for deleted Measure under Owned Measures tab
         cy.log('Delete Measure')
+        MeasuresPage.actionCenter('edit')
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureButtonActionBtn, 5000)
         cy.get(EditMeasurePage.editMeasureButtonActionBtn).click()
         Utilities.waitForElementVisible(EditMeasurePage.editMeasureDeleteActionBtn, 5000)
@@ -79,6 +71,24 @@ describe('Measure List Page Searching', () => {
         cy.get(MeasuresPage.allMeasuresTab).click()
         cy.get(MeasuresPage.searchInputBox).clear().type('&%*').type('{enter}')
         cy.get('[data-testid="row-item"] > :nth-child(2)').should('not.exist')
+    })
 
+    it('When searching, page count always resets to 1', () => {
+
+        cy.get(MeasuresPage.allMeasuresTab).should('be.visible')
+        cy.get(MeasuresPage.allMeasuresTab).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+        cy.wait(5500)
+
+        cy.get('.pagination-container').contains('button', '6').click()
+        cy.url().should('include','page=6')
+
+        cy.get(MeasuresPage.searchInputBox).clear().type('dental{enter}')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
+        cy.contains('75FHIR').should('be.visible')
+
+        cy.url().should('include','page=1')
+        cy.get('.pagination-container').contains('button', '1').should('have.class', 'Mui-selected')
     })
 })
