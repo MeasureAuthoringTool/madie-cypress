@@ -504,7 +504,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         MeasuresPage.actionCenter('associatemeasure')
 
-        cy.get(EditMeasurePage.associateCmsIdDialog).should('include.text', 'NameversionmodelCMS ID')
+        cy.get(EditMeasurePage.associateCmsIdDialog).should('include.text', 'MeasureVersionModelCMS ID')
         cy.get('[id="associate-cms-id-dialog"]').should('include.text', 'Associate CMS ID will copy the CMS ID from your QDM measure to your QI-Core measure. To copy QDM metadata to the QI-Core measure as well please select the checkbox below.')
         Utilities.waitForElementVisible(Utilities.DiscardCancelBtn, 35000)
         Utilities.waitForElementVisible(EditMeasurePage.associateCmsAssociateBtn, 37000)
@@ -1050,7 +1050,7 @@ describe('Measure Association: Transferring meta data and CMS ID from QDM to QI 
 
         MeasuresPage.actionCenter('associatemeasure')
 
-        cy.get(EditMeasurePage.associateCmsIdDialog).should('include.text', 'NameversionmodelCMS ID')
+        cy.get(EditMeasurePage.associateCmsIdDialog).should('include.text', 'MeasureVersionModelCMS ID')
         cy.get('[id="associate-cms-id-dialog"]').should('include.text', 'Associate CMS ID will copy the CMS ID from your QDM measure to your QI-Core measure. To copy QDM metadata to the QI-Core measure as well please select the checkbox below.')
         Utilities.waitForElementVisible(Utilities.DiscardCancelBtn, 35000)
         Utilities.waitForElementVisible(EditMeasurePage.associateCmsAssociateBtn, 37000)
