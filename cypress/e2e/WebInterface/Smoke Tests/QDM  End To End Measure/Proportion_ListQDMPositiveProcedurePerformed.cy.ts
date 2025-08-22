@@ -206,8 +206,7 @@ describe('Measure Creation: Proportion ListQDMPositiveProcedurePerformed', () =>
     after('Clean up', () => {
 
         OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('End to End Proportion ListQDMPositiveProcedurePerformed', () => {
