@@ -51,7 +51,7 @@ describe('Measure Sharing', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
-        cy.get(MeasuresPage.sharedMeasures).click()
+        cy.get(LandingPage.myMeasuresTab).click()
         cy.reload()
         Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 50000)
         cy.get(MeasuresPage.measureListTitles).wait(3000).should('contain', newMeasureName)
