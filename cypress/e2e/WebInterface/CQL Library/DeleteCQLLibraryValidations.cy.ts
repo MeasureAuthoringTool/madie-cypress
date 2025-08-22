@@ -33,7 +33,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
@@ -86,7 +86,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
@@ -159,7 +159,7 @@ describe('Delete CQL Library Validations - Library List page', () => {
         cy.clearLocalStorage()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
@@ -193,7 +193,7 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
         Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         CQLLibrariesPage.clickViewforCreatedLibrary()
@@ -253,6 +253,7 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
 
         CQLLibrariesPage.clickEditforCreatedLibrary()
         cy.get(CQLLibraryPage.actionCenterButton).click()
@@ -335,6 +336,7 @@ describe('Delete CQL Library Validations - Edit Library page', () => {
         cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
 
         CQLLibrariesPage.clickViewforCreatedLibrary()
         cy.get(CQLLibraryPage.actionCenterButton).click()

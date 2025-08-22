@@ -165,15 +165,15 @@ describe('CQL Library Validations -- User ownership', () => {
         Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         //ensure we are on the My Libraries tab
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
 
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
     })
@@ -190,9 +190,9 @@ describe('CQL Library Validations -- User ownership', () => {
         Utilities.waitForElementVisible(CQLLibraryPage.LibFilterTextField, 60000)
 
         //ensure we are on the All Libraries tab
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryNameAlt)
 

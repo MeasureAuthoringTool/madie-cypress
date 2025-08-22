@@ -78,8 +78,8 @@ export class CQLLibrariesPage {
             cy.get(Header.cqlLibraryTab).should('exist')
             cy.get(Header.cqlLibraryTab).should('be.visible')
             cy.get(Header.cqlLibraryTab).click()
-            Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesBtn, 50000)
-            cy.get(CQLLibraryPage.allLibrariesBtn).wait(2000).click()
+            Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesTab, 50000)
+            cy.get(CQLLibraryPage.allLibrariesTab).wait(2000).click()
         } else {
             //Navigate to CQL Library Page
             cy.get(Header.cqlLibraryTab).should('exist')

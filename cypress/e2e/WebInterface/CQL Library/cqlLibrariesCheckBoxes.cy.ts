@@ -42,9 +42,9 @@ describe('CQL Library Sharing', () => {
 
         OktaLogin.Login()
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
 
         CQLLibraryPage.checkLibrary(0)
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)

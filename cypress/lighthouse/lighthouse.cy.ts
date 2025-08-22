@@ -499,9 +499,9 @@ describe('Navigate to the "All CQL Libraries" page', () => {
         OktaLogin.Login()
         cy.reload()
         cy.get(Header.cqlLibraryTab).click().wait(3500)
-        Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesBtn, 5000)
+        Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesTab, 5000)
         cy.reload()
-        cy.get(CQLLibraryPage.allLibrariesBtn).wait(3500).click().wait(3500)
+        cy.get(CQLLibraryPage.allLibrariesTab).wait(3500).click().wait(3500)
         const thresholds = {
             performance: 10,
             accessibility: 72,

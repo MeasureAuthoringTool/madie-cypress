@@ -4,6 +4,7 @@ import { Header } from "../../../../Shared/Header"
 import {CQLLibraryPage, EditLibraryActions} from "../../../../Shared/CQLLibraryPage"
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { MadieObject, PermissionActions, Utilities } from "../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 
 let CQLLibraryName = 'TestLibrary' + Date.now()
 let newCQLLibraryName = ''
@@ -35,38 +36,33 @@ describe('CQL Library Sharing', () => {
         Utilities.deleteLibrary(newCQLLibraryName)
     })
 
-
-    it('Verify Shared CQL Library is viewable under My Libraries tab', () => {
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        //set local user that does not own the Library
-        cy.setAccessTokenCookie()
+    it('Verify Shared CQL Library is viewable under Shared Libraries tab', () => {
 
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
         OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
-        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
+        CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
     })
 
     it('Verify CQL Library can be edited by the shared user', () => {
 
-        cy.clearCookies()
-        cy.clearLocalStorage()
-        //set local user that does not own the Library
-        cy.setAccessTokenCookie()
         //Share Library with ALT User
         Utilities.setSharePermissions(MadieObject.Library, PermissionActions.GRANT, harpUserALT)
 
         //Login as ALT User
         OktaLogin.AltLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
 
         //Edit CQL Library details
         CQLLibrariesPage.clickEditforCreatedLibrary()
@@ -75,7 +71,6 @@ describe('CQL Library Sharing', () => {
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
         cy.log('CQL Library Updated Successfully')
-
     })
 })
 
@@ -150,10 +145,12 @@ describe('CQL Library Sharing - Multiple instances', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible').wait(2000)
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
         CQLLibrariesPage.validateCQLLibraryName(randomCQLLibraryName)
         cy.get('[data-testid="table-body"]').should('contain', newCQLLibraryName)
     })
@@ -182,6 +179,12 @@ describe('Remove user\'s share access from a library', () => {
     it('After removing access, user can no longer edit the library', () => {
 
         OktaLogin.AltLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
 
         CQLLibrariesPage.clickEditforCreatedLibrary()
 
@@ -222,6 +225,7 @@ describe('Share CQL Library using Action Center buttons', () => {
     it('Verify CQL Library owner can share Library from Action centre share button and shred user is able to edit Library', () => {
 
         OktaLogin.Login()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         //Navigate to CQL Library Page
         cy.get(Header.cqlLibraryTab).click()
@@ -241,10 +245,12 @@ describe('Share CQL Library using Action Center buttons', () => {
 
         //Login as ALT User
         OktaLogin.AltLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
 
         //Delete button disabled for shared owner
@@ -260,7 +266,6 @@ describe('Share CQL Library using Action Center buttons', () => {
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).click()
         cy.get(CQLLibraryPage.genericSuccessMessage).should('be.visible')
         cy.log('CQL Library Updated Successfully')
-
     })
 
     it('Verify CQL Library owner can share Library from Edit Library page Action centre share button', () => {
@@ -294,9 +299,9 @@ describe('Share CQL Library using Action Center buttons', () => {
 
         //Navigate to All Libraries tab
         cy.get(Header.cqlLibraryTab).click().wait(2000)
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.allLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.allLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 500000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
@@ -304,7 +309,6 @@ describe('Share CQL Library using Action Center buttons', () => {
         cy.get('[data-testid="share-action-btn"]').should('be.visible')
         cy.get('[data-testid="share-action-btn"]').should('be.disabled')
     })
-
 
     it('Verify error message when CQL Library is shared with same user multiple times', () => {
 
@@ -346,12 +350,12 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
 
         OktaLogin.Logout()
         Utilities.deleteLibrary(updatedCQLLibraryName)
-
     })
 
     it('Verify all instances of the CQL Library (Version and Draft) are shared to the user', () => {
 
         OktaLogin.Login()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
         //Navigate to CQL Library Page
         cy.get(Header.cqlLibraryTab).click()
@@ -415,10 +419,12 @@ describe('Share CQL Library using Action Center buttons - Multiple instances', (
 
         //Login as ALT User and verify both Draft and Versioned Library are shared
         OktaLogin.AltLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.sharedLibrariesTab).click()
         cy.get('[data-testid="cqlLibrary-button-0_cqlLibraryName"]').should('contain.text', updatedCQLLibraryName)
         cy.get('[data-testid="cqlLibrary-button-1_cqlLibraryName"]').should('contain.text', newCQLLibraryName)
     })

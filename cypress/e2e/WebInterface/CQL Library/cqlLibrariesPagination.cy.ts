@@ -25,11 +25,11 @@ describe('Validate QDM CQL on CQL Library page', () => {
         OktaLogin.Logout()
     })
 
-    it('Verify Pagination for "All CQL Libraries"', () => {
+    it('Verify Pagination for "All Libraries"', () => {
 
         cy.get(Header.cqlLibraryTab).click().wait(2000)
-        Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesBtn, 5000)
-        cy.get(CQLLibraryPage.allLibrariesBtn).click().wait(2000)
+        Utilities.waitForElementVisible(CQLLibraryPage.allLibrariesTab, 5000)
+        cy.get(CQLLibraryPage.allLibrariesTab).click().wait(2000)
         //Verify URL before clicking on Next button
         cy.url().should('not.include', 'page=2')
         //Click on Next Button
@@ -71,7 +71,7 @@ describe('Validate Qi-Core CQL on CQL Library page', () => {
         OktaLogin.Logout()
     })
 
-    it('Verify Pagination for the "My CQL Libraries"', () => {
+    it('Verify Pagination for the "Owned Libraries"', () => {
 
         cy.get(Header.cqlLibraryTab).click()
         //Verify URL before clicking on Next button

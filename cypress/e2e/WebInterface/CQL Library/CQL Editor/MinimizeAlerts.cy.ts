@@ -93,7 +93,7 @@ describe('Minimize Alerts - Non-owner can also minimize to review the Library', 
 
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
         CQLLibrariesPage.clickViewforCreatedLibrary()
     })
 

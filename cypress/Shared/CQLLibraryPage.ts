@@ -27,8 +27,8 @@ const filePath = 'cypress/fixtures/cqlLibraryId'
 
 export class CQLLibraryPage {
     // older 2 tabs
-    public static readonly allLibrariesBtn = '[data-testid="all-cql-libraries-tab"]'
-    public static readonly myLibrariesBtn = '[data-testid="my-cql-libraries-tab"]'
+    public static readonly allLibrariesBtn = '[data-testid="all-cql-libraries-tab"]' // all refs removed
+    public static readonly myLibrariesBtn = '[data-testid="my-cql-libraries-tab"]' // all refs removed
     // new 3 tabs, with LibrarySearchh = true
     public static readonly ownedLibrariesTab = '[data-testid="owned-libraries-tab"]'
     public static readonly sharedLibrariesTab = '[data-testid="shared-libraries-tab"]'

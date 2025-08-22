@@ -29,7 +29,7 @@ describe('CQL Library Transfer', () => {
 
     afterEach('LogOut', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
 
@@ -44,9 +44,9 @@ describe('CQL Library Transfer', () => {
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
         CQLLibrariesPage.validateCQLLibraryName(CQLLibraryName)
     })
 
@@ -143,9 +143,9 @@ describe('CQL Library Transfer - Multiple instances', () => {
         //Login as ALT User
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
         CQLLibrariesPage.validateCQLLibraryName(randomCQLLibraryName)
         cy.get('[data-testid="table-body"]').should('contain', newCQLLibraryName)
     })

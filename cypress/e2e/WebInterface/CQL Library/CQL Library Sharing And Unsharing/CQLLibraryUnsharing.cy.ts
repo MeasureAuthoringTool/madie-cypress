@@ -23,7 +23,7 @@ describe('Un Share CQL Library using Action Center buttons', () => {
 
     afterEach('LogOut and Clean up', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
         cy.clearCookies()
         cy.clearLocalStorage()
         cy.setAccessTokenCookie()
@@ -56,9 +56,9 @@ describe('Un Share CQL Library using Action Center buttons', () => {
         //Login as ALT user and verify CQL Library is not visible on My Libraries page
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
         cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
     })
 
@@ -88,9 +88,9 @@ describe('Un Share CQL Library using Action Center buttons', () => {
         //Login as ALT user and verify CQL Library is not visible on My Libraries page
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
         cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
 
     })
@@ -109,7 +109,7 @@ describe('Un Share CQL Library using Action Center buttons - Multiple instances'
 
     afterEach('LogOut', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     it('Verify all instances of the CQL Library (Version and Draft) are shared to the user', () => {
@@ -168,9 +168,9 @@ describe('Un Share CQL Library using Action Center buttons - Multiple instances'
         //Login as ALT user and verify CQL Library is not visible on My Libraries page
         OktaLogin.AltLogin()
         cy.get(Header.cqlLibraryTab).click()
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('exist')
-        cy.get(CQLLibraryPage.myLibrariesBtn).should('be.visible')
-        cy.get(CQLLibraryPage.myLibrariesBtn).click()
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('exist')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).should('be.visible')
+        cy.get(CQLLibraryPage.ownedLibrariesTab).click()
         Utilities.waitForElementVisible('[class="cql-library-table"]', 60000)
         cy.get('[class="cql-library-table"]').should('not.contain', CQLLibraryName)
         cy.get('[class="cql-library-table"]').should('not.contain', updatedCQLLibraryName)
