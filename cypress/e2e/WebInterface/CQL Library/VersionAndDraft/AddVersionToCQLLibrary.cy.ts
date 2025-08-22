@@ -3,6 +3,7 @@ import { CQLLibraryPage, EditLibraryActions } from "../../../../Shared/CQLLibrar
 import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../../Shared/Header"
 import { Utilities } from "../../../../Shared/Utilities"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 
 let CqlLibraryOne: string
 let CQLLibraryPublisher = 'SemanticBits'
@@ -19,7 +20,7 @@ describe('Action Center Buttons - Add Version to CQL Library', () => {
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     it('Add Version to the CQL Library from My Libraries', () => {
@@ -62,12 +63,10 @@ describe('Action Center Buttons - Add Version to CQL Library', () => {
 
         cy.setAccessTokenCookieALT()
         OktaLogin.AltLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
 
-        cy.get(Header.cqlLibraryTab).click().wait(1000)
-        cy.get(Header.mainMadiePageButton).click().wait(1000)
-        cy.get(Header.cqlLibraryTab).click().wait(1000)
-        cy.reload()
-        cy.get(CQLLibraryPage.allLibrariesBtn).wait(2000).click()
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 600000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
@@ -76,13 +75,8 @@ describe('Action Center Buttons - Add Version to CQL Library', () => {
         cy.get(CQLLibrariesPage.actionCenterVersionBtn).should('be.visible')
         cy.get(CQLLibrariesPage.actionCenterVersionBtn).should('be.disabled')
 
-        CQLLibrariesPage.clickViewforCreatedLibrary(false, true)
+        cy.contains('View').click()
 
         cy.get(CQLLibraryPage.actionCenterButton).should('not.exist')
-
-        Utilities.deleteLibrary(CqlLibraryOne)
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
     })
 })

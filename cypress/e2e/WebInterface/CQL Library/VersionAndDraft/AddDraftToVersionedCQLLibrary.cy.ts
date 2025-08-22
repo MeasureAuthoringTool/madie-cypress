@@ -4,12 +4,12 @@ import { CQLLibrariesPage } from "../../../../Shared/CQLLibrariesPage"
 import { Header } from "../../../../Shared/Header"
 import { Utilities } from "../../../../Shared/Utilities"
 import { TestCasesPage } from "../../../../Shared/TestCasesPage"
+import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 
 let CqlLibraryOne: string
 const CQLLibraryPublisher = 'SemanticBits'
 const versionNumber = '1.0.000'
 const filePath = 'cypress/fixtures/cqlLibraryId'
-const filePath2 = 'cypress/fixtures/cqlLibraryId2'
 
 describe('Action Center Buttons - Add Draft to CQL Library', () => {
 
@@ -22,12 +22,12 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
 
     afterEach('Logout', () => {
 
-        OktaLogin.Logout()
+        OktaLogin.UILogout()
     })
 
     // just this 1st test has been prepped for when FF LibrarySearch = true, see references to MAT-5119
     // as of right now, this version should fail in DEV but pass in TEST
-    it('Add Draft to the versioned Library from My Libraries', () => {
+    it('Add Draft to the versioned Library from Owned Libraries', () => {
 
         //Add Draft to Versioned Library
         OktaLogin.Login()
@@ -144,8 +144,10 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         cy.setAccessTokenCookieALT()
 
         OktaLogin.AltLogin()
-        cy.get(Header.cqlLibraryTab).click().wait(1000)
-        cy.get(CQLLibraryPage.allLibrariesBtn).wait(2000).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
+        cy.get(Header.cqlLibraryTab).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         Utilities.waitForElementVisible('[data-testid="cqlLibrary-button-0_select"]', 600000)
         cy.get('[data-testid="cqlLibrary-button-0_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView().click()
@@ -154,15 +156,10 @@ describe('Action Center Buttons - Add Draft to CQL Library', () => {
         cy.get(CQLLibrariesPage.actionCenterDraftBtn).should('be.disabled')
 
         //Verify that Non Measure owner unable to edit Library
-        CQLLibrariesPage.clickViewforCreatedLibrary(null, true)
+        cy.contains('View').click()
         cy.get(TestCasesPage.importTestCaseSuccessInfo).should('contain.text', 'You are not the owner of the CQL Library. Only owner can edit it.')
         cy.get(CQLLibraryPage.readOnlyCqlLibraryName).should('have.attr', 'readonly')
         cy.get(CQLLibraryPage.cqlLibraryDesc).should('have.attr', 'readonly')
         cy.get(CQLLibraryPage.updateCQLLibraryBtn).should('be.disabled')
-
-        OktaLogin.UILogout()
-        cy.clearAllCookies()
-        cy.clearLocalStorage()
-        cy.clearAllSessionStorage({ log: true })
     })
 })
