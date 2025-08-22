@@ -50,7 +50,7 @@ describe('Delete Test Case', () => {
     afterEach('Logout and Clean up Measures', () => {
 
         OktaLogin.UILogout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('Delete single Test Case - Success scenario', () => {
@@ -93,7 +93,7 @@ describe('Delete Test Case', () => {
 
         //Login as Alt User
         OktaLogin.AltLogin()
-        Utilities.waitForElementVisible(MeasuresPage.allMeasuresTab, 20700)
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
         cy.get(MeasuresPage.allMeasuresTab).click({ force: true })
 
         MeasuresPage.actionCenter("edit")

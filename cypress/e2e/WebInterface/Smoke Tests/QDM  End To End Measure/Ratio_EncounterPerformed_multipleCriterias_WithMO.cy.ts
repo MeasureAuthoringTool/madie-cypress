@@ -93,7 +93,7 @@ describe('Measure Creation: Ratio EncounterPerformed, Multiple Criterias With MO
     after('Logout and Clean up', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('End to End Ratio EncounterPerformed, Multiple Criterias With MO', () => {

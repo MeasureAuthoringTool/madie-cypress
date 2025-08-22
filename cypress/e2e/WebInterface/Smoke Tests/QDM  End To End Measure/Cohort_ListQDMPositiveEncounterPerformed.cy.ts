@@ -32,7 +32,7 @@ describe('Measure Creation: Cohort ListQDMPositiveEncounterPerformed', () => {
     after('Clean up', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('End to End Cohort ListQDMPositiveEncounterPerformed', () => {

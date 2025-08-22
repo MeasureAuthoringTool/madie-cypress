@@ -4,6 +4,7 @@ import { MeasureGroupPage } from "./MeasureGroupPage"
 import { CQLLibraryPage } from "./CQLLibraryPage"
 import { v4 as uuidv4 } from 'uuid'
 import { Environment } from "./Environment"
+import { Measure } from "@madie/madie-models"
 
 const adminApiKey = Environment.credentials().adminApiKey
 let harpUser = Environment.credentials().harpUser
@@ -96,15 +97,9 @@ export class Utilities {
         })
     }
 
-    public static deleteMeasure(measureName: string, cqlLibraryName: string, deleteSecondMeasure?: boolean, altUser?: boolean, measureNumber?: number): void {
+    public static deleteMeasure(measureName?: string, cqlLibraryName?: string, deleteSecondMeasure?: boolean, altUser?: boolean, measureNumber?: number): void {
 
         let measurePath = 'cypress/fixtures/measureId'
-        let versionIdPath = 'cypress/fixtures/versionId'
-        let measureSetIdPath = 'cypress/fixtures/measureSetId'
-        const now = require('dayjs')
-        let mpStartDate = now().subtract('1', 'year').format('YYYY-MM-DD')
-        let mpEndDate = now().format('YYYY-MM-DD')
-        let ecqmTitle = 'eCQMTitle'
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
         }
@@ -121,36 +116,41 @@ export class Utilities {
         }
         if (measureNumber > 0) {
             measurePath = 'cypress/fixtures/measureId' + measureNumber
-            versionIdPath = 'cypress/fixtures/versionId' + measureNumber
-            measureSetIdPath = 'cypress/fixtures/measureSetId' + measureNumber
         }
 
         if (deleteSecondMeasure) {
             measurePath = 'cypress/fixtures/measureId2'
-            versionIdPath = 'cypress/fixtures/versionId2'
-            measureSetIdPath = 'cypress/fixtures/measureSetId2'
         }
 
+        let measureData: Measure
         cy.getCookie('accessToken').then((accessToken) => {
             cy.readFile(measurePath).should('exist').then((id) => {
-                cy.readFile(versionIdPath).should('exist').then((vId) => {
-                    cy.readFile(measureSetIdPath).should('exist').then((measureSetId) => {
-                        cy.request({
-                            url: '/api/measures/' + id,
-                            method: 'PUT',
-                            headers: {
-                                Authorization: 'Bearer ' + accessToken.value
-                            },
-                            body: {
-                                "id": id, "measureName": measureName, "cqlLibraryName": cqlLibraryName, "ecqmTitle": ecqmTitle,
-                                "model": 'QI-Core v4.1.1', "measurementPeriodStart": mpStartDate, "measurementPeriodEnd": mpEndDate, "active": false, "versionId": vId, "measureSetId": measureSetId
-                            }
-                        }).then((response) => {
-                            console.log(response)
 
-                            expect(response.status).to.eql(200)
-                            cy.log('Measure Deleted Successfully')
-                        })
+                cy.request({
+                    url: '/api/measures/' + id,
+                    headers: {
+                        authorization: 'Bearer ' + accessToken.value
+                    },
+                    method: 'GET',
+
+                }).then((response) => {
+                    expect(response.status).to.eql(200)
+                    expect(response.body.active).to.eql(true)
+                    measureData = response.body
+                    measureData.active = false
+                
+                    cy.request({
+                        url: '/api/measures/' + id,
+                        method: 'PUT',
+                        headers: {
+                            Authorization: 'Bearer ' + accessToken.value
+                        },
+                        body: measureData
+                    }).then((response) => {
+                        console.log(response)
+
+                        expect(response.status).to.eql(200)
+                        cy.log('Measure Deleted Successfully')
                     })
                 })
             })

@@ -24,23 +24,32 @@ describe('Delete CQL Library - Library List Page', () => {
 
     it('Verify Library Owner can Delete Library through Library page Action center on Library list Page', () => {
 
-        let myCountBefore: number, myCountAfter: number, allCountBefore: number, allCountAfter: number
+        let ownedCountBefore: number, 
+            ownedCountAfter: number, 
+            allCountBefore: number, 
+            allCountAfter: number
 
         cy.get(Header.cqlLibraryTab).click()
 
         Utilities.waitForElementVisible(CQLLibraryPage.cqlLibSearchResultsTable, 11500)
 
+        // need this for now - it lets the library counts calculate
         cy.wait(8500)
 
         // also checks for counts on tabs - https://jira.cms.gov/browse/MAT-8360
-        cy.get(CQLLibraryPage.myLibrariesBtn).invoke('text').then(displayText => {
+        cy.get(CQLLibraryPage.ownedLibrariesTab).invoke('text').then(displayText => {
 
-            expect(displayText).to.contain('My Libraries')
+            expect(displayText).to.contain('Owned Libraries')
             const numberAsString = displayText.toString().split('(')[1].slice(0, -1)
-            myCountBefore = Number(numberAsString)
+            ownedCountBefore = Number(numberAsString)
         })
 
-        cy.get(CQLLibraryPage.allLibrariesBtn).invoke('text').then(displayText => {
+        cy.get(CQLLibraryPage.sharedLibrariesTab).invoke('text').then(displayText => {
+
+            expect(displayText).to.contain('Shared Libraries')
+        })
+
+        cy.get(CQLLibraryPage.allLibrariesTab).invoke('text').then(displayText => {
 
             expect(displayText).to.contain('All Libraries')
             const numberAsString = displayText.toString().split('(')[1].slice(0, -1)
@@ -66,17 +75,17 @@ describe('Delete CQL Library - Library List Page', () => {
         cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', libraryName)
 
         //Navigate to All Libraries tab
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         // verify library counts have changed -1
-        cy.get(CQLLibraryPage.myLibrariesBtn).invoke('text').then(displayText => {
+        cy.get(CQLLibraryPage.ownedLibrariesTab).invoke('text').then(displayText => {
 
             const numberAsString = displayText.toString().split('(')[1].slice(0, -1)
-            myCountAfter = Number(numberAsString)
-            expect(myCountBefore).is.greaterThan(myCountAfter)
+            ownedCountAfter = Number(numberAsString)
+            expect(ownedCountBefore).is.greaterThan(ownedCountAfter)
         })
 
-        cy.get(CQLLibraryPage.allLibrariesBtn).invoke('text').then(displayText => {
+        cy.get(CQLLibraryPage.allLibrariesTab).invoke('text').then(displayText => {
 
             const numberAsString = displayText.toString().split('(')[1].slice(0, -1)
             allCountAfter = Number(numberAsString)
@@ -115,7 +124,7 @@ describe('Delete CQL Library - Edit Library Page', () => {
         cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', libraryName)
 
         //Navigate to All Libraries tab
-        cy.get(CQLLibraryPage.allLibrariesBtn).click()
+        cy.get(CQLLibraryPage.allLibrariesTab).click()
 
         //Verify the deleted library is not on All Measures page list
         cy.get(CQLLibraryPage.libraryListTitles).should('not.contain', libraryName)

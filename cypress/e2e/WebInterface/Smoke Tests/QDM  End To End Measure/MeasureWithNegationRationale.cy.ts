@@ -179,8 +179,7 @@ describe('Measure with Negation Rationale', () => {
     after('Clean up', () => {
 
         OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('End to End Measure with Negation Rationale', () => {

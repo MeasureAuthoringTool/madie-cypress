@@ -152,7 +152,7 @@ describe('Measure Creation: Proportion Patient Based', () => {
     after('Clean up', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('End to End Proportion Patient Based', () => {

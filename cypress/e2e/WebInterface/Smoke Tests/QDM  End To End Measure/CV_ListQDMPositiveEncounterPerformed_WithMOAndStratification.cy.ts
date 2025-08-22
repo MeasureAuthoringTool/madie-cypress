@@ -151,8 +151,7 @@ describe('Measure Creation: CV ListQDMPositiveEncounterPerformed With MO And Str
     after('Clean up', () => {
 
         OktaLogin.Logout()
-
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('End to End CV ListQDMPositiveEncounterPerformed With MO And Stratification', () => {

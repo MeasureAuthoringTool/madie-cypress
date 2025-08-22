@@ -41,7 +41,7 @@ describe('Measure Creation: Ratio ListQDMPositiveEncounterPerformed with MO', ()
     after('Logout and Clean up', () => {
 
         OktaLogin.Logout()
-        Utilities.deleteMeasure(measureName, CqlLibraryName)
+        Utilities.deleteMeasure()
     })
 
     it('End to End Ratio ListQDMPositiveEncounterPerformed with MO', () => {
