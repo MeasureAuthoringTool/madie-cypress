@@ -114,21 +114,19 @@ export class MeasuresPage {
     public static actionCenter(action: string, measureNumber?: number, options?: MeasureActionOptions): void {
 
         //There is a prerequsite that you have a measure created and measure ID stored to a file
-
         let filePath = 'cypress/fixtures/measureId'
 
         if ((measureNumber === undefined) || (measureNumber === null)) {
             measureNumber = 0
         }
 
-
         if (measureNumber > 0) {
             filePath = 'cypress/fixtures/measureId' + measureNumber
         }
         cy.readFile(filePath).should('exist').then((fileContents) => {
             Utilities.waitForElementVisible('[data-testid="measure-name-' + fileContents + '_select"]', 1200000)
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').scrollIntoView()
-            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[class="px-1"]').find('[class=" cursor-pointer"]').click()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').scrollIntoView()
+            cy.get('[data-testid="measure-name-' + fileContents + '_select"]').find('[type="checkbox"]').check()
         })
 
         switch ((action.valueOf()).toString().toLowerCase()) {

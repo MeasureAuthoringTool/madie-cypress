@@ -352,7 +352,6 @@ describe('Delete Saved Parameters', () => {
         cy.get(CQLEditorPage.saveCQLButton).should('be.disabled')
     })
 
-
     it('When form is clean ask "Are you sure?"', () => {
 
         cy.get(CQLEditorPage.parametersTab).click()
@@ -387,6 +386,7 @@ describe('Qi-Core CQL Parameters - Measure ownership Validations', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.AltLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
     })
 
     afterEach('Clean up and Logout', () => {
@@ -399,6 +399,8 @@ describe('Qi-Core CQL Parameters - Measure ownership Validations', () => {
 
         //Navigate to All Measures page
         cy.get(MeasuresPage.allMeasuresTab).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
         MeasuresPage.actionCenter('view')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
