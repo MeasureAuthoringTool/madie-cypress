@@ -54,6 +54,7 @@ describe('CQL Library Validations', () => {
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).should('be.visible')
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('SemanticBits')
         cy.get(CQLLibraryPage.cqlLibraryCreatePublisher).type('{downArrow}').type('{enter}')
+        Utilities.waitForElementEnabled(CQLLibraryPage.saveCQLLibraryBtn, 60000)
 
         //save the new CQL Library
         CQLLibraryPage.clickCreateLibraryButton()
