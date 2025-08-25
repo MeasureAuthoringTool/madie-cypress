@@ -6,7 +6,6 @@ import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { LandingPage } from "../../../../Shared/LandingPage"
 
 let measureName = 'CreateMeasureGroup' + Date.now()
 let CqlLibraryName = 'CreateMeasureGroupLib' + Date.now()
@@ -134,9 +133,9 @@ describe('Validate Measure Group -- scoring and populations', () => {
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
         //wait until page / tabs loads
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
-        cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasuresPage.ownedMeasures, 20700)
+        cy.get(MeasuresPage.ownedMeasures).should('exist')
+        cy.get(MeasuresPage.ownedMeasures).should('be.visible')
         //navigate back to the measure group page
         MeasuresPage.actionCenter('edit')
         //Click on the measure group tab
@@ -210,9 +209,9 @@ describe('Validate Measure Group -- scoring and populations', () => {
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
         //wait until page / tabs loads
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
-        cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasuresPage.ownedMeasures, 20700)
+        cy.get(MeasuresPage.ownedMeasures).should('exist')
+        cy.get(MeasuresPage.ownedMeasures).should('be.visible')
         //navigate back to the measure group page
         MeasuresPage.actionCenter('edit')
         //Click on the measure group tab
@@ -266,9 +265,9 @@ describe('Validate Measure Group -- scoring and populations', () => {
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
         //wait until page / tabs loads
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
-        cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasuresPage.ownedMeasures, 20700)
+        cy.get(MeasuresPage.ownedMeasures).should('exist')
+        cy.get(MeasuresPage.ownedMeasures).should('be.visible')
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
