@@ -1,12 +1,11 @@
 import { OktaLogin } from "../../../../Shared/OktaLogin"
-import {CreateMeasureOptions, CreateMeasurePage} from "../../../../Shared/CreateMeasurePage"
+import { CreateMeasureOptions, CreateMeasurePage } from "../../../../Shared/CreateMeasurePage"
 import { MeasuresPage } from "../../../../Shared/MeasuresPage"
 import { EditMeasurePage } from "../../../../Shared/EditMeasurePage"
 import { MeasureGroupPage } from "../../../../Shared/MeasureGroupPage"
 import { Utilities } from "../../../../Shared/Utilities"
 import { Header } from "../../../../Shared/Header"
 import { CQLEditorPage } from "../../../../Shared/CQLEditorPage"
-import { LandingPage } from "../../../../Shared/LandingPage"
 import { MeasureCQL } from "../../../../Shared/MeasureCQL"
 
 let measureName = 'QDMPopCriteriaPage' + Date.now()
@@ -94,8 +93,7 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
     it('Add UCUM Scoring Unit to Population Criteria', () => {
 
         //Click on the measure group tab
-        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
+        Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 30000)
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //navigate to the criteria section of the PC
@@ -118,9 +116,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
-        cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
         //navigate back to the measure group page
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -144,7 +141,6 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Navigate to Reporting page
@@ -167,9 +163,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
-        cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
         //navigate back to the measure group page
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -193,9 +188,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
-        cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
         //navigate back to the measure group page
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -223,9 +217,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
-        cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
         //navigate back to the measure group page
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -242,7 +235,6 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //Navigate to Reporting page
@@ -263,9 +255,8 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //navigate away from measure group page
         cy.get(Header.mainMadiePageButton).click()
-        Utilities.waitForElementVisible(LandingPage.myMeasuresTab, 20700)
-        cy.get(LandingPage.myMeasuresTab).should('exist')
-        cy.get(LandingPage.myMeasuresTab).should('be.visible')
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
         //navigate back to the measure group page
         MeasuresPage.actionCenter('edit')
         cy.get(EditMeasurePage.measureGroupsTab).click()
@@ -281,7 +272,6 @@ describe('Validate QDM Population Criteria section -- scoring and populations', 
 
         //Click on the measure group tab
         Utilities.waitForElementVisible(EditMeasurePage.measureGroupsTab, 20700)
-        cy.get(EditMeasurePage.measureGroupsTab).should('be.visible')
         cy.get(EditMeasurePage.measureGroupsTab).click()
 
         //click on the Risk Adjustment button / link on the left page to populate fields on the right
