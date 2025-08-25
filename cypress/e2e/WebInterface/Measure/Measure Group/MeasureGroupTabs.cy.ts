@@ -397,7 +397,6 @@ describe('Validating Reporting tabs', () => {
         cy.get(MeasureGroupPage.improvementNotationValues)
             .type('{downArrow}{enter}')
         cy.get(MeasureGroupPage.improvementNotationDescQiCore).find(EditMeasurePage.RTEContentField)
-            .clear()
             .type('{selectAll}{backspace}')
             .type('Loss of points is actually good.').wait(500)
 
