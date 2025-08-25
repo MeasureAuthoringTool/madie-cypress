@@ -482,7 +482,6 @@ describe('Qi-Core CQL Definitions - Expression Editor Name Option Validations', 
 
         Utilities.validateErrors(CQLEditorPage.errorInCQLEditorWindow, CQLEditorPage.errorContainer, "Parse: 7:13 | Definition names must not be a reserved word.")
     })
-
 })
 
 describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
@@ -491,6 +490,7 @@ describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.AltLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
     })
 
     afterEach('Clean up and Logout', () => {
@@ -503,6 +503,8 @@ describe('Qi-Core CQL Definitions - Measure ownership Validations', () => {
 
         //Navigate to All Measures page
         cy.get(MeasuresPage.allMeasuresTab).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
         MeasuresPage.actionCenter('view')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()

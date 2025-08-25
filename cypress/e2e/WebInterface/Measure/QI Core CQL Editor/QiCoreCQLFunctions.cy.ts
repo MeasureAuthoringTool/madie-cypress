@@ -233,6 +233,7 @@ describe('Qi-Core CQL Functions - Measure ownership Validations', () => {
 
         CreateMeasurePage.CreateQICoreMeasureAPI(measureName, CqlLibraryName, measureCQL)
         OktaLogin.AltLogin()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
     })
 
     afterEach('Clean up and Logout', () => {
@@ -245,6 +246,8 @@ describe('Qi-Core CQL Functions - Measure ownership Validations', () => {
 
         //Navigate to All Measures page
         cy.get(MeasuresPage.allMeasuresTab).click()
+        Utilities.waitForElementVisible(MeasuresPage.measureListTitles, 60000)
+
         MeasuresPage.actionCenter('view')
         cy.get(EditMeasurePage.cqlEditorTab).click()
         cy.get(CQLEditorPage.expandCQLBuilder).click()
